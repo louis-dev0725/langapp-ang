@@ -72,4 +72,8 @@ if (YII_ENV_DEV) {
     ];
 }
 
+if (file_exists(__DIR__ . '/web-local.php')) {
+    include(__DIR__ . '/web-local.php');
+}
+
 return $config;
