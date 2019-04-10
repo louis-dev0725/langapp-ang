@@ -1,11 +1,12 @@
 <?php
 
 $params = [
-    'adminEmail' => 'support@service-template.lb7.ru',
-    'noreplyEmail' => 'support@service-template.lb7.ru',
-    'rememberMe' => 3600 * 24 * 365 * 5,
-    'user.passwordResetTokenExpire' => 3600,
-    'fromName' => 'Service Template lb7.ru',
+    'adminEmail' => 'support@localhost',
+    'noreplyEmail' => 'support@localhost',
+    'siteName' => 'Service Template',
+    'fromName' => 'Service Template',
+    'hostName' => 'localhost:8080',
+    'baseUrl' => 'https://localhost:8080',
 ];
 
 if (file_exists(__DIR__ . '/params-local.php')) {
