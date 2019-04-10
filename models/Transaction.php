@@ -23,11 +23,40 @@ use yii\db\ActiveRecord;
  * @property array $dataJson
  *
  * @property User $user
+ * @property User $parentTransaction
+ * @property User $childTransaction
  */
 class Transaction extends \yii\db\ActiveRecord
 {
     const SCENARIO_ADMIN = 'admin';
     const SCENARIO_USER = 'user';
+
+    /**
+     * @param User $user user for current transaction
+     */
+    public function checkInvitedBy($user)
+    {
+        if ($user == null) {
+            $user = $this->user;
+        }
+
+        if ($user != null && !$this->isNewRecord && $this->isRealMoney && $user->invitedByUserId != 0 && $user->invitedByUser != null && $this->money > 0 && $this->childTransaction == null) {
+            $rTransaction = new Transaction();
+            $rTransaction->money = 0;
+            $rTransaction->isRealMoney = 0;
+            $rTransaction->money = floor($this->money * $user->invitedByUser->partnerPercent * 100) / 100;
+            $rTransaction->comment = "Партнерская программа: привлеченный клиент #{$user->id} пополнил счет на " . Helpers::formatMoney($this->money) . " руб. (операция #{$this->id}).";
+            $rTransaction->isPartner = 1;
+            $rTransaction->userId = $user->invitedByUserId;
+            $rTransaction->fromInvitedUserId = $user->id;
+            $rTransaction->parentTransactionId = $this->id;
+            $rTransaction->save(false);
+
+            $user->updatePartnerEarned();
+
+            $user->invitedByUser->updateBalance();
+        }
+    }
 
     public static function recalculateCommonForUser($user)
     {
@@ -94,6 +123,7 @@ class Transaction extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if ($this->user != null) {
+            $this->checkInvitedBy($this->user);
             $this->user->updateBalance(false);
         }
         parent::afterSave($insert, $changedAttributes);
@@ -171,5 +201,21 @@ class Transaction extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'userId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChildTransaction()
+    {
+        return $this->hasOne(Transaction::class, ['parentTransactionId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParentTransaction()
+    {
+        return $this->hasOne(Transaction::class, ['id' => 'parentTransactionId']);
     }
 }

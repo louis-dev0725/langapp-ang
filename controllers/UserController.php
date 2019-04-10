@@ -59,7 +59,7 @@ class UserController extends ActiveController
                 ],
                 [
                     'allow' => true,
-                    'actions' => ['index', 'delete'],
+                    'actions' => ['index', 'delete', 'check-invited-users'],
                     'roles' => ['admin'],
                 ],
             ]
@@ -75,6 +75,7 @@ class UserController extends ActiveController
         $verbs['login'] = ['POST'];
         $verbs['request-reset-password'] = ['POST'];
         $verbs['reset-password'] = ['POST'];
+        $verbs['check-invited-users'] = ['POST'];
 
         return $verbs;
     }
@@ -206,6 +207,17 @@ class UserController extends ActiveController
         }
 
         return $model;
+    }
+
+    public function actionCheckInvitedUsers($id) {
+        $model = User::findOne($id);
+        if ($model == null) {
+            throw new NotFoundHttpException("Object not found: $id");
+        }
+
+        $model->checkInvitedUsers();
+
+        return ['done' => true];
     }
 
     /**

@@ -42,6 +42,10 @@ use yii\web\IdentityInterface;
  * @property string $timezone
  *
  * @property string $password write-only password (virtual attribute)
+ * @property User $invitedByUser
+ * @property User[] $invitedUsers
+ * @property Transaction[] $transactions
+ * @property Invoice[] $invoices
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -52,6 +56,19 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     const SCENARIO_REGISTER = 'register';
 
     protected $_password;
+
+    public function checkInvitedUsers()
+    {
+        foreach ($this->invitedUsers as $user) {
+            foreach ($user->transactions as $transaction) {
+                $transaction->checkInvitedBy($user);
+            }
+
+            $user->updatePartnerEarned();
+        }
+
+        $this->updateBalance();
+    }
 
     public function getRestorePasswordLink()
     {
@@ -140,7 +157,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             self::SCENARIO_LOGIN => ['email', 'password'],
-            self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone'],
+            self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId'],
             self::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone'],
             self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'partnerPercent', 'wmr', 'timezone'],
         ];
@@ -370,5 +387,37 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function validateAuthKey($authKey)
     {
         throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInvoices()
+    {
+        return $this->hasMany(Invoice::class, ['userId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTransactions()
+    {
+        return $this->hasMany(Transaction::class, ['userId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInvitedByUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'invitedByUserId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInvitedUsers()
+    {
+        return $this->hasMany(User::class, ['invitedByUserId' => 'id']);
     }
 }
