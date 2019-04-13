@@ -54,7 +54,7 @@ class UserController extends ActiveController
                 ],
                 [
                     'allow' => true,
-                    'actions' => ['me', 'update'],
+                    'actions' => ['me', 'update', 'invited-users'],
                     'roles' => ['@'],
                 ],
                 [
@@ -76,6 +76,7 @@ class UserController extends ActiveController
         $verbs['request-reset-password'] = ['POST'];
         $verbs['reset-password'] = ['POST'];
         $verbs['check-invited-users'] = ['POST'];
+        $verbs['invited-users'] = ['GET'];
 
         return $verbs;
     }
@@ -110,6 +111,27 @@ class UserController extends ActiveController
                 'defaultOrder' => ['id' => SORT_ASC],
             ],
         ]);
+    }
+
+    public function actionInvitedUsers($id)
+    {
+        $userId = Yii::$app->user->id;
+        if (Helpers::isAdmin()) {
+            $model = User::findOne($id);
+            if ($model == null) {
+                throw new NotFoundHttpException("Object not found: $id");
+            }
+            $userId = $model->id;
+        } elseif ($id !== $userId) {
+            throw new ForbiddenHttpException('You can view/edit only your own profile.');
+        }
+
+        $users = User::find()->where(['invitedByUserId' => $userId])->all();
+        foreach ($users as $user) {
+            $user->scenario = User::SCENARIO_INVITED_USER;
+        }
+
+        return $users;
     }
 
     public function actionCreate()
@@ -209,7 +231,8 @@ class UserController extends ActiveController
         return $model;
     }
 
-    public function actionCheckInvitedUsers($id) {
+    public function actionCheckInvitedUsers($id)
+    {
         $model = User::findOne($id);
         if ($model == null) {
             throw new NotFoundHttpException("Object not found: $id");

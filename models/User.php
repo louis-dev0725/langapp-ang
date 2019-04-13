@@ -55,6 +55,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     const SCENARIO_ADMIN = 'admin';
     const SCENARIO_LOGIN = 'login';
     const SCENARIO_REGISTER = 'register';
+    const SCENARIO_INVITED_USER = 'invited_user';
 
     protected $_password;
 
@@ -166,13 +167,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function fields()
     {
-        if ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
+        if ($this->scenario == self::SCENARIO_INVITED_USER) {
+            return ['id', 'name', 'partnerEarned'];
+        } elseif ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
             unset($fields['passwordHash']);
 
             return $fields;
         } elseif ($this->scenario == self::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime', 'isServicePaused', 'isPartner', 'partnerPercent', 'partnerEarned', 'wmr', 'timezone', 'language'];
+            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime', 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language'];
         } else {
             return [];
         }

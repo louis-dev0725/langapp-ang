@@ -70,6 +70,7 @@ $config = [
                         'GET,POST request-reset-password' => 'request-reset-password',
                         'GET,POST reset-password' => 'reset-password',
                         'GET,POST {id}/check-invited-users' => 'check-invited-users',
+                        'GET {id}/invited-users' => 'invited-users',
                     ],
                 ],
                 [
