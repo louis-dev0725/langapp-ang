@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\Helpers;
+use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\PasswordResetForm;
 use app\models\RequestPasswordResetForm;
@@ -40,7 +41,7 @@ class UserController extends ActiveController
     {
         $behaviors = parent::behaviors();
 
-        $availableToEveryone = ['options', 'login', 'create', 'request-reset-password', 'reset-password'];
+        $availableToEveryone = ['options', 'login', 'create', 'request-reset-password', 'reset-password', 'contact'];
 
         $behaviors['authenticator']['optional'] = $availableToEveryone;
         $behaviors['access'] = [
@@ -77,6 +78,7 @@ class UserController extends ActiveController
         $verbs['reset-password'] = ['POST'];
         $verbs['check-invited-users'] = ['POST'];
         $verbs['invited-users'] = ['GET'];
+        $verbs['contact'] = ['POST'];
 
         return $verbs;
     }
@@ -111,6 +113,42 @@ class UserController extends ActiveController
                 'defaultOrder' => ['id' => SORT_ASC],
             ],
         ]);
+    }
+
+    public function actionContact()
+    {
+        $model = new ContactForm();
+
+        $model->subject = 'Обратная связь';
+        if (!Yii::$app->user->isGuest) {
+            $user = User::findOne(Yii::$app->user->id);
+        } else {
+            $user = null;
+        }
+        if ($user != null) {
+            $model->email = $user->email;
+            $model->name = $user->name;
+            $model->subject .= ' #' . $user->id;
+        }
+
+        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+
+        if ($model->validate()) {
+            if ($model->name != '') {
+                $model->subject .= ' (' . $model->name . ')';
+            }
+            if ($model->name == '' && $user == null) {
+                $model->subject .= ' ' . Yii::$app->formatter->asDatetime(time());
+            }
+            if ($model->contact(Yii::$app->params['adminEmail'])) {
+                return ['done' => true];
+            }
+            else {
+                $model->addError('email', 'Не удалось отправить сообщение. Пожалуйста, свяжитесь с нами по E-mail: ' . Yii::$app->params['adminEmail']);
+            }
+        }
+
+        return $model;
     }
 
     public function actionInvitedUsers($id)
