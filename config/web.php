@@ -63,6 +63,7 @@ $config = [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'user',
+                    'prefix' => 'api',
                     'extraPatterns' => [
                         'GET,HEAD me' => 'me',
                         'GET,POST login' => 'login',
@@ -74,6 +75,7 @@ $config = [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'transaction',
+                    'prefix' => 'api',
                 ],
             ],
         ],
