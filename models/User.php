@@ -40,6 +40,7 @@ use yii\web\IdentityInterface;
  * @property string $wmr
  * @property array $dataJson
  * @property string $timezone
+ * @property string $language
  *
  * @property string $password write-only password (virtual attribute)
  * @property User $invitedByUser
@@ -157,9 +158,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             self::SCENARIO_LOGIN => ['email', 'password'],
-            self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId'],
-            self::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone'],
-            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'partnerPercent', 'wmr', 'timezone'],
+            self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone', 'language'],
+            self::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone', 'language'],
+            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language'],
         ];
     }
 
@@ -171,7 +172,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
             return $fields;
         } elseif ($this->scenario == self::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime', 'isServicePaused', 'isPartner', 'partnerPercent', 'partnerEarned', 'wmr', 'timezone'];
+            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime', 'isServicePaused', 'isPartner', 'partnerPercent', 'partnerEarned', 'wmr', 'timezone', 'language'];
         } else {
             return [];
         }
