@@ -19,7 +19,9 @@ $config = [
             'cookieValidationKey' => 'fjZ9Tct4c3LvC_4JeeVzPigVO6D5cbOm',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
-            ]
+            ],
+            'enableCsrfValidation' => false,
+            'enableCsrfCookie' => false,
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -62,21 +64,21 @@ $config = [
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'user',
+                    'controller' => ['user', 'transaction'],
                     'prefix' => 'api',
-                    'extraPatterns' => [
-                        'GET,HEAD me' => 'me',
-                        'GET,POST login' => 'login',
-                        'GET,POST request-reset-password' => 'request-reset-password',
-                        'GET,POST reset-password' => 'reset-password',
-                        'GET,POST {id}/check-invited-users' => 'check-invited-users',
-                        'GET {id}/invited-users' => 'invited-users',
+                    'patterns' => [
+                        'PUT,PATCH {id}' => 'update',
+                        'DELETE {id}' => 'delete',
+                        'GET,HEAD {id}' => 'view',
+                        'POST' => 'create',
+                        'GET,HEAD' => 'index',
+                        '{id}' => 'options',
+                        '' => 'options',
+                        'OPTIONS <id:\d+>/<action:[\w-]+>' => 'options',
+                        'OPTIONS <action:[\w-]+>' => 'options',
+                        '<id:\d+>/<action:[\w-]+>' => '<action>',
+                        '<action:[\w-]+>' => '<action>',
                     ],
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'transaction',
-                    'prefix' => 'api',
                 ],
             ],
         ],
