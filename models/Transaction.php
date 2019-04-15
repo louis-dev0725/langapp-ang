@@ -21,6 +21,7 @@ use yii\db\ActiveRecord;
  * @property int $fromInvitedUserId
  * @property int $parentTransactionId
  * @property array $dataJson
+ * @property int $invoiceId
  *
  * @property User $user
  * @property User $parentTransaction
@@ -129,11 +130,20 @@ class Transaction extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
     }
 
+    public function fields()
+    {
+        if (Helpers::isAdmin()) {
+            return parent::fields();
+        } else {
+            return ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'];
+        }
+    }
+
     public function scenarios()
     {
         return [
             self::SCENARIO_USER => ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'],
-            self::SCENARIO_ADMIN => ['id', 'userId', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'dataJson'],
+            self::SCENARIO_ADMIN => ['id', 'userId', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'invoiceId', 'dataJson'],
         ];
     }
 

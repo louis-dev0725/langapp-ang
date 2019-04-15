@@ -80,6 +80,8 @@ $config = [
                         '<action:[\w-]+>' => '<action>',
                     ],
                 ],
+                'api/pay/start' => 'pay/start',
+                'api/pay/result' => 'pay/result',
             ],
         ],
         'authManager' => [

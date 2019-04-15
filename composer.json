@@ -19,7 +19,9 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.1.0",
         "bizley/migration": "3.2",
-        "sizeg/yii2-jwt": "^1.2"
+        "sizeg/yii2-jwt": "^1.2",
+        "league/omnipay": "3",
+        "hiqdev/omnipay-robokassa": "^3.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
