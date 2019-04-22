@@ -1,0 +1,22 @@
+<mat-toolbar>
+  <a mat-button *ngIf="!api.isLoggedIn" routerLink="/signup">Регистрация</a>
+  <button mat-button *ngIf="!api.isLoggedIn" routerLink="/signin">Вход</button>
+  <button mat-button [matMenuTriggerFor]="language">Язык</button>
+  <button mat-button *ngIf="api.isLoggedIn">Оплата</button>
+  <button mat-button *ngIf="api.isLoggedIn" routerLink="/settings">Настройки</button>
+  <button mat-button [matMenuTriggerFor]="partnership" routerLink="/settings">Партнерам</button>
+  <button mat-button routerLink="/contacts">Контакты</button>
+  <button mat-button *ngIf="api.isLoggedIn" routerLink="/contacts">Выход</button>
+</mat-toolbar>
+
+
+<mat-menu #language="matMenu">
+  <button mat-menu-item (click)="setLanguage('ru')">Russian</button>
+  <button mat-menu-item (click)="setLanguage('en')">Английский</button>
+</mat-menu>
+
+<mat-menu #partnership="matMenu">
+  <button mat-menu-item routerLink="about-partner">О программе</button>
+  <button mat-menu-item routerLink="clients" *ngIf="api.isLoggedIn">Клиенты</button>
+  <button mat-menu-item routerLink="operations" *ngIf="api.isLoggedIn">Операции</button>
+</mat-menu>
