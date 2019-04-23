@@ -4,13 +4,24 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { SigninComponent } from './signin/signin.component';
+import { SigninComponent } from './login/signin/signin.component';
 import {ApiService} from "./services/api.service";
-import {MatButtonModule, MatListModule, MatMenuModule, MatSidenavModule, MatToolbarModule} from "@angular/material";
+import {
+  MatButtonModule, MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from "@angular/material";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {CanactivateLogged} from "./services/canactivate-logged";
+import {CanactivateNologged} from "./services/canactivate-nologged";
+import {LoginModule} from "./login/login.module";
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -20,8 +31,7 @@ export function createTranslateLoader(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    SigninComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -35,11 +45,16 @@ export function createTranslateLoader(http: HttpClient) {
       }
     }),
     BrowserAnimationsModule,
+    LoginModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatMenuModule,
     MatButtonModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSelectModule,
+    MatInputModule
   ],
-  providers: [ApiService],
+  providers: [ApiService, CanactivateLogged, CanactivateNologged],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

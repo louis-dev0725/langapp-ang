@@ -1,0 +1,25 @@
+<div class="container">
+  <h1 translate>Restore password</h1>
+  <p class="note" translate>To restore password need to provide Email connected with an account</p>
+  <div class="container">
+    <form [formGroup]="restoreForm">
+      <mat-form-field class="form-item">
+        <mat-label translate>Email</mat-label>
+        <input
+          matInput
+          formControlName="email"
+          required
+          placeholder="{{'Email' | translate}}">
+        <mat-error *ngIf="checkError()">{{ emailErrors() }}</mat-error>
+      </mat-form-field>
+
+      <div class="form-item">
+        <button
+          mat-raised-button
+          [disabled]="!restoreForm.valid"
+          translate>Send</button>
+      </div>
+
+    </form>
+  </div>
+</div>

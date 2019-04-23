@@ -1,0 +1,11 @@
+<div class="container">
+  <h1 translate>Sign up</h1>
+  <p></p>
+  <div class="container">
+    <form [formGroup]="signupForm">
+      <input type="hidden" formControlName="timezone" [ngModel]="getTimezone()">
+      <input type="hidden" formControlName="language" [ngModel]="getLanguage()">
+      <input *ngIf="getInvatedId()" type="hidden" formControlName="invitedByUserId" [ngModel]="getInvatedId()">
+    </form>
+  </div>
+</div>
