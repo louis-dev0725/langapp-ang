@@ -5,9 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-stats": "ng build --prod --aot=true --buildOptimizer=true --stats-json",
+    "bundle-report": "webpack-bundle-analyzer ./dist/call-rocket/stats.json",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "translate-extract": "./node_modules/.bin/ngx-translate-extract -i ./src -o ./src/assets/i18n/*.json --format namespaced-json --marker _ --clean --sort"
   },
   "private": true,
   "dependencies": {
@@ -24,7 +27,7 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "core-js": "^2.5.4",
-    "moment": "^2.24.0",
+    "jstz": "^2.1.1",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
@@ -49,6 +52,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "~3.2.2"
+    "typescript": "~3.2.2",
+    "webpack-bundle-analyzer": "^3.3.2"
   }
 }

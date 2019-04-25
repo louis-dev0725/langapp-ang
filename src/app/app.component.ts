@@ -11,8 +11,13 @@ export class AppComponent {
   title = 'call-rocket';
 
   constructor(private translate: TranslateService) {
-    // note: [SHR] try to find lang in localstorage
-    this.translate.setDefaultLang('ru');
+    let langVal = localStorage.getItem('lang');
+    if (!langVal) {
+      langVal = navigator.language;
+      console.log('LANG', langVal);
+      localStorage.setItem('lang', langVal);
+    }
+    this.translate.setDefaultLang(langVal);
   }
 
   prepareRoute(outlet: RouterOutlet) {

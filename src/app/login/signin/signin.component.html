@@ -33,7 +33,7 @@
 
       <div class="form-item">
         <button
-          mat-raised-button
+          mat-flat-button
           color="primary"
           translate
           type="submit"
@@ -42,44 +42,4 @@
 
     </form>
   </div>
-<!--  <h1>{{title}}</h1>-->
-<!--  <div class="container">-->
-<!--    <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">-->
-
-<!--      <mat-form-field class="form-item">-->
-<!--        <mat-label translate>Email</mat-label>-->
-<!--        <input-->
-<!--          matInput-->
-<!--          placeholder="{{'Email' | translate}}"-->
-<!--          formControlName="email"-->
-<!--          required>-->
-<!--        <mat-error-->
-<!--          *ngIf="!signupForm.controls['email'].valid && signupForm.controls['email'].touched">-->
-<!--          {{ getErrorHint('email') }}-->
-<!--        </mat-error>-->
-<!--      </mat-form-field>-->
-
-<!--      <mat-form-field class="form-item">-->
-<!--        <mat-label translate>Password</mat-label>-->
-<!--        <input-->
-<!--          matInput-->
-<!--          placeholder="{{'Password' | translate}}"-->
-<!--          formControlName="password"-->
-<!--          required>-->
-<!--        <mat-error *ngIf="!signupForm.controls['password'].valid && signupForm.controls['password'].touched">-->
-<!--          {{ getErrorHint('password') }}-->
-<!--        </mat-error>-->
-<!--      </mat-form-field>-->
-
-<!--      <div class="form-item">-->
-<!--        <a-->
-<!--          (click)="mode = 'restore'"-->
-<!--          class="form-item-link"-->
-<!--          [ngClass]="{hidden: mode !== 'sigunp'}"-->
-<!--          translate>Forgot password?-->
-<!--        </a>-->
-<!--      </div>-->
-
-<!--    </form>-->
-<!--  </div>-->
 </div>

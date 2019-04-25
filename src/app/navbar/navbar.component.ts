@@ -10,7 +10,7 @@ import {TranslateService} from "@ngx-translate/core";
 export class NavbarComponent implements OnInit {
 
   constructor(
-    private api: ApiService,
+    public api: ApiService,
     private translate: TranslateService) {
 
   }

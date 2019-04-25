@@ -17,4 +17,19 @@ export class ApiService {
   }
 
   constructor(private http: HttpClient) { }
+
+  //<editor-fold desc="Signup group">
+  login() {
+
+  }
+
+  restorePassword() {
+
+  }
+
+  signUp() {
+
+  }
+  //</editor-fold>
+
 }
