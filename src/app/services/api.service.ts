@@ -107,6 +107,10 @@ export class ApiService {
 
   //</editor-fold>
 
+  transactionList() {
+
+  }
+
   private getMeRequest(observer) {
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + localStorage.getItem('token'));

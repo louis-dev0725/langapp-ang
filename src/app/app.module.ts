@@ -7,8 +7,8 @@ import {NavbarComponent} from './navbar/navbar.component';
 import {ApiService} from './services/api.service';
 import {
   MatButtonModule, MatInputModule,
-  MatMenuModule,
-  MatSelectModule,
+  MatMenuModule, MatPaginatorModule,
+  MatSelectModule, MatSortModule, MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
@@ -54,7 +54,10 @@ export function createTranslateLoader(http: HttpClient) {
     MatButtonModule,
     MatToolbarModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [ApiService, CanactivateLogged, CanactivateNologged],
   bootstrap: [AppComponent]
