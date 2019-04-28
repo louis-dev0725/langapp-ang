@@ -1,0 +1,16 @@
+<div class="container">
+  <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="form-item">
+      <input
+        matInput
+        required
+        placeholder="{{'Amount' | translate}}">
+      <mat-error *ngIf="paymentError()">{{ getError() }}</mat-error>
+    </mat-form-field>
+
+  </form>
+</div>
+<div class="container">
+
+</div>

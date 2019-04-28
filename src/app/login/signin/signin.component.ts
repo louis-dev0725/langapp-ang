@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ApiService} from "../../services/api.service";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ApiService} from '../../services/api.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -12,6 +13,7 @@ export class SigninComponent implements OnInit {
 
   constructor(
     private api: ApiService,
+    private router: Router,
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -22,7 +24,12 @@ export class SigninComponent implements OnInit {
   }
 
   onSubmit(value: any) {
-
+    this.api.login(value).subscribe((res) => {
+      if (res) {
+        // note: [SHR] place here default route
+        this.router.navigate(['/payment'])
+      }
+    });
   }
 
   checkError(fieldName: string) {

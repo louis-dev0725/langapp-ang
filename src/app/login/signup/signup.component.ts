@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ApiService} from "../../services/api.service";
-import {TranslateService} from "@ngx-translate/core";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ApiService} from '../../services/api.service';
+import {TranslateService} from '@ngx-translate/core';
 
 import * as jstz from 'jstz';
+import {CustomValidator} from "../../services/custom-validator";
 
 @Component({
   selector: 'app-signup',
@@ -12,6 +13,7 @@ import * as jstz from 'jstz';
 })
 export class SignupComponent implements OnInit {
 
+  // note: [SHR] place error map to the common place
   private errorMap = {
     required: 'This field is required',
     email: 'This is not valid email',
@@ -40,7 +42,7 @@ export class SignupComponent implements OnInit {
       email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
       password: ['', {validators: [Validators.required], updateOn: 'change'}],
       passrepeat: ['', {validators: [Validators.required], updateOn: 'change'}],
-    }, {validator: SignupComponent.confirmPasswordCheck})
+    }, {validator: CustomValidator.confirmPasswordCheck})
   }
 
   getTimezone() {
@@ -49,7 +51,7 @@ export class SignupComponent implements OnInit {
   }
 
   getLanguage() {
-
+    return navigator.language;
   }
 
   getInvatedId(): string | boolean {
@@ -58,23 +60,11 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit(value: any) {
-
+    this.api.signUp(value).subscribe((res) => {
+      console.log('result', res);
+    })
   }
 
-  /**
-   * this method used as a custom validator to check
-   * the password and repeat-password is equaled or not
-   * @param ctrl
-   */
-  static confirmPasswordCheck(ctrl: AbstractControl) {
-    const password = ctrl.get('password').value;
-    const passrepeat = ctrl.get('passrepeat').value;
-    if (password !== passrepeat) {
-      ctrl.get('passrepeat').setErrors({passconfirm: true});
-    } else {
-      return null;
-    }
-  }
 
   getErrors(fieldName: string): string {
     const errors = this.signupForm.get(fieldName).errors;

@@ -1,13 +1,5 @@
 
 
-export interface Menu {
-  state: string;
-  menukey: string;
-  name: string;
-  children?: Menu[];
-  isAdmin: boolean;
-}
-
 export interface User {
   name: string;
   company?: string;

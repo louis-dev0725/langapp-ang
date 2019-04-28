@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ApiService} from "../services/api.service";
-import {TranslateService} from "@ngx-translate/core";
+import {ApiService} from '../services/api.service';
+import {TranslateService} from '@ngx-translate/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +12,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     public api: ApiService,
+    private router: Router,
     private translate: TranslateService) {
 
   }
@@ -21,5 +23,10 @@ export class NavbarComponent implements OnInit {
 
   setLanguage(lang: string) {
     this.translate.use(lang);
+  }
+
+  logout() {
+    this.api.logout();
+    this.router.navigate(['/'])
   }
 }

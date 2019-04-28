@@ -1,7 +1,9 @@
 {
+	"Amount": "",
 	"Company": "Company",
 	"Email": "Email",
 	"Forgot password?": "Forgot password?",
+	"Logout": "",
 	"Name": "Name",
 	"Password": "Password",
 	"Phone": "Phone",
@@ -10,5 +12,12 @@
 	"Send": "Send",
 	"Sign in": "Sign in",
 	"Sign up": "Sign up",
-	"To restore password need to provide Email connected with an account": "To restore password need to provide Email connected with an account"
+	"restore": {
+		"password": "Please, provide a new password",
+		"request": "To recover your password, you must enter the E-mail to which the account is registered.",
+		"request-sent": "An email has been sent to your E-mail with a link to reset your password. Check your email and follow the link received."
+	},
+	"signup": {
+		"note": "To connect to the site of the Rocket Call system, you must register."
+	}
 }

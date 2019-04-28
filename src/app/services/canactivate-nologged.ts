@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from "@angular/router";
-import {Observable} from "rxjs";
-import {ApiService} from "./api.service";
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {Observable} from 'rxjs';
+import {ApiService} from './api.service';
 
 @Injectable()
 export class CanactivateNologged implements CanActivate {

@@ -1,16 +1,41 @@
 <div class="container">
   <h1 translate>Restore password</h1>
-  <p class="note" translate>To restore password need to provide Email connected with an account</p>
+  <p class="note" translate [ngSwitch]="mode">
+    <ng-template [ngSwitchCase]="MODE_REQUEST" translate>restore.request</ng-template>
+    <ng-template [ngSwitchCase]="MODE_REQUEST_SENT" translate>restore.request-sent</ng-template>
+    <ng-template [ngSwitchCase]="MODE_PASSWORD" translate>restore.password</ng-template>
+  </p>
   <div class="container">
-    <form [formGroup]="restoreForm">
-      <mat-form-field class="form-item">
+    <form [formGroup]="restoreForm" (ngSubmit)="onSubmit()">
+
+      <mat-form-field class="form-item" *ngIf="mode === MODE_REQUEST">
         <mat-label translate>Email</mat-label>
         <input
           matInput
           formControlName="email"
           required
           placeholder="{{'Email' | translate}}">
-        <mat-error *ngIf="checkError()">{{ emailErrors() }}</mat-error>
+        <mat-error *ngIf="checkError('email')">{{ getErrors('email') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-item" *ngIf="mode === MODE_PASSWORD">
+        <mat-label translate>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          required
+          placeholder="{{'Password' | translate}}">
+        <mat-error *ngIf="checkError('password')">{{ getErrors('password') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-item" *ngIf="mode === MODE_PASSWORD">
+        <mat-label translate>Repeat password</mat-label>
+        <input
+          matInput
+          formControlName="passrepeat"
+          required
+          placeholder="{{'Repeat password' | translate}}">
+        <mat-error *ngIf="checkError('passrepeat')">{{ getErrors('passrepeat') }}</mat-error>
       </mat-form-field>
 
       <div class="form-item">
@@ -18,7 +43,8 @@
           color="primary"
           mat-flat-button
           [disabled]="!restoreForm.valid"
-          translate>Send</button>
+          translate>Send
+        </button>
       </div>
 
     </form>

@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ApiService} from "../../services/api.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ApiService} from '../../services/api.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CustomValidator} from '../../services/custom-validator';
 
 @Component({
   selector: 'app-restore',
@@ -9,27 +11,80 @@ import {ApiService} from "../../services/api.service";
 })
 export class RestoreComponent implements OnInit {
 
-  restoreForm: FormGroup;
+  readonly MODE_REQUEST = 'request-link';
+  readonly MODE_REQUEST_SENT = 'request-sent';
+  readonly MODE_PASSWORD = 'password-change';
+
+  private errorMap = {
+    required: 'This field is required',
+    email: 'This is not valid email',
+    passconfirm: 'Password and repeat password are not equals'
+  };
+
+  restoreForm: FormGroup = new FormGroup({});
+  _mode = this.MODE_REQUEST;
+  get mode(): string {
+    return this._mode;
+  }
+
+  set mode(val:string) {
+    if (this.mode !== val) {
+      this._mode = val;
+      this.changeForm();
+    }
+  }
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private api: ApiService,
-    private formBuilder: FormBuilder) {
+    private router: Router) {
+
+    if (this.activatedRoute.snapshot.data.mode) {
+      this.mode = activatedRoute.snapshot.data.mode;
+    }
   }
 
   ngOnInit() {
-    this.restoreForm = this.formBuilder.group({
-      email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}]
-    })
-  }
-
-  checkError() {
-    return !this.restoreForm.controls['email'].valid && this.restoreForm.controls['email'].touched;
-  }
-
-  emailErrors(): string {
     // todo: [SHR]: translate errors
-    const eml = this.restoreForm.get('email');
-    return eml.hasError('required') ? 'Field is required' :
-      eml.hasError('email') ? 'Not a valid email' : '';
+    this.changeForm();
+  }
+
+  changeForm() {
+    if (this.mode === this.MODE_REQUEST) {
+      console.log('REQ');
+      this.restoreForm = new FormGroup({
+        email: new FormControl('', {validators: [Validators.required, Validators.email], updateOn: 'change'} )
+      })
+    }
+
+    if (this.mode === this.MODE_PASSWORD) {
+      this.restoreForm = new FormGroup({
+        password: new FormControl('',{validators: [Validators.required], updateOn: 'change'}),
+        passrepeat: new FormControl('',{validators: [Validators.required], updateOn: 'change'})
+      },  CustomValidator.confirmPasswordCheck);
+    }
+  }
+
+  checkError(fieldName: string) {
+    return !!this.restoreForm.get(fieldName).errors
+  }
+
+  getErrors(fieldName: string): string {
+    const errors = this.restoreForm.get(fieldName).errors;
+    const key = Object.keys(errors)[0];
+    return (this.errorMap[key]) ? this.errorMap[key] : '';
+  }
+
+  onSubmit() {
+    if(this.mode === this.MODE_REQUEST) {
+      this.api.restorePasswordRequest(this.restoreForm.value);
+      this.mode = this.MODE_REQUEST_SENT;
+    }
+
+    if (this.mode === this.MODE_PASSWORD) {
+      this.api.changePassword(this.restoreForm.value).subscribe((res) => {
+        this.router.navigate(['/payment'])
+      })
+    }
   }
 }

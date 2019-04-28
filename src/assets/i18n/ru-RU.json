@@ -1,14 +1,23 @@
 {
-	"Company": "",
-	"Email": "",
-	"Forgot password?": "",
-	"Name": "",
-	"Password": "",
-	"Phone": "",
-	"Repeat password": "",
-	"Restore password": "",
-	"Send": "",
-	"Sign in": "",
-	"Sign up": "",
-	"To restore password need to provide Email connected with an account": ""
+	"Amount": "",
+	"Company": "Компания",
+	"Email": "Email",
+	"Forgot password?": "Забыли пароль?",
+	"Logout": "",
+	"Name": "Имя",
+	"Password": "Пароль",
+	"Phone": "Мобильный телефон",
+	"Repeat password": "Повтор пароля",
+	"Restore password": "Забыли пароль",
+	"Send": "Отправить",
+	"Sign in": "Вход",
+	"Sign up": "Зарегистрироваться",
+	"restore": {
+		"password": "Введите новый пароль",
+		"request": "Для восстановления пароля необходимо ввести E-mail, на который зарегистрирован аккаунт.",
+		"request-sent": "На ваш E-mail отправлено письмо с ссылкой для восстановления пароля. Проверьте почту и перейдите по полученной ссылке."
+	},
+	"signup": {
+		"note": "Для подключения к сайту системы Rocket Call необходимо пройти регистрацию."
+	}
 }
