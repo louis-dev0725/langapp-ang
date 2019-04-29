@@ -107,6 +107,10 @@ export class ApiService {
 
   //</editor-fold>
 
+  getTimeZones() {
+    return this.http.get('/assets/timezones.json');
+  }
+
   transactionList() {
 
   }

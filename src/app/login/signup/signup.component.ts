@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../services/api.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -12,13 +12,6 @@ import {CustomValidator} from "../../services/custom-validator";
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
-
-  // note: [SHR] place error map to the common place
-  private errorMap = {
-    required: 'This field is required',
-    email: 'This is not valid email',
-    passconfirm: 'Password and repeat password are not equals'
-  };
 
   signupForm: FormGroup;
 
@@ -69,7 +62,7 @@ export class SignupComponent implements OnInit {
   getErrors(fieldName: string): string {
     const errors = this.signupForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (this.errorMap[key]) ? this.errorMap[key] : '';
+    return (CustomValidator.errorMap[key]) ? CustomValidator.errorMap[key] : '';
   }
 
   checkError(fieldName: string) {

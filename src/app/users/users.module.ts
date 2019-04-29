@@ -1,21 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {UsersComponent} from './users.component';
-import {ReactiveFormsModule} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatCheckboxModule, MatFormFieldModule, MatInputModule} from '@angular/material';
 import {TranslateModule} from '@ngx-translate/core';
 import {RouterModule} from '@angular/router';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
-    UsersComponent
+    UsersComponent,
+    SettingsComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatCheckboxModule
   ]
 })
 export class UsersModule { }

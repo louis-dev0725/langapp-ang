@@ -3,7 +3,7 @@
   <button mat-button *ngIf="!api.isLoggedIn" routerLink="/signin" translate>Sign in</button>
   <button mat-button [matMenuTriggerFor]="language" translate>Language</button>
   <button mat-button *ngIf="api.isLoggedIn" routerLink="/payment" translate>Payment</button>
-  <button mat-button *ngIf="api.isLoggedIn" routerLink="/settings" translate>Settings</button>
+  <button mat-button *ngIf="api.isLoggedIn" routerLink="/users/settings" translate>Settings</button>
   <button mat-button [matMenuTriggerFor]="partnership" routerLink="/settings" translate>Partnership</button>
   <button mat-button routerLink="/contacts" translate>Contacts</button>
   <button mat-button *ngIf="api.isLoggedIn" (click)="logout()" translate>Logout</button>

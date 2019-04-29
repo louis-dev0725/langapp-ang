@@ -11,6 +11,8 @@ export interface User {
   site?: string;
   isLoggedIn: boolean;
   isAdmin: boolean;
+  isServicePaused?: boolean;
+  wmr?: string;
 }
 
 

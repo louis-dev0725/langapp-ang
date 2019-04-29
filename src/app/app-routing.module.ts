@@ -7,6 +7,7 @@ import {RestoreComponent} from './login/restore/restore.component';
 import {UsersComponent} from './users/users.component';
 import {CanactivateLogged} from './services/canactivate-logged';
 import {PaymentComponent} from './payment/payment.component';
+import {SettingsComponent} from './users/settings/settings.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,11 @@ const routes: Routes = [
         component: RestoreComponent,
         canActivate: [CanactivateNologged],
         data: {mode: 'password-change'}
+      },
+      {
+        path: 'settings',
+        component: SettingsComponent,
+        canActivate: [CanactivateLogged]
       }
     ]
   }
