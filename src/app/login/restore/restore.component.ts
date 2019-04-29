@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../services/api.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CustomValidator} from '../../services/custom-validator';
+import {ApiError} from '../../services/api-error';
 
 @Component({
   selector: 'app-restore',
@@ -23,6 +24,7 @@ export class RestoreComponent implements OnInit {
 
   restoreForm: FormGroup = new FormGroup({});
   _mode = this.MODE_REQUEST;
+  errors: any[] = [];
   get mode(): string {
     return this._mode;
   }
@@ -76,8 +78,15 @@ export class RestoreComponent implements OnInit {
   }
 
   onSubmit() {
+    this.errors = [];
     if(this.mode === this.MODE_REQUEST) {
-      this.api.restorePasswordRequest(this.restoreForm.value);
+      this.api.restorePasswordRequest(this.restoreForm.value)
+        .subscribe((res) => {
+          if(res instanceof ApiError) {
+            this.mode = this.MODE_REQUEST;
+            this.errors = res.error;
+          }
+        });
       this.mode = this.MODE_REQUEST_SENT;
     }
 

@@ -5,6 +5,8 @@ import {TranslateService} from '@ngx-translate/core';
 
 import * as jstz from 'jstz';
 import {CustomValidator} from "../../services/custom-validator";
+import {ApiError} from '../../services/api-error';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -14,10 +16,12 @@ import {CustomValidator} from "../../services/custom-validator";
 export class SignupComponent implements OnInit {
 
   signupForm: FormGroup;
+  errors: any[] = [];
 
   constructor(
     private api: ApiService,
     private formBuilder: FormBuilder,
+    private router: Router,
     private translate: TranslateService) {
   }
 
@@ -53,8 +57,13 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit(value: any) {
+    this.errors = [];
     this.api.signUp(value).subscribe((res) => {
-      console.log('result', res);
+      if(res instanceof ApiError) {
+        this.errors = res.error;
+      } else {
+        this.router.navigate(['/payment'])
+      }
     })
   }
 

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../../services/api.service';
 import {Router} from '@angular/router';
+import {ApiError} from '../../services/api-error';
+import {FieldError} from '../../interfaces/common.interface';
 
 @Component({
   selector: 'app-signin',
@@ -10,11 +12,13 @@ import {Router} from '@angular/router';
 })
 export class SigninComponent implements OnInit {
   signinForm: FormGroup;
+  errors: FieldError[] = [];
 
   constructor(
     private api: ApiService,
-    private router: Router,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder,
+    private router: Router) {
+  }
 
   ngOnInit() {
     this.signinForm = this.formBuilder.group({
@@ -24,8 +28,12 @@ export class SigninComponent implements OnInit {
   }
 
   onSubmit(value: any) {
+    this.errors = [];
     this.api.login(value).subscribe((res) => {
-      if (res) {
+      if (res instanceof ApiError) {
+
+        this.errors = res.error;
+      } else {
         // note: [SHR] place here default route
         this.router.navigate(['/payment'])
       }

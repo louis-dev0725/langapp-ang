@@ -1,6 +1,14 @@
 <div class="container">
   <h1 translate>Sign up</h1>
   <p></p>
+
+  <ng-container *ngIf="errors.length > 0">
+    <mat-card *ngFor="let err of errors"
+              class="err-alert">
+      <mat-card-content>{{err.message}}</mat-card-content>
+    </mat-card>
+  </ng-container>
+
   <div class="container">
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
       <input type="hidden" formControlName="timezone" [ngModel]="getTimezone()">
@@ -37,6 +45,7 @@
           matInput
           required
           formControlName="email"
+          type="email"
           placeholder="{{'Email' | translate}}">
         <mat-error *ngIf="checkError('email')">{{ getErrors('email') }}</mat-error>
       </mat-form-field>
@@ -46,6 +55,7 @@
           matInput
           required
           formControlName="password"
+          type="password"
           placeholder="{{'Password' | translate}}">
         <mat-error *ngIf="checkError('password')">{{ getErrors('password') }}</mat-error>
       </mat-form-field>
@@ -55,6 +65,7 @@
           matInput
           required
           formControlName="passrepeat"
+          type="password"
           placeholder="{{'Repeat password' | translate}}">
         <mat-error *ngIf="checkError('passrepeat')">{{getErrors('passrepeat')}}</mat-error>
       </mat-form-field>

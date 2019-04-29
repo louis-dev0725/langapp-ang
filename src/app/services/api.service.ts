@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {User} from '../interfaces/common.interface';
 import {Observable} from 'rxjs';
+import {ApiError} from './api-error';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +24,9 @@ export class ApiService {
     }
     this._user = value;
   }
+
   get token(): string {
-    return  (this._token) ? this._token : localStorage.getItem('token');
+    return localStorage.getItem('token');
   }
 
   set token(value: string) {
@@ -37,7 +39,7 @@ export class ApiService {
 
 
   get apiHost(): string {
-    return  this.windowConfig.apiHost + this.windowConfig.apiPrefix;
+    return this.windowConfig.apiHost + this.windowConfig.apiPrefix;
   }
 
   get isAdmin(): boolean {
@@ -53,10 +55,11 @@ export class ApiService {
     return (window as any).rocket;
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   //<editor-fold desc="Signup group">
-  login(params: any): Observable<any> {
+  login(params: any): Observable<any | ApiError>  {
     return Observable.create((observer) => {
       this.http.post(this.apiHost + '/users/login', params)
         .subscribe((res: any) => {
@@ -66,15 +69,21 @@ export class ApiService {
           } else {
             observer.next(res.message);
           }
+        }, (err: any) => {
+          observer.next(this.getApiError(err));
         })
     })
   }
 
-  restorePasswordRequest(params: any) {
-    this.http.post(this.apiHost + '/users/request-reset-password', params)
-      .subscribe((res) => {
-        // empty subscription to prevent optimize remove request
-      })
+  restorePasswordRequest(params: any): Observable<any> {
+    return Observable.create((observer) => {
+      this.http.post(this.apiHost + '/users/request-reset-password', params)
+        .subscribe(() => {
+          observer.next(true);
+        }, (err) => {
+          observer.next(this.getApiError(err));
+        })
+    })
   }
 
   changePassword(params: any): Observable<any> {
@@ -83,6 +92,8 @@ export class ApiService {
         .subscribe((res: any) => {
           this.token = res.accessToken;
           this.getMeRequest(observer);
+        }, (error) => {
+          observer.next(this.getApiError(error));
         })
     })
   }
@@ -91,9 +102,10 @@ export class ApiService {
     return Observable.create((observer) => {
       return this.http.post<User>(this.apiHost + '/users', params).subscribe((res) => {
         this.user = res;
-        observer.complete();
+        localStorage.setItem('token', this.user.accessToken);
+        this.getMeRequest(observer);
       }, (error) => {
-        observer.next(false);
+        observer.next(this.getApiError(error));
         observer.complete();
       });
     })
@@ -113,6 +125,10 @@ export class ApiService {
 
   transactionList() {
 
+  }
+
+  private getApiError(response) {
+    return new ApiError(response.error, response.ok, response.status, response.statusText);
   }
 
   private getMeRequest(observer) {

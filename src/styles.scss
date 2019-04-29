@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
-$color-blue-link: #039be5;;
+$color-blue-link: #039be5;
+$color-red-danger: #f44336;
 
 html, body {
   height: 100%;
@@ -25,6 +26,11 @@ body {
   color: $color-blue-link;
 }
 
+.err-alert {
+  background-color: $color-red-danger;
+}
+
+// flat input field
 .no-spinners::-webkit-outer-spin-button,
 .no-spinners::-webkit-inner-spin-button {
   -webkit-appearance: none;

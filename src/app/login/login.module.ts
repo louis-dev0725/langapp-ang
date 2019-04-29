@@ -5,7 +5,7 @@ import { SignupComponent } from './signup/signup.component';
 import { RestoreComponent } from './restore/restore.component';
 import {ApiService} from "../services/api.service";
 import {TranslateModule} from "@ngx-translate/core";
-import {MatButtonModule, MatFormFieldModule, MatInputModule} from "@angular/material";
+import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule} from "@angular/material";
 import {ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 
@@ -22,7 +22,8 @@ import {RouterModule} from "@angular/router";
     MatInputModule,
     ReactiveFormsModule,
     MatButtonModule,
-    RouterModule
+    RouterModule,
+    MatCardModule
   ],
   providers: [ApiService]
 })

@@ -1,6 +1,7 @@
 
 
 export interface User {
+  accessToken?: string;
   id?: number;
   name: string;
   company?: string;
@@ -15,4 +16,8 @@ export interface User {
   wmr?: string;
 }
 
+export interface FieldError {
+  field: string;
+  message: string;
+}
 

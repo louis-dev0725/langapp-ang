@@ -2,12 +2,17 @@
 	"About": "About",
 	"Amount": "Amount",
 	"Clients": "Clients",
+	"Comment": "Comment",
 	"Company": "Company",
 	"Contacts": "Contacts",
+	"Date": "Date",
 	"Email": "Email",
 	"Forgot password?": "Forgot password?",
+	"Is need to password change": "",
+	"Is service paused": "",
 	"Language": "Language",
 	"Logout": "Logout",
+	"Money": "Money",
 	"Name": "Name",
 	"Partnership": "Partnership",
 	"Password": "Password",
@@ -15,11 +20,19 @@
 	"Phone": "Phone",
 	"Repeat password": "Repeat password",
 	"Restore password": "Restore password",
+	"Save": "Save",
 	"Send": "Send",
 	"Settings": "Settings",
 	"Sign in": "Sign in",
 	"Sign up": "Sign up",
+	"Site": "Site",
 	"Transactions": "Transactions",
+	"WMR wallet": "WMR wallet",
+	"Your id: {{api": {
+		"user": {
+			"id}}": ""
+		}
+	},
 	"restore": {
 		"password": "Please, provide a new password",
 		"request": "To recover your password, you must enter the E-mail to which the account is registered.",
