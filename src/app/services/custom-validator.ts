@@ -8,7 +8,8 @@ export class CustomValidator {
   static errorMap = {
     required: 'This field is required',
     email: 'This is not valid email',
-    passconfirm: 'Password and repeat password are not equals'
+    passconfirm: 'Password and repeat password are not equals',
+    min: 'The amount must be equals to or greater than'
   };
 
   /**

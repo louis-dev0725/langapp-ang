@@ -14,7 +14,6 @@ export class AppComponent {
     let langVal = localStorage.getItem('lang');
     if (!langVal) {
       langVal = navigator.language;
-      console.log('LANG', langVal);
       localStorage.setItem('lang', langVal);
     }
     this.translate.setDefaultLang(langVal);

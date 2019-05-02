@@ -8,6 +8,7 @@ import {UsersComponent} from './users/users.component';
 import {CanactivateLogged} from './services/canactivate-logged';
 import {PaymentComponent} from './payment/payment.component';
 import {SettingsComponent} from './users/settings/settings.component';
+import {AboutComponent} from './partners/about/about.component';
 
 const routes: Routes = [
   {
@@ -44,6 +45,16 @@ const routes: Routes = [
         path: 'settings',
         component: SettingsComponent,
         canActivate: [CanactivateLogged]
+      }
+    ]
+  },
+  {
+    path: 'partners',
+    canActivateChild: [CanactivateLogged],
+    children: [
+      {
+        path: 'about',
+        component: AboutComponent
       }
     ]
   }

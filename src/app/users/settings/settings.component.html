@@ -1,6 +1,6 @@
 <div class="container">
   <h1 translate>Settings</h1>
-  <p class="note" translate>Your id: {{api.user.id}}</p>
+  <p class="note">{{'Your id' | translate}}: {{api.user.id}}</p>
   <form [formGroup]="settingsForm">
 
     <mat-form-field class="form-item">
@@ -42,15 +42,15 @@
         matInput
         required
         formControlName="email"
+        [ngModel]="user.email"
         placeholder="{{'Email' | translate}}">
       <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
     </mat-form-field>
 
     <div class="form-item">
-      <mat-label translate>Is service paused</mat-label>
       <mat-checkbox
         formControlName="isServicePaused"
-        [ngModel]="isServicePaused">
+        [ngModel]="isServicePaused">{{'Is service paused' | translate}}
       </mat-checkbox>
     </div>
 
@@ -62,33 +62,46 @@
         placeholder="{{'WMR wallet' | translate}}">
     </mat-form-field>
 
+    <mat-form-field class="form-item">
+      <mat-label translate>Timezone</mat-label>
+      <mat-select [ngModel]="user.timezone" formControlName="timezone">
+        <mat-optgroup *ngFor="let tzgroup of timeZones" [label]="tzgroup.group">
+          <mat-option *ngFor="let zone of tzgroup.zones" [value]="zone.value">{{zone.value}}</mat-option>
+        </mat-optgroup>
+      </mat-select>
+    </mat-form-field>
+
     <div class="form-item">
-      <mat-label translate>Is need to password change</mat-label>
-      <mat-checkbox (change)="onPasswordFlagChange()"></mat-checkbox>
+      <mat-checkbox
+        (change)="onPasswordFlagChange()">{{'Is need to password change' | translate}}
+      </mat-checkbox>
     </div>
 
     <div [ngClass]="{'hidden': !isChangePassword, 'foldable': isChangePassword}">
-      <mat-form-field class="form-item">
-        <input
-          matInput
-          required
-          formControlName="password"
-          placeholder="{{'Password' | translate}}">
-        <mat-error *ngIf="checkError('password')">{{ getError('password') }}</mat-error>
-      </mat-form-field>
+      <ng-container *ngIf="isChangePassword">
+        <mat-form-field class="form-item">
+          <input
+            matInput
+            required
+            formControlName="password"
+            placeholder="{{'Password' | translate}}">
+          <mat-error *ngIf="checkError('password')">{{ getError('password') }}</mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="form-item">
-        <input
-          matInput
-          required
-          formControlName="passrepeat"
-          placeholder="{{'Repeat password' | translate}}">
-        <mat-error *ngIf="checkError('passrepeat')">{{getError('passrepeat')}}</mat-error>
-      </mat-form-field>
+        <mat-form-field class="form-item">
+          <input
+            matInput
+            required
+            formControlName="passrepeat"
+            placeholder="{{'Repeat password' | translate}}">
+          <mat-error *ngIf="checkError('passrepeat')">{{getError('passrepeat')}}</mat-error>
+        </mat-form-field>
+      </ng-container>
     </div>
 
     <div class="form-item">
       <button
+        (click)="onSubmit(settingsForm.value)"
         mat-flat-button
         [disabled]="!settingsForm.valid"
         color="primary"

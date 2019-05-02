@@ -1,22 +1,22 @@
 <mat-toolbar>
-  <a mat-button *ngIf="!api.isLoggedIn" routerLink="/signup" translate>Sign up</a>
-  <button mat-button *ngIf="!api.isLoggedIn" routerLink="/signin" translate>Sign in</button>
-  <button mat-button [matMenuTriggerFor]="language" translate>Language</button>
-  <button mat-button *ngIf="api.isLoggedIn" routerLink="/payment" translate>Payment</button>
-  <button mat-button *ngIf="api.isLoggedIn" routerLink="/users/settings" translate>Settings</button>
-  <button mat-button [matMenuTriggerFor]="partnership" routerLink="/settings" translate>Partnership</button>
-  <button mat-button routerLink="/contacts" translate>Contacts</button>
-  <button mat-button *ngIf="api.isLoggedIn" (click)="logout()" translate>Logout</button>
+  <a mat-button *ngIf="!api.isLoggedIn" routerLink="/signup">{{'Sign up' | translate}}</a>
+  <button mat-button *ngIf="!api.isLoggedIn" routerLink="/signin">{{'Sign in' | translate}}</button>
+  <button mat-button [matMenuTriggerFor]="language">{{'Language' | translate}}</button>
+  <button mat-button *ngIf="api.isLoggedIn" routerLink="/payment">{{'Payment' | translate}}</button>
+  <button mat-button *ngIf="api.isLoggedIn" routerLink="/users/settings" >{{'Settings' | translate}}</button>
+  <button mat-button [matMenuTriggerFor]="partnership">{{'Partnership' | translate}}</button>
+  <button mat-button routerLink="/contacts">{{'Contacts' | translate}}</button>
+  <button mat-button *ngIf="api.isLoggedIn" (click)="logout()">{{'Logout' | translate}}</button>
 </mat-toolbar>
 
 
 <mat-menu #language="matMenu">
-  <button mat-menu-item (click)="setLanguage('ru')">Russian</button>
-  <button mat-menu-item (click)="setLanguage('en')">Английский</button>
+  <button mat-menu-item (click)="setLanguage('ru-RU')">Русский</button>
+  <button mat-menu-item (click)="setLanguage('en-US')">English</button>
 </mat-menu>
 
 <mat-menu #partnership="matMenu">
-  <button mat-menu-item routerLink="about-partner" translate>About</button>
-  <button mat-menu-item routerLink="clients" *ngIf="api.isLoggedIn" translate>Clients</button>
-  <button mat-menu-item routerLink="operations" *ngIf="api.isLoggedIn" translate>Transactions</button>
+  <button mat-menu-item routerLink="/partners/about">{{'About' | translate}}</button>
+  <button mat-menu-item routerLink="/partners/clients" *ngIf="api.isLoggedIn">{{'Clients' | translate}}</button>
+  <button mat-menu-item routerLink="/partners/operations" *ngIf="api.isLoggedIn">{{'Transactions' | translate}}</button>
 </mat-menu>

@@ -1,0 +1,29 @@
+<div class="card-content">
+  <h1 class="page-title" translate>Partnership programm</h1>
+  <p>Вознаграждение партнера составляет 30% от платежей привлеченного клиента. Выплаты производятся на WMR кошелек.<br>
+    Указать номер WMR кошелька можно в <a routerLink="/users/settings">настройках</a>. Полные правила партнерской программы
+    <a target="_blank" href="/docs/pravila.pdf">по ссылке</a>.</p>Если у вас есть вопросы или предложения – <a
+    href="/users/contact">напишите нам</a>.<p></p>
+  <p style="font-size: 16px;">На вашем партнерском счете {{user.balancePartner | number }}.
+  <h2 translate>Referal links</h2>
+  <div class="form">
+    <label for="url_main_page" class="active" translate>Main page</label>
+    <input id="url_main_page"
+           class="partner-url"
+           readonly="readonly"
+           onclick="this.focus(); this.select()"
+           type="text"
+           value="http://callrocket.ru/?rr={{user?.id}}"
+           name="">
+    <label
+      for="url_create"
+      class="active" translate>Registration page</label>
+
+    <input id="url_create" class="partner-url"
+           readonly="readonly"
+           onclick="this.focus(); this.select()"
+           type="text"
+           value="http://callrocket.ru/users/create?rr={{user?.id}}"
+           name="">
+  </div>
+</div>

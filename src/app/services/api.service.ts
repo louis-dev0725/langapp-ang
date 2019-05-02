@@ -131,14 +131,31 @@ export class ApiService {
     return new ApiError(response.error, response.ok, response.status, response.statusText);
   }
 
-  private getMeRequest(observer) {
-    const headers = new HttpHeaders()
-      .append('Authorization', 'Bearer ' + localStorage.getItem('token'));
 
-    this.http.get<User>(this.apiHost + '/users/me', {headers: headers}).subscribe((userRes: any) => {
+  //<editor-fold desc="Users group">
+
+  updateUser(value: any) {
+    const headers = this.getHeadersWithToken();
+    this.http.patch(this.apiHost + '/users/update', value, {headers})
+      .subscribe((res) => {
+        console.log('update user res', res);
+      })
+  }
+
+  private getMeRequest(observer) {
+
+    const headers = this.getHeadersWithToken();
+
+    this.http.get<User>(this.apiHost + '/users/me', {headers}).subscribe((userRes: any) => {
       this.user = userRes;
       observer.next(true);
     });
+  }
+  //</editor-fold>
+
+  private getHeadersWithToken(): HttpHeaders {
+    return new HttpHeaders()
+      .append('Authorization', 'Bearer ' + localStorage.getItem('token'));
   }
 
 }

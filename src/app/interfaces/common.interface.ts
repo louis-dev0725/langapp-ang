@@ -2,6 +2,8 @@
 
 export interface User {
   accessToken?: string;
+  balance?: number;
+  balancePartner: number;
   id?: number;
   name: string;
   company?: string;

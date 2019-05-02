@@ -7,7 +7,7 @@ import {NavbarComponent} from './navbar/navbar.component';
 import {ApiService} from './services/api.service';
 import {
   MatButtonModule, MatInputModule,
-  MatMenuModule, MatPaginatorModule,
+  MatMenuModule, MatPaginatorIntl, MatPaginatorModule,
   MatSelectModule, MatSortModule, MatTableModule,
   MatToolbarModule
 } from '@angular/material';
@@ -21,6 +21,8 @@ import {CanactivateNologged} from './services/canactivate-nologged';
 import {LoginModule} from './login/login.module';
 import {UsersModule} from './users/users.module';
 import {PaymentComponent} from './payment/payment.component';
+import {PartnersModule} from './partners/partners.module';
+import {CustomPaginatorTranslator} from './services/custom-paginator-translator';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -40,13 +42,14 @@ export function createTranslateLoader(http: HttpClient) {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
+        useFactory: createTranslateLoader,
         deps: [HttpClient]
       }
     }),
     BrowserAnimationsModule,
     LoginModule,
     FormsModule,
+    PartnersModule,
     ReactiveFormsModule,
     UsersModule,
 
@@ -59,7 +62,11 @@ export function createTranslateLoader(http: HttpClient) {
     MatPaginatorModule,
     MatSortModule
   ],
-  providers: [ApiService, CanactivateLogged, CanactivateNologged],
+  providers: [
+    ApiService,
+    CanactivateLogged,
+    CanactivateNologged,
+    {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

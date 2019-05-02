@@ -8,8 +8,8 @@
 	"Date": "Date",
 	"Email": "Email",
 	"Forgot password?": "Forgot password?",
-	"Is need to password change": "Is need to password change",
-	"Is service paused": "Is service paused",
+	"Is need to password change": "",
+	"Is service paused": "",
 	"Language": "Language",
 	"Logout": "Logout",
 	"Main page": "Main page",
@@ -31,15 +31,15 @@
 	"Sign in": "Sign in",
 	"Sign up": "Sign up",
 	"Site": "Site",
-	"Timezone": "Timezone",
+	"Timezone": "",
 	"Transactions": "Transactions",
 	"WMR wallet": "WMR wallet",
 	"Your id": "Your id",
 	"paginator": {
-		"Items per page": "Items per page",
-		"next": "Next",
-		"of": "of",
-		"prev": "Prev"
+		"Items per page": "",
+		"next": "",
+		"of": "",
+		"prev": ""
 	},
 	"restore": {
 		"password": "Please, provide a new password",
@@ -50,8 +50,8 @@
 		"note": "To connect to the site of the Rocket Call system, you must register."
 	},
 	"valid-err": {
-		"Password and repeat password are not equals": "Password and repeat password are not equals",
-		"This field is required": "This field is required",
-		"This is not valid email": "This is not valid email"
+		"Password and repeat password are not equals": "",
+		"This field is required": "",
+		"This is not valid email": ""
 	}
 }

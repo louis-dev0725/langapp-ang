@@ -53,7 +53,6 @@ export class RestoreComponent implements OnInit {
 
   changeForm() {
     if (this.mode === this.MODE_REQUEST) {
-      console.log('REQ');
       this.restoreForm = new FormGroup({
         email: new FormControl('', {validators: [Validators.required, Validators.email], updateOn: 'change'} )
       })
