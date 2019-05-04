@@ -23,6 +23,9 @@ import {UsersModule} from './users/users.module';
 import {PaymentComponent} from './payment/payment.component';
 import {PartnersModule} from './partners/partners.module';
 import {CustomPaginatorTranslator} from './services/custom-paginator-translator';
+import { ContactComponent } from './contact/contact.component';
+import { PaymentsTableComponent } from './common/payments-table/payments-table.component';
+import {PaymentsTableModule} from './common/payments-table/payments-table.module';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -33,7 +36,8 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     NavbarComponent,
-    PaymentComponent
+    PaymentComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +65,8 @@ export function createTranslateLoader(http: HttpClient) {
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    PaymentsTableModule
   ],
   providers: [
     ApiService,

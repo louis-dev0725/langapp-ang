@@ -12,10 +12,13 @@ export class AboutComponent implements OnInit {
     return this.api.user;
   }
 
+
+
   constructor(private api: ApiService) {
   }
 
   ngOnInit() {
+
   }
 
 }

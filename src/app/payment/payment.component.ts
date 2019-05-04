@@ -18,19 +18,14 @@ export class PaymentComponent implements OnInit {
 
   translatedErrorMap = CustomValidator.errorMap;
 
-  columnNames: string[] = ['id', 'addedDateTime', 'money', 'comment'];
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  @ViewChild(MatSort) sort: MatSort;
   paymentForm: FormGroup;
 
-  dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
+  rows: any;
 
   constructor(
     private api: ApiService,
     private router: Router,
-    private serializer: UrlSerializer,
-    private translate: TranslateService) {
+    private serializer: UrlSerializer) {
 
   }
 
@@ -41,13 +36,9 @@ export class PaymentComponent implements OnInit {
 
     this.api.getUserTransactionsList().subscribe((res) => {
       if (!(res instanceof ApiError)) {
-        const operations = res.items;
-        this.dataSource = new MatTableDataSource(operations);
+        this.rows = res.items;
       }
     });
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   getError() {

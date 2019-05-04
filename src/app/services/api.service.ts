@@ -139,7 +139,7 @@ export class ApiService {
    * method: POST
    * url: /users/<user id>/check-invited-users
    */
-  getClientsList(): Observable<InvitedUser> | Observable<ApiError> {
+  getClientsList(): Observable<any> {
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.post(this.apiHost + `/users/${this.user.id}/check-invited-users`, {headers}).subscribe((result) => {
@@ -147,23 +147,6 @@ export class ApiService {
       }, (error) => {
         observer.next(this.getApiError(error))
       })
-    })
-  }
-
-  /**
-   * Operations filtered by user
-   * method: GET
-   * url: /transactions/index?filter=<user id>
-   */
-  getUserTransactionsList(): Observable<any>{
-    return Observable.create((observer) => {
-      const headers = this.getHeadersWithToken();
-      this.http.get(this.apiHost + `/transactions/index?filter[userId]=${this.user.id}`, {headers})
-        .subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        })
     })
   }
 
@@ -199,8 +182,69 @@ export class ApiService {
 
   //</editor-fold>
 
+  //<editor-fold desc="Transactions">
+  private prepareTransactionsUrl(params: any = {}): string {
+    let url = this.apiHost + '/transactions/index';
+    if (Object.keys(params).length > 0) {
+      url+= '?';
+    }
+    const urlParams: any = [];
+    if (params.userId) {
+      urlParams.push(`filter[userId]=${this.user.id}`);
+    }
+    if (params.isParnter) {
+      urlParams.push('filter[isPartner]');
+    }
+    return  url + urlParams.join('&');
+  }
+
+  /**
+   * Operations filtered by user
+   * method: GET
+   * url: /transactions/index?filter[userId]=<user id>
+   */
+  getUserTransactionsList(): Observable<any>{
+    return Observable.create((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.prepareTransactionsUrl({userId:1}), {headers})
+        .subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        })
+    })
+  }
+
+  /**
+   * Operations filtered by user and isPartner flag
+   * method: GET
+   * url: /transactions/index?filter[userId]=<user id>&filter[isPartner]=1
+   */
+  getUserPartnersTransactionsList(): Observable<any> {
+    return Observable.create((obsrver) => {
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.prepareTransactionsUrl({userId:1, isPartner: 1}), {headers})
+        .subscribe((res) => {
+          obsrver.next(res);
+        }, (error) => {
+          obsrver.next(this.getApiError(error));
+        })
+    })
+  }
+  //</editor-fold>
+
+  private getSimpleLanguageHeader(): HttpHeaders {
+    let lang = localStorage.getItem('lang');
+    if (!lang) {
+      lang = 'ru';
+    }
+    return  new HttpHeaders()
+      .append('Accept-Language', lang)
+  }
+
   private getHeadersWithToken(): HttpHeaders {
     return new HttpHeaders()
+      .append('Accept-Language', localStorage.getItem('lang'))
       .append('Authorization', 'Bearer ' + localStorage.getItem('token'));
   }
 

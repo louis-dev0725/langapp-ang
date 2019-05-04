@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatSort, MatTableDataSource} from '@angular/material';
 import {ApiService} from '../../services/api.service';
+import {ApiError} from '../../services/api-error';
 
 @Component({
   selector: 'app-clients',
@@ -11,7 +12,6 @@ export class ClientsComponent implements OnInit {
   clientsDataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   columnNames: string[] = ['id', 'name', 'partnerEarned'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
@@ -20,10 +20,11 @@ export class ClientsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.api.getClientsList().subscribe((res) => {
-      this.clientsDataSource
-    })
-    this.clientsDataSource.paginator = this.paginator;
+    this.api.getClientsList().subscribe((res: any) => {
+      if (!(res instanceof ApiError))
+      this.clientsDataSource = new MatTableDataSource(res);
+      this.clientsDataSource.sort = this.sort;
+    });
     this.clientsDataSource.sort = this.sort;
   }
 

@@ -5,12 +5,15 @@ import {RouterModule} from '@angular/router';
 import { ClientsComponent } from './clients/clients.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatPaginatorModule, MatSortModule, MatTableModule} from '@angular/material';
+import { TransactionComponent } from './transaction/transaction.component';
+import {PaymentsTableModule} from '../common/payments-table/payments-table.module';
 
 @NgModule({
-  declarations: [AboutComponent, ClientsComponent],
+  declarations: [AboutComponent, ClientsComponent, TransactionComponent],
   imports: [
     CommonModule,
     RouterModule,
+    PaymentsTableModule,
     TranslateModule,
     MatTableModule,
     MatSortModule,

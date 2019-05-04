@@ -10,6 +10,8 @@ import {PaymentComponent} from './payment/payment.component';
 import {SettingsComponent} from './users/settings/settings.component';
 import {AboutComponent} from './partners/about/about.component';
 import {ClientsComponent} from './partners/clients/clients.component';
+import {ContactComponent} from './contact/contact.component';
+import {TransactionComponent} from './partners/transaction/transaction.component';
 
 const routes: Routes = [
   {
@@ -60,8 +62,17 @@ const routes: Routes = [
       {
         path: 'clients',
         component: ClientsComponent
+      },
+      {
+        path: 'operations',
+        component: TransactionComponent
       }
     ]
+  },
+  {
+    path: 'contact',
+    component: ContactComponent,
+    canActivate: [CanactivateNologged]
   }
 ];
 

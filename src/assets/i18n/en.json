@@ -1,5 +1,6 @@
 {
 	"About": "About",
+	"Account replenishment": "Account replenishment",
 	"Amount": "Amount",
 	"Clients": "Clients",
 	"Comment": "Comment",
@@ -15,8 +16,11 @@
 	"Main page": "Main page",
 	"Money": "Money",
 	"Name": "Name",
+	"No records found": "No records found",
+	"On yours parnters account is: {{parnterBalance}}": "",
+	"Parntership program: transactions": "Parntership program: transactions",
 	"Partnership": "Partnership",
-	"Partnership programm": "Partnership programm",
+	"Partnership program": "Partnership program",
 	"Password": "Password",
 	"Pay": "Pay",
 	"Payment": "Payment",
@@ -33,6 +37,7 @@
 	"Site": "Site",
 	"Timezone": "Timezone",
 	"Transactions": "Transactions",
+	"Transactions history": "Transactions history",
 	"WMR wallet": "WMR wallet",
 	"Your id": "Your id",
 	"paginator": {
