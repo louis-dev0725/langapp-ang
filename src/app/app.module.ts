@@ -8,7 +8,7 @@ import {ApiService} from './services/api.service';
 import {
   MatButtonModule, MatInputModule,
   MatMenuModule, MatPaginatorIntl, MatPaginatorModule,
-  MatSelectModule, MatSortModule, MatTableModule,
+  MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
@@ -60,7 +60,8 @@ export function createTranslateLoader(http: HttpClient) {
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatSnackBarModule
   ],
   providers: [
     ApiService,

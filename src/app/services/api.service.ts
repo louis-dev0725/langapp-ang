@@ -128,18 +128,28 @@ export class ApiService {
   }
 
   private getApiError(response) {
-    return new ApiError(response.error, response.ok, response.status, response.statusText);
+    if (response.error) {
+      return new ApiError(response.error, response.ok, response.status, response.statusText);
+    } else {
+      return new ApiError([{field: 'all', message: 'Server error'}], false);
+    }
   }
 
 
   //<editor-fold desc="Users group">
 
-  updateUser(value: any) {
-    const headers = this.getHeadersWithToken();
-    this.http.patch(this.apiHost + '/users/update', value, {headers})
-      .subscribe((res) => {
-        console.log('update user res', res);
-      })
+  updateUser(value: any): Observable<any>{
+    // todo: [SHR]: link to update in php code is differ than postman api
+    return Observable.create((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.patch(this.apiHost + '/users/update/' + value.id, value, {headers})
+        .subscribe((res) => {
+          observer.next(res)
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        })
+    })
+
   }
 
   private getMeRequest(observer) {

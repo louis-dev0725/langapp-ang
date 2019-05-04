@@ -3,6 +3,8 @@ import {ApiService} from '../../services/api.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../interfaces/common.interface';
 import {CustomValidator} from '../../services/custom-validator';
+import {ApiError} from '../../services/api-error';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-settings',
@@ -25,7 +27,8 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -35,6 +38,7 @@ export class SettingsComponent implements OnInit {
     });
 
     this.settingsForm = this.formBuilder.group({
+      id: [''],
       name: ['', {validators: [Validators.required], updateOn: 'change'}],
       email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
       company: [''],
@@ -80,6 +84,14 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmit(value: any) {
-    this.api.updateUser(value)
+    this.api.updateUser(value).subscribe((result) => {
+      if (result instanceof ApiError) {
+        // todo: [SHR]: handle error
+
+      } else {
+        localStorage.setItem('user', JSON.stringify(this.user));
+        this.snackBar.open('Settings was successfully saved',  null,{duration: 3000});
+      }
+    })
   }
 }

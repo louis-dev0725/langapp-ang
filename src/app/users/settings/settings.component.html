@@ -1,7 +1,8 @@
 <div class="container">
   <h1 translate>Settings</h1>
-  <p class="note">{{'Your id' | translate}}: {{api.user.id}}</p>
+  <p class="note">{{'Your id' | translate}}: {{user.id}}</p>
   <form [formGroup]="settingsForm">
+    <input type="hidden" formControlName="id" [ngModel]="user.id">
 
     <mat-form-field class="form-item">
       <input
