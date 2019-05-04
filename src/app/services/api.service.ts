@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {User} from '../interfaces/common.interface';
+import {InvitedUser, Operations, User} from '../interfaces/common.interface';
 import {Observable} from 'rxjs';
 import {ApiError} from './api-error';
 
@@ -59,7 +59,7 @@ export class ApiService {
   }
 
   //<editor-fold desc="Signup group">
-  login(params: any): Observable<any | ApiError>  {
+  login(params: any): Observable<any | ApiError> {
     return Observable.create((observer) => {
       this.http.post(this.apiHost + '/users/login', params)
         .subscribe((res: any) => {
@@ -123,10 +123,6 @@ export class ApiService {
     return this.http.get('/assets/timezones.json');
   }
 
-  transactionList() {
-
-  }
-
   private getApiError(response) {
     if (response.error) {
       return new ApiError(response.error, response.ok, response.status, response.statusText);
@@ -138,6 +134,45 @@ export class ApiService {
 
   //<editor-fold desc="Users group">
 
+  /**
+   * Get clients table list
+   * method: POST
+   * url: /users/<user id>/check-invited-users
+   */
+  getClientsList(): Observable<InvitedUser> | Observable<ApiError> {
+    return Observable.create((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.post(this.apiHost + `/users/${this.user.id}/check-invited-users`, {headers}).subscribe((result) => {
+        observer.next(result);
+      }, (error) => {
+        observer.next(this.getApiError(error))
+      })
+    })
+  }
+
+  /**
+   * Operations filtered by user
+   * method: GET
+   * url: /transactions/index?filter=<user id>
+   */
+  getUserTransactionsList(): Observable<any>{
+    return Observable.create((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + `/transactions/index?filter[userId]=${this.user.id}`, {headers})
+        .subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        })
+    })
+  }
+
+  /**
+   * Save user model/profile changes
+   * method: PATCH
+   * url: /users/update/
+   * @param value
+   */
   updateUser(value: any): Observable<any>{
     // todo: [SHR]: link to update in php code is differ than postman api
     return Observable.create((observer) => {
@@ -161,6 +196,7 @@ export class ApiService {
       observer.next(true);
     });
   }
+
   //</editor-fold>
 
   private getHeadersWithToken(): HttpHeaders {

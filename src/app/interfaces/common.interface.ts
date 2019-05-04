@@ -18,8 +18,21 @@ export interface User {
   wmr?: string;
 }
 
+export interface InvitedUser {
+  id: number;
+  name: string;
+  partnerEarned: number;
+}
+
 export interface FieldError {
   field: string;
   message: string;
+}
+
+export interface Operations {
+  id: number;
+  addedDateTime: string;
+  money: number;
+  comment: number;
 }
 

@@ -9,6 +9,7 @@ import {CanactivateLogged} from './services/canactivate-logged';
 import {PaymentComponent} from './payment/payment.component';
 import {SettingsComponent} from './users/settings/settings.component';
 import {AboutComponent} from './partners/about/about.component';
+import {ClientsComponent} from './partners/clients/clients.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,10 @@ const routes: Routes = [
       {
         path: 'about',
         component: AboutComponent
+      },
+      {
+        path: 'clients',
+        component: ClientsComponent
       }
     ]
   }

@@ -1,0 +1,26 @@
+<div class="container">
+  <h1 translate>Clients</h1>
+  <table mat-table [dataSource]="clientsDataSource" matSort>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderRowDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let row">{{row.id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderRowDef mat-sort-header>{{'Name' | translate}}</th>
+      <td mat-cell *matCellDef="let row">{{row.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="partnerEarned">
+      <th mat-header-cell *matHeaderRowDef mat-sort-header>{{'Earnded' | translate}}</th>
+      <td mat-cell *matCellDef="let row">{{row.partnerEarned}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
+
+  </table>
+
+  <mat-paginator></mat-paginator>
+</div>

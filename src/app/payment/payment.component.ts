@@ -5,6 +5,7 @@ import {Router, UrlSerializer} from '@angular/router';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {CustomValidator} from '../services/custom-validator';
 import {TranslateService} from '@ngx-translate/core';
+import {ApiError} from '../services/api-error';
 
 @Component({
   selector: 'app-payment',
@@ -15,11 +16,6 @@ export class PaymentComponent implements OnInit {
 
   private minVal = 100;
 
-  private operationsList: any = [
-    {id: 1, addedDateTime: '', money: 10, comment: ''},
-    {id: 2, addedDateTime: '', money: 100, comment: ''}
-  ];
-
   translatedErrorMap = CustomValidator.errorMap;
 
   columnNames: string[] = ['id', 'addedDateTime', 'money', 'comment'];
@@ -28,14 +24,13 @@ export class PaymentComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   paymentForm: FormGroup;
 
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
 
   constructor(
     private api: ApiService,
     private router: Router,
     private serializer: UrlSerializer,
     private translate: TranslateService) {
-    this.dataSource = new MatTableDataSource<any>(this.operationsList);
 
   }
 
@@ -44,7 +39,12 @@ export class PaymentComponent implements OnInit {
       amount: new FormControl('', {validators: [Validators.required, Validators.min(100)], updateOn: 'change'})
     });
 
-
+    this.api.getUserTransactionsList().subscribe((res) => {
+      if (!(res instanceof ApiError)) {
+        const operations = res.items;
+        this.dataSource = new MatTableDataSource(operations);
+      }
+    });
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
