@@ -13,6 +13,7 @@ export class ClientsComponent implements OnInit {
   columnNames: string[] = ['id', 'name', 'partnerEarned'];
 
   @ViewChild(MatSort) sort: MatSort;
+  isEmptyTable = true;
 
   constructor(
     private api: ApiService
@@ -20,12 +21,17 @@ export class ClientsComponent implements OnInit {
 
   ngOnInit() {
 
+    this.api.getClientsList().subscribe((res: any[]) => {
+      this.isEmptyTable = (res) ? res.length === 0 : true;
+      this.clientsDataSource = new MatTableDataSource(res)
+    });
     this.api.getClientsList().subscribe((res: any) => {
       if (!(res instanceof ApiError))
-      this.clientsDataSource = new MatTableDataSource(res);
+        this.clientsDataSource = new MatTableDataSource(res);
       this.clientsDataSource.sort = this.sort;
     });
     this.clientsDataSource.sort = this.sort;
   }
 
 }
+

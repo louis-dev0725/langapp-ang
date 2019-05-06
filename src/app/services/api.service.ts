@@ -142,7 +142,7 @@ export class ApiService {
   getClientsList(): Observable<any> {
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
-      this.http.post(this.apiHost + `/users/${this.user.id}/check-invited-users`, {headers}).subscribe((result) => {
+      this.http.get(this.apiHost + `/users/${this.user.id}/invited-users`, {headers}).subscribe((result) => {
         observer.next(result);
       }, (error) => {
         observer.next(this.getApiError(error))

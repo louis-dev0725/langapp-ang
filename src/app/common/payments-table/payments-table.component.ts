@@ -45,7 +45,7 @@ export class PaymentsTableComponent implements OnInit {
   private _isShowPartnerEarn: boolean;
 
   get isShowPartnerEarn(): boolean {
-    return this.isShowPartnerEarn;
+    return this._isShowPartnerEarn;
   }
 
   set isShowPartnerEarn(val: boolean) {

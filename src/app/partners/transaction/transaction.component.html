@@ -5,6 +5,8 @@
 <div class="container">
   <h2 translate>Transactions history</h2>
   <app-payments-table
+    [moneyTitle]="'Amount' | translate"
+    [isShowComment]="true"
     [isPaginator]="true"
     [rows]="rows"></app-payments-table>
 </div>
