@@ -70,9 +70,8 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'contact',
+    path: 'contacts',
     component: ContactComponent,
-    canActivate: [CanactivateNologged]
   }
 ];
 

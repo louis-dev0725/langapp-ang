@@ -42,6 +42,10 @@ export class ApiService {
     return this.windowConfig.apiHost + this.windowConfig.apiPrefix;
   }
 
+  get siteKey(): string {
+    return  this.windowConfig.siteKey;
+  }
+
   get isAdmin(): boolean {
     return (this.user) ? this.user.isAdmin : false;
   }
@@ -248,4 +252,8 @@ export class ApiService {
       .append('Authorization', 'Bearer ' + localStorage.getItem('token'));
   }
 
+  sendMessage(data: any) {
+    const headers = this.getSimpleLanguageHeader();
+    return this.http.post(this.apiHost + '/users/contact', data, {headers});
+  }
 }

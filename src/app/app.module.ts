@@ -26,6 +26,7 @@ import {CustomPaginatorTranslator} from './services/custom-paginator-translator'
 import { ContactComponent } from './contact/contact.component';
 import { PaymentsTableComponent } from './common/payments-table/payments-table.component';
 import {PaymentsTableModule} from './common/payments-table/payments-table.module';
+import {NgxCaptchaModule} from 'ngx-captcha';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -52,6 +53,7 @@ export function createTranslateLoader(http: HttpClient) {
     }),
     BrowserAnimationsModule,
     LoginModule,
+    NgxCaptchaModule,
     FormsModule,
     PartnersModule,
     ReactiveFormsModule,
