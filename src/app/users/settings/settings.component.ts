@@ -17,6 +17,11 @@ export class SettingsComponent implements OnInit {
   isChangePassword = false;
   timeZones: any[] = [];
 
+  private _errors = [];
+  get errors() {
+    return this._errors;
+  };
+
   get isServicePaused(): boolean {
     return this.user.isServicePaused !== undefined ? this.user.isServicePaused : false;
   }

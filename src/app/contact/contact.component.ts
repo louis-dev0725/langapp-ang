@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../services/api.service';
 import {MatSnackBar} from '@angular/material';
 import {User} from '../interfaces/common.interface';
 import {ReCaptcha2Component} from 'ngx-captcha';
+import {CustomValidator} from '../services/custom-validator';
 
 @Component({
   selector: 'app-contact',
@@ -24,11 +25,13 @@ export class ContactComponent implements OnInit {
     return this.api.user;
   }
 
+  @ViewChild('frmVar') form;
   @ViewChild('recaptcha') recaptcha: ReCaptcha2Component;
 
   constructor(
     private api: ApiService,
     private formBuilder: FormBuilder,
+    private ref: ChangeDetectorRef,
     private snakcBar: MatSnackBar
   ) { }
 
@@ -37,18 +40,24 @@ export class ContactComponent implements OnInit {
       name: ['', {validators: [Validators.required], updateOn: 'change'}],
       email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
       telephone: [''],
-      message: ['', {validators: [Validators.required], updateOn: 'change'}],
+      subject: [''],
+      body: ['', {validators: [Validators.required], updateOn: 'change'}],
       recaptcha: ['', Validators.required]
     })
   }
 
-  onSubmit(data: any) {
-    this.api.sendMessage(data).subscribe((res) => {
-      this.contactForm.reset();
-      this.snakcBar.open('Your message successfully delivered' )
-    }, () => {
-      this.contactForm.reset(data);
-    })
+  onSubmit() {
+    console.log('form value', this.contactForm.value);
+    this.api.sendMessage(this.contactForm.value).subscribe((res) => {
+      this.snakcBar.open('Your message successfully delivered', null, {duration: 3000} );
+      this.form.resetForm();
+      this.contactForm.get('name').setValue(this.user.name);
+      this.contactForm.get('email').setValue(this.user.email);
+      this.contactForm.get('telephone').setValue(this.user.telephone);
+    }, (err) => {
+      this.contactForm.reset(this.contactForm.value);
+    });
+    this.reloadCaptcha();
   }
 
   checkError(fieldName: string) {
@@ -58,6 +67,7 @@ export class ContactComponent implements OnInit {
   getError(fieldName: string) {
     const errors = this.contactForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
+    return (CustomValidator.errorMap[key]) ? CustomValidator.errorMap[key] : '';
   }
 
   resetCaptcha() {

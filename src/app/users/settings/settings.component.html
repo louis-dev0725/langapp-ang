@@ -1,114 +1,124 @@
 <div class="container">
   <h1 translate>Settings</h1>
   <p class="note">{{'Your id' | translate}}: {{user.id}}</p>
-  <form [formGroup]="settingsForm">
-    <input type="hidden" formControlName="id" [ngModel]="user.id">
 
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        required
-        formControlName="name"
-        [ngModel]="user.name"
-        placeholder="{{'Name' | translate}}">
-      <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
-    </mat-form-field>
+  <ng-container *ngIf="errors.length > 0">
+    <mat-card *ngFor="let err of errors"
+              class="err-alert">
+      <mat-card-content>{{err.message}}</mat-card-content>
+    </mat-card>
+  </ng-container>
 
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        formControlName="company"
-        [ngModel]="user.company"
-        placeholder="{{'Company' | translate }}">
-    </mat-form-field>
+  <div class="container">
+    <form [formGroup]="settingsForm">
+      <input type="hidden" formControlName="id" [ngModel]="user.id">
 
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        formControlName="site"
-        [ngModel]="user.site"
-        placeholder="{{'Site' | translate}}">
-    </mat-form-field>
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          required
+          formControlName="name"
+          [ngModel]="user.name"
+          placeholder="{{'Name' | translate}}">
+        <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
+      </mat-form-field>
 
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        formControlName="telephone"
-        [ngModel]="user.telephone"
-        placeholder="{{'Phone' | translate}}">
-    </mat-form-field>
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          formControlName="company"
+          [ngModel]="user.company"
+          placeholder="{{'Company' | translate }}">
+      </mat-form-field>
 
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        required
-        formControlName="email"
-        [ngModel]="user.email"
-        placeholder="{{'Email' | translate}}">
-      <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
-    </mat-form-field>
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          formControlName="site"
+          [ngModel]="user.site"
+          placeholder="{{'Site' | translate}}">
+      </mat-form-field>
 
-    <div class="form-item">
-      <mat-checkbox
-        formControlName="isServicePaused"
-        [ngModel]="isServicePaused">{{'Is service paused' | translate}}
-      </mat-checkbox>
-    </div>
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          formControlName="telephone"
+          [ngModel]="user.telephone"
+          placeholder="{{'Phone' | translate}}">
+      </mat-form-field>
 
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        [ngModel]="user.wmr"
-        formControlName="wmr"
-        placeholder="{{'WMR wallet' | translate}}">
-    </mat-form-field>
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          required
+          formControlName="email"
+          [ngModel]="user.email"
+          placeholder="{{'Email' | translate}}">
+        <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
+      </mat-form-field>
 
-    <mat-form-field class="form-item">
-      <mat-label translate>Timezone</mat-label>
-      <mat-select [ngModel]="user.timezone" formControlName="timezone">
-        <mat-optgroup *ngFor="let tzgroup of timeZones" [label]="tzgroup.group">
-          <mat-option *ngFor="let zone of tzgroup.zones" [value]="zone.value">{{zone.value}}</mat-option>
-        </mat-optgroup>
-      </mat-select>
-    </mat-form-field>
+      <div class="form-item">
+        <mat-checkbox
+          formControlName="isServicePaused"
+          [ngModel]="isServicePaused">{{'Is service paused' | translate}}
+        </mat-checkbox>
+      </div>
 
-    <div class="form-item">
-      <mat-checkbox
-        (change)="onPasswordFlagChange()">{{'Is need to password change' | translate}}
-      </mat-checkbox>
-    </div>
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          [ngModel]="user.wmr"
+          formControlName="wmr"
+          placeholder="{{'WMR wallet' | translate}}">
+      </mat-form-field>
 
-    <div [ngClass]="{'hidden': !isChangePassword, 'foldable': isChangePassword}">
-      <ng-container *ngIf="isChangePassword">
-        <mat-form-field class="form-item">
-          <input
-            matInput
-            required
-            formControlName="password"
-            placeholder="{{'Password' | translate}}">
-          <mat-error *ngIf="checkError('password')">{{ getError('password') }}</mat-error>
-        </mat-form-field>
+      <mat-form-field class="form-item">
+        <mat-label translate>Timezone</mat-label>
+        <mat-select [ngModel]="user.timezone" formControlName="timezone">
+          <mat-optgroup *ngFor="let tzgroup of timeZones" [label]="tzgroup.group">
+            <mat-option *ngFor="let zone of tzgroup.zones" [value]="zone.value">{{zone.value}}</mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
 
-        <mat-form-field class="form-item">
-          <input
-            matInput
-            required
-            formControlName="passrepeat"
-            placeholder="{{'Repeat password' | translate}}">
-          <mat-error *ngIf="checkError('passrepeat')">{{getError('passrepeat')}}</mat-error>
-        </mat-form-field>
-      </ng-container>
-    </div>
+      <div class="form-item">
+        <mat-checkbox
+          (change)="onPasswordFlagChange()">{{'Is need to password change' | translate}}resetCaptcha
+        </mat-checkbox>
+      </div>
 
-    <div class="form-item">
-      <button
-        (click)="onSubmit(settingsForm.value)"
-        mat-flat-button
-        [disabled]="!settingsForm.valid"
-        color="primary"
-        translate>Save
-      </button>
-    </div>
+      <div [ngClass]="{'hidden': !isChangePassword, 'foldable': isChangePassword}">
+        <ng-container *ngIf="isChangePassword">
+          <mat-form-field class="form-item">
+            <input
+              matInput
+              required
+              formControlName="password"
+              placeholder="{{'Password' | translate}}">
+            <mat-error *ngIf="checkError('password')">{{ getError('password') }}</mat-error>
+          </mat-form-field>
 
-  </form>
+          <mat-form-field class="form-item">
+            <input
+              matInput
+              required
+              formControlName="passrepeat"
+              placeholder="{{'Repeat password' | translate}}">
+            <mat-error *ngIf="checkError('passrepeat')">{{getError('passrepeat')}}</mat-error>
+          </mat-form-field>
+        </ng-container>
+      </div>
+
+      <div class="form-item">
+        <button
+          (click)="onSubmit(settingsForm.value)"
+          mat-flat-button
+          [disabled]="!settingsForm.valid"
+          color="primary"
+          translate>Save
+        </button>
+      </div>
+
+    </form>
+  </div>
 </div>

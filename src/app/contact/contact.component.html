@@ -5,7 +5,7 @@
   <p>E-mail поддержки: <a href="mailto:support@callrocket.ru">support@callrocket.ru</a></p>
 </div>
 <div class="container">
-  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+  <form #frmVar="ngForm" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="form-item">
       <input
         matInput
@@ -35,11 +35,18 @@
     </mat-form-field>
 
     <mat-form-field class="form-item">
+      <input
+        matInput
+        formControlName="subject"
+        placeholder="{{'Subject' | translate}}">
+    </mat-form-field>
+
+    <mat-form-field class="form-item">
       <textarea
         matInput
-        formControlName="message"
+        formControlName="body"
         placeholder="{{'Message' | translate}}"></textarea>
-      <mat-error *ngIf="checkError('message')">{{getError('message')}}</mat-error>
+      <mat-error *ngIf="checkError('body')">{{getError('body')}}</mat-error>
     </mat-form-field>
     <div class="form-item">
       <ngx-recaptcha2
@@ -52,11 +59,12 @@
         [size]="'normal'"
         [useGlobalDomain]="true">
       </ngx-recaptcha2>
+<!--      <mat-error *ngIf="checkError('recaptcha')">{{getError('recaptcha')}}</mat-error>-->
     </div>
 
     <div class="form-item">
       <button
-        (click)="onSubmit(contactForm.value)"
+        (click)="onSubmit()"
         color="primary"
         [disabled]="isErrors"
         mat-flat-button

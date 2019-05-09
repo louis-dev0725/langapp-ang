@@ -254,6 +254,6 @@ export class ApiService {
 
   sendMessage(data: any) {
     const headers = this.getSimpleLanguageHeader();
-    return this.http.post(this.apiHost + '/users/contact', data, {headers});
+    return this.http.post(this.apiHost + '/users/contact', data);
   }
 }
