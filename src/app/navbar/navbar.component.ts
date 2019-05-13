@@ -27,6 +27,7 @@ export class NavbarComponent implements OnInit {
   setLanguage(lang: string) {
     localStorage.setItem('lang', lang);
     this.translate.use(lang);
+    this.eventService.emitChangeEvent({type: 'language-change'});
   }
 
   logout() {

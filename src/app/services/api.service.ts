@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {InvitedUser, Operations, User} from '../interfaces/common.interface';
 import {Observable} from 'rxjs';
 import {ApiError} from './api-error';
@@ -139,6 +139,32 @@ export class ApiService {
   //<editor-fold desc="Users group">
 
   /**
+   * Get users list for admin
+   * method: GET
+   * url: /users/index
+   */
+  getAdminUsers(page = 0, filterParams: any = {}, sort: any = {}) {
+    const requestObject: any = {};
+    const params: any = {};
+
+    if (page > 0) {
+      // note: [SHR] if need to change items per page - do it via "per-page" param
+      params.page = page;
+    }
+
+    if (Object.keys(filterParams).length > 0) {
+      requestObject.filter = filterParams;
+    }
+
+    if (Object.keys(sort).length > 0) {
+      params.sort = this.prepareSort(sort);
+    }
+
+    const headers = this.getHeadersWithToken();
+    return this.http.get(this.apiHost + '/users/index', {headers, params});
+  }
+
+  /**
    * Get clients table list
    * method: POST
    * url: /users/<user id>/check-invited-users
@@ -237,6 +263,11 @@ export class ApiService {
   }
   //</editor-fold>
 
+  sendMessage(data: any) {
+    const headers = this.getSimpleLanguageHeader();
+    return this.http.post(this.apiHost + '/users/contact', data, {headers});
+  }
+
   private getSimpleLanguageHeader(): HttpHeaders {
     let lang = localStorage.getItem('lang');
     if (!lang) {
@@ -252,8 +283,16 @@ export class ApiService {
       .append('Authorization', 'Bearer ' + localStorage.getItem('token'));
   }
 
-  sendMessage(data: any) {
-    const headers = this.getSimpleLanguageHeader();
-    return this.http.post(this.apiHost + '/users/contact', data);
+  private prepareSort(sortObject: any): string {
+    const res = Object.keys(sortObject).reduce((acc: string[], sortfield) => {
+      let sortExpression = sortfield;
+      if (sortObject[sortfield] === 'desc') {
+        sortfield = '-' + sortfield;
+      }
+      acc.push(sortfield);
+      return acc;
+    }, []);
+    return res.join(',');
   }
+
 }

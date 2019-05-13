@@ -24,9 +24,10 @@ import {PaymentComponent} from './payment/payment.component';
 import {PartnersModule} from './partners/partners.module';
 import {CustomPaginatorTranslator} from './services/custom-paginator-translator';
 import { ContactComponent } from './contact/contact.component';
-import { PaymentsTableComponent } from './common/payments-table/payments-table.component';
 import {PaymentsTableModule} from './common/payments-table/payments-table.module';
 import {NgxCaptchaModule} from 'ngx-captcha';
+import {CanactivateAdmin} from './services/canactivate-admin';
+import {ExtendedModule} from '@angular/flex-layout';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -68,10 +69,12 @@ export function createTranslateLoader(http: HttpClient) {
     MatPaginatorModule,
     MatSortModule,
     MatSnackBarModule,
-    PaymentsTableModule
+    PaymentsTableModule,
+    ExtendedModule
   ],
   providers: [
     ApiService,
+    CanactivateAdmin,
     CanactivateLogged,
     CanactivateNologged,
     {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator}],

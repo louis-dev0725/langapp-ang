@@ -12,8 +12,14 @@ import {AboutComponent} from './partners/about/about.component';
 import {ClientsComponent} from './partners/clients/clients.component';
 import {ContactComponent} from './contact/contact.component';
 import {TransactionComponent} from './partners/transaction/transaction.component';
+import {CanactivateAdmin} from './services/canactivate-admin';
 
 const routes: Routes = [
+  {
+    path: 'admin',
+    canActivate: [CanactivateAdmin],
+    loadChildren: './admin/admin.module#AdminModule'
+  },
   {
     path: 'signup',
     component: SignupComponent,

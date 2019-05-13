@@ -1,4 +1,5 @@
-<mat-toolbar>
+
+<mat-toolbar color="primary">
   <a mat-button *ngIf="!api.isLoggedIn" routerLink="/signup">{{'Sign up' | translate}}</a>
   <button mat-button *ngIf="!api.isLoggedIn" routerLink="/signin">{{'Sign in' | translate}}</button>
   <button mat-button [matMenuTriggerFor]="language">{{'Language' | translate}}</button>
@@ -7,6 +8,8 @@
   <button mat-button [matMenuTriggerFor]="partnership">{{'Partnership' | translate}}</button>
   <button mat-button routerLink="/contacts">{{'Contacts' | translate}}</button>
   <button mat-button *ngIf="api.isLoggedIn" (click)="logout()">{{'Logout' | translate}}</button>
+  <button mat-button *ngIf="api.isLoggedIn && api.isAdmin" [matMenuTriggerFor]="adminmenu">{{'Admin' | translate}}</button>
+
 </mat-toolbar>
 
 
@@ -19,4 +22,9 @@
   <button mat-menu-item routerLink="/partners/about">{{'About' | translate}}</button>
   <button mat-menu-item routerLink="/partners/clients" *ngIf="api.isLoggedIn">{{'Clients' | translate}}</button>
   <button mat-menu-item routerLink="/partners/operations" *ngIf="api.isLoggedIn">{{'Transactions' | translate}}</button>
+</mat-menu>
+
+<mat-menu #adminmenu="matMenu">
+  <button mat-menu-item routerLink="/admin/users">{{'Clients' | translate}}</button>
+  <button mat-menu-item routerLink="/admin/operations">{{'Transactions' | translate}}</button>
 </mat-menu>
