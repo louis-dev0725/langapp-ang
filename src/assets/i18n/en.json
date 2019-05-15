@@ -48,6 +48,7 @@
 	"Users - admin": "Users - admin",
 	"WMR wallet": "WMR wallet",
 	"Your id": "Your id",
+	"isServicePaused": "",
 	"paginator": {
 		"Items per page": "Items per page",
 		"next": "Next",

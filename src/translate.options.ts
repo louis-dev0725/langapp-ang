@@ -2,6 +2,8 @@
 
 import { _ } from '@biesbjerg/ngx-translate-extract';
 
+_('isServicePaused');
+
 _('paginator.Items per page');
 _('paginator.of');
 _('paginator.prev');

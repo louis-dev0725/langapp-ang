@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {InvitedUser, Operations, User} from '../interfaces/common.interface';
 import {Observable} from 'rxjs';
 import {ApiError} from './api-error';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -153,7 +154,10 @@ export class ApiService {
     }
 
     if (Object.keys(filterParams).length > 0) {
-      requestObject.filter = filterParams;
+      // params.filter = filterParams;
+      Object.keys(filterParams).forEach((filterKey) => {
+        params[`filter[${filterKey}]`] = filterParams[filterKey];
+      })
     }
 
     if (Object.keys(sort).length > 0) {

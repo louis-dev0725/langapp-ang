@@ -13,6 +13,7 @@ import {EventService} from '../../event.service';
 export class AdmUsersComponent implements OnInit {
 
   private usersSubscription: Subscription;
+  private sendTimeout;
 
   columns = ['id', 'name', 'company', 'telephone', 'balance', 'comment', 'edit'];
   notFilterFields = ['Comment', 'Edit'];
@@ -27,13 +28,11 @@ export class AdmUsersComponent implements OnInit {
     Email: 'Email',
     Comment: 'Comment',
     Edit:'Edit',
-
+    isServicePaused: 'Is service paused'
   };
 
   get fileldKeys(): any[] {
-    const keys = Object.keys(this.translatedKeys);
-    keys.unshift('id');
-    return keys;
+    return Object.keys(this.translatedKeys);
   }
 
   filter = {
@@ -41,7 +40,8 @@ export class AdmUsersComponent implements OnInit {
     name: '',
     company:'',
     telephone: '',
-    email:''
+    email:'',
+    isservicepaused: '',
   };
 
   set rows(data: any[]) {
@@ -88,20 +88,44 @@ export class AdmUsersComponent implements OnInit {
     if (this.usersSubscription) {
       this.usersSubscription.unsubscribe();
     }
+    let toSendFilter = Object.assign({}, this.filter);
 
-    this.usersSubscription = this.api.getAdminUsers(0, {}, sort).subscribe((res: any) => {
+    const replaceKeys = {isservicepaused: 'isServicePaused'};
+
+    console.log('tosend', toSendFilter);
+
+    Object.keys(toSendFilter).forEach((key) => {
+
+      if(toSendFilter[key]=== '') {
+        delete toSendFilter[key];
+      }
+
+      if (replaceKeys[key] && toSendFilter[key]) {
+        toSendFilter[replaceKeys[key]] = toSendFilter[key];
+        delete toSendFilter[key]
+      }
+
+    });
+
+
+    this.usersSubscription = this.api.getAdminUsers(0, toSendFilter, sort).subscribe((res: any) => {
       this.rows = res.items;
     })
   }
 
   runFilter() {
-    console.log('filter', this.filter);
-    // this.getUsers();
+    if (this.sendTimeout) {
+      clearTimeout(this.sendTimeout);
+    }
+    this.sendTimeout = setTimeout(() => {
+      this.getUsers();
+    }, 300)
   }
 
   transatePage() {
     this.translate.get(this.fileldKeys).subscribe((res: any) => {
-      this.translatedKeys = res;
+      this.translatedKeys = Object.assign({id: 'ID'}, res);
+
     });
   }
 }

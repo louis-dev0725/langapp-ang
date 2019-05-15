@@ -48,6 +48,7 @@
 	"Users - admin": "Пользователи - администратор",
 	"WMR wallet": "WMR кошелек",
 	"Your id": "Ваш ID",
+	"isServicePaused": "Активность сервиса",
 	"paginator": {
 		"Items per page": "Выводится на страницу",
 		"next": "След.",
