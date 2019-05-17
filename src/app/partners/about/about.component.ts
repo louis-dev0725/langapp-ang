@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiService} from '../../services/api.service';
-import {User} from '../../interfaces/common.interface';
+import {User} from '@app/interfaces/common.interface';
+import {SessionService} from '@app/services/session.service';
 
 @Component({
   selector: 'app-about',
@@ -9,12 +9,12 @@ import {User} from '../../interfaces/common.interface';
 })
 export class AboutComponent implements OnInit {
   get user(): User {
-    return this.api.user;
+    return this.session.user;
   }
 
 
 
-  constructor(private api: ApiService) {
+  constructor(private session: SessionService) {
   }
 
   ngOnInit() {

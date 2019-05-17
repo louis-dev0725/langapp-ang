@@ -1,9 +1,11 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {ApiService} from '../../services/api.service';
+import {ApiService} from '@app/services/api.service';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Subscription} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
-import {EventService} from '../../event.service';
+import {EventService} from '@app/event.service';
+import {Router} from '@angular/router';
+import {SessionService} from '@app/services/session.service';
 
 @Component({
   selector: 'app-adm-users',
@@ -31,7 +33,7 @@ export class AdmUsersComponent implements OnInit {
     isServicePaused: 'Is service paused'
   };
 
-  get fileldKeys(): any[] {
+  get fieldKeys(): any[] {
     return Object.keys(this.translatedKeys);
   }
 
@@ -53,11 +55,14 @@ export class AdmUsersComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator;
   @ViewChild(MatSort) sort;
+  isLoaded = false;
 
   constructor(
     private api: ApiService,
     private eventService: EventService,
     private ref: ChangeDetectorRef,
+    private router: Router,
+    private session: SessionService,
     private translate: TranslateService) { }
 
   ngOnInit() {
@@ -81,6 +86,8 @@ export class AdmUsersComponent implements OnInit {
   }
 
   getUsers() {
+    this.isLoaded = false;
+    this.rows = [];
     let sort:any = {};
     if (this.sort.direction !== '') {
       sort[this.sort.active] = this.sort.direction;
@@ -91,8 +98,6 @@ export class AdmUsersComponent implements OnInit {
     let toSendFilter = Object.assign({}, this.filter);
 
     const replaceKeys = {isservicepaused: 'isServicePaused'};
-
-    console.log('tosend', toSendFilter);
 
     Object.keys(toSendFilter).forEach((key) => {
 
@@ -110,6 +115,7 @@ export class AdmUsersComponent implements OnInit {
 
     this.usersSubscription = this.api.getAdminUsers(0, toSendFilter, sort).subscribe((res: any) => {
       this.rows = res.items;
+      this.isLoaded = true;
     })
   }
 
@@ -123,9 +129,14 @@ export class AdmUsersComponent implements OnInit {
   }
 
   transatePage() {
-    this.translate.get(this.fileldKeys).subscribe((res: any) => {
+    this.translate.get(this.fieldKeys).subscribe((res: any) => {
       this.translatedKeys = Object.assign({id: 'ID'}, res);
 
     });
+  }
+
+  showEditUser(row: any) {
+    this.session.userToEdit = row;
+    this.router.navigate(['/admin/user'])
   }
 }

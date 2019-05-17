@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ApiService} from '../../services/api.service';
+import {ApiService} from '@app/services/api.service';
+import {SessionService} from '@app/services/session.service';
 
 @Component({
   selector: 'app-transaction',
@@ -10,10 +11,10 @@ export class TransactionComponent implements OnInit {
   rows: any;
 
   get parnterBalance(): number {
-    return this.api.user.balancePartner;
+    return this.session.user.balancePartner;
   }
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private session: SessionService) { }
 
   ngOnInit() {
     this.api.getUserPartnersTransactionsList().subscribe((result) => {

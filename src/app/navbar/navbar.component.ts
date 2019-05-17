@@ -3,6 +3,7 @@ import {ApiService} from '../services/api.service';
 import {TranslateService} from '@ngx-translate/core';
 import {Router} from '@angular/router';
 import {EventService} from '../event.service';
+import {SessionService} from '../services/session.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,6 +17,7 @@ export class NavbarComponent implements OnInit {
     private eventService: EventService,
     private router: Router,
     private ref: ChangeDetectorRef,
+    private session: SessionService,
     private translate: TranslateService) {
 
   }

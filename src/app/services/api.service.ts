@@ -1,43 +1,14 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {InvitedUser, Operations, User} from '../interfaces/common.interface';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {User} from '../interfaces/common.interface';
 import {Observable} from 'rxjs';
 import {ApiError} from './api-error';
-import {forEach} from '@angular/router/src/utils/collection';
+import {SessionService} from './session.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  get user(): User {
-    if (!this._user) {
-      const userKey = localStorage.getItem('user');
-      if (userKey) {
-        this._user = JSON.parse(userKey);
-      }
-    }
-    return this._user;
-  }
-
-  set user(value: User) {
-    if (value) {
-      localStorage.setItem('user', JSON.stringify(value));
-    }
-    this._user = value;
-  }
-
-  get token(): string {
-    return localStorage.getItem('token');
-  }
-
-  set token(value: string) {
-    localStorage.setItem('token', value);
-    this._token = value;
-  }
-
-  private _user: User;
-  private _token: string;
-
 
   get apiHost(): string {
     return this.windowConfig.apiHost + this.windowConfig.apiPrefix;
@@ -47,20 +18,13 @@ export class ApiService {
     return  this.windowConfig.siteKey;
   }
 
-  get isAdmin(): boolean {
-    return (this.user) ? this.user.isAdmin : false;
-  }
-
-  get isLoggedIn(): boolean {
-    const token = this.token;
-    return !!token;
-  }
-
   get windowConfig(): any {
     return (window as any).rocket;
   }
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private session: SessionService) {
   }
 
   //<editor-fold desc="Signup group">
@@ -69,7 +33,7 @@ export class ApiService {
       this.http.post(this.apiHost + '/users/login', params)
         .subscribe((res: any) => {
           if (res.accessToken) {
-            this.token = res.accessToken;
+            this.session.token = res.accessToken;
             this.getMeRequest(observer)
           } else {
             observer.next(res.message);
@@ -95,7 +59,7 @@ export class ApiService {
     return Observable.create((observer) => {
       this.http.post(this.apiHost + '/users/reset-password', params)
         .subscribe((res: any) => {
-          this.token = res.accessToken;
+          this.session.token = res.accessToken;
           this.getMeRequest(observer);
         }, (error) => {
           observer.next(this.getApiError(error));
@@ -106,8 +70,8 @@ export class ApiService {
   signUp(params: any): Observable<any> {
     return Observable.create((observer) => {
       return this.http.post<User>(this.apiHost + '/users', params).subscribe((res) => {
-        this.user = res;
-        localStorage.setItem('token', this.user.accessToken);
+        this.session.user = res;
+        this.session.token = this.session.user.accessToken;
         this.getMeRequest(observer);
       }, (error) => {
         observer.next(this.getApiError(error));
@@ -117,9 +81,7 @@ export class ApiService {
   }
 
   logout() {
-    this.user = undefined;
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    this.session.logout();
   }
 
   //</editor-fold>
@@ -145,7 +107,6 @@ export class ApiService {
    * url: /users/index
    */
   getAdminUsers(page = 0, filterParams: any = {}, sort: any = {}) {
-    const requestObject: any = {};
     const params: any = {};
 
     if (page > 0) {
@@ -176,7 +137,10 @@ export class ApiService {
   getClientsList(): Observable<any> {
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
-      this.http.get(this.apiHost + `/users/${this.user.id}/invited-users`, {headers}).subscribe((result) => {
+      this.http.get(
+        this.apiHost + `/users/${this.session.user.id}/invited-users`,
+        {headers}
+      ).subscribe((result) => {
         observer.next(result);
       }, (error) => {
         observer.next(this.getApiError(error))
@@ -209,7 +173,7 @@ export class ApiService {
     const headers = this.getHeadersWithToken();
 
     this.http.get<User>(this.apiHost + '/users/me', {headers}).subscribe((userRes: any) => {
-      this.user = userRes;
+      this.session.user = userRes;
       observer.next(true);
     });
   }
@@ -224,7 +188,7 @@ export class ApiService {
     }
     const urlParams: any = [];
     if (params.userId) {
-      urlParams.push(`filter[userId]=${this.user.id}`);
+      urlParams.push(`filter[userId]=${this.session.user.id}`);
     }
     if (params.isParnter) {
       urlParams.push('filter[isPartner]');
@@ -273,10 +237,7 @@ export class ApiService {
   }
 
   private getSimpleLanguageHeader(): HttpHeaders {
-    let lang = localStorage.getItem('lang');
-    if (!lang) {
-      lang = 'ru';
-    }
+    const lang = this.session.lang;
     return  new HttpHeaders()
       .append('Accept-Language', lang)
   }
@@ -289,7 +250,6 @@ export class ApiService {
 
   private prepareSort(sortObject: any): string {
     const res = Object.keys(sortObject).reduce((acc: string[], sortfield) => {
-      let sortExpression = sortfield;
       if (sortObject[sortfield] === 'desc') {
         sortfield = '-' + sortfield;
       }

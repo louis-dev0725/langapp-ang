@@ -1,11 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ApiService} from '../../services/api.service';
+import {ApiService} from '@app/services/api.service';
 import {TranslateService} from '@ngx-translate/core';
 
 import * as jstz from 'jstz';
-import {CustomValidator} from "../../services/custom-validator";
-import {ApiError} from '../../services/api-error';
+import {CustomValidator} from '@app/services/custom-validator';
+import {ApiError} from '@app/services/api-error';
 import {Router} from '@angular/router';
 
 @Component({

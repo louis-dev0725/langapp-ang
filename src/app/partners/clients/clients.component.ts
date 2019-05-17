@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatTableDataSource} from '@angular/material';
-import {ApiService} from '../../services/api.service';
-import {ApiError} from '../../services/api-error';
+import {ApiService} from '@app/services/api.service';
+import {ApiError} from '@app/services/api-error';
 
 @Component({
   selector: 'app-clients',

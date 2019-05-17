@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ApiService} from '../../services/api.service';
+import {ApiService} from '@app/services/api.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {User} from '../../interfaces/common.interface';
-import {CustomValidator} from '../../services/custom-validator';
-import {ApiError} from '../../services/api-error';
+import {User} from '@app/interfaces/common.interface';
+import {CustomValidator} from '@app/services/custom-validator';
+import {ApiError} from '@app/services/api-error';
 import {MatSnackBar} from '@angular/material';
+import {SessionService} from '@app/services/session.service';
 
 @Component({
   selector: 'app-settings',
@@ -27,13 +28,14 @@ export class SettingsComponent implements OnInit {
   }
 
   get user(): User {
-    return this.api.user;
+    return this.session.user;
   }
 
   constructor(
     private api: ApiService,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private session: SessionService) {
   }
 
   ngOnInit() {

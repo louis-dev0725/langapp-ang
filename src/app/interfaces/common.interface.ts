@@ -16,6 +16,9 @@ export interface User {
   isAdmin: boolean;
   isServicePaused?: boolean;
   wmr?: string;
+  registerIp?:string;
+  lastLoginIp?:string;
+  addedDateTime?:string;
 }
 
 export interface InvitedUser {

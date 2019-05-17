@@ -5,6 +5,7 @@ import {MatSnackBar} from '@angular/material';
 import {User} from '../interfaces/common.interface';
 import {ReCaptcha2Component} from 'ngx-captcha';
 import {CustomValidator} from '../services/custom-validator';
+import {SessionService} from '@app/services/session.service';
 
 @Component({
   selector: 'app-contact',
@@ -22,7 +23,7 @@ export class ContactComponent implements OnInit {
   }
 
   get user(): User {
-    return this.api.user;
+    return this.session.user;
   }
 
   @ViewChild('frmVar') form;
@@ -32,7 +33,8 @@ export class ContactComponent implements OnInit {
     private api: ApiService,
     private formBuilder: FormBuilder,
     private ref: ChangeDetectorRef,
-    private snakcBar: MatSnackBar
+    private snakcBar: MatSnackBar,
+    private session: SessionService
   ) { }
 
   ngOnInit() {
@@ -47,7 +49,6 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('form value', this.contactForm.value);
     this.api.sendMessage(this.contactForm.value).subscribe((res) => {
       this.snakcBar.open('Your message successfully delivered', null, {duration: 3000} );
       this.form.resetForm();

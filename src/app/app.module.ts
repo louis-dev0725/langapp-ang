@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -28,6 +28,7 @@ import {PaymentsTableModule} from './common/payments-table/payments-table.module
 import {NgxCaptchaModule} from 'ngx-captcha';
 import {CanactivateAdmin} from './services/canactivate-admin';
 import {ExtendedModule} from '@angular/flex-layout';
+import {SessionService} from './services/session.service';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -77,7 +78,9 @@ export function createTranslateLoader(http: HttpClient) {
     CanactivateAdmin,
     CanactivateLogged,
     CanactivateNologged,
-    {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator}],
+    {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator},
+    {provide: LOCALE_ID, useFactory: SessionService.getLocale()}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ApiService} from '../../services/api.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ApiService} from '@app/services/api.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CustomValidator} from '../../services/custom-validator';
-import {ApiError} from '../../services/api-error';
+import {CustomValidator} from '@app/services/custom-validator';
+import {ApiError} from '@app/services/api-error';
 
 @Component({
   selector: 'app-restore',

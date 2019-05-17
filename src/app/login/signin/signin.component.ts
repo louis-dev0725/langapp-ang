@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ApiService} from '../../services/api.service';
+import {ApiService} from '@app/services/api.service';
 import {Router} from '@angular/router';
-import {ApiError} from '../../services/api-error';
-import {FieldError} from '../../interfaces/common.interface';
+import {ApiError} from '@app/services/api-error';
+import {FieldError} from '@app/interfaces/common.interface';
 
 @Component({
   selector: 'app-signin',

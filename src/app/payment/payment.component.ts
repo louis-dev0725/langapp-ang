@@ -1,11 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../services/api.service';
 import {Router, UrlSerializer} from '@angular/router';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {CustomValidator} from '../services/custom-validator';
-import {TranslateService} from '@ngx-translate/core';
 import {ApiError} from '../services/api-error';
+import {SessionService} from '@app/services/session.service';
 
 @Component({
   selector: 'app-payment',
@@ -25,7 +24,8 @@ export class PaymentComponent implements OnInit {
   constructor(
     private api: ApiService,
     private router: Router,
-    private serializer: UrlSerializer) {
+    private serializer: UrlSerializer,
+    private session: SessionService) {
 
   }
 
@@ -47,7 +47,7 @@ export class PaymentComponent implements OnInit {
   }
 
   onPayment() {
-    const user = this.api.user;
+    const user = this.session.user;
     const urlTree = this.router.createUrlTree(
       ['/pay/start'],
       {
