@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {ApiService} from './services/api.service';
 import {
-  MatButtonModule, MatInputModule,
+  MatButtonModule, MatButtonToggleModule, MatIconModule, MatInputModule,
   MatMenuModule, MatPaginatorIntl, MatPaginatorModule,
   MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule,
   MatToolbarModule
@@ -29,6 +29,7 @@ import {NgxCaptchaModule} from 'ngx-captcha';
 import {CanactivateAdmin} from './services/canactivate-admin';
 import {ExtendedModule} from '@angular/flex-layout';
 import {SessionService} from './services/session.service';
+import {CustomValidator} from '@app/services/custom-validator';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -71,13 +72,16 @@ export function createTranslateLoader(http: HttpClient) {
     MatSortModule,
     MatSnackBarModule,
     PaymentsTableModule,
-    ExtendedModule
+    ExtendedModule,
+    MatButtonToggleModule,
+    MatIconModule
   ],
   providers: [
     ApiService,
     CanactivateAdmin,
     CanactivateLogged,
     CanactivateNologged,
+    CustomValidator,
     {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator},
     {provide: LOCALE_ID, useFactory: SessionService.getLocale()}
   ],

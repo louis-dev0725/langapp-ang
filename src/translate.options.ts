@@ -9,7 +9,8 @@ _('paginator.of');
 _('paginator.prev');
 _('paginator.next');
 
-_('valid-err.This field is required');
-_('valid-err.This is not valid email');
-_('valid-err.Password and repeat password are not equals');
+_('valid-err.required');
+_('valid-err.email');
+_('valid-err.passconfirm');
+_('valid-err.min');
 */

@@ -33,6 +33,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private api: ApiService,
+    private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private session: SessionService) {
@@ -66,7 +67,7 @@ export class SettingsComponent implements OnInit {
   getError(fieldName: string) {
     const errors = this.settingsForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (CustomValidator.errorMap[key]) ? CustomValidator.errorMap[key] : '';
+    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
   }
 
   onPasswordFlagChange() {

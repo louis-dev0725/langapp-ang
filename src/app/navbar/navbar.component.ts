@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {ApiService} from '../services/api.service';
 import {TranslateService} from '@ngx-translate/core';
 import {Router} from '@angular/router';
@@ -10,7 +10,24 @@ import {SessionService} from '../services/session.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
+
+  private langMap = {
+    'ru': 'Русский',
+    'ru-RU': 'Русский',
+    'en':'English',
+    'en-US':'English'
+  };
+
+  languages = ['Русский', 'English'];
+
+  get currentLang(): string {
+    return this.langMap[this.session.lang];
+  }
+
+  get isLoggedIn(): boolean {
+    return this.session.isLoggedIn;
+  }
 
   constructor(
     public api: ApiService,
@@ -22,13 +39,10 @@ export class NavbarComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-
-  }
-
-  setLanguage(lang: string) {
-    localStorage.setItem('lang', lang);
-    this.translate.use(lang);
+  setLanguage(lang: any) {
+    const idx = this.languages.indexOf(lang);
+    this.session.lang = (idx > 0) ? 'en-US' : 'ru-RU';
+    this.translate.use(this.session.lang);
     this.eventService.emitChangeEvent({type: 'language-change'});
   }
 

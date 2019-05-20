@@ -26,6 +26,7 @@ export class AdmUserEditComponent implements OnInit {
 
   constructor(
     private api: ApiService,
+    private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
     private session: SessionService,
     private snackBar: MatSnackBar
@@ -68,7 +69,7 @@ export class AdmUserEditComponent implements OnInit {
   getError(fieldName: string) {
     const errors = this.userProfile.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (CustomValidator.errorMap[key]) ? CustomValidator.errorMap[key] : '';
+    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
   }
 
   onPasswordFlagChange() {

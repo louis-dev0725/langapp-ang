@@ -31,6 +31,7 @@ export class ContactComponent implements OnInit {
 
   constructor(
     private api: ApiService,
+    private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
     private ref: ChangeDetectorRef,
     private snakcBar: MatSnackBar,
@@ -68,7 +69,7 @@ export class ContactComponent implements OnInit {
   getError(fieldName: string) {
     const errors = this.contactForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (CustomValidator.errorMap[key]) ? CustomValidator.errorMap[key] : '';
+    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
   }
 
   resetCaptcha() {

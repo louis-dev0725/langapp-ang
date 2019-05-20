@@ -1,27 +1,40 @@
 
 <mat-toolbar color="primary">
-  <a mat-button *ngIf="!api.isLoggedIn" routerLink="/signup">{{'Sign up' | translate}}</a>
-  <button mat-button *ngIf="!api.isLoggedIn" routerLink="/signin">{{'Sign in' | translate}}</button>
+  <a mat-button *ngIf="!isLoggedIn" routerLink="/signup">{{'Sign up' | translate}}</a>
+  <button mat-button *ngIf="!isLoggedIn" routerLink="/signin">{{'Sign in' | translate}}</button>
   <button mat-button [matMenuTriggerFor]="language">{{'Language' | translate}}</button>
-  <button mat-button *ngIf="api.isLoggedIn" routerLink="/payment">{{'Payment' | translate}}</button>
-  <button mat-button *ngIf="api.isLoggedIn" routerLink="/users/settings" >{{'Settings' | translate}}</button>
+  <button mat-button *ngIf="isLoggedIn" routerLink="/payment">{{'Payment' | translate}}</button>
+  <button mat-button *ngIf="isLoggedIn" routerLink="/users/settings" >{{'Settings' | translate}}</button>
   <button mat-button [matMenuTriggerFor]="partnership">{{'Partnership' | translate}}</button>
   <button mat-button routerLink="/contacts">{{'Contacts' | translate}}</button>
-  <button mat-button *ngIf="api.isLoggedIn" (click)="logout()">{{'Logout' | translate}}</button>
-  <button mat-button *ngIf="api.isLoggedIn && session.isAdmin" [matMenuTriggerFor]="adminmenu">{{'Admin' | translate}}</button>
+  <button mat-button *ngIf="isLoggedIn" (click)="logout()">{{'Logout' | translate}}</button>
+  <button mat-button *ngIf="isLoggedIn && session.isAdmin" [matMenuTriggerFor]="adminmenu">{{'Admin' | translate}}</button>
 
 </mat-toolbar>
 
 
 <mat-menu #language="matMenu">
-  <button mat-menu-item (click)="setLanguage('ru-RU')">Русский</button>
-  <button mat-menu-item (click)="setLanguage('en-US')">English</button>
+  <mat-button-toggle-group
+    #group="matButtonToggleGroup"
+    class="lang-toggle-group"
+    [vertical]="true"
+    [(ngModel)]="currentLang">
+    <mat-button-toggle
+      (click)="setLanguage(lang)"
+      ngDefaultControl
+      class="lang-item"
+      *ngFor="let lang of languages"
+      [value]="lang">
+      <mat-icon *ngIf="group.value === lang">check</mat-icon>
+      {{lang}}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
 </mat-menu>
 
 <mat-menu #partnership="matMenu">
   <button mat-menu-item routerLink="/partners/about">{{'About' | translate}}</button>
-  <button mat-menu-item routerLink="/partners/clients" *ngIf="api.isLoggedIn">{{'Clients' | translate}}</button>
-  <button mat-menu-item routerLink="/partners/operations" *ngIf="api.isLoggedIn">{{'Transactions' | translate}}</button>
+  <button mat-menu-item routerLink="/partners/clients" *ngIf="isLoggedIn">{{'Clients' | translate}}</button>
+  <button mat-menu-item routerLink="/partners/operations" *ngIf="isLoggedIn">{{'Transactions' | translate}}</button>
 </mat-menu>
 
 <mat-menu #adminmenu="matMenu">

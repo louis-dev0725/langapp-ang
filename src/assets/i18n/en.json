@@ -10,6 +10,7 @@
 	"Company": "Company",
 	"Contacts": "Contacts",
 	"Date": "Date",
+	"Date of creation": "",
 	"Earned": "Earned",
 	"Edit": "Edit",
 	"Edit user profile": "",
@@ -19,6 +20,7 @@
 	"Is need to password change": "Is need to password change",
 	"Is service paused": "Is service paused",
 	"Language": "Language",
+	"Last login IP": "",
 	"Logout": "Logout",
 	"Main page": "Main page",
 	"Message": "Message",
@@ -26,6 +28,7 @@
 	"No records found": "No records found",
 	"On yours partners account is": "On yours partners account is",
 	"Open as user": "",
+	"Partner Balance": "",
 	"Partnership": "Partnership",
 	"Partnership program": "Partnership program",
 	"Partnership program: transactions": "Partnership program: transactions",
@@ -69,8 +72,9 @@
 		"note": "To connect to the site of the Rocket Call system, you must register."
 	},
 	"valid-err": {
-		"Password and repeat password are not equals": "Password and repeat password are not equals",
-		"This field is required": "This field is required",
-		"This is not valid email": "This is not valid email"
+		"email": "This is not valid email",
+		"min": "The amount must be equals to or greater than",
+		"passconfirm": "Password and repeat password are not equals",
+		"required": "This field is required"
 	}
 }

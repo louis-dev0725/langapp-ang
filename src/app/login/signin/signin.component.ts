@@ -4,6 +4,7 @@ import {ApiService} from '@app/services/api.service';
 import {Router} from '@angular/router';
 import {ApiError} from '@app/services/api-error';
 import {FieldError} from '@app/interfaces/common.interface';
+import {CustomValidator} from '@app/services/custom-validator';
 
 @Component({
   selector: 'app-signin',
@@ -16,6 +17,7 @@ export class SigninComponent implements OnInit {
 
   constructor(
     private api: ApiService,
+    private custValidator: CustomValidator,
     private formBuilder: FormBuilder,
     private router: Router) {
   }
@@ -40,24 +42,13 @@ export class SigninComponent implements OnInit {
     });
   }
 
+  getErrors(fieldName: string): string {
+    const errors = this.signinForm.get(fieldName).errors;
+    const key = Object.keys(errors)[0];
+    return (this.custValidator.errorMap[key]) ? this.custValidator.errorMap[key] : '';
+  }
+
   checkError(fieldName: string) {
-    return !this.signinForm.valid;
-  }
-
-  getError(fieldName: string) {
-    return this[fieldName + 'Errors']();
-  }
-
-  private emailErrors(): string {
-    // todo: [SHR]: translate errors
-    const eml = this.signinForm.get('email');
-    return eml.hasError('required') ? 'Field is required' :
-      eml.hasError('email') ? 'Not a valid email' : '';
-  }
-
-  private passwordErrors(): string {
-    // todo: [SHR]: translate errors
-    const pwd = this.signinForm.get('password');
-    return pwd.hasError('required') ? 'Field is required' : '';
+    return !!this.signinForm.get(fieldName).errors
   }
 }

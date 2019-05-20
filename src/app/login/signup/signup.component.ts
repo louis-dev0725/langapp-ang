@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '@app/services/api.service';
-import {TranslateService} from '@ngx-translate/core';
 
 import * as jstz from 'jstz';
 import {CustomValidator} from '@app/services/custom-validator';
@@ -20,14 +19,12 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private api: ApiService,
+    private custValidator: CustomValidator,
     private formBuilder: FormBuilder,
-    private router: Router,
-    private translate: TranslateService) {
+    private router: Router) {
   }
 
   ngOnInit() {
-
-    // todo: [SHR]: translate errors
 
     this.signupForm = this.formBuilder.group({
       timezone: [''],
@@ -71,7 +68,7 @@ export class SignupComponent implements OnInit {
   getErrors(fieldName: string): string {
     const errors = this.signupForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (CustomValidator.errorMap[key]) ? CustomValidator.errorMap[key] : '';
+    return (this.custValidator.errorMap[key]) ? this.custValidator.errorMap[key] : '';
   }
 
   checkError(fieldName: string) {

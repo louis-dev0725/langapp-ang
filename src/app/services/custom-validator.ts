@@ -1,16 +1,42 @@
 import {AbstractControl} from '@angular/forms';
 import {Injectable} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {EventService} from '@app/event.service';
 
 @Injectable()
 export class CustomValidator {
 
 
-  static errorMap = {
+  errorMap = {
     required: 'This field is required',
     email: 'This is not valid email',
     passconfirm: 'Password and repeat password are not equals',
     min: 'The amount must be equals to or greater than'
   };
+
+
+  constructor(
+    private eventService: EventService,
+    private translate: TranslateService) {
+    this.callTranslate();
+    this.eventService.emitter.subscribe((event) => {
+      if (event.type === 'language-change') {
+        this.callTranslate();
+      }
+    })
+  }
+
+  callTranslate() {
+    const keys = Object.keys(this.errorMap).map((key) => {
+      return 'valid-err.' + key;
+    });
+    const originalKeys = Object.keys(this.errorMap);
+    this.translate.get(keys).subscribe((res) => {
+      originalKeys.forEach((key, idx) => {
+        this.errorMap[key] = res[keys[idx]];
+      })
+    })
+  }
 
   /**
    * this method used as a custom validator to check

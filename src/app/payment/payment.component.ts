@@ -15,14 +15,13 @@ export class PaymentComponent implements OnInit {
 
   private minVal = 100;
 
-  translatedErrorMap = CustomValidator.errorMap;
-
   paymentForm: FormGroup;
 
   rows: any;
 
   constructor(
     private api: ApiService,
+    private customValidator: CustomValidator,
     private router: Router,
     private serializer: UrlSerializer,
     private session: SessionService) {
@@ -43,7 +42,7 @@ export class PaymentComponent implements OnInit {
 
   getError() {
     const key = Object.keys(this.paymentForm.get('amount').errors);
-    return (key) ? this.translatedErrorMap[key[0]] + ` ${this.minVal} ` : '';
+    return (key) ? this.customValidator[key[0]] + ` ${this.minVal} ` : '';
   }
 
   onPayment() {

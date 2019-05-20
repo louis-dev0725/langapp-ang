@@ -16,12 +16,6 @@ export class RestoreComponent implements OnInit {
   readonly MODE_REQUEST_SENT = 'request-sent';
   readonly MODE_PASSWORD = 'password-change';
 
-  private errorMap = {
-    required: 'This field is required',
-    email: 'This is not valid email',
-    passconfirm: 'Password and repeat password are not equals'
-  };
-
   restoreForm: FormGroup = new FormGroup({});
   _mode = this.MODE_REQUEST;
   errors: any[] = [];
@@ -38,6 +32,7 @@ export class RestoreComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private customValidator: CustomValidator,
     private api: ApiService,
     private router: Router) {
 
@@ -73,7 +68,7 @@ export class RestoreComponent implements OnInit {
   getErrors(fieldName: string): string {
     const errors = this.restoreForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (this.errorMap[key]) ? this.errorMap[key] : '';
+    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
   }
 
   onSubmit() {

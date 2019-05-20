@@ -18,7 +18,7 @@
           required
           formControlName="email"
           placeholder="{{'Email' | translate}}">
-        <mat-error *ngIf="checkError('email')">{{ getError('email')}}</mat-error>
+        <mat-error *ngIf="checkError('email')">{{ getErrors('email')}}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-item">
@@ -29,7 +29,7 @@
           formControlName="password"
           required
           placeholder="{{'Password' | translate}}">
-        <mat-error *ngIf="checkError('password')">{{ getError('password')}}</mat-error>
+        <mat-error *ngIf="checkError('password')">{{ getErrors('password')}}</mat-error>
       </mat-form-field>
 
       <div class="form-item">
@@ -44,9 +44,9 @@
         <button
           mat-flat-button
           color="primary"
-          translate
           type="submit"
-          [disabled]="!signinForm.valid">Sign in</button>
+          [disabled]="!signinForm.valid">{{'Sign in' | translate}}
+        </button>
       </div>
 
     </form>
