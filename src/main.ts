@@ -9,4 +9,12 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
+  .then(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('rr');
+    if (myParam) {
+      localStorage.setItem('invitedByUserId', myParam);
+      document.cookie = 'invitedByUserId=' + myParam;
+    }
+  })
   .catch(err => console.error(err));

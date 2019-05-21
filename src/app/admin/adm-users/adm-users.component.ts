@@ -29,8 +29,7 @@ export class AdmUsersComponent implements OnInit {
     Balance: 'Balance',
     Email: 'Email',
     Comment: 'Comment',
-    Edit:'Edit',
-    isServicePaused: 'Is service paused'
+    Edit:'Edit'
   };
 
   get fieldKeys(): any[] {

@@ -10,14 +10,14 @@
 
   <div class="container">
     <form [formGroup]="userProfile">
-      <input type="hidden" formControlName="id" [ngModel]="user?.id">
+      <input type="hidden" formControlName="id" [value]="user?.id">
 
       <mat-form-field class="form-item">
         <input
           matInput
           required
           formControlName="name"
-          [ngModel]="user.name"
+          [ngModel]="user?.name"
           placeholder="{{'Name' | translate}}">
         <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
       </mat-form-field>
@@ -26,7 +26,7 @@
         <input
           matInput
           formControlName="company"
-          [ngModel]="user.company"
+          [ngModel]="user?.company"
           placeholder="{{'Company' | translate }}">
       </mat-form-field>
 
@@ -34,7 +34,7 @@
         <input
           matInput
           formControlName="site"
-          [ngModel]="user.site"
+          [ngModel]="user?.site"
           placeholder="{{'Site' | translate}}">
       </mat-form-field>
 
@@ -42,7 +42,7 @@
         <input
           matInput
           formControlName="telephone"
-          [ngModel]="user.telephone"
+          [ngModel]="user?.telephone"
           placeholder="{{'Phone' | translate}}">
       </mat-form-field>
 
@@ -51,7 +51,7 @@
           matInput
           required
           formControlName="email"
-          [ngModel]="user.email"
+          [ngModel]="user?.email"
           placeholder="{{'Email' | translate}}">
         <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
       </mat-form-field>
@@ -66,7 +66,7 @@
       <mat-form-field class="form-item">
         <input
           matInput
-          [ngModel]="user.wmr"
+          [ngModel]="user?.wmr"
           formControlName="wmr"
           placeholder="{{'WMR wallet' | translate}}">
       </mat-form-field>
@@ -74,25 +74,23 @@
       <mat-form-field class="form-item">
         <input
           matInput
-          type="number"
           formControlName="balance"
-          [value]="user.balance"
+          [value]="user?.balance"
           placeholder="{{'Balance' | translate}}">
       </mat-form-field>
 
       <mat-form-field class="form-item">
         <input
           matInput
-          type="number"
           formControlName="balancePartner"
-          [value]="user.balancePartner"
+          [value]="user?.balancePartner"
           placeholder="{{'Partner Balance' | translate}}">
       </mat-form-field>
 
       <mat-form-field class="form-item">
         <input
           matInput
-          [ngModel]="user.registerIp"
+          [ngModel]="user?.registerIp"
           formControlName="registerIp"
           placeholder="{{'Register IP' | translate}}">
       </mat-form-field>
@@ -100,7 +98,7 @@
       <mat-form-field class="form-item">
         <input
           matInput
-          [ngModel]="user.lastLoginIp"
+          [ngModel]="user?.lastLoginIp"
           formControlName="lastLoginIp"
           placeholder="{{'Last login IP' | translate}}">
       </mat-form-field>
@@ -108,14 +106,14 @@
       <mat-form-field class="form-item">
         <input
           matInput
-          [value]="user.addedDateTime | date : 'mediumDate' : user.timezone : 'ru-RU' "
+          [value]="user?.addedDateTime"
           [readonly]="true"
           placeholder="{{'Date of creation' | translate}}">
       </mat-form-field>
 
       <mat-form-field class="form-item">
         <mat-label translate>Timezone</mat-label>
-        <mat-select [ngModel]="user.timezone" formControlName="timezone">
+        <mat-select [ngModel]="selectedTimeZone" formControlName="timezone" >
           <mat-optgroup *ngFor="let tzgroup of timeZones" [label]="tzgroup.group">
             <mat-option *ngFor="let zone of tzgroup.zones" [value]="zone.value">{{zone.value}}</mat-option>
           </mat-optgroup>
@@ -149,7 +147,17 @@
           </mat-form-field>
         </ng-container>
       </div>
+
     </form>
+
+    <a
+      [disabled]="!userProfile.valid"
+      color="primary"
+      (click)="onProfileSave()"
+      mat-flat-button>
+      {{'Save' | translate}}
+    </a>
+
   </div>
   <div class="container">
     <h2 translate>Actions</h2>

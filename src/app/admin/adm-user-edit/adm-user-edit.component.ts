@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ApiService} from '@app/services/api.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User} from '@app/interfaces/common.interface';
-import {MatSnackBar} from '@angular/material';
 import {CustomValidator} from '@app/services/custom-validator';
 import {SessionService} from '@app/services/session.service';
 
@@ -19,6 +18,12 @@ export class AdmUserEditComponent implements OnInit {
   userProfile: FormGroup;
   user: User;
   timeZones: any[] = [];
+  get selectedTimeZone(): any {
+    if (this.user) {
+      return this.user.timezone;
+    }
+    return  '';
+  }
 
   get errors() {
     return this._errors;
@@ -29,7 +34,6 @@ export class AdmUserEditComponent implements OnInit {
     private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
     private session: SessionService,
-    private snackBar: MatSnackBar
   ) {
   }
 
@@ -59,6 +63,9 @@ export class AdmUserEditComponent implements OnInit {
   }
 
   get isServicePaused(): boolean {
+    if (!this.user) {
+      return false;
+    }
     return this.user.isServicePaused !== undefined ? this.user.isServicePaused : false;
   }
 
@@ -91,5 +98,9 @@ export class AdmUserEditComponent implements OnInit {
       this.userProfile.removeControl('password');
       this.userProfile.removeControl('passrepeat');
     }
+  }
+
+  onProfileSave() {
+    console.log(this.userProfile.value);
   }
 }
