@@ -26,8 +26,9 @@ export class ClientsComponent implements OnInit {
       this.clientsDataSource = new MatTableDataSource(res)
     });
     this.api.getClientsList().subscribe((res: any) => {
-      if (!(res instanceof ApiError))
+      if (!(res instanceof ApiError)) {
         this.clientsDataSource = new MatTableDataSource(res);
+      }
       this.clientsDataSource.sort = this.sort;
     });
     this.clientsDataSource.sort = this.sort;

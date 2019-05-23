@@ -9,6 +9,8 @@ _('paginator.of');
 _('paginator.prev');
 _('paginator.next');
 
+_('snackbar.user-edit-success');
+
 _('valid-err.required');
 _('valid-err.email');
 _('valid-err.passconfirm');

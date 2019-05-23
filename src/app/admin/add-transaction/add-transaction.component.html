@@ -1,0 +1,45 @@
+<div class="container">
+  <h1 translate>Add transaction</h1>
+  <p class="notation">{{'User name' | translate}} : {{user?.name}}</p>
+  <ng-container *ngIf="errors.length > 0">
+    <mat-card *ngFor="let err of errors"
+              class="err-alert">
+      <mat-card-content>{{err.message}}</mat-card-content>
+    </mat-card>
+  </ng-container>
+  <div class="container">
+    <form [formGroup]="transactionForm">
+      <input type="hidden" formControlName="userId" [ngModel]="transaction?.userId">
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          required
+          type="number"
+          formControlName="money"
+          placeholder="{{'Amount' | translate}}">
+        <mat-error *ngIf="checkError('money')">{{getError('money')}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="form-item">
+      <textarea
+        matInput
+        formControlName="comment"
+        placeholder="{{'Comment' | translate}}"></textarea>
+        <mat-error *ngIf="checkError('comment')">{{getError('comment')}}</mat-error>
+      </mat-form-field>
+      <div class="form-item">
+        <mat-checkbox
+          formControlName="isParnter"
+          [ngModel]="transaction?.isPartner">{{'Is partner account' | translate}}
+        </mat-checkbox>
+      </div>
+    </form>
+
+    <a
+      [disabled]="!transactionForm.valid"
+      color="primary"
+      (click)="onCreateTransaction()"
+      mat-flat-button>
+      {{'Create transaction' | translate}}
+    </a>
+  </div>
+</div>

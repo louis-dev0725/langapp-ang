@@ -46,10 +46,11 @@ export class SessionService {
   }
 
   get userToEdit(): any {
-    return this._userToEdit;
+    return (this._userToEdit) ? this._userToEdit : JSON.parse(localStorage.getItem('userToEdit'));
   }
 
   set userToEdit(value: any) {
+    localStorage.setItem('userToEdit', JSON.stringify(value));
     this._userToEdit = value;
   }
 

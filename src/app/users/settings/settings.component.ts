@@ -94,7 +94,7 @@ export class SettingsComponent implements OnInit {
   onSubmit(value: any) {
     this.api.updateUser(value).subscribe((result) => {
       if (result instanceof ApiError) {
-        // todo: [SHR]: handle error
+        this._errors = result.error;
 
       } else {
         localStorage.setItem('user', JSON.stringify(this.user));

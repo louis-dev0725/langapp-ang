@@ -1,18 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ApiService} from '@app/services/api.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User} from '@app/interfaces/common.interface';
 import {CustomValidator} from '@app/services/custom-validator';
 import {SessionService} from '@app/services/session.service';
+import {ApiError} from '@app/services/api-error';
+import {MatSnackBar} from '@angular/material';
+import {EventService} from '@app/event.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-adm-user-edit',
   templateUrl: './adm-user-edit.component.html',
   styleUrls: ['./adm-user-edit.component.scss']
 })
-export class AdmUserEditComponent implements OnInit {
+export class AdmUserEditComponent implements OnInit, OnDestroy {
 
   private _errors = [];
+  private globalEventSubscription;
+  private snackbarMessages = {
+    'snackbar.user-edit-success':'User profile was successfully saved'
+  };
 
   isChangePassword = false;
   userProfile: FormGroup;
@@ -32,13 +40,24 @@ export class AdmUserEditComponent implements OnInit {
   constructor(
     private api: ApiService,
     private customValidator: CustomValidator,
+    private eventService: EventService,
     private formBuilder: FormBuilder,
     private session: SessionService,
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.user = this.session.userToEdit;
+
+    this.callTranslate();
+
+    this.globalEventSubscription = this.eventService.emitter.subscribe((event) => {
+      if (event.type === 'language-change') {
+        this.callTranslate()
+      }
+    });
 
     this.api.getTimeZones().subscribe((res: any) => {
       this.timeZones = res;
@@ -60,6 +79,10 @@ export class AdmUserEditComponent implements OnInit {
       timezone: [''],
       language: ['']
     })
+  }
+
+  ngOnDestroy(): void {
+
   }
 
   get isServicePaused(): boolean {
@@ -102,5 +125,18 @@ export class AdmUserEditComponent implements OnInit {
 
   onProfileSave() {
     console.log(this.userProfile.value);
+    this.api.updateUser(this.userProfile.value).subscribe((res) => {
+      if (res instanceof ApiError) {
+        this._errors = res.error;
+      } else {
+        this.snackBar.open(this.snackbarMessages['snackbar.user-edit-success'],  null,{duration: 3000});
+      }
+    })
+  }
+
+  private callTranslate() {
+    this.translate.get(Object.keys(this.snackbarMessages)).subscribe((res) => {
+      this.snackbarMessages = res;
+    })
   }
 }

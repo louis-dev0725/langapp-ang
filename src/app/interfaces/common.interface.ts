@@ -39,3 +39,11 @@ export interface Operations {
   comment: number;
 }
 
+export interface Transaction {
+  id?: number;
+  userId: number;
+  money: number;
+  comment: string;
+  isPartner: boolean;
+}
+

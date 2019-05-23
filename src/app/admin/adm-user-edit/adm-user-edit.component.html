@@ -10,7 +10,7 @@
 
   <div class="container">
     <form [formGroup]="userProfile">
-      <input type="hidden" formControlName="id" [value]="user?.id">
+      <input type="hidden" formControlName="id" [ngModel]="user?.id">
 
       <mat-form-field class="form-item">
         <input
@@ -161,7 +161,11 @@
   </div>
   <div class="container">
     <h2 translate>Actions</h2>
-    <a>Add transaction</a>
+    <a
+      routerLink="/admin/create-transaction"
+      mat-flat-button
+      color="primary"
+      translate>Add transaction</a>
     <a>Calculate partner balance</a>
   </div>
   <button translate>Open as user</button>

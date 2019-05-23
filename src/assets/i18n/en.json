@@ -71,6 +71,9 @@
 	"signup": {
 		"note": "To connect to the site of the Rocket Call system, you must register."
 	},
+	"snackbar": {
+		"user-edit-success": ""
+	},
 	"valid-err": {
 		"email": "This is not valid email",
 		"min": "The amount must be equals to or greater than",

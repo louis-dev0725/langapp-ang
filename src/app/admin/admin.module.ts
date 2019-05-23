@@ -14,6 +14,7 @@ import { AdmUsersComponent } from './adm-users/adm-users.component';
 import {FlexModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AdmUserEditComponent } from './adm-user-edit/adm-user-edit.component';
+import { AddTransactionComponent } from './add-transaction/add-transaction.component';
 
 const routes: Routes = [
   {
@@ -23,11 +24,15 @@ const routes: Routes = [
   {
     path: 'user',
     component: AdmUserEditComponent
+  },
+  {
+    path: 'create-transaction',
+    component: AddTransactionComponent
   }
 ];
 
 @NgModule({
-  declarations: [AdmUsersComponent, AdmUserEditComponent],
+  declarations: [AdmUsersComponent, AdmUserEditComponent, AddTransactionComponent],
   imports: [
     CommonModule,
     MatTableModule,
