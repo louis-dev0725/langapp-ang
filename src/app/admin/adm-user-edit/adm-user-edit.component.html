@@ -166,7 +166,11 @@
       mat-flat-button
       color="primary"
       translate>Add transaction</a>
-    <a>Calculate partner balance</a>
+    <a
+      (click)="recalculatePartnerBalance()"
+      color="primary"
+      translate
+      mat-flat-button>Recalculate partner balance</a>
   </div>
   <button translate>Open as user</button>
 </div>

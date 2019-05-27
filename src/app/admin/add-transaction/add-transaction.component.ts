@@ -6,6 +6,8 @@ import {EventService} from '@app/event.service';
 import {CustomValidator} from '@app/services/custom-validator';
 import {MatSnackBar} from '@angular/material';
 import {Transaction, User} from '@app/interfaces/common.interface';
+import {ApiError} from '@app/services/api-error';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-add-transaction',
@@ -37,6 +39,7 @@ export class AddTransactionComponent implements OnInit {
     private customValidator: CustomValidator,
     private eventService: EventService,
     private formBuilder: FormBuilder,
+    private router: Router,
     private session: SessionService,
     private snackBar: MatSnackBar
   ) { }
@@ -53,14 +56,28 @@ export class AddTransactionComponent implements OnInit {
   }
 
   checkError(fieldName: string) {
-
+    return !this.transactionForm.get(fieldName).valid;
   }
 
   getError(fieldName: string) {
-
+    const errors = this.transactionForm.get(fieldName).errors;
+    const key = Object.keys(errors)[0];
+    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
   }
 
   onCreateTransaction() {
-    console.log(this.transactionForm.value);
+    this.api.createTransaction(this.transactionForm.value)
+      .subscribe((res) => {
+        if (! (res instanceof ApiError)) {
+          this.snackBar.open('Transaction created', null, {duration: 3000} );
+          setTimeout(() => {
+            this.router.navigate(['/admin/user']);
+          }, 3100)
+        } else {
+          this.errors = res.error;
+        }
+        this.transactionForm.reset();
+        this.transactionForm.get('userId').setValue(this.user.id);
+      });
   }
 }

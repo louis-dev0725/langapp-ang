@@ -134,11 +134,14 @@ export class ApiService {
    * method: POST
    * url: /users/<user id>/check-invited-users
    */
-  getClientsList(): Observable<any> {
+  getClientsList(userId: number = null): Observable<any> {
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
+      if (!userId) {
+        userId = this.session.user.id;
+      }
       this.http.get(
-        this.apiHost + `/users/${this.session.user.id}/invited-users`,
+        this.apiHost + `/users/${userId}/invited-users`,
         {headers}
       ).subscribe((result) => {
         observer.next(result);
@@ -226,6 +229,18 @@ export class ApiService {
           obsrver.next(res);
         }, (error) => {
           obsrver.next(this.getApiError(error));
+        })
+    })
+  }
+
+  createTransaction(data: any): Observable<any> {
+    return Observable.create((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.post(this.apiHost + '/transactions/create', data, {headers})
+        .subscribe((res) => {
+          observer.next(res)
+        }, (error) => {
+          observer.next(this.getApiError(error));
         })
     })
   }

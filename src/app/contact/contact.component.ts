@@ -34,7 +34,7 @@ export class ContactComponent implements OnInit {
     private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
     private ref: ChangeDetectorRef,
-    private snakcBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private session: SessionService
   ) { }
 
@@ -51,7 +51,7 @@ export class ContactComponent implements OnInit {
 
   onSubmit() {
     this.api.sendMessage(this.contactForm.value).subscribe((res) => {
-      this.snakcBar.open('Your message successfully delivered', null, {duration: 3000} );
+      this.snackBar.open('Your message successfully delivered', null, {duration: 3000} );
       this.form.resetForm();
       this.contactForm.get('name').setValue(this.user.name);
       this.contactForm.get('email').setValue(this.user.email);

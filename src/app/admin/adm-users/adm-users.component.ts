@@ -87,14 +87,14 @@ export class AdmUsersComponent implements OnInit {
   getUsers() {
     this.isLoaded = false;
     this.rows = [];
-    let sort:any = {};
+    const sort:any = {};
     if (this.sort.direction !== '') {
       sort[this.sort.active] = this.sort.direction;
     }
     if (this.usersSubscription) {
       this.usersSubscription.unsubscribe();
     }
-    let toSendFilter = Object.assign({}, this.filter);
+    const toSendFilter = Object.assign({}, this.filter);
 
     const replaceKeys = {isservicepaused: 'isServicePaused'};
 

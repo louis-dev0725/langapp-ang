@@ -139,4 +139,14 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       this.snackbarMessages = res;
     })
   }
+
+  recalculatePartnerBalance() {
+    this.api.getClientsList(this.user.id).subscribe((res) => {
+      if (res instanceof ApiError) {
+        this.snackBar.open('Error when recalculating balance', null, {duration: 3000})
+      } else {
+        this.snackBar.open('Balance recalculated', null, {duration: 3000});
+      }
+    })
+  }
 }
