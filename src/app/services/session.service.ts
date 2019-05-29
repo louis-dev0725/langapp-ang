@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {User} from '../interfaces/common.interface';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,26 @@ export class SessionService {
     this._token = value;
   }
 
+  private _tempUser: any;
+  get tempUser(): any {
+    return (this._tempUser) ? this._tempUser : JSON.parse(localStorage.getItem('tempUser'));
+  }
+
+  set tempUser(value: any) {
+    localStorage.setItem('tempUser', JSON.stringify(value));
+    this._tempUser = value;
+  }
+
+  private _transaction: any;
+  get transaction(): any {
+    return (this._transaction) ? this._transaction : JSON.parse(localStorage.getItem('transaction'));
+  }
+
+  set transaction(value: any) {
+    localStorage.setItem('transaction', JSON.stringify(value));
+    this._transaction = value;
+  }
+
   get userToEdit(): any {
     return (this._userToEdit) ? this._userToEdit : JSON.parse(localStorage.getItem('userToEdit'));
   }
@@ -72,10 +93,16 @@ export class SessionService {
     this._user = value;
   }
 
+  constructor(private router: Router) {
+
+  }
+
+
   logout() {
     this.user = undefined;
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    this.router.navigate(['/']);
   }
 
   static getLang(): string {

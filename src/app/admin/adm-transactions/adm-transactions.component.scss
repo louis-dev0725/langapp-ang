@@ -1,0 +1,15 @@
+// common tables
+table {
+  width: 100%;
+}
+
+td, th {
+  width: 25%;
+}
+
+.edit-link {
+  cursor: pointer;
+  &:hover {
+    color: #039be5;
+  }
+}

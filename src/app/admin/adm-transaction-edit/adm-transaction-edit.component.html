@@ -1,0 +1,79 @@
+<div class="container">
+  <h1 translate>Edit transaction</h1>
+  <p class="note">{{'Transacrion Id' | translate}} {{transaction?.id}} {{'for user' | translate}} {{transaction?.name}}</p>
+
+  <ng-container *ngIf="errors.length > 0">
+    <mat-card *ngFor="let err of errors"
+              class="err-alert">
+      <mat-card-content>{{err.message}}</mat-card-content>
+    </mat-card>
+  </ng-container>
+
+  <div class="container">
+    <form [formGroup]="transactionForm">
+      <input type="hidden" formControlName="id" [ngModel]="transaction?.id">
+      <input type="hidden" formControlName="userId" [ngModel]="transaction?.userId">
+
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          required
+          type="number"
+          formControlName="money"
+          [ngModel]="transaction?.money"
+          placeholder="{{'Amount' | translate}}">
+        <mat-error *ngIf="checkError('money')">{{getError('money')}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-item">
+        <textarea
+          matInput
+          formControlName="comment"
+          placeholder="{{'Comment'| translate }}">{{transaction?.comment}}</textarea>
+        <mat-error *ngIf="checkError('comment')">{{getError('comment')}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          type="number"
+          formControlName="fromInvitedUserId"
+          [ngModel]="transaction?.fromInvitedUserId"
+          placeholder="{{'Invited user Id' | translate}}">
+        <mat-error *ngIf="checkError('fromInvitedUserId')">{{getError('fromInvitedUserId')}}</mat-error>
+      </mat-form-field>
+
+      <div class="form-item">
+        <mat-checkbox
+          formControlName="isCommon"
+          [ngModel]="transaction?.isCommon">{{'Is common' | translate}}
+        </mat-checkbox>
+      </div>
+
+      <div class="form-item">
+        <mat-checkbox
+          formControlName="isPartner"
+          [ngModel]="transaction?.isPartner">{{'Is partner' | translate}}
+        </mat-checkbox>
+      </div>
+
+      <div class="form-item">
+        <mat-checkbox
+          formControlName="isRealMoney"
+          [ngModel]="transaction?.isRealMoney">{{'Is real money' | translate}}
+        </mat-checkbox>
+      </div>
+
+    </form>
+
+    <a
+      [disabled]="!transactionForm.valid"
+      color="primary"
+      (click)="onTransactionSave()"
+      mat-flat-button>
+      {{'Save' | translate}}
+    </a>
+
+  </div>
+
+</div>

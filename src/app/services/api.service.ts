@@ -15,7 +15,7 @@ export class ApiService {
   }
 
   get siteKey(): string {
-    return  this.windowConfig.siteKey;
+    return this.windowConfig.siteKey;
   }
 
   get windowConfig(): any {
@@ -91,6 +91,9 @@ export class ApiService {
   }
 
   private getApiError(response) {
+    if (response.status == 401) {
+      this.logout();
+    }
     if (response.error) {
       return new ApiError(response.error, response.ok, response.status, response.statusText);
     } else {
@@ -107,26 +110,27 @@ export class ApiService {
    * url: /users/index
    */
   getAdminUsers(page = 0, filterParams: any = {}, sort: any = {}) {
-    const params: any = {};
+    let params: any = {};
 
     if (page > 0) {
       // note: [SHR] if need to change items per page - do it via "per-page" param
       params.page = page;
     }
 
-    if (Object.keys(filterParams).length > 0) {
-      // params.filter = filterParams;
-      Object.keys(filterParams).forEach((filterKey) => {
-        params[`filter[${filterKey}]`] = filterParams[filterKey];
-      })
-    }
+    params = Object.assign(params, this.prepareFilter(filterParams));
 
     if (Object.keys(sort).length > 0) {
       params.sort = this.prepareSort(sort);
     }
 
     const headers = this.getHeadersWithToken();
-    return this.http.get(this.apiHost + '/users/index', {headers, params});
+    return Observable.create((observer) => {
+      this.http.get(this.apiHost + '/users/index', {headers, params}).subscribe((res) => {
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      })
+    })
   }
 
   /**
@@ -157,7 +161,7 @@ export class ApiService {
    * url: /users/update/
    * @param value
    */
-  updateUser(value: any): Observable<any>{
+  updateUser(value: any): Observable<any> {
     // todo: [SHR]: link to update in php code is differ than postman api
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
@@ -171,12 +175,16 @@ export class ApiService {
 
   }
 
-  private getMeRequest(observer) {
+  private getMeRequest(observer, token = null, isCurrentUser = true) {
 
-    const headers = this.getHeadersWithToken();
+    const headers = this.getHeadersWithToken(token);
 
     this.http.get<User>(this.apiHost + '/users/me', {headers}).subscribe((userRes: any) => {
-      this.session.user = userRes;
+      if (isCurrentUser) {
+        this.session.user = userRes;
+      } else {
+        this.session.tempUser = userRes;
+      }
       observer.next(true);
     });
   }
@@ -184,10 +192,37 @@ export class ApiService {
   //</editor-fold>
 
   //<editor-fold desc="Transactions">
+
+  getTransactions(page = 0, filter: any = {}, sort: any = {}): Observable<any> {
+    let params: any = {};
+
+    if (page > 0) {
+      params.page = page;
+    }
+
+    params = Object.assign(params, this.prepareFilter(filter));
+
+    if (Object.keys(sort).length > 0) {
+      params.sort = this.prepareSort(sort);
+    }
+
+    const headers = this.getHeadersWithToken();
+
+    return Observable.create((observer) => {
+      this.http.get(this.apiHost + '/transactions', {headers, params})
+        .subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        })
+    })
+
+  }
+
   private prepareTransactionsUrl(params: any = {}): string {
     let url = this.apiHost + '/transactions/index';
     if (Object.keys(params).length > 0) {
-      url+= '?';
+      url += '?';
     }
     const urlParams: any = [];
     if (params.userId) {
@@ -196,7 +231,7 @@ export class ApiService {
     if (params.isParnter) {
       urlParams.push('filter[isPartner]');
     }
-    return  url + urlParams.join('&');
+    return url + urlParams.join('&');
   }
 
   /**
@@ -204,10 +239,10 @@ export class ApiService {
    * method: GET
    * url: /transactions/index?filter[userId]=<user id>
    */
-  getUserTransactionsList(): Observable<any>{
+  getUserTransactionsList(): Observable<any> {
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
-      this.http.get(this.prepareTransactionsUrl({userId:1}), {headers})
+      this.http.get(this.prepareTransactionsUrl({userId: 1}), {headers})
         .subscribe((res) => {
           observer.next(res);
         }, (error) => {
@@ -224,7 +259,7 @@ export class ApiService {
   getUserPartnersTransactionsList(): Observable<any> {
     return Observable.create((obsrver) => {
       const headers = this.getHeadersWithToken();
-      this.http.get(this.prepareTransactionsUrl({userId:1, isPartner: 1}), {headers})
+      this.http.get(this.prepareTransactionsUrl({userId: 1, isPartner: 1}), {headers})
         .subscribe((res) => {
           obsrver.next(res);
         }, (error) => {
@@ -244,6 +279,19 @@ export class ApiService {
         })
     })
   }
+
+  updateTransaction(data: any): Observable<any> {
+    return Observable.create((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.patch(this.apiHost + '/transactions/update', data, {headers})
+        .subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        })
+    })
+  }
+
   //</editor-fold>
 
   sendMessage(data: any) {
@@ -253,14 +301,17 @@ export class ApiService {
 
   private getSimpleLanguageHeader(): HttpHeaders {
     const lang = this.session.lang;
-    return  new HttpHeaders()
+    return new HttpHeaders()
       .append('Accept-Language', lang)
   }
 
-  private getHeadersWithToken(): HttpHeaders {
+  private getHeadersWithToken(token = null): HttpHeaders {
+    if (!token) {
+      token = localStorage.getItem('token');
+    }
     return new HttpHeaders()
       .append('Accept-Language', localStorage.getItem('lang'))
-      .append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+      .append('Authorization', 'Bearer ' + token);
   }
 
   private prepareSort(sortObject: any): string {
@@ -273,5 +324,23 @@ export class ApiService {
     }, []);
     return res.join(',');
   }
+
+
+  private prepareFilter(filter: any): any {
+    const params: any = {};
+    if (Object.keys(filter).length > 0) {
+      Object.keys(filter).forEach((filterKey) => {
+        params[`filter[${filterKey}]`] = filter[filterKey];
+      })
+    }
+    return params;
+  }
+
+  getUserByToken(token: string): Observable<any> {
+    return Observable.create((observer) => {
+      this.getMeRequest(observer, token, false);
+    })
+  }
+
 
 }

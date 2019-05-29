@@ -14,6 +14,12 @@ export class CustomValidator {
     min: 'The amount must be equals to or greater than'
   };
 
+  messagesMap = {
+    'snackbar.balance-edit-error': 'Error when recalculating balance',
+    'snackbar.settings-edit-success': 'Settings was successfully saved',
+    'snackbar.user-edit-success': 'User profile was successfully saved',
+  }
+
 
   constructor(
     private eventService: EventService,
@@ -35,6 +41,9 @@ export class CustomValidator {
       originalKeys.forEach((key, idx) => {
         this.errorMap[key] = res[keys[idx]];
       })
+    });
+    this.translate.get(Object.keys(this.messagesMap)).subscribe((res) => {
+      this.messagesMap = res;
     })
   }
 

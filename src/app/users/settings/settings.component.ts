@@ -98,7 +98,7 @@ export class SettingsComponent implements OnInit {
 
       } else {
         localStorage.setItem('user', JSON.stringify(this.user));
-        this.snackBar.open('Settings was successfully saved',  null,{duration: 3000});
+        this.snackBar.open(this.customValidator.messagesMap['Settings was successfully saved'],  null,{duration: 3000});
       }
     })
   }

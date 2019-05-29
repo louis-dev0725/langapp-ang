@@ -6,6 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {EventService} from '@app/event.service';
 import {Router} from '@angular/router';
 import {SessionService} from '@app/services/session.service';
+import {ApiError} from '@app/services/api-error';
 
 @Component({
   selector: 'app-adm-users',
@@ -84,7 +85,7 @@ export class AdmUsersComponent implements OnInit {
     return this.notFilterFields.indexOf(item) < 0;
   }
 
-  getUsers() {
+  getUsers(): void {
     this.isLoaded = false;
     this.rows = [];
     const sort:any = {};
@@ -112,10 +113,13 @@ export class AdmUsersComponent implements OnInit {
     });
 
 
-    this.usersSubscription = this.api.getAdminUsers(0, toSendFilter, sort).subscribe((res: any) => {
-      this.rows = res.items;
-      this.isLoaded = true;
-    })
+    this.usersSubscription = this.api.getAdminUsers(this.paginator.page, toSendFilter, sort)
+      .subscribe((res: any) => {
+        if (!(res instanceof ApiError)) {
+          this.rows = res.items;
+        }
+        this.isLoaded = true;
+      });
   }
 
   runFilter() {

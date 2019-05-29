@@ -7,7 +7,6 @@ import {SessionService} from '@app/services/session.service';
 import {ApiError} from '@app/services/api-error';
 import {MatSnackBar} from '@angular/material';
 import {EventService} from '@app/event.service';
-import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-adm-user-edit',
@@ -18,9 +17,6 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
   private _errors = [];
   private globalEventSubscription;
-  private snackbarMessages = {
-    'snackbar.user-edit-success':'User profile was successfully saved'
-  };
 
   isChangePassword = false;
   userProfile: FormGroup;
@@ -44,20 +40,11 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private session: SessionService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
   ) {
   }
 
   ngOnInit(): void {
     this.user = this.session.userToEdit;
-
-    this.callTranslate();
-
-    this.globalEventSubscription = this.eventService.emitter.subscribe((event) => {
-      if (event.type === 'language-change') {
-        this.callTranslate()
-      }
-    });
 
     this.api.getTimeZones().subscribe((res: any) => {
       this.timeZones = res;
@@ -124,26 +111,20 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   onProfileSave() {
-    console.log(this.userProfile.value);
     this.api.updateUser(this.userProfile.value).subscribe((res) => {
       if (res instanceof ApiError) {
         this._errors = res.error;
       } else {
-        this.snackBar.open(this.snackbarMessages['snackbar.user-edit-success'],  null,{duration: 3000});
+        this.snackBar.open(this.customValidator.messagesMap['snackbar.user-edit-success'],  null,{duration: 3000});
       }
     })
   }
 
-  private callTranslate() {
-    this.translate.get(Object.keys(this.snackbarMessages)).subscribe((res) => {
-      this.snackbarMessages = res;
-    })
-  }
 
   recalculatePartnerBalance() {
     this.api.getClientsList(this.user.id).subscribe((res) => {
       if (res instanceof ApiError) {
-        this.snackBar.open('Error when recalculating balance', null, {duration: 3000})
+        this.snackBar.open(this.customValidator.messagesMap['snackbar.balance-edit-error'], null, {duration: 3000})
       } else {
         this.snackBar.open('Balance recalculated', null, {duration: 3000});
       }

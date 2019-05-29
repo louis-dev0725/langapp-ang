@@ -41,9 +41,14 @@ export interface Operations {
 
 export interface Transaction {
   id?: number;
-  userId: number;
+  userId?: number;
+  name?: string;
+  token?: string;
   money: number;
   comment: string;
-  isPartner: boolean;
+  isCommon?: number;
+  isPartner: number;
+  isRealMoney?: number;
+  fromInvitedUserId?:number;
 }
 
