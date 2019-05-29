@@ -130,10 +130,27 @@ class Transaction extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
     }
 
+    /**
+     * @param ActiveRecord $record
+     * @param $row
+     */
+    public static function populateRecord($record, $row)
+    {
+        parent::populateRecord($record, $row);
+        if (Helpers::isAdmin()) {
+            $record->setAttribute('name', $row['name']);
+            $record->setAttribute('token', self::getToken($row['userId']));
+        }
+    }
+
+
     public function fields()
     {
         if (Helpers::isAdmin()) {
-            return parent::fields();
+            $parentFields = parent::fields();
+            $parentFields[] = 'name';
+            $parentFields[] = 'token';
+            return $parentFields;
         } else {
             return ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'];
         }
@@ -143,7 +160,7 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return [
             self::SCENARIO_USER => ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'],
-            self::SCENARIO_ADMIN => ['id', 'userId', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'invoiceId', 'dataJson'],
+            self::SCENARIO_ADMIN => ['id', 'userId', 'name', 'token', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'invoiceId', 'dataJson'],
         ];
     }
 
@@ -181,9 +198,20 @@ class Transaction extends \yii\db\ActiveRecord
             [['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'integer'],
             [['money'], 'number'],
             [['addedDateTime', 'dataJson'], 'safe'],
-            [['comment'], 'string', 'max' => 255],
+            [['comment', 'name', 'token'], 'string', 'max' => 255],
         ];
     }
+
+    public function attributes()
+    {
+        $attributes = parent::attributes();
+        if (Helpers::isAdmin()) {
+            $attributes[] = 'name';
+            $attributes[] = 'token';
+        }
+        return $attributes;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -193,6 +221,8 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'userId' => Yii::t('app', 'ID пользователя'),
+            'name' => Yii::t('app', 'Имя пользователя'),
+            'token' => '',
             'money' => Yii::t('app', 'Изменение баланса'),
             'isCommon' => Yii::t('app', 'Is Common'),
             'comment' => Yii::t('app', 'Комментарий'),
@@ -203,6 +233,13 @@ class Transaction extends \yii\db\ActiveRecord
             'parentTransactionId' => Yii::t('app', 'Parent Transaction ID'),
             'dataJson' => Yii::t('app', 'Data Json'),
         ];
+    }
+
+    public static function getToken($id)
+    {
+        $user = new User();
+        $user->id = $id;
+        return $user->generateAccessToken();
     }
 
     /**

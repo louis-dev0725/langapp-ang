@@ -80,12 +80,15 @@ class TransactionController extends ActiveController
             $userId = Yii::$app->user->id;
 
             // Force filter by userId
-            $query->andWhere(['userId' => $userId]);
+            $query->andWhere(['transactions.userId' => $userId]);
 
             // Check works only for simple filters and doesn't guarantee that there is filter for userId
             if (empty($filter) || (isset($filter['userId']) && $filter['userId'] != $userId)) {
                 throw new ForbiddenHttpException("User can only access to own's transactions. You should add filter like ?filter[userId]=$userId");
             }
+        } else {
+            $query->select(['transactions.*', 'users.name'])
+                ->leftJoin('users','"users"."id" = "transactions"."userId"');
         }
 
         return Yii::createObject([

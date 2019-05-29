@@ -42,6 +42,7 @@ use yii\web\IdentityInterface;
  * @property string $timezone
  * @property string $language
  *
+ * @property string $isAdmin
  * @property string $password write-only password (virtual attribute)
  * @property User $invitedByUser
  * @property User[] $invitedUsers
@@ -160,8 +161,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return [
             self::SCENARIO_LOGIN => ['email', 'password'],
             self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone', 'language'],
-            self::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone', 'language'],
-            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language'],
+            self::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone', 'language', 'isAdmin'],
+            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin'],
         ];
     }
 
@@ -171,11 +172,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             return ['id', 'name', 'partnerEarned'];
         } elseif ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
+            $fields['isAdmin'] = 'isAdmin';
             unset($fields['passwordHash']);
 
             return $fields;
         } elseif ($this->scenario == self::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime', 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language'];
+            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime', 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin'];
         } else {
             return [];
         }
@@ -218,7 +220,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ['email', 'unique'],
             ['password', 'filter', 'filter' => 'trim'],
             [['balance', 'balancePartner', 'partnerPercent', 'partnerEarned'], 'number'],
-            [['paidUntilDateTime', 'addedDateTime', 'updatedDateTime', 'restorePasswordUntilDate', 'passwordChangedDateTime', 'dataJson'], 'safe'],
+            [['isAdmin', 'paidUntilDateTime', 'addedDateTime', 'updatedDateTime', 'restorePasswordUntilDate', 'passwordChangedDateTime', 'dataJson'], 'safe'],
             [['comment'], 'string'],
             [['isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments'], 'default', 'value' => 0],
             [['isPartner'], 'default', 'value' => 1],
@@ -260,6 +262,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'wmr' => Yii::t('app', 'Wmr'),
             'dataJson' => Yii::t('app', 'Data Json'),
             'timezone' => Yii::t('app', 'Timezone'),
+            'isAdmin' => Yii::t('app', 'Is Admin')
         ];
     }
 
@@ -317,6 +320,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         /** @var Token $token */
         $token = Yii::$app->jwt->loadToken($tokenString);
+        if (null === $token) {
+            return null;
+        }
         $userId = $token->getClaim('uid');
         $user = self::findOne($userId);
 
@@ -423,5 +429,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getInvitedUsers()
     {
         return $this->hasMany(User::class, ['invitedByUserId' => 'id']);
+    }
+
+    public function getIsAdmin()
+    {
+        return Helpers::isAdmin();
     }
 }

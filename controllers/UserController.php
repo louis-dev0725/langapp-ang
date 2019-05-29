@@ -153,6 +153,8 @@ class UserController extends ActiveController
 
     public function actionInvitedUsers($id)
     {
+        // note: [SHR]: this changes need to push to repository
+        $id = (int) $id;
         $userId = Yii::$app->user->id;
         if (Helpers::isAdmin()) {
             $model = User::findOne($id);
