@@ -99,6 +99,14 @@ class UserController extends ActiveController
 
         $query = User::find();
         if (!empty($filter)) {
+            $likeFields = ['name', 'company', 'email'];
+            foreach ($filter as $field => $value) {
+                if (in_array($field, $likeFields)) {
+                    unset($filter[$field]);
+                    $query->andWhere(['like', $field, $value]);
+
+                }
+            }
             $query->andWhere($filter);
         }
 
