@@ -32,6 +32,10 @@ class Transaction extends \yii\db\ActiveRecord
     const SCENARIO_ADMIN = 'admin';
     const SCENARIO_USER = 'user';
 
+    private static function isSaveMethod() {
+        return in_array(Yii::$app->request->method, ['PUT', 'PATCH']);
+    }
+
     /**
      * @param User $user user for current transaction
      */
@@ -137,7 +141,7 @@ class Transaction extends \yii\db\ActiveRecord
     public static function populateRecord($record, $row)
     {
         parent::populateRecord($record, $row);
-        if (Helpers::isAdmin()) {
+        if (Helpers::isAdmin() && (!self::isSaveMethod())) {
             $record->setAttribute('name', $row['name']);
             $record->setAttribute('token', self::getToken($row['userId']));
         }
@@ -146,7 +150,7 @@ class Transaction extends \yii\db\ActiveRecord
 
     public function fields()
     {
-        if (Helpers::isAdmin()) {
+        if (Helpers::isAdmin() && (!self::isSaveMethod())) {
             $parentFields = parent::fields();
             $parentFields[] = 'name';
             $parentFields[] = 'token';
@@ -158,9 +162,13 @@ class Transaction extends \yii\db\ActiveRecord
 
     public function scenarios()
     {
+        $adminFields = ['id', 'userId', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'invoiceId', 'dataJson'];
+        if (!self::isSaveMethod()) {
+            $adminFields = array_merge($adminFields, ['name', 'token']);
+        }
         return [
             self::SCENARIO_USER => ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'],
-            self::SCENARIO_ADMIN => ['id', 'userId', 'name', 'token', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'invoiceId', 'dataJson'],
+            self::SCENARIO_ADMIN => $adminFields
         ];
     }
 
@@ -205,7 +213,7 @@ class Transaction extends \yii\db\ActiveRecord
     public function attributes()
     {
         $attributes = parent::attributes();
-        if (Helpers::isAdmin()) {
+        if (Helpers::isAdmin() && !self::isSaveMethod()) {
             $attributes[] = 'name';
             $attributes[] = 'token';
         }
