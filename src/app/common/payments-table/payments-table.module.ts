@@ -7,7 +7,13 @@
 
 import {NgModule} from '@angular/core';
 import {PaymentsTableComponent} from './payments-table.component';
-import {MatPaginatorModule, MatSortModule, MatTableModule} from '@angular/material';
+import {
+  MatCardModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule,
+  MatSortModule,
+  MatTableModule
+} from '@angular/material';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonModule} from '@angular/common';
 
@@ -18,7 +24,9 @@ import {CommonModule} from '@angular/common';
     MatTableModule,
     MatSortModule,
     TranslateModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatCardModule,
+    MatProgressSpinnerModule
   ],
   exports: [PaymentsTableComponent]
 })

@@ -1,4 +1,3 @@
-/*
 
 import { _ } from '@biesbjerg/ngx-translate-extract';
 
@@ -17,4 +16,3 @@ _('valid-err.required');
 _('valid-err.email');
 _('valid-err.passconfirm');
 _('valid-err.min');
-*/

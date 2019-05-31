@@ -14,9 +14,7 @@ export class NavbarComponent {
 
   private langMap = {
     'ru': 'Русский',
-    'ru-RU': 'Русский',
     'en':'English',
-    'en-US':'English'
   };
 
   languages = ['Русский', 'English'];
@@ -41,7 +39,7 @@ export class NavbarComponent {
 
   setLanguage(lang: any) {
     const idx = this.languages.indexOf(lang);
-    this.session.lang = (idx > 0) ? 'en-US' : 'ru-RU';
+    this.session.lang = (idx > 0) ? 'en' : 'ru';
     this.translate.use(this.session.lang);
     this.eventService.emitChangeEvent({type: 'language-change'});
   }

@@ -162,10 +162,9 @@ export class ApiService {
    * @param value
    */
   updateUser(value: any): Observable<any> {
-    // todo: [SHR]: link to update in php code is differ than postman api
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
-      this.http.patch(this.apiHost + '/users/update/' + value.id, value, {headers})
+      this.http.patch<User>(this.apiHost + '/users/' + value.id, value, {headers})
         .subscribe((res) => {
           observer.next(res)
         }, (error) => {
@@ -283,7 +282,8 @@ export class ApiService {
   updateTransaction(data: any): Observable<any> {
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
-      this.http.patch(this.apiHost + '/transactions/update', data, {headers})
+      // this.http.patch(this.apiHost + '/transaction/update/' + data.id, data, {headers})
+      this.http.patch(this.apiHost + '/transactions/' + data.id, data, {headers})
         .subscribe((res) => {
           observer.next(res);
         }, (error) => {

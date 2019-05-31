@@ -87,9 +87,9 @@
 		"note": "To connect to the site of the Rocket Call system, you must register."
 	},
 	"snackbar": {
-		"balance-edit-error": "",
-		"settings-edit-success": "",
-		"user-edit-success": ""
+		"balance-edit-error": "Error when recalculating balance",
+		"settings-edit-success": "Settings was successfully saved",
+		"user-edit-success": "User profile was successfully saved"
 	},
 	"valid-err": {
 		"email": "This is not valid email",

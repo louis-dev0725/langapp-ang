@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../services/api.service';
 import {Router, UrlSerializer} from '@angular/router';
 import {CustomValidator} from '../services/custom-validator';
 import {ApiError} from '../services/api-error';
 import {SessionService} from '@app/services/session.service';
+import {PaymentsTableComponent} from '@app/common/payments-table/payments-table.component';
 
 @Component({
   selector: 'app-payment',
@@ -19,6 +20,8 @@ export class PaymentComponent implements OnInit {
 
   rows: any;
 
+  @ViewChild(PaymentsTableComponent) paymentsTable: PaymentsTableComponent;
+
   constructor(
     private api: ApiService,
     private customValidator: CustomValidator,
@@ -29,6 +32,9 @@ export class PaymentComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.paymentsTable.isLoaded = false;
+
     this.paymentForm = new FormGroup({
       amount: new FormControl('', {validators: [Validators.required, Validators.min(100)], updateOn: 'change'})
     });
@@ -36,6 +42,7 @@ export class PaymentComponent implements OnInit {
     this.api.getUserTransactionsList().subscribe((res) => {
       if (!(res instanceof ApiError)) {
         this.rows = res.items;
+        this.paymentsTable.isLoaded = true;
       }
     });
   }

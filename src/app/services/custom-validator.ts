@@ -18,7 +18,7 @@ export class CustomValidator {
     'snackbar.balance-edit-error': 'Error when recalculating balance',
     'snackbar.settings-edit-success': 'Settings was successfully saved',
     'snackbar.user-edit-success': 'User profile was successfully saved',
-  }
+  };
 
 
   constructor(

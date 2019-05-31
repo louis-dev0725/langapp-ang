@@ -26,6 +26,7 @@
 <div class="container">
   <h1 translate>Transactions history</h1>
   <app-payments-table
+    #paymentsTable
     [isShowComment]="true"
     [rows]="rows"
     [isPaginator]="true"></app-payments-table>

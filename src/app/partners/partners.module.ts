@@ -4,7 +4,13 @@ import { AboutComponent } from './about/about.component';
 import {RouterModule} from '@angular/router';
 import { ClientsComponent } from './clients/clients.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {MatPaginatorModule, MatSortModule, MatTableModule} from '@angular/material';
+import {
+  MatCardModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule,
+  MatSortModule,
+  MatTableModule
+} from '@angular/material';
 import { TransactionComponent } from './transaction/transaction.component';
 import {PaymentsTableModule} from '../common/payments-table/payments-table.module';
 
@@ -18,6 +24,8 @@ import {PaymentsTableModule} from '../common/payments-table/payments-table.modul
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
   ],
   providers: [DecimalPipe]
 })

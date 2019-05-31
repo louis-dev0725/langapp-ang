@@ -11,15 +11,19 @@ export class AppComponent {
   title = 'call-rocket';
 
   constructor(private translate: TranslateService) {
+    const langMap = {
+      'ru-RU': 'ru',
+      'en-US': 'en'
+    };
     let langVal = localStorage.getItem('lang');
     if (!langVal) {
       langVal = navigator.language;
+      if (langMap[langVal]) {
+        langVal = langMap[langVal];
+      }
       localStorage.setItem('lang', langVal);
     }
     this.translate.setDefaultLang(langVal);
   }
 
-  prepareRoute(outlet: RouterOutlet) {
-
-  }
 }

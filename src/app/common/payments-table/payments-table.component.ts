@@ -75,6 +75,18 @@ export class PaymentsTableComponent implements OnInit {
     }
   }
 
+  private _isLoaded = true;
+
+  @Input()
+  set isLoaded (val: boolean) {
+    this._isLoaded = val;
+  }
+
+  get isLoaded (): boolean {
+    return this._isLoaded;
+  }
+
+
   dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   isEmptyTable = true;
 

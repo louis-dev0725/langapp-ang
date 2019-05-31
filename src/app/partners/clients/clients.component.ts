@@ -14,18 +14,20 @@ export class ClientsComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   isEmptyTable = true;
+  isLoaded = true;
 
   constructor(
     private api: ApiService
   ) { }
 
   ngOnInit() {
-
+    this.isLoaded = false;
     this.api.getClientsList().subscribe((res: any[]) => {
       this.isEmptyTable = (res) ? res.length === 0 : true;
       this.clientsDataSource = new MatTableDataSource(res)
     });
     this.api.getClientsList().subscribe((res: any) => {
+      this.isLoaded = true;
       if (!(res instanceof ApiError)) {
         this.clientsDataSource = new MatTableDataSource(res);
       }

@@ -87,9 +87,9 @@
 		"note": "Для подключения к сайту системы Rocket Call необходимо пройти регистрацию."
 	},
 	"snackbar": {
-		"balance-edit-error": "",
-		"settings-edit-success": "",
-		"user-edit-success": ""
+		"balance-edit-error": "Ошибка при пересчете баланса",
+		"settings-edit-success": "Настройки сохранены",
+		"user-edit-success": "Профиль пользователя сохранен"
 	},
 	"valid-err": {
 		"email": "Это не валидный email",

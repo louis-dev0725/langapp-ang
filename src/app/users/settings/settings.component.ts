@@ -95,10 +95,10 @@ export class SettingsComponent implements OnInit {
     this.api.updateUser(value).subscribe((result) => {
       if (result instanceof ApiError) {
         this._errors = result.error;
-
       } else {
-        localStorage.setItem('user', JSON.stringify(this.user));
-        this.snackBar.open(this.customValidator.messagesMap['Settings was successfully saved'],  null,{duration: 3000});
+        this.session.user = result;
+        console.log(this.customValidator.messagesMap['snackbar.settings-edit-success'], this.customValidator.messagesMap);
+        this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'],  null,{duration: 3000});
       }
     })
   }

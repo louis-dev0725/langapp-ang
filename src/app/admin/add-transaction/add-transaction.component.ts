@@ -30,7 +30,7 @@ export class AddTransactionComponent implements OnInit {
   transaction: Transaction = {
     userId: 0,
     comment: '',
-    isPartner: false,
+    isPartner: 0,
     money: 0
   };
 
