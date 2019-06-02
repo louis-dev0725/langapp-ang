@@ -30,6 +30,7 @@ import {CanactivateAdmin} from './services/canactivate-admin';
 import {ExtendedModule} from '@angular/flex-layout';
 import {SessionService} from './services/session.service';
 import {CustomValidator} from '@app/services/custom-validator';
+import { SuccessComponent } from './payment/success/success.component';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -41,7 +42,8 @@ export function createTranslateLoader(http: HttpClient) {
     AppComponent,
     NavbarComponent,
     PaymentComponent,
-    ContactComponent
+    ContactComponent,
+    SuccessComponent
   ],
   imports: [
     BrowserModule,

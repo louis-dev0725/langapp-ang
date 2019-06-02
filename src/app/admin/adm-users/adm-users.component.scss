@@ -10,3 +10,13 @@ td, th {
 .edit-link {
   cursor: pointer;
 }
+
+.filter-container {
+  overflow: hidden;
+  height: 200px;
+  transition: height .5s ease-in-out;
+}
+
+.folded {
+  height: 0;
+}

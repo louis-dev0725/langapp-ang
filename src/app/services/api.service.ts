@@ -9,6 +9,7 @@ import {SessionService} from './session.service';
   providedIn: 'root'
 })
 export class ApiService {
+  private readonly pageSize = 50;
 
   get apiHost(): string {
     return this.windowConfig.apiHost + this.windowConfig.apiPrefix;
@@ -110,11 +111,11 @@ export class ApiService {
    * url: /users/index
    */
   getAdminUsers(page = 0, filterParams: any = {}, sort: any = {}) {
-    let params: any = {};
+
+    let params: any = {'per-page': this.pageSize};
 
     if (page > 0) {
-      // note: [SHR] if need to change items per page - do it via "per-page" param
-      params.page = page;
+      params.page = page + 1;
     }
 
     params = Object.assign(params, this.prepareFilter(filterParams));
@@ -125,7 +126,7 @@ export class ApiService {
 
     const headers = this.getHeadersWithToken();
     return Observable.create((observer) => {
-      this.http.get(this.apiHost + '/users/index', {headers, params}).subscribe((res) => {
+      this.http.get(this.apiHost + '/users', {headers, params}).subscribe((res) => {
         observer.next(res);
       }, (error) => {
         observer.next(this.getApiError(error));
@@ -152,6 +153,12 @@ export class ApiService {
       }, (error) => {
         observer.next(this.getApiError(error))
       })
+    })
+  }
+
+  meRequest(): Observable<any> {
+    return Observable.create((observer) => {
+      this.getMeRequest(observer);
     })
   }
 
@@ -184,7 +191,9 @@ export class ApiService {
       } else {
         this.session.tempUser = userRes;
       }
-      observer.next(true);
+      observer.next(userRes);
+    }, (error) => {
+      observer.next(this.getApiError(error));
     });
   }
 
@@ -192,8 +201,13 @@ export class ApiService {
 
   //<editor-fold desc="Transactions">
 
+  /**
+   * Operations with filter
+   * method: GET
+   * url: /transactions?filter[<field name>]=<field value> [&...]
+   */
   getTransactions(page = 0, filter: any = {}, sort: any = {}): Observable<any> {
-    let params: any = {};
+    let params: any = {'per-page': this.pageSize};
 
     if (page > 0) {
       params.page = page;
@@ -230,6 +244,15 @@ export class ApiService {
     if (params.isParnter) {
       urlParams.push('filter[isPartner]');
     }
+
+    if (params.page) {
+      urlParams.push('page=' + params.page);
+    }
+
+    if (params.sort) {
+      urlParams.push('sort=' + params.sort);
+    }
+
     return url + urlParams.join('&');
   }
 
@@ -238,10 +261,21 @@ export class ApiService {
    * method: GET
    * url: /transactions/index?filter[userId]=<user id>
    */
-  getUserTransactionsList(): Observable<any> {
+  getUserTransactionsList(page = 0, sort = {}): Observable<any> {
+
+    const params: any = {userId: this.session.user.id, 'per-page': this.pageSize};
+
+    if (Object.keys(sort).length > 0) {
+      params.sort = this.prepareSort(sort);
+    }
+
+    if (page > 0) {
+      params.page = page - 1;
+    }
+
     return Observable.create((observer) => {
       const headers = this.getHeadersWithToken();
-      this.http.get(this.prepareTransactionsUrl({userId: 1}), {headers})
+      this.http.get(this.prepareTransactionsUrl(params), {headers})
         .subscribe((res) => {
           observer.next(res);
         }, (error) => {
@@ -255,10 +289,21 @@ export class ApiService {
    * method: GET
    * url: /transactions/index?filter[userId]=<user id>&filter[isPartner]=1
    */
-  getUserPartnersTransactionsList(): Observable<any> {
+  getUserPartnersTransactionsList(page = 0, sort = {}): Observable<any> {
+
+    const params: any = {userId: 1, isPartner: 1, 'per-page' : this.pageSize}
+
+    if (Object.keys(sort).length > 0) {
+      params.sort = this.prepareSort(sort);
+    }
+
+    if (page > 0) {
+      params.page = page - 1;
+    }
+
     return Observable.create((obsrver) => {
       const headers = this.getHeadersWithToken();
-      this.http.get(this.prepareTransactionsUrl({userId: 1, isPartner: 1}), {headers})
+      this.http.get(this.prepareTransactionsUrl(params), {headers})
         .subscribe((res) => {
           obsrver.next(res);
         }, (error) => {

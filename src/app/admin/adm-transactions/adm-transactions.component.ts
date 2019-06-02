@@ -20,19 +20,28 @@ export class AdmTransactionsComponent implements OnInit {
 
   transactionList: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   fieldKeys: any;
-  filter: any;
-  translatedKeys: any;
+  translatedKeys: any = {
+    id: 'Id',
+    userId: '',
+    money: 'Money',
+  };
   columns = ['id', 'user', 'money', 'comment', 'addedDateTime', 'isPartner', 'edit'];
   isLoaded = false;
   isEmptyTable = true;
 
+
+  filter: any = {
+  };
+
   set rows(data: any[]) {
+    console.log('rows', data);
     this.isEmptyTable = (data) ? data.length === 0 : true;
     this.transactionList = new MatTableDataSource(data);
   }
 
   @ViewChild(MatPaginator) paginator;
   @ViewChild(MatSort) sort;
+  isFilterShown = false;
 
   constructor(
     private api: ApiService,
@@ -44,6 +53,9 @@ export class AdmTransactionsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.fieldKeys = Object.keys(this.translatedKeys);
+
     this.sort.sortChange.subscribe((data) => {
       this.getTransactions();
     });
@@ -56,7 +68,12 @@ export class AdmTransactionsComponent implements OnInit {
   }
 
   runFilter() {
-
+    if (this.sendTimeout) {
+      clearTimeout(this.sendTimeout);
+    }
+    this.sendTimeout = setTimeout(() => {
+      this.getTransactions();
+    }, 300)
   }
 
   getIsPartner(row: any): string {
@@ -87,7 +104,6 @@ export class AdmTransactionsComponent implements OnInit {
 
   showEditTransaction(row: any) {
     this.session.transaction = row;
-    console.log('transaction', row);
     this.router.navigate(['/admin/transaction']);
   }
 

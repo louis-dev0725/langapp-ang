@@ -13,6 +13,7 @@ import {
 } from '@angular/material';
 import { TransactionComponent } from './transaction/transaction.component';
 import {PaymentsTableModule} from '../common/payments-table/payments-table.module';
+import {SessionService} from '@app/services/session.service';
 
 @NgModule({
   declarations: [AboutComponent, ClientsComponent, TransactionComponent],
@@ -27,6 +28,6 @@ import {PaymentsTableModule} from '../common/payments-table/payments-table.modul
     MatCardModule,
     MatProgressSpinnerModule,
   ],
-  providers: [DecimalPipe]
+  providers: [DecimalPipe, SessionService]
 })
 export class PartnersModule { }

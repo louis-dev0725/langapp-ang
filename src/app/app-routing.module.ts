@@ -13,6 +13,7 @@ import {ClientsComponent} from './partners/clients/clients.component';
 import {ContactComponent} from './contact/contact.component';
 import {TransactionComponent} from './partners/transaction/transaction.component';
 import {CanactivateAdmin} from './services/canactivate-admin';
+import {SuccessComponent} from '@app/payment/success/success.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,11 @@ const routes: Routes = [
   {
     path: 'payment',
     component: PaymentComponent,
+    canActivate: [CanactivateLogged]
+  },
+  {
+    path: 'payment-success',
+    component: SuccessComponent,
     canActivate: [CanactivateLogged]
   },
   {

@@ -1,5 +1,5 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {MatPaginator, MatSort, MatTableDataSource, PageEvent} from '@angular/material';
 import {ApiService} from '../../services/api.service';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -86,9 +86,12 @@ export class PaymentsTableComponent implements OnInit {
     return this._isLoaded;
   }
 
+  @Output() tableEvents: EventEmitter<any> = new EventEmitter<any>();
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   isEmptyTable = true;
+  @Input()
+  pageSize: any;
 
 
   constructor(
@@ -97,7 +100,16 @@ export class PaymentsTableComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.sort.sortChange.subscribe((data) => {
+      const sort:any = {};
+      if (this.sort.direction !== '') {
+        sort[this.sort.active] = this.sort.direction;
+      }
+      this.tableEvents.emit({type: 'sort', data: sort});
+    })
   }
 
+  onPage(event: PageEvent) {
+    this.tableEvents.emit({type: 'page', data: event});
+  }
 }

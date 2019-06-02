@@ -26,8 +26,9 @@
 <div class="container">
   <h1 translate>Transactions history</h1>
   <app-payments-table
-    #paymentsTable
+    [pageSize]="50"
     [isShowComment]="true"
+    [moneyTitle]="'Amount' | translate"
     [rows]="rows"
     [isPaginator]="true"></app-payments-table>
 </div>

@@ -20,7 +20,6 @@ export class AddTransactionComponent implements OnInit {
     return this._user;
   }
   set user(val: User) {
-    console.log('user', val);
     this._user = val;
     this.transaction.userId = val.id;
   }

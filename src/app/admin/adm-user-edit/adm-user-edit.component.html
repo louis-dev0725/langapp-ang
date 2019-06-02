@@ -162,15 +162,15 @@
   <div class="container">
     <h2 translate>Actions</h2>
     <a
+      class="action-item"
       routerLink="/admin/create-transaction"
       mat-flat-button
-      color="primary"
-      translate>Add transaction</a>
+      color="primary">{{'Add transaction' | translate}}</a>
     <a
+      class="action-item"
       (click)="recalculatePartnerBalance()"
       color="primary"
-      translate
-      mat-flat-button>Recalculate partner balance</a>
+      mat-flat-button>{{'Recalculate partner balance' | translate}}</a>
   </div>
   <button translate>Open as user</button>
 </div>

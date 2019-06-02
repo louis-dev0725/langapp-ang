@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '@app/services/api.service';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatSort, PageEvent} from '@angular/material';
 import {Subscription} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
 import {EventService} from '@app/event.service';
@@ -20,10 +20,12 @@ export class AdmUsersComponent implements OnInit {
 
   columns = ['id', 'name', 'company', 'telephone', 'balance', 'comment', 'edit'];
   notFilterFields = ['Comment', 'Edit'];
-  usersList: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  usersList:any = {};
   isEmptyTable = true;
+  isFilterShown = false;
 
   translatedKeys = {
+    Id: 'Id',
     Name: 'Name',
     Company: 'Company',
     Phone: 'Phone',
@@ -33,11 +35,9 @@ export class AdmUsersComponent implements OnInit {
     Edit:'Edit'
   };
 
-  get fieldKeys(): any[] {
-    return Object.keys(this.translatedKeys);
-  }
+  fieldKeys: any;
 
-  filter = {
+  filter: any = {
     id: '',
     name: '',
     company:'',
@@ -48,7 +48,7 @@ export class AdmUsersComponent implements OnInit {
 
   set rows(data: any[]) {
     this.isEmptyTable = (data) ? data.length === 0 : true;
-    this.usersList = new MatTableDataSource(data);
+    this.usersList = data;
     this.usersList.sort = this.sort;
     this.usersList.paginator = this.paginator;
   }
@@ -66,6 +66,8 @@ export class AdmUsersComponent implements OnInit {
     private translate: TranslateService) { }
 
   ngOnInit() {
+
+    this.fieldKeys = Object.keys(this.translatedKeys);
 
     this.transatePage();
 
@@ -95,7 +97,7 @@ export class AdmUsersComponent implements OnInit {
     if (this.usersSubscription) {
       this.usersSubscription.unsubscribe();
     }
-    const toSendFilter = Object.assign({}, this.filter);
+    const toSendFilter: any = Object.assign({}, this.filter);
 
     const replaceKeys = {isservicepaused: 'isServicePaused'};
 
@@ -113,10 +115,12 @@ export class AdmUsersComponent implements OnInit {
     });
 
 
-    this.usersSubscription = this.api.getAdminUsers(this.paginator.page, toSendFilter, sort)
+    this.usersSubscription = this.api.getAdminUsers(this.paginator.pageIndex, toSendFilter, sort)
       .subscribe((res: any) => {
         if (!(res instanceof ApiError)) {
           this.rows = res.items;
+          this.paginator.length = res._meta.totalCount;
+          this.paginator.pageIndex = res._meta.currentPage - 1;
         }
         this.isLoaded = true;
       });
@@ -141,5 +145,9 @@ export class AdmUsersComponent implements OnInit {
   showEditUser(row: any) {
     this.session.userToEdit = row;
     this.router.navigate(['/admin/user'])
+  }
+
+  onPageChange(event: PageEvent) {
+    this.getUsers();
   }
 }

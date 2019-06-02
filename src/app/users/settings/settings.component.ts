@@ -97,7 +97,6 @@ export class SettingsComponent implements OnInit {
         this._errors = result.error;
       } else {
         this.session.user = result;
-        console.log(this.customValidator.messagesMap['snackbar.settings-edit-success'], this.customValidator.messagesMap);
         this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'],  null,{duration: 3000});
       }
     })

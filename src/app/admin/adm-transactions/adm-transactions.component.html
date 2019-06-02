@@ -2,18 +2,26 @@
   <h1 translate>Transactions - admin</h1>
 
   <div class="container">
-    <button mat-flat-button translate>Show filter</button>
-    <h2 translate>Filter</h2>
-    <div fxLayout="row wrap">
-      <ng-container *ngFor="let item of fieldKeys; let i = index">
-        <mat-form-field fxFlex="20%" *ngIf="isFilterField(item)">
-          <input
-            type="text"
-            matInput placeholder="{{translatedKeys[item] }}"
-            (keyup)="runFilter()"
-            [(ngModel)]="filter[item.toLowerCase()]">
-        </mat-form-field>
-      </ng-container>
+    <button
+      mat-flat-button
+      (click)="isFilterShown = !isFilterShown">
+      <ng-container *ngTemplateOutlet="isFilterShown ? hideFilter : showFilter"></ng-container>
+    </button>
+    <ng-template #hideFilter>{{'Hide filter' | translate}}</ng-template>
+    <ng-template #showFilter>{{'Show filter' | translate}}</ng-template>
+    <div fxLayout="row wrap" class="filter-container" [ngClass]="{folded: !isFilterShown}">
+      <h2 translate>Filter</h2>
+      <div class="container">
+        <ng-container *ngFor="let item of fieldKeys; let i = index">
+          <mat-form-field fxFlex="20%" *ngIf="isFilterField(item)">
+            <input
+              type="text"
+              matInput placeholder="{{translatedKeys[item] }}"
+              (keyup)="runFilter()"
+              [(ngModel)]="filter[item]">
+          </mat-form-field>
+        </ng-container>
+      </div>
     </div>
   </div>
 
