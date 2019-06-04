@@ -150,4 +150,11 @@ export class AdmUsersComponent implements OnInit {
   onPageChange(event: PageEvent) {
     this.getUsers();
   }
+
+  clearFilter() {
+    Object.keys(this.filter).map((item) => {
+      this.filter[item] = '';
+    });
+    this.runFilter();
+  }
 }

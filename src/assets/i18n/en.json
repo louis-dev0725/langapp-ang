@@ -73,8 +73,11 @@
 	"Your account is successfully recharged": "Your account is successfully recharged",
 	"Your current balance": "Your current balance",
 	"Your id": "Your id",
+	"addedDateTime": "Added date time",
 	"for user": "for user",
+	"id": "ID",
 	"isServicePaused": "Is service paused",
+	"money": "Amount",
 	"paginator": {
 		"Items per page": "Items per page",
 		"next": "Next",
@@ -95,6 +98,7 @@
 		"settings-edit-success": "Settings was successfully saved",
 		"user-edit-success": "User profile was successfully saved"
 	},
+	"userId": "User ID",
 	"valid-err": {
 		"email": "This is not valid email",
 		"min": "The amount must be equals to or greater than",

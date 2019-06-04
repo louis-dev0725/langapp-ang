@@ -3,6 +3,11 @@ import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 _('isServicePaused');
 
+_('id');
+_('userId');
+_('money');
+_('addedDateTime');
+
 _('paginator.Items per page');
 _('paginator.of');
 _('paginator.prev');

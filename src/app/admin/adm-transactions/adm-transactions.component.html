@@ -13,15 +13,23 @@
       <h2 translate>Filter</h2>
       <div class="container">
         <ng-container *ngFor="let item of fieldKeys; let i = index">
-          <mat-form-field fxFlex="20%" *ngIf="isFilterField(item)">
+          <mat-form-field fxFlex="20%" *ngIf="!isDate(item)">
             <input
               type="text"
               matInput placeholder="{{translatedKeys[item] }}"
               (keyup)="runFilter()"
               [(ngModel)]="filter[item]">
           </mat-form-field>
+
+          <mat-form-field fxFlex="20%" *ngIf="isDate(item)">
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date" (dateChange)="changeDate($event.value.format('YYYY-MM-DD'))" [(ngModel)]="filter.addedDateTime">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
         </ng-container>
       </div>
+      <a mat-flat-button color="primary" (click)="clearFilter()">Clear filter</a>
     </div>
   </div>
 

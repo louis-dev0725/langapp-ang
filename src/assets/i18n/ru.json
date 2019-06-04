@@ -31,8 +31,8 @@
 	"Is service paused": "Приостановить сервис",
 	"Language": "Язык",
 	"Last login IP": "IP последнего визита",
-	"Link for the Main page": "",
-	"Link for the Registration page": "",
+	"Link for the Main page": "Ссылка для главной страницы",
+	"Link for the Registration page": "Ссылка на регистрацию",
 	"Logout": "Выход",
 	"Message": "Сообщение",
 	"Name": "Имя",
@@ -73,8 +73,11 @@
 	"Your account is successfully recharged": "Ваш счет успешно пополнен",
 	"Your current balance": "Ваш текущий баланс",
 	"Your id": "Ваш ID",
+	"addedDateTime": "Время создания",
 	"for user": "для пользователя",
+	"id": "ID",
 	"isServicePaused": "Активность сервиса",
+	"money": "Сумма",
 	"paginator": {
 		"Items per page": "Выводится на страницу",
 		"next": "След.",
@@ -95,6 +98,7 @@
 		"settings-edit-success": "Настройки сохранены",
 		"user-edit-success": "Профиль пользователя сохранен"
 	},
+	"userId": "ID пользователя",
 	"valid-err": {
 		"email": "Это не валидный email",
 		"min": "Значение должно быть равно или большим чем",

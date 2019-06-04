@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatCheckboxModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule,
   MatIconModule,
-  MatInputModule,
+  MatInputModule, MatNativeDateModule,
   MatPaginatorModule, MatProgressSpinnerModule, MatSelectModule,
   MatSortModule,
   MatTableModule
@@ -17,6 +17,7 @@ import { AdmUserEditComponent } from './adm-user-edit/adm-user-edit.component';
 import { AddTransactionComponent } from './add-transaction/add-transaction.component';
 import { AdmTransactionsComponent } from './adm-transactions/adm-transactions.component';
 import { AdmTransactionEditComponent } from './adm-transaction-edit/adm-transaction-edit.component';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
 
 const routes: Routes = [
   {
@@ -59,7 +60,9 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class AdminModule { }

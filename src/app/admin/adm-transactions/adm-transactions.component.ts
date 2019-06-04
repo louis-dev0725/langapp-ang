@@ -1,5 +1,12 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE, MatDatepicker,
+  MatPaginator,
+  MatSort,
+  MatTableDataSource
+} from '@angular/material';
 import {ApiService} from '@app/services/api.service';
 import {EventService} from '@app/event.service';
 import {Router} from '@angular/router';
@@ -7,23 +14,43 @@ import {SessionService} from '@app/services/session.service';
 import {TranslateService} from '@ngx-translate/core';
 import {Subscription} from 'rxjs';
 import {ApiError} from '@app/services/api-error';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
+import {forEach} from '@angular/router/src/utils/collection';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'YYYY-MM-DD',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
 
 @Component({
   selector: 'app-adm-transactions',
   templateUrl: './adm-transactions.component.html',
-  styleUrls: ['./adm-transactions.component.scss']
+  styleUrls: ['./adm-transactions.component.scss'],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'ru-RU'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+  ]
 })
 export class AdmTransactionsComponent implements OnInit {
 
   private transactionsSubscription: Subscription;
   private sendTimeout;
 
-  transactionList: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+  transactionList: any = {};
   fieldKeys: any;
   translatedKeys: any = {
     id: 'Id',
-    userId: '',
+    userId: 'User Id',
     money: 'Money',
+    addedDateTime: 'Added date time'
   };
   columns = ['id', 'user', 'money', 'comment', 'addedDateTime', 'isPartner', 'edit'];
   isLoaded = false;
@@ -31,12 +58,16 @@ export class AdmTransactionsComponent implements OnInit {
 
 
   filter: any = {
+    id: '',
+    userId: '',
+    money: '',
+    addedDateTime: ''
   };
+  globalEventSubscription: any;
 
   set rows(data: any[]) {
-    console.log('rows', data);
     this.isEmptyTable = (data) ? data.length === 0 : true;
-    this.transactionList = new MatTableDataSource(data);
+    this.transactionList = data;
   }
 
   @ViewChild(MatPaginator) paginator;
@@ -44,6 +75,7 @@ export class AdmTransactionsComponent implements OnInit {
   isFilterShown = false;
 
   constructor(
+    private adapter: DateAdapter<any>,
     private api: ApiService,
     private eventService: EventService,
     private ref: ChangeDetectorRef,
@@ -54,7 +86,16 @@ export class AdmTransactionsComponent implements OnInit {
 
   ngOnInit() {
 
+    this.translatePage();
+
+    this.globalEventSubscription = this.eventService.emitter.subscribe((event) => {
+      if(event.type === 'language-change') {
+        this.translatePage();
+      }
+    });
+
     this.fieldKeys = Object.keys(this.translatedKeys);
+
 
     this.sort.sortChange.subscribe((data) => {
       this.getTransactions();
@@ -64,7 +105,11 @@ export class AdmTransactionsComponent implements OnInit {
   }
 
   isFilterField(item: any) {
+    return true;
+  }
 
+  isDate(fieldName: string) {
+    return ['addedDateTime'].indexOf(fieldName) >= 0;
   }
 
   runFilter() {
@@ -93,6 +138,14 @@ export class AdmTransactionsComponent implements OnInit {
 
     const filterValue = Object.assign({}, this.filter);
 
+    Object.keys(filterValue).forEach((key) => {
+
+      if(filterValue[key]=== '') {
+        delete filterValue[key];
+      }
+    });
+
+
     this.transactionsSubscription = this.api.getTransactions(this.paginator.page, filterValue, sort)
       .subscribe((result) => {
         this.isLoaded = true;
@@ -113,6 +166,27 @@ export class AdmTransactionsComponent implements OnInit {
         this.session.userToEdit = this.session.tempUser;
         this.router.navigate(['/admin/user']);
       }
+    })
+  }
+
+  translatePage() {
+    this.adapter.setLocale(this.session.lang);
+
+    this.translate.get(Object.keys(this.translatedKeys)).subscribe((res: any) => {
+      console.log(res);
+      this.translatedKeys = res;
+
+    });
+  }
+
+  changeDate(data: any) {
+    this.filter.addedDateTime = data;
+    this.runFilter();
+  }
+
+  clearFilter() {
+    Object.keys(this.translatedKeys).map((key) => {
+      this.filter[key] = '';
     })
   }
 }

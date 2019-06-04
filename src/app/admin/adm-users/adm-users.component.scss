@@ -9,11 +9,15 @@ td, th {
 
 .edit-link {
   cursor: pointer;
+  &:hover {
+    color: #039be5;
+  }
 }
 
 .filter-container {
   overflow: hidden;
-  height: 200px;
+  height: 220px;
+  padding-bottom: 5px;
   transition: height .5s ease-in-out;
 }
 
