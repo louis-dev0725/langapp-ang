@@ -73,6 +73,18 @@ class TransactionController extends ActiveController
 
         $query = Transaction::find();
         if (!empty($filter)) {
+            // todo: [SHR]: replace fields if filter is AND expression
+            $replaceTransKeys = ['id', 'userId'];
+            foreach ($replaceTransKeys as $replaceKey) {
+                if (isset($filter[$replaceKey])) {
+                    $filter['"transactions"."' . $replaceKey . '"'] = $filter[$replaceKey];
+                    unset($filter[$replaceKey]);
+                }
+            }
+            if (isset($filter['addedDateTime'])) {
+                $filter['"transactions"."addedDateTime"::DATE'] = $filter['addedDateTime'];
+                unset($filter['addedDateTime']);
+            }
             $query->andWhere($filter);
         }
 
