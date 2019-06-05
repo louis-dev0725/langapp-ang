@@ -49,8 +49,10 @@ export class AdmTransactionsComponent implements OnInit {
   translatedKeys: any = {
     id: 'Id',
     userId: 'User Id',
+    name: 'Name',
     money: 'Money',
-    addedDateTime: 'Added date time'
+    addedDateTime: 'Added date time',
+    comment: 'Comment'
   };
   columns = ['id', 'user', 'money', 'comment', 'addedDateTime', 'isPartner', 'edit'];
   isLoaded = false;
@@ -61,8 +63,11 @@ export class AdmTransactionsComponent implements OnInit {
     id: '',
     userId: '',
     money: '',
-    addedDateTime: ''
+    addedDateTime: '',
+    name: '',
+    comment: ''
   };
+
   globalEventSubscription: any;
 
   set rows(data: any[]) {
@@ -102,10 +107,6 @@ export class AdmTransactionsComponent implements OnInit {
     });
 
     this.getTransactions();
-  }
-
-  isFilterField(item: any) {
-    return true;
   }
 
   isDate(fieldName: string) {
@@ -187,6 +188,7 @@ export class AdmTransactionsComponent implements OnInit {
   clearFilter() {
     Object.keys(this.translatedKeys).map((key) => {
       this.filter[key] = '';
-    })
+    });
+    this.runFilter();
   }
 }

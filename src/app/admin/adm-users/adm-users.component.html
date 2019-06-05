@@ -9,9 +9,9 @@
     </button>
       <ng-template #hideFilter>{{'Hide filter' | translate}}</ng-template>
       <ng-template #showFilter>{{'Show filter' | translate}}</ng-template>
-    <div fxLayout="row wrap" class="filter-container" [ngClass]="{folded: !isFilterShown}">
-      <h2 translate>Filter</h2>
-      <div class="container">
+    <div class="filter-container" [ngClass]="{folded: !isFilterShown}">
+      <h2 translate fxLayout="row">Filter</h2>
+      <div class="container" fxLayout="row wrap">
         <ng-container *ngFor="let item of fieldKeys; let i = index">
           <mat-form-field fxFlex="20%" *ngIf="isFilterField(item)">
             <input
