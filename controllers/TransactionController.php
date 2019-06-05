@@ -7,9 +7,11 @@ namespace app\controllers;
 use app\components\Helpers;
 use app\models\Transaction;
 use app\models\TransactionSearch;
+use function Clue\StreamFilter\fun;
 use Yii;
 use yii\data\ActiveDataFilter;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 use yii\filters\AccessControl;
 use yii\rest\IndexAction;
 use yii\web\ForbiddenHttpException;
@@ -73,19 +75,7 @@ class TransactionController extends ActiveController
 
         $query = Transaction::find();
         if (!empty($filter)) {
-            // todo: [SHR]: replace fields if filter is AND expression
-            $replaceTransKeys = ['id', 'userId'];
-            foreach ($replaceTransKeys as $replaceKey) {
-                if (isset($filter[$replaceKey])) {
-                    $filter['"transactions"."' . $replaceKey . '"'] = $filter[$replaceKey];
-                    unset($filter[$replaceKey]);
-                }
-            }
-            if (isset($filter['addedDateTime'])) {
-                $filter['"transactions"."addedDateTime"::DATE'] = $filter['addedDateTime'];
-                unset($filter['addedDateTime']);
-            }
-            $query->andWhere($filter);
+            $query = $this->prepareFilter($query, $filter);
         }
 
         if (!Helpers::isAdmin()) {
@@ -114,6 +104,51 @@ class TransactionController extends ActiveController
                 'defaultOrder' => ['id' => SORT_DESC],
             ],
         ]);
+    }
+
+    /**
+     * @param ActiveQuery $query query for the ActiveDataProvider
+     * @param array $filter filter condition for the $query
+     * @return ActiveQuery
+     */
+    private function prepareFilter($query, $filter)
+    {
+        $isComplex = $filter[0] === 'AND';
+        $replaceTransKeys = ['id', 'userId', 'addedDateTime', 'name', 'comment'];
+
+        $wrapTableName = function ($fieldName, $filterItem) use ($query, $replaceTransKeys) {
+            if (!is_array($filterItem)) {
+                return;
+            }
+            $condition = $filterItem;
+            if (in_array($fieldName, $replaceTransKeys)) {
+                if ($fieldName === 'addedDateTime') {
+                    $condition = ['"transactions"."addedDateTime"::DATE' => $filterItem[$fieldName]];
+                } else if ($fieldName === 'name') {
+                    $condition = ['like', '"users"."name"', $filterItem[$fieldName]];
+                } else if ($fieldName === 'comment') {
+                    $condition = ['like', '"transactions"."comment"', $filterItem[$fieldName]];
+                } else {
+                    $condition = ['"transactions"."' . $fieldName . '"' => $filterItem[$fieldName]];
+                }
+            }
+            $query->andWhere($condition);
+        };
+
+        if ($isComplex) {
+            foreach ($filter as $idx => $value)
+                if ($idx > 0) {
+                    reset($value);
+                    $fieldName = key($value);
+                    $wrapTableName($fieldName, $value);
+                }
+        } else {
+            reset($filter);
+            $fieldName = key($filter);
+            $wrapTableName($fieldName, $filter);
+        }
+
+        return $query;
     }
 
     /**
