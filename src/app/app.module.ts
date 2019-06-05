@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {ApiService} from './services/api.service';
 import {
-  MatButtonModule, MatButtonToggleModule, MatIconModule, MatInputModule,
+  MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatInputModule,
   MatMenuModule, MatPaginatorIntl, MatPaginatorModule,
   MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule,
   MatToolbarModule
@@ -76,7 +76,8 @@ export function createTranslateLoader(http: HttpClient) {
     PaymentsTableModule,
     ExtendedModule,
     MatButtonToggleModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule
   ],
   providers: [
     ApiService,

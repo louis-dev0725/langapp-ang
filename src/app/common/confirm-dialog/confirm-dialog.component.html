@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>{{title}}</h1>
+
+<div mat-dialog-content>
+  {{message}}
+</div>
+
+<div mat-dialog-actions class="actions">
+  <a
+    mat-flat-button
+    (click)="onDismiss()"
+    translate>Cancel
+  </a>
+  <a
+    mat-flat-button
+    color="primary"
+    (click)="onConfirm()"
+    translate>Ok</a>
+</div>

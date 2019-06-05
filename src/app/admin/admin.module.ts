@@ -17,7 +17,7 @@ import { AdmUserEditComponent } from './adm-user-edit/adm-user-edit.component';
 import { AddTransactionComponent } from './add-transaction/add-transaction.component';
 import { AdmTransactionsComponent } from './adm-transactions/adm-transactions.component';
 import { AdmTransactionEditComponent } from './adm-transaction-edit/adm-transaction-edit.component';
-import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {ConfirmDialogModule} from '@app/common/confirm-dialog/confirm-dialog.module';
 
 const routes: Routes = [
   {
@@ -62,7 +62,8 @@ const routes: Routes = [
     MatCheckboxModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    ConfirmDialogModule
   ]
 })
 export class AdminModule { }

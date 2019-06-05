@@ -10,6 +10,9 @@ _('money');
 _('name');
 _('userId');
 
+_('confirm.user-open.title');
+_('confirm.user-open.msg');
+
 _('paginator.Items per page');
 _('paginator.of');
 _('paginator.prev');

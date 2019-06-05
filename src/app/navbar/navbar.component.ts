@@ -46,6 +46,6 @@ export class NavbarComponent {
 
   logout() {
     this.api.logout();
-    this.router.navigateByUrl('/')
+    // this.router.navigateByUrl('/')
   }
 }

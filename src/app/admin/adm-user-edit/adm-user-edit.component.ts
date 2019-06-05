@@ -5,8 +5,11 @@ import {User} from '@app/interfaces/common.interface';
 import {CustomValidator} from '@app/services/custom-validator';
 import {SessionService} from '@app/services/session.service';
 import {ApiError} from '@app/services/api-error';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {EventService} from '@app/event.service';
+import {ConfirmDialogComponent, ConfirmDialogModel} from '@app/common/confirm-dialog/confirm-dialog.component';
+import {TranslateService} from '@ngx-translate/core';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-adm-user-edit',
@@ -16,12 +19,18 @@ import {EventService} from '@app/event.service';
 export class AdmUserEditComponent implements OnInit, OnDestroy {
 
   private _errors = [];
-  private globalEventSubscription;
+  private globalEventSubscription: Subscription;
 
   isChangePassword = false;
   userProfile: FormGroup;
   user: User;
   timeZones: any[] = [];
+
+  messages: any = {
+    'confirm.user-open.title': '',
+    'confirm.user-open.msg': ''
+  };
+
   get selectedTimeZone(): any {
     if (this.user) {
       return this.user.timezone;
@@ -35,11 +44,13 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private api: ApiService,
+    private confirmDialog: MatDialog,
     private customValidator: CustomValidator,
     private eventService: EventService,
     private formBuilder: FormBuilder,
     private session: SessionService,
     private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {
   }
 
@@ -48,6 +59,14 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
     this.api.getTimeZones().subscribe((res: any) => {
       this.timeZones = res;
+    });
+
+    this.callTranslate();
+
+    this.globalEventSubscription = this.eventService.emitter.subscribe((event) => {
+      if (event.type === 'language-change') {
+        this.callTranslate();
+      }
     });
 
     this.userProfile = this.formBuilder.group({
@@ -69,7 +88,9 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    if (this.globalEventSubscription) {
+      this.globalEventSubscription.unsubscribe();
+    }
   }
 
   get isServicePaused(): boolean {
@@ -128,6 +149,31 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       } else {
         this.snackBar.open('Balance recalculated', null, {duration: 3000});
       }
+    })
+  }
+
+  openAsUser() {
+
+    const title = this.messages['confirm.user-open.title'];
+    const msg = this.messages['confirm.user-open.msg'];
+
+    const dialogModel = new ConfirmDialogModel(title, msg);
+
+    const dialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: dialogModel
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.session.openAsUser(this.user)
+      }
+    })
+  }
+
+  private callTranslate() {
+    this.translate.get(Object.keys(this.messages)).subscribe((res) => {
+      this.messages = res;
     })
   }
 }

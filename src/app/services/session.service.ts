@@ -102,7 +102,11 @@ export class SessionService {
     this.user = undefined;
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    this.router.navigate(['/']);
+    this.reloadAdmin();
+    if (this.user) {
+      localStorage.removeItem('savedAdmin');
+    }
+    this.router.navigateByUrl('/');
   }
 
   static getLang(): string {
@@ -117,5 +121,20 @@ export class SessionService {
     return (SessionService.locales[SessionService.getLang()])
       ? SessionService.locales[SessionService.getLang()]
       : SessionService.getLang();
+  }
+
+  saveAdmin() {
+    localStorage.setItem('savedAdmin', JSON.stringify(this.user));
+  }
+
+  reloadAdmin() {
+    this.user = JSON.parse(localStorage.getItem('savedAdmin'));
+  }
+
+  openAsUser(user: User) {
+    this.saveAdmin();
+    this.user = user;
+    this.token = user.accessToken;
+    this.router.navigateByUrl('/');
   }
 }
