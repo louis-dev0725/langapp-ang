@@ -162,7 +162,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             self::SCENARIO_LOGIN => ['email', 'password'],
             self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone', 'language'],
             self::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone', 'language', 'isAdmin'],
-            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin'],
+            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'accessToken'],
         ];
     }
 
@@ -173,6 +173,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         } elseif ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
             $fields['isAdmin'] = 'isAdmin';
+            $fields['accessToken'] = 'token';
             unset($fields['passwordHash']);
 
             return $fields;
@@ -433,6 +434,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function getIsAdmin()
     {
-        return Helpers::isAdmin();
+        $roles = array_keys(\Yii::$app->authManager->getRolesByUser($this->id));
+        return in_array('admin', $roles);
+    }
+
+    public function getToken()
+    {
+        return $this->generateAccessToken();
     }
 }
