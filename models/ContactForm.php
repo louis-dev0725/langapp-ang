@@ -13,6 +13,7 @@ class ContactForm extends Model
     public $name;
     public $email;
     public $subject;
+    public $telephone;
     public $body;
 
     /**
@@ -22,7 +23,7 @@ class ContactForm extends Model
     {
         return [
             [['email', 'body'], 'required'],
-            ['name', 'safe'],
+            [['name', 'telephone'], 'safe'],
             ['email', 'email'],
         ];
     }
@@ -33,10 +34,11 @@ class ContactForm extends Model
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('app', 'Имя'),
+            'name' => Yii::t('app', 'Name'),
             'email' => Yii::t('app', 'E-mail'),
-            'subject' => Yii::t('app', 'Тема'),
-            'body' => Yii::t('app', 'Текст'),
+            'telephone' => Yii::t('app', 'Telephone'),
+            'subject' => Yii::t('app', 'Topic'),
+            'body' => Yii::t('app', 'Body'),
         ];
     }
 
