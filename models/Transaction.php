@@ -233,17 +233,17 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'userId' => Yii::t('app', 'ID пользователя'),
-            'name' => Yii::t('app', 'Имя пользователя'),
+            'userId' => Yii::t('app', 'User ID'),
+            'name' => Yii::t('app', 'Name'),
             'token' => '',
-            'money' => Yii::t('app', 'Изменение баланса'),
+            'money' => Yii::t('app', 'Balance change'),
             'isCommon' => Yii::t('app', 'Is Common'),
-            'comment' => Yii::t('app', 'Комментарий'),
-            'addedDateTime' => Yii::t('app', 'Дата добавления'),
-            'isPartner' => Yii::t('app', 'Партнерская'),
-            'isRealMoney' => Yii::t('app', 'Реальные деньги'),
-            'fromInvitedUserId' => Yii::t('app', 'From Invited User ID'),
-            'parentTransactionId' => Yii::t('app', 'Parent Transaction ID'),
+            'comment' => Yii::t('app', 'Comment'),
+            'addedDateTime' => Yii::t('app', 'Added'),
+            'isPartner' => Yii::t('app', 'Partner'),
+            'isRealMoney' => Yii::t('app', 'Is real money'),
+            'fromInvitedUserId' => Yii::t('app', 'From invited User ID'),
+            'parentTransactionId' => Yii::t('app', 'Parent transaction ID'),
             'dataJson' => Yii::t('app', 'Data Json'),
         ];
     }

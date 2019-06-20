@@ -34,14 +34,14 @@ class PasswordResetForm extends Model
     {
         $this->user = User::findByPasswordResetToken($this->token);
         if ($this->user === null) {
-            $this->addError('token', Yii::t('app', 'Неверный токен для сброса пароля'));
+            $this->addError('token', Yii::t('app', 'Wrong link to reset the password.'));
         }
     }
 
     public function attributeLabels()
     {
         return [
-            'password' => Yii::t('app', 'Новый пароль'),
+            'password' => Yii::t('app', 'New password'),
         ];
     }
 
