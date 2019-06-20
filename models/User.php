@@ -10,6 +10,7 @@ use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;
 use yii\web\IdentityInterface;
+use yii\web\UserEvent;
 
 /**
  * This is the model class for table "users".
@@ -59,6 +60,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     const SCENARIO_INVITED_USER = 'invited_user';
 
     protected $_password;
+
+    /**
+     * @param UserEvent $event
+     */
+    public static function afterLogin($event)
+    {
+        /** @var User $user */
+        $user = $event->identity;
+        Yii::$app->formatter->timeZone = $user->timezone;
+    }
 
     public function checkInvitedUsers()
     {
@@ -172,13 +183,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             return ['id', 'name', 'partnerEarned'];
         } elseif ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
+            $fields['paidUntilDateTime'] = [Helpers::class, 'formatDateField'];
+            $fields['addedDateTime'] = [Helpers::class, 'formatDateField'];
+            $fields['updatedDateTime'] = [Helpers::class, 'formatDateField'];
             $fields['isAdmin'] = 'isAdmin';
             $fields['accessToken'] = 'token';
             unset($fields['passwordHash']);
 
             return $fields;
         } elseif ($this->scenario == self::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime', 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin'];
+            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin'];
         } else {
             return [];
         }
@@ -333,6 +347,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
         $issuedAt = $token->getClaim('iat');
         $passwordChanged = Helpers::dateToUnix($user->passwordChangedDateTime);
+
         if ($issuedAt < $passwordChanged) {
             return null;
         }

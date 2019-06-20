@@ -142,8 +142,12 @@ class Transaction extends \yii\db\ActiveRecord
     {
         parent::populateRecord($record, $row);
         if (Helpers::isAdmin() && (!self::isSaveMethod())) {
-            $record->setAttribute('name', $row['name']);
-            $record->setAttribute('token', self::getToken($row['userId']));
+            if (isset($row['name'])) {
+                $record->setAttribute('name', $row['name']);
+            }
+            if (isset($row['userId'])) {
+                $record->setAttribute('token', self::getToken($row['userId']));
+            }
         }
     }
 
@@ -154,9 +158,10 @@ class Transaction extends \yii\db\ActiveRecord
             $parentFields = parent::fields();
             $parentFields[] = 'name';
             $parentFields[] = 'token';
+            $parentFields['addedDateTime'] = [Helpers::class, 'formatDateField'];
             return $parentFields;
         } else {
-            return ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'];
+            return ['id', 'userId', 'money', 'comment', 'addedDateTime' => [Helpers::class, 'formatDateField'], 'isPartner', 'fromInvitedUserId'];
         }
     }
 

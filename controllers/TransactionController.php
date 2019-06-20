@@ -113,7 +113,7 @@ class TransactionController extends ActiveController
      */
     private function prepareFilter($query, $filter)
     {
-        $isComplex = $filter[0] === 'AND';
+        $isComplex = isset($filter[0]) && $filter[0] === 'AND';
         $replaceTransKeys = ['id', 'userId', 'addedDateTime', 'name', 'comment'];
 
         $wrapTableName = function ($fieldName, $filterItem) use ($query, $replaceTransKeys) {

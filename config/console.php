@@ -9,6 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'sourceLanguage' => 'en-US',
     'language' => 'ru-RU',
+    'timeZone' => 'UTC',
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
