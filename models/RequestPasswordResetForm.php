@@ -17,10 +17,11 @@ class RequestPasswordResetForm extends Model
     public function rules()
     {
         return [
-            ['email', 'trim'],
+            ['email', 'filter', 'filter' => 'strtolower'],
+            ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
             ['email', 'email'],
-            ['email', 'exist', 'targetClass' => User::class, 'message' => Yii::t('app', 'Пользователь с таким E-mail не найден.')],
+            ['email', 'exist', 'targetClass' => User::class, 'message' => Yii::t('app', 'User with such email was not found.')],
         ];
     }
 
