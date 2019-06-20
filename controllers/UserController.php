@@ -189,6 +189,7 @@ class UserController extends ActiveController
         ]);
 
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $model->registerIp = Yii::$app->request->getUserIP();
         if ($model->save()) {
             $model->scenario = User::SCENARIO_PROFILE;
             $model->refresh();
@@ -208,6 +209,8 @@ class UserController extends ActiveController
         $model = new LoginForm();
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
         if ($model->validate()) {
+            $model->user->lastLoginIp = Yii::$app->request->getUserIP();
+            $model->user->save(false, ['lastLoginIp']);
             $token = $model->user->generateAccessToken();
             return ['accessToken' => $token];
         }
