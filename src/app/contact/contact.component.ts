@@ -26,8 +26,8 @@ export class ContactComponent implements OnInit {
     return this.session.user;
   }
 
-  @ViewChild('frmVar') form;
-  @ViewChild('recaptcha') recaptcha: ReCaptcha2Component;
+  @ViewChild('frmVar', {static: false}) form;
+  @ViewChild('recaptcha', {static: false}) recaptcha: ReCaptcha2Component;
 
   constructor(
     private api: ApiService,

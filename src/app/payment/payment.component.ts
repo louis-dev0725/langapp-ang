@@ -23,7 +23,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   rows: any;
 
-  @ViewChild(PaymentsTableComponent) paymentsTable: PaymentsTableComponent;
+  @ViewChild(PaymentsTableComponent, {static: false}) paymentsTable: PaymentsTableComponent;
 
   constructor(
     private api: ApiService,

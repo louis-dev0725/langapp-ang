@@ -19,7 +19,7 @@ const routes: Routes = [
   {
     path: 'admin',
     canActivate: [CanactivateAdmin],
-    loadChildren: './admin/admin.module#AdminModule'
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: 'signup',

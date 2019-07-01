@@ -61,8 +61,8 @@ export class PaymentsTableComponent implements OnInit {
 
   columns: string[] = ['addedDateTime', 'money'];
 
-  @ViewChild(MatPaginator) paginator;
-  @ViewChild(MatSort) sort;
+  @ViewChild(MatPaginator, {static: false}) paginator;
+  @ViewChild(MatSort, {static: false}) sort;
 
   @Input() moneyTitle: any;
 

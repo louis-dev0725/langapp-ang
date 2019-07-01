@@ -53,8 +53,8 @@ export class AdmUsersComponent implements OnInit {
     this.usersList.paginator = this.paginator;
   }
 
-  @ViewChild(MatPaginator) paginator;
-  @ViewChild(MatSort) sort;
+  @ViewChild(MatPaginator, {static: false}) paginator;
+  @ViewChild(MatSort, {static: false}) sort;
   isLoaded = false;
 
   constructor(

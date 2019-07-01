@@ -75,8 +75,8 @@ export class AdmTransactionsComponent implements OnInit {
     this.transactionList = data;
   }
 
-  @ViewChild(MatPaginator) paginator;
-  @ViewChild(MatSort) sort;
+  @ViewChild(MatPaginator, {static: false}) paginator;
+  @ViewChild(MatSort, {static: false}) sort;
   isFilterShown = false;
 
   constructor(
