@@ -13,7 +13,7 @@ import {
 } from '@angular/material';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CanactivateLogged} from './services/canactivate-logged';
@@ -31,6 +31,7 @@ import {ExtendedModule} from '@angular/flex-layout';
 import {SessionService} from './services/session.service';
 import {CustomValidator} from '@app/services/custom-validator';
 import { SuccessComponent } from './payment/success/success.component';
+import { HttpInterceptorService } from "@app/http/http-interceptor";
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -86,7 +87,12 @@ export function createTranslateLoader(http: HttpClient) {
     CanactivateNologged,
     CustomValidator,
     {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator},
-    {provide: LOCALE_ID, useFactory: SessionService.getLocale()}
+    {provide: LOCALE_ID, useFactory: SessionService.getLocale()},    ,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

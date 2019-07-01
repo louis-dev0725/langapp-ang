@@ -28,11 +28,11 @@ export class NavbarComponent {
   }
 
   constructor(
+    public session: SessionService,
     public api: ApiService,
     private eventService: EventService,
     private router: Router,
     private ref: ChangeDetectorRef,
-    private session: SessionService,
     private translate: TranslateService) {
 
   }

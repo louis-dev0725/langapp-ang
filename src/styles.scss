@@ -41,3 +41,9 @@ body {
   -webkit-appearance: none;
   margin: 0;
 }
+
+snack-bar-container.snack-error {
+  background: $color-red-danger;
+  color: #fff;
+  //color: rgba(0,0,0,.87);
+}
