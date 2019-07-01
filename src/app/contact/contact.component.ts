@@ -1,11 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ApiService} from '../services/api.service';
-import {MatSnackBar} from '@angular/material';
-import {User} from '../interfaces/common.interface';
-import {ReCaptcha2Component} from 'ngx-captcha';
-import {CustomValidator} from '../services/custom-validator';
-import {SessionService} from '@app/services/session.service';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ApiService } from '../services/api.service';
+import { MatSnackBar } from '@angular/material';
+import { User } from '../interfaces/common.interface';
+import { ReCaptcha2Component } from 'ngx-captcha';
+import { CustomValidator } from '../services/custom-validator';
+import { SessionService } from '@app/services/session.service';
 
 @Component({
   selector: 'app-contact',
@@ -14,6 +14,7 @@ import {SessionService} from '@app/services/session.service';
 })
 export class ContactComponent implements OnInit {
   contactForm: FormGroup;
+
   get isErrors() {
     return !this.contactForm.valid;
   }
@@ -26,24 +27,24 @@ export class ContactComponent implements OnInit {
     return this.session.user;
   }
 
-  @ViewChild('frmVar', {static: false}) form;
-  @ViewChild('recaptcha', {static: false}) recaptcha: ReCaptcha2Component;
+  @ViewChild('frmVar', {static: true}) form;
+  @ViewChild('recaptcha', {static: true}) recaptcha: ReCaptcha2Component;
 
   constructor(
-    private api: ApiService,
+    public api: ApiService,
     private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
     private ref: ChangeDetectorRef,
     private snackBar: MatSnackBar,
     private session: SessionService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.contactForm = this.formBuilder.group({
-      name: ['', {validators: [Validators.required], updateOn: 'change'}],
-      email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
-      telephone: [''],
-      subject: [''],
+      name: [this.user['name'] || '', {validators: [Validators.required], updateOn: 'change'}],
+      email: [this.user['email'] || '', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
+      telephone: [this.user['telephone'] || ''],
       body: ['', {validators: [Validators.required], updateOn: 'change'}],
       recaptcha: ['', Validators.required]
     })
@@ -51,7 +52,9 @@ export class ContactComponent implements OnInit {
 
   onSubmit() {
     this.api.sendMessage(this.contactForm.value).subscribe((res) => {
-      this.snackBar.open('Your message successfully delivered', null, {duration: 3000} );
+      // console.log(this.i18n('Email'));
+      const message = localStorage.getItem('lang') == 'ru' ? 'Ваще сообщение успсешно отправлено' : 'Your message successfully delivered';
+      this.snackBar.open(message, null, {duration: 3000});
       this.form.resetForm();
       this.contactForm.get('name').setValue(this.user.name);
       this.contactForm.get('email').setValue(this.user.email);

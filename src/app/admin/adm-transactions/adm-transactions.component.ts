@@ -15,7 +15,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {Subscription} from 'rxjs';
 import {ApiError} from '@app/services/api-error';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {forEach} from '@angular/router/src/utils/collection';
 
 export const MY_FORMATS = {
   parse: {
@@ -75,8 +74,8 @@ export class AdmTransactionsComponent implements OnInit {
     this.transactionList = data;
   }
 
-  @ViewChild(MatPaginator, {static: false}) paginator;
-  @ViewChild(MatSort, {static: false}) sort;
+  @ViewChild(MatPaginator, {static: true}) paginator;
+  @ViewChild(MatSort, {static: true}) sort;
   isFilterShown = false;
 
   constructor(
@@ -174,7 +173,6 @@ export class AdmTransactionsComponent implements OnInit {
     this.adapter.setLocale(this.session.lang);
 
     this.translate.get(Object.keys(this.translatedKeys)).subscribe((res: any) => {
-      console.log(res);
       this.translatedKeys = res;
 
     });

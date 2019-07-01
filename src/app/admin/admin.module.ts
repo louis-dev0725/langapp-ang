@@ -33,7 +33,7 @@ const routes: Routes = [
     component: AddTransactionComponent
   },
   {
-    path: 'operations',
+    path: 'transactions',
     component: AdmTransactionsComponent
   },
   {

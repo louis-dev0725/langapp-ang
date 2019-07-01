@@ -10,6 +10,7 @@
   <button mat-button *ngIf="isLoggedIn" (click)="logout()">{{'Logout' | translate}}</button>
   <button mat-button *ngIf="isLoggedIn && session.isAdmin" [matMenuTriggerFor]="adminmenu">{{'Admin' | translate}}</button>
 
+  <span style="margin-left: auto;font-size: 14px;" *ngIf="user">{{user.name}}</span>
 </mat-toolbar>
 
 
@@ -18,7 +19,8 @@
     #group="matButtonToggleGroup"
     class="lang-toggle-group"
     [vertical]="true"
-    [(ngModel)]="currentLang">
+    [ngModel]="currentLang"
+    (ngModelChange) = "setLanguage($event)">
     <mat-button-toggle
       (click)="setLanguage(lang)"
       ngDefaultControl
@@ -34,10 +36,10 @@
 <mat-menu #partnership="matMenu">
   <button mat-menu-item routerLink="/partners/about">{{'About' | translate}}</button>
   <button mat-menu-item routerLink="/partners/clients" *ngIf="isLoggedIn">{{'Clients' | translate}}</button>
-  <button mat-menu-item routerLink="/partners/operations" *ngIf="isLoggedIn">{{'Transactions' | translate}}</button>
+  <button mat-menu-item routerLink="/partners/transactions" *ngIf="isLoggedIn">{{'Transactions' | translate}}</button>
 </mat-menu>
 
 <mat-menu #adminmenu="matMenu">
   <button mat-menu-item routerLink="/admin/users">{{'Clients' | translate}}</button>
-  <button mat-menu-item routerLink="/admin/operations">{{'Transactions' | translate}}</button>
+  <button mat-menu-item routerLink="/admin/transactions">{{'Transactions' | translate}}</button>
 </mat-menu>

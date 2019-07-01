@@ -11,7 +11,6 @@
         matInput
         required
         formControlName="name"
-        [ngModel]="user?.name"
         placeholder="{{'Name' | translate}}">
       <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
     </mat-form-field>
@@ -21,7 +20,6 @@
         matInput
         required
         formControlName="email"
-        [ngModel]="user?.email"
         placeholder="{{'Email' | translate}}">
       <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
     </mat-form-field>
@@ -30,16 +28,15 @@
       <input
         matInput
         formControlName="telephone"
-        [ngModel]="user?.telephone"
         placeholder="{{'Phone' | translate}}">
     </mat-form-field>
 
-    <mat-form-field class="form-item">
+    <!--<mat-form-field class="form-item">
       <input
         matInput
         formControlName="subject"
         placeholder="{{'Subject' | translate}}">
-    </mat-form-field>
+    </mat-form-field>-->
 
     <mat-form-field class="form-item">
       <textarea

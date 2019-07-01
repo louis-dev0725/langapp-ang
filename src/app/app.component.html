@@ -1,3 +1,11 @@
+<mat-progress-bar
+    *ngIf="isProgressBarLoading"
+    class="example-margin"
+    [color]="color"
+    [mode]="mode"
+    [value]="value"
+    [bufferValue]="bufferValue">
+</mat-progress-bar>
 <app-navbar></app-navbar>
 <div>
   <router-outlet></router-outlet>

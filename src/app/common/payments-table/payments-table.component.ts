@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, PageEvent} from '@angular/material';
-import {ApiService} from '../../services/api.service';
+import {ApiService} from '@app/services/api.service';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
@@ -62,7 +62,7 @@ export class PaymentsTableComponent implements OnInit {
   columns: string[] = ['addedDateTime', 'money'];
 
   @ViewChild(MatPaginator, {static: false}) paginator;
-  @ViewChild(MatSort, {static: false}) sort;
+  @ViewChild(MatSort, {static: true}) sort;
 
   @Input() moneyTitle: any;
 

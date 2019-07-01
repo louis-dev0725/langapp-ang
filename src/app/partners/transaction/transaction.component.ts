@@ -15,7 +15,7 @@ export class TransactionComponent implements OnInit, OnDestroy {
 
   rows: any;
 
-  @ViewChild(PaymentsTableComponent, {static: false}) paymentTable: PaymentsTableComponent;
+  @ViewChild(PaymentsTableComponent, {static: true}) paymentTable: PaymentsTableComponent;
 
   get parnterBalance(): number {
     return this.session.user.balancePartner;

@@ -46,14 +46,14 @@ export class SettingsComponent implements OnInit {
     });
 
     this.settingsForm = this.formBuilder.group({
-      id: [''],
-      name: ['', {validators: [Validators.required], updateOn: 'change'}],
-      email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
-      company: [''],
-      site: [''],
-      telephone: [''],
+      id: [this.user['id'] || ''],
+      name: [this.user['name'] || '', {validators: [Validators.required], updateOn: 'change'}],
+      email: [this.user['email'] || '', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
+      company: [this.user['company'] || ''],
+      site: [this.user['site'] || ''],
+      telephone: [this.user['telephone'] || ''],
       isServicePaused: [''],
-      wmr: [''],
+      wmr: [this.user['wmr'] || ''],
       timezone: [''],
       language: ['']
     });

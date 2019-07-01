@@ -76,7 +76,7 @@ const routes: Routes = [
         component: ClientsComponent
       },
       {
-        path: 'operations',
+        path: 'transactions',
         component: TransactionComponent
       }
     ]

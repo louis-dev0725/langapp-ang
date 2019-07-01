@@ -12,7 +12,7 @@ export class ClientsComponent implements OnInit {
   clientsDataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   columnNames: string[] = ['id', 'name', 'partnerEarned'];
 
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   isEmptyTable = true;
   isLoaded = true;
 

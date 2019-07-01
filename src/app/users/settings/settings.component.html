@@ -11,14 +11,13 @@
 
   <div class="container">
     <form [formGroup]="settingsForm">
-      <input type="hidden" formControlName="id" [ngModel]="user.id">
+      <input type="hidden" formControlName="id">
 
       <mat-form-field class="form-item">
         <input
           matInput
           required
           formControlName="name"
-          [ngModel]="user.name"
           placeholder="{{'Name' | translate}}">
         <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
       </mat-form-field>
@@ -27,7 +26,6 @@
         <input
           matInput
           formControlName="company"
-          [ngModel]="user.company"
           placeholder="{{'Company' | translate }}">
       </mat-form-field>
 
@@ -35,7 +33,6 @@
         <input
           matInput
           formControlName="site"
-          [ngModel]="user.site"
           placeholder="{{'Site' | translate}}">
       </mat-form-field>
 
@@ -43,7 +40,6 @@
         <input
           matInput
           formControlName="telephone"
-          [ngModel]="user.telephone"
           placeholder="{{'Phone' | translate}}">
       </mat-form-field>
 
@@ -52,29 +48,26 @@
           matInput
           required
           formControlName="email"
-          [ngModel]="user.email"
           placeholder="{{'Email' | translate}}">
         <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
       </mat-form-field>
 
       <div class="form-item">
         <mat-checkbox
-          formControlName="isServicePaused"
-          [ngModel]="isServicePaused">{{'Is service paused' | translate}}
+          formControlName="isServicePaused">{{'Is service paused' | translate}}
         </mat-checkbox>
       </div>
 
       <mat-form-field class="form-item">
         <input
           matInput
-          [ngModel]="user.wmr"
           formControlName="wmr"
           placeholder="{{'WMR wallet' | translate}}">
       </mat-form-field>
 
       <mat-form-field class="form-item">
         <mat-label translate>Timezone</mat-label>
-        <mat-select [ngModel]="user.timezone" formControlName="timezone">
+        <mat-select formControlName="timezone">
           <mat-optgroup *ngFor="let tzgroup of timeZones" [label]="tzgroup.group">
             <mat-option *ngFor="let zone of tzgroup.zones" [value]="zone.value">{{zone.value}}</mat-option>
           </mat-optgroup>
