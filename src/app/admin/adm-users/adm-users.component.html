@@ -3,22 +3,22 @@
 
   <div class="container">
     <button
-      mat-flat-button
-      (click)="isFilterShown = !isFilterShown">
+        mat-flat-button
+        (click)="isFilterShown = !isFilterShown">
       <ng-container *ngTemplateOutlet="isFilterShown ? hideFilter : showFilter"></ng-container>
     </button>
-      <ng-template #hideFilter>{{'Hide filter' | translate}}</ng-template>
-      <ng-template #showFilter>{{'Show filter' | translate}}</ng-template>
+    <ng-template #hideFilter>{{'Hide filter' | translate}}</ng-template>
+    <ng-template #showFilter>{{'Show filter' | translate}}</ng-template>
     <div class="filter-container" [ngClass]="{folded: !isFilterShown}">
       <h2 translate fxLayout="row">Filter</h2>
       <div class="container" fxLayout="row wrap">
         <ng-container *ngFor="let item of fieldKeys; let i = index">
           <mat-form-field fxFlex="20%" *ngIf="isFilterField(item)">
             <input
-              type="text"
-              matInput placeholder="{{translatedKeys[item] }}"
-              (keyup)="runFilter()"
-              [(ngModel)]="filter[item.toLowerCase()]">
+                type="text"
+                matInput placeholder="{{translatedKeys[item] }}"
+                (keyup)="runFilter()"
+                [(ngModel)]="filter[item.toLowerCase()]">
           </mat-form-field>
         </ng-container>
       </div>
@@ -51,7 +51,7 @@
 
       <ng-container matColumnDef="balance">
         <th mat-header-cell *matHeaderCellDef>{{'Balance' | translate}}</th>
-        <td mat-cell *matCellDef="let row">{{row.balance}}</td>
+        <td mat-cell *matCellDef="let row">{{row.balance | formatNumbers: session.lang}}</td>
       </ng-container>
 
 
@@ -79,8 +79,8 @@
     <mat-card *ngIf="!isLoaded"
               style="display: flex; justify-content: center; align-items: center">
       <mat-progress-spinner
-        color="primary"
-        mode="indeterminate">
+          color="primary"
+          mode="indeterminate">
       </mat-progress-spinner>
     </mat-card>
 

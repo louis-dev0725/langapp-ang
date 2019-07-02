@@ -1,17 +1,11 @@
 import { Injectable } from '@angular/core';
 import { DatePipe } from "@angular/common";
-import { toNumbers } from "@angular/compiler-cli/src/diagnostics/typescript_version";
 import { SessionService } from "@app/services/session.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
-  private langMap = {
-     'ru': 'ru-RU',
-     'en': 'en-US'
-  };
-
   constructor(private sessionService: SessionService) {
   }
 

@@ -15,7 +15,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {Subscription} from 'rxjs';
 import {ApiError} from '@app/services/api-error';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import { UtilsService } from "@app/services/utils.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -72,32 +71,22 @@ export class AdmTransactionsComponent implements OnInit {
 
   set rows(data: any[]) {
     this.isEmptyTable = (data) ? data.length === 0 : true;
-    if(data.length){
-      data = data.map((el) => {
-        return {
-          ...el,
-          addedDateTime: this.utilsService.convertDate(el.addedDateTime),
-          money: this.utilsService.convertValue(el.money)
-        }
-      })
-    }
     this.transactionList = data;
   }
 
   @ViewChild(MatPaginator, {static: true}) paginator;
   @ViewChild(MatSort, {static: true}) sort;
-  isFilterShown = false;
-
   constructor(
-    private utilsService: UtilsService,
+    public session: SessionService,
     private adapter: DateAdapter<any>,
     private api: ApiService,
     private eventService: EventService,
     private ref: ChangeDetectorRef,
     private router: Router,
-    private session: SessionService,
     private translate: TranslateService) {
   }
+
+  isFilterShown = false;
 
   ngOnInit() {
 

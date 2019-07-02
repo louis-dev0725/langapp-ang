@@ -1,5 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { LOCALE_ID, MissingTranslationStrategy, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  LOCALE_ID,
+  MissingTranslationStrategy,
+  NgModule,
+  TRANSLATIONS,
+  TRANSLATIONS_FORMAT
+} from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,6 +42,7 @@ import { SuccessComponent } from './payment/success/success.component';
 import { HttpInterceptorService } from "@app/http/http-interceptor";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslatingService } from "@app/services/translating.service";
+import { ConfirmDialogModule } from "@app/common/confirm-dialog/confirm-dialog.module";
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -82,7 +90,8 @@ export function createTranslateLoader(http: HttpClient) {
     MatButtonToggleModule,
     MatIconModule,
     MatDialogModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    ConfirmDialogModule
   ],
   providers: [
     ApiService,

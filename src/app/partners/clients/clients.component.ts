@@ -1,7 +1,8 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatSort, MatTableDataSource} from '@angular/material';
-import {ApiService} from '@app/services/api.service';
-import {ApiError} from '@app/services/api-error';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSort, MatTableDataSource } from '@angular/material';
+import { ApiService } from '@app/services/api.service';
+import { ApiError } from '@app/services/api-error';
+import { SessionService } from "@app/services/session.service";
 
 @Component({
   selector: 'app-clients',
@@ -17,8 +18,10 @@ export class ClientsComponent implements OnInit {
   isLoaded = true;
 
   constructor(
+    public session: SessionService,
     private api: ApiService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.isLoaded = false;

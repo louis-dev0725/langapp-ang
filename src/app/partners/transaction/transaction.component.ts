@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ApiService} from '@app/services/api.service';
-import {SessionService} from '@app/services/session.service';
-import {PaymentsTableComponent} from '@app/common/payments-table/payments-table.component';
-import {Subscription} from 'rxjs';
-import {ApiError} from '@app/services/api-error';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ApiService } from '@app/services/api.service';
+import { SessionService } from '@app/services/session.service';
+import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
+import { Subscription } from 'rxjs';
+import { ApiError } from '@app/services/api-error';
 import { UtilsService } from "@app/services/utils.service";
 
 @Component({
@@ -24,7 +24,8 @@ export class TransactionComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService,
               private session: SessionService,
-              private utilsService: UtilsService) { }
+              private utilsService: UtilsService) {
+  }
 
   ngOnInit() {
     this.getTransactions();

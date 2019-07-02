@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource, PageEvent} from '@angular/material';
-import {ApiService} from '@app/services/api.service';
-import {TranslateService} from '@ngx-translate/core';
-import { UtilsService } from "@app/services/utils.service";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, PageEvent } from '@angular/material';
+import { ApiService } from '@app/services/api.service';
+import { TranslateService } from '@ngx-translate/core';
+import { SessionService } from "@app/services/session.service";
 
 @Component({
   selector: 'app-payments-table',
@@ -16,7 +16,7 @@ export class PaymentsTableComponent implements OnInit {
   private _isShowComment;
 
   get isShowComment(): boolean {
-    return  this._isShowComment;
+    return this._isShowComment;
   }
 
   @Input() set isShowComment(val: boolean) {
@@ -69,14 +69,6 @@ export class PaymentsTableComponent implements OnInit {
 
   @Input() set rows(data: any[]) {
     this.isEmptyTable = (data) ? data.length === 0 : true;
-    if (data) {
-      data = data.map((el) => {
-        return {
-          ...el,
-          addedDateTime: this.utilsService.convertDate(el.addedDateTime)
-        }
-      });
-    }
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     if (this.isPaginator) {
@@ -87,11 +79,11 @@ export class PaymentsTableComponent implements OnInit {
   private _isLoaded = true;
 
   @Input()
-  set isLoaded (val: boolean) {
+  set isLoaded(val: boolean) {
     this._isLoaded = val;
   }
 
-  get isLoaded (): boolean {
+  get isLoaded(): boolean {
     return this._isLoaded;
   }
 
@@ -104,14 +96,14 @@ export class PaymentsTableComponent implements OnInit {
 
 
   constructor(
-    private utilsService: UtilsService,
+    private session: SessionService,
     private api: ApiService,
     private translate: TranslateService) {
   }
 
   ngOnInit() {
     this.sort.sortChange.subscribe((data) => {
-      const sort:any = {};
+      const sort: any = {};
       if (this.sort.direction !== '') {
         sort[this.sort.active] = this.sort.direction;
       }

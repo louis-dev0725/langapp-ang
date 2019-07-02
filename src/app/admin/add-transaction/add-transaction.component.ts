@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ApiService} from '@app/services/api.service';
-import {SessionService} from '@app/services/session.service';
-import {EventService} from '@app/event.service';
-import {CustomValidator} from '@app/services/custom-validator';
-import {MatSnackBar} from '@angular/material';
-import {Transaction, User} from '@app/interfaces/common.interface';
-import {ApiError} from '@app/services/api-error';
-import {Router} from '@angular/router';
-import { UtilsService } from "@app/services/utils.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ApiService } from '@app/services/api.service';
+import { SessionService } from '@app/services/session.service';
+import { EventService } from '@app/event.service';
+import { CustomValidator } from '@app/services/custom-validator';
+import { MatSnackBar } from '@angular/material';
+import { Transaction, User } from '@app/interfaces/common.interface';
+import { ApiError } from '@app/services/api-error';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-transaction',
@@ -20,10 +19,12 @@ export class AddTransactionComponent implements OnInit {
   get user(): User {
     return this._user;
   }
+
   set user(val: User) {
     this._user = val;
     this.transaction.userId = val.id;
   }
+
   errors: any = [];
   transactionForm: FormGroup;
 
@@ -41,14 +42,14 @@ export class AddTransactionComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private session: SessionService,
-    private snackBar: MatSnackBar,
-    private utilsService: UtilsService
-  ) { }
+    private snackBar: MatSnackBar
+  ) {
+  }
 
   ngOnInit() {
     this.transactionForm = this.formBuilder.group({
       userId: [this.transaction.userId || '', {validators: [Validators.required]}],
-      money: [this.utilsService.convertValue(this.transaction.money) || 0, {validators: [Validators.required], updateOn: 'change'}],
+      money: [this.transaction.money || 0, {validators: [Validators.required], updateOn: 'change'}],
       comment: [this.transaction.comment || ''],
       isPartner: [this.transaction.isPartner || '']
     });
@@ -69,8 +70,8 @@ export class AddTransactionComponent implements OnInit {
   onCreateTransaction() {
     this.api.createTransaction(this.transactionForm.value)
       .subscribe((res) => {
-        if (! (res instanceof ApiError)) {
-          this.snackBar.open('Transaction created', null, {duration: 3000} );
+        if (!(res instanceof ApiError)) {
+          this.snackBar.open('Transaction created', null, {duration: 3000});
           setTimeout(() => {
             this.router.navigate(['/admin/user']);
           }, 3100)

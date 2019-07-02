@@ -1,13 +1,12 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {ApiService} from '@app/services/api.service';
-import {MatPaginator, MatSort, PageEvent} from '@angular/material';
-import {Subscription} from 'rxjs';
-import {TranslateService} from '@ngx-translate/core';
-import {EventService} from '@app/event.service';
-import {Router} from '@angular/router';
-import {SessionService} from '@app/services/session.service';
-import {ApiError} from '@app/services/api-error';
-import { UtilsService } from "@app/services/utils.service";
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ApiService } from '@app/services/api.service';
+import { MatPaginator, MatSort, PageEvent } from '@angular/material';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { EventService } from '@app/event.service';
+import { Router } from '@angular/router';
+import { SessionService } from '@app/services/session.service';
+import { ApiError } from '@app/services/api-error';
 
 @Component({
   selector: 'app-adm-users',
@@ -21,7 +20,7 @@ export class AdmUsersComponent implements OnInit {
 
   columns = ['id', 'name', 'company', 'telephone', 'balance', 'comment', 'edit'];
   notFilterFields = ['Comment', 'Edit'];
-  usersList:any = {};
+  usersList: any = {};
   isEmptyTable = true;
   isFilterShown = false;
 
@@ -33,7 +32,7 @@ export class AdmUsersComponent implements OnInit {
     Balance: 'Balance',
     Email: 'Email',
     Comment: 'Comment',
-    Edit:'Edit'
+    Edit: 'Edit'
   };
 
   fieldKeys: any;
@@ -41,20 +40,15 @@ export class AdmUsersComponent implements OnInit {
   filter: any = {
     id: '',
     name: '',
-    company:'',
+    company: '',
     telephone: '',
-    email:'',
+    email: '',
     isservicepaused: '',
   };
 
   set rows(data: any[]) {
     this.isEmptyTable = (data) ? data.length === 0 : true;
-    this.usersList = data.map((el) => {
-      return {
-        ...el,
-        balance: this.utilsService.convertValue(el.balance)
-      }
-    });
+    this.usersList = data;
     this.usersList.sort = this.sort;
     this.usersList.paginator = this.paginator;
   }
@@ -69,8 +63,8 @@ export class AdmUsersComponent implements OnInit {
     private ref: ChangeDetectorRef,
     private router: Router,
     private session: SessionService,
-    private utilsService: UtilsService,
-    private translate: TranslateService) { }
+    private translate: TranslateService) {
+  }
 
   ngOnInit() {
 
@@ -83,7 +77,7 @@ export class AdmUsersComponent implements OnInit {
     });
 
     this.eventService.emitter.subscribe((event) => {
-      if(event.type === 'language-change') {
+      if (event.type === 'language-change') {
         this.transatePage();
       }
     });
@@ -97,7 +91,7 @@ export class AdmUsersComponent implements OnInit {
   getUsers(): void {
     this.isLoaded = false;
     this.rows = [];
-    const sort:any = {};
+    const sort: any = {};
     if (this.sort.direction !== '') {
       sort[this.sort.active] = this.sort.direction;
     }
@@ -110,7 +104,7 @@ export class AdmUsersComponent implements OnInit {
 
     Object.keys(toSendFilter).forEach((key) => {
 
-      if(toSendFilter[key]=== '') {
+      if (toSendFilter[key] === '') {
         delete toSendFilter[key];
       }
 

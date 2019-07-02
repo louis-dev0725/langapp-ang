@@ -8,16 +8,17 @@ import {
   MatSortModule,
   MatTableModule
 } from '@angular/material';
-import {TranslateModule} from '@ngx-translate/core';
-import {RouterModule, Routes} from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { RouterModule, Routes } from '@angular/router';
 import { AdmUsersComponent } from './adm-users/adm-users.component';
-import {FlexModule} from '@angular/flex-layout';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FlexModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdmUserEditComponent } from './adm-user-edit/adm-user-edit.component';
 import { AddTransactionComponent } from './add-transaction/add-transaction.component';
 import { AdmTransactionsComponent } from './adm-transactions/adm-transactions.component';
 import { AdmTransactionEditComponent } from './adm-transaction-edit/adm-transaction-edit.component';
-import {ConfirmDialogModule} from '@app/common/confirm-dialog/confirm-dialog.module';
+import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
+import { SharedModule } from "@app/shared/shared.module";
 
 const routes: Routes = [
   {
@@ -43,7 +44,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AdmUsersComponent, AdmUserEditComponent, AddTransactionComponent, AdmTransactionsComponent, AdmTransactionEditComponent],
+  declarations: [
+    AdmUsersComponent,
+    AdmUserEditComponent,
+    AddTransactionComponent,
+    AdmTransactionsComponent,
+    AdmTransactionEditComponent
+  ],
   imports: [
     CommonModule,
     MatTableModule,
@@ -63,7 +70,9 @@ const routes: Routes = [
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    SharedModule
   ]
 })
-export class AdminModule { }
+export class AdminModule {
+}

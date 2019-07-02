@@ -59,7 +59,7 @@
 
       <ng-container matColumnDef="money">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount' | translate}}</th>
-        <td mat-cell *matCellDef="let row">{{row.money}}</td>
+        <td mat-cell *matCellDef="let row">{{row.money | formatNumbers: session.lang}}</td>
       </ng-container>
 
       <ng-container matColumnDef="comment">
@@ -69,7 +69,7 @@
 
       <ng-container matColumnDef="addedDateTime">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Added date' | translate}}</th>
-        <td mat-cell *matCellDef="let row">{{row.addedDateTime}}</td>
+        <td mat-cell *matCellDef="let row">{{row.addedDateTime | formatDate: session.lang}}</td>
       </ng-container>
 
       <ng-container matColumnDef="isPartner">

@@ -63,11 +63,11 @@
           formControlName="wmr"
           placeholder="{{'WMR wallet' | translate}}">
       </mat-form-field>
-
       <mat-form-field class="form-item">
         <input
           matInput
           formControlName="balance"
+          [value]="userProfile.get('balance').value | formatNumbers: session.lang"
           placeholder="{{'Balance' | translate}}">
       </mat-form-field>
 
@@ -75,6 +75,7 @@
         <input
           matInput
           formControlName="balancePartner"
+          [value]="userProfile.get('balancePartner').value | formatNumbers: session.lang"
           placeholder="{{'Partner Balance' | translate}}">
       </mat-form-field>
 
@@ -91,11 +92,10 @@
           formControlName="lastLoginIp"
           placeholder="{{'Last login IP' | translate}}">
       </mat-form-field>
-
       <mat-form-field class="form-item">
         <input
           matInput
-          [value]="user?.addedDateTime"
+          [value]="user?.addedDateTime | formatDate: session.lang"
           [readonly]="true"
           placeholder="{{'Date of creation' | translate}}">
       </mat-form-field>

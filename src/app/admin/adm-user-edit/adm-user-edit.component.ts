@@ -68,9 +68,6 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.session.userToEdit;
-    this.user.addedDateTime = this.utilsService.convertDate(this.user.addedDateTime);
-    this.user.balance = this.utilsService.convertValue(this.user.balance);
-    this.user.balancePartner = this.utilsService.convertValue(this.user.balancePartner);
 
     this.api.getTimeZones().subscribe((res: any) => {
       this.timeZones = res;
@@ -83,7 +80,6 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
         this.callTranslate();
       }
     });
-    console.log(this.user);
     this.userProfile = this.formBuilder.group({
       id: [this.user.id || ''],
       name: [this.user.name || '', {validators: [Validators.required], updateOn: 'change'}],
