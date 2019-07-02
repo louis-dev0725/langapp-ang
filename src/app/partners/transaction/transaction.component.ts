@@ -4,6 +4,7 @@ import {SessionService} from '@app/services/session.service';
 import {PaymentsTableComponent} from '@app/common/payments-table/payments-table.component';
 import {Subscription} from 'rxjs';
 import {ApiError} from '@app/services/api-error';
+import { UtilsService } from "@app/services/utils.service";
 
 @Component({
   selector: 'app-transaction',
@@ -18,10 +19,12 @@ export class TransactionComponent implements OnInit, OnDestroy {
   @ViewChild(PaymentsTableComponent, {static: true}) paymentTable: PaymentsTableComponent;
 
   get parnterBalance(): number {
-    return this.session.user.balancePartner;
+    return this.utilsService.convertValue(this.session.user.balancePartner);
   }
 
-  constructor(private api: ApiService, private session: SessionService) { }
+  constructor(private api: ApiService,
+              private session: SessionService,
+              private utilsService: UtilsService) { }
 
   ngOnInit() {
     this.getTransactions();

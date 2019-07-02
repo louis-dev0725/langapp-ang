@@ -7,6 +7,7 @@ import {EventService} from '@app/event.service';
 import {Router} from '@angular/router';
 import {SessionService} from '@app/services/session.service';
 import {ApiError} from '@app/services/api-error';
+import { UtilsService } from "@app/services/utils.service";
 
 @Component({
   selector: 'app-adm-users',
@@ -48,7 +49,12 @@ export class AdmUsersComponent implements OnInit {
 
   set rows(data: any[]) {
     this.isEmptyTable = (data) ? data.length === 0 : true;
-    this.usersList = data;
+    this.usersList = data.map((el) => {
+      return {
+        ...el,
+        balance: this.utilsService.convertValue(el.balance)
+      }
+    });
     this.usersList.sort = this.sort;
     this.usersList.paginator = this.paginator;
   }
@@ -63,6 +69,7 @@ export class AdmUsersComponent implements OnInit {
     private ref: ChangeDetectorRef,
     private router: Router,
     private session: SessionService,
+    private utilsService: UtilsService,
     private translate: TranslateService) { }
 
   ngOnInit() {

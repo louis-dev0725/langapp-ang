@@ -8,6 +8,7 @@ import {MatSnackBar} from '@angular/material';
 import {Transaction, User} from '@app/interfaces/common.interface';
 import {ApiError} from '@app/services/api-error';
 import {Router} from '@angular/router';
+import { UtilsService } from "@app/services/utils.service";
 
 @Component({
   selector: 'app-add-transaction',
@@ -40,13 +41,14 @@ export class AddTransactionComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private session: SessionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private utilsService: UtilsService
   ) { }
 
   ngOnInit() {
     this.transactionForm = this.formBuilder.group({
       userId: [this.transaction.userId || '', {validators: [Validators.required]}],
-      money: [this.transaction.money || '', {validators: [Validators.required], updateOn: 'change'}],
+      money: [this.utilsService.convertValue(this.transaction.money) || 0, {validators: [Validators.required], updateOn: 'change'}],
       comment: [this.transaction.comment || ''],
       isPartner: [this.transaction.isPartner || '']
     });

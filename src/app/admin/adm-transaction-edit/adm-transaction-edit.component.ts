@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { TranslatingService } from "@app/services/translating.service";
+import { UtilsService } from "@app/services/utils.service";
 
 @Component({
   selector: 'app-adm-transaction-edit',
@@ -24,7 +25,8 @@ export class AdmTransactionEditComponent implements OnInit {
     private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
     private session: SessionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private utilsService: UtilsService
   ) {
   }
 
@@ -33,7 +35,7 @@ export class AdmTransactionEditComponent implements OnInit {
     this.transactionForm = this.formBuilder.group({
       id: [this.transaction.id || ''],
       userId: [this.transaction.userId || ''],
-      money: [this.transaction.money || '', {validators: [Validators.required], updateOn: 'change'}],
+      money: [this.utilsService.convertValue(this.transaction.money) || 0, {validators: [Validators.required], updateOn: 'change'}],
       comment: [this.transaction.comment || ''],
       isCommon: [this.transaction.isCommon || ''],
       isPartner: [this.transaction.isPartner || ''],

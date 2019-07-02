@@ -76,7 +76,8 @@ export class AdmTransactionsComponent implements OnInit {
       data = data.map((el) => {
         return {
           ...el,
-          addedDateTime: this.utilsService.convertDate(el.addedDateTime)
+          addedDateTime: this.utilsService.convertDate(el.addedDateTime),
+          money: this.utilsService.convertValue(el.money)
         }
       })
     }
