@@ -19,6 +19,10 @@ export interface User {
   registerIp?:string;
   lastLoginIp?:string;
   addedDateTime?:string;
+  isPartner?:any;
+  invitedByUserId?:any;
+  enablePartnerPayments?:any;
+  comment?:any;
 }
 
 export interface InvitedUser {

@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angula
 import {MatPaginator, MatSort, MatTableDataSource, PageEvent} from '@angular/material';
 import {ApiService} from '@app/services/api.service';
 import {TranslateService} from '@ngx-translate/core';
+import { UtilsService } from "@app/services/utils.service";
 
 @Component({
   selector: 'app-payments-table',
@@ -68,6 +69,14 @@ export class PaymentsTableComponent implements OnInit {
 
   @Input() set rows(data: any[]) {
     this.isEmptyTable = (data) ? data.length === 0 : true;
+    if (data) {
+      data = data.map((el) => {
+        return {
+          ...el,
+          addedDateTime: this.utilsService.convertDate(el.addedDateTime)
+        }
+      });
+    }
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     if (this.isPaginator) {
@@ -95,6 +104,7 @@ export class PaymentsTableComponent implements OnInit {
 
 
   constructor(
+    private utilsService: UtilsService,
     private api: ApiService,
     private translate: TranslateService) {
   }

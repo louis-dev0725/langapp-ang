@@ -46,8 +46,9 @@ export class HttpInterceptorService implements HttpInterceptor {
           this.eventsService.progressBarLoading.emit(false);
         }
       }, (err: any) => {
+        loading = false;
         if (err instanceof HttpErrorResponse) {
-          if (err.status !== 401 && err.status !== 422) {
+          if (err.status !== 401 && err.status !== 403 && err.status !== 422){
             let config = new MatSnackBarConfig();
             config.panelClass = ['snack-error'];
             config.duration = 3000;

@@ -144,7 +144,7 @@ export class AdmUsersComponent implements OnInit {
 
   showEditUser(row: any) {
     this.session.userToEdit = row;
-    this.router.navigate(['/admin/user'])
+    this.router.navigate([`/admin/user/${row.id}`])
   }
 
   onPageChange(event: PageEvent) {

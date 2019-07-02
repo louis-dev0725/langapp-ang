@@ -11,8 +11,8 @@
 
   <div class="container">
     <form [formGroup]="transactionForm">
-      <input type="hidden" formControlName="id" [ngModel]="transaction?.id">
-      <input type="hidden" formControlName="userId" [ngModel]="transaction?.userId">
+      <input type="hidden" formControlName="id">
+      <input type="hidden" formControlName="userId">
 
       <mat-form-field class="form-item">
         <input
@@ -20,7 +20,6 @@
           required
           type="number"
           formControlName="money"
-          [ngModel]="transaction?.money"
           placeholder="{{'Amount' | translate}}">
         <mat-error *ngIf="checkError('money')">{{getError('money')}}</mat-error>
       </mat-form-field>
@@ -38,29 +37,25 @@
           matInput
           type="number"
           formControlName="fromInvitedUserId"
-          [ngModel]="transaction?.fromInvitedUserId"
           placeholder="{{'Invited user Id' | translate}}">
         <mat-error *ngIf="checkError('fromInvitedUserId')">{{getError('fromInvitedUserId')}}</mat-error>
       </mat-form-field>
 
       <div class="form-item">
         <mat-checkbox
-          formControlName="isCommon"
-          [ngModel]="transaction?.isCommon">{{'Is common' | translate}}
+          formControlName="isCommon">{{'Is common' | translate}}
         </mat-checkbox>
       </div>
 
       <div class="form-item">
         <mat-checkbox
-          formControlName="isPartner"
-          [ngModel]="transaction?.isPartner">{{'Is partner' | translate}}
+          formControlName="isPartner">{{'Is partner' | translate}}
         </mat-checkbox>
       </div>
 
       <div class="form-item">
         <mat-checkbox
-          formControlName="isRealMoney"
-          [ngModel]="transaction?.isRealMoney">{{'Is real money' | translate}}
+          formControlName="isRealMoney">{{'Is real money' | translate}}
         </mat-checkbox>
       </div>
 

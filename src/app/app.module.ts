@@ -33,14 +33,10 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { SuccessComponent } from './payment/success/success.component';
 import { HttpInterceptorService } from "@app/http/http-interceptor";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-/*import { I18n, MISSING_TRANSLATION_STRATEGY } from "@ngx-translate/i18n-polyfill";
-declare const require;*/
-
-let translations;
+import { TranslatingService } from "@app/services/translating.service";
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
-  translations = new TranslateHttpLoader(http, './assets/i18n/', '.json');
-  return translations;
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json')
 }
 
 @NgModule({
@@ -92,13 +88,9 @@ export function createTranslateLoader(http: HttpClient) {
     CanactivateLogged,
     CanactivateNologged,
     CustomValidator,
+    TranslatingService,
     {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator},
     {provide: LOCALE_ID, useFactory: SessionService.getLocale()},
-    /*{provide: TRANSLATIONS, useValue: translations},
-    {provide: TRANSLATIONS_FORMAT, useValue: 'json'},
-    {provide: LOCALE_ID, useValue: "fr"},
-    {provide: MISSING_TRANSLATION_STRATEGY, useValue: MissingTranslationStrategy.Ignore},
-    I18n,*/
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,

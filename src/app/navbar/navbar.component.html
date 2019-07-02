@@ -9,8 +9,7 @@
   <button mat-button routerLink="/contacts">{{'Contacts' | translate}}</button>
   <button mat-button *ngIf="isLoggedIn" (click)="logout()">{{'Logout' | translate}}</button>
   <button mat-button *ngIf="isLoggedIn && session.isAdmin" [matMenuTriggerFor]="adminmenu">{{'Admin' | translate}}</button>
-
-  <span style="margin-left: auto;font-size: 14px;" *ngIf="user">{{user.name}}</span>
+  <button mat-button *ngIf="isLoggedIn && !session.isAdmin">{{user?.name}}</button>
 </mat-toolbar>
 
 

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import {User} from '../interfaces/common.interface';
 import {Router} from '@angular/router';
 
@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
   providedIn: 'root'
 })
 export class SessionService {
+  public changingUser = new EventEmitter();
 
   get lang(): string {
     return SessionService.getLang();
@@ -89,6 +90,7 @@ export class SessionService {
   set user(value: User) {
     if (value) {
       localStorage.setItem('user', JSON.stringify(value));
+      this.changingUser.emit(value);
     }
     this._user = value;
   }
@@ -99,6 +101,7 @@ export class SessionService {
 
 
   logout() {
+    this.changingUser.emit('');
     this.user = undefined;
     localStorage.removeItem('user');
     localStorage.removeItem('token');

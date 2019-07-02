@@ -6,6 +6,7 @@ import { User } from '../interfaces/common.interface';
 import { ReCaptcha2Component } from 'ngx-captcha';
 import { CustomValidator } from '../services/custom-validator';
 import { SessionService } from '@app/services/session.service';
+import { TranslatingService } from "@app/services/translating.service";
 
 @Component({
   selector: 'app-contact',
@@ -31,6 +32,7 @@ export class ContactComponent implements OnInit {
   @ViewChild('recaptcha', {static: true}) recaptcha: ReCaptcha2Component;
 
   constructor(
+    private translatingService: TranslatingService,
     public api: ApiService,
     private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
@@ -52,9 +54,7 @@ export class ContactComponent implements OnInit {
 
   onSubmit() {
     this.api.sendMessage(this.contactForm.value).subscribe((res) => {
-      // console.log(this.i18n('Email'));
-      const message = localStorage.getItem('lang') == 'ru' ? 'Ваще сообщение успсешно отправлено' : 'Your message successfully delivered';
-      this.snackBar.open(message, null, {duration: 3000});
+      this.snackBar.open(this.translatingService.translates['Messages sent'], null, {duration: 3000});
       this.form.resetForm();
       this.contactForm.get('name').setValue(this.user.name);
       this.contactForm.get('email').setValue(this.user.email);

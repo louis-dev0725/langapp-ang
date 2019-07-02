@@ -15,6 +15,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {Subscription} from 'rxjs';
 import {ApiError} from '@app/services/api-error';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
+import { UtilsService } from "@app/services/utils.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -71,6 +72,14 @@ export class AdmTransactionsComponent implements OnInit {
 
   set rows(data: any[]) {
     this.isEmptyTable = (data) ? data.length === 0 : true;
+    if(data.length){
+      data = data.map((el) => {
+        return {
+          ...el,
+          addedDateTime: this.utilsService.convertDate(el.addedDateTime)
+        }
+      })
+    }
     this.transactionList = data;
   }
 
@@ -79,6 +88,7 @@ export class AdmTransactionsComponent implements OnInit {
   isFilterShown = false;
 
   constructor(
+    private utilsService: UtilsService,
     private adapter: DateAdapter<any>,
     private api: ApiService,
     private eventService: EventService,
@@ -157,14 +167,14 @@ export class AdmTransactionsComponent implements OnInit {
 
   showEditTransaction(row: any) {
     this.session.transaction = row;
-    this.router.navigate(['/admin/transaction']);
+    this.router.navigate([`/admin/transaction/${row.id}`]);
   }
 
   showEditUser(row: any) {
     this.api.getUserByToken(row.token).subscribe((result) => {
       if (!(result instanceof ApiError)) {
         this.session.userToEdit = this.session.tempUser;
-        this.router.navigate(['/admin/user']);
+        this.router.navigate([`/admin/user/${this.session.userToEdit.id}`]);
       }
     })
   }

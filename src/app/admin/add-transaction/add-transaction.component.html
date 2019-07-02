@@ -9,7 +9,7 @@
   </ng-container>
   <div class="container">
     <form [formGroup]="transactionForm">
-      <input type="hidden" formControlName="userId" [ngModel]="transaction?.userId">
+      <input type="hidden" formControlName="userId">
       <mat-form-field class="form-item">
         <input
           matInput
@@ -28,8 +28,7 @@
       </mat-form-field>
       <div class="form-item">
         <mat-checkbox
-          formControlName="isParnter"
-          [ngModel]="transaction?.isPartner">{{'Is partner account' | translate}}
+          formControlName="isPartner">{{'Is partner account' | translate}}
         </mat-checkbox>
       </div>
     </form>

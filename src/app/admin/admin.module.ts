@@ -25,7 +25,7 @@ const routes: Routes = [
     component: AdmUsersComponent
   },
   {
-    path: 'user',
+    path: 'user/:userId',
     component: AdmUserEditComponent
   },
   {
@@ -37,7 +37,7 @@ const routes: Routes = [
     component: AdmTransactionsComponent
   },
   {
-    path: 'transaction',
+    path: 'transaction/:id',
     component: AdmTransactionEditComponent
   }
 ];

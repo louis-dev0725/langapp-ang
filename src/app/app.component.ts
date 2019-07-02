@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {RouterOutlet} from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { RouterOutlet } from '@angular/router';
 import { EventsService } from "@app/services/events.service";
-import { Subscription } from "rxjs";
+import { untilDestroyed } from "ngx-take-until-destroy";
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,6 @@ export class AppComponent implements OnInit, OnDestroy {
   public mode = 'indeterminate';
   public value = 50;
   public bufferValue = 75;
-  public sub: Subscription;
 
   title = 'call-rocket';
 
@@ -31,7 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (langMap[langVal]) {
         langVal = langMap[langVal];
       }
-      if(langVal !== 'ru' && langVal !== 'en'){
+      if (langVal !== 'ru' && langVal !== 'en') {
         langVal = 'en'
       }
       localStorage.setItem('lang', langVal);
@@ -40,13 +39,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.eventsService.progressBarLoading
-      .subscribe((event: boolean) => {
-        this.isProgressBarLoading = event;
-      })
+    this.eventsService.progressBarLoading.pipe(
+      untilDestroyed(this)
+    ).subscribe((event: boolean) => {
+      this.isProgressBarLoading = event;
+    })
   }
 
-  ngOnDestroy(){
-    this.sub.unsubscribe();
+  ngOnDestroy() {
   }
 }

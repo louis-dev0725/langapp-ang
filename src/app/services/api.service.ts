@@ -156,6 +156,23 @@ export class ApiService {
     })
   }
 
+  checkInvitedUsers(userId: number = null): Observable<any> {
+    return Observable.create((observer) => {
+      const headers = this.getHeadersWithToken();
+      if (!userId) {
+        userId = this.session.user.id;
+      }
+      this.http.post(
+        this.apiHost + `/users/${userId}/check-invited-users`, {},
+        {headers}
+      ).subscribe((result) => {
+        observer.next(result);
+      }, (error) => {
+        observer.next(this.getApiError(error))
+      })
+    })
+  }
+
   meRequest(): Observable<any> {
     return Observable.create((observer) => {
       this.getMeRequest(observer);

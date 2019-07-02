@@ -1,16 +1,17 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { EventService } from '../event.service';
 import { SessionService } from '../services/session.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   public user;
 
   private langMap = {
@@ -39,12 +40,16 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = this.getInfoUser();
-    console.log(this.user);
+    this.user = this.session.user;
+    this.session.changingUser.pipe(
+      untilDestroyed(this)
+    ).subscribe((user) => {
+      this.user = user;
+    });
   }
 
-  public getInfoUser() {
-    return JSON.parse(localStorage.getItem('user'));
+  ngOnDestroy() {
+
   }
 
   setLanguage(lang: any) {

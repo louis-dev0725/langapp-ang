@@ -27,9 +27,9 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
 
     this.signupForm = this.formBuilder.group({
-      timezone: [''],
-      language: [''],
-      invitedByUserId: [''],
+      timezone: [this.getTimezone() || ''],
+      language: [this.getLanguage() || ''],
+      invitedByUserId: [this.getInvatedId() || ''],
       name: ['', {validators: [Validators.required], updateOn: 'change'}],
       company: [''],
       telephone: [''],
@@ -55,7 +55,11 @@ export class SignupComponent implements OnInit {
 
   onSubmit(value: any) {
     this.errors = [];
-    this.api.signUp(value).subscribe((res) => {
+    const data = {
+      ...value,
+      invitedByUserId: localStorage.getItem('invitedByUserId')
+    };
+    this.api.signUp(data).subscribe((res) => {
       if(res instanceof ApiError) {
         this.errors = res.error;
       } else {

@@ -45,10 +45,10 @@ export class AddTransactionComponent implements OnInit {
 
   ngOnInit() {
     this.transactionForm = this.formBuilder.group({
-      userId: ['', {validatore: [Validators.required]}],
-      money: ['', {validators: [Validators.required], updateOn: 'change'}],
-      comment: [''],
-      isParnter: ['']
+      userId: [this.transaction.userId || '', {validators: [Validators.required]}],
+      money: [this.transaction.money || '', {validators: [Validators.required], updateOn: 'change'}],
+      comment: [this.transaction.comment || ''],
+      isPartner: [this.transaction.isPartner || '']
     });
 
     this.user = this.session.userToEdit;

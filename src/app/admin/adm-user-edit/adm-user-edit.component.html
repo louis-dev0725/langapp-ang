@@ -10,14 +10,13 @@
 
   <div class="container">
     <form [formGroup]="userProfile">
-      <input type="hidden" formControlName="id" [ngModel]="user?.id">
+      <input type="hidden" formControlName="id">
 
       <mat-form-field class="form-item">
         <input
           matInput
           required
           formControlName="name"
-          [ngModel]="user?.name"
           placeholder="{{'Name' | translate}}">
         <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
       </mat-form-field>
@@ -26,7 +25,6 @@
         <input
           matInput
           formControlName="company"
-          [ngModel]="user?.company"
           placeholder="{{'Company' | translate }}">
       </mat-form-field>
 
@@ -34,7 +32,6 @@
         <input
           matInput
           formControlName="site"
-          [ngModel]="user?.site"
           placeholder="{{'Site' | translate}}">
       </mat-form-field>
 
@@ -42,7 +39,6 @@
         <input
           matInput
           formControlName="telephone"
-          [ngModel]="user?.telephone"
           placeholder="{{'Phone' | translate}}">
       </mat-form-field>
 
@@ -51,22 +47,19 @@
           matInput
           required
           formControlName="email"
-          [ngModel]="user?.email"
           placeholder="{{'Email' | translate}}">
         <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
       </mat-form-field>
 
       <div class="form-item">
         <mat-checkbox
-          formControlName="isServicePaused"
-          [ngModel]="isServicePaused">{{'Is service paused' | translate}}
+          formControlName="isServicePaused">{{'Is service paused' | translate}}
         </mat-checkbox>
       </div>
 
       <mat-form-field class="form-item">
         <input
           matInput
-          [ngModel]="user?.wmr"
           formControlName="wmr"
           placeholder="{{'WMR wallet' | translate}}">
       </mat-form-field>
@@ -75,7 +68,6 @@
         <input
           matInput
           formControlName="balance"
-          [value]="user?.balance"
           placeholder="{{'Balance' | translate}}">
       </mat-form-field>
 
@@ -83,14 +75,12 @@
         <input
           matInput
           formControlName="balancePartner"
-          [value]="user?.balancePartner"
           placeholder="{{'Partner Balance' | translate}}">
       </mat-form-field>
 
       <mat-form-field class="form-item">
         <input
           matInput
-          [ngModel]="user?.registerIp"
           formControlName="registerIp"
           placeholder="{{'Register IP' | translate}}">
       </mat-form-field>
@@ -98,7 +88,6 @@
       <mat-form-field class="form-item">
         <input
           matInput
-          [ngModel]="user?.lastLoginIp"
           formControlName="lastLoginIp"
           placeholder="{{'Last login IP' | translate}}">
       </mat-form-field>
@@ -113,7 +102,7 @@
 
       <mat-form-field class="form-item">
         <mat-label translate>Timezone</mat-label>
-        <mat-select [ngModel]="selectedTimeZone" formControlName="timezone" >
+        <mat-select formControlName="timezone" >
           <mat-optgroup *ngFor="let tzgroup of timeZones" [label]="tzgroup.group">
             <mat-option *ngFor="let zone of tzgroup.zones" [value]="zone.value">{{zone.value}}</mat-option>
           </mat-optgroup>
@@ -147,6 +136,38 @@
           </mat-form-field>
         </ng-container>
       </div>
+
+      <div class="form-item">
+        <mat-checkbox
+            formControlName="isPartner">{{'Enable partner' | translate}}
+        </mat-checkbox>
+      </div>
+      <mat-form-field class="form-item">
+        <input
+            matInput
+            type="number"
+            formControlName="invitedByUserId"
+            placeholder="{{'Invited user Id' | translate}}">
+      </mat-form-field>
+      <div class="form-item">
+        <mat-checkbox
+            formControlName="enablePartnerPayments">{{'Enable payment' | translate}}
+        </mat-checkbox>
+      </div>
+      <mat-form-field class="form-item">
+        <mat-label translate>{{'Language user' | translate}}</mat-label>
+        <mat-select formControlName="language">
+            <mat-option *ngFor="let lang of languages" [value]="lang.value">{{lang.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form-item">
+        <textarea
+            matInput
+            formControlName="comment"
+            placeholder="{{'Comment'| translate }}">{{user?.comment}}</textarea>
+        <mat-error *ngIf="checkError('comment')">{{getError('comment')}}</mat-error>
+      </mat-form-field>
 
     </form>
 
