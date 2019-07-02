@@ -16,18 +16,17 @@ export class UtilsService {
   }
 
   public convertDate(date) {
+    const format = this.sessionService.lang =='en' ? 'yyyy-MM-dd' : 'dd-MM-yy';
     const datePipe = new DatePipe('en-US');
-    return datePipe.transform(date, 'yyyy-MM-dd');
+    return datePipe.transform(date, `${format} HH:mm:ss`);
   }
 
   public convertValue(value) {
-    console.log(value);
     const lang = this.sessionService.lang;
     let _value = parseFloat(value).toFixed(2);
     if(lang == 'ru') {
       _value.replace('.', ',');
     }
-    console.log(+_value);
     return +_value || 0;
   }
 }

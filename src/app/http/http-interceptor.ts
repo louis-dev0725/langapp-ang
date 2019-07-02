@@ -51,7 +51,6 @@ export class HttpInterceptorService implements HttpInterceptor {
           if (err.status !== 401 && err.status !== 403 && err.status !== 422){
             let config = new MatSnackBarConfig();
             config.panelClass = ['snack-error'];
-            config.duration = 3000;
             this.snackBar.open(err.message, null, config);
             loading = false;
           }

@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ApiService } from './services/api.service';
 import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatInputModule,
   MatMenuModule, MatPaginatorIntl, MatPaginatorModule,
   MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule,
@@ -34,6 +35,7 @@ import { SuccessComponent } from './payment/success/success.component';
 import { HttpInterceptorService } from "@app/http/http-interceptor";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslatingService } from "@app/services/translating.service";
+
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
   return new TranslateHttpLoader(http, './assets/i18n/', '.json')
@@ -91,6 +93,8 @@ export function createTranslateLoader(http: HttpClient) {
     TranslatingService,
     {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator},
     {provide: LOCALE_ID, useFactory: SessionService.getLocale()},
+
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,
