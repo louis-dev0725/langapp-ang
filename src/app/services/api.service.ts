@@ -239,7 +239,7 @@ export class ApiService {
     const headers = this.getHeadersWithToken();
 
     return Observable.create((observer) => {
-      this.http.get(this.apiHost + '/transactions', {headers, params})
+      this.http.get(this.apiHost + '/transactions?field=*,user.id,user.name,user.accessToken&expand=user', {headers, params})
         .subscribe((res) => {
           observer.next(res);
         }, (error) => {

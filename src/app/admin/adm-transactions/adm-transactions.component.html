@@ -27,7 +27,7 @@
               matInput
               [matDatepicker]="picker"
               placeholder="{{'Choose a date' | translate}}"
-              (dateChange)="changeDate($event.value.format('YYYY-MM-DD'))"
+              (dateChange)="changeDate($event.value)"
               [(ngModel)]="filter.addedDateTime">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -52,7 +52,7 @@
         <td mat-cell *matCellDef="let row">
           <a
             (click)="showEditUser(row)"
-             class="edit-link">{{row.name}}
+             class="edit-link">{{row.user.name}}
           </a>
         </td>
       </ng-container>

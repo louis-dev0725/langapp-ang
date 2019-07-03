@@ -39,7 +39,6 @@ export class AdmTransactionEditComponent implements OnInit {
       userId: [''],
       money: ['', {validators: [Validators.required]}],
       comment: [''],
-      isCommon: [''],
       isPartner: [''],
       isRealMoney: [''],
       fromInvitedUserId: [''],

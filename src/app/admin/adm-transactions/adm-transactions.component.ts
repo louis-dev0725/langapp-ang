@@ -48,7 +48,6 @@ export class AdmTransactionsComponent implements OnInit {
   translatedKeys: any = {
     id: 'Id',
     userId: 'User Id',
-    name: 'Name',
     money: 'Money',
     addedDateTime: 'Added date time',
     comment: 'Comment'
@@ -179,7 +178,7 @@ export class AdmTransactionsComponent implements OnInit {
   }
 
   changeDate(data: any) {
-    this.filter.addedDateTime = data;
+    this.filter.addedDateTime = data ? data.format('YYYY-MM-DD') : '';
     this.runFilter();
   }
 
