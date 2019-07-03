@@ -258,7 +258,7 @@ export class ApiService {
     return this.http.get(this.apiHost + `/transactions/${id}`, {headers});
   }
 
-  public getTransactionByUser(userId: number, partner = 0, page = 0, sort = {}): Observable<any> {
+  public getTransactionByUser(userId: number, partner = 0, sort = {}, page = 0): Observable<any> {
     const params: any = {userId: userId, isPartner: partner, 'per-page' : this.pageSize};
     if (Object.keys(sort).length > 0) {
       params.sort = this.prepareSort(sort);

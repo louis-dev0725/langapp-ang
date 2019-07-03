@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '@app/interfaces/common.interface';
 import { CustomValidator } from '@app/services/custom-validator';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatPaginator, MatSnackBar, MatSort, PageEvent } from '@angular/material';
 import { EventService } from '@app/event.service';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import { forkJoin, Observable, of, Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
@@ -19,6 +19,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class AdmUserEditComponent implements OnInit, OnDestroy {
   public userId;
+  public transactionList: any = [];
+  public columns = ['id', 'money', 'comment', 'addedDateTime', 'edit'];
+  public transactionPartnerList: any = [];
   public languages = [
     {
       value: 'ru-RU',
@@ -29,6 +32,8 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       label: "English"
     },
   ];
+  public isLoadingTrans = false;
+  public isLoadingTransPartner = false;
 
   private _errors = [];
   private globalEventSubscription: Subscription;
@@ -42,6 +47,12 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     'confirm.user-open.title': '',
     'confirm.user-open.msg': ''
   };
+  // @ViewChild(MatSort, {static: true}) sort;
+  @ViewChild('sortTrans', {static: true}) sortTrans: MatSort;
+  @ViewChild('sortTransPartn', {static: true}) sortTransPartn: MatSort;
+
+  @ViewChild('paginatorTrans', {static: true}) paginatorTrans;
+  @ViewChild('paginatorPartnerTrans', {static: true}) paginatorPartnerTrans;
 
   get selectedTimeZone(): any {
     if (this.user) {
@@ -63,7 +74,8 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
   }
 
@@ -73,6 +85,13 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
     this.api.getTimeZones().subscribe((res: any) => {
       this.timeZones = res;
+    });
+
+    this.sortTrans.sortChange.subscribe((sort) => {
+      this.getTrans(this.userId);
+    });
+    this.sortTransPartn.sortChange.subscribe((sort) => {
+      this.getPartnerTrans(this.userId);
     });
 
     this.callTranslate();
@@ -102,15 +121,46 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       enablePartnerPayments: [''],
       comment: [''],
     });
+    this.getTrans(this.userId);
+    this.getPartnerTrans(this.userId);
+  }
 
-    //todo: to uncomment when will be fix on backend
-    /*forkJoin(
-      this.getTransactions(this.userId),
-      this.getTransactions(this.userId, 1)
-    ).subscribe((res) => {
-      console.log(res[0]);
-      console.log(res[1]);
-    });*/
+  public getTrans(userId, page?) {
+    const _sort: any = {};
+    if (this.sortTrans.direction !== '') {
+      _sort[this.sortTrans.active] = this.sortTrans.direction;
+    }
+    this.isLoadingTrans = true;
+    this.getTransactions(userId, 0, _sort, page)
+      .subscribe((res) => {
+        this.transactionList = res.items;
+        this.transactionList.sort = this.sortTrans;
+        this.transactionList.paginator = this.paginatorTrans;
+        this.paginatorTrans.length = res._meta.totalCount;
+        this.paginatorTrans.pageIndex = res._meta.currentPage - 1;
+        this.isLoadingTrans = false;
+      }, (err) => {
+        this.isLoadingTrans = false;
+      });
+  }
+
+  public getPartnerTrans(userId, page?) {
+    const _sort: any = {};
+    if (this.sortTransPartn.direction !== '') {
+      _sort[this.sortTransPartn.active] = this.sortTransPartn.direction;
+    }
+    this.isLoadingTransPartner = true;
+    this.getTransactions(userId, 1, _sort, page)
+      .subscribe((res) => {
+        this.transactionPartnerList = res.items;
+        this.transactionList.sort = this.sortTransPartn;
+        this.transactionList.paginator = this.paginatorPartnerTrans;
+        this.paginatorPartnerTrans.length = res._meta.totalCount;
+        this.paginatorPartnerTrans.pageIndex = res._meta.currentPage - 1;
+        this.isLoadingTransPartner = false;
+      }, (err) => {
+        this.isLoadingTransPartner = false;
+      });
   }
 
   ngOnDestroy(): void {
@@ -119,8 +169,17 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getTransactions(id: number, partner?) {
-    return this.api.getTransactionByUser(id, partner);
+  showEditTransaction(row: any) {
+    this.session.transaction = row;
+    this.router.navigate([`/admin/transaction/${row.id}`]);
+  }
+
+  public getTransactions(id: number, partner?, sort?, page?) {
+    return this.api.getTransactionByUser(id, partner, sort, page);
+  }
+
+  public onPageChange(event: PageEvent, partner) {
+    partner ? this.getPartnerTrans(this.userId) : this.getTrans(this.userId);
   }
 
   public getUser(id: number) {
@@ -132,6 +191,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       }, (err) => {
       })
   }
+
   public updateForm(res) {
     this.userProfile.patchValue({
       id: res.id,
@@ -180,8 +240,8 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   onProfileSave() {
     const data = {
       ...this.userProfile.value,
-      enablePartnerPayments: this.userProfile.value.enablePartnerPayments ? 1: 0,
-      isPartner: this.userProfile.value.isPartner ? 1: 0
+      enablePartnerPayments: this.userProfile.value.enablePartnerPayments ? 1 : 0,
+      isPartner: this.userProfile.value.isPartner ? 1 : 0
     };
     this.api.updateUser(data).subscribe((res) => {
       if (res instanceof ApiError) {

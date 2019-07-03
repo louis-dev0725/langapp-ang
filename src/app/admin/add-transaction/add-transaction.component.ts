@@ -47,14 +47,14 @@ export class AddTransactionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.user = this.session.userToEdit;
+
     this.transactionForm = this.formBuilder.group({
-      userId: ['', {validators: [Validators.required]}],
+      userId: [this.user.id || '', {validators: [Validators.required]}],
       money: ['', {validators: [Validators.required]}],
       comment: [''],
-      isPartner: [this.transaction.isPartner || '']
+      isPartner: ['']
     });
-
-    this.user = this.session.userToEdit;
   }
 
   checkError(fieldName: string) {
@@ -68,12 +68,16 @@ export class AddTransactionComponent implements OnInit {
   }
 
   onCreateTransaction() {
-    this.api.createTransaction(this.transactionForm.value)
+    const data = {
+      ...this.transactionForm.value,
+      isPartner: this.transactionForm.value.isPartner ? 1: 0
+    };
+    this.api.createTransaction(data)
       .subscribe((res) => {
         if (!(res instanceof ApiError)) {
           this.snackBar.open('Transaction created', null, {duration: 3000});
           setTimeout(() => {
-            this.router.navigate(['/admin/user']);
+            this.router.navigate([`/admin/user/${this.user.id}`]);
           }, 3100)
         } else {
           this.errors = res.error;
