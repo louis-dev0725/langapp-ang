@@ -7,7 +7,7 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { MatSnackBar } from '@angular/material';
 import { Transaction, User } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-transaction',
@@ -36,21 +36,21 @@ export class AddTransactionComponent implements OnInit {
   };
 
   constructor(
+    public session: SessionService,
     private api: ApiService,
     private customValidator: CustomValidator,
     private eventService: EventService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private session: SessionService,
     private snackBar: MatSnackBar
   ) {
   }
 
   ngOnInit() {
     this.transactionForm = this.formBuilder.group({
-      userId: [this.transaction.userId || '', {validators: [Validators.required]}],
-      money: [this.transaction.money || 0, {validators: [Validators.required], updateOn: 'change'}],
-      comment: [this.transaction.comment || ''],
+      userId: ['', {validators: [Validators.required]}],
+      money: ['', {validators: [Validators.required]}],
+      comment: [''],
       isPartner: [this.transaction.isPartner || '']
     });
 

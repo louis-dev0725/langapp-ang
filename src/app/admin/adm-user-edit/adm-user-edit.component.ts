@@ -9,8 +9,8 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { EventService } from '@app/event.service';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
-import { UtilsService } from "@app/services/utils.service";
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-adm-user-edit',
@@ -18,6 +18,7 @@ import { UtilsService } from "@app/services/utils.service";
   styleUrls: ['./adm-user-edit.component.scss']
 })
 export class AdmUserEditComponent implements OnInit, OnDestroy {
+  public userId;
   public languages = [
     {
       value: 'ru-RU',
@@ -54,20 +55,21 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    public session: SessionService,
     private api: ApiService,
     private confirmDialog: MatDialog,
     private customValidator: CustomValidator,
     private eventService: EventService,
     private formBuilder: FormBuilder,
-    private session: SessionService,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
-    private utilsService: UtilsService
+    private route: ActivatedRoute
   ) {
   }
 
   ngOnInit(): void {
-    this.user = this.session.userToEdit;
+    this.userId = +this.route.snapshot.paramMap.get('id');
+    this.getUser(this.userId);
 
     this.api.getTimeZones().subscribe((res: any) => {
       this.timeZones = res;
@@ -81,31 +83,60 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       }
     });
     this.userProfile = this.formBuilder.group({
-      id: [this.user.id || ''],
-      name: [this.user.name || '', {validators: [Validators.required], updateOn: 'change'}],
-      company: [this.user.company || ''],
-      site: [this.user.site || ''],
-      telephone: [this.user.telephone || ''],
-      email: [this.user.email || '', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
+      id: [''],
+      name: ['', {validators: [Validators.required], updateOn: 'change'}],
+      company: [''],
+      site: [''],
+      telephone: [''],
+      email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
       isServicePaused: [''],
-      balance: [this.user.balance || 0],
-      balancePartner: [this.user.balancePartner || 0],
-      wmr: [this.user.wmr || ''],
-      registerIp: [this.user.registerIp || ''],
-      lastLoginIp: [this.user.lastLoginIp || ''],
-      timezone: [this.user.timezone || ''],
-      language: [this.user.language || ''],
-      isPartner: [this.user.isPartner || ''],
-      invitedByUserId: [this.user.invitedByUserId || ''],
-      enablePartnerPayments: [this.user.enablePartnerPayments || ''],
-      comment: [this.user.comment || ''],
+      balance: [''],
+      balancePartner: [''],
+      wmr: [''],
+      registerIp: [''],
+      lastLoginIp: [''],
+      timezone: [''],
+      language: [''],
+      isPartner: [''],
+      invitedByUserId: [''],
+      enablePartnerPayments: [''],
+      comment: [''],
     });
+
+    //todo: to uncomment when will be fix on backend
+    /*forkJoin(
+      this.getTransactions(this.userId),
+      this.getTransactions(this.userId, 1)
+    ).subscribe((res) => {
+      console.log(res[0]);
+      console.log(res[1]);
+    });*/
   }
 
   ngOnDestroy(): void {
     if (this.globalEventSubscription) {
       this.globalEventSubscription.unsubscribe();
     }
+  }
+
+  public getTransactions(id: number, partner?) {
+    return this.api.getTransactionByUser(id, partner);
+  }
+
+  public getUser(id: number) {
+    return this.api.getUserById(id)
+      .subscribe((res: any) => {
+        this.user = res;
+        this.session.userToEdit = res;
+        this.updateForm(res);
+      }, (err) => {
+      })
+  }
+  public updateForm(res) {
+    this.userProfile.patchValue({
+      id: res.id,
+      ...res
+    });
   }
 
   get isServicePaused(): boolean {

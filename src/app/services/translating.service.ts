@@ -6,12 +6,18 @@ import { SessionService } from "@app/services/session.service";
   providedIn: 'root'
 })
 export class TranslatingService {
-  private _translates;
+  private _translates = {
+    'ru': '',
+    'en': ''
+  };
 
   constructor(private http: HttpClient,
               private sessionService: SessionService) {
-    this.loadFile(this.sessionService.lang).subscribe((res: any) => {
-      this._translates = res;
+    this.loadFile('ru').subscribe((res: any) => {
+      this._translates.ru = res;
+    });
+    this.loadFile('en').subscribe((res: any) => {
+      this._translates.en = res;
     });
   }
 
@@ -20,6 +26,6 @@ export class TranslatingService {
   }
 
   get translates() {
-    return this._translates;
+    return this._translates[this.sessionService.lang];
   }
 }

@@ -7,11 +7,10 @@
   <button mat-button *ngIf="isLoggedIn" routerLink="/users/settings" >{{'Settings' | translate}}</button>
   <button mat-button [matMenuTriggerFor]="partnership">{{'Partnership' | translate}}</button>
   <button mat-button routerLink="/contacts">{{'Contacts' | translate}}</button>
+  <button mat-button *ngIf="isLoggedIn && session.isAdmin" [matMenuTriggerFor]="adminmenu">{{'Your id' | translate}}{{': ' + user?.id}}</button>
+  <button mat-button *ngIf="isLoggedIn && !session.isAdmin && !user.isAdmin">{{'Logged in as ID' | translate}}{{': ' + user?.id}}</button>
   <button mat-button *ngIf="isLoggedIn" (click)="logout()">{{'Logout' | translate}}</button>
-  <button mat-button *ngIf="isLoggedIn && session.isAdmin" [matMenuTriggerFor]="adminmenu">{{'Admin' | translate}}</button>
-  <button mat-button *ngIf="isLoggedIn && !session.isAdmin">{{user?.name}}</button>
 </mat-toolbar>
-
 
 <mat-menu #language="matMenu">
   <mat-button-toggle-group

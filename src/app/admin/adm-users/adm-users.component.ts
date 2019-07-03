@@ -18,7 +18,7 @@ export class AdmUsersComponent implements OnInit {
   private usersSubscription: Subscription;
   private sendTimeout;
 
-  columns = ['id', 'name', 'company', 'telephone', 'balance', 'comment', 'edit'];
+  columns = ['id', 'name', 'company', 'telephone', 'balance',  'balancePartner', 'comment', 'edit'];
   notFilterFields = ['Comment', 'Edit'];
   usersList: any = {};
   isEmptyTable = true;
@@ -30,6 +30,7 @@ export class AdmUsersComponent implements OnInit {
     Company: 'Company',
     Phone: 'Phone',
     Balance: 'Balance',
+    BalancePartner: 'BalancePartner',
     Email: 'Email',
     Comment: 'Comment',
     Edit: 'Edit'

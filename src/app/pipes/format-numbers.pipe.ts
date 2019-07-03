@@ -8,8 +8,8 @@ export class FormatNumbersPipe implements PipeTransform {
     const lang = args[0];
     let _value = parseFloat(value).toFixed(2);
     if(lang == 'ru') {
-      _value.replace('.', ',');
+      // _value = _value.toString().replace(".", ",");
     }
-    return +_value || 0;
+    return +_value;
   }
 }

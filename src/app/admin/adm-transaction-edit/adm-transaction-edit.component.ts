@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { TranslatingService } from "@app/services/translating.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-adm-transaction-edit',
@@ -17,28 +18,48 @@ export class AdmTransactionEditComponent implements OnInit {
   transaction: Transaction;
   errors: any[] = [];
   transactionForm: FormGroup;
+  transactionId;
 
   constructor(
+    public session: SessionService,
     private translatingService: TranslatingService,
     private api: ApiService,
     private customValidator: CustomValidator,
     private formBuilder: FormBuilder,
-    private session: SessionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute
   ) {
   }
 
   ngOnInit() {
-    this.transaction = this.session.transaction;
+    this.transactionId = +this.route.snapshot.paramMap.get('id');
+    this.getTransaction(this.transactionId);
     this.transactionForm = this.formBuilder.group({
-      id: [this.transaction.id || ''],
-      userId: [this.transaction.userId || ''],
-      money: [this.transaction.money || 0, {validators: [Validators.required], updateOn: 'change'}],
-      comment: [this.transaction.comment || ''],
-      isCommon: [this.transaction.isCommon || ''],
-      isPartner: [this.transaction.isPartner || ''],
-      isRealMoney: [this.transaction.isRealMoney || ''],
-      fromInvitedUserId: [this.transaction['fromInvitedUserId'] || ''],
+      id: [''],
+      userId: [''],
+      money: ['', {validators: [Validators.required]}],
+      comment: [''],
+      isCommon: [''],
+      isPartner: [''],
+      isRealMoney: [''],
+      fromInvitedUserId: [''],
+    });
+  }
+
+  getTransaction(id: number) {
+    return this.api.getTransactionById(id)
+      .subscribe((res: any) => {
+        this.transaction = res;
+        this.session.transaction = res;
+        this.updateForm(res);
+      }, (err) => {
+      })
+  }
+
+  updateForm(res) {
+    this.transactionForm.patchValue({
+      id: res.id,
+      ...res
     })
   }
 

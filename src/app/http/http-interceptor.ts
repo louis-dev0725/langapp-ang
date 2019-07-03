@@ -38,7 +38,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       if (loading) {
         this.eventsService.progressBarLoading.emit(true);
       }
-    }, 800);
+    }, 200);
     return next.handle(dupReq).pipe(
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
@@ -50,10 +50,11 @@ export class HttpInterceptorService implements HttpInterceptor {
         if (err instanceof HttpErrorResponse) {
           if (err.status !== 401 && err.status !== 403 && err.status !== 422){
             let config = new MatSnackBarConfig();
+            config.duration = 3000;
             config.panelClass = ['snack-error'];
             this.snackBar.open(err.message, null, config);
-            loading = false;
           }
+          loading = false;
           this.eventsService.progressBarLoading.emit(false);
         }
       }));

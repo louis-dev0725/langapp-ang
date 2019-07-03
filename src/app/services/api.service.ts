@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {User} from '../interfaces/common.interface';
-import {Observable} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {ApiError} from './api-error';
 import {SessionService} from './session.service';
 
@@ -249,6 +249,27 @@ export class ApiService {
 
   }
 
+  public getUserById(id: number) {
+    const headers = this.getHeadersWithToken();
+    return this.http.get(this.apiHost + `/users/${id}`, {headers});
+  }
+  public getTransactionById(id: number) {
+    const headers = this.getHeadersWithToken();
+    return this.http.get(this.apiHost + `/transactions/${id}`, {headers});
+  }
+
+  public getTransactionByUser(userId: number, partner = 0, page = 0, sort = {}): Observable<any> {
+    const params: any = {userId: userId, isPartner: partner, 'per-page' : this.pageSize};
+    if (Object.keys(sort).length > 0) {
+      params.sort = this.prepareSort(sort);
+    }
+    if (page > 0) {
+      params.page = page - 1;
+    }
+    const headers = this.getHeadersWithToken();
+    return this.http.get(this.prepareTransactionsUrl(params), {headers})
+  }
+
   private prepareTransactionsUrl(params: any = {}): string {
     let url = this.apiHost + '/transactions/index';
     if (Object.keys(params).length > 0) {
@@ -258,8 +279,8 @@ export class ApiService {
     if (params.userId) {
       urlParams.push(`filter[userId]=${this.session.user.id}`);
     }
-    if (params.isParnter) {
-      urlParams.push('filter[isPartner]');
+    if (params.isPartner || params.isPartner == 0) {
+      urlParams.push('filter[isPartner]=' + params.isPartner);
     }
 
     if (params.page) {

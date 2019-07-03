@@ -26,7 +26,7 @@ const routes: Routes = [
     component: AdmUsersComponent
   },
   {
-    path: 'user/:userId',
+    path: 'user/:id',
     component: AdmUserEditComponent
   },
   {

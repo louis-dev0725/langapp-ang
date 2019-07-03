@@ -19,12 +19,11 @@ export class TransactionComponent implements OnInit, OnDestroy {
   @ViewChild(PaymentsTableComponent, {static: true}) paymentTable: PaymentsTableComponent;
 
   get parnterBalance(): number {
-    return this.utilsService.convertValue(this.session.user.balancePartner);
+    return this.session.user.balancePartner;
   }
 
-  constructor(private api: ApiService,
-              private session: SessionService,
-              private utilsService: UtilsService) {
+  constructor(public session: SessionService,
+              private api: ApiService) {
   }
 
   ngOnInit() {
