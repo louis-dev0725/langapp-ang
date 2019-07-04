@@ -178,7 +178,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     return this.api.getTransactionByUser(id, partner, sort, page);
   }
 
-  public onPageChange(event: PageEvent, partner) {
+  public onPageChange(event: PageEvent, partner?) {
     partner ? this.getPartnerTrans(this.userId) : this.getTrans(this.userId);
   }
 
