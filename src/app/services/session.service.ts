@@ -76,6 +76,9 @@ export class SessionService {
     this._userToEdit = value;
   }
 
+  get openedAdmin() {
+    return !!localStorage.getItem('savedAdmin');
+  }
 
   get user(): User {
     if (!this._user) {

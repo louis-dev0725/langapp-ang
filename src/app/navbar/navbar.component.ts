@@ -32,6 +32,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.session.isLoggedIn;
   }
 
+  get isOpenedAdmin(): boolean {
+    return this.session.openedAdmin;
+  }
+
   constructor(
     public session: SessionService,
     public api: ApiService,
