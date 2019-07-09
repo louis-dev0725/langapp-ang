@@ -44,12 +44,18 @@ export class ContactComponent implements OnInit {
 
   ngOnInit() {
     this.contactForm = this.formBuilder.group({
-      name: [this.user['name'] || '', {validators: [Validators.required], updateOn: 'change'}],
-      email: [this.user['email'] || '', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
-      telephone: [this.user['telephone'] || ''],
+      name: ['', {validators: [Validators.required], updateOn: 'change'}],
+      email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
+      telephone: [''],
       body: ['', {validators: [Validators.required], updateOn: 'change'}],
       recaptcha: ['', Validators.required]
-    })
+    });
+
+    if (this.user) {
+      this.contactForm.patchValue({
+        ...this.user
+      })
+    }
   }
 
   onSubmit() {

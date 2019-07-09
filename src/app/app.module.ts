@@ -43,6 +43,8 @@ import { HttpInterceptorService } from "@app/http/http-interceptor";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslatingService } from "@app/services/translating.service";
 import { ConfirmDialogModule } from "@app/common/confirm-dialog/confirm-dialog.module";
+import { ThemeModule } from "@app/theme/theme.module";
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -91,7 +93,8 @@ export function createTranslateLoader(http: HttpClient) {
     MatIconModule,
     MatDialogModule,
     MatProgressBarModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ThemeModule
   ],
   providers: [
     ApiService,
@@ -108,7 +111,11 @@ export function createTranslateLoader(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,
       multi: true
-    }
+    },
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    },
   ],
   bootstrap: [AppComponent]
 })
