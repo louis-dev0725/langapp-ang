@@ -1,19 +1,26 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
+import { APP_NAME, APP_DATE_CREATED } from "@app/config/config";
 
 @Component({
-    selector: 'app-footer',
-    template: `
-        <div class="layout-footer clearfix">
-            <a href="dashboard.xhtml">
-                <img alt="logo-colored" src="assets/layout/images/logo-colored.png" />
-            </a>
-            <span class="footer-text-right">
-                <span class="material-icons">copyright</span>
-                <span>All Rights Reserved</span>
+  selector: 'app-footer',
+  template: `
+    <div class="layout-footer clearfix">
+            <span>
+                {{appName}} © {{dateString}}
             </span>
-        </div>
-    `
+      <span class="footer-text-right">
+                <a href="">{{'Public offer' | translate}}</a> / <a href="">{{'Privacy police' | translate}}</a>
+            </span>
+    </div>
+  `
 })
 export class ThemeFooterComponent {
+  public appName = APP_NAME;
+  public appDate = +APP_DATE_CREATED;
+  public toDay = new Date();
+  public dateString;
 
+  ngOnInit() {
+    this.dateString = this.toDay.getFullYear() > this.appDate ? `${this.toDay.getFullYear()} - ${this.appDate}` : this.appDate;
+  }
 }

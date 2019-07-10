@@ -19,6 +19,7 @@ import { TranslatingService } from "@app/services/translating.service";
 import { untilDestroyed } from "ngx-take-until-destroy";
 import { TranslateService } from "@ngx-translate/core";
 import { EventService } from "@app/event.service";
+import { APP_NAME } from "@app/config/config";
 
 @Component({
   selector: 'app-menu',
@@ -26,6 +27,7 @@ import { EventService } from "@app/event.service";
 })
 
 export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
+  public appName = APP_NAME;
   model = [];
   languages = ['Русский', 'English'];
   @Input() reset: boolean;
@@ -35,6 +37,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(public app: ThemeMainComponent,
               public session: SessionService,
               public translatingService: TranslatingService,
+              private cd: ChangeDetectorRef,
               private eventService: EventService,
               private translate: TranslateService) {
   }
@@ -59,6 +62,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public updateItems(el) {
     el['hide'] = !this.isLoggedIn;
+    el['admin'] = this.session.isAdmin;
     if (el['items']) {
       el.items = el.items.map((res) => {
         return this.updateItems(res);
@@ -71,10 +75,42 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.model = [
+    this.model = this.getModel();
+    console.log({...this.model});
+    this.session.changingUser.pipe(
+      untilDestroyed(this)
+    ).subscribe((user) => {
+      // this.model.map((el) => {
+      //   return this.updateItems(el);
+      // });
+      console.log(this.isLoggedIn);
+      this.model = this.getModel();
+      this.cd.detectChanges();
+      console.log({...this.model});
+    });
+  }
+
+  public getModel() {
+    return [
       {
         label: 'Sign up',
         routerLink: ['signup'],
+        hide: this.isLoggedIn,
+      },
+      {
+        label: 'Admin',
+        hide: !this.isLoggedIn,
+        admin: this.session.isAdmin,
+        items: [
+          {
+            label: 'Clients',
+            routerLink: ['/admin/users']
+          },
+          {
+            label: 'Transactions',
+            routerLink: ['/admin/transactions']
+          }
+        ]
       },
       {
         label: 'Language',
@@ -111,18 +147,14 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
             routerLink: ['/partners/transactions']
           },
         ]
+      },
+      {
+        label: 'Payment',
+        routerLink: ['payment'],
+        hide: !this.isLoggedIn
       }
     ];
-    this.session.changingUser.pipe(
-      untilDestroyed(this)
-    ).subscribe((user) => {
-      this.model.map((el) => {
-        return this.updateItems(el);
-      });
-      console.log({...this.model});
-    });
   }
-
 
   changeTheme(theme) {
     const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
