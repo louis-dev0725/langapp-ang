@@ -53,12 +53,12 @@
               <span>{{'Sign in' | translate}}</span>
             </a>
           </li>
-          <li role="menuitem" *ngIf="!isLoggedIn" (click)="logout()">
+          <!--<li role="menuitem" *ngIf="!isLoggedIn" (click)="logout()">
             <a routerLink="/signup">
               <i class="material-icons">input</i>
               <span>{{'Sign up' | translate}}</span>
             </a>
-          </li>
+          </li>-->
           <li role="menuitem" *ngIf="isLoggedIn" (click)="logout()">
             <a href="#">
               <i class="material-icons">input</i>

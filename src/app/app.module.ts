@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {
+  APP_INITIALIZER,
   CUSTOM_ELEMENTS_SCHEMA,
   LOCALE_ID,
   MissingTranslationStrategy,
@@ -50,6 +51,10 @@ export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
   return new TranslateHttpLoader(http, './assets/i18n/', '.json')
 }
+
+//export function translatingServiceFactory(http: HttpClient, translatingService: TranslatingService) {
+//  return () => translatingService.loadFiles();
+//}
 
 @NgModule({
   declarations: [
@@ -102,7 +107,6 @@ export function createTranslateLoader(http: HttpClient) {
     CanactivateLogged,
     CanactivateNologged,
     CustomValidator,
-    TranslatingService,
     {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator},
     {provide: LOCALE_ID, useFactory: SessionService.getLocale()},
 
@@ -116,6 +120,13 @@ export function createTranslateLoader(http: HttpClient) {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
     },
+    /*TranslatingService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: translatingServiceFactory,
+      deps: [HttpClient, TranslatingService],
+      multi: true
+    }*/
   ],
   bootstrap: [AppComponent]
 })

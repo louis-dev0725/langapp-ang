@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { SessionService } from "@app/services/session.service";
+import { forkJoin, Observable, of } from "rxjs";
+import { subscribeTo } from "rxjs/internal-compatibility";
 
 @Injectable({
   providedIn: 'root'
