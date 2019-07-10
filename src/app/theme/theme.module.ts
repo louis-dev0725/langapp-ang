@@ -73,6 +73,9 @@ import { ThemeMainComponent } from "@app/theme/theme.main.component";
 import { ThemeFooterComponent } from "@app/theme/theme.footer.component";
 import { RouterModule } from "@angular/router";
 
+
+import { TranslateModule } from '@ngx-translate/core';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -143,7 +146,9 @@ import { RouterModule } from "@angular/router";
     TooltipModule,
     TreeModule,
     TreeTableModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+
+    TranslateModule
   ],
   declarations: [
     ThemeMenuComponent,

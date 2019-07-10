@@ -1,0 +1,23 @@
+// style for main layout without breadcrumbs
+.layout-wrapper {
+  .layout-main {
+    padding-top: 64px;
+    .layout-content {
+      //padding-top: 64px;
+    }
+    .layout-topbar {
+      top: 0;
+    }
+  }
+}
+
+.custom-topbar-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  .topbar-item {
+    color: #fff;
+    font-size: 13px;
+  }
+}
