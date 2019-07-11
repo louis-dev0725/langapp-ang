@@ -104,11 +104,12 @@ export class SessionService {
 
 
   logout() {
-    this.changingUser.emit('');
+    this.token = '';
     this.user = undefined;
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     this.reloadAdmin();
+    this.changingUser.emit('');
     this.router.navigateByUrl('/');
   }
 

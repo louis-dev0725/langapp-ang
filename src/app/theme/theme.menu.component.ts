@@ -80,13 +80,8 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     this.session.changingUser.pipe(
       untilDestroyed(this)
     ).subscribe((user) => {
-      // this.model.map((el) => {
-      //   return this.updateItems(el);
-      // });
-      console.log(this.isLoggedIn);
       this.model = this.getModel();
       this.cd.detectChanges();
-      console.log({...this.model});
     });
   }
 
@@ -99,8 +94,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         label: 'Admin',
-        hide: !this.isLoggedIn,
-        admin: this.session.isAdmin,
+        hide: !this.isLoggedIn || !this.session.isAdmin,
         items: [
           {
             label: 'Clients',

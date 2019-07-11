@@ -5,7 +5,7 @@ import {
   MAT_DATE_LOCALE, MatDatepicker,
   MatPaginator,
   MatSort,
-  MatTableDataSource
+  MatTableDataSource, PageEvent
 } from '@angular/material';
 import {ApiService} from '@app/services/api.service';
 import {EventService} from '@app/event.service';
@@ -71,6 +71,8 @@ export class AdmTransactionsComponent implements OnInit {
   set rows(data: any[]) {
     this.isEmptyTable = (data) ? data.length === 0 : true;
     this.transactionList = data;
+    this.transactionList.sort = this.sort;
+    this.transactionList.paginator = this.paginator;
   }
 
   @ViewChild(MatPaginator, {static: true}) paginator;
@@ -104,6 +106,10 @@ export class AdmTransactionsComponent implements OnInit {
       this.getTransactions();
     });
 
+    this.getTransactions();
+  }
+
+  onPageChange(event: PageEvent) {
     this.getTransactions();
   }
 
@@ -150,6 +156,8 @@ export class AdmTransactionsComponent implements OnInit {
         this.isLoaded = true;
         if (!(result instanceof ApiError)) {
           this.rows = result.items;
+          this.paginator.length = result._meta.totalCount;
+          this.paginator.pageIndex = result._meta.currentPage - 1;
         }
       })
   }
