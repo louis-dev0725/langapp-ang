@@ -109,7 +109,6 @@ export class SessionService {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     this.reloadAdmin();
-    this.changingUser.emit('');
     this.router.navigateByUrl('/');
   }
 
@@ -137,6 +136,7 @@ export class SessionService {
       this.token = this.user.accessToken;
       localStorage.removeItem('savedAdmin');
     }
+    this.changingUser.emit(this.user);
   }
 
   openAsUser(user: User) {

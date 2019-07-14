@@ -53,6 +53,8 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
       untilDestroyed(this)
     ).subscribe((user) => {
       this.user = user;
+      console.log(this.user);
+      // debugger;
     });
   }
 

@@ -81,6 +81,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       untilDestroyed(this)
     ).subscribe((user) => {
       this.model = this.getModel();
+      console.log({...this.model});
       this.cd.detectChanges();
     });
   }

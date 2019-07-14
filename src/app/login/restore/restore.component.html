@@ -1,63 +1,65 @@
 <div class="container">
-  <h1 translate>Restore password</h1>
-  <p class="note" translate [ngSwitch]="mode" *ngIf="errors.length === 0">
-    <ng-template [ngSwitchCase]="MODE_REQUEST" translate>restore.request</ng-template>
-    <ng-template [ngSwitchCase]="MODE_REQUEST_SENT" translate>restore.request-sent</ng-template>
-    <ng-template [ngSwitchCase]="MODE_PASSWORD" translate>restore.password</ng-template>
-  </p>
+  <div class="card">
+    <h1 translate>Restore password</h1>
+    <p class="note" translate [ngSwitch]="mode" *ngIf="errors.length === 0">
+      <ng-template [ngSwitchCase]="MODE_REQUEST" translate>restore.request</ng-template>
+      <ng-template [ngSwitchCase]="MODE_REQUEST_SENT" translate>restore.request-sent</ng-template>
+      <ng-template [ngSwitchCase]="MODE_PASSWORD" translate>restore.password</ng-template>
+    </p>
 
-  <ng-container *ngIf="errors.length > 0">
-    <mat-card *ngFor="let err of errors"
-              class="err-alert">
-      <mat-card-content>{{err.message}}</mat-card-content>
-    </mat-card>
-  </ng-container>
+    <ng-container *ngIf="errors.length > 0">
+      <mat-card *ngFor="let err of errors"
+                class="err-alert">
+        <mat-card-content>{{err.message}}</mat-card-content>
+      </mat-card>
+    </ng-container>
 
-  <div class="container">
-    <form [formGroup]="restoreForm" (ngSubmit)="onSubmit()">
+    <div class="container">
+      <form [formGroup]="restoreForm" (ngSubmit)="onSubmit()">
 
-      <mat-form-field class="form-item" *ngIf="mode === MODE_REQUEST">
-        <mat-label translate>Email</mat-label>
-        <input
-          matInput
-          formControlName="email"
-          required
-          type="email"
-          placeholder="{{'Email' | translate}}">
-        <mat-error *ngIf="checkError('email')">{{ getErrors('email') }}</mat-error>
-      </mat-form-field>
+        <mat-form-field class="form-item" *ngIf="mode === MODE_REQUEST">
+          <mat-label translate>Email</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            required
+            type="email"
+            placeholder="{{'Email' | translate}}">
+          <mat-error *ngIf="checkError('email')">{{ getErrors('email') }}</mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="form-item" *ngIf="mode === MODE_PASSWORD">
-        <mat-label translate>Password</mat-label>
-        <input
-          matInput
-          formControlName="password"
-          required
-          type="password"
-          placeholder="{{'Password' | translate}}">
-        <mat-error *ngIf="checkError('password')">{{ getErrors('password') }}</mat-error>
-      </mat-form-field>
+        <mat-form-field class="form-item" *ngIf="mode === MODE_PASSWORD">
+          <mat-label translate>Password</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            required
+            type="password"
+            placeholder="{{'Password' | translate}}">
+          <mat-error *ngIf="checkError('password')">{{ getErrors('password') }}</mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="form-item" *ngIf="mode === MODE_PASSWORD">
-        <mat-label translate>Repeat password</mat-label>
-        <input
-          matInput
-          formControlName="passrepeat"
-          required
-          type="password"
-          placeholder="{{'Repeat password' | translate}}">
-        <mat-error *ngIf="checkError('passrepeat')">{{ getErrors('passrepeat') }}</mat-error>
-      </mat-form-field>
+        <mat-form-field class="form-item" *ngIf="mode === MODE_PASSWORD">
+          <mat-label translate>Repeat password</mat-label>
+          <input
+            matInput
+            formControlName="passrepeat"
+            required
+            type="password"
+            placeholder="{{'Repeat password' | translate}}">
+          <mat-error *ngIf="checkError('passrepeat')">{{ getErrors('passrepeat') }}</mat-error>
+        </mat-form-field>
 
-      <div class="form-item" *ngIf="mode !== MODE_REQUEST_SENT">
-        <button
-          color="primary"
-          mat-flat-button
-          [disabled]="!restoreForm.valid"
-          translate>Send
-        </button>
-      </div>
+        <div class="form-item" *ngIf="mode !== MODE_REQUEST_SENT">
+          <button
+            color="primary"
+            mat-flat-button
+            [disabled]="!restoreForm.valid"
+            translate>Send
+          </button>
+        </div>
 
-    </form>
+      </form>
+    </div>
   </div>
 </div>
