@@ -1,22 +1,25 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { MatPaginator, MatSort, PageEvent } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
 import { Router } from '@angular/router';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
+import { debounceTime, delay } from "rxjs/operators";
+import { untilDestroyed } from "ngx-take-until-destroy";
 
 @Component({
   selector: 'app-adm-users',
   templateUrl: './adm-users.component.html',
   styleUrls: ['./adm-users.component.scss']
 })
-export class AdmUsersComponent implements OnInit {
+export class AdmUsersComponent implements OnInit, OnDestroy {
 
   private usersSubscription: Subscription;
   private sendTimeout;
+  public commentChanged: Subject<string> = new Subject<string>();
 
   columns = ['id', 'name', 'company', 'telephone', 'balance',  'balancePartner', 'comment', 'edit'];
   notFilterFields = ['Comment', 'Edit'];
@@ -67,6 +70,8 @@ export class AdmUsersComponent implements OnInit {
     private translate: TranslateService) {
   }
 
+  ngOnDestroy() {}
+
   ngOnInit() {
 
     this.fieldKeys = Object.keys(this.translatedKeys);
@@ -83,6 +88,24 @@ export class AdmUsersComponent implements OnInit {
       }
     });
     this.getUsers();
+    this.commentChanged.pipe(
+      debounceTime(1000))
+      .pipe(untilDestroyed(this))
+      .subscribe((comment) => {
+        this.addComment(comment);
+      });
+  }
+
+  onChangeComment(row) {
+    this.commentChanged.next(row)
+  }
+
+  addComment(row){
+    const data = {
+      id: row.id,
+      comment: row.comment,
+    };
+    this.api.updateUser(data).pipe();
   }
 
   isFilterField(item: string): boolean {
