@@ -7,7 +7,7 @@
 	"Admin": "Admin",
 	"Amount": "Amount",
 	"Balance": "Balance",
-	"Cancel": "",
+	"Cancel": "Cancel",
 	"Choose a date": "Choose a date",
 	"Clients": "Clients",
 	"Comment": "Comment",
@@ -45,7 +45,7 @@
 	"Messages sent": "Your message successfully delivered",
 	"Name": "Name",
 	"No records found": "No records found",
-	"Ok": "",
+	"Ok": "Ok",
 	"On your affiliate account": "On your affiliate account",
 	"Open as user": "Open as user",
 	"Partner Balance": "Partner Balance",
@@ -93,6 +93,9 @@
 		"user-open": {
 			"msg": "Your admin session will be suspended. After logout from the User account, your admin session will be restored",
 			"title": "Confirm open as User"
+		},
+		"transaction": {
+			"created": "Transaction created"
 		}
 	},
 	"for user": "for user",

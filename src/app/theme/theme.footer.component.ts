@@ -21,6 +21,6 @@ export class ThemeFooterComponent {
   public dateString;
 
   ngOnInit() {
-    this.dateString = this.toDay.getFullYear() > this.appDate ? `${this.toDay.getFullYear()} - ${this.appDate}` : this.appDate;
+    this.dateString = this.toDay.getFullYear() > this.appDate ? `${this.appDate} - ${this.toDay.getFullYear()}` : this.appDate;
   }
 }

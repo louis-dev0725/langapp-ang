@@ -46,6 +46,7 @@ import { TranslatingService } from "@app/services/translating.service";
 import { ConfirmDialogModule } from "@app/common/confirm-dialog/confirm-dialog.module";
 import { ThemeModule } from "@app/theme/theme.module";
 import { HashLocationStrategy, LocationStrategy } from "@angular/common";
+import { ContentPageComponent } from './content-page/content-page.component';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -62,7 +63,8 @@ export function createTranslateLoader(http: HttpClient) {
     NavbarComponent,
     PaymentComponent,
     ContactComponent,
-    SuccessComponent
+    SuccessComponent,
+    ContentPageComponent
   ],
   imports: [
     BrowserModule,

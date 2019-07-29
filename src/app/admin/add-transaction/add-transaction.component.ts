@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material';
 import { Transaction, User } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatingService } from "@app/services/translating.service";
 
 @Component({
   selector: 'app-add-transaction',
@@ -42,7 +43,8 @@ export class AddTransactionComponent implements OnInit {
     private eventService: EventService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translatingService: TranslatingService
   ) {
   }
 
@@ -53,7 +55,8 @@ export class AddTransactionComponent implements OnInit {
       userId: [this.user.id || '', {validators: [Validators.required]}],
       money: ['', {validators: [Validators.required]}],
       comment: [''],
-      isPartner: ['']
+      isPartner: [''],
+      isRealMoney: ['']
     });
   }
 
@@ -75,7 +78,7 @@ export class AddTransactionComponent implements OnInit {
     this.api.createTransaction(data)
       .subscribe((res) => {
         if (!(res instanceof ApiError)) {
-          this.snackBar.open('Transaction created', null, {duration: 3000});
+          this.snackBar.open(this.translatingService.translates['confirm'].transaction.created, null, {duration: 3000});
           setTimeout(() => {
             this.router.navigate([`/admin/user/${this.user.id}`]);
           }, 3100)

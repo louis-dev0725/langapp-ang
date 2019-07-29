@@ -28,45 +28,6 @@
         <span *ngIf="isLoggedIn && !isOpenedAdmin">{{'Your id' | translate}}{{': ' + user?.id}}</span>
         <span *ngIf="isLoggedIn && isOpenedAdmin">{{'Logged in as ID' | translate}}{{': ' + user?.id}}</span>
       </li>
-      <li #settings [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}"
-          (click)="app.onTopbarRootItemClick($event, settings)">
-        <a href="#">
-          <i class="topbar-icon material-icons">settings</i>
-          <span class="topbar-item-name">{{'Settings' | translate}}</span>
-        </a>
-        <ul class="fadeInDown">
-          <li role="menuitem">
-            <a routerLink="/settings">
-              <i class="material-icons">settings</i>
-              <span>{{'Settings' | translate}}</span>
-            </a>
-          </li>
-          <li role="menuitem">
-            <a routerLink="/contacts">
-              <i class="material-icons">account_circle</i>
-              <span>{{'Contacts' | translate}}</span>
-            </a>
-          </li>
-          <li *ngIf="!isLoggedIn" role="menuitem">
-            <a routerLink="/signin">
-              <i class="material-icons">input</i>
-              <span>{{'Sign in' | translate}}</span>
-            </a>
-          </li>
-          <!--<li role="menuitem" *ngIf="!isLoggedIn" (click)="logout()">
-            <a routerLink="/signup">
-              <i class="material-icons">input</i>
-              <span>{{'Sign up' | translate}}</span>
-            </a>
-          </li>-->
-          <li role="menuitem" *ngIf="isLoggedIn" (click)="logout()">
-            <a href="#">
-              <i class="material-icons">input</i>
-              <span>{{'Logout' | translate}}</span>
-            </a>
-          </li>
-        </ul>
-      </li>
     </ul>
   </div>
 </div>

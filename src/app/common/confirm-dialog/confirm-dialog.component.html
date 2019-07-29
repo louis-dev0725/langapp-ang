@@ -7,12 +7,11 @@
 <div mat-dialog-actions class="actions">
   <a
     mat-flat-button
-    (click)="onDismiss()"
-    translate>Cancel
+    (click)="onDismiss()">
+    {{'Cancel' | translate}}
   </a>
   <a
     mat-flat-button
     color="primary"
-    (click)="onConfirm()"
-    translate>Ok</a>
+    (click)="onConfirm()">{{'Ok' | translate}}</a>
 </div>

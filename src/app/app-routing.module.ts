@@ -14,6 +14,7 @@ import {ContactComponent} from './contact/contact.component';
 import {TransactionComponent} from './partners/transaction/transaction.component';
 import {CanactivateAdmin} from './services/canactivate-admin';
 import {SuccessComponent} from '@app/payment/success/success.component';
+import { ContentPageComponent } from "@app/content-page/content-page.component";
 
 const routes: Routes = [
   {
@@ -84,6 +85,10 @@ const routes: Routes = [
   {
     path: 'contacts',
     component: ContactComponent,
+  },
+  {
+    path: 'content-page',
+    component: ContentPageComponent,
   }
 ];
 

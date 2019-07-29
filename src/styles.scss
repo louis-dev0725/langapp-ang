@@ -12,6 +12,15 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+strong {
+  font-weight: 500;
+}
+
 .container {
   padding: 10px;
   margin-bottom: 20px;

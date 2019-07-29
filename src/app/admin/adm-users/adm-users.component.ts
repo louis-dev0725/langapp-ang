@@ -105,7 +105,7 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
       id: row.id,
       comment: row.comment,
     };
-    this.api.updateUser(data).pipe();
+    this.api.updateUser(data).subscribe();
   }
 
   isFilterField(item: string): boolean {

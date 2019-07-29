@@ -4,8 +4,6 @@ import {
   OnInit,
   AfterViewInit,
   OnDestroy,
-  ElementRef,
-  Renderer,
   ViewChild,
   ChangeDetectorRef
 } from '@angular/core';
@@ -20,6 +18,9 @@ import { untilDestroyed } from "ngx-take-until-destroy";
 import { TranslateService } from "@ngx-translate/core";
 import { EventService } from "@app/event.service";
 import { APP_NAME } from "@app/config/config";
+import { ConfirmDialogComponent, ConfirmDialogModel } from "@app/common/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material";
+import { ApiService } from "@app/services/api.service";
 
 @Component({
   selector: 'app-menu',
@@ -35,11 +36,13 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('scrollPanel', {static: true}) layoutMenuScrollerViewChild: ScrollPanel;
 
   constructor(public app: ThemeMainComponent,
+              public api: ApiService,
               public session: SessionService,
-              public translatingService: TranslatingService,
               private cd: ChangeDetectorRef,
               private eventService: EventService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private confirmDialog: MatDialog,
+              private translatingService: TranslatingService) {
   }
 
   ngAfterViewInit() {
@@ -50,6 +53,14 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get isLoggedIn(): boolean {
     return this.session.isLoggedIn;
+  }
+
+  get isOpenedAdmin(): boolean {
+    return this.session.openedAdmin;
+  }
+
+  get isAdmin(): boolean {
+    return this.session.isAdmin
   }
 
 
@@ -71,17 +82,14 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     return el;
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
   ngOnInit() {
     this.model = this.getModel();
-    console.log({...this.model});
     this.session.changingUser.pipe(
       untilDestroyed(this)
-    ).subscribe((user) => {
-      this.model = this.getModel();
-      console.log({...this.model});
+    ).subscribe(() => {
+      this.model = [...this.getModel()];
       this.cd.detectChanges();
     });
   }
@@ -89,13 +97,8 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   public getModel() {
     return [
       {
-        label: 'Sign up',
-        routerLink: ['signup'],
-        hide: this.isLoggedIn,
-      },
-      {
         label: 'Admin',
-        hide: !this.isLoggedIn || !this.session.isAdmin,
+        hide: !this.isAdmin || (this.isAdmin && this.isOpenedAdmin),
         items: [
           {
             label: 'Clients',
@@ -147,18 +150,52 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         label: 'Payment',
         routerLink: ['payment'],
         hide: !this.isLoggedIn
-      }
+      },
+      {
+        label: 'Contacts',
+        routerLink: ['/contacts']
+      },
+      {
+        label: 'Settings',
+        routerLink: ['/users/settings']
+      },
+      {
+        label: 'Sign up',
+        routerLink: ['signup'],
+        hide: this.isLoggedIn,
+      },
+      {
+        label: 'Sign in',
+        routerLink: ['signin'],
+        hide: this.isLoggedIn,
+      },
+      {
+        label: 'Logout',
+        hide: !this.isLoggedIn,
+        command: (event) => {
+          this.logout();
+        }
+      },
     ];
   }
 
-  changeTheme(theme) {
-    const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
-    themeLink.href = 'assets/theme/theme-' + theme + '.css';
-  }
+  logout() {
+    if (!this.isOpenedAdmin) {
+      const dialogModel = new ConfirmDialogModel(this.translatingService.translates['Logout confirm title'], this.translatingService.translates['Logout confirm msg']);
 
-  changeLayout(theme) {
-    const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
-    layoutLink.href = 'assets/layout/css/layout-' + theme + '.css';
+      const dialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+        maxWidth: "400px",
+        data: dialogModel
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.api.logout();
+        }
+      })
+    } else {
+      this.api.logout();
+    }
   }
 }
 
@@ -168,7 +205,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   /* tslint:enable:component-selector */
   template: `
     <ng-template ngFor let-child let-i="index" [ngForOf]="(root ? item : item.items)">
-      <li [ngClass]="{'active-menuitem': isActive(i)}" [class]="child?.badgeStyleClass">
+      <li [ngClass]="{'active-menuitem': isActive(i)}" [class]="child?.badgeStyleClass" *ngIf="!child?.hide">
         <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" *ngIf="!child.routerLink && !child?.hide"
            [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target"
            (mouseenter)="onMouseEnter(i)" class="ripplelink">
@@ -178,7 +215,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
           <span class="menuitem-badge" *ngIf="child.badge">{{child.badge}}</span>
         </a>
 
-        <a (click)="itemClick($event,child,i)" *ngIf="child.routerLink && !child?.hide"
+        <a (click)="itemClick($event,child,i)" *ngIf="child.routerLink"
            [routerLink]="child.routerLink" routerLinkActive="active-menuitem-routerlink"
            [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null"
            [attr.target]="child.target"
