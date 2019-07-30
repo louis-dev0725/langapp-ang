@@ -1,7 +1,7 @@
 <div class="layout-sidebar" [ngClass]="{'layout-sidebar-active': app.sidebarActive, 'layout-sidebar-dark': app.darkMenu}"
     (click)="app.onSidebarClick($event)" (mouseover)="app.sidebarActive=true" (mouseleave)="app.sidebarActive=false">
     <div class="sidebar-logo">
-        <a routerLink="/dashboard">
+        <a routerLink="/">
             <img alt="logo" src="assets/layout/images/logo-slim.png" />
             <span class="app-name">{{appName}}</span>
         </a>

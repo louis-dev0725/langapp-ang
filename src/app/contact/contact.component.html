@@ -1,70 +1,70 @@
 <div class="container">
-  <h1>Служба поддержки</h1>
-  <p>Заполните форму ниже для обращения в службу поддержки. Ответ придет к вам на E-mail.</p>
+  <div class="card">
+    <h1>Служба поддержки</h1>
+    <p>Заполните форму ниже для обращения в службу поддержки. Ответ придет к вам на E-mail.</p>
 
-  <p>E-mail поддержки: <a href="mailto:support@callrocket.ru">support@callrocket.ru</a></p>
-</div>
-<div class="container">
-  <form #frmVar="ngForm" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        required
-        formControlName="name"
-        placeholder="{{'Name' | translate}}">
-      <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
-    </mat-form-field>
+    <p>E-mail поддержки: <a href="mailto:support@callrocket.ru">support@callrocket.ru</a></p>
+    <form #frmVar="ngForm" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          required
+          formControlName="name"
+          placeholder="{{'Name' | translate}}">
+        <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
+      </mat-form-field>
 
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        required
-        formControlName="email"
-        placeholder="{{'Email' | translate}}">
-      <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
-    </mat-form-field>
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          required
+          formControlName="email"
+          placeholder="{{'Email' | translate}}">
+        <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
+      </mat-form-field>
 
-    <mat-form-field class="form-item">
-      <input
-        matInput
-        formControlName="telephone"
-        placeholder="{{'Phone' | translate}}">
-    </mat-form-field>
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          formControlName="telephone"
+          placeholder="{{'Phone' | translate}}">
+      </mat-form-field>
 
-    <!--<mat-form-field class="form-item">
-      <input
-        matInput
-        formControlName="subject"
-        placeholder="{{'Subject' | translate}}">
-    </mat-form-field>-->
+      <!--<mat-form-field class="form-item">
+        <input
+          matInput
+          formControlName="subject"
+          placeholder="{{'Subject' | translate}}">
+      </mat-form-field>-->
 
-    <mat-form-field class="form-item">
-      <textarea
-        matInput
-        formControlName="body"
-        placeholder="{{'Message' | translate}}"></textarea>
-      <mat-error *ngIf="checkError('body')">{{getError('body')}}</mat-error>
-    </mat-form-field>
-    <div class="form-item">
-      <ngx-recaptcha2
-        #recaptcha
-        formControlName="recaptcha"
-        (reset)="resetCaptcha()"
-        (reload)="reloadCaptcha()"
-        [hl]="language"
-        [siteKey]="api.siteKey"
-        [size]="'normal'"
-        [useGlobalDomain]="true">
-      </ngx-recaptcha2>
-<!--      <mat-error *ngIf="checkError('recaptcha')">{{getError('recaptcha')}}</mat-error>-->
-    </div>
+      <mat-form-field class="form-item">
+        <textarea
+          matInput
+          formControlName="body"
+          placeholder="{{'Message' | translate}}"></textarea>
+        <mat-error *ngIf="checkError('body')">{{getError('body')}}</mat-error>
+      </mat-form-field>
+      <div class="form-item">
+        <ngx-recaptcha2
+          #recaptcha
+          formControlName="recaptcha"
+          (reset)="resetCaptcha()"
+          (reload)="reloadCaptcha()"
+          [hl]="language"
+          [siteKey]="api.siteKey"
+          [size]="'normal'"
+          [useGlobalDomain]="true">
+        </ngx-recaptcha2>
+  <!--      <mat-error *ngIf="checkError('recaptcha')">{{getError('recaptcha')}}</mat-error>-->
+      </div>
 
-    <div class="form-item">
-      <button
-        (click)="onSubmit()"
-        color="primary"
-        [disabled]="isErrors"
-        mat-flat-button>{{'Send' | translate}}</button>
-    </div>
-  </form>
+      <div class="form-item">
+        <button
+          (click)="onSubmit()"
+          color="primary"
+          [disabled]="isErrors"
+          mat-flat-button>{{'Send' | translate}}</button>
+      </div>
+    </form>
+  </div>
 </div>

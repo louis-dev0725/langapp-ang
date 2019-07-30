@@ -2,8 +2,13 @@
 .layout-wrapper {
   .layout-main {
     padding-top: 64px;
+
     .layout-content {
-      //padding-top: 64px;
+      @media (min-width: 1025px) {
+        padding: 17px 17px 82px 17px;
+        min-height: calc(100vh - 65px);
+        box-sizing: border-box;
+      }
     }
     .layout-topbar {
       top: 0;
@@ -23,7 +28,43 @@
   .topbar-item {
     color: #fff;
     font-size: 13px;
+
+    a {
+      //color: #9CCC65;
+      font-size: 13px;
+      color: #fff;
+    }
+    @media (max-width: 1024px) {
+      padding: 10px 15px;
+      font-size: 14px;
+
+      & , a {
+        color: inherit;
+      }
+    }
   }
+}
+
+app-footer {
+  @media (min-width: 1025px) {
+    height: 65px;
+    margin-top: -65px;
+    display: block;
+
+    .layout-footer {
+      height: 100%;
+      box-sizing: border-box;
+
+      & > span {
+        display: inline-flex;
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
+.layout-content > * > .container:last-child {
+  margin-bottom: 0;
 }
 
 .card h1:first-child {

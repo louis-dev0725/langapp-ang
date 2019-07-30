@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ClientsComponent } from './clients/clients.component';
 import { TranslateModule } from '@ngx-translate/core';
 import {
-  MatCardModule,
+  MatCardModule, MatFormFieldModule, MatInputModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
   MatSortModule,
@@ -32,7 +32,9 @@ import { SharedModule } from "@app/shared/shared.module";
     MatPaginatorModule,
     MatCardModule,
     MatProgressSpinnerModule,
-    SharedModule
+    SharedModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [DecimalPipe, SessionService]
 })

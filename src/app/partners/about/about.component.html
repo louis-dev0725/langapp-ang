@@ -30,23 +30,31 @@
   <h2 translate>Referal links</h2>
     <div class="container">
       <div class="form-item">
-        <label for="url_main_page" class="active" translate>Link for the Main page</label>
-        <input id="url_main_page"
-               onclick="this.focus();"
-               class="partner-url"
-               readonly="readonly"
-               type="text"
-               value="http://callrocket.ru/?rr={{user?.id}}">
+        <mat-form-field >
+          <mat-label translate>Link for the Main page</mat-label>
+          <input
+              value="http://callrocket.ru/?rr={{user?.id}}"
+              matInput
+              readonly="readonly">
+        </mat-form-field>
       </div>
       <div class="form-item">
-        <label
+        <mat-form-field>
+          <mat-label translate>Link for the Registration page</mat-label>
+          <input
+              value="http://callrocket.ru/users/create?rr={{user?.id}}"
+              matInput
+              readonly="readonly">
+        </mat-form-field>
+      <!--  <label
           for="url_create"
           class="active" translate>Link for the Registration page</label>
 
         <input id="url_create" class="partner-url"
                readonly="readonly"
                type="text"
-               value="http://callrocket.ru/users/create?rr={{user?.id}}"></div>
+               value="http://callrocket.ru/users/create?rr={{user?.id}}">-->
+      </div>
     </div>
   </div>
 </div>

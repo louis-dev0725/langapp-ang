@@ -33,6 +33,14 @@ strong {
 .form-item {
   width: 100%;
   margin-bottom: 20px;
+
+  mat-form-field {
+    min-width: 40%;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
 }
 
 .form-item-link {

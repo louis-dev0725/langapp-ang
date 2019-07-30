@@ -21,12 +21,18 @@
       <li class="topbar-item" *ngIf="isLoggedIn">
         <span>
           8 (800) 000-00-00 <br>
-          с 11:00 до 19:00
+          {{'from' | translate}} 11:00 {{'to' | translate}} 19:00
         </span>
       </li>
       <li class="topbar-item">
         <span *ngIf="isLoggedIn && !isOpenedAdmin">{{'Your id' | translate}}{{': ' + user?.id}}</span>
         <span *ngIf="isLoggedIn && isOpenedAdmin">{{'Logged in as ID' | translate}}{{': ' + user?.id}}</span>
+      </li>
+      <li class="topbar-item" *ngIf="isLoggedIn">
+        <span>
+          {{'Your balance' | translate}}: {{user.balance}} {{'rub' | translate}}<br>
+          <a routerLink="/payment">{{'Refill' | translate}}</a>
+        </span>
       </li>
     </ul>
   </div>
