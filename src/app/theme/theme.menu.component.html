@@ -5,11 +5,10 @@
             <img alt="logo" src="assets/layout/images/logo-slim.png" />
             <span class="app-name">{{appName}}</span>
         </a>
-        <a href="#" class="sidebar-anchor" title="Toggle Menu" (click)="app.onToggleMenuClick($event)"></a>
     </div>
 
    <p-scrollPanel #scrollPanel [style]="{height: '100%'}">
-        <ul app-theme-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset" parentActive="true"></ul>
+        <ul [user] = "user" app-theme-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset" parentActive="true"></ul>
     </p-scrollPanel>
 
 </div>

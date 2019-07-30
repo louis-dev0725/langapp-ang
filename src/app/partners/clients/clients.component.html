@@ -1,7 +1,8 @@
 <div class="container">
   <div class="card">
     <h1 translate>Clients</h1>
-    <table mat-table [dataSource]="clientsDataSource" matSort>
+    <div class="wrap-table">
+      <table mat-table [dataSource]="clientsDataSource" matSort>
 
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
@@ -22,7 +23,7 @@
       <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
 
     </table>
-
+    </div>
     <mat-card *ngIf="!isLoaded"
               style="display: flex; justify-content: center; align-items: center">
       <mat-progress-spinner

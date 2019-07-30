@@ -103,6 +103,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getModel() {
+    console.log(this.translatingService.translates);
     return [
       {
         label: 'Admin',
@@ -137,7 +138,6 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         label: 'Partnership',
-        routerLink: ['partners'],
         hide: !this.isLoggedIn,
         items: [
           {
@@ -156,8 +156,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         label: 'Payment',
-        // additionalLabel: "<span>({{'balance' | translate}}: {{user.balance}} {{'rub' | translate}})</span>",
-        // additionalLabel: `${this.translatingService.translates['balance']}`,
+        name: 'payment',
         routerLink: ['payment'],
         hide: !this.isLoggedIn
       },
@@ -219,7 +218,6 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         <a [href]="child.url||'#'" (click)="itemClick($event,child,i)" *ngIf="!child.routerLink && !child?.hide"
            [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target"
            (mouseenter)="onMouseEnter(i)" class="ripplelink">
-          <i class="material-icons">{{child.icon}}</i>
           <span class="menuitem-text">{{child.label | translate}}</span>
           <i class="material-icons layout-submenu-toggler" *ngIf="child.items">keyboard_arrow_down</i>
           <span class="menuitem-badge" *ngIf="child.badge">{{child.badge}}</span>
@@ -230,10 +228,14 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
            [routerLinkActiveOptions]="{exact: true}" [attr.tabindex]="!visible ? '-1' : null"
            [attr.target]="child.target"
            (mouseenter)="onMouseEnter(i)" class="ripplelink">
-          <i class="material-icons">{{child.icon}}</i>
           <span class="menuitem-text">
             {{child.label | translate}}
-            <span class="menuitem-text-additional" [innerHTML]="{{child?.additionalLabel"></span>
+            <ng-container [ngSwitch]="child.name">
+              <span class="menuitem-text-additional" *ngSwitchCase="'payment'">
+                <!--<span>({{'balance' | translate}}: {{user.balance}} {{'rub' | translate}})</span>-->
+                <span>({{'balance' | translate}}: {{user?.balance}} {{'rub' | translate}})</span>
+              </span>
+            </ng-container>
           </span>
           <i class="material-icons layout-submenu-toggler" *ngIf="child.items">keyboard_arrow_down</i>
           <span class="menuitem-badge" *ngIf="child.badge">{{child.badge}}</span>
@@ -272,18 +274,12 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 })
 export class ThemeSubMenuComponent implements OnInit, OnDestroy {
 
-  public user;
+  @Input() user;
 
   private langMap = {
     'ru': 'Русский',
     'en': 'English',
   };
-
-  languages = ['Русский', 'English'];
-
-  get currentLang(): string {
-    return this.langMap[this.session.lang];
-  }
 
   @Input() item: MenuItem;
 
@@ -301,8 +297,7 @@ export class ThemeSubMenuComponent implements OnInit, OnDestroy {
               public router: Router,
               public location: Location,
               public appMenu: ThemeMenuComponent,
-              public session: SessionService,
-              private translatingService: TranslatingService) {
+              public session: SessionService) {
   }
 
   ngOnInit() {
