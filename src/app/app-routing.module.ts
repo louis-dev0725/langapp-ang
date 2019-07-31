@@ -23,21 +23,10 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
-  /*{
-    path: 'signup',
-    component: SignupComponent,
-    canActivate: [CanactivateNologged]
-  },
   {
-    path: 'signin',
-    component: SigninComponent,
-    canActivate: [CanactivateNologged]
+    path: 'partners',
+    loadChildren: () => import('./partners/partners.module').then(m => m.PartnersModule)
   },
-  {
-    path: 'restore',
-    component: RestoreComponent,
-    canActivate: [CanactivateNologged]
-  },*/
   {
     path: 'payment',
     component: PaymentComponent,
@@ -52,34 +41,10 @@ const routes: Routes = [
     path: 'users',
     component: UsersComponent,
     children: [
-      /*{
-        path:'restore-password',
-        component: RestoreComponent,
-        canActivate: [CanactivateNologged],
-        data: {mode: 'password-change'}
-      },*/
       {
         path: 'settings',
         component: SettingsComponent,
         canActivate: [CanactivateLogged]
-      }
-    ]
-  },
-  {
-    path: 'partners',
-    canActivateChild: [CanactivateLogged],
-    children: [
-      {
-        path: 'about',
-        component: AboutComponent
-      },
-      {
-        path: 'clients',
-        component: ClientsComponent
-      },
-      {
-        path: 'transactions',
-        component: TransactionComponent
       }
     ]
   },

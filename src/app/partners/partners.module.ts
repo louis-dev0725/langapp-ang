@@ -15,12 +15,15 @@ import { TransactionComponent } from './transaction/transaction.component';
 import { PaymentsTableModule } from '../common/payments-table/payments-table.module';
 import { SessionService } from '@app/services/session.service';
 import { SharedModule } from "@app/shared/shared.module";
+import { PartnersComponent } from "@app/partners/partners.component";
+import { PartnersRoutingModule } from "@app/partners/partners-routing.module";
 
 @NgModule({
   declarations: [
     AboutComponent,
     ClientsComponent,
-    TransactionComponent
+    TransactionComponent,
+    PartnersComponent
   ],
   imports: [
     CommonModule,
@@ -30,11 +33,9 @@ import { SharedModule } from "@app/shared/shared.module";
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    MatCardModule,
     MatProgressSpinnerModule,
     SharedModule,
-    MatFormFieldModule,
-    MatInputModule,
+    PartnersRoutingModule
   ],
   providers: [DecimalPipe, SessionService]
 })
