@@ -19,7 +19,6 @@ import { AdmTransactionsComponent } from './adm-transactions/adm-transactions.co
 import { AdmTransactionEditComponent } from './adm-transaction-edit/adm-transaction-edit.component';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
 import { SharedModule } from "@app/shared/shared.module";
-import { UiModule } from "@app/theme/ui.module";
 
 const routes: Routes = [
   {
@@ -72,8 +71,7 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     ConfirmDialogModule,
-    SharedModule,
-    UiModule
+    SharedModule
   ]
 })
 export class AdminModule {

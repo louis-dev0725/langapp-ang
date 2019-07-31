@@ -25,8 +25,8 @@
         <span *ngIf="isLoggedIn && isOpenedAdmin">{{'Logged in as ID' | translate}}{{': ' + user?.id}}</span>
       </li>
       <li class="topbar-item" *ngIf="isLoggedIn">
-        <span>
-          {{'Your balance' | translate}}: {{user.balance}} {{'rub' | translate}}<br>
+        <span *ngIf="user?.balance">
+          {{'Your balance' | translate}}: {{user?.balance | formatNumbers}} {{'rub' | translate}}<br>
           <a routerLink="/payment">{{'Refill' | translate}}</a>
         </span>
       </li>

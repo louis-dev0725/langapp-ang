@@ -8,11 +8,11 @@ import { ThemeTopbarComponent } from "@app/theme/theme.topbar.component";
 import { ThemeMainComponent } from "@app/theme/theme.main.component";
 import { ThemeFooterComponent } from "@app/theme/theme.footer.component";
 import { RouterModule } from "@angular/router";
-
-
 import { TranslateModule } from '@ngx-translate/core';
-import { UiModule } from "@app/theme/ui.module";
 import { ThemeBreadcrumbComponent } from "@app/theme/theme.breadcrumb.component";
+import { SharedModule } from "@app/shared/shared.module";
+import { BreadcrumbModule, ScrollPanelModule } from "primeng/primeng";
+import { VirtualScrollerModule } from "primeng/virtualscroller";
 
 @NgModule({
   imports: [
@@ -22,7 +22,10 @@ import { ThemeBreadcrumbComponent } from "@app/theme/theme.breadcrumb.component"
     MenuModule,
     MenubarModule,
     TranslateModule,
-    UiModule
+    SharedModule,
+    BreadcrumbModule,
+    ScrollPanelModule,
+    VirtualScrollerModule,
   ],
   declarations: [
     ThemeMenuComponent,
@@ -38,7 +41,10 @@ import { ThemeBreadcrumbComponent } from "@app/theme/theme.breadcrumb.component"
     ThemeTopbarComponent,
     ThemeMainComponent,
     ThemeFooterComponent,
-    ThemeBreadcrumbComponent
+    ThemeBreadcrumbComponent,
+    BreadcrumbModule,
+    ScrollPanelModule,
+    VirtualScrollerModule,
   ],
   providers: [
   ]

@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MenuItem } from 'primeng/primeng';
 import { BreadcrumbService } from "@app/theme/breadcrumb.service";
+import { MenuItem } from "primeng/api";
 
 @Component({
     selector: 'app-breadcrumb',

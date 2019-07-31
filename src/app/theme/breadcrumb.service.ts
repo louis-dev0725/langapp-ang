@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Subject ,  Observable } from 'rxjs';
-import { MenuItem } from 'primeng/primeng';
+import { Subject } from 'rxjs';
+import { MenuItem } from "primeng/api";
 
 @Injectable({
     providedIn: 'root'

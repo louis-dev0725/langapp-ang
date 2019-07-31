@@ -10,7 +10,6 @@ import {
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { MenuItem, ScrollPanel } from 'primeng/primeng';
 import { ThemeMainComponent } from './theme.main.component';
 import { SessionService } from "@app/services/session.service";
 import { TranslatingService } from "@app/services/translating.service";
@@ -21,6 +20,7 @@ import { APP_NAME } from "@app/config/config";
 import { ConfirmDialogComponent, ConfirmDialogModel } from "@app/common/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material";
 import { ApiService } from "@app/services/api.service";
+import { MenuItem } from "primeng/api";
 
 @Component({
   selector: 'app-menu',
@@ -34,7 +34,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   languages = ['Русский', 'English'];
   @Input() reset: boolean;
 
-  @ViewChild('scrollPanel', {static: true}) layoutMenuScrollerViewChild: ScrollPanel;
+  @ViewChild('scrollPanel', {static: true}) layoutMenuScrollerViewChild;
 
   constructor(public app: ThemeMainComponent,
               public api: ApiService,
@@ -103,7 +103,6 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getModel() {
-    console.log(this.translatingService.translates);
     return [
       {
         label: 'Admin',
@@ -170,12 +169,12 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         label: 'Sign up',
-        routerLink: ['signup'],
+        routerLink: ['/auth/signup'],
         hide: this.isLoggedIn,
       },
       {
         label: 'Sign in',
-        routerLink: ['signin'],
+        routerLink: ['/auth/signin'],
         hide: this.isLoggedIn,
       },
       {
@@ -233,8 +232,8 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
             <ng-container [ngSwitch]="child.name">
               <span class="menuitem-text-additional" *ngSwitchCase="'payment'">
                 <!--<span>({{'balance' | translate}}: {{user.balance}} {{'rub' | translate}})</span>-->
-                <span>({{'balance' | translate}}: {{user?.balance}} {{'rub' | translate}})</span>
-              </span>
+                <span>({{'balance' | translate}}: {{user?.balance | formatNumbers}} {{'rub' | translate}})</span>
+              </span> 
             </ng-container>
           </span>
           <i class="material-icons layout-submenu-toggler" *ngIf="child.items">keyboard_arrow_down</i>

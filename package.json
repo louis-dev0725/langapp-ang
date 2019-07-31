@@ -10,6 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "build:stats": "ng build --prod --stats-json",
+    "analyze": "webpack-bundle-analyzer dist/call-rocket/stats-es5.json",
     "translate-extract": "./node_modules/.bin/ngx-translate-extract -i ./src -o ./src/assets/i18n/*.json --format namespaced-json --marker _ --clean --sort"
   },
   "private": true,
@@ -65,6 +67,7 @@
     "tslint": "~5.11.0",
     "tslint-sonarts": "^1.9.0",
     "typescript": "~3.4.5",
-    "webpack-bundle-analyzer": "^3.3.2"
+    "webpack-bundle-analyzer": "^3.4.1",
+    "webpack-cli": "^3.3.6"
   }
 }

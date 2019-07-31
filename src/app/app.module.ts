@@ -27,7 +27,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CanactivateLogged } from './services/canactivate-logged';
 import { CanactivateNologged } from './services/canactivate-nologged';
-import { LoginModule } from './login/login.module';
 import { UsersModule } from './users/users.module';
 import { PaymentComponent } from './payment/payment.component';
 import { PartnersModule } from './partners/partners.module';
@@ -78,7 +77,6 @@ export function createTranslateLoader(http: HttpClient) {
       }
     }),
     BrowserAnimationsModule,
-    LoginModule,
     NgxCaptchaModule,
     FormsModule,
     PartnersModule,
@@ -86,8 +84,8 @@ export function createTranslateLoader(http: HttpClient) {
     UsersModule,
 
     MatMenuModule,
-    MatButtonModule,
     MatToolbarModule,
+    MatButtonModule,
     MatSelectModule,
     MatInputModule,
     MatTableModule,
