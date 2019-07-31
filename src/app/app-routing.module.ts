@@ -1,12 +1,7 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {CanactivateNologged} from './services/canactivate-nologged';
-import {UsersComponent} from './users/users.component';
 import {CanactivateLogged} from './services/canactivate-logged';
 import {PaymentComponent} from './payment/payment.component';
-import {SettingsComponent} from './users/settings/settings.component';
-import {AboutComponent} from './partners/about/about.component';
-import {ClientsComponent} from './partners/clients/clients.component';
 import {ContactComponent} from './contact/contact.component';
 import {TransactionComponent} from './partners/transaction/transaction.component';
 import {CanactivateAdmin} from './services/canactivate-admin';
@@ -28,6 +23,11 @@ const routes: Routes = [
     loadChildren: () => import('./partners/partners.module').then(m => m.PartnersModule)
   },
   {
+    path: 'users',
+    canActivate: [CanactivateLogged],
+    loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
+  },
+  {
     path: 'payment',
     component: PaymentComponent,
     canActivate: [CanactivateLogged]
@@ -36,17 +36,6 @@ const routes: Routes = [
     path: 'payment-success',
     component: SuccessComponent,
     canActivate: [CanactivateLogged]
-  },
-  {
-    path: 'users',
-    component: UsersComponent,
-    children: [
-      {
-        path: 'settings',
-        component: SettingsComponent,
-        canActivate: [CanactivateLogged]
-      }
-    ]
   },
   {
     path: 'contacts',

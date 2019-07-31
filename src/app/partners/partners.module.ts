@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { ClientsComponent } from './clients/clients.component';
 import { TranslateModule } from '@ngx-translate/core';
 import {
-  MatCardModule, MatFormFieldModule, MatInputModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
   MatSortModule,
@@ -13,7 +12,6 @@ import {
 } from '@angular/material';
 import { TransactionComponent } from './transaction/transaction.component';
 import { PaymentsTableModule } from '../common/payments-table/payments-table.module';
-import { SessionService } from '@app/services/session.service';
 import { SharedModule } from "@app/shared/shared.module";
 import { PartnersComponent } from "@app/partners/partners.component";
 import { PartnersRoutingModule } from "@app/partners/partners-routing.module";
@@ -37,7 +35,7 @@ import { PartnersRoutingModule } from "@app/partners/partners-routing.module";
     SharedModule,
     PartnersRoutingModule
   ],
-  providers: [DecimalPipe, SessionService]
+  providers: [DecimalPipe]
 })
 export class PartnersModule {
 }

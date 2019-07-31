@@ -79,9 +79,7 @@ export function createTranslateLoader(http: HttpClient) {
     BrowserAnimationsModule,
     NgxCaptchaModule,
     FormsModule,
-    PartnersModule,
     ReactiveFormsModule,
-    UsersModule,
 
     MatMenuModule,
     MatToolbarModule,
