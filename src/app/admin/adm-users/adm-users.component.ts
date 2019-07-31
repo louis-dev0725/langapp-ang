@@ -7,9 +7,8 @@ import { EventService } from '@app/event.service';
 import { Router } from '@angular/router';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
-import { debounceTime, delay } from "rxjs/operators";
+import { debounceTime } from "rxjs/operators";
 import { untilDestroyed } from "ngx-take-until-destroy";
-import { BreadcrumbService } from "@app/theme/breadcrumb.service";
 
 @Component({
   selector: 'app-adm-users',
@@ -68,12 +67,7 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
     private ref: ChangeDetectorRef,
     private router: Router,
     private session: SessionService,
-    private translate: TranslateService,
-    private breadcrumbService: BreadcrumbService) {
-    this.breadcrumbService.setItems([
-      {label: 'Admin'},
-      {label: 'Users', routerLink: ['/data']}
-    ]);
+    private translate: TranslateService) {
   }
 
   ngOnDestroy() {}

@@ -1,17 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {
-  APP_INITIALIZER,
-  CUSTOM_ELEMENTS_SCHEMA,
-  LOCALE_ID,
-  MissingTranslationStrategy,
-  NgModule,
-  TRANSLATIONS,
-  TRANSLATIONS_FORMAT
-} from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
 import { ApiService } from './services/api.service';
 import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
@@ -27,9 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CanactivateLogged } from './services/canactivate-logged';
 import { CanactivateNologged } from './services/canactivate-nologged';
-import { UsersModule } from './users/users.module';
 import { PaymentComponent } from './payment/payment.component';
-import { PartnersModule } from './partners/partners.module';
 import { CustomPaginatorTranslator } from './services/custom-paginator-translator';
 import { ContactComponent } from './contact/contact.component';
 import { PaymentsTableModule } from './common/payments-table/payments-table.module';
@@ -46,6 +35,8 @@ import { ConfirmDialogModule } from "@app/common/confirm-dialog/confirm-dialog.m
 import { ThemeModule } from "@app/theme/theme.module";
 import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { ContentPageComponent } from './content-page/content-page.component';
+import { BreadCrumbsService } from "@app/services/bread-crumbs.service";
+import { HocBreadCrumbComponent } from "@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component";
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -59,7 +50,6 @@ export function createTranslateLoader(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     PaymentComponent,
     ContactComponent,
     SuccessComponent,
@@ -105,6 +95,7 @@ export function createTranslateLoader(http: HttpClient) {
     CanactivateLogged,
     CanactivateNologged,
     CustomValidator,
+    BreadCrumbsService,
     {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator},
     {provide: LOCALE_ID, useFactory: SessionService.getLocale()},
 

@@ -9,10 +9,11 @@ import { ThemeMainComponent } from "@app/theme/theme.main.component";
 import { ThemeFooterComponent } from "@app/theme/theme.footer.component";
 import { RouterModule } from "@angular/router";
 import { TranslateModule } from '@ngx-translate/core';
-import { ThemeBreadcrumbComponent } from "@app/theme/theme.breadcrumb.component";
 import { SharedModule } from "@app/shared/shared.module";
 import { BreadcrumbModule, ScrollPanelModule } from "primeng/primeng";
 import { VirtualScrollerModule } from "primeng/virtualscroller";
+import { HocBreadCrumbComponent } from "@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component";
+import { BreadCrumbsService } from "@app/services/bread-crumbs.service";
 
 @NgModule({
   imports: [
@@ -33,7 +34,7 @@ import { VirtualScrollerModule } from "primeng/virtualscroller";
     ThemeTopbarComponent,
     ThemeMainComponent,
     ThemeFooterComponent,
-    ThemeBreadcrumbComponent
+    HocBreadCrumbComponent
   ],
   exports: [
     ThemeMenuComponent,
@@ -41,12 +42,13 @@ import { VirtualScrollerModule } from "primeng/virtualscroller";
     ThemeTopbarComponent,
     ThemeMainComponent,
     ThemeFooterComponent,
-    ThemeBreadcrumbComponent,
     BreadcrumbModule,
     ScrollPanelModule,
     VirtualScrollerModule,
+    HocBreadCrumbComponent
   ],
   providers: [
+    BreadCrumbsService
   ]
 })
 export class ThemeModule {

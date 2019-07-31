@@ -1,14 +1,12 @@
 <div class="layout-wrapper layout-wrapper-static" (click)="onWrapperClick()"
-     [ngClass]="{'layout-wrapper-active': mobileMenuActive,
-                'layout-menu-horizontal': layoutMode === 'horizontal',
-                'layout-rtl': isRTL}">
+     [ngClass]="{'layout-wrapper-active': mobileMenuActive, 'layout-menu-horizontal': layoutMode === 'horizontal'}">
 
     <app-menu [reset]="resetMenu"></app-menu>
     <div class="layout-main">
         <app-topbar></app-topbar>
 
         <div class="layout-content">
-            <!--<app-breadcrumb></app-breadcrumb>-->
+            <app-hoc-bread-crumb></app-hoc-bread-crumb>
             <ng-content></ng-content>
         </div>
 
