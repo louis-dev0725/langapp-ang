@@ -15,15 +15,24 @@ const authRoutes = [
     children: [
       {
         path: 'signup',
-        component: SignupComponent
+        component: SignupComponent,
+        data: {
+          breadcrumb: 'Sign up'
+        }
       },
       {
         path: 'signin',
-        component: SigninComponent
+        component: SigninComponent,
+        data: {
+          breadcrumb: 'Sign in'
+        }
       },
       {
         path: 'restore',
-        component: RestoreComponent
+        component: RestoreComponent,
+        data: {
+          breadcrumb: 'Restore password'
+        }
       }
     ]
   }

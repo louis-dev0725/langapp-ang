@@ -19,28 +19,60 @@ import { AdmTransactionsComponent } from './adm-transactions/adm-transactions.co
 import { AdmTransactionEditComponent } from './adm-transaction-edit/adm-transaction-edit.component';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
 import { SharedModule } from "@app/shared/shared.module";
+import { AdminComponent } from "@app/admin/admin.component";
+import { AdmUsersPageComponent } from './adm-users-page/adm-users-page.component';
 
 const routes: Routes = [
   {
-    path: 'users',
-    component: AdmUsersComponent
+    path: '',
+    component: AdminComponent,
+    /*data: {
+      breadcrumb: 'Admin'
+    },*/
+    children: [
+      {
+        path: 'users',
+        component: AdmUsersPageComponent,
+        children: [
+          {
+            path: '',
+            component: AdmUsersComponent,
+            data: {
+              breadcrumb: 'Users'
+            }
+          },
+        ]
+      },
+      {
+        path: 'user/:id',
+        component: AdmUserEditComponent,
+        data: {
+          breadcrumb: 'Users'
+        }
+      },
+      {
+        path: 'create-transaction',
+        component: AddTransactionComponent,
+        data: {
+          breadcrumb: 'Create transaction'
+        }
+      },
+      {
+        path: 'transactions',
+        component: AdmTransactionsComponent,
+        data: {
+          breadcrumb: 'Transactions'
+        }
+      },
+      {
+        path: 'transaction/:id',
+        component: AdmTransactionEditComponent,
+        data: {
+          breadcrumb: 'Transactions'
+        }
+      }
+    ]
   },
-  {
-    path: 'user/:id',
-    component: AdmUserEditComponent
-  },
-  {
-    path: 'create-transaction',
-    component: AddTransactionComponent
-  },
-  {
-    path: 'transactions',
-    component: AdmTransactionsComponent
-  },
-  {
-    path: 'transaction/:id',
-    component: AdmTransactionEditComponent
-  }
 ];
 
 @NgModule({
@@ -49,7 +81,9 @@ const routes: Routes = [
     AdmUserEditComponent,
     AddTransactionComponent,
     AdmTransactionsComponent,
-    AdmTransactionEditComponent
+    AdmTransactionEditComponent,
+    AdminComponent,
+    AdmUsersPageComponent
   ],
   imports: [
     CommonModule,
