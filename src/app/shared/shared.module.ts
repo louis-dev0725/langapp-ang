@@ -6,8 +6,8 @@ import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
-  MatFormFieldModule,
-  MatInputModule,
+  MatFormFieldModule, MatIconModule,
+  MatInputModule, MatProgressSpinnerModule,
   MatSelectModule
 } from "@angular/material";
 
@@ -18,11 +18,13 @@ import {
   ],
   imports: [
     CommonModule,
+    MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatCardModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
     MatCheckboxModule
   ],
   exports: [
@@ -33,7 +35,9 @@ import {
     MatButtonModule,
     MatCardModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatIconModule
   ]
 })
 export class SharedModule { }

@@ -80,7 +80,7 @@ export class AddTransactionComponent implements OnInit {
         if (!(res instanceof ApiError)) {
           this.snackBar.open(this.translatingService.translates['confirm'].transaction.created, null, {duration: 3000});
           setTimeout(() => {
-            this.router.navigate([`/admin/user/${this.user.id}`]);
+            this.router.navigate([`/admin/users/${this.user.id}`]);
           }, 3100)
         } else {
           this.errors = res.error;

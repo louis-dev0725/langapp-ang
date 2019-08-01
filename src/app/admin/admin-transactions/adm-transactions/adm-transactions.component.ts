@@ -2,14 +2,13 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE, MatDatepicker,
+  MAT_DATE_LOCALE,
   MatPaginator,
-  MatSort,
-  MatTableDataSource, PageEvent
+  MatSort, PageEvent
 } from '@angular/material';
 import {ApiService} from '@app/services/api.service';
 import {EventService} from '@app/event.service';
-import {Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {SessionService} from '@app/services/session.service';
 import {TranslateService} from '@ngx-translate/core';
 import {Subscription} from 'rxjs';
@@ -84,6 +83,7 @@ export class AdmTransactionsComponent implements OnInit {
     private eventService: EventService,
     private ref: ChangeDetectorRef,
     private router: Router,
+    private route: ActivatedRoute,
     private translate: TranslateService) {
   }
 
@@ -164,14 +164,14 @@ export class AdmTransactionsComponent implements OnInit {
 
   showEditTransaction(row: any) {
     this.session.transaction = row;
-    this.router.navigate([`/admin/transaction/${row.id}`]);
+    this.router.navigate([`../${row.id}`], {relativeTo: this.route});
   }
 
   showEditUser(row: any) {
     this.api.getUserByToken(row.token).subscribe((result) => {
       if (!(result instanceof ApiError)) {
         this.session.userToEdit = this.session.tempUser;
-        this.router.navigate([`/admin/user/${this.session.userToEdit.id}`]);
+        this.router.navigate([`../users/${this.session.userToEdit.id}`], {relativeTo: this.route});
       }
     })
   }

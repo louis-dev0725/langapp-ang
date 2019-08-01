@@ -171,7 +171,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
   showEditTransaction(row: any) {
     this.session.transaction = row;
-    this.router.navigate([`/admin/transaction/${row.id}`]);
+    this.router.navigate([`/admin/transactions/${row.id}`]);
   }
 
   public getTransactions(id: number, partner?, sort?, page?) {

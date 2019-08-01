@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, PageEvent } from '@angular/material';
 import { Subject, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from "@angular/router";
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
 import { debounceTime } from "rxjs/operators";
@@ -67,6 +67,7 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
     private ref: ChangeDetectorRef,
     private router: Router,
     private session: SessionService,
+    private route: ActivatedRoute,
     private translate: TranslateService) {
   }
 
@@ -169,7 +170,7 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
 
   showEditUser(row: any) {
     this.session.userToEdit = row;
-    this.router.navigate([`/admin/user/${row.id}`])
+    this.router.navigate([`../${row.id}`], { relativeTo: this.route })
   }
 
   onPageChange(event: PageEvent) {

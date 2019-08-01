@@ -110,11 +110,11 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         items: [
           {
             label: 'Clients',
-            routerLink: ['/admin/users']
+            routerLink: ['admin/users']
           },
           {
             label: 'Transactions',
-            routerLink: ['/admin/transactions']
+            routerLink: ['admin/transactions']
           }
         ]
       },
