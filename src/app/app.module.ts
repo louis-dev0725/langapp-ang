@@ -18,25 +18,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CanactivateLogged } from './services/canactivate-logged';
 import { CanactivateNologged } from './services/canactivate-nologged';
-import { PaymentComponent } from './payment/payment.component';
 import { CustomPaginatorTranslator } from './services/custom-paginator-translator';
-import { ContactComponent } from './contact/contact.component';
 import { PaymentsTableModule } from './common/payments-table/payments-table.module';
-import { NgxCaptchaModule } from 'ngx-captcha';
 import { CanactivateAdmin } from './services/canactivate-admin';
 import { ExtendedModule } from '@angular/flex-layout';
 import { SessionService } from './services/session.service';
 import { CustomValidator } from '@app/services/custom-validator';
-import { SuccessComponent } from './payment/success/success.component';
 import { HttpInterceptorService } from "@app/http/http-interceptor";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { TranslatingService } from "@app/services/translating.service";
 import { ConfirmDialogModule } from "@app/common/confirm-dialog/confirm-dialog.module";
 import { ThemeModule } from "@app/theme/theme.module";
 import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { ContentPageComponent } from './content-page/content-page.component';
 import { BreadCrumbsService } from "@app/services/bread-crumbs.service";
-import { HocBreadCrumbComponent } from "@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component";
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
@@ -50,9 +44,6 @@ export function createTranslateLoader(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    PaymentComponent,
-    ContactComponent,
-    SuccessComponent,
     ContentPageComponent
   ],
   imports: [
@@ -67,7 +58,6 @@ export function createTranslateLoader(http: HttpClient) {
       }
     }),
     BrowserAnimationsModule,
-    NgxCaptchaModule,
     FormsModule,
     ReactiveFormsModule,
 
@@ -80,7 +70,6 @@ export function createTranslateLoader(http: HttpClient) {
     MatPaginatorModule,
     MatSortModule,
     MatSnackBarModule,
-    PaymentsTableModule,
     ExtendedModule,
     MatButtonToggleModule,
     MatIconModule,

@@ -6,6 +6,8 @@ import {ContactComponent} from './contact/contact.component';
 import {CanactivateAdmin} from './services/canactivate-admin';
 import {SuccessComponent} from '@app/payment/success/success.component';
 import { ContentPageComponent } from "@app/content-page/content-page.component";
+import { AboutComponent } from "@app/partners/about/about.component";
+import { CanactivateNologged } from "@app/services/canactivate-nologged";
 
 const routes: Routes = [
   {
@@ -15,10 +17,12 @@ const routes: Routes = [
   },
   {
     path: 'auth',
+    canActivate: [CanactivateNologged],
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
     path: 'partners',
+    canActivate: [CanactivateLogged],
     loadChildren: () => import('./partners/partners.module').then(m => m.PartnersModule)
   },
   {
@@ -27,22 +31,20 @@ const routes: Routes = [
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
   },
   {
-    path: 'payment',
-    component: PaymentComponent,
-    canActivate: [CanactivateLogged]
-  },
-  {
-    path: 'payment-success',
-    component: SuccessComponent,
-    canActivate: [CanactivateLogged]
-  },
-  {
     path: 'contacts',
-    component: ContactComponent,
+    loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule)
+  },
+  {
+    path: 'payment',
+    canActivate: [CanactivateLogged],
+    loadChildren: () => import('./payment/payment.module').then(m => m.PaymentModule)
   },
   {
     path: 'content-page',
     component: ContentPageComponent,
+    data: {
+      breadcrumb: 'Content-page'
+    }
   }
 ];
 

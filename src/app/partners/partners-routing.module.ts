@@ -3,32 +3,42 @@ import { RouterModule } from "@angular/router";
 import { AboutComponent } from "@app/partners/about/about.component";
 import { ClientsComponent } from "@app/partners/clients/clients.component";
 import { TransactionComponent } from "@app/partners/transaction/transaction.component";
-import { CanactivateLogged } from "@app/services/canactivate-logged";
 import { PartnersComponent } from "@app/partners/partners.component";
-const authRoutes = [
+const partnersRoutes = [
   {
     path: '',
     component: PartnersComponent,
-    canActivate: [CanactivateLogged],
+    data: {
+      breadcrumb: 'Partners'
+    },
     children: [
       {
         path: 'about',
-        component: AboutComponent
+        component: AboutComponent,
+        data: {
+          breadcrumb: 'About'
+        },
       },
       {
         path: 'clients',
-        component: ClientsComponent
+        component: ClientsComponent,
+        data: {
+          breadcrumb: 'Clients'
+        },
       },
       {
         path: 'transactions',
-        component: TransactionComponent
+        component: TransactionComponent,
+        data: {
+          breadcrumb: 'Transactions'
+        },
       }
     ]
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(authRoutes)],
+  imports: [RouterModule.forChild(partnersRoutes)],
   exports: [RouterModule],
 })
 export class PartnersRoutingModule { }
