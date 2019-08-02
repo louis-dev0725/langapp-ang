@@ -10,14 +10,12 @@ export class CustomPaginatorTranslator extends MatPaginatorIntl {
   constructor(private translateService: TranslateService) {
     super();
 
-
-    const translateKeys = ['paginator.Items per page', 'paginator.next', 'paginator.of', 'paginator.prev'];
-
-    this.translateService.get(translateKeys).subscribe((res) => {
-      this.itemsPerPageLabel = res['paginator.Items per page'];
-      this.nextPageLabel = res['paginator.next'];
-      this.previousPageLabel = res['paginator.prev'];
-      this.rangeOf = res['paginator.of'];
+    this.translateService.onLangChange.subscribe((res) => {
+      const paginator = res['translations']['paginator'];
+      this.itemsPerPageLabel = paginator['Items per page'];
+      this.nextPageLabel = paginator['next'];
+      this.previousPageLabel = paginator['prev'];
+      this.rangeOf = paginator['of'];
       this.changes.next();
     });
 

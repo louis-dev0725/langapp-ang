@@ -10,7 +10,7 @@ const usersRoutes = [
     component: UsersComponent,
     canActivate: [CanactivateLogged],
     data: {
-      breadcrumb: 'users'
+      breadcrumb: 'Users'
     },
     children: [
       {
@@ -18,7 +18,7 @@ const usersRoutes = [
         component: SettingsComponent,
         canActivate: [CanactivateLogged],
         data: {
-          breadcrumb: 'settings'
+          breadcrumb: 'Settings'
         }
       }
     ]

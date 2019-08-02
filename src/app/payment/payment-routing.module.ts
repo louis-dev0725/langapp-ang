@@ -7,7 +7,7 @@ const paymentsRoutes = [
     path: '',
     component: PaymentComponent,
     data: {
-      breadcrumb: 'Payments'
+      breadcrumb: 'Payment'
     },
 
   },
