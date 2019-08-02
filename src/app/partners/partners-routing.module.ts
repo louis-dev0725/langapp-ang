@@ -13,6 +13,11 @@ const partnersRoutes = [
     },
     children: [
       {
+        path: '',
+        redirectTo: 'about',
+        pathMatch: 'full'
+      },
+      {
         path: 'about',
         component: AboutComponent,
         data: {

@@ -1,9 +1,9 @@
-<ul class="custom-breadcrumbs">
+<ul class="custom-breadcrumbs" *ngIf="crumbs.length">
   <li><a routerLink=""><i class="material-icons">home</i></a></li>
   <li>/</li>
   <ng-template ngFor let-item let-last="last" [ngForOf]="crumbs">
     <li>
-      <a [routerLink]="item.url" *ngIf="item.url">{{item.label}}</a>
+      <a [routerLink]="item.url" *ngIf="item.url">{{item.label | translate}}</a>
       <ng-container *ngIf="!item.url">{{ item.label | translate}}</ng-container>
     </li>
     <li *ngIf="!last">/</li>
