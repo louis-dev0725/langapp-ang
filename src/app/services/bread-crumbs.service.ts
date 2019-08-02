@@ -17,8 +17,6 @@ export class BreadCrumbsService implements OnDestroy {
                 private activatedRoute: ActivatedRoute,
                 private translatingService: TranslatingService) {}
 
-    // todo: add translates
-    // todo: add breadcrumbs to all routes
     public initBreadCrumbs() {
         this.sub = this.router.events
             .pipe(
