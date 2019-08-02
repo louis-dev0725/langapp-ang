@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
-import { ThemeMenuComponent, ThemeSubMenuComponent } from "@app/theme/theme.menu.component";
-import { ThemeTopbarComponent } from "@app/theme/theme.topbar.component";
-import { ThemeMainComponent } from "@app/theme/theme.main.component";
-import { ThemeFooterComponent } from "@app/theme/theme.footer.component";
-import { RouterModule } from "@angular/router";
+import { ThemeMenuComponent, ThemeSubMenuComponent } from '@app/theme/theme.menu.component';
+import { ThemeTopbarComponent } from '@app/theme/theme.topbar.component';
+import { ThemeMainComponent } from '@app/theme/theme.main.component';
+import { ThemeFooterComponent } from '@app/theme/theme.footer.component';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { SharedModule } from "@app/shared/shared.module";
-import { BreadcrumbModule, ScrollPanelModule } from "primeng/primeng";
-import { VirtualScrollerModule } from "primeng/virtualscroller";
-import { HocBreadCrumbComponent } from "@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component";
-import { BreadCrumbsService } from "@app/services/bread-crumbs.service";
+import { SharedModule } from '@app/shared/shared.module';
+import { BreadcrumbModule, ScrollPanelModule } from 'primeng/primeng';
+import { VirtualScrollerModule } from 'primeng/virtualscroller';
+import { HocBreadCrumbComponent } from '@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component';
+import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 
 @NgModule({
   imports: [
@@ -26,7 +26,7 @@ import { BreadCrumbsService } from "@app/services/bread-crumbs.service";
     SharedModule,
     BreadcrumbModule,
     ScrollPanelModule,
-    VirtualScrollerModule,
+    VirtualScrollerModule
   ],
   declarations: [
     ThemeMenuComponent,
@@ -47,9 +47,6 @@ import { BreadCrumbsService } from "@app/services/bread-crumbs.service";
     VirtualScrollerModule,
     HocBreadCrumbComponent
   ],
-  providers: [
-    BreadCrumbsService
-  ]
+  providers: [BreadCrumbsService]
 })
-export class ThemeModule {
-}
+export class ThemeModule {}

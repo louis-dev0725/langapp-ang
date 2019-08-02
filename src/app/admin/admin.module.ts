@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminComponent } from "@app/admin/admin.component";
-import { RouterModule, Routes } from "@angular/router";
+import { AdminComponent } from '@app/admin/admin.component';
+import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
     data: {
-      breadcrumb: 'Admin',
+      breadcrumb: 'Admin'
     },
     children: [
       {
@@ -18,7 +18,7 @@ const routes: Routes = [
       },
       {
         path: 'users',
-        loadChildren: () => import('./admin-users/admin-users.module').then(m => m.AdminUsersModule),
+        loadChildren: () => import('./admin-users/admin-users.module').then(m => m.AdminUsersModule)
       },
       {
         path: 'transactions',
@@ -29,13 +29,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    AdminComponent
-  ],
-  imports: [
-    RouterModule.forChild(routes),
-    CommonModule
-  ]
+  declarations: [AdminComponent],
+  imports: [RouterModule.forChild(routes), CommonModule]
 })
-export class AdminModule {
-}
+export class AdminModule {}

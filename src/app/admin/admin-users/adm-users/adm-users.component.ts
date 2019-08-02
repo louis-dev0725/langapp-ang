@@ -4,11 +4,11 @@ import { MatPaginator, MatSort, PageEvent } from '@angular/material';
 import { Subject, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
-import { debounceTime } from "rxjs/operators";
-import { untilDestroyed } from "ngx-take-until-destroy";
+import { debounceTime } from 'rxjs/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-adm-users',
@@ -16,12 +16,11 @@ import { untilDestroyed } from "ngx-take-until-destroy";
   styleUrls: ['./adm-users.component.scss']
 })
 export class AdmUsersComponent implements OnInit, OnDestroy {
-
   private usersSubscription: Subscription;
   private sendTimeout;
   public commentChanged: Subject<string> = new Subject<string>();
 
-  columns = ['id', 'name', 'company', 'telephone', 'balance',  'balancePartner', 'comment', 'edit'];
+  columns = ['id', 'name', 'company', 'telephone', 'balance', 'balancePartner', 'comment', 'edit'];
   notFilterFields = ['Comment', 'Edit'];
   usersList: any = {};
   isEmptyTable = true;
@@ -47,18 +46,18 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
     company: '',
     telephone: '',
     email: '',
-    isservicepaused: '',
+    isservicepaused: ''
   };
 
   set rows(data: any[]) {
-    this.isEmptyTable = (data) ? data.length === 0 : true;
+    this.isEmptyTable = data ? data.length === 0 : true;
     this.usersList = data;
     this.usersList.sort = this.sort;
     this.usersList.paginator = this.paginator;
   }
 
-  @ViewChild(MatPaginator, {static: true}) paginator;
-  @ViewChild(MatSort, {static: true}) sort;
+  @ViewChild(MatPaginator, { static: true }) paginator;
+  @ViewChild(MatSort, { static: true }) sort;
   isLoaded = false;
 
   constructor(
@@ -68,43 +67,42 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
     private router: Router,
     private session: SessionService,
     private route: ActivatedRoute,
-    private translate: TranslateService) {
-  }
+    private translate: TranslateService
+  ) {}
 
   ngOnDestroy() {}
 
   ngOnInit() {
-
     this.fieldKeys = Object.keys(this.translatedKeys);
 
     this.transatePage();
 
-    this.sort.sortChange.subscribe((data) => {
+    this.sort.sortChange.subscribe(data => {
       this.getUsers();
     });
 
-    this.eventService.emitter.subscribe((event) => {
+    this.eventService.emitter.subscribe(event => {
       if (event.type === 'language-change') {
         this.transatePage();
       }
     });
     this.getUsers();
-    this.commentChanged.pipe(
-      debounceTime(1000))
+    this.commentChanged
+      .pipe(debounceTime(1000))
       .pipe(untilDestroyed(this))
-      .subscribe((comment) => {
+      .subscribe(comment => {
         this.addComment(comment);
       });
   }
 
   onChangeComment(row) {
-    this.commentChanged.next(row)
+    this.commentChanged.next(row);
   }
 
-  addComment(row){
+  addComment(row) {
     const data = {
       id: row.id,
-      comment: row.comment,
+      comment: row.comment
     };
     this.api.updateUser(data).subscribe();
   }
@@ -125,31 +123,27 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
     }
     const toSendFilter: any = Object.assign({}, this.filter);
 
-    const replaceKeys = {isservicepaused: 'isServicePaused'};
+    const replaceKeys = { isservicepaused: 'isServicePaused' };
 
-    Object.keys(toSendFilter).forEach((key) => {
-
+    Object.keys(toSendFilter).forEach(key => {
       if (toSendFilter[key] === '') {
         delete toSendFilter[key];
       }
 
       if (replaceKeys[key] && toSendFilter[key]) {
         toSendFilter[replaceKeys[key]] = toSendFilter[key];
-        delete toSendFilter[key]
+        delete toSendFilter[key];
       }
-
     });
 
-
-    this.usersSubscription = this.api.getAdminUsers(this.paginator.pageIndex, toSendFilter, sort)
-      .subscribe((res: any) => {
-        if (!(res instanceof ApiError)) {
-          this.rows = res.items;
-          this.paginator.length = res._meta.totalCount;
-          this.paginator.pageIndex = res._meta.currentPage - 1;
-        }
-        this.isLoaded = true;
-      });
+    this.usersSubscription = this.api.getAdminUsers(this.paginator.pageIndex, toSendFilter, sort).subscribe((res: any) => {
+      if (!(res instanceof ApiError)) {
+        this.rows = res.items;
+        this.paginator.length = res._meta.totalCount;
+        this.paginator.pageIndex = res._meta.currentPage - 1;
+      }
+      this.isLoaded = true;
+    });
   }
 
   runFilter() {
@@ -158,19 +152,18 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
     }
     this.sendTimeout = setTimeout(() => {
       this.getUsers();
-    }, 300)
+    }, 300);
   }
 
   transatePage() {
     this.translate.get(this.fieldKeys).subscribe((res: any) => {
-      this.translatedKeys = Object.assign({id: 'ID'}, res);
-
+      this.translatedKeys = Object.assign({ id: 'ID' }, res);
     });
   }
 
   showEditUser(row: any) {
     this.session.userToEdit = row;
-    this.router.navigate([`../${row.id}`], { relativeTo: this.route })
+    this.router.navigate([`../${row.id}`], { relativeTo: this.route });
   }
 
   onPageChange(event: PageEvent) {
@@ -178,7 +171,7 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
   }
 
   clearFilter() {
-    Object.keys(this.filter).map((item) => {
+    Object.keys(this.filter).map(item => {
       this.filter[item] = '';
     });
     this.runFilter();

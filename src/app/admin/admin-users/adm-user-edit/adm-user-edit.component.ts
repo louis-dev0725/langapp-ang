@@ -10,7 +10,7 @@ import { EventService } from '@app/event.service';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { forkJoin, Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-adm-user-edit',
@@ -25,12 +25,12 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   public languages = [
     {
       value: 'ru-RU',
-      label: "Русский"
+      label: 'Русский'
     },
     {
       value: 'en-Us',
-      label: "English"
-    },
+      label: 'English'
+    }
   ];
   public isLoadingTrans = false;
   public isLoadingTransPartner = false;
@@ -48,11 +48,11 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     'confirm.user-open.msg': ''
   };
   // @ViewChild(MatSort, {static: true}) sort;
-  @ViewChild('sortTrans', {static: true}) sortTrans: MatSort;
-  @ViewChild('sortTransPartn', {static: true}) sortTransPartn: MatSort;
+  @ViewChild('sortTrans', { static: true }) sortTrans: MatSort;
+  @ViewChild('sortTransPartn', { static: true }) sortTransPartn: MatSort;
 
-  @ViewChild('paginatorTrans', {static: true}) paginatorTrans;
-  @ViewChild('paginatorPartnerTrans', {static: true}) paginatorPartnerTrans;
+  @ViewChild('paginatorTrans', { static: true }) paginatorTrans;
+  @ViewChild('paginatorPartnerTrans', { static: true }) paginatorPartnerTrans;
 
   get selectedTimeZone(): any {
     if (this.user) {
@@ -63,7 +63,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
   get errors() {
     return this._errors;
-  };
+  }
 
   constructor(
     public session: SessionService,
@@ -75,9 +75,8 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private translate: TranslateService,
     private route: ActivatedRoute,
-    private router: Router,
-  ) {
-  }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.userId = +this.route.snapshot.paramMap.get('id');
@@ -87,27 +86,27 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       this.timeZones = res;
     });
 
-    this.sortTrans.sortChange.subscribe((sort) => {
+    this.sortTrans.sortChange.subscribe(sort => {
       this.getTrans(this.userId);
     });
-    this.sortTransPartn.sortChange.subscribe((sort) => {
+    this.sortTransPartn.sortChange.subscribe(sort => {
       this.getPartnerTrans(this.userId);
     });
 
     this.callTranslate();
 
-    this.globalEventSubscription = this.eventService.emitter.subscribe((event) => {
+    this.globalEventSubscription = this.eventService.emitter.subscribe(event => {
       if (event.type === 'language-change') {
         this.callTranslate();
       }
     });
     this.userProfile = this.formBuilder.group({
       id: [''],
-      name: ['', {validators: [Validators.required], updateOn: 'change'}],
+      name: ['', { validators: [Validators.required], updateOn: 'change' }],
       company: [''],
       site: [''],
       telephone: [''],
-      email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
+      email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
       isServicePaused: [''],
       balance: [''],
       balancePartner: [''],
@@ -119,7 +118,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       isPartner: [''],
       invitedByUserId: [''],
       enablePartnerPayments: [''],
-      comment: [''],
+      comment: ['']
     });
     this.getTrans(this.userId);
     this.getPartnerTrans(this.userId);
@@ -131,17 +130,19 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       _sort[this.sortTrans.active] = this.sortTrans.direction;
     }
     this.isLoadingTrans = true;
-    this.getTransactions(userId, 0, _sort, page)
-      .subscribe((res) => {
+    this.getTransactions(userId, 0, _sort, page).subscribe(
+      res => {
         this.transactionList = res.items;
         this.transactionList.sort = this.sortTrans;
         this.transactionList.paginator = this.paginatorTrans;
         this.paginatorTrans.length = res._meta.totalCount;
         this.paginatorTrans.pageIndex = res._meta.currentPage - 1;
         this.isLoadingTrans = false;
-      }, (err) => {
+      },
+      err => {
         this.isLoadingTrans = false;
-      });
+      }
+    );
   }
 
   public getPartnerTrans(userId, page?) {
@@ -150,17 +151,19 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       _sort[this.sortTransPartn.active] = this.sortTransPartn.direction;
     }
     this.isLoadingTransPartner = true;
-    this.getTransactions(userId, 1, _sort, page)
-      .subscribe((res) => {
+    this.getTransactions(userId, 1, _sort, page).subscribe(
+      res => {
         this.transactionPartnerList = res.items;
         this.transactionList.sort = this.sortTransPartn;
         this.transactionList.paginator = this.paginatorPartnerTrans;
         this.paginatorPartnerTrans.length = res._meta.totalCount;
         this.paginatorPartnerTrans.pageIndex = res._meta.currentPage - 1;
         this.isLoadingTransPartner = false;
-      }, (err) => {
+      },
+      err => {
         this.isLoadingTransPartner = false;
-      });
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -183,13 +186,14 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   public getUser(id: number) {
-    return this.api.getUserById(id)
-      .subscribe((res: any) => {
+    return this.api.getUserById(id).subscribe(
+      (res: any) => {
         this.user = res;
         this.session.userToEdit = res;
         this.updateForm(res);
-      }, (err) => {
-      })
+      },
+      err => {}
+    );
   }
 
   public updateForm(res) {
@@ -207,26 +211,32 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   checkError(fieldName: string) {
-    return !this.userProfile.get(fieldName).valid
+    return !this.userProfile.get(fieldName).valid;
   }
 
   getError(fieldName: string) {
     const errors = this.userProfile.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }
 
   onPasswordFlagChange() {
     this.isChangePassword = !this.isChangePassword;
     if (this.isChangePassword) {
-      this.userProfile.addControl('password', this.formBuilder.control('', {
-        validators: [Validators.required],
-        updateOn: 'change'
-      }));
-      this.userProfile.addControl('passrepeat', this.formBuilder.control('', {
-        validators: [Validators.required],
-        updateOn: 'change'
-      }));
+      this.userProfile.addControl(
+        'password',
+        this.formBuilder.control('', {
+          validators: [Validators.required],
+          updateOn: 'change'
+        })
+      );
+      this.userProfile.addControl(
+        'passrepeat',
+        this.formBuilder.control('', {
+          validators: [Validators.required],
+          updateOn: 'change'
+        })
+      );
       this.userProfile.setValidators([CustomValidator.confirmPasswordCheck]);
       this.userProfile.updateValueAndValidity();
     } else {
@@ -243,48 +253,46 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       enablePartnerPayments: this.userProfile.value.enablePartnerPayments ? 1 : 0,
       isPartner: this.userProfile.value.isPartner ? 1 : 0
     };
-    this.api.updateUser(data).subscribe((res) => {
+    this.api.updateUser(data).subscribe(res => {
       if (res instanceof ApiError) {
         this._errors = res.error;
       } else {
-        this.snackBar.open(this.customValidator.messagesMap['snackbar.user-edit-success'], null, {duration: 3000});
+        this.snackBar.open(this.customValidator.messagesMap['snackbar.user-edit-success'], null, { duration: 3000 });
       }
-    })
+    });
   }
 
-
   recalculatePartnerBalance() {
-    this.api.checkInvitedUsers(this.user.id).subscribe((res) => {
+    this.api.checkInvitedUsers(this.user.id).subscribe(res => {
       if (res instanceof ApiError) {
-        this.snackBar.open(this.customValidator.messagesMap['snackbar.balance-edit-error'], null, {duration: 3000})
+        this.snackBar.open(this.customValidator.messagesMap['snackbar.balance-edit-error'], null, { duration: 3000 });
       } else {
-        this.snackBar.open('Balance recalculated', null, {duration: 3000});
+        this.snackBar.open('Balance recalculated', null, { duration: 3000 });
       }
-    })
+    });
   }
 
   openAsUser() {
-
     const title = this.messages['confirm.user-open.title'];
     const msg = this.messages['confirm.user-open.msg'];
 
     const dialogModel = new ConfirmDialogModel(title, msg);
 
     const dialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
+      maxWidth: '400px',
       data: dialogModel
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.session.openAsUser(this.user)
+        this.session.openAsUser(this.user);
       }
-    })
+    });
   }
 
   private callTranslate() {
-    this.translate.get(Object.keys(this.messages)).subscribe((res) => {
+    this.translate.get(Object.keys(this.messages)).subscribe(res => {
       this.messages = res;
-    })
+    });
   }
 }

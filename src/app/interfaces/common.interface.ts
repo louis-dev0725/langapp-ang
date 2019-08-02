@@ -1,5 +1,3 @@
-
-
 export interface User {
   accessToken?: string;
   balance?: number;
@@ -16,13 +14,13 @@ export interface User {
   isAdmin: boolean;
   isServicePaused?: boolean;
   wmr?: string;
-  registerIp?:string;
-  lastLoginIp?:string;
-  addedDateTime?:string;
-  isPartner?:any;
-  invitedByUserId?:any;
-  enablePartnerPayments?:any;
-  comment?:any;
+  registerIp?: string;
+  lastLoginIp?: string;
+  addedDateTime?: string;
+  isPartner?: any;
+  invitedByUserId?: any;
+  enablePartnerPayments?: any;
+  comment?: any;
 }
 
 export interface InvitedUser {
@@ -53,6 +51,5 @@ export interface Transaction {
   isCommon?: number;
   isPartner: number;
   isRealMoney?: number;
-  fromInvitedUserId?:number;
+  fromInvitedUserId?: number;
 }
-

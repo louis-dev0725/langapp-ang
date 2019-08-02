@@ -6,7 +6,7 @@ import { User } from '../interfaces/common.interface';
 import { ReCaptcha2Component } from 'ngx-captcha';
 import { CustomValidator } from '../services/custom-validator';
 import { SessionService } from '@app/services/session.service';
-import { TranslatingService } from "@app/services/translating.service";
+import { TranslatingService } from '@app/services/translating.service';
 
 @Component({
   selector: 'app-contact',
@@ -28,8 +28,8 @@ export class ContactComponent implements OnInit {
     return this.session.user;
   }
 
-  @ViewChild('frmVar', {static: true}) form;
-  @ViewChild('recaptcha', {static: true}) recaptcha: ReCaptcha2Component;
+  @ViewChild('frmVar', { static: true }) form;
+  @ViewChild('recaptcha', { static: true }) recaptcha: ReCaptcha2Component;
 
   constructor(
     private translatingService: TranslatingService,
@@ -39,35 +39,37 @@ export class ContactComponent implements OnInit {
     private ref: ChangeDetectorRef,
     private snackBar: MatSnackBar,
     private session: SessionService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.contactForm = this.formBuilder.group({
-      name: ['', {validators: [Validators.required], updateOn: 'change'}],
-      email: ['', {validators: [Validators.required, Validators.email], updateOn: 'change'}],
+      name: ['', { validators: [Validators.required], updateOn: 'change' }],
+      email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
       telephone: [''],
-      body: ['', {validators: [Validators.required], updateOn: 'change'}],
+      body: ['', { validators: [Validators.required], updateOn: 'change' }],
       recaptcha: ['', Validators.required]
     });
 
     if (this.user) {
       this.contactForm.patchValue({
         ...this.user
-      })
+      });
     }
   }
 
   onSubmit() {
-    this.api.sendMessage(this.contactForm.value).subscribe((res) => {
-      this.snackBar.open(this.translatingService.translates['Messages sent'], null, {duration: 3000});
-      this.form.resetForm();
-      this.contactForm.get('name').setValue(this.user.name);
-      this.contactForm.get('email').setValue(this.user.email);
-      this.contactForm.get('telephone').setValue(this.user.telephone);
-    }, (err) => {
-      this.contactForm.reset(this.contactForm.value);
-    });
+    this.api.sendMessage(this.contactForm.value).subscribe(
+      res => {
+        this.snackBar.open(this.translatingService.translates['Messages sent'], null, { duration: 3000 });
+        this.form.resetForm();
+        this.contactForm.get('name').setValue(this.user.name);
+        this.contactForm.get('email').setValue(this.user.email);
+        this.contactForm.get('telephone').setValue(this.user.telephone);
+      },
+      err => {
+        this.contactForm.reset(this.contactForm.value);
+      }
+    );
     this.reloadCaptcha();
   }
 
@@ -78,7 +80,7 @@ export class ContactComponent implements OnInit {
   getError(fieldName: string) {
     const errors = this.contactForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }
 
   resetCaptcha() {

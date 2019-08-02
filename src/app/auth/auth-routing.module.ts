@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { SignupComponent } from "@app/auth/signup/signup.component";
-import { SigninComponent } from "@app/auth/signin/signin.component";
-import { RouterModule } from "@angular/router";
-import { RestoreComponent } from "@app/auth/restore/restore.component";
-import { AuthComponent } from "@app/auth/auth.component";
+import { SignupComponent } from '@app/auth/signup/signup.component';
+import { SigninComponent } from '@app/auth/signin/signin.component';
+import { RouterModule } from '@angular/router';
+import { RestoreComponent } from '@app/auth/restore/restore.component';
+import { AuthComponent } from '@app/auth/auth.component';
 
 const authRoutes = [
-
   {
     path: '',
     component: AuthComponent,
@@ -38,6 +37,6 @@ const authRoutes = [
 
 @NgModule({
   imports: [RouterModule.forChild(authRoutes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AuthRoutingModule { }
+export class AuthRoutingModule {}

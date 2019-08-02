@@ -1,4 +1,3 @@
-
 import { _ } from '@biesbjerg/ngx-translate-extract/dist/utils/utils';
 
 _('isServicePaused');

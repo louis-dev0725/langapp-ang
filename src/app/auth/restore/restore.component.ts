@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ApiService} from '@app/services/api.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CustomValidator} from '@app/services/custom-validator';
-import {ApiError} from '@app/services/api-error';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ApiService } from '@app/services/api.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CustomValidator } from '@app/services/custom-validator';
+import { ApiError } from '@app/services/api-error';
 
 @Component({
   selector: 'app-restore',
@@ -11,7 +11,6 @@ import {ApiError} from '@app/services/api-error';
   styleUrls: ['./restore.component.scss']
 })
 export class RestoreComponent implements OnInit {
-
   readonly MODE_REQUEST = 'request-link';
   readonly MODE_REQUEST_SENT = 'request-sent';
   readonly MODE_PASSWORD = 'password-change';
@@ -23,7 +22,7 @@ export class RestoreComponent implements OnInit {
     return this._mode;
   }
 
-  set mode(val:string) {
+  set mode(val: string) {
     if (this.mode !== val) {
       this._mode = val;
       this.changeForm();
@@ -34,8 +33,8 @@ export class RestoreComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private customValidator: CustomValidator,
     private api: ApiService,
-    private router: Router) {
-
+    private router: Router
+  ) {
     if (this.activatedRoute.snapshot.data.mode) {
       this.mode = activatedRoute.snapshot.data.mode;
     }
@@ -49,45 +48,47 @@ export class RestoreComponent implements OnInit {
   changeForm() {
     if (this.mode === this.MODE_REQUEST) {
       this.restoreForm = new FormGroup({
-        email: new FormControl('', {validators: [Validators.required, Validators.email], updateOn: 'change'} )
-      })
+        email: new FormControl('', { validators: [Validators.required, Validators.email], updateOn: 'change' })
+      });
     }
 
     if (this.mode === this.MODE_PASSWORD) {
-      this.restoreForm = new FormGroup({
-        password: new FormControl('',{validators: [Validators.required], updateOn: 'change'}),
-        passrepeat: new FormControl('',{validators: [Validators.required], updateOn: 'change'})
-      },  CustomValidator.confirmPasswordCheck);
+      this.restoreForm = new FormGroup(
+        {
+          password: new FormControl('', { validators: [Validators.required], updateOn: 'change' }),
+          passrepeat: new FormControl('', { validators: [Validators.required], updateOn: 'change' })
+        },
+        CustomValidator.confirmPasswordCheck
+      );
     }
   }
 
   checkError(fieldName: string) {
-    return !!this.restoreForm.get(fieldName).errors
+    return !!this.restoreForm.get(fieldName).errors;
   }
 
   getErrors(fieldName: string): string {
     const errors = this.restoreForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }
 
   onSubmit() {
     this.errors = [];
-    if(this.mode === this.MODE_REQUEST) {
-      this.api.restorePasswordRequest(this.restoreForm.value)
-        .subscribe((res) => {
-          if(res instanceof ApiError) {
-            this.mode = this.MODE_REQUEST;
-            this.errors = res.error;
-          }
-        });
+    if (this.mode === this.MODE_REQUEST) {
+      this.api.restorePasswordRequest(this.restoreForm.value).subscribe(res => {
+        if (res instanceof ApiError) {
+          this.mode = this.MODE_REQUEST;
+          this.errors = res.error;
+        }
+      });
       this.mode = this.MODE_REQUEST_SENT;
     }
 
     if (this.mode === this.MODE_PASSWORD) {
-      this.api.changePassword(this.restoreForm.value).subscribe((res) => {
-        this.router.navigate(['/payment'])
-      })
+      this.api.changePassword(this.restoreForm.value).subscribe(res => {
+        this.router.navigate(['/payment']);
+      });
     }
   }
 }

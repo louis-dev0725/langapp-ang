@@ -1,21 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormatDatePipe } from "@app/pipes/format-date.pipe";
-import { FormatNumbersPipe } from "@app/pipes/format-numbers.pipe";
+import { FormatDatePipe } from '@app/pipes/format-date.pipe';
+import { FormatNumbersPipe } from '@app/pipes/format-numbers.pipe';
 import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
-  MatFormFieldModule, MatIconModule,
-  MatInputModule, MatProgressSpinnerModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatProgressSpinnerModule,
   MatSelectModule
-} from "@angular/material";
+} from '@angular/material';
 
 @NgModule({
-  declarations: [
-    FormatDatePipe,
-    FormatNumbersPipe
-  ],
+  declarations: [FormatDatePipe, FormatNumbersPipe],
   imports: [
     CommonModule,
     MatIconModule,
@@ -40,4 +39,4 @@ import {
     MatIconModule
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

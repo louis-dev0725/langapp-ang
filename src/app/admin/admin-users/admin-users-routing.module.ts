@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from "@angular/router";
-import { AdminUsersComponent } from "@app/admin/admin-users/admin-users.component";
-import { AdmUsersLayoutComponent } from "@app/admin/admin-users/adm-users-layout/adm-users-layout.component";
-import { AdmUsersComponent } from "@app/admin/admin-users/adm-users/adm-users.component";
-import { AdmUserEditComponent } from "@app/admin/admin-users/adm-user-edit/adm-user-edit.component";
+import { RouterModule } from '@angular/router';
+import { AdminUsersComponent } from '@app/admin/admin-users/admin-users.component';
+import { AdmUsersLayoutComponent } from '@app/admin/admin-users/adm-users-layout/adm-users-layout.component';
+import { AdmUsersComponent } from '@app/admin/admin-users/adm-users/adm-users.component';
+import { AdmUserEditComponent } from '@app/admin/admin-users/adm-user-edit/adm-user-edit.component';
 
 const adminRoutes = [
   {
@@ -22,7 +22,7 @@ const adminRoutes = [
             component: AdmUsersComponent,
             data: {
               breadcrumb: ''
-            },
+            }
           },
           {
             path: ':id',
@@ -30,7 +30,7 @@ const adminRoutes = [
             data: {
               breadcrumb: 'Edit'
             }
-          },
+          }
         ]
       }
     ]
@@ -39,6 +39,6 @@ const adminRoutes = [
 
 @NgModule({
   imports: [RouterModule.forChild(adminRoutes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AdminUsersRoutingModule { }
+export class AdminUsersRoutingModule {}

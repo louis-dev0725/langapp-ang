@@ -7,21 +7,13 @@
 
 import { NgModule } from '@angular/core';
 import { PaymentsTableComponent } from './payments-table.component';
-import {
-  MatCardModule,
-  MatPaginatorModule,
-  MatProgressSpinnerModule,
-  MatSortModule,
-  MatTableModule
-} from '@angular/material';
+import { MatCardModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from "@app/shared/shared.module";
+import { SharedModule } from '@app/shared/shared.module';
 
 @NgModule({
-  declarations: [
-    PaymentsTableComponent
-  ],
+  declarations: [PaymentsTableComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -34,6 +26,4 @@ import { SharedModule } from "@app/shared/shared.module";
   ],
   exports: [PaymentsTableComponent]
 })
-export class PaymentsTableModule {
-
-}
+export class PaymentsTableModule {}

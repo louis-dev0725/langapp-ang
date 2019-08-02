@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from "@angular/router";
-import { PaymentComponent } from "@app/payment/payment.component";
-import { SuccessComponent } from "@app/payment/success/success.component";
+import { RouterModule } from '@angular/router';
+import { PaymentComponent } from '@app/payment/payment.component';
+import { SuccessComponent } from '@app/payment/success/success.component';
 const paymentsRoutes = [
   {
     path: '',
     component: PaymentComponent,
     data: {
       breadcrumb: 'Payment'
-    },
-
-  },
+    }
+  }
   /*{
     path: 'success',
     component: SuccessComponent,
@@ -22,6 +21,6 @@ const paymentsRoutes = [
 
 @NgModule({
   imports: [RouterModule.forChild(paymentsRoutes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class PaymentRoutingModule { }
+export class PaymentRoutingModule {}

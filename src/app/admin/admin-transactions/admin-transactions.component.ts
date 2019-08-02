@@ -5,10 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './admin-transactions.component.html'
 })
 export class AdminTransactionsComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

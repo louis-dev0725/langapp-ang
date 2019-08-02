@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from "@angular/router";
-import { AdminTransactionsComponent } from "@app/admin/admin-transactions/admin-transactions.component";
-import { AdmTransactionsLayoutComponent } from "@app/admin/admin-transactions/adm-transactions-layout/adm-transactions-layout.component";
-import { AdmTransactionsComponent } from "@app/admin/admin-transactions/adm-transactions/adm-transactions.component";
-import { AddTransactionComponent } from "@app/admin/admin-transactions/add-transaction/add-transaction.component";
-import { AdmTransactionEditComponent } from "@app/admin/admin-transactions/adm-transaction-edit/adm-transaction-edit.component";
+import { RouterModule } from '@angular/router';
+import { AdminTransactionsComponent } from '@app/admin/admin-transactions/admin-transactions.component';
+import { AdmTransactionsLayoutComponent } from '@app/admin/admin-transactions/adm-transactions-layout/adm-transactions-layout.component';
+import { AdmTransactionsComponent } from '@app/admin/admin-transactions/adm-transactions/adm-transactions.component';
+import { AddTransactionComponent } from '@app/admin/admin-transactions/add-transaction/add-transaction.component';
+import { AdmTransactionEditComponent } from '@app/admin/admin-transactions/adm-transaction-edit/adm-transaction-edit.component';
 
 const transactionsRoutes = [
   {
@@ -23,7 +23,7 @@ const transactionsRoutes = [
             component: AdmTransactionsComponent,
             data: {
               breadcrumb: ''
-            },
+            }
           },
           {
             path: 'create',
@@ -47,6 +47,6 @@ const transactionsRoutes = [
 
 @NgModule({
   imports: [RouterModule.forChild(transactionsRoutes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AdminTransactionsRoutingModule { }
+export class AdminTransactionsRoutingModule {}

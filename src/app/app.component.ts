@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { EventsService } from "@app/services/events.service";
-import { untilDestroyed } from "ngx-take-until-destroy";
-import { BreadCrumbsService } from "@app/services/bread-crumbs.service";
+import { EventsService } from '@app/services/events.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   title = 'call-rocket';
 
-  constructor(private translate: TranslateService,
-              private breadCrumbsService: BreadCrumbsService,
-              private eventsService: EventsService) {
+  constructor(private translate: TranslateService, private breadCrumbsService: BreadCrumbsService, private eventsService: EventsService) {
     const langMap = {
       'ru-RU': 'ru',
       'en-US': 'en'
@@ -32,7 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
         langVal = langMap[langVal];
       }
       if (langVal !== 'ru' && langVal !== 'en') {
-        langVal = 'en'
+        langVal = 'en';
       }
       localStorage.setItem('lang', langVal);
     }
@@ -40,15 +38,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.eventsService.progressBarLoading.pipe(
-      untilDestroyed(this)
-    ).subscribe((event: boolean) => {
+    this.eventsService.progressBarLoading.pipe(untilDestroyed(this)).subscribe((event: boolean) => {
       this.isProgressBarLoading = event;
     });
     this.breadCrumbsService.initBreadCrumbs();
-
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 }

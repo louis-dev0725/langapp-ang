@@ -6,8 +6,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
-import { TranslatingService } from "@app/services/translating.service";
-import { ActivatedRoute } from "@angular/router";
+import { TranslatingService } from '@app/services/translating.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-adm-transaction-edit',
@@ -28,8 +28,7 @@ export class AdmTransactionEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.transactionId = +this.route.snapshot.paramMap.get('id');
@@ -37,39 +36,40 @@ export class AdmTransactionEditComponent implements OnInit {
     this.transactionForm = this.formBuilder.group({
       id: [''],
       userId: [''],
-      money: ['', {validators: [Validators.required]}],
+      money: ['', { validators: [Validators.required] }],
       comment: [''],
       isPartner: [''],
       isRealMoney: [''],
-      fromInvitedUserId: [''],
+      fromInvitedUserId: ['']
     });
   }
 
   getTransaction(id: number) {
-    return this.api.getTransactionById(id)
-      .subscribe((res: any) => {
+    return this.api.getTransactionById(id).subscribe(
+      (res: any) => {
         this.transaction = res;
         this.session.transaction = res;
         this.updateForm(res);
-      }, (err) => {
-      })
+      },
+      err => {}
+    );
   }
 
   updateForm(res) {
     this.transactionForm.patchValue({
       id: res.id,
       ...res
-    })
+    });
   }
 
   checkError(fieldName: string) {
-    return !this.transactionForm.get(fieldName).valid
+    return !this.transactionForm.get(fieldName).valid;
   }
 
   getError(fieldName: string) {
     const errors = this.transactionForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }
 
   onTransactionSave() {
@@ -79,12 +79,12 @@ export class AdmTransactionEditComponent implements OnInit {
       isPartner: this.transactionForm.value.isPartner ? 1 : 0,
       isRealMoney: this.transactionForm.value.isRealMoney ? 1 : 0
     };
-    this.api.updateTransaction(data).subscribe((res) => {
+    this.api.updateTransaction(data).subscribe(res => {
       if (res instanceof ApiError) {
         this.errors = res.error;
       } else {
-        this.snackBar.open(this.translatingService.translates['Saved'])
+        this.snackBar.open(this.translatingService.translates['Saved']);
       }
-    })
+    });
   }
 }

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { MatPaginator, MatSort, MatTableDataSource, PageEvent } from '@angular/material';
 import { ApiService } from '@app/services/api.service';
 import { TranslateService } from '@ngx-translate/core';
-import { SessionService } from "@app/services/session.service";
+import { SessionService } from '@app/services/session.service';
 
 @Component({
   selector: 'app-payments-table',
@@ -10,7 +10,6 @@ import { SessionService } from "@app/services/session.service";
   styleUrls: ['./payments-table.component.scss']
 })
 export class PaymentsTableComponent implements OnInit {
-
   @Input() isPaginator = false;
 
   private _isShowComment;
@@ -62,13 +61,13 @@ export class PaymentsTableComponent implements OnInit {
 
   columns: string[] = ['addedDateTime', 'money'];
 
-  @ViewChild(MatPaginator, {static: false}) paginator;
-  @ViewChild(MatSort, {static: true}) sort;
+  @ViewChild(MatPaginator, { static: false }) paginator;
+  @ViewChild(MatSort, { static: true }) sort;
 
   @Input() moneyTitle: any;
 
   @Input() set rows(data: any[]) {
-    this.isEmptyTable = (data) ? data.length === 0 : true;
+    this.isEmptyTable = data ? data.length === 0 : true;
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     if (this.isPaginator) {
@@ -94,24 +93,19 @@ export class PaymentsTableComponent implements OnInit {
   @Input()
   pageSize: any;
 
-
-  constructor(
-    private session: SessionService,
-    private api: ApiService,
-    private translate: TranslateService) {
-  }
+  constructor(private session: SessionService, private api: ApiService, private translate: TranslateService) {}
 
   ngOnInit() {
-    this.sort.sortChange.subscribe((data) => {
+    this.sort.sortChange.subscribe(data => {
       const sort: any = {};
       if (this.sort.direction !== '') {
         sort[this.sort.active] = this.sort.direction;
       }
-      this.tableEvents.emit({type: 'sort', data: sort});
-    })
+      this.tableEvents.emit({ type: 'sort', data: sort });
+    });
   }
 
   onPage(event: PageEvent) {
-    this.tableEvents.emit({type: 'page', data: event});
+    this.tableEvents.emit({ type: 'page', data: event });
   }
 }

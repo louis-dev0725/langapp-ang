@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import {User} from '../interfaces/common.interface';
-import {Router} from '@angular/router';
+import { User } from '../interfaces/common.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -24,13 +24,13 @@ export class SessionService {
   }
 
   private _lang: string;
-  private static locales = {ru: 'ru-RU', en: 'en-US'};
+  private static locales = { ru: 'ru-RU', en: 'en-US' };
   private _token: string;
   private _user: User;
   private _userToEdit: any;
 
   get isAdmin(): boolean {
-    return (this.user) ? this.user.isAdmin : false;
+    return this.user ? this.user.isAdmin : false;
   }
 
   get isLoggedIn(): boolean {
@@ -49,7 +49,7 @@ export class SessionService {
 
   private _tempUser: any;
   get tempUser(): any {
-    return (this._tempUser) ? this._tempUser : JSON.parse(localStorage.getItem('tempUser'));
+    return this._tempUser ? this._tempUser : JSON.parse(localStorage.getItem('tempUser'));
   }
 
   set tempUser(value: any) {
@@ -59,7 +59,7 @@ export class SessionService {
 
   private _transaction: any;
   get transaction(): any {
-    return (this._transaction) ? this._transaction : JSON.parse(localStorage.getItem('transaction'));
+    return this._transaction ? this._transaction : JSON.parse(localStorage.getItem('transaction'));
   }
 
   set transaction(value: any) {
@@ -68,7 +68,7 @@ export class SessionService {
   }
 
   get userToEdit(): any {
-    return (this._userToEdit) ? this._userToEdit : JSON.parse(localStorage.getItem('userToEdit'));
+    return this._userToEdit ? this._userToEdit : JSON.parse(localStorage.getItem('userToEdit'));
   }
 
   set userToEdit(value: any) {
@@ -98,10 +98,7 @@ export class SessionService {
     this._user = value;
   }
 
-  constructor(private router: Router) {
-
-  }
-
+  constructor(private router: Router) {}
 
   logout() {
     this.token = '';
@@ -121,9 +118,7 @@ export class SessionService {
   }
 
   static getLocale() {
-    return (SessionService.locales[SessionService.getLang()])
-      ? SessionService.locales[SessionService.getLang()]
-      : SessionService.getLang();
+    return SessionService.locales[SessionService.getLang()] ? SessionService.locales[SessionService.getLang()] : SessionService.getLang();
   }
 
   saveAdmin() {

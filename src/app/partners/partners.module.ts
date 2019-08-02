@@ -4,25 +4,15 @@ import { AboutComponent } from './about/about.component';
 import { RouterModule } from '@angular/router';
 import { ClientsComponent } from './clients/clients.component';
 import { TranslateModule } from '@ngx-translate/core';
-import {
-  MatPaginatorModule,
-  MatProgressSpinnerModule,
-  MatSortModule,
-  MatTableModule
-} from '@angular/material';
+import { MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { TransactionComponent } from './transaction/transaction.component';
 import { PaymentsTableModule } from '../common/payments-table/payments-table.module';
-import { SharedModule } from "@app/shared/shared.module";
-import { PartnersComponent } from "@app/partners/partners.component";
-import { PartnersRoutingModule } from "@app/partners/partners-routing.module";
+import { SharedModule } from '@app/shared/shared.module';
+import { PartnersComponent } from '@app/partners/partners.component';
+import { PartnersRoutingModule } from '@app/partners/partners-routing.module';
 
 @NgModule({
-  declarations: [
-    AboutComponent,
-    ClientsComponent,
-    TransactionComponent,
-    PartnersComponent
-  ],
+  declarations: [AboutComponent, ClientsComponent, TransactionComponent, PartnersComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -37,5 +27,4 @@ import { PartnersRoutingModule } from "@app/partners/partners-routing.module";
   ],
   providers: [DecimalPipe]
 })
-export class PartnersModule {
-}
+export class PartnersModule {}

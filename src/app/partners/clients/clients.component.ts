@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { ApiService } from '@app/services/api.service';
 import { ApiError } from '@app/services/api-error';
-import { SessionService } from "@app/services/session.service";
+import { SessionService } from '@app/services/session.service';
 
 @Component({
   selector: 'app-clients',
@@ -13,21 +13,17 @@ export class ClientsComponent implements OnInit {
   clientsDataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   columnNames: string[] = ['id', 'name', 'partnerEarned'];
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   isEmptyTable = true;
   isLoaded = true;
 
-  constructor(
-    public session: SessionService,
-    private api: ApiService
-  ) {
-  }
+  constructor(public session: SessionService, private api: ApiService) {}
 
   ngOnInit() {
     this.isLoaded = false;
     this.api.getClientsList().subscribe((res: any[]) => {
-      this.isEmptyTable = (res) ? res.length === 0 : true;
-      this.clientsDataSource = new MatTableDataSource(res)
+      this.isEmptyTable = res ? res.length === 0 : true;
+      this.clientsDataSource = new MatTableDataSource(res);
     });
     this.api.getClientsList().subscribe((res: any) => {
       this.isLoaded = true;
@@ -38,6 +34,4 @@ export class ClientsComponent implements OnInit {
     });
     this.clientsDataSource.sort = this.sort;
   }
-
 }
-

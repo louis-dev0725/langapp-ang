@@ -8,9 +8,8 @@ describe('AdmUserEditComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdmUserEditComponent ]
-    })
-    .compileComponents();
+      declarations: [AdmUserEditComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

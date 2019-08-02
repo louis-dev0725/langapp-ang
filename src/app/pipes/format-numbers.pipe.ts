@@ -7,7 +7,7 @@ export class FormatNumbersPipe implements PipeTransform {
   transform(value: any, ...args: any[]): any {
     const lang = args[0];
     let _value = parseFloat(value).toFixed(2);
-    if(lang == 'ru') {
+    if (lang == 'ru') {
       // _value = _value.toString().replace(".", ",");
     }
     return +_value;

@@ -8,7 +8,8 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
   .then(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const myParam = urlParams.get('rr');

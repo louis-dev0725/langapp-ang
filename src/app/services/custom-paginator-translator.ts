@@ -1,16 +1,15 @@
-import {MatPaginatorIntl} from '@angular/material';
-import {Injectable} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
+import { MatPaginatorIntl } from '@angular/material';
+import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class CustomPaginatorTranslator extends MatPaginatorIntl {
-
   rangeOf = 'of';
 
   constructor(private translateService: TranslateService) {
     super();
 
-    this.translateService.onLangChange.subscribe((res) => {
+    this.translateService.onLangChange.subscribe(res => {
       const paginator = res['translations']['paginator'];
       this.itemsPerPageLabel = paginator['Items per page'];
       this.nextPageLabel = paginator['next'];
@@ -18,7 +17,6 @@ export class CustomPaginatorTranslator extends MatPaginatorIntl {
       this.rangeOf = paginator['of'];
       this.changes.next();
     });
-
 
     this.getRangeLabel = (page, pageSize, length) => {
       if (length == 0 || pageSize == 0) {
@@ -28,8 +26,6 @@ export class CustomPaginatorTranslator extends MatPaginatorIntl {
       const startIndex = page * pageSize;
       const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
       return `${startIndex + 1} - ${endIndex} ${this.rangeOf} ${length}`;
-    }
+    };
   }
-
-
 }

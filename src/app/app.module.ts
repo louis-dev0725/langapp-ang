@@ -6,9 +6,18 @@ import { AppComponent } from './app.component';
 import { ApiService } from './services/api.service';
 import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
-  MatButtonModule, MatButtonToggleModule, MatDialogModule, MatIconModule, MatInputModule,
-  MatMenuModule, MatPaginatorIntl, MatPaginatorModule,
-  MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatPaginatorIntl,
+  MatPaginatorModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -24,17 +33,17 @@ import { CanactivateAdmin } from './services/canactivate-admin';
 import { ExtendedModule } from '@angular/flex-layout';
 import { SessionService } from './services/session.service';
 import { CustomValidator } from '@app/services/custom-validator';
-import { HttpInterceptorService } from "@app/http/http-interceptor";
+import { HttpInterceptorService } from '@app/http/http-interceptor';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ConfirmDialogModule } from "@app/common/confirm-dialog/confirm-dialog.module";
-import { ThemeModule } from "@app/theme/theme.module";
-import { HashLocationStrategy, LocationStrategy } from "@angular/common";
+import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
+import { ThemeModule } from '@app/theme/theme.module';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ContentPageComponent } from './content-page/content-page.component';
-import { BreadCrumbsService } from "@app/services/bread-crumbs.service";
+import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json')
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 //export function translatingServiceFactory(http: HttpClient, translatingService: TranslatingService) {
@@ -42,10 +51,7 @@ export function createTranslateLoader(http: HttpClient) {
 //}
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ContentPageComponent
-  ],
+  declarations: [AppComponent, ContentPageComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -85,10 +91,10 @@ export function createTranslateLoader(http: HttpClient) {
     CanactivateNologged,
     CustomValidator,
     BreadCrumbsService,
-    {provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator},
-    {provide: LOCALE_ID, useFactory: SessionService.getLocale()},
+    { provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator },
+    { provide: LOCALE_ID, useFactory: SessionService.getLocale() },
 
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}},
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 3000 } },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,
@@ -97,7 +103,7 @@ export function createTranslateLoader(http: HttpClient) {
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
-    },
+    }
     /*TranslatingService,
     {
       provide: APP_INITIALIZER,
@@ -108,5 +114,4 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

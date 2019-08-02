@@ -1,23 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminTransactionsComponent } from "@app/admin/admin-transactions/admin-transactions.component";
-import { AdminTransactionsRoutingModule } from "@app/admin/admin-transactions/admin-transactions-routing.module";
+import { AdminTransactionsComponent } from '@app/admin/admin-transactions/admin-transactions.component';
+import { AdminTransactionsRoutingModule } from '@app/admin/admin-transactions/admin-transactions-routing.module';
 import { AdmTransactionsLayoutComponent } from './adm-transactions-layout/adm-transactions-layout.component';
-import { FlexModule } from "@angular/flex-layout";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ConfirmDialogModule } from "@app/common/confirm-dialog/confirm-dialog.module";
-import { SharedModule } from "@app/shared/shared.module";
-import {
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatSortModule,
-  MatTableModule
-} from "@angular/material";
-import { TranslateModule } from "@ngx-translate/core";
-import { AddTransactionComponent } from "@app/admin/admin-transactions/add-transaction/add-transaction.component";
-import { AdmTransactionEditComponent } from "@app/admin/admin-transactions/adm-transaction-edit/adm-transaction-edit.component";
-import { AdmTransactionsComponent } from "@app/admin/admin-transactions/adm-transactions/adm-transactions.component";
+import { FlexModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
+import { SharedModule } from '@app/shared/shared.module';
+import { MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, MatTableModule } from '@angular/material';
+import { TranslateModule } from '@ngx-translate/core';
+import { AddTransactionComponent } from '@app/admin/admin-transactions/add-transaction/add-transaction.component';
+import { AdmTransactionEditComponent } from '@app/admin/admin-transactions/adm-transaction-edit/adm-transaction-edit.component';
+import { AdmTransactionsComponent } from '@app/admin/admin-transactions/adm-transactions/adm-transactions.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +19,7 @@ import { AdmTransactionsComponent } from "@app/admin/admin-transactions/adm-tran
     AdmTransactionEditComponent,
     AdmTransactionsComponent,
     AdmTransactionsLayoutComponent,
-    AdminTransactionsComponent,
+    AdminTransactionsComponent
   ],
   imports: [
     CommonModule,
@@ -44,4 +38,4 @@ import { AdmTransactionsComponent } from "@app/admin/admin-transactions/adm-tran
     AdminTransactionsRoutingModule
   ]
 })
-export class AdminTransactionsModule { }
+export class AdminTransactionsModule {}

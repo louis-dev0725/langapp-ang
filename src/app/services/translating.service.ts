@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { SessionService } from "@app/services/session.service";
+import { HttpClient } from '@angular/common/http';
+import { SessionService } from '@app/services/session.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslatingService {
   private _translates = {
-    'ru': '',
-    'en': ''
+    ru: '',
+    en: ''
   };
 
-  constructor(private http: HttpClient,
-              private sessionService: SessionService) {
+  constructor(private http: HttpClient, private sessionService: SessionService) {
     this.loadFile('ru').subscribe((res: any) => {
       this._translates.ru = res;
     });

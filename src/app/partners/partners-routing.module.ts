@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from "@angular/router";
-import { AboutComponent } from "@app/partners/about/about.component";
-import { ClientsComponent } from "@app/partners/clients/clients.component";
-import { TransactionComponent } from "@app/partners/transaction/transaction.component";
-import { PartnersComponent } from "@app/partners/partners.component";
+import { RouterModule } from '@angular/router';
+import { AboutComponent } from '@app/partners/about/about.component';
+import { ClientsComponent } from '@app/partners/clients/clients.component';
+import { TransactionComponent } from '@app/partners/transaction/transaction.component';
+import { PartnersComponent } from '@app/partners/partners.component';
 const partnersRoutes = [
   {
     path: '',
@@ -22,21 +22,21 @@ const partnersRoutes = [
         component: AboutComponent,
         data: {
           breadcrumb: 'About'
-        },
+        }
       },
       {
         path: 'clients',
         component: ClientsComponent,
         data: {
           breadcrumb: 'Clients'
-        },
+        }
       },
       {
         path: 'transactions',
         component: TransactionComponent,
         data: {
           breadcrumb: 'Transactions'
-        },
+        }
       }
     ]
   }
@@ -44,6 +44,6 @@ const partnersRoutes = [
 
 @NgModule({
   imports: [RouterModule.forChild(partnersRoutes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class PartnersRoutingModule { }
+export class PartnersRoutingModule {}

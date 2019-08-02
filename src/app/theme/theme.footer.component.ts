@@ -1,16 +1,14 @@
 import { Component } from '@angular/core';
-import { APP_NAME, APP_DATE_CREATED } from "@app/config/config";
+import { APP_NAME, APP_DATE_CREATED } from '@app/config/config';
 
 @Component({
   selector: 'app-footer',
   template: `
     <div class="layout-footer clearfix">
-            <span>
-                {{appName}} © {{dateString}}
-            </span>
+      <span> {{ appName }} © {{ dateString }} </span>
       <span class="footer-text-right">
-                <a href="">{{'Public offer' | translate}}</a> / <a href="">{{'Privacy police' | translate}}</a>
-            </span>
+        <a href="">{{ 'Public offer' | translate }}</a> / <a href="">{{ 'Privacy police' | translate }}</a>
+      </span>
     </div>
   `
 })

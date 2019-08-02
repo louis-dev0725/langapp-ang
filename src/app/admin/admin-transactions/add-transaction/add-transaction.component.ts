@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material';
 import { Transaction, User } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslatingService } from "@app/services/translating.service";
+import { TranslatingService } from '@app/services/translating.service';
 
 @Component({
   selector: 'app-add-transaction',
@@ -45,15 +45,14 @@ export class AddTransactionComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private translatingService: TranslatingService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.user = this.session.userToEdit;
 
     this.transactionForm = this.formBuilder.group({
-      userId: [this.user.id || '', {validators: [Validators.required]}],
-      money: ['', {validators: [Validators.required]}],
+      userId: [this.user.id || '', { validators: [Validators.required] }],
+      money: ['', { validators: [Validators.required] }],
       comment: [''],
       isPartner: [''],
       isRealMoney: ['']
@@ -67,26 +66,25 @@ export class AddTransactionComponent implements OnInit {
   getError(fieldName: string) {
     const errors = this.transactionForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    return (this.customValidator.errorMap[key]) ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }
 
   onCreateTransaction() {
     const data = {
       ...this.transactionForm.value,
-      isPartner: this.transactionForm.value.isPartner ? 1: 0
+      isPartner: this.transactionForm.value.isPartner ? 1 : 0
     };
-    this.api.createTransaction(data)
-      .subscribe((res) => {
-        if (!(res instanceof ApiError)) {
-          this.snackBar.open(this.translatingService.translates['confirm'].transaction.created, null, {duration: 3000});
-          setTimeout(() => {
-            this.router.navigate([`/admin/users/${this.user.id}`]);
-          }, 3100)
-        } else {
-          this.errors = res.error;
-        }
-        this.transactionForm.reset();
-        this.transactionForm.get('userId').setValue(this.user.id);
-      });
+    this.api.createTransaction(data).subscribe(res => {
+      if (!(res instanceof ApiError)) {
+        this.snackBar.open(this.translatingService.translates['confirm'].transaction.created, null, { duration: 3000 });
+        setTimeout(() => {
+          this.router.navigate([`/admin/users/${this.user.id}`]);
+        }, 3100);
+      } else {
+        this.errors = res.error;
+      }
+      this.transactionForm.reset();
+      this.transactionForm.get('userId').setValue(this.user.id);
+    });
   }
 }

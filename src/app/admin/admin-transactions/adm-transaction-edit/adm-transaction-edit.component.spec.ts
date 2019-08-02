@@ -8,9 +8,8 @@ describe('AdmTransactionEditComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdmTransactionEditComponent ]
-    })
-    .compileComponents();
+      declarations: [AdmTransactionEditComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

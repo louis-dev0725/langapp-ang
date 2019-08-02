@@ -4,10 +4,7 @@ import { EventEmitter, Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class EventsService {
-
   public progressBarLoading = new EventEmitter();
 
-  constructor() { }
-
-
+  constructor() {}
 }

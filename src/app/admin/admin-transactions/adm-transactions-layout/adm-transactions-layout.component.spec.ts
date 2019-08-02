@@ -8,9 +8,8 @@ describe('AdmTransactionsLayoutComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdmTransactionsLayoutComponent ]
-    })
-    .compileComponents();
+      declarations: [AdmTransactionsLayoutComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

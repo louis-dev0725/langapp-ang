@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {User} from '@app/interfaces/common.interface';
-import {SessionService} from '@app/services/session.service';
+import { Component, OnInit } from '@angular/core';
+import { User } from '@app/interfaces/common.interface';
+import { SessionService } from '@app/services/session.service';
 
 @Component({
   selector: 'app-about',
@@ -8,18 +8,11 @@ import {SessionService} from '@app/services/session.service';
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements OnInit {
-
   get user(): User {
     return this.session.user;
   }
 
+  constructor(public session: SessionService) {}
 
-
-  constructor(public session: SessionService) {
-  }
-
-  ngOnInit() {
-
-  }
-
+  ngOnInit() {}
 }
