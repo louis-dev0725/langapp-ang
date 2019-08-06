@@ -43,6 +43,8 @@ use yii\web\UserEvent;
  * @property array $dataJson
  * @property string $timezone
  * @property string $language
+ * @property string $currency
+ * @property string $frozeEnablePartnerPayments
  *
  * @property string $isAdmin
  * @property string $password write-only password (virtual attribute)
@@ -172,9 +174,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             self::SCENARIO_LOGIN => ['email', 'password'],
-            self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone', 'language'],
+            self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone', 'language', 'currency'],
             self::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone', 'language', 'isAdmin'],
-            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'accessToken'],
+            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'accessToken', 'currency'],
         ];
     }
 
@@ -187,7 +189,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         if ($this->scenario == self::SCENARIO_INVITED_USER) {
             return ['id', 'name', 'partnerEarned'];
         } elseif ($this->scenario == self::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications'];
+            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications', 'currency'];
         } elseif ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
             $fields['paidUntilDateTime'] = [Helpers::class, 'formatDateField'];
@@ -227,6 +229,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return 'users';
     }
 
+    public function getAvailableCurrencyList() {
+        return ['RUB', 'USD', 'EUR', 'JPY', 'KRW', 'CNY'];
+    }
+
+    public function getDefaultCurrency() {
+        return 'RUB';
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -242,11 +252,13 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['balance', 'balancePartner', 'partnerPercent', 'partnerEarned'], 'number'],
             [['isAdmin', 'paidUntilDateTime', 'addedDateTime', 'updatedDateTime', 'restorePasswordUntilDate', 'passwordChangedDateTime', 'dataJson'], 'safe'],
             [['comment'], 'string'],
-            [['isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments'], 'default', 'value' => 0],
+            [['isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments'], 'default', 'value' => 0],
             [['isPartner'], 'default', 'value' => 1],
             [['isServicePaused'], 'boolean'],
-            [['invitedByUserId', 'isPartner', 'enablePartnerPayments'], 'integer'],
+            [['invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments'], 'integer'],
             [['name', 'company', 'site', 'telephone', 'email', 'password', 'registerIp', 'lastLoginIp', 'restorePasswordKey', 'wmr', 'timezone'], 'string', 'max' => 255],
+            ['currency', 'default', 'value' => $this->getDefaultCurrency()],
+            ['currency', 'in', 'range' => $this->getAvailableCurrencyList()],
         ];
     }
 
@@ -278,6 +290,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'invitedByUserId' => Yii::t('app', 'Invited By User ID'),
             'isPartner' => Yii::t('app', 'Is Partner'),
             'enablePartnerPayments' => Yii::t('app', 'Enable Partner Payments'),
+            'frozeEnablePartnerPayments' => Yii::t('app', 'Froze "Enable Partner Payments"'),
             'partnerPercent' => Yii::t('app', 'Partner Percent'),
             'partnerEarned' => Yii::t('app', 'Partner Earned'),
             'wmr' => Yii::t('app', 'WMR'),
