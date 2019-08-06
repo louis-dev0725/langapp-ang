@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
@@ -51,6 +51,6 @@ import { MatDialogModule, MatSnackBarModule } from '@angular/material';
     HocBreadCrumbComponent,
     MatSnackBarModule
   ],
-  providers: [BreadCrumbsService]
+  providers: [BreadCrumbsService, DecimalPipe]
 })
 export class ThemeModule {}

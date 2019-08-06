@@ -29,3 +29,21 @@ textarea {
   max-width: 300px;
   margin: 5px;
 }
+
+.wrap-filter {
+  margin: 0 -10px;
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+
+    .filter-item {
+      width: 20%;
+      box-sizing: border-box;
+    }
+  }
+
+  mat-form-field {
+    padding: 0 10px;
+  }
+}

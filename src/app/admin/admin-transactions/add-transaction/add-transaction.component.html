@@ -1,7 +1,7 @@
 <div class="container">
   <div class="card">
     <h1 translate>Add transaction</h1>
-    <p class="notation">{{'User name' | translate}} : {{user?.name}}</p>
+    <a [routerLink]="['../../users/'+ user?.id]">{{'User' | translate}} #{{user?.id}}</a>
     <ng-container *ngIf="errors.length > 0">
       <mat-card *ngFor="let err of errors"
                 class="err-alert">
@@ -30,7 +30,7 @@
         </mat-form-field>
         <div class="form-item">
           <mat-checkbox
-            formControlName="isPartner">{{'Is partner account' | translate}}
+            formControlName="isPartner">{{'Partner transaction' | translate}}
           </mat-checkbox>
         </div>
         <div class="form-item">

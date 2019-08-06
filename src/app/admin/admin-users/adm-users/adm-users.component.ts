@@ -9,7 +9,7 @@ import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
 import { debounceTime, take } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 
 @Component({
   selector: 'app-adm-users',
@@ -20,6 +20,8 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
   private usersSubscription: Subscription;
   private sendTimeout;
   public commentChanged: Subject<string> = new Subject<string>();
+  public filterChanged: Subject<string> = new Subject<string>();
+  public filterErrMsg = '';
 
   columns = ['id', 'name', 'company', 'telephone', 'balance', 'balancePartner', 'comment', 'edit'];
   notFilterFields = ['Comment', 'Edit'];
@@ -31,7 +33,7 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
     Id: 'Id',
     Name: 'Name',
     Company: 'Company',
-    Phone: 'Phone',
+    Telephone: 'Telephone',
     Balance: 'Balance',
     BalancePartner: 'BalancePartner',
     Email: 'Email',
@@ -61,12 +63,10 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort;
   isLoaded = false;
 
-  @ViewChild('autosize', {static: false}) autosize: CdkTextareaAutosize;
+  @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
 
   triggerResize() {
-    // Wait for changes to be applied, then trigger textarea resize.
-    this.ngZone.onStable.pipe(take(1))
-      .subscribe(() => this.autosize.resizeToFitContent(true));
+    this.ngZone.onStable.pipe(take(1)).subscribe(() => this.autosize.resizeToFitContent(true));
   }
   constructor(
     private ngZone: NgZone,
@@ -102,10 +102,19 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
       .subscribe(comment => {
         this.addComment(comment);
       });
+    this.filterChanged
+      .pipe(debounceTime(1000))
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.getUsers();
+      });
   }
 
   onChangeComment(row) {
     this.commentChanged.next(row);
+  }
+  onChangeFilter(row) {
+    this.filterChanged.next(row);
   }
 
   addComment(row) {
@@ -144,15 +153,21 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
         delete toSendFilter[key];
       }
     });
-
-    this.usersSubscription = this.api.getAdminUsers(this.paginator.pageIndex, toSendFilter, sort).subscribe((res: any) => {
-      if (!(res instanceof ApiError)) {
-        this.rows = res.items;
-        this.paginator.length = res._meta.totalCount;
-        this.paginator.pageIndex = res._meta.currentPage - 1;
+    this.filterErrMsg = '';
+    this.usersSubscription = this.api.getAdminUsers(this.paginator.pageIndex, toSendFilter, sort).subscribe(
+      (res: any) => {
+        if (!(res instanceof ApiError)) {
+          this.rows = res.items;
+          this.paginator.length = res._meta.totalCount;
+          this.paginator.pageIndex = res._meta.currentPage - 1;
+        }
+        this.isLoaded = true;
+      },
+      err => {
+        this.filterErrMsg = err.error[0]['message'];
+        this.isLoaded = true;
       }
-      this.isLoaded = true;
-    });
+    );
   }
 
   runFilter() {

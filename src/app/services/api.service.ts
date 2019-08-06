@@ -129,7 +129,7 @@ export class ApiService {
     }
 
     const headers = this.getHeadersWithToken();
-    return Observable.create(observer => {
+    /*return Observable.create(observer => {
       this.http.get(this.apiHost + '/users', { headers, params }).subscribe(
         res => {
           observer.next(res);
@@ -138,7 +138,9 @@ export class ApiService {
           observer.next(this.getApiError(error));
         }
       );
-    });
+    });*/
+
+    return this.http.get(this.apiHost + '/users', { headers, params });
   }
 
   /**

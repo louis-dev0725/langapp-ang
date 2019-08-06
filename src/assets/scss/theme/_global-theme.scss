@@ -6,7 +6,7 @@ $active-color: #9CCC65;
     padding-top: 64px;
 
     .layout-content {
-      @media (min-width: 1025px) {
+      @media (min-width: 768px) {
         padding: 17px 17px 82px 17px;
         min-height: calc(100vh - 65px);
         box-sizing: border-box;
@@ -19,6 +19,33 @@ $active-color: #9CCC65;
 
     .layout-breadcrumb {
       padding: 0;
+    }
+
+    .layout-footer {
+      height: 100%;
+      box-sizing: border-box;
+
+      @media (min-width: 768px) {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+
+      & > span {
+      }
+
+      .footer-text-right {
+        @media (min-width: 768px) {
+          margin-top: 0;
+        }
+
+        @media (max-width: 767px) {
+          display: block;
+          float: none;
+          margin-top: 10px;
+        }
+      }
     }
   }
 
@@ -66,20 +93,10 @@ $active-color: #9CCC65;
 }
 
 app-footer {
-  @media (min-width: 1025px) {
+  @media (min-width: 768px) {
     height: 65px;
     margin-top: -65px;
     display: block;
-
-    .layout-footer {
-      height: 100%;
-      box-sizing: border-box;
-
-      & > span {
-        display: inline-flex;
-        margin-top: 10px;
-      }
-    }
   }
 }
 
@@ -125,7 +142,12 @@ app-footer {
       color: $active-color;
     }
   }
-  & ,a {
+  &, a {
     color: #757575;
   }
+}
+
+.err-msg {
+  margin: 10px 0;
+  color: red;
 }

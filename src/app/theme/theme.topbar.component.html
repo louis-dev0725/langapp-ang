@@ -26,7 +26,7 @@
       </li>
       <li class="topbar-item" *ngIf="isLoggedIn">
         <span *ngIf="user?.balance">
-          {{'Your balance' | translate}}: {{user?.balance | formatNumbers}} {{'rub' | translate}}<br>
+          {{'Your balance' | translate}}: {{user?.balance}} {{'rub' | translate}}<br>
           <a routerLink="/payment">{{'Refill' | translate}}</a>
         </span>
       </li>

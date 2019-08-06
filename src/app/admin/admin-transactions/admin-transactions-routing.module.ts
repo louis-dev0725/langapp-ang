@@ -29,7 +29,7 @@ const transactionsRoutes = [
             path: 'create',
             component: AddTransactionComponent,
             data: {
-              breadcrumb: 'Create'
+              breadcrumb: 'Add transaction'
             }
           },
           {
