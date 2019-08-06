@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\components\Helpers;
+use app\components\Notifications;
 use Lcobucci\JWT\Token;
 use sizeg\jwt\Jwt;
 use Yii;
@@ -177,10 +178,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         ];
     }
 
+    public function getNotifications() {
+        return Notifications::getForUser($this);
+    }
+
     public function fields()
     {
         if ($this->scenario == self::SCENARIO_INVITED_USER) {
             return ['id', 'name', 'partnerEarned'];
+        } elseif ($this->scenario == self::SCENARIO_PROFILE) {
+            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications'];
         } elseif ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
             $fields['paidUntilDateTime'] = [Helpers::class, 'formatDateField'];
@@ -191,8 +198,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             unset($fields['passwordHash']);
 
             return $fields;
-        } elseif ($this->scenario == self::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin'];
         } else {
             return [];
         }

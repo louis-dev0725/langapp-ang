@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\Helpers;
+use app\components\Notifications;
 use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\PasswordResetForm;
@@ -14,6 +15,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\rest\IndexAction;
+use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -55,7 +57,7 @@ class UserController extends ActiveController
                 ],
                 [
                     'allow' => true,
-                    'actions' => ['me', 'update', 'invited-users'],
+                    'actions' => ['me', 'update', 'invited-users', 'close-notification'],
                     'roles' => ['@'],
                 ],
                 [
@@ -79,6 +81,7 @@ class UserController extends ActiveController
         $verbs['check-invited-users'] = ['POST'];
         $verbs['invited-users'] = ['GET'];
         $verbs['contact'] = ['POST'];
+        $verbs['close-notification'] = ['POST'];
 
         return $verbs;
     }
@@ -292,6 +295,23 @@ class UserController extends ActiveController
         $model->checkInvitedUsers();
 
         return ['done' => true];
+    }
+
+    public function actionCloseNotification() {
+        $userId = Yii::$app->user->id;
+        $model = User::findOne($userId);
+        if ($model == null) {
+            throw new NotFoundHttpException('User not found');
+        }
+
+        $id = Yii::$app->request->getBodyParam('id');
+        if ($id == null) {
+            throw new BadRequestHttpException('"id" required in request.');
+        }
+
+        Notifications::processClosed($model, $id);
+
+        return ['done' => true, 'notifications' => $model->getNotifications()];
     }
 
     /**
