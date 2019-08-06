@@ -14,6 +14,7 @@ import { BreadcrumbModule, ScrollPanelModule } from 'primeng/primeng';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { HocBreadCrumbComponent } from '@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
+import { MatDialogModule, MatSnackBarModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -26,7 +27,9 @@ import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
     SharedModule,
     BreadcrumbModule,
     ScrollPanelModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+    MatDialogModule,
+    MatSnackBarModule
   ],
   declarations: [
     ThemeMenuComponent,
@@ -45,7 +48,8 @@ import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
     BreadcrumbModule,
     ScrollPanelModule,
     VirtualScrollerModule,
-    HocBreadCrumbComponent
+    HocBreadCrumbComponent,
+    MatSnackBarModule
   ],
   providers: [BreadCrumbsService]
 })

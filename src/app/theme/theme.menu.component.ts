@@ -80,12 +80,10 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     this.model = this.getModel();
     this.user = this.session.user;
 
-    this.session.changingUser.pipe(untilDestroyed(this)).subscribe(() => {
-      this.model = [...this.getModel()];
-      this.cd.detectChanges();
-    });
     this.session.changingUser.pipe(untilDestroyed(this)).subscribe(user => {
+      this.model = [...this.getModel()];
       this.user = user;
+      this.cd.detectChanges();
     });
   }
 
@@ -152,7 +150,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       {
         label: 'Settings',
-        routerLink: ['/users/settings']
+        routerLink: ['/settings/profile']
       },
       {
         label: 'Sign up',

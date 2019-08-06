@@ -26,9 +26,9 @@ const routes: Routes = [
     loadChildren: () => import('./partners/partners.module').then(m => m.PartnersModule)
   },
   {
-    path: 'users',
+    path: 'settings',
     canActivate: [CanactivateLogged],
-    loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
+    loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
   },
   {
     path: 'contacts',

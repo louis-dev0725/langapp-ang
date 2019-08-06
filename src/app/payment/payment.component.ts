@@ -7,7 +7,6 @@ import { ApiError } from '../services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
 import { Subscription } from 'rxjs';
-import { PageEvent } from '@angular/material';
 
 @Component({
   selector: 'app-payment',
@@ -84,6 +83,18 @@ export class PaymentComponent implements OnInit, OnDestroy {
         amount: this.paymentForm.get('amount').value
       }
     });
-    window.open(this.api.apiHost + this.serializer.serialize(urlTree), '_blank');
+    const childWindow = window.open(this.api.apiHost + this.serializer.serialize(urlTree), '_blank');
+    const interval = setInterval(() => {
+      if (childWindow.closed) {
+        clearInterval(interval);
+        this.updateUser();
+      }
+    }, 1000);
+  }
+
+  updateUser() {
+    this.api.meRequest().subscribe((res) => {
+      this.session.changingUser.emit(res);
+    })
   }
 }

@@ -8,14 +8,15 @@ import { MatSnackBar } from '@angular/material';
 import { SessionService } from '@app/services/session.service';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class ProfileComponent implements OnInit {
   settingsForm: FormGroup;
   isChangePassword = false;
   timeZones: any[] = [];
+  user;
 
   private _errors = [];
   get errors() {
@@ -24,10 +25,6 @@ export class SettingsComponent implements OnInit {
 
   get isServicePaused(): boolean {
     return this.user.isServicePaused !== undefined ? this.user.isServicePaused : false;
-  }
-
-  get user(): User {
-    return this.session.user;
   }
 
   constructor(
@@ -39,19 +36,32 @@ export class SettingsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.api.meRequest().subscribe(res => {
+      this.user = res;
+      this.settingsForm.patchValue({
+        id: res.id,
+        name: res.name,
+        email: res.email,
+        company: res.company,
+        site: res.site,
+        telephone: res.telephone,
+        wmr: res.wmr
+      });
+    });
+
     this.api.getTimeZones().subscribe((res: any) => {
       this.timeZones = res;
     });
 
     this.settingsForm = this.formBuilder.group({
-      id: [this.user['id'] || ''],
-      name: [this.user['name'] || '', { validators: [Validators.required], updateOn: 'change' }],
-      email: [this.user['email'] || '', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
-      company: [this.user['company'] || ''],
-      site: [this.user['site'] || ''],
-      telephone: [this.user['telephone'] || ''],
+      id: [''],
+      name: ['', { validators: [Validators.required], updateOn: 'change' }],
+      email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
+      company: [''],
+      site: [''],
+      telephone: [''],
       isServicePaused: [''],
-      wmr: [this.user['wmr'] || ''],
+      wmr: [''],
       timezone: [''],
       language: ['']
     });

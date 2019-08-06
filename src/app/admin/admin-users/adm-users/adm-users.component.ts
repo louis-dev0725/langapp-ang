@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { MatPaginator, MatSort, PageEvent } from '@angular/material';
 import { Subject, Subscription } from 'rxjs';
@@ -7,8 +7,9 @@ import { EventService } from '@app/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, take } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 
 @Component({
   selector: 'app-adm-users',
@@ -60,7 +61,15 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort;
   isLoaded = false;
 
+  @ViewChild('autosize', {static: false}) autosize: CdkTextareaAutosize;
+
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this.ngZone.onStable.pipe(take(1))
+      .subscribe(() => this.autosize.resizeToFitContent(true));
+  }
   constructor(
+    private ngZone: NgZone,
     private api: ApiService,
     private eventService: EventService,
     private ref: ChangeDetectorRef,

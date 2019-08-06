@@ -65,9 +65,19 @@
           <ng-container matColumnDef="comment">
             <th mat-header-cell *matHeaderCellDef>{{'Comment' | translate}}</th>
             <td mat-cell *matCellDef="let row">
-              <textarea [(ngModel)]="row.comment" (keydown)="onChangeComment(row)">
-                {{row.comment}}
-              </textarea>
+              <mat-form-field class="form-item">
+                <textarea
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="1"
+                    cdkAutosizeMaxRows="8"
+                    matInput
+                    [(ngModel)]="row.comment"
+                    (keydown)="onChangeComment(row)">
+                  {{row.comment}}
+                </textarea>
+              </mat-form-field>
+
             </td>
           </ng-container>
 
