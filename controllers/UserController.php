@@ -60,7 +60,7 @@ class UserController extends ActiveController
                 ],
                 [
                     'allow' => true,
-                    'actions' => ['index', 'delete', 'check-invited-users'],
+                    'actions' => ['index', 'delete', 'view', 'check-invited-users'],
                     'roles' => ['admin'],
                 ],
             ]

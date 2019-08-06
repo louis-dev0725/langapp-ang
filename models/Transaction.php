@@ -134,30 +134,11 @@ class Transaction extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
     }
 
-    /**
-     * @param ActiveRecord $record
-     * @param $row
-     */
-    public static function populateRecord($record, $row)
-    {
-        parent::populateRecord($record, $row);
-        if (Helpers::isAdmin() && (!self::isSaveMethod())) {
-            if (isset($row['name'])) {
-                $record->setAttribute('name', $row['name']);
-            }
-            if (isset($row['userId'])) {
-                $record->setAttribute('token', self::getToken($row['userId']));
-            }
-        }
-    }
-
 
     public function fields()
     {
         if (Helpers::isAdmin() && (!self::isSaveMethod())) {
             $parentFields = parent::fields();
-            $parentFields[] = 'name';
-            $parentFields[] = 'token';
             $parentFields['addedDateTime'] = [Helpers::class, 'formatDateField'];
             return $parentFields;
         } else {
@@ -165,12 +146,14 @@ class Transaction extends \yii\db\ActiveRecord
         }
     }
 
+    public function extraFields()
+    {
+        return ['user'];
+    }
+
     public function scenarios()
     {
         $adminFields = ['id', 'userId', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'invoiceId', 'dataJson'];
-        if (!self::isSaveMethod()) {
-            $adminFields = array_merge($adminFields, ['name', 'token']);
-        }
         return [
             self::SCENARIO_USER => ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'],
             self::SCENARIO_ADMIN => $adminFields
@@ -208,21 +191,12 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             [['userId', 'money'], 'required'],
             //[['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'default', 'value' => null],
+            [['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'default', 'value' => 0],
             [['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'integer'],
             [['money'], 'number'],
             [['addedDateTime', 'dataJson'], 'safe'],
-            [['comment', 'name', 'token'], 'string', 'max' => 255],
+            [['comment'], 'string'],
         ];
-    }
-
-    public function attributes()
-    {
-        $attributes = parent::attributes();
-        if (Helpers::isAdmin() && !self::isSaveMethod()) {
-            $attributes[] = 'name';
-            $attributes[] = 'token';
-        }
-        return $attributes;
     }
 
 
@@ -234,8 +208,6 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'userId' => Yii::t('app', 'User ID'),
-            'name' => Yii::t('app', 'Name'),
-            'token' => '',
             'money' => Yii::t('app', 'Balance change'),
             'isCommon' => Yii::t('app', 'Is Common'),
             'comment' => Yii::t('app', 'Comment'),

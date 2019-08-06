@@ -78,6 +78,13 @@ class TransactionController extends ActiveController
             $query = $this->prepareFilter($query, $filter);
         }
 
+        if (isset($requestParams['expand']) && is_string($requestParams['expand'])) {
+            $expand = preg_split('/\s*,\s*/', $requestParams['expand'], -1, PREG_SPLIT_NO_EMPTY);
+        }
+        else {
+            $expand = [];
+        }
+
         if (!Helpers::isAdmin()) {
             $userId = Yii::$app->user->id;
 
@@ -88,9 +95,10 @@ class TransactionController extends ActiveController
             if (empty($filter) || (isset($filter['userId']) && $filter['userId'] != $userId)) {
                 throw new ForbiddenHttpException("User can only access to own's transactions. You should add filter like ?filter[userId]=$userId");
             }
-        } else {
-            $query->select(['transactions.*', 'users.name'])
-                ->leftJoin('users','"users"."id" = "transactions"."userId"');
+        }
+
+        if (in_array('user', $expand)) {
+            $query->with('user');
         }
 
         return Yii::createObject([
@@ -114,7 +122,7 @@ class TransactionController extends ActiveController
     private function prepareFilter($query, $filter)
     {
         $isComplex = isset($filter[0]) && $filter[0] === 'AND';
-        $replaceTransKeys = ['id', 'userId', 'addedDateTime', 'name', 'comment'];
+        $replaceTransKeys = ['id', 'userId', 'addedDateTime', 'name', 'comment', 'isPartner'];
 
         $wrapTableName = function ($fieldName, $filterItem) use ($query, $replaceTransKeys) {
             if (!is_array($filterItem)) {
