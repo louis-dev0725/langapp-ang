@@ -1,7 +1,7 @@
 <div class="container">
   <div class="card">
     <h1 translate>Edit transaction</h1>
-    <p class="note">{{'Transation' | translate}} #{{transaction?.id}} {{'for user' | translate}} #{{transaction?.userId}}</p>
+    <p class="note">{{'Transaction' | translate}} #{{transaction?.id}} {{'for user' | translate}} #{{transaction?.userId}}</p>
     <ng-container *ngIf="errors.length > 0">
       <mat-card *ngFor="let err of errors"
                 class="err-alert">
