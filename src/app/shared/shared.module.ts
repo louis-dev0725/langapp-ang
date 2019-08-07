@@ -12,9 +12,10 @@ import {
   MatProgressSpinnerModule,
   MatSelectModule
 } from '@angular/material';
+import { RoundToPipe } from '@app/pipes/round-to.pipe';
 
 @NgModule({
-  declarations: [FormatDatePipe, FormatNumbersPipe],
+  declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe],
   imports: [
     CommonModule,
     MatIconModule,
@@ -29,6 +30,7 @@ import {
   exports: [
     FormatDatePipe,
     FormatNumbersPipe,
+    RoundToPipe,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,

@@ -231,8 +231,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
             {{ child.label | translate }}
             <ng-container [ngSwitch]="child.name">
               <span class="menuitem-text-additional" *ngSwitchCase="'payment'">
-                <!--<span>({{'balance' | translate}}: {{user.balance}} {{'rub' | translate}})</span>-->
-                <span>({{ 'balance' | translate }}: {{ user?.balance | formatNumbers }} {{ 'rub' | translate }})</span>
+                <span>({{ 'balance' | translate }}: {{ user?.balance | roundTo }}₽)</span>
               </span>
             </ng-container>
           </span>

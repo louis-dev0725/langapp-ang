@@ -20,7 +20,7 @@ import { ThemeModule } from '@app/theme/theme.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ContentPageComponent } from './content-page/content-page.component';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
-import { ConfirmDialogModule } from "@app/common/confirm-dialog/confirm-dialog.module";
+import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
 
 export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files

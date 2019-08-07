@@ -1,7 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
-import { TranslatingService } from '@app/services/translating.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -13,7 +12,7 @@ export class BreadCrumbsService implements OnDestroy {
   private sub;
   private url;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private translatingService: TranslatingService) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
 
   public initBreadCrumbs() {
     this.sub = this.router.events
@@ -74,7 +73,6 @@ export class BreadCrumbsService implements OnDestroy {
   }
 
   private _mapCrumbs(el) {
-    // const name = this.translatingService.translates[el.data['value']['breadcrumb']];
     const name = el.data['value']['breadcrumb'];
     return {
       label: name.charAt(0).toUpperCase() + name.slice(1)
