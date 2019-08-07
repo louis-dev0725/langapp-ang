@@ -1,21 +1,26 @@
-import { Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
-
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit, OnChanges {
-  @Input() public user;
   public messages = [];
+  public user;
 
   constructor(private msgService: MessageService, private api: ApiService, private sessionService: SessionService) {}
 
   ngOnInit() {
+    this.user = this.sessionService.user;
     this.messages = this.user ? this._mapMessages(this.user['notifications']) : [];
+
+    this.sessionService.changingUser.subscribe(user => {
+      this.user = user;
+      this.messages = this.user ? this._mapMessages(this.user['notifications']) : [];
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -27,7 +32,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
   public onValueChange(msg) {
     const data = { id: msg.id, onClose: true };
     this.api.onCloseNotify(data).subscribe(() => {
-      this.user = this.user.filter(el => el.id !== msg.id);
+      this.user['notifications'] = this.user['notifications'].filter(el => el.id !== msg.id);
       this.sessionService.changingUser.emit(this.user);
     });
   }

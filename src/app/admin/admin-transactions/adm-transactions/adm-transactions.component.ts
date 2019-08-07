@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { availableCurrencyList } from '@app/config/availableCurrencyList';
 
 export const MY_FORMATS = {
   parse: {
@@ -44,7 +45,7 @@ export class AdmTransactionsComponent implements OnInit {
     addedDateTime: 'Added date time',
     comment: 'Comment'
   };
-  columns = ['id', 'user', 'money', 'comment', 'addedDateTime', 'isPartner', 'edit'];
+  columns = ['id', 'user', 'money', 'currency', 'amount in', 'comment', 'addedDateTime', 'isPartner', 'edit'];
   isLoaded = false;
   isEmptyTable = true;
 
@@ -52,6 +53,8 @@ export class AdmTransactionsComponent implements OnInit {
     id: '',
     userId: '',
     money: '',
+    currency: '',
+    baseCurrency: '',
     addedDateTime: '',
     name: '',
     comment: ''
@@ -142,7 +145,15 @@ export class AdmTransactionsComponent implements OnInit {
     this.transactionsSubscription = this.api.getTransactions(this.paginator.page, filterValue, sort).subscribe(result => {
       this.isLoaded = true;
       if (!(result instanceof ApiError)) {
-        this.rows = result.items;
+        this.rows = result.items.map(el => {
+          const _mark = availableCurrencyList.find((item: any) => {
+            return item.label == el.currency;
+          }).value;
+          return {
+            ...el,
+            currencyMark: _mark
+          };
+        });
         this.paginator.length = result._meta.totalCount;
         this.paginator.pageIndex = result._meta.currentPage - 1;
       }

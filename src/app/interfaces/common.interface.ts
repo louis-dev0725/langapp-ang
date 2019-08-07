@@ -21,6 +21,8 @@ export interface User {
   invitedByUserId?: any;
   enablePartnerPayments?: any;
   comment?: any;
+  currency?: any;
+  config?: any;
 }
 
 export interface InvitedUser {

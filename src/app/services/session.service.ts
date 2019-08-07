@@ -1,11 +1,12 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { User } from '../interfaces/common.interface';
 import { Router } from '@angular/router';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SessionService {
+export class SessionService implements OnDestroy {
   public changingUser = new EventEmitter();
 
   get lang(): string {
@@ -98,7 +99,13 @@ export class SessionService {
     this._user = value;
   }
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    this.changingUser.pipe(untilDestroyed(this)).subscribe((user: any) => {
+      localStorage.setItem('user', JSON.stringify(user));
+    });
+  }
+
+  ngOnDestroy(): void {}
 
   logout() {
     this.token = '';

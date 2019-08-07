@@ -142,6 +142,7 @@
               formControlName="isPartner">{{'Enable partner' | translate}}
           </mat-checkbox>
         </div>
+
         <mat-form-field class="form-item">
           <input
               matInput
@@ -154,6 +155,18 @@
               formControlName="enablePartnerPayments">{{'Enable payment' | translate}}
           </mat-checkbox>
         </div>
+        <div class="form-item">
+          <mat-checkbox
+              formControlName="frozeEnablePartnerPayments">{{"Froze 'Enable Partner Payments'" | translate}}
+          </mat-checkbox>
+        </div>
+        <mat-form-field class="form-item">
+          <mat-label translate>{{'Currency' | translate}}</mat-label>
+          <mat-select formControlName="currency">
+            <mat-option *ngFor="let cur of currency" [value]="cur.value">{{cur.label}}({{cur.value}})</mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field class="form-item">
           <mat-label translate>{{'Language user' | translate}}</mat-label>
           <mat-select formControlName="language">
@@ -216,6 +229,16 @@
             <td mat-cell *matCellDef="let row">{{row.money | formatNumbers: session.lang}}</td>
           </ng-container>
 
+          <ng-container matColumnDef="currency">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Currency' | translate}}</th>
+            <td mat-cell *matCellDef="let row">{{row.currency}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount in" >
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount in' | translate}} {{baseCurrency}}</th>
+            <td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatNumbers: session.lang}}</td>
+          </ng-container>
+
           <ng-container matColumnDef="comment">
             <th mat-header-cell *matHeaderCellDef>{{'Comment' | translate}}</th>
             <td mat-cell *matCellDef="let row">{{row.comment}}</td>
@@ -256,6 +279,16 @@
           <ng-container matColumnDef="money">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount' | translate}}</th>
             <td mat-cell *matCellDef="let row">{{row.money | formatNumbers: session.lang}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="currency">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Currency' | translate}}</th>
+            <td mat-cell *matCellDef="let row">{{row.currency}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount in" >
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount in' | translate}}{{baseCurrency}}</th>
+            <td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatNumbers: session.lang}}</td>
           </ng-container>
 
           <ng-container matColumnDef="comment">

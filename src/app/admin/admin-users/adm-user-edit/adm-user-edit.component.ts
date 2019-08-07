@@ -1,16 +1,17 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '@app/interfaces/common.interface';
 import { CustomValidator } from '@app/services/custom-validator';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
-import { MatDialog, MatPaginator, MatSnackBar, MatSort, PageEvent } from '@angular/material';
+import { MatDialog, MatSnackBar, MatSort, PageEvent } from '@angular/material';
 import { EventService } from '@app/event.service';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import { forkJoin, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { availableCurrencyList } from '@app/config/availableCurrencyList';
 
 @Component({
   selector: 'app-adm-user-edit',
@@ -20,7 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AdmUserEditComponent implements OnInit, OnDestroy {
   public userId;
   public transactionList: any = [];
-  public columns = ['id', 'money', 'comment', 'addedDateTime', 'edit'];
+  public columns = ['id', 'money', 'currency', 'amount in', 'comment', 'addedDateTime', 'edit'];
   public transactionPartnerList: any = [];
   public languages = [
     {
@@ -32,6 +33,8 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       label: 'English'
     }
   ];
+  public currency = availableCurrencyList;
+  public baseCurrency;
   public isLoadingTrans = false;
   public isLoadingTransPartner = false;
 
@@ -104,6 +107,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       id: [''],
       name: ['', { validators: [Validators.required], updateOn: 'change' }],
       company: [''],
+      currency: [''],
       site: [''],
       telephone: [''],
       email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
@@ -118,6 +122,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       isPartner: [''],
       invitedByUserId: [''],
       enablePartnerPayments: [''],
+      frozeEnablePartnerPayments: [''],
       comment: ['']
     });
     this.getTrans(this.userId);
@@ -133,6 +138,15 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     this.getTransactions(userId, 0, _sort, page).subscribe(
       res => {
         this.transactionList = res.items;
+        /*this.transactionList = res.items.map(el => {
+          const _mark = availableCurrencyList.find((item: any) => {
+            return item.label == el.currency;
+          }).value;
+          return {
+            ...el,
+            currencyMark: _mark
+          };
+        });*/
         this.transactionList.sort = this.sortTrans;
         this.transactionList.paginator = this.paginatorTrans;
         this.paginatorTrans.length = res._meta.totalCount;
@@ -154,6 +168,15 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     this.getTransactions(userId, 1, _sort, page).subscribe(
       res => {
         this.transactionPartnerList = res.items;
+        /*this.transactionPartnerList = res.items.map(el => {
+          const _mark = availableCurrencyList.find((item: any) => {
+            return item.label == el.currency;
+          }).value;
+          return {
+            ...el,
+            currencyMark: _mark
+          };
+        });*/
         this.transactionList.sort = this.sortTransPartn;
         this.transactionList.paginator = this.paginatorPartnerTrans;
         this.paginatorPartnerTrans.length = res._meta.totalCount;
@@ -189,6 +212,8 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     return this.api.getUserById(id).subscribe(
       (res: any) => {
         this.user = res;
+        this.baseCurrency = this.user.currency;
+        console.log(this.user);
         this.session.userToEdit = res;
         this.updateForm(res);
       },
@@ -251,7 +276,8 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     const data = {
       ...this.userProfile.value,
       enablePartnerPayments: this.userProfile.value.enablePartnerPayments ? 1 : 0,
-      isPartner: this.userProfile.value.isPartner ? 1 : 0
+      isPartner: this.userProfile.value.isPartner ? 1 : 0,
+      frozeEnablePartnerPayments: this.userProfile.value.frozeEnablePartnerPayments ? 1 : 0
     };
     this.api.updateUser(data).subscribe(res => {
       if (res instanceof ApiError) {

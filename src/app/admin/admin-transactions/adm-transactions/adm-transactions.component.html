@@ -38,7 +38,6 @@
         <a mat-flat-button color="primary" (click)="clearFilter()">Clear filter</a>
       </div>
     </div>
-
     <div class="container">
       <div class="wrap-table">
         <table mat-table [dataSource]="transactionList" matSort>
@@ -63,6 +62,16 @@
           <td mat-cell *matCellDef="let row">{{row.money | formatNumbers: session.lang}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="currency">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Currency' | translate}}</th>
+          <td mat-cell *matCellDef="let row">{{row.currency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount in" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount in' | translate}}</th>
+          <td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatNumbers: session.lang}}{{row?.currencyMark}}</td>
+        </ng-container>
+
         <ng-container matColumnDef="comment">
           <th mat-header-cell *matHeaderCellDef>{{'Comment' | translate}}</th>
           <td mat-cell *matCellDef="let row">{{row.comment}}</td>
@@ -75,7 +84,7 @@
 
         <ng-container matColumnDef="isPartner">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Is partner' | translate}}</th>
-          <td mat-cell *matCellDef="let row">{{getIsPartner(row)}}</td>
+          <td mat-cell *matCellDef="let row">{{row.isPartner}}</td>
         </ng-container>
 
         <ng-container matColumnDef="edit">

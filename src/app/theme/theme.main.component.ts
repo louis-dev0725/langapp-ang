@@ -1,4 +1,8 @@
-import { Component, OnDestroy, Renderer2, OnInit, NgZone } from '@angular/core';
+import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { ApiService } from '@app/services/api.service';
+import { SessionService } from '@app/services/session.service';
+import { onRandomFromRange } from '@app/helpers/randomFromRange';
 
 @Component({
   selector: 'app-theme-main',
@@ -35,7 +39,22 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
 
   resetMenu: boolean;
 
-  constructor(public renderer: Renderer2, public zone: NgZone) {}
+  interval;
+
+  constructor(public zone: NgZone, private router: Router, private api: ApiService, private sessionService: SessionService) {
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        if (this.sessionService.isLoggedIn) {
+          this.api.meRequest().subscribe();
+        }
+      }
+    });
+    this.interval = setInterval(() => {
+      if (this.sessionService.isLoggedIn) {
+        this.api.meRequest().subscribe();
+      }
+    }, onRandomFromRange(500, 600));
+  }
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
@@ -164,6 +183,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.unbindRipple();
+    clearInterval(this.interval);
   }
 
   onWrapperClick() {

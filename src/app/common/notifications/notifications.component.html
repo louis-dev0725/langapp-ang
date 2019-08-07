@@ -1,3 +1,5 @@
-<div *ngFor="let message of messages">
-  <p-messages (valueChange)="onValueChange(message)" [(value)]="message.data"></p-messages>
+<div class="container">
+  <div *ngFor="let message of messages">
+    <p-messages (valueChange)="onValueChange(message)" [(value)]="message.data"></p-messages>
+  </div>
 </div>
