@@ -10,12 +10,14 @@ import { ThemeFooterComponent } from '@app/theme/theme.footer.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@app/shared/shared.module';
-import { BreadcrumbModule, ScrollPanelModule } from 'primeng/primeng';
+import { BreadcrumbModule, MessageService, ScrollPanelModule } from 'primeng/primeng';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { HocBreadCrumbComponent } from '@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 import { MatDialogModule, MatSnackBarModule } from '@angular/material';
-
+import { NotificationsComponent } from '@app/common/notifications/notifications.component';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 @NgModule({
   imports: [
     CommonModule,
@@ -29,7 +31,9 @@ import { MatDialogModule, MatSnackBarModule } from '@angular/material';
     ScrollPanelModule,
     VirtualScrollerModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MessagesModule,
+    MessageModule
   ],
   declarations: [
     ThemeMenuComponent,
@@ -37,7 +41,8 @@ import { MatDialogModule, MatSnackBarModule } from '@angular/material';
     ThemeTopbarComponent,
     ThemeMainComponent,
     ThemeFooterComponent,
-    HocBreadCrumbComponent
+    HocBreadCrumbComponent,
+    NotificationsComponent
   ],
   exports: [
     ThemeMenuComponent,
@@ -51,6 +56,6 @@ import { MatDialogModule, MatSnackBarModule } from '@angular/material';
     HocBreadCrumbComponent,
     MatSnackBarModule
   ],
-  providers: [BreadCrumbsService]
+  providers: [BreadCrumbsService, MessageService]
 })
 export class ThemeModule {}

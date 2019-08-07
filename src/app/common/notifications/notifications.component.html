@@ -1,0 +1,3 @@
+<div *ngFor="let message of messages">
+  <p-messages (valueChange)="onValueChange(message)" [(value)]="message.data"></p-messages>
+</div>

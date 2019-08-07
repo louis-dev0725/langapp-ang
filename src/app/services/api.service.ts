@@ -439,4 +439,9 @@ export class ApiService {
       this.getMeRequest(observer, token, false);
     });
   }
+
+  onCloseNotify(data) {
+    const headers = this.getHeadersWithToken();
+    return this.http.post(this.apiHost + '/users/close-notification', data, { headers });
+  }
 }
