@@ -17,7 +17,7 @@ import { SessionService } from './services/session.service';
 import { CustomValidator } from '@app/services/custom-validator';
 import { HttpInterceptorService } from '@app/http/http-interceptor';
 import { ThemeModule } from '@app/theme/theme.module';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
 import { ContentPageComponent } from './content-page/content-page.component';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
@@ -26,6 +26,9 @@ export function createTranslateLoader(http: HttpClient) {
   // todo: [SHR]: change prefix for translation files
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu);
 
 @NgModule({
   declarations: [AppComponent, ContentPageComponent],

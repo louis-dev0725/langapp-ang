@@ -58,12 +58,12 @@
 
           <ng-container matColumnDef="balance">
             <th mat-header-cell *matHeaderCellDef>{{'Balance' | translate}}</th>
-            <td mat-cell *matCellDef="let row">{{row.balance | formatNumbers: session.lang}}</td>
+            <td mat-cell *matCellDef="let row">{{row.balance | formatCurrency : session.lang}}</td>
           </ng-container>
 
           <ng-container matColumnDef="balancePartner">
             <th mat-header-cell *matHeaderCellDef>{{'Partner Balance' | translate}}</th>
-            <td mat-cell *matCellDef="let row">{{row.balancePartner | formatNumbers: session.lang}}</td>
+            <td mat-cell *matCellDef="let row">{{row.balancePartner | formatCurrency : session.lang}}</td>
           </ng-container>
 
 

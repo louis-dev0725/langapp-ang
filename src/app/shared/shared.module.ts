@@ -13,9 +13,10 @@ import {
   MatSelectModule
 } from '@angular/material';
 import { RoundToPipe } from '@app/pipes/round-to.pipe';
+import { FormatCurrencyPipe } from '@app/pipes/format-currency.pipe';
 
 @NgModule({
-  declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe],
+  declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe],
   imports: [
     CommonModule,
     MatIconModule,
@@ -31,6 +32,7 @@ import { RoundToPipe } from '@app/pipes/round-to.pipe';
     FormatDatePipe,
     FormatNumbersPipe,
     RoundToPipe,
+    FormatCurrencyPipe,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
