@@ -138,15 +138,6 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     this.getTransactions(userId, 0, _sort, page).subscribe(
       res => {
         this.transactionList = res.items;
-        /*this.transactionList = res.items.map(el => {
-          const _mark = availableCurrencyList.find((item: any) => {
-            return item.label == el.currency;
-          }).value;
-          return {
-            ...el,
-            currencyMark: _mark
-          };
-        });*/
         this.transactionList.sort = this.sortTrans;
         this.transactionList.paginator = this.paginatorTrans;
         this.paginatorTrans.length = res._meta.totalCount;

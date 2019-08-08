@@ -20,7 +20,7 @@
       If you have any questions or suggestions - write to us.
     </ng-container>
 
-    <p class="notation">{{'On your affiliate account' | translate}} {{user.balancePartner}} {{'rub' | translate}}.</p>
+    <p class="notation">{{'On your affiliate account' | translate}} {{user.balancePartner | formatCurrency: session.lang }}.</p>
 
   </div>
 </div>

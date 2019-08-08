@@ -290,7 +290,7 @@ export class ApiService {
     }
     const urlParams: any = [];
     if (params.userId) {
-      urlParams.push(`filter[userId]=${this.session.user.id}`);
+      urlParams.push(`filter[userId]=${params.userId}`);
     }
     if (params.isPartner || params.isPartner == 0) {
       urlParams.push('filter[isPartner]=' + params.isPartner);

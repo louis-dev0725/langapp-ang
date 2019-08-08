@@ -15,11 +15,11 @@ export class NotificationsComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.user = this.sessionService.user;
-    this.messages = this.user ? this._mapMessages(this.user['notifications']) : [];
+    this.messages = this.user && this.user['notifications'] ? this._mapMessages(this.user['notifications']) : [];
 
     this.sessionService.changingUser.subscribe(user => {
       this.user = user;
-      this.messages = this.user ? this._mapMessages(this.user['notifications']) : [];
+      this.messages = this.user && this.user['notifications'] ? this._mapMessages(this.user['notifications']) : [];
     });
   }
 

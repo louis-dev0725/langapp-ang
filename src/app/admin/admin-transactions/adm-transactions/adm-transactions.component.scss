@@ -37,4 +37,12 @@ td, th {
   th.mat-header-cell:last-of-type {
     width: 50px !important;
   }
+
+  td.mat-cell:nth-child(6) {
+    min-width: 200px;
+  }
+  td.mat-cell:nth-child(7) {
+    min-width: 125px;
+  }
+
 }

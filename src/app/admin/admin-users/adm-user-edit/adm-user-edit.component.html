@@ -226,7 +226,7 @@
 
           <ng-container matColumnDef="money">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount' | translate}}</th>
-            <td mat-cell *matCellDef="let row">{{row.money | formatNumbers: session.lang}}</td>
+            <td mat-cell *matCellDef="let row">{{row.money | formatCurrency : session.lang}}</td>
           </ng-container>
 
           <ng-container matColumnDef="currency">
@@ -236,7 +236,7 @@
 
           <ng-container matColumnDef="amount in" >
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount in' | translate}} {{baseCurrency}}</th>
-            <td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatNumbers: session.lang}}</td>
+            <td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatCurrency : session.lang}}</td>
           </ng-container>
 
           <ng-container matColumnDef="comment">
@@ -278,7 +278,7 @@
 
           <ng-container matColumnDef="money">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount' | translate}}</th>
-            <td mat-cell *matCellDef="let row">{{row.money | formatNumbers: session.lang}}</td>
+            <td mat-cell *matCellDef="let row">{{row.money | formatCurrency : session.lang}}</td>
           </ng-container>
 
           <ng-container matColumnDef="currency">
@@ -288,7 +288,7 @@
 
           <ng-container matColumnDef="amount in" >
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount in' | translate}}{{baseCurrency}}</th>
-            <td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatNumbers: session.lang}}</td>
+            <td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatCurrency : session.lang}}</td>
           </ng-container>
 
           <ng-container matColumnDef="comment">

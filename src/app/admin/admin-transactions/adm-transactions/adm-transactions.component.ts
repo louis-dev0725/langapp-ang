@@ -166,6 +166,7 @@ export class AdmTransactionsComponent implements OnInit {
   }
 
   showEditUser(row: any) {
+    console.log(row.user.id);
     this.api.getUserByToken(row.token).subscribe(result => {
       if (!(result instanceof ApiError)) {
         this.session.userToEdit = this.session.tempUser;

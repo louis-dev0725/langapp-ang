@@ -100,16 +100,16 @@ export class SessionService implements OnDestroy {
   }
 
   constructor(private router: Router) {
-    this.changingUser.pipe(untilDestroyed(this)).subscribe((user: any) => {
+    /*this.changingUser.pipe(untilDestroyed(this)).subscribe((user: any) => {
       localStorage.setItem('user', JSON.stringify(user));
-    });
+    });*/
   }
 
   ngOnDestroy(): void {}
 
   logout() {
-    this.token = '';
-    this.user = undefined;
+    /*this.token = '';
+    this.user = undefined;*/
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     this.reloadAdmin();
