@@ -166,11 +166,10 @@ export class AdmTransactionsComponent implements OnInit {
   }
 
   showEditUser(row: any) {
-    console.log(row.user.id);
     this.api.getUserByToken(row.token).subscribe(result => {
       if (!(result instanceof ApiError)) {
         this.session.userToEdit = this.session.tempUser;
-        this.router.navigate([`../../users/${this.session.userToEdit.id}`], { relativeTo: this.route });
+        this.router.navigate([`../../users/${row.user.id}`], { relativeTo: this.route });
       }
     });
   }

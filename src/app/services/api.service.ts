@@ -342,7 +342,7 @@ export class ApiService {
    * url: /transactions/index?filter[userId]=<user id>&filter[isPartner]=1
    */
   getUserPartnersTransactionsList(page = 0, sort = {}): Observable<any> {
-    const params: any = { userId: 1, isPartner: 1, 'per-page': this.pageSize };
+    const params: any = { userId: this.session.user.id, isPartner: 1, 'per-page': this.pageSize };
 
     if (Object.keys(sort).length > 0) {
       params.sort = this.prepareSort(sort);
