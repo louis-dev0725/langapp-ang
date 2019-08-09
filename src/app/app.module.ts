@@ -30,6 +30,15 @@ import localeRu from '@angular/common/locales/ru';
 
 registerLocaleData(localeRu);
 
+// Store
+import { StoreModule, MetaReducer } from '@ngrx/store';
+import { reducers } from '@app/store/reducers';
+import { environment } from '../environments/environment';
+import { storeFreeze } from 'ngrx-store-freeze';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+export const metaReducers: MetaReducer<any>[] = !environment.production ? [storeFreeze] : [];
+
 @NgModule({
   declarations: [AppComponent, ContentPageComponent],
   imports: [
@@ -43,6 +52,8 @@ registerLocaleData(localeRu);
         deps: [HttpClient]
       }
     }),
+    StoreModule.forRoot(reducers, { metaReducers }),
+    environment.development ? StoreDevtoolsModule.instrument() : [],
     BrowserAnimationsModule,
     ThemeModule,
     ConfirmDialogModule
