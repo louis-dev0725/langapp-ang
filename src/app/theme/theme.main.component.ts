@@ -42,7 +42,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   interval;
 
   constructor(public zone: NgZone, private router: Router, private api: ApiService, private sessionService: SessionService) {
-    /*router.events.subscribe(event => {
+    router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (this.sessionService.isLoggedIn) {
           this.api.meRequest().subscribe();
@@ -53,7 +53,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
       if (this.sessionService.isLoggedIn) {
         this.api.meRequest().subscribe();
       }
-    }, onRandomFromRange(500, 600));*/
+    }, onRandomFromRange(500, 600));
   }
 
   ngOnInit() {
