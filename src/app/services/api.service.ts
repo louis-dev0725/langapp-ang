@@ -4,6 +4,9 @@ import { User } from '../interfaces/common.interface';
 import { Observable, of } from 'rxjs';
 import { ApiError } from './api-error';
 import { SessionService } from './session.service';
+import { Store } from '@ngrx/store';
+import * as fromStore from '@app/store';
+import { LoadAccount, LoadAccountFail, LoadAccountSuccess } from '@app/store';
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +26,16 @@ export class ApiService {
     return (window as any).rocket;
   }
 
-  constructor(private http: HttpClient, private session: SessionService) {}
+  constructor(private http: HttpClient, private session: SessionService, private store: Store<fromStore.State>) {}
 
   //<editor-fold desc="Signup group">
   login(params: any): Observable<any | ApiError> {
+    this.store.dispatch(new LoadAccount());
     return Observable.create(observer => {
       this.http.post(this.apiHost + '/users/login', params).subscribe(
         (res: any) => {
           if (res.accessToken) {
+            this.store.dispatch(new LoadAccountSuccess(res));
             this.session.token = res.accessToken;
             this.getMeRequest(observer);
           } else {
@@ -39,6 +44,7 @@ export class ApiService {
         },
         (err: any) => {
           console.log(err);
+          this.store.dispatch(new LoadAccountFail(err));
           observer.next(this.getApiError(err));
         }
       );

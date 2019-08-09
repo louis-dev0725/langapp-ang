@@ -1,2 +1,2 @@
-// export * from './authorities.action';
+export * from './authorized.action';
 export * from './account.action';
