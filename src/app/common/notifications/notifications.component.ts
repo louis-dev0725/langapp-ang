@@ -11,7 +11,7 @@ export class NotificationsComponent implements OnInit, OnChanges {
   public messages = [];
   public user;
 
-  constructor(private msgService: MessageService, private api: ApiService, private sessionService: SessionService) {}
+  constructor(public sessionService: SessionService, private msgService: MessageService, private api: ApiService) {}
 
   ngOnInit() {
     this.user = this.sessionService.user;
