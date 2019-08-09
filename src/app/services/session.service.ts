@@ -1,7 +1,6 @@
 import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { User } from '../interfaces/common.interface';
 import { Router } from '@angular/router';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +27,6 @@ export class SessionService implements OnDestroy {
   private static locales = { ru: 'ru-RU', en: 'en-US' };
   private _token: string;
   private _user: User;
-  private _userToEdit: any;
 
   get isAdmin(): boolean {
     return this.user ? this.user.isAdmin : false;
@@ -48,16 +46,6 @@ export class SessionService implements OnDestroy {
     this._token = value;
   }
 
-  private _tempUser: any;
-  get tempUser(): any {
-    return this._tempUser ? this._tempUser : JSON.parse(localStorage.getItem('tempUser'));
-  }
-
-  set tempUser(value: any) {
-    localStorage.setItem('tempUser', JSON.stringify(value));
-    this._tempUser = value;
-  }
-
   private _transaction: any;
   get transaction(): any {
     return this._transaction ? this._transaction : JSON.parse(localStorage.getItem('transaction'));
@@ -66,15 +54,6 @@ export class SessionService implements OnDestroy {
   set transaction(value: any) {
     localStorage.setItem('transaction', JSON.stringify(value));
     this._transaction = value;
-  }
-
-  get userToEdit(): any {
-    return this._userToEdit ? this._userToEdit : JSON.parse(localStorage.getItem('userToEdit'));
-  }
-
-  set userToEdit(value: any) {
-    localStorage.setItem('userToEdit', JSON.stringify(value));
-    this._userToEdit = value;
   }
 
   get openedAdmin() {
@@ -99,17 +78,11 @@ export class SessionService implements OnDestroy {
     this._user = value;
   }
 
-  constructor(private router: Router) {
-    /*this.changingUser.pipe(untilDestroyed(this)).subscribe((user: any) => {
-      localStorage.setItem('user', JSON.stringify(user));
-    });*/
-  }
+  constructor(private router: Router) {}
 
   ngOnDestroy(): void {}
 
   logout() {
-    /*this.token = '';
-    this.user = undefined;*/
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     this.reloadAdmin();
@@ -129,7 +102,10 @@ export class SessionService implements OnDestroy {
   }
 
   saveAdmin() {
-    localStorage.setItem('savedAdmin', JSON.stringify(this.user));
+    const token = localStorage.getItem('token');
+    const _user = { ...this.user };
+    _user['accessToken'] = token;
+    localStorage.setItem('savedAdmin', JSON.stringify(_user));
   }
 
   reloadAdmin() {
@@ -137,6 +113,10 @@ export class SessionService implements OnDestroy {
     if (this.user) {
       this.token = this.user.accessToken;
       localStorage.removeItem('savedAdmin');
+    } else {
+      const lang = localStorage.getItem('lang');
+      localStorage.clear();
+      localStorage.setItem('lang', lang);
     }
     this.changingUser.emit(this.user);
   }

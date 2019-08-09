@@ -38,6 +38,7 @@ export class ApiService {
           }
         },
         (err: any) => {
+          console.log(err);
           observer.next(this.getApiError(err));
         }
       );
@@ -213,11 +214,11 @@ export class ApiService {
 
     this.http.get<User>(this.apiHost + '/users/me', { headers }).subscribe(
       (userRes: any) => {
-        if (isCurrentUser) {
-          this.session.user = userRes;
+        /*if (isCurrentUser) {
         } else {
-          this.session.tempUser = userRes;
-        }
+          // this.session.tempUser = userRes;
+        }*/
+        this.session.user = userRes;
         observer.next(userRes);
       },
       error => {

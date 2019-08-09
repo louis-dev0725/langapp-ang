@@ -164,7 +164,7 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
         this.isLoaded = true;
       },
       err => {
-        this.filterErrMsg = err.error[0]['message'];
+        this.filterErrMsg = err.error['message'] || err.error[0]['message'];
         this.isLoaded = true;
       }
     );
@@ -183,11 +183,6 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
     this.translate.get(this.fieldKeys).subscribe((res: any) => {
       this.translatedKeys = Object.assign({ id: 'ID' }, res);
     });
-  }
-
-  showEditUser(row: any) {
-    this.session.userToEdit = row;
-    this.router.navigate([`../${row.id}`], { relativeTo: this.route });
   }
 
   onPageChange(event: PageEvent) {

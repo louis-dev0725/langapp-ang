@@ -204,8 +204,6 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.user = res;
         this.baseCurrency = this.user.currency;
-        console.log(this.user);
-        this.session.userToEdit = res;
         this.updateForm(res);
       },
       err => {}

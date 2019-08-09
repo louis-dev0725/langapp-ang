@@ -48,7 +48,7 @@ export class AddTransactionComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.user = this.session.userToEdit;
+    this.user = this.session.user;
 
     this.transactionForm = this.formBuilder.group({
       userId: [this.user.id || '', { validators: [Validators.required] }],
@@ -72,7 +72,8 @@ export class AddTransactionComponent implements OnInit {
   onCreateTransaction() {
     const data = {
       ...this.transactionForm.value,
-      isPartner: this.transactionForm.value.isPartner ? 1 : 0
+      isPartner: this.transactionForm.value.isPartner ? 1 : 0,
+      isRealMoney: this.transactionForm.value.isRealMoney ? 1 : 0
     };
     this.api.createTransaction(data).subscribe(res => {
       if (!(res instanceof ApiError)) {
