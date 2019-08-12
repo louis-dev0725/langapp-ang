@@ -1,5 +1,4 @@
 <div class="container" *ngIf="(isLoggedIn$ | async) && messages.length">
-  <div>test</div>
   <div *ngFor="let message of messages">
     <p-messages (valueChange)="onValueChange(message)" [(value)]="message.data"></p-messages>
   </div>

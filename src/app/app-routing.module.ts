@@ -1,13 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CanactivateLogged } from './services/canactivate-logged';
-import { PaymentComponent } from './payment/payment.component';
-import { ContactComponent } from './contact/contact.component';
-import { CanactivateAdmin } from './services/canactivate-admin';
-import { SuccessComponent } from '@app/payment/success/success.component';
+import { CanactivateLogged } from './guards/canactivate-logged';
+import { CanactivateAdmin } from './guards/canactivate-admin';
 import { ContentPageComponent } from '@app/content-page/content-page.component';
-import { AboutComponent } from '@app/partners/about/about.component';
-import { CanactivateNologged } from '@app/services/canactivate-nologged';
+import { CanactivateNologged } from '@app/guards/canactivate-nologged';
 
 const routes: Routes = [
   {

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CanactivateLogged } from '@app/services/canactivate-logged';
+import { CanactivateLogged } from '@app/guards/canactivate-logged';
 import { RouterModule } from '@angular/router';
 import { SettingsComponent } from '@app/settings/settings.component';
 import { ProfileComponent } from '@app/settings/profile/profile.component';
