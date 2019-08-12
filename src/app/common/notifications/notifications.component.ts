@@ -1,7 +1,10 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
+import * as fromStore from '@app/store';
+import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
+import { Store } from '@ngrx/store';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
@@ -10,8 +13,12 @@ import { SessionService } from '@app/services/session.service';
 export class NotificationsComponent implements OnInit, OnChanges {
   public messages = [];
   public user;
+  public isLoggedIn$ = this.store.select(getAuthorizedIsLoggedIn);
 
-  constructor(public sessionService: SessionService, private msgService: MessageService, private api: ApiService) {}
+  constructor(public sessionService: SessionService,
+              private msgService: MessageService,
+              private api: ApiService,
+              private store: Store<fromStore.State>) {}
 
   ngOnInit() {
     this.user = this.sessionService.user;

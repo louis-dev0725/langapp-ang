@@ -1,7 +1,8 @@
 import * as fromAccount from '../actions/account.action';
+import { User } from '../../interfaces/common.interface';
 
 export interface AccountState {
-  data: any;
+  data: User;
   loaded: boolean;
   loading: boolean;
 }

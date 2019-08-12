@@ -4,12 +4,14 @@ export interface AuthorizedState {
   data: any;
   loaded: boolean;
   loading: boolean;
+  token: string;
 }
 
 export const initialState: AuthorizedState = {
   data: localStorage.getItem('saveAdmin') ? JSON.parse(localStorage.getItem('saveAdmin')) : JSON.parse(localStorage.getItem('user')),
   loaded: false,
-  loading: false
+  loading: false,
+  token: localStorage.getItem('token')
 };
 
 export function reducer(state: AuthorizedState = initialState, action: fromAuthorized.AuthorizedAction): AuthorizedState {
@@ -34,7 +36,17 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
         ...state,
         loading: false,
         loaded: true,
-        data: action.payload
+        token: action.payload
+      };
+    }
+
+    case fromAuthorized.LOG_OUT_AUTHORIZED: {
+      localStorage.removeItem('token');
+      return {
+        data: null,
+        loaded: false,
+        loading: false,
+        token: ''
       };
     }
   }
@@ -45,3 +57,4 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
 export const getAuthorizedData = (state: AuthorizedState): string[] => state.data;
 export const getAuthorizedLoaded = (state: AuthorizedState): boolean => state.loaded;
 export const getAuthorizedLoading = (state: AuthorizedState): boolean => state.loading;
+export const isLoggedIn = (state: AuthorizedState): boolean => !!state.token;

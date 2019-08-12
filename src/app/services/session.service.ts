@@ -1,11 +1,17 @@
-import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { User } from '../interfaces/common.interface';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as fromStore from '@app/store';
+import { LogOutAction } from '@app/store';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SessionService implements OnDestroy {
+export class SessionService {
+
+  private static locales = { ru: 'ru-RU', en: 'en-US' };
+
   public changingUser = new EventEmitter();
 
   get lang(): string {
@@ -24,7 +30,7 @@ export class SessionService implements OnDestroy {
   }
 
   private _lang: string;
-  private static locales = { ru: 'ru-RU', en: 'en-US' };
+
   private _token: string;
   private _user: User;
 
@@ -78,17 +84,6 @@ export class SessionService implements OnDestroy {
     this._user = value;
   }
 
-  constructor(private router: Router) {}
-
-  ngOnDestroy(): void {}
-
-  logout() {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    this.reloadAdmin();
-    this.router.navigateByUrl('/');
-  }
-
   static getLang(): string {
     let lang = localStorage.getItem('lang');
     if (!lang) {
@@ -100,6 +95,17 @@ export class SessionService implements OnDestroy {
   static getLocale() {
     return SessionService.locales[SessionService.getLang()] ? SessionService.locales[SessionService.getLang()] : SessionService.getLang();
   }
+
+  constructor(private router: Router,  private store: Store<fromStore.State>) {}
+
+  logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.reloadAdmin();
+    this.store.dispatch(new LogOutAction());
+    this.router.navigateByUrl('/');
+  }
+
 
   saveAdmin() {
     const token = localStorage.getItem('token');

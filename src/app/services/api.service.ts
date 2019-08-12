@@ -6,7 +6,8 @@ import { ApiError } from './api-error';
 import { SessionService } from './session.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
-import { LoadAccount, LoadAccountFail, LoadAccountSuccess } from '@app/store';
+import { LoadAccount, LoadAccountFail, LoadAccountSuccess, LoadAuthorizedSuccess } from '@app/store';
+
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,7 @@ export class ApiService {
         (res: any) => {
           if (res.accessToken) {
             this.store.dispatch(new LoadAccountSuccess(res));
+            this.store.dispatch(new LoadAuthorizedSuccess(res.accessToken));
             this.session.token = res.accessToken;
             this.getMeRequest(observer);
           } else {
