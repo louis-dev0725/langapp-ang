@@ -16,7 +16,7 @@ use yii\filters\AccessControl;
 use yii\rest\IndexAction;
 use yii\web\ForbiddenHttpException;
 
-class TransactionController extends ActiveController
+class TransactionController extends \app\controllers\ActiveController
 {
     public $modelClass = Transaction::class;
     public $createScenario = Transaction::SCENARIO_ADMIN;

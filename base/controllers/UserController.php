@@ -20,7 +20,7 @@ use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
-class UserController extends ActiveController
+class UserController extends \app\controllers\ActiveController
 {
     public $modelClass = User::class;
 
