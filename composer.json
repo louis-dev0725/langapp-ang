@@ -21,7 +21,9 @@
         "bizley/migration": "3.2",
         "sizeg/yii2-jwt": "^1.2",
         "league/omnipay": "3",
-        "hiqdev/omnipay-robokassa": "^3.1"
+        "hiqdev/omnipay-robokassa": "^3.1",
+      "ext-json": "*",
+      "ext-simplexml": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

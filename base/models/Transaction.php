@@ -2,6 +2,7 @@
 
 namespace app\base\models;
 
+use app\components\CurrencyConverter;
 use app\components\Helpers;
 use Yii;
 use yii\behaviors\AttributeBehavior;
@@ -22,6 +23,8 @@ use yii\db\ActiveRecord;
  * @property int $parentTransactionId
  * @property array $dataJson
  * @property int $invoiceId
+ * @property string $currency
+ * @property string $moneyBaseCurrency
  *
  * @property User $user
  * @property User $parentTransaction
@@ -123,6 +126,23 @@ class Transaction extends \yii\db\ActiveRecord
                 $transaction->save(false);
             }
         }
+    }
+
+    public function calculateToBaseCurrency() {
+        $this->moneyBaseCurrency = CurrencyConverter::convert($this->money, Helpers::dateToUnix($this->addedDateTime), $this->currency, User::getBaseCurrency());
+    }
+
+    public function beforeSave($insert)
+    {
+        $return = parent::beforeSave($insert);
+
+        if ($this->currency == null) {
+            $this->currency = $this->user->currency;
+        }
+        if ($this->isNewRecord || $this->isAttributeChanged('money') || $this->isAttributeChanged('currency')) {
+            $this->calculateToBaseCurrency();
+        }
+        return $return;
     }
 
     public function afterSave($insert, $changedAttributes)

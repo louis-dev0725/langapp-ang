@@ -64,6 +64,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     protected $_password;
 
+    public static function getBaseCurrency()
+    {
+        return 'RUB';
+    }
+
     /**
      * @param UserEvent $event
      */
@@ -180,8 +185,17 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         ];
     }
 
-    public function getNotifications() {
+    public function getNotifications()
+    {
         return Notifications::getForUser($this);
+    }
+
+    public function getConfig()
+    {
+        return [
+            'availableCurrencyList' => User::getAvailableCurrencyList(),
+            'baseCurrency' => User::getBaseCurrency(),
+        ];
     }
 
     public function fields()
@@ -189,7 +203,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         if ($this->scenario == self::SCENARIO_INVITED_USER) {
             return ['id', 'name', 'partnerEarned'];
         } elseif ($this->scenario == self::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications', 'currency'];
+            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications', 'currency', 'config'];
         } elseif ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
             $fields['paidUntilDateTime'] = [Helpers::class, 'formatDateField'];
@@ -229,11 +243,21 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return 'users';
     }
 
-    public function getAvailableCurrencyList() {
-        return ['RUB', 'USD', 'EUR', 'JPY', 'KRW', 'CNY'];
+    public static function getAvailableCurrencyList()
+    {
+        return [
+            'RUB' => '₽',
+            'USD' => '$',
+            'EUR' => '€',
+            'JPY' => '円',
+            'KRW' => '₩',
+            //'CNY' => '元'
+            'CNY' => '¥'
+        ];
     }
 
-    public function getDefaultCurrency() {
+    public function getDefaultCurrency()
+    {
         return 'RUB';
     }
 
@@ -258,7 +282,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments'], 'integer'],
             [['name', 'company', 'site', 'telephone', 'email', 'password', 'registerIp', 'lastLoginIp', 'restorePasswordKey', 'wmr', 'timezone'], 'string', 'max' => 255],
             ['currency', 'default', 'value' => $this->getDefaultCurrency()],
-            ['currency', 'in', 'range' => $this->getAvailableCurrencyList()],
+            ['currency', 'in', 'range' => array_keys(User::getAvailableCurrencyList())],
         ];
     }
 

@@ -4,7 +4,7 @@
 namespace app\base\components;
 
 
-use app\models\User;
+use app\base\models\User;
 use Yii;
 
 class Notifications
@@ -40,14 +40,16 @@ class Notifications
     {
         $list = self::getForUser($user);
         $has = false;
+        $canClose = false;
         foreach ($list as $item) {
             if (isset($item['id']) && $item['id'] == $id) {
                 $has = true;
+                $canClose = isset($item['canClose']) && $item['canClose'];
                 break;
             }
         }
 
-        if ($has) {
+        if ($has && $canClose) {
             $dataJson = $user->dataJson;
 
             if (!isset($dataJson['closedNotifications'])) {
