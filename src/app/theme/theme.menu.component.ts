@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -13,6 +13,10 @@ import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-
 import { MatDialog } from '@angular/material';
 import { ApiService } from '@app/services/api.service';
 import { MenuItem } from 'primeng/api';
+import { Observable } from 'rxjs';
+import * as fromStore from '@app/store';
+import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-menu',
@@ -24,6 +28,8 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   model = [];
   languages = ['Русский', 'English'];
   @Input() reset: boolean;
+  private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
+  public isLoggedIn: boolean;
 
   @ViewChild('scrollPanel', { static: true }) layoutMenuScrollerViewChild;
 
@@ -35,8 +41,13 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     private eventService: EventService,
     private translate: TranslateService,
     private confirmDialog: MatDialog,
-    private translatingService: TranslatingService
-  ) {}
+    private translatingService: TranslatingService,
+    private store: Store<fromStore.State>,
+  ) {
+    this.isLoggedIn$
+      .pipe(untilDestroyed(this))
+      .subscribe((authState: boolean) => this.isLoggedIn = authState);
+  }
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -44,9 +55,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 100);
   }
 
-  get isLoggedIn(): boolean {
-    return this.session.isLoggedIn;
-  }
+  ngOnDestroy() {}
 
   get isOpenedAdmin(): boolean {
     return this.session.openedAdmin;
@@ -73,8 +82,6 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     return el;
   }
-
-  ngOnDestroy() {}
 
   ngOnInit() {
     this.model = this.getModel();
@@ -292,7 +299,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     ])
   ]
 })
-export class ThemeSubMenuComponent implements OnInit, OnDestroy {
+export class ThemeSubMenuComponent {
   @Input() user;
 
   private langMap = {
@@ -320,9 +327,6 @@ export class ThemeSubMenuComponent implements OnInit, OnDestroy {
     public session: SessionService
   ) {}
 
-  ngOnInit() {}
-
-  ngOnDestroy() {}
 
   itemClick(event: Event, item: MenuItem, index: number) {
     if (this.root) {

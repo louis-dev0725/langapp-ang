@@ -43,3 +43,8 @@ export const getAuthorizedLoading = createSelector(
   getAuthorizedState,
   fromAuthorized.getAuthorizedLoading
 );
+
+export const isAdminSelector = createSelector(
+  getAccountState,
+  (state: AccountState): boolean => (state.data ? state.data.isAdmin : false)
+);

@@ -3,6 +3,10 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import { onRandomFromRange } from '@app/helpers/randomFromRange';
+import { Observable } from 'rxjs';
+import * as fromStore from '@app/store';
+import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-theme-main',
@@ -40,26 +44,35 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   resetMenu: boolean;
 
   interval;
+  private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
 
-  constructor(public zone: NgZone, private router: Router, private api: ApiService, private sessionService: SessionService) {
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        if (this.sessionService.isLoggedIn) {
-          this.api.meRequest().subscribe();
-        }
-      }
-    });
-    this.interval = setInterval(() => {
-      if (this.sessionService.isLoggedIn) {
-        this.api.meRequest().subscribe();
-      }
-    }, onRandomFromRange(500, 600));
+  constructor(public zone: NgZone,
+              private store: Store<fromStore.State>,
+              private router: Router, private api: ApiService, private sessionService: SessionService) {
+                this.setUpSubscriptions();
   }
 
   ngOnInit() {
     this.zone.runOutsideAngular(() => {
       this.bindRipple();
     });
+  }
+
+  setUpSubscriptions() {
+    this.router.events.subscribe(async event => {
+      if (event instanceof NavigationEnd) {
+        const isLoggedIn = await this.isLoggedIn$.toPromise();
+        if (isLoggedIn) {
+          this.api.meRequest().subscribe();
+        }
+      }
+    });
+    this.interval = setInterval(async () => {
+      const isLoggedIn = await this.isLoggedIn$.toPromise();
+      if (isLoggedIn) {
+        this.api.meRequest().subscribe();
+      }
+    }, onRandomFromRange(500, 600));
   }
 
   bindRipple() {

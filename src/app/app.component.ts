@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { EventsService } from '@app/services/events.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -45,4 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {}
+
+
 }

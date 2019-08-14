@@ -38,11 +38,6 @@ export class SessionService {
     return this.user ? this.user.isAdmin : false;
   }
 
-  get isLoggedIn(): boolean {
-    const token = this.token;
-    return !!token;
-  }
-
   get token(): string {
     return localStorage.getItem('token');
   }

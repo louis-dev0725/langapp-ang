@@ -1,5 +1,4 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { MessageService } from 'primeng/api';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import * as fromStore from '@app/store';
@@ -16,7 +15,6 @@ export class NotificationsComponent implements OnInit, OnChanges {
   public isLoggedIn$ = this.store.select(getAuthorizedIsLoggedIn);
 
   constructor(public sessionService: SessionService,
-              private msgService: MessageService,
               private api: ApiService,
               private store: Store<fromStore.State>) {}
 
