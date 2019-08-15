@@ -31,7 +31,7 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
       };
     }
 
-    case fromAuthorized.LOAD_AUTHORIZED_SUCCESS: {
+    case fromAuthorized.AUTHORIZED_UPDATE_TOKEN: {
       return {
         ...state,
         loading: false,

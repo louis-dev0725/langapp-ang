@@ -3,7 +3,7 @@ import { User } from '../interfaces/common.interface';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
-import { LogOutAction } from '@app/store';
+import { LogOutAction, AuthorizedUpdateTokenAction } from '@app/store';
 
 @Injectable({
   providedIn: 'root'
@@ -31,21 +31,12 @@ export class SessionService {
 
   private _lang: string;
 
-  private _token: string;
   private _user: User;
 
   get isAdmin(): boolean {
     return this.user ? this.user.isAdmin : false;
   }
 
-  get token(): string {
-    return localStorage.getItem('token');
-  }
-
-  set token(value: string) {
-    localStorage.setItem('token', value);
-    this._token = value;
-  }
 
   private _transaction: any;
   get transaction(): any {
@@ -112,7 +103,7 @@ export class SessionService {
   reloadAdmin() {
     this.user = JSON.parse(localStorage.getItem('savedAdmin'));
     if (this.user) {
-      this.token = this.user.accessToken;
+      this.store.dispatch( new AuthorizedUpdateTokenAction(this.user.accessToken));
       localStorage.removeItem('savedAdmin');
     } else {
       const lang = localStorage.getItem('lang');
@@ -125,8 +116,7 @@ export class SessionService {
   openAsUser(user: User) {
     this.saveAdmin();
     this.user = user;
-
-    this.token = user.accessToken;
+    this.store.dispatch( new AuthorizedUpdateTokenAction(this.user.accessToken));
     this.router.navigateByUrl('/');
   }
 }

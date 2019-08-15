@@ -6,7 +6,7 @@ import { ApiError } from './api-error';
 import { SessionService } from './session.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
-import { LoadAccount, LoadAccountFail, LoadAccountSuccess, LoadAuthorizedSuccess } from '@app/store';
+import { LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction } from '@app/store';
 
 
 @Injectable({
@@ -37,8 +37,7 @@ export class ApiService {
         (res: any) => {
           if (res.accessToken) {
             this.store.dispatch(new LoadAccountSuccess(res));
-            this.store.dispatch(new LoadAuthorizedSuccess(res.accessToken));
-            this.session.token = res.accessToken;
+            this.store.dispatch(new AuthorizedUpdateTokenAction(res.accessToken));
             this.getMeRequest(observer);
           } else {
             observer.next(res.message);
@@ -70,7 +69,7 @@ export class ApiService {
     return Observable.create(observer => {
       this.http.post(this.apiHost + '/users/reset-password', params).subscribe(
         (res: any) => {
-          this.session.token = res.accessToken;
+          this.store.dispatch(new AuthorizedUpdateTokenAction(res.accessToken));
           this.getMeRequest(observer);
         },
         error => {
@@ -85,7 +84,7 @@ export class ApiService {
       return this.http.post<User>(this.apiHost + '/users', params).subscribe(
         res => {
           this.session.user = res;
-          this.session.token = this.session.user.accessToken;
+          this.store.dispatch(new AuthorizedUpdateTokenAction(this.session.user.accessToken));
           this.getMeRequest(observer);
         },
         error => {
