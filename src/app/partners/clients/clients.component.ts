@@ -15,19 +15,15 @@ export class ClientsComponent implements OnInit {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   isEmptyTable = true;
-  isLoaded = true;
+  isLoaded = false;
 
   constructor(public session: SessionService, private api: ApiService) {}
 
   ngOnInit() {
-    this.isLoaded = false;
-    this.api.getClientsList().subscribe((res: any[]) => {
-      this.isEmptyTable = res ? res.length === 0 : true;
-      this.clientsDataSource = new MatTableDataSource(res);
-    });
     this.api.getClientsList().subscribe((res: any) => {
       this.isLoaded = true;
       if (!(res instanceof ApiError)) {
+        this.isEmptyTable = res ? res.length === 0 : true;
         this.clientsDataSource = new MatTableDataSource(res);
       }
       this.clientsDataSource.sort = this.sort;

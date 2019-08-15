@@ -2,9 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
-import { Subscription } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
-import { UtilsService } from '@app/services/utils.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
@@ -13,7 +11,6 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
   styleUrls: ['./transaction.component.scss']
 })
 export class TransactionComponent implements OnInit, OnDestroy {
-  private tableEvents: Subscription;
 
   rows: any;
 
