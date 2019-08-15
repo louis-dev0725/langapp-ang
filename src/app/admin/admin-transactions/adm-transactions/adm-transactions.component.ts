@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, LOCALE_ID, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatPaginator, MatSort, PageEvent } from '@angular/material';
 import { ApiService } from '@app/services/api.service';
 import { EventService } from '@app/event.service';
@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { availableCurrencyList } from '@app/config/availableCurrencyList';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 export const MY_FORMATS = {
   parse: {
@@ -32,7 +33,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ]
 })
-export class AdmTransactionsComponent implements OnInit {
+export class AdmTransactionsComponent implements OnInit, OnDestroy {
   private transactionsSubscription: Subscription;
   private sendTimeout;
 
@@ -60,8 +61,6 @@ export class AdmTransactionsComponent implements OnInit {
     comment: ''
   };
 
-  globalEventSubscription: any;
-
   set rows(data: any[]) {
     this.isEmptyTable = data ? data.length === 0 : true;
     this.transactionList = data;
@@ -87,7 +86,9 @@ export class AdmTransactionsComponent implements OnInit {
   ngOnInit() {
     this.translatePage();
 
-    this.globalEventSubscription = this.eventService.emitter.subscribe(event => {
+    this.eventService.emitter
+    .pipe(untilDestroyed(this))
+    .subscribe(event => {
       if (event.type === 'language-change') {
         this.translatePage();
       }
@@ -95,12 +96,16 @@ export class AdmTransactionsComponent implements OnInit {
 
     this.fieldKeys = Object.keys(this.translatedKeys);
 
-    this.sort.sortChange.subscribe(data => {
+    this.sort.sortChange
+    .pipe(untilDestroyed(this))
+    .subscribe(data => {
       this.getTransactions();
     });
 
     this.getTransactions();
   }
+
+  ngOnDestroy() {}
 
   onPageChange(event: PageEvent) {
     this.getTransactions();
@@ -142,7 +147,9 @@ export class AdmTransactionsComponent implements OnInit {
       }
     });
 
-    this.transactionsSubscription = this.api.getTransactions(this.paginator.page, filterValue, sort).subscribe(result => {
+    this.transactionsSubscription = this.api.getTransactions(this.paginator.page, filterValue, sort)
+    .pipe(untilDestroyed(this))
+    .subscribe(result => {
       this.isLoaded = true;
       if (!(result instanceof ApiError)) {
         this.rows = result.items.map(el => {
@@ -161,7 +168,9 @@ export class AdmTransactionsComponent implements OnInit {
   }
 
   showEditUser(row: any) {
-    this.api.getUserByToken(row.token).subscribe(result => {
+    this.api.getUserByToken(row.token)
+    .pipe(untilDestroyed(this))
+    .subscribe(result => {
       if (!(result instanceof ApiError)) {
         this.router.navigate([`../../users/${row.user.id}`], { relativeTo: this.route });
       }
@@ -171,7 +180,9 @@ export class AdmTransactionsComponent implements OnInit {
   translatePage() {
     this.adapter.setLocale(this.session.lang);
 
-    this.translate.get(Object.keys(this.translatedKeys)).subscribe((res: any) => {
+    this.translate.get(Object.keys(this.translatedKeys))
+    .pipe(untilDestroyed(this))
+    .subscribe((res: any) => {
       this.translatedKeys = res;
     });
   }

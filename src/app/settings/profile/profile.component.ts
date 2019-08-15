@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '@app/interfaces/common.interface';
@@ -6,13 +6,14 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { MatSnackBar } from '@angular/material';
 import { SessionService } from '@app/services/session.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   settingsForm: FormGroup;
   isChangePassword = false;
   timeZones: any[] = [];
@@ -36,7 +37,9 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.api.meRequest().subscribe(res => {
+    this.api.meRequest()
+    .pipe(untilDestroyed(this))
+    .subscribe(res => {
       this.user = res;
       this.settingsForm.patchValue({
         id: res.id,
@@ -49,7 +52,10 @@ export class ProfileComponent implements OnInit {
       });
     });
 
-    this.api.getTimeZones().subscribe((res: any) => {
+
+    this.api.getTimeZones()
+    .pipe(untilDestroyed(this))
+    .subscribe((res: any) => {
       this.timeZones = res;
     });
 
@@ -66,6 +72,8 @@ export class ProfileComponent implements OnInit {
       language: ['']
     });
   }
+
+  ngOnDestroy() {}
 
   checkError(fieldName: string) {
     return !this.settingsForm.get(fieldName).valid;
@@ -105,7 +113,9 @@ export class ProfileComponent implements OnInit {
   }
 
   onSubmit(value: any) {
-    this.api.updateUser(value).subscribe(result => {
+    this.api.updateUser(value)
+    .pipe(untilDestroyed(this))
+    .subscribe(result => {
       if (result instanceof ApiError) {
         this._errors = result.error;
       } else {

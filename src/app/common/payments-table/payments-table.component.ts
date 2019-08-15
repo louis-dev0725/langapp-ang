@@ -1,15 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, PageEvent } from '@angular/material';
 import { ApiService } from '@app/services/api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SessionService } from '@app/services/session.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-payments-table',
   templateUrl: './payments-table.component.html',
   styleUrls: ['./payments-table.component.scss']
 })
-export class PaymentsTableComponent implements OnInit {
+export class PaymentsTableComponent implements OnInit, OnDestroy {
   @Input() isPaginator = false;
 
   private _isShowComment;
@@ -96,7 +97,9 @@ export class PaymentsTableComponent implements OnInit {
   constructor(private session: SessionService, private api: ApiService, private translate: TranslateService) {}
 
   ngOnInit() {
-    this.sort.sortChange.subscribe(data => {
+    this.sort.sortChange
+    .pie(untilDestroyed(this))
+    .subscribe(data => {
       const sort: any = {};
       if (this.sort.direction !== '') {
         sort[this.sort.active] = this.sort.direction;
@@ -104,6 +107,8 @@ export class PaymentsTableComponent implements OnInit {
       this.tableEvents.emit({ type: 'sort', data: sort });
     });
   }
+
+  ngOnDestroy() {}
 
   onPage(event: PageEvent) {
     this.tableEvents.emit({ type: 'page', data: event });

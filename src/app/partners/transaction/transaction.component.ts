@@ -5,6 +5,7 @@ import { PaymentsTableComponent } from '@app/common/payments-table/payments-tabl
 import { Subscription } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { UtilsService } from '@app/services/utils.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-transaction',
@@ -27,7 +28,9 @@ export class TransactionComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getTransactions();
 
-    this.tableEvents = this.paymentTable.tableEvents.subscribe(event => {
+    this.paymentTable.tableEvents
+    .pipe(untilDestroyed(this))
+    .subscribe(event => {
       if (event.type === 'page') {
         this.getTransactions(event.data.pageIndex);
       }
@@ -37,16 +40,14 @@ export class TransactionComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.tableEvents) {
-      this.tableEvents.unsubscribe();
-    }
-  }
+  ngOnDestroy(): void { }
 
   getTransactions(page = 0, sort = {}) {
     this.rows = [];
     this.paymentTable.isLoaded = false;
-    this.api.getUserPartnersTransactionsList(page, sort).subscribe(result => {
+    this.api.getUserPartnersTransactionsList(page, sort)
+    .pipe(untilDestroyed(this))
+    .subscribe(result => {
       if (!(result instanceof ApiError)) {
         this.rows = result.items;
         this.paymentTable.isLoaded = true;

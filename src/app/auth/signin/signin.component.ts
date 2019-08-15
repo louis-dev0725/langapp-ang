@@ -26,7 +26,7 @@ export class SigninComponent implements OnInit {
 
   onSubmit(value: any) {
     this.errors = [];
-    this.api.login(value).subscribe(res => {
+    this.api.login(value).toPromise().then(res => {
       if (res instanceof ApiError) {
         this.errors = res.error;
       } else {

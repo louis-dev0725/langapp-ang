@@ -1,15 +1,16 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, OnDestroy } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import * as fromStore from '@app/store';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
 import { Store } from '@ngrx/store';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss']
 })
-export class NotificationsComponent implements OnInit, OnChanges {
+export class NotificationsComponent implements OnInit, OnChanges, OnDestroy {
   public messages = [];
   public user;
   public isLoggedIn$ = this.store.select(getAuthorizedIsLoggedIn);
@@ -22,11 +23,17 @@ export class NotificationsComponent implements OnInit, OnChanges {
     this.user = this.sessionService.user;
     this.messages = this.user && this.user['notifications'] ? this._mapMessages(this.user['notifications']) : [];
 
-    this.sessionService.changingUser.subscribe(user => {
+    this.sessionService.changingUser
+    .pipe(untilDestroyed(this))
+    .subscribe(user => {
       this.user = user;
       this.messages = this.user && this.user['notifications'] ? this._mapMessages(this.user['notifications']) : [];
     });
   }
+
+  ngOnDestroy() {}
+
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user'] && changes['user']['notifications']) {
@@ -36,7 +43,9 @@ export class NotificationsComponent implements OnInit, OnChanges {
 
   public onValueChange(msg) {
     const data = { id: msg.id, onClose: true };
-    this.api.onCloseNotify(data).subscribe(() => {
+    this.api.onCloseNotify(data)
+    .pipe(untilDestroyed(this))
+    .subscribe(() => {
       this.user['notifications'] = this.user['notifications'].filter(el => el.id !== msg.id);
       this.sessionService.changingUser.emit(this.user);
     });

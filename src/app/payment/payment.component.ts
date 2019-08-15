@@ -6,7 +6,7 @@ import { CustomValidator } from '../services/custom-validator';
 import { ApiError } from '../services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
-import { Subscription } from 'rxjs';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-payment',
@@ -15,7 +15,6 @@ import { Subscription } from 'rxjs';
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   private minVal = 100;
-  private tableEventsSubscription: Subscription;
 
   paymentForm: FormGroup;
 
@@ -34,7 +33,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.paymentsTable.isLoaded = false;
 
-    this.tableEventsSubscription = this.paymentsTable.tableEvents.subscribe((res: any) => {
+    this.paymentsTable.tableEvents
+    .pipe(untilDestroyed(this))
+    .subscribe((res: any) => {
       this.paymentsTable.isLoaded = false;
       this.paymentsTable.rows = [];
       if (res.type === 'page') {
@@ -52,14 +53,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.getRows();
   }
 
-  ngOnDestroy(): void {
-    if (this.tableEventsSubscription) {
-      this.tableEventsSubscription.unsubscribe();
-    }
-  }
+  ngOnDestroy(): void {}
 
   getRows(page = 0, sort = {}) {
-    this.api.getUserTransactionsList(page, sort).subscribe(res => {
+    this.api.getUserTransactionsList(page, sort)
+    .pipe(untilDestroyed(this))
+      .subscribe(res => {
       if (!(res instanceof ApiError)) {
         this.rows = res.items;
         this.paymentsTable.isLoaded = true;
@@ -93,8 +92,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   updateUser() {
-    this.api.meRequest().subscribe((res) => {
+    this.api.meRequest()
+    .pipe(untilDestroyed(this))
+    .subscribe((res) => {
       this.session.changingUser.emit(res);
-    })
+    });
   }
 }

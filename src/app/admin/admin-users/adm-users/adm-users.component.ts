@@ -86,11 +86,15 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
 
     this.transatePage();
 
-    this.sort.sortChange.subscribe(data => {
+    this.sort.sortChange
+    .pipe(untilDestroyed(this))
+    .subscribe(data => {
       this.getUsers();
     });
 
-    this.eventService.emitter.subscribe(event => {
+    this.eventService.emitter
+    .pipe(untilDestroyed(this))
+    .subscribe(event => {
       if (event.type === 'language-change') {
         this.transatePage();
       }
@@ -122,7 +126,9 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
       id: row.id,
       comment: row.comment
     };
-    this.api.updateUser(data).subscribe();
+    this.api.updateUser(data)
+    .pipe(untilDestroyed(this))
+    .subscribe();
   }
 
   isFilterField(item: string): boolean {
@@ -154,7 +160,9 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
       }
     });
     this.filterErrMsg = '';
-    this.usersSubscription = this.api.getAdminUsers(this.paginator.pageIndex, toSendFilter, sort).subscribe(
+    this.usersSubscription = this.api.getAdminUsers(this.paginator.pageIndex, toSendFilter, sort)
+    .pipe(untilDestroyed(this))
+    .subscribe(
       (res: any) => {
         if (!(res instanceof ApiError)) {
           this.rows = res.items;
@@ -180,7 +188,9 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
   }
 
   transatePage() {
-    this.translate.get(this.fieldKeys).subscribe((res: any) => {
+    this.translate.get(this.fieldKeys)
+    .pipe(untilDestroyed(this))
+    .subscribe((res: any) => {
       this.translatedKeys = Object.assign({ id: 'ID' }, res);
     });
   }

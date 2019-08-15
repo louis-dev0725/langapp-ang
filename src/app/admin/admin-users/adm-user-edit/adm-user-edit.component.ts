@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { availableCurrencyList } from '@app/config/availableCurrencyList';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-adm-user-edit',
@@ -85,20 +86,28 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     this.userId = +this.route.snapshot.paramMap.get('id');
     this.getUser(this.userId);
 
-    this.api.getTimeZones().subscribe((res: any) => {
+    this.api.getTimeZones()
+    .pipe(untilDestroyed(this))
+    .subscribe((res: any) => {
       this.timeZones = res;
     });
 
-    this.sortTrans.sortChange.subscribe(sort => {
+    this.sortTrans.sortChange
+    .pipe(untilDestroyed(this))
+    .subscribe(sort => {
       this.getTrans(this.userId);
     });
-    this.sortTransPartn.sortChange.subscribe(sort => {
+    this.sortTransPartn.sortChange
+    .pipe(untilDestroyed(this))
+    .subscribe(sort => {
       this.getPartnerTrans(this.userId);
     });
 
     this.callTranslate();
 
-    this.globalEventSubscription = this.eventService.emitter.subscribe(event => {
+    this.globalEventSubscription = this.eventService.emitter
+    .pipe(untilDestroyed(this))
+    .subscribe(event => {
       if (event.type === 'language-change') {
         this.callTranslate();
       }
@@ -135,7 +144,9 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       _sort[this.sortTrans.active] = this.sortTrans.direction;
     }
     this.isLoadingTrans = true;
-    this.getTransactions(userId, 0, _sort, page).subscribe(
+    this.getTransactions(userId, 0, _sort, page)
+    .pipe(untilDestroyed(this))
+    .subscribe(
       res => {
         this.transactionList = res.items;
         this.transactionList.sort = this.sortTrans;
@@ -156,7 +167,9 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       _sort[this.sortTransPartn.active] = this.sortTransPartn.direction;
     }
     this.isLoadingTransPartner = true;
-    this.getTransactions(userId, 1, _sort, page).subscribe(
+    this.getTransactions(userId, 1, _sort, page)
+    .pipe(untilDestroyed(this))
+    .subscribe(
       res => {
         this.transactionPartnerList = res.items;
         /*this.transactionPartnerList = res.items.map(el => {
@@ -200,7 +213,9 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   public getUser(id: number) {
-    return this.api.getUserById(id).subscribe(
+    return this.api.getUserById(id)
+    .pipe(untilDestroyed(this))
+    .subscribe(
       (res: any) => {
         this.user = res;
         this.baseCurrency = this.user.currency;
@@ -268,7 +283,9 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       isPartner: this.userProfile.value.isPartner ? 1 : 0,
       frozeEnablePartnerPayments: this.userProfile.value.frozeEnablePartnerPayments ? 1 : 0
     };
-    this.api.updateUser(data).subscribe(res => {
+    this.api.updateUser(data)
+    .pipe(untilDestroyed(this))
+    .subscribe(res => {
       if (res instanceof ApiError) {
         this._errors = res.error;
       } else {
@@ -278,7 +295,9 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   recalculatePartnerBalance() {
-    this.api.checkInvitedUsers(this.user.id).subscribe(res => {
+    this.api.checkInvitedUsers(this.user.id)
+    .pipe(untilDestroyed(this))
+    .subscribe(res => {
       if (res instanceof ApiError) {
         this.snackBar.open(this.customValidator.messagesMap['snackbar.balance-edit-error'], null, { duration: 3000 });
       } else {
@@ -298,7 +317,9 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       data: dialogModel
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed()
+    .pipe(untilDestroyed(this))
+    .subscribe(result => {
       if (result) {
         this.session.openAsUser(this.user);
       }
@@ -306,7 +327,9 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   private callTranslate() {
-    this.translate.get(Object.keys(this.messages)).subscribe(res => {
+    this.translate.get(Object.keys(this.messages))
+    .pipe(untilDestroyed(this))
+    .subscribe(res => {
       this.messages = res;
     });
   }

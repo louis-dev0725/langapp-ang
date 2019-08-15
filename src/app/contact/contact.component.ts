@@ -58,7 +58,7 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
-    this.api.sendMessage(this.contactForm.value).subscribe(
+    this.api.sendMessage(this.contactForm.value).toPromise().then(
       res => {
         this.snackBar.open(this.translatingService.translates['Messages sent'], null, { duration: 3000 });
         this.form.resetForm();

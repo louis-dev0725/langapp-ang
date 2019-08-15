@@ -191,7 +191,9 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         data: dialogModel
       });
 
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(result => {
         if (result) {
           this.api.logout();
         }

@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,9 @@ export class BreadCrumbsService implements OnDestroy {
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
 
   public initBreadCrumbs() {
-    this.sub = this.router.events
+    this.router.events
       .pipe(
+        untilDestroyed(this),
         filter(e => e instanceof NavigationEnd),
         map(() => {
           const snapshot = this.router.routerState.snapshot;
@@ -44,11 +46,7 @@ export class BreadCrumbsService implements OnDestroy {
       });
   }
 
-  public ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-  }
+  public ngOnDestroy() { }
 
   public getCrumbs() {
     return this.breadcrumbs;

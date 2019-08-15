@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Transaction } from '@app/interfaces/common.interface';
 import { SessionService } from '@app/services/session.service';
 import { ApiService } from '@app/services/api.service';
@@ -8,13 +8,14 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { TranslatingService } from '@app/services/translating.service';
 import { ActivatedRoute } from '@angular/router';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-adm-transaction-edit',
   templateUrl: './adm-transaction-edit.component.html',
   styleUrls: ['./adm-transaction-edit.component.scss']
 })
-export class AdmTransactionEditComponent implements OnInit {
+export class AdmTransactionEditComponent implements OnInit, OnDestroy {
   transaction: Transaction;
   errors: any[] = [];
   transactionForm: FormGroup;
@@ -44,8 +45,12 @@ export class AdmTransactionEditComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void { }
+
   getTransaction(id: number) {
-    return this.api.getTransactionById(id).subscribe(
+    return this.api.getTransactionById(id)
+    .pipe(untilDestroyed(this))
+    .subscribe(
       (res: any) => {
         this.transaction = res;
         this.session.transaction = res;
@@ -79,7 +84,9 @@ export class AdmTransactionEditComponent implements OnInit {
       isPartner: this.transactionForm.value.isPartner ? 1 : 0,
       isRealMoney: this.transactionForm.value.isRealMoney ? 1 : 0
     };
-    this.api.updateTransaction(data).subscribe(res => {
+    this.api.updateTransaction(data)
+    .pipe(untilDestroyed(this))
+    .subscribe(res => {
       if (res instanceof ApiError) {
         this.errors = res.error;
       } else {

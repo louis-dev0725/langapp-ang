@@ -55,7 +55,7 @@ export class SignupComponent implements OnInit {
       ...value,
       invitedByUserId: localStorage.getItem('invitedByUserId')
     };
-    this.api.signUp(data).subscribe(res => {
+    this.api.signUp(data).toPromise().then(res => {
       if (res instanceof ApiError) {
         this.errors = res.error;
       } else {

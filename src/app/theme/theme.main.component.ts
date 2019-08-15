@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import * as fromStore from '@app/store';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
 import { Store } from '@ngrx/store';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-theme-main',
@@ -59,18 +60,24 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   }
 
   setUpSubscriptions() {
-    this.router.events.subscribe(async event => {
+    this.router.events
+    .pipe(untilDestroyed(this))
+    .subscribe(async event => {
       if (event instanceof NavigationEnd) {
         const isLoggedIn = await this.isLoggedIn$.toPromise();
         if (isLoggedIn) {
-          this.api.meRequest().subscribe();
+          this.api.meRequest()
+          .pipe(untilDestroyed(this))
+          .subscribe();
         }
       }
     });
     this.interval = setInterval(async () => {
       const isLoggedIn = await this.isLoggedIn$.toPromise();
       if (isLoggedIn) {
-        this.api.meRequest().subscribe();
+        this.api.meRequest()
+        .pipe(untilDestroyed(this))
+        .subscribe();
       }
     }, onRandomFromRange(500, 600));
   }

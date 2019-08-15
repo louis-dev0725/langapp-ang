@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
@@ -7,15 +7,16 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { MatSnackBar } from '@angular/material';
 import { Transaction, User } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslatingService } from '@app/services/translating.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-add-transaction',
   templateUrl: './add-transaction.component.html',
   styleUrls: ['./add-transaction.component.scss']
 })
-export class AddTransactionComponent implements OnInit {
+export class AddTransactionComponent implements OnInit, OnDestroy {
   private _user: User;
   get user(): User {
     return this._user;
@@ -59,6 +60,8 @@ export class AddTransactionComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {}
+
   checkError(fieldName: string) {
     return !this.transactionForm.get(fieldName).valid;
   }
@@ -75,7 +78,9 @@ export class AddTransactionComponent implements OnInit {
       isPartner: this.transactionForm.value.isPartner ? 1 : 0,
       isRealMoney: this.transactionForm.value.isRealMoney ? 1 : 0
     };
-    this.api.createTransaction(data).subscribe(res => {
+    this.api.createTransaction(data)
+    .pipe(untilDestroyed(this))
+    .subscribe(res => {
       if (!(res instanceof ApiError)) {
         this.snackBar.open(this.translatingService.translates['confirm'].transaction.created, null, { duration: 3000 });
         setTimeout(() => {
