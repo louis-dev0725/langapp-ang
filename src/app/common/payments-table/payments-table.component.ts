@@ -98,7 +98,7 @@ export class PaymentsTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sort.sortChange
-    .pie(untilDestroyed(this))
+    .pipe(untilDestroyed(this))
     .subscribe(data => {
       const sort: any = {};
       if (this.sort.direction !== '') {
