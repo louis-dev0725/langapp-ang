@@ -20,7 +20,6 @@ export class SessionService {
 
   set lang(value: string) {
     if (value) {
-      this._lang = value;
       localStorage.setItem('lang', value);
     }
   }
@@ -28,8 +27,6 @@ export class SessionService {
   get locale(): string {
     return SessionService.getLocale();
   }
-
-  private _lang: string;
 
   private _user: User;
 

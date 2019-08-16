@@ -1,16 +1,14 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BreadCrumbsService implements OnDestroy {
+export class BreadCrumbsService {
   public breadcrumbs$: any = new BehaviorSubject([]);
   private breadcrumbs = [];
-  private sub;
   private url;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
@@ -18,7 +16,6 @@ export class BreadCrumbsService implements OnDestroy {
   public initBreadCrumbs() {
     this.router.events
       .pipe(
-        untilDestroyed(this),
         filter(e => e instanceof NavigationEnd),
         map(() => {
           const snapshot = this.router.routerState.snapshot;
@@ -45,8 +42,6 @@ export class BreadCrumbsService implements OnDestroy {
         this.breadcrumbs$.next(this.breadcrumbs);
       });
   }
-
-  public ngOnDestroy() { }
 
   public getCrumbs() {
     return this.breadcrumbs;
