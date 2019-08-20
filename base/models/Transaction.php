@@ -157,7 +157,7 @@ class Transaction extends \yii\db\ActiveRecord
 
     public function fields()
     {
-        if (Helpers::isAdmin() && (!self::isSaveMethod())) {
+        if (Helpers::isAdmin() && (!static::isSaveMethod())) {
             $parentFields = parent::fields();
             $parentFields['addedDateTime'] = [Helpers::class, 'formatDateField'];
             return $parentFields;
@@ -175,8 +175,8 @@ class Transaction extends \yii\db\ActiveRecord
     {
         $adminFields = ['id', 'userId', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'invoiceId', 'dataJson'];
         return [
-            self::SCENARIO_USER => ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'],
-            self::SCENARIO_ADMIN => $adminFields
+            static::SCENARIO_USER => ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'],
+            static::SCENARIO_ADMIN => $adminFields
         ];
     }
 
@@ -240,19 +240,12 @@ class Transaction extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getToken($id)
-    {
-        $user = new User();
-        $user->id = $id;
-        return $user->generateAccessToken();
-    }
-
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {
-        return $this->hasOne(User::class, ['id' => 'userId']);
+        return $this->hasOne(\app\models\User::class, ['id' => 'userId']);
     }
 
     /**
@@ -260,7 +253,7 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public function getChildTransaction()
     {
-        return $this->hasOne(Transaction::class, ['parentTransactionId' => 'id']);
+        return $this->hasOne(\app\models\Transaction::class, ['parentTransactionId' => 'id']);
     }
 
     /**
@@ -268,6 +261,6 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public function getParentTransaction()
     {
-        return $this->hasOne(Transaction::class, ['id' => 'parentTransactionId']);
+        return $this->hasOne(\app\models\Transaction::class, ['id' => 'parentTransactionId']);
     }
 }

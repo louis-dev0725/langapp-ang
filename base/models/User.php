@@ -178,10 +178,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function scenarios()
     {
         return [
-            self::SCENARIO_LOGIN => ['email', 'password'],
-            self::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone', 'language', 'currency'],
-            self::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone', 'language', 'isAdmin'],
-            self::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'accessToken', 'currency'],
+            static::SCENARIO_LOGIN => ['email', 'password'],
+            static::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone', 'language', 'currency'],
+            static::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone', 'language', 'isAdmin'],
+            static::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'accessToken', 'currency'],
         ];
     }
 
@@ -200,11 +200,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function fields()
     {
-        if ($this->scenario == self::SCENARIO_INVITED_USER) {
+        if ($this->scenario == static::SCENARIO_INVITED_USER) {
             return ['id', 'name', 'partnerEarned'];
-        } elseif ($this->scenario == self::SCENARIO_PROFILE) {
+        } elseif ($this->scenario == static::SCENARIO_PROFILE) {
             return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications', 'currency', 'config'];
-        } elseif ($this->scenario == self::SCENARIO_INDEX || Helpers::isAdmin()) {
+        } elseif ($this->scenario == static::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
             $fields['paidUntilDateTime'] = [Helpers::class, 'formatDateField'];
             $fields['addedDateTime'] = [Helpers::class, 'formatDateField'];
@@ -267,7 +267,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['name', 'email', 'password'], 'required', 'on' => self::SCENARIO_REGISTER],
+            [['name', 'email', 'password'], 'required', 'on' => static::SCENARIO_REGISTER],
             ['email', 'email'],
             ['email', 'filter', 'filter' => 'strtolower'],
             ['email', 'filter', 'filter' => 'trim'],
@@ -350,7 +350,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findByEmail($email)
     {
-        return self::find()->where(['email' => strtolower(trim($email))])->one();
+        return static::find()->where(['email' => strtolower(trim($email))])->one();
     }
 
     /**
@@ -362,7 +362,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return self::findOne($id);
+        return static::findOne($id);
     }
 
     /**
@@ -382,7 +382,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             return null;
         }
         $userId = $token->getClaim('uid');
-        $user = self::findOne($userId);
+        $user = static::findOne($userId);
 
         if ($user == null) {
             return null;
@@ -463,7 +463,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getInvoices()
     {
-        return $this->hasMany(Invoice::class, ['userId' => 'id']);
+        return $this->hasMany(\app\models\Invoice::class, ['userId' => 'id']);
     }
 
     /**
@@ -471,7 +471,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getTransactions()
     {
-        return $this->hasMany(Transaction::class, ['userId' => 'id']);
+        return $this->hasMany(\app\models\Transaction::class, ['userId' => 'id']);
     }
 
     /**
@@ -479,7 +479,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getInvitedByUser()
     {
-        return $this->hasOne(User::class, ['id' => 'invitedByUserId']);
+        return $this->hasOne(\app\models\User::class, ['id' => 'invitedByUserId']);
     }
 
     /**
@@ -487,7 +487,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getInvitedUsers()
     {
-        return $this->hasMany(User::class, ['invitedByUserId' => 'id']);
+        return $this->hasMany(\app\models\User::class, ['invitedByUserId' => 'id']);
     }
 
     public function getIsAdmin()
