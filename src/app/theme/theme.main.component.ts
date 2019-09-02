@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import { onRandomFromRange } from '@app/helpers/randomFromRange';
@@ -46,6 +46,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
 
   interval;
   private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
+  public isLoggedIn: boolean;
 
   constructor(public zone: NgZone,
               private store: Store<fromStore.State>,
@@ -53,31 +54,35 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
                 this.setUpSubscriptions();
   }
 
+
   ngOnInit() {
+    this.isLoggedIn$.subscribe(res => {
+      this.isLoggedIn = res;
+    });
+    this.setUpSubscriptions();
     this.zone.runOutsideAngular(() => {
       this.bindRipple();
     });
   }
 
   setUpSubscriptions() {
-    this.router.events
-    .pipe(untilDestroyed(this))
-    .subscribe(async event => {
-      if (event instanceof NavigationEnd) {
-        const isLoggedIn = await this.isLoggedIn$.toPromise();
-        if (isLoggedIn) {
-          this.api.meRequest()
-          .pipe(untilDestroyed(this))
-          .subscribe();
+    this.router.events.subscribe(async event => {
+      if (event instanceof NavigationStart) {
+        if (this.isLoggedIn) {
+          this.api
+            .meRequest()
+            .pipe(untilDestroyed(this))
+            .subscribe();
         }
       }
     });
     this.interval = setInterval(async () => {
       const isLoggedIn = await this.isLoggedIn$.toPromise();
       if (isLoggedIn) {
-        this.api.meRequest()
-        .pipe(untilDestroyed(this))
-        .subscribe();
+        this.api
+          .meRequest()
+          .pipe(untilDestroyed(this))
+          .subscribe();
       }
     }, onRandomFromRange(500, 600));
   }

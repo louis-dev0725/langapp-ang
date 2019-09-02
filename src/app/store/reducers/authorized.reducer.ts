@@ -5,13 +5,15 @@ export interface AuthorizedState {
   loaded: boolean;
   loading: boolean;
   token: string;
+  admin: any;
 }
 
 export const initialState: AuthorizedState = {
-  data: localStorage.getItem('saveAdmin') ? JSON.parse(localStorage.getItem('saveAdmin')) : JSON.parse(localStorage.getItem('user')),
-  loaded: false,
+  data: localStorage.getItem('savedAdmin') ? JSON.parse(localStorage.getItem('savedAdmin')) : JSON.parse(localStorage.getItem('user')),
+  loaded: true,
   loading: false,
-  token: localStorage.getItem('token')
+  token: localStorage.getItem('token'),
+  admin: localStorage.getItem('savedAdmin') ? JSON.parse(localStorage.getItem('savedAdmin')) : null
 };
 
 export function reducer(state: AuthorizedState = initialState, action: fromAuthorized.AuthorizedAction): AuthorizedState {
@@ -31,7 +33,48 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
       };
     }
 
+    case fromAuthorized.LOAD_AUTHORIZED_SUCCESS: {
+      // localStorage.setItem('user', JSON.stringify(action.payload));
+      return {
+        ...state,
+        data: action.payload,
+        loading: false,
+        loaded: true
+      };
+    }
+
+    case fromAuthorized.AUTHORIZED_SAVE_ADMIN: {
+      // localStorage.setItem('savedAdmin', JSON.stringify(action.payload));
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        admin: action.payload
+      };
+    }
+
+    case fromAuthorized.AUTHORIZED_LOGOUT_AS_USER: {
+      // localStorage.removeItem('savedAdmin');
+      return {
+        ...state,
+        data: action.payload,
+        loading: false,
+        loaded: true,
+        admin: null
+      };
+    }
+    case fromAuthorized.AUTHORIZED_UPDATE_USER: {
+      // localStorage.setItem('user', JSON.stringify(action.payload));
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        data: action.payload
+      };
+    }
+
     case fromAuthorized.AUTHORIZED_UPDATE_TOKEN: {
+      localStorage.setItem('token', action.payload);
       return {
         ...state,
         loading: false,
@@ -44,9 +87,10 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
       localStorage.removeItem('token');
       return {
         data: null,
-        loaded: false,
         loading: false,
-        token: ''
+        loaded: true,
+        token: '',
+        admin: null
       };
     }
   }

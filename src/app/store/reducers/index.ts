@@ -4,11 +4,11 @@ import { AccountState } from '@app/store/reducers/account.reducer';
 
 export interface State {
   authorized: fromAuthorized.AuthorizedState;
-  account: fromAccount.AccountState;
+  // account: fromAccount.AccountState;
 }
 
 export const reducers: ActionReducerMap<State> = {
-  account: fromAccount.reducer,
+  // account: fromAccount.reducer,
   authorized: fromAuthorized.reducer
 };
 

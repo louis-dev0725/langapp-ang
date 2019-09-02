@@ -3,7 +3,13 @@ import { User } from '../interfaces/common.interface';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
-import { LogOutAction, AuthorizedUpdateTokenAction } from '@app/store';
+import {
+  LogOutAction,
+  AuthorizedUpdateTokenAction,
+  AuthorizedSaveAdminAction,
+  LogOutAsUserAction,
+  AuthorizedUpdateUserAction
+} from '@app/store';
 
 @Injectable({
   providedIn: 'root'
@@ -94,16 +100,19 @@ export class SessionService {
     const token = localStorage.getItem('token');
     const _user = { ...this.user };
     _user['accessToken'] = token;
+    this.store.dispatch(new AuthorizedSaveAdminAction(_user));
     localStorage.setItem('savedAdmin', JSON.stringify(_user));
   }
 
   reloadAdmin() {
     this.user = JSON.parse(localStorage.getItem('savedAdmin'));
     if (this.user) {
-      this.store.dispatch( new AuthorizedUpdateTokenAction(this.user.accessToken));
+      this.store.dispatch(new AuthorizedUpdateTokenAction(this.user.accessToken));
+      this.store.dispatch(new LogOutAsUserAction(this.user));
       localStorage.removeItem('savedAdmin');
     } else {
       const lang = localStorage.getItem('lang');
+      this.store.dispatch(new LogOutAction());
       localStorage.clear();
       localStorage.setItem('lang', lang);
     }
@@ -113,7 +122,8 @@ export class SessionService {
   openAsUser(user: User) {
     this.saveAdmin();
     this.user = user;
-    this.store.dispatch( new AuthorizedUpdateTokenAction(this.user.accessToken));
+    this.store.dispatch(new AuthorizedUpdateTokenAction(this.user.accessToken));
+    this.store.dispatch(new AuthorizedUpdateUserAction(this.user));
     this.router.navigateByUrl('/');
   }
 }

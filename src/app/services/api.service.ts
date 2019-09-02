@@ -6,7 +6,13 @@ import { ApiError } from './api-error';
 import { SessionService } from './session.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
-import { LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction } from '@app/store';
+import {
+  LoadAccount,
+  LoadAccountFail,
+  LoadAccountSuccess,
+  AuthorizedUpdateTokenAction,
+  LoadAuthorizedSuccess
+} from '@app/store';
 
 
 @Injectable({
@@ -225,6 +231,7 @@ export class ApiService {
         } else {
           // this.session.tempUser = userRes;
         }*/
+        this.store.dispatch(new LoadAuthorizedSuccess(userRes));
         this.session.user = userRes;
         observer.next(userRes);
       },
