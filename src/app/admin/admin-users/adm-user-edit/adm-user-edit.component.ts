@@ -80,34 +80,33 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.route.params.pipe(untilDestroyed(this)).subscribe(params => {
+      this.getUser(params.id);
+    });
+  }
 
   ngOnInit(): void {
     this.userId = +this.route.snapshot.paramMap.get('id');
     this.getUser(this.userId);
 
-    this.api.getTimeZones()
-    .pipe(untilDestroyed(this))
-    .subscribe((res: any) => {
-      this.timeZones = res;
-    });
+    this.api
+      .getTimeZones()
+      .pipe(untilDestroyed(this))
+      .subscribe((res: any) => {
+        this.timeZones = res;
+      });
 
-    this.sortTrans.sortChange
-    .pipe(untilDestroyed(this))
-    .subscribe(sort => {
+    this.sortTrans.sortChange.pipe(untilDestroyed(this)).subscribe(sort => {
       this.getTrans(this.userId);
     });
-    this.sortTransPartn.sortChange
-    .pipe(untilDestroyed(this))
-    .subscribe(sort => {
+    this.sortTransPartn.sortChange.pipe(untilDestroyed(this)).subscribe(sort => {
       this.getPartnerTrans(this.userId);
     });
 
     this.callTranslate();
 
-    this.globalEventSubscription = this.eventService.emitter
-    .pipe(untilDestroyed(this))
-    .subscribe(event => {
+    this.globalEventSubscription = this.eventService.emitter.pipe(untilDestroyed(this)).subscribe(event => {
       if (event.type === 'language-change') {
         this.callTranslate();
       }
@@ -145,20 +144,20 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     }
     this.isLoadingTrans = true;
     this.getTransactions(userId, 0, _sort, page)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      res => {
-        this.transactionList = res.items;
-        this.transactionList.sort = this.sortTrans;
-        this.transactionList.paginator = this.paginatorTrans;
-        this.paginatorTrans.length = res._meta.totalCount;
-        this.paginatorTrans.pageIndex = res._meta.currentPage - 1;
-        this.isLoadingTrans = false;
-      },
-      err => {
-        this.isLoadingTrans = false;
-      }
-    );
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        res => {
+          this.transactionList = res.items;
+          this.transactionList.sort = this.sortTrans;
+          this.transactionList.paginator = this.paginatorTrans;
+          this.paginatorTrans.length = res._meta.totalCount;
+          this.paginatorTrans.pageIndex = res._meta.currentPage - 1;
+          this.isLoadingTrans = false;
+        },
+        err => {
+          this.isLoadingTrans = false;
+        }
+      );
   }
 
   public getPartnerTrans(userId, page?) {
@@ -168,11 +167,11 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     }
     this.isLoadingTransPartner = true;
     this.getTransactions(userId, 1, _sort, page)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      res => {
-        this.transactionPartnerList = res.items;
-        /*this.transactionPartnerList = res.items.map(el => {
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        res => {
+          this.transactionPartnerList = res.items;
+          /*this.transactionPartnerList = res.items.map(el => {
           const _mark = availableCurrencyList.find((item: any) => {
             return item.label == el.currency;
           }).value;
@@ -181,16 +180,16 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
             currencyMark: _mark
           };
         });*/
-        this.transactionList.sort = this.sortTransPartn;
-        this.transactionList.paginator = this.paginatorPartnerTrans;
-        this.paginatorPartnerTrans.length = res._meta.totalCount;
-        this.paginatorPartnerTrans.pageIndex = res._meta.currentPage - 1;
-        this.isLoadingTransPartner = false;
-      },
-      err => {
-        this.isLoadingTransPartner = false;
-      }
-    );
+          this.transactionList.sort = this.sortTransPartn;
+          this.transactionList.paginator = this.paginatorPartnerTrans;
+          this.paginatorPartnerTrans.length = res._meta.totalCount;
+          this.paginatorPartnerTrans.pageIndex = res._meta.currentPage - 1;
+          this.isLoadingTransPartner = false;
+        },
+        err => {
+          this.isLoadingTransPartner = false;
+        }
+      );
   }
 
   ngOnDestroy(): void {
@@ -213,16 +212,17 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   public getUser(id: number) {
-    return this.api.getUserById(id)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (res: any) => {
-        this.user = res;
-        this.baseCurrency = this.user.currency;
-        this.updateForm(res);
-      },
-      err => {}
-    );
+    return this.api
+      .getUserById(id)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (res: any) => {
+          this.user = res;
+          this.baseCurrency = this.user.currency;
+          this.updateForm(res);
+        },
+        err => {}
+      );
   }
 
   public updateForm(res) {
@@ -283,27 +283,29 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       isPartner: this.userProfile.value.isPartner ? 1 : 0,
       frozeEnablePartnerPayments: this.userProfile.value.frozeEnablePartnerPayments ? 1 : 0
     };
-    this.api.updateUser(data)
-    .pipe(untilDestroyed(this))
-    .subscribe(res => {
-      if (res instanceof ApiError) {
-        this._errors = res.error;
-      } else {
-        this.snackBar.open(this.customValidator.messagesMap['snackbar.user-edit-success'], null, { duration: 3000 });
-      }
-    });
+    this.api
+      .updateUser(data)
+      .pipe(untilDestroyed(this))
+      .subscribe(res => {
+        if (res instanceof ApiError) {
+          this._errors = res.error;
+        } else {
+          this.snackBar.open(this.customValidator.messagesMap['snackbar.user-edit-success'], null, { duration: 3000 });
+        }
+      });
   }
 
   recalculatePartnerBalance() {
-    this.api.checkInvitedUsers(this.user.id)
-    .pipe(untilDestroyed(this))
-    .subscribe(res => {
-      if (res instanceof ApiError) {
-        this.snackBar.open(this.customValidator.messagesMap['snackbar.balance-edit-error'], null, { duration: 3000 });
-      } else {
-        this.snackBar.open('Balance recalculated', null, { duration: 3000 });
-      }
-    });
+    this.api
+      .checkInvitedUsers(this.user.id)
+      .pipe(untilDestroyed(this))
+      .subscribe(res => {
+        if (res instanceof ApiError) {
+          this.snackBar.open(this.customValidator.messagesMap['snackbar.balance-edit-error'], null, { duration: 3000 });
+        } else {
+          this.snackBar.open('Balance recalculated', null, { duration: 3000 });
+        }
+      });
   }
 
   openAsUser() {
@@ -317,20 +319,22 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       data: dialogModel
     });
 
-    dialogRef.afterClosed()
-    .pipe(untilDestroyed(this))
-    .subscribe(result => {
-      if (result) {
-        this.session.openAsUser(this.user);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(result => {
+        if (result) {
+          this.session.openAsUser(this.user);
+        }
+      });
   }
 
   private callTranslate() {
-    this.translate.get(Object.keys(this.messages))
-    .pipe(untilDestroyed(this))
-    .subscribe(res => {
-      this.messages = res;
-    });
+    this.translate
+      .get(Object.keys(this.messages))
+      .pipe(untilDestroyed(this))
+      .subscribe(res => {
+        this.messages = res;
+      });
   }
 }

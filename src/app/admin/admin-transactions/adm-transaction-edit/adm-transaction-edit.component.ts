@@ -29,7 +29,11 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.route.params.pipe(untilDestroyed(this)).subscribe(params => {
+      this.getTransaction(params.id);
+    });
+  }
 
   ngOnInit() {
     this.transactionId = +this.route.snapshot.paramMap.get('id');
@@ -45,19 +49,20 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   getTransaction(id: number) {
-    return this.api.getTransactionById(id)
-    .pipe(untilDestroyed(this))
-    .subscribe(
-      (res: any) => {
-        this.transaction = res;
-        this.session.transaction = res;
-        this.updateForm(res);
-      },
-      err => {}
-    );
+    return this.api
+      .getTransactionById(id)
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (res: any) => {
+          this.transaction = res;
+          this.session.transaction = res;
+          this.updateForm(res);
+        },
+        err => {}
+      );
   }
 
   updateForm(res) {
@@ -84,14 +89,15 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
       isPartner: this.transactionForm.value.isPartner ? 1 : 0,
       isRealMoney: this.transactionForm.value.isRealMoney ? 1 : 0
     };
-    this.api.updateTransaction(data)
-    .pipe(untilDestroyed(this))
-    .subscribe(res => {
-      if (res instanceof ApiError) {
-        this.errors = res.error;
-      } else {
-        this.snackBar.open(this.translatingService.translates['Saved']);
-      }
-    });
+    this.api
+      .updateTransaction(data)
+      .pipe(untilDestroyed(this))
+      .subscribe(res => {
+        if (res instanceof ApiError) {
+          this.errors = res.error;
+        } else {
+          this.snackBar.open(this.translatingService.translates['Saved']);
+        }
+      });
   }
 }
