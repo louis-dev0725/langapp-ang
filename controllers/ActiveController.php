@@ -8,15 +8,13 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\Cors;
 use yii\helpers\ArrayHelper;
 
-class ActiveController extends \yii\rest\ActiveController
-{
+class ActiveController extends \yii\rest\ActiveController {
     public $serializer = [
         'class' => \yii\rest\Serializer::class,
         'collectionEnvelope' => 'items',
     ];
 
-    public function behaviors()
-    {
+    public function behaviors() {
         $behaviors = parent::behaviors();
 
         if (isset($behaviors['contentNegotiator']['formats']['application/xml'])) {
@@ -25,7 +23,6 @@ class ActiveController extends \yii\rest\ActiveController
 
         $behaviors['contentNegotiator']['languages'] = ['ru-RU', 'en-US'];
 
-        // add CORS filter (for development)
         if (YII_ENV_DEV) {
             $withCorsFilter = [
                 [

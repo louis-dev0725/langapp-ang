@@ -16,14 +16,12 @@ use yii\filters\AccessControl;
 use yii\rest\IndexAction;
 use yii\web\ForbiddenHttpException;
 
-class TransactionController extends ActiveController
-{
+class TransactionController extends ActiveController {
     public $modelClass = Transaction::class;
     public $createScenario = Transaction::SCENARIO_ADMIN;
     public $updateScenario = Transaction::SCENARIO_ADMIN;
 
-    public function actions()
-    {
+    public function actions() {
         $actions = parent::actions();
 
         $actions['index']['dataFilter'] = [
@@ -35,8 +33,7 @@ class TransactionController extends ActiveController
         return $actions;
     }
 
-    public function behaviors()
-    {
+    public function behaviors() {
         $behaviors = parent::behaviors();
 
         $behaviors['access'] = [
@@ -66,8 +63,7 @@ class TransactionController extends ActiveController
      * @throws \yii\base\InvalidConfigException
      * @throws ForbiddenHttpException
      */
-    public function prepareDataProvider($action, $filter)
-    {
+    public function prepareDataProvider($action, $filter) {
         $requestParams = Yii::$app->getRequest()->getBodyParams();
         if (empty($requestParams)) {
             $requestParams = Yii::$app->getRequest()->getQueryParams();
@@ -90,7 +86,7 @@ class TransactionController extends ActiveController
             }
         } else {
             $query->select(['transactions.*', 'users.name'])
-                ->leftJoin('users','"users"."id" = "transactions"."userId"');
+                ->leftJoin('users','users.id = transactions.userId');
         }
 
         return Yii::createObject([
@@ -111,8 +107,7 @@ class TransactionController extends ActiveController
      * @param array $filter filter condition for the $query
      * @return ActiveQuery
      */
-    private function prepareFilter($query, $filter)
-    {
+    private function prepareFilter($query, $filter) {
         $isComplex = $filter[0] === 'AND';
         $replaceTransKeys = ['id', 'userId', 'addedDateTime', 'name', 'comment'];
 
@@ -136,12 +131,13 @@ class TransactionController extends ActiveController
         };
 
         if ($isComplex) {
-            foreach ($filter as $idx => $value)
+            foreach ($filter as $idx => $value) {
                 if ($idx > 0) {
                     reset($value);
                     $fieldName = key($value);
                     $wrapTableName($fieldName, $value);
                 }
+            }
         } else {
             reset($filter);
             $fieldName = key($filter);
@@ -157,15 +153,13 @@ class TransactionController extends ActiveController
      * @param array $params additional parameters
      * @throws ForbiddenHttpException if the user does not have access
      */
-    public function checkAccess($action, $model = null, $params = [])
-    {
+    public function checkAccess($action, $model = null, $params = []) {
         if (Helpers::isAdmin()) {
             if ($model != null) {
                 $model->scenario = Transaction::SCENARIO_ADMIN;
             }
         } else {
             if ($action == 'index') {
-                // Allow index
             } elseif ($action == 'view') {
                 if ($model->userId !== Yii::$app->user->id) {
                     throw new ForbiddenHttpException();

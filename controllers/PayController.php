@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\Invoice;
 use app\models\Transaction;
-use app\models\User;
 use Omnipay\RoboKassa\Gateway;
 use Omnipay\RoboKassa\Message\CompletePurchaseRequest;
 use Omnipay\RoboKassa\Message\CompletePurchaseResponse;
@@ -13,10 +12,8 @@ use Omnipay\RoboKassa\Message\PurchaseResponse;
 use Yii;
 use yii\web\Controller;
 
-class PayController extends Controller
-{
-    public function beforeAction($action)
-    {
+class PayController extends Controller {
+    public function beforeAction($action) {
         if ($this->action->id == 'finish' || $this->action->id == 'result') {
             $this->enableCsrfValidation = false;
         }
@@ -27,8 +24,7 @@ class PayController extends Controller
      * @param bool $isSuccessPage
      * @return Gateway
      */
-    protected function getGateway($isSuccessPage = false)
-    {
+    protected function getGateway($isSuccessPage = false) {
         $gateway = new Gateway();
 
         if (isset(Yii::$app->params['robokassa'])) {
@@ -57,8 +53,7 @@ class PayController extends Controller
         return $gateway;
     }
 
-    public function actionStart($email, $amount, $userId)
-    {
+    public function actionStart($email, $amount, $userId) {
         if (empty($userId)) {
             return $this->redirect('/');
         }
@@ -69,7 +64,8 @@ class PayController extends Controller
         $invoice->save(false);
 
         /** @var PurchaseRequest $request */
-        $request = $gateway->purchase(['amount' => $amount, 'InvId' => $invoice->id, 'currency' => 'RUB', 'email' => $email, 'description' => 'Пополнение счета']);
+        $request = $gateway->purchase(['amount' => $amount, 'InvId' => $invoice->id, 'currency' => 'RUB',
+            'email' => $email, 'description' => 'Пополнение счета']);
 
         /** @var PurchaseResponse $response */
         $response = $request->send();
@@ -79,8 +75,7 @@ class PayController extends Controller
         }
     }
 
-    public function actionResult()
-    {
+    public function actionResult() {
         $gateway = $this->getGateway();
         /** @var CompletePurchaseRequest $request */
         $request = $gateway->completePurchase();
