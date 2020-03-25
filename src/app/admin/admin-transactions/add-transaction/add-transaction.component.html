@@ -40,11 +40,7 @@
         </div>
       </form>
 
-      <a
-        [disabled]="!transactionForm.valid"
-        color="primary"
-        (click)="onCreateTransaction()"
-        mat-flat-button>
+      <a [disabled]="!transactionForm.valid" color="primary" (click)="onCreateTransaction()" mat-flat-button>
         {{'Create transaction' | translate}}
       </a>
     </div>

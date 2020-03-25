@@ -1,18 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../interfaces/common.interface';
-import { Observable, of } from 'rxjs';
+import { Materials, TypeContent, User } from '../interfaces/common.interface';
+import { Observable } from 'rxjs';
 import { ApiError } from './api-error';
 import { SessionService } from './session.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
-import {
-  LoadAccount,
-  LoadAccountFail,
-  LoadAccountSuccess,
-  AuthorizedUpdateTokenAction,
-  LoadAuthorizedSuccess
-} from '@app/store';
+import { LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction,
+  LoadAuthorizedSuccess } from '@app/store';
 
 
 @Injectable({
@@ -35,10 +30,12 @@ export class ApiService {
 
   constructor(private http: HttpClient, private session: SessionService, private store: Store<fromStore.State>) {}
 
-  //<editor-fold desc="Signup group">
+  /**
+   * Авторизация
+   */
   login(params: any): Observable<any | ApiError> {
     this.store.dispatch(new LoadAccount());
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       this.http.post(this.apiHost + '/users/login', params).subscribe(
         (res: any) => {
           if (res.accessToken) {
@@ -58,8 +55,11 @@ export class ApiService {
     });
   }
 
+  /**
+   * Забыли пароль
+   */
   restorePasswordRequest(params: any): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       this.http.post(this.apiHost + '/users/request-reset-password', params).subscribe(
         () => {
           observer.next(true);
@@ -71,8 +71,11 @@ export class ApiService {
     });
   }
 
+  /**
+   * Смена пароля
+   */
   changePassword(params: any): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       this.http.post(this.apiHost + '/users/reset-password', params).subscribe(
         (res: any) => {
           this.store.dispatch(new AuthorizedUpdateTokenAction(res.accessToken));
@@ -85,8 +88,11 @@ export class ApiService {
     });
   }
 
+  /**
+   * Регистрация
+   */
   signUp(params: any): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       return this.http.post<User>(this.apiHost + '/users', params).subscribe(
         res => {
           this.session.user = res;
@@ -101,18 +107,26 @@ export class ApiService {
     });
   }
 
+  /**
+   * Выход
+   */
   logout() {
     this.session.logout();
   }
+  // </editor-fold>
 
-  //</editor-fold>
-
+  /**
+   * Получаем часовые пояса
+   */
   getTimeZones() {
     return this.http.get('/assets/timezones.json');
   }
 
+  /**
+   * Вывод api ошибки
+   */
   private getApiError(response) {
-    if (response.status == 401) {
+    if (response.status === 401) {
       this.logout();
     }
     if (response.error) {
@@ -121,8 +135,6 @@ export class ApiService {
       return new ApiError([{ field: 'all', message: 'Server error' }], false);
     }
   }
-
-  //<editor-fold desc="Users group">
 
   /**
    * Get users list for admin
@@ -143,17 +155,6 @@ export class ApiService {
     }
 
     const headers = this.getHeadersWithToken();
-    /*return Observable.create(observer => {
-      this.http.get(this.apiHost + '/users', { headers, params }).subscribe(
-        res => {
-          observer.next(res);
-        },
-        error => {
-          observer.next(this.getApiError(error));
-        }
-      );
-    });*/
-
     return this.http.get(this.apiHost + '/users', { headers, params });
   }
 
@@ -163,7 +164,7 @@ export class ApiService {
    * url: /users/<user id>/check-invited-users
    */
   getClientsList(userId: number = null): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       if (!userId) {
         userId = this.session.user.id;
@@ -179,8 +180,11 @@ export class ApiService {
     });
   }
 
+  /**
+   * Что-то связанное с партнёрской программой
+   */
   checkInvitedUsers(userId: number = null): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       if (!userId) {
         userId = this.session.user.id;
@@ -196,8 +200,11 @@ export class ApiService {
     });
   }
 
+  /**
+   * Получаем авторизованного пользователя(себя)
+   */
   meRequest(): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       this.getMeRequest(observer);
     });
   }
@@ -206,10 +213,10 @@ export class ApiService {
    * Save user model/profile changes
    * method: PATCH
    * url: /users/update/
-   * @param value
+   * @var value
    */
   updateUser(value: any): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch<User>(this.apiHost + '/users/' + value.id, value, { headers }).subscribe(
         res => {
@@ -222,15 +229,14 @@ export class ApiService {
     });
   }
 
+  /**
+   * Получаем авторизованного пользователя(себя), сам запрос
+   */
   private getMeRequest(observer, token = null, isCurrentUser = true) {
     const headers = this.getHeadersWithToken(token);
 
     this.http.get<User>(this.apiHost + '/users/me', { headers }).subscribe(
       (userRes: any) => {
-        /*if (isCurrentUser) {
-        } else {
-          // this.session.tempUser = userRes;
-        }*/
         this.store.dispatch(new LoadAuthorizedSuccess(userRes));
         this.session.user = userRes;
         observer.next(userRes);
@@ -240,10 +246,6 @@ export class ApiService {
       }
     );
   }
-
-  //</editor-fold>
-
-  //<editor-fold desc="Transactions">
 
   /**
    * Operations with filter
@@ -262,10 +264,8 @@ export class ApiService {
     if (Object.keys(sort).length > 0) {
       params.sort = this.prepareSort(sort);
     }
-
     const headers = this.getHeadersWithToken();
-
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       this.http.get(this.apiHost + '/transactions?field=*,user.id,user.name,user.accessToken&expand=user', { headers, params }).subscribe(
         res => {
           observer.next(res);
@@ -277,15 +277,25 @@ export class ApiService {
     });
   }
 
+  /**
+   * Получаем пользователя по id
+   */
   public getUserById(id: number) {
     const headers = this.getHeadersWithToken();
     return this.http.get(this.apiHost + `/users/${id}`, { headers });
   }
+
+  /**
+   * Получаем транзакцию по id
+   */
   public getTransactionById(id: number) {
     const headers = this.getHeadersWithToken();
     return this.http.get(this.apiHost + `/transactions/${id}`, { headers });
   }
 
+  /**
+   * Получаем транзакции пользователя
+   */
   public getTransactionByUser(userId: number, partner = 0, sort = {}, page = 0): Observable<any> {
     const params: any = { userId: userId, isPartner: partner, 'per-page': this.pageSize };
     if (Object.keys(sort).length > 0) {
@@ -298,6 +308,9 @@ export class ApiService {
     return this.http.get(this.prepareTransactionsUrl(params), { headers });
   }
 
+  /**
+   * Получаем все транзакции пользователя ... вроде
+   */
   private prepareTransactionsUrl(params: any = {}): string {
     let url = this.apiHost + '/transactions/index';
     if (Object.keys(params).length > 0) {
@@ -307,7 +320,7 @@ export class ApiService {
     if (params.userId) {
       urlParams.push(`filter[userId]=${params.userId}`);
     }
-    if (params.isPartner || params.isPartner == 0) {
+    if (params.isPartner || params.isPartner === 0) {
       urlParams.push('filter[isPartner]=' + params.isPartner);
     }
 
@@ -338,7 +351,7 @@ export class ApiService {
       params.page = page - 1;
     }
 
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.get(this.prepareTransactionsUrl(params), { headers }).subscribe(
         res => {
@@ -367,21 +380,24 @@ export class ApiService {
       params.page = page - 1;
     }
 
-    return Observable.create(obsrver => {
+    return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.get(this.prepareTransactionsUrl(params), { headers }).subscribe(
         res => {
-          obsrver.next(res);
+          observer.next(res);
         },
         error => {
-          obsrver.next(this.getApiError(error));
+          observer.next(this.getApiError(error));
         }
       );
     });
   }
 
+  /**
+   * Создаём транзакцию
+   */
   createTransaction(data: any): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.post(this.apiHost + '/transactions/create', data, { headers }).subscribe(
         res => {
@@ -394,10 +410,12 @@ export class ApiService {
     });
   }
 
+  /**
+   * Обновляем транзакцию
+   */
   updateTransaction(data: any): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
-      // this.http.patch(this.apiHost + '/transaction/update/' + data.id, data, {headers})
       this.http.patch(this.apiHost + '/transactions/' + data.id, data, { headers }).subscribe(
         res => {
           observer.next(res);
@@ -409,18 +427,69 @@ export class ApiService {
     });
   }
 
-  //</editor-fold>
+  /**
+   * Получение всех категорий
+   */
+  getCategories(): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + '/categories', { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
 
+  /**
+   * Создаём материал
+   */
+  createMaterials(data: Materials): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.post(this.apiHost + '/contents/create', data, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Псевдо получение типов контента
+   */
+  getTypeContent(): Observable<any> {
+    return new Observable((observer) => {
+      const typeContent = [
+        { id: 1, title: 'Текст'},
+        { id: 2, title: 'Аудио'},
+        { id: 3, title: 'Видео'},
+      ];
+      observer.next(typeContent);
+    });
+  }
+
+  /**
+   * Отправляем email(Обратная связь)
+   */
   sendMessage(data: any) {
     const headers = this.getSimpleLanguageHeader();
     return this.http.post(this.apiHost + '/users/contact', data, { headers });
   }
 
+  /**
+   * Получаем язык приложения
+   */
   private getSimpleLanguageHeader(): HttpHeaders {
     const lang = this.session.lang;
     return new HttpHeaders().append('Accept-Language', lang);
   }
 
+  /**
+   * Устанавливаем необходимые заголовки
+   */
   private getHeadersWithToken(token = null): HttpHeaders {
     if (!token) {
       token = localStorage.getItem('token');
@@ -449,8 +518,11 @@ export class ApiService {
     return params;
   }
 
+  /**
+   * Получаем пользователя по токену
+   */
   getUserByToken(token: string): Observable<any> {
-    return Observable.create(observer => {
+    return new Observable((observer) => {
       this.getMeRequest(observer, token, false);
     });
   }

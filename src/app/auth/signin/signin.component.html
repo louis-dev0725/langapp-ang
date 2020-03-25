@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="card">
+  <div class="card" *ngIf="isLoaded">
     <h1 translate>Sign in</h1>
     <p class="note" translate>signup.note</p>
 
@@ -49,8 +49,14 @@
             [disabled]="!signinForm.valid">{{'Sign in' | translate}}
           </button>
         </div>
-
       </form>
     </div>
   </div>
+
+  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
+    <mat-progress-spinner
+      color="primary"
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </mat-card>
 </div>

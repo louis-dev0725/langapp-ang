@@ -37,9 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.api.meRequest()
-    .pipe(untilDestroyed(this))
-    .subscribe(res => {
+    this.api.meRequest().pipe(untilDestroyed(this)).subscribe(res => {
       this.user = res;
       this.settingsForm.patchValue({
         id: res.id,
@@ -53,9 +51,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
 
 
-    this.api.getTimeZones()
-    .pipe(untilDestroyed(this))
-    .subscribe((res: any) => {
+    this.api.getTimeZones().pipe(untilDestroyed(this)).subscribe((res: any) => {
       this.timeZones = res;
     });
 
@@ -113,9 +109,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(value: any) {
-    this.api.updateUser(value)
-    .pipe(untilDestroyed(this))
-    .subscribe(result => {
+    this.api.updateUser(value).pipe(untilDestroyed(this)).subscribe(result => {
       if (result instanceof ApiError) {
         this._errors = result.error;
       } else {

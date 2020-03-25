@@ -55,3 +55,27 @@ export interface Transaction {
   isRealMoney?: number;
   fromInvitedUserId?: number;
 }
+
+export interface Materials {
+  id?: number;
+  title: string;
+  type_content: number;
+  source_link: string;
+  text: string;
+  status: number;
+  count_symbol: number;
+  level_JLPT: string;
+  deleted: number;
+  category?: any;
+}
+
+export interface Category {
+  id?: number;
+  title: string;
+  parent: number;
+}
+
+export interface TypeContent {
+  id: number;
+  title: string;
+}

@@ -152,6 +152,26 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         hide: !this.isLoggedIn
       },
       {
+        label: 'Materials',
+        routerLink: ['/content'],
+        hide: !this.isLoggedIn,
+        items: [
+          {
+            label: 'Create material',
+            routerLink: ['content/create']
+          },
+          {
+            label: 'Catalog materials',
+            routerLink: ['content/materials']
+          }
+        ]
+      },
+      {
+        label: 'Category materials',
+        routerLink: ['/category'],
+        hide: !this.isAdmin || (this.isAdmin && this.isOpenedAdmin)
+      },
+      {
         label: 'Contacts',
         routerLink: ['/contacts']
       },

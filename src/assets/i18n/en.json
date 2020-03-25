@@ -109,7 +109,10 @@
 		},
 		"transaction": {
 			"created": "Transaction created"
-		}
+		},
+    "materials": {
+      "created": "Material created"
+    }
 	},
 	"for user": "for user",
 	"id": "ID",
@@ -142,5 +145,16 @@
 		"min": "The amount must be equals to or greater than",
 		"passconfirm": "Password and repeat password are not equals",
 		"required": "This field is required"
-	}
+	},
+  "Materials": "Materials",
+  "Create material": "Create material",
+  "Catalog materials": "Catalog materials",
+  "Category materials": "Category materials",
+  "Material Creation": "Material Creation",
+  "title": "Title",
+  "Categories": "Categories",
+  "Type Content": "Type Content",
+  "source_link": "Source Link",
+  "text": "Text",
+  "Not format url": "Link does not match format"
 }

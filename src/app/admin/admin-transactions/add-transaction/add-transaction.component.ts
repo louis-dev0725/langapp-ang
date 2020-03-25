@@ -78,9 +78,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
       isPartner: this.transactionForm.value.isPartner ? 1 : 0,
       isRealMoney: this.transactionForm.value.isRealMoney ? 1 : 0
     };
-    this.api.createTransaction(data)
-    .pipe(untilDestroyed(this))
-    .subscribe(res => {
+    this.api.createTransaction(data).pipe(untilDestroyed(this)).subscribe(res => {
       if (!(res instanceof ApiError)) {
         this.snackBar.open(this.translatingService.translates['confirm'].transaction.created, null, { duration: 3000 });
         setTimeout(() => {

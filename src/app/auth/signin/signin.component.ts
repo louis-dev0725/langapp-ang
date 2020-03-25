@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
@@ -12,10 +12,21 @@ import { CustomValidator } from '@app/services/custom-validator';
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
+
+  constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder, private router: Router) {}
+
+  @Input()
+  set isLoaded(val: boolean) {
+    this._isLoaded = val;
+  }
+
+  get isLoaded(): boolean {
+    return this._isLoaded;
+  }
   signinForm: FormGroup;
   errors: FieldError[] = [];
 
-  constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder, private router: Router) {}
+  private _isLoaded = true;
 
   ngOnInit() {
     this.signinForm = this.formBuilder.group({
@@ -26,6 +37,7 @@ export class SigninComponent implements OnInit {
 
   onSubmit(value: any) {
     this.errors = [];
+    this.isLoaded = false;
     this.api.login(value).subscribe(res => {
       if (res instanceof ApiError) {
         this.errors = res.error;

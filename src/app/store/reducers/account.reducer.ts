@@ -1,5 +1,5 @@
 import * as fromAccount from '../actions/account.action';
-import { User } from '../../interfaces/common.interface';
+import { User } from '@app/interfaces/common.interface';
 
 export interface AccountState {
   data: User;

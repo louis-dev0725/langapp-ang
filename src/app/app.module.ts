@@ -18,7 +18,6 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { HttpInterceptorService } from '@app/http/http-interceptor';
 import { ThemeModule } from '@app/theme/theme.module';
 import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
-import { ContentPageComponent } from './content-page/content-page.component';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
 
@@ -40,7 +39,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 export const metaReducers: MetaReducer<any>[] = !environment.production ? [storeFreeze] : [];
 
 @NgModule({
-  declarations: [AppComponent, ContentPageComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

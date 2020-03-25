@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="card" *ngIf="isLoaded">
+    <h1 translate>Material Creation</h1>
+    <ng-container *ngIf="errors.length > 0">
+      <mat-card *ngFor="let err of errors" class="err-alert">
+        <mat-card-content>{{err.message}}</mat-card-content>
+      </mat-card>
+    </ng-container>
+
+    <div class="container">
+      <form [formGroup]="materialsForm">
+        <mat-form-field class="form-item">
+          <input matInput required formControlName="title" placeholder="{{'title' | translate}}">
+          <mat-error *ngIf="checkError('title')">{{getError('title')}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-item">
+          <mat-label>{{ 'Categories' | translate }}</mat-label>
+          <mat-select formControlName="category" multiple required>
+            <mat-option *ngFor="let category_one of categories" [value]="category_one.id">{{ category_one.title }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="checkError('category')">{{ getError('category') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-item">
+          <mat-label>{{ 'Type Content' | translate }}</mat-label>
+          <mat-select formControlName="type_content" required>
+            <mat-option *ngFor="let type of types" [value]="type.id">{{ type.title }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="checkError('type_content')">{{ getError('type_content') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-item">
+          <input type="url" matInput required formControlName="source_link" placeholder="{{'source_link' | translate}}">
+          <mat-error *ngIf="checkError('source_link')">{{ getError('source_link') | translate }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-item">
+          <textarea rows="10" matInput required formControlName="text" placeholder="{{'text' | translate}}"></textarea>
+          <mat-error *ngIf="checkError('text')">{{getError('text')}}</mat-error>
+        </mat-form-field>
+
+        <div class="form-item">
+          <button (click)="onSubmit()" mat-flat-button [disabled]="!materialsForm.valid"
+            color="primary">{{'Save' | translate}}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
+  </mat-card>
+</div>

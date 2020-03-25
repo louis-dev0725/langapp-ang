@@ -1,7 +1,7 @@
-import { Injectable, ViewChild } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { EventsService } from '@app/services/events.service';
 
@@ -9,19 +9,12 @@ import { EventsService } from '@app/services/events.service';
   providedIn: 'root'
 })
 export class HttpInterceptorService implements HttpInterceptor {
-  private baseUrl: string = 'http://service-template.lb7.ru/api';
-
   constructor(private eventsService: EventsService, private snackBar: MatSnackBar) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let dupReq = request;
     let loading = true;
 
-    // todo: only for testing
-    if (request.url.indexOf('assets') == -1) {
-      const subUrl = request.url.substring(request.url.indexOf('api') + 3);
-      dupReq = request.clone({ url: this.baseUrl + subUrl });
-    }
     dupReq.headers.append('Accept-Language', localStorage.getItem('lang'));
     setTimeout(() => {
       if (loading) {

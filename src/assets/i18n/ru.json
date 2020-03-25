@@ -100,6 +100,7 @@
 	"Your balance": "Ваш баланс",
 	"balance": "баланс",
 	"Your id": "Ваш ID",
+
 	"addedDateTime": "Время создания",
 	"comment": "Комментарий",
 	"confirm": {
@@ -109,7 +110,10 @@
 		},
 		"transaction": {
 			"created": "Транзакция создана"
-		}
+		},
+    "materials": {
+      "created": "Материал создан"
+    }
 	},
 	"for user": "для пользователя",
 	"id": "ID",
@@ -142,5 +146,16 @@
 		"min": "Значение должно быть равно или большим чем",
 		"passconfirm": "Пароль и подтверждение пароля не совпадают",
 		"required": "Это обязательное поле"
-	}
+	},
+  "Materials": "Материалы",
+  "Create material": "Создать материал",
+  "Catalog materials": "Каталог материалов",
+  "Category materials": "Категории материалов",
+  "Material Creation": "Создание материала",
+  "title": "Название",
+  "Categories": "Категории",
+  "Type Content": "Тип контента",
+  "source_link": "Ссылка на источник",
+  "text": "Текст",
+  "Not format url": "Ссылка не соответствует формату"
 }
