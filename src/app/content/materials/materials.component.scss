@@ -1,0 +1,36 @@
+.filter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-filter {
+  display: flex;
+  max-width: 400px;
+  width: 100%;
+  margin-right: 15px;
+}
+
+.input-filter {
+  width: 70%;
+}
+
+.filter-button {
+  width: 30%;
+  padding-top: 10px;
+}
+
+.filter-button button {
+  width: 100%;
+}
+
+.select-filter {
+  max-width: 250px;
+  width: 100%;
+  margin-right: 15px;
+}
+
+.filter-button-hide {
+  display: flex;
+  margin-top: 4px;
+  height: 50px;
+}

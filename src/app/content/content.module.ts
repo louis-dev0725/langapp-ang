@@ -7,6 +7,7 @@ import { MaterialsComponent } from './materials/materials.component';
 import { CreateMaterialsComponent } from './create-materials/create-materials.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@app/shared/shared.module';
+import { ListMaterialsComponent } from './materials/list-materials/list-materials.component';
 
 const routes: Routes = [
    {
@@ -40,7 +41,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent],
+  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, ListMaterialsComponent],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,

@@ -9,7 +9,8 @@ export class CustomValidator {
     required: 'This field is required',
     email: 'This is not valid email',
     passconfirm: 'Password and repeat password are not equals',
-    min: 'The amount must be equals to or greater than'
+    min: 'The amount must be equals to or greater than',
+    pattern: 'Not format url'
   };
 
   messagesMap = {

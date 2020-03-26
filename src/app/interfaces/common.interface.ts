@@ -79,3 +79,36 @@ export interface TypeContent {
   id: number;
   title: string;
 }
+
+export interface Contents {
+  items: [
+    {
+      id: number;
+      title: string;
+      type_content: number;
+      source_link: string;
+      text: string;
+      status: number;
+      count_symbol: number;
+      level_JLPT: string;
+      deleted: number;
+    }
+  ];
+  _links: {
+    self: {
+      href: string;
+    },
+    next?: {
+      href: string;
+    },
+    last?: {
+      href: string;
+    }
+  };
+  _meta: {
+    totalCount: number;
+    pageCount: number;
+    currentPage: number;
+    perPage: number;
+  };
+}

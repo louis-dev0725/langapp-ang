@@ -67,15 +67,13 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
   getError(fieldName: string) {
     const errors = this.materialsForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    const res = this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
-    if (res !== '') {
-      return res;
-    } else {
-      return 'Not format url';
-    }
+
+    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }
 
   onSubmit() {
+    this._isLoaded = false;
+
     const materials = {
       ...this.materialsForm.value,
       count_symbol: this.materialsForm.value.text.length,
@@ -92,6 +90,8 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
       } else {
         this.errors = res.error;
       }
+
+      this._isLoaded = true;
      });
   }
 

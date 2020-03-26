@@ -465,9 +465,59 @@ export class ApiService {
       const typeContent = [
         { id: 1, title: 'Текст'},
         { id: 2, title: 'Аудио'},
-        { id: 3, title: 'Видео'},
+        { id: 3, title: 'Видео'}
       ];
       observer.next(typeContent);
+    });
+  }
+
+  /**
+   * Псевдо получение объемов текста
+   */
+  getVolumeContent(): Observable<any> {
+    return new Observable((observer) => {
+      const volumeContent = [
+        { id: '0,500', title: '0 - 500'},
+        { id: '501,1500', title: '501 - 1500'},
+        { id: '1501,5000', title: '1501 - 5000'},
+        { id: '5000,unlimited', title: '> 5000'}
+      ];
+      observer.next(volumeContent);
+    });
+  }
+
+  /**
+   * Псевдо получение сложности текста
+   */
+  getComplicationContent(): Observable<any> {
+    return new Observable((observer) => {
+      const complicationContent = [
+        { id: 'N1', title: 'N1'},
+        { id: 'N2', title: 'N2'},
+        { id: 'N3', title: 'N3'},
+        { id: 'N4', title: 'N4'},
+        { id: 'N5', title: 'N5'}
+      ];
+      observer.next(complicationContent);
+    });
+  }
+
+  /**
+   * Получаем список материалов с фильтром
+   */
+  getMaterials(data: any): Observable<any> {
+    return new Observable((observer) => {
+      let query = '';
+      if (data !== '') {
+        query = '?' + data;
+      }
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + '/contents/index' + query, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
     });
   }
 

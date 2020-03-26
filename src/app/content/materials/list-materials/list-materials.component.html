@@ -1,0 +1,35 @@
+<div class="container">
+  <table mat-table [dataSource]="arrayData.items">
+    <ng-container matColumnDef="title">
+      <td mat-cell *matCellDef="let element" class="table-title">{{element.title}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="level_JLPT" class="table-column">
+      <td mat-cell *matCellDef="let element">{{element.level_JLPT}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="count_symbol" class="table-column">
+      <td mat-cell *matCellDef="let element">{{element.count_symbol}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="button" class="table-button">
+      <td mat-cell *matCellDef="let element">
+        <a *ngIf="element.type_content == 2" [href]="element.source_link" target="_blank" mat-flat-button>
+          {{ 'Study' | translate }}
+        </a>
+        <a *ngIf="element.type_content == 3" [href]="element.source_link" target="_blank" mat-flat-button>
+          {{ 'Look' | translate }}
+        </a>
+        <a *ngIf="element.type_content == 1" [href]="element.source_link" target="_blank" mat-flat-button>
+          {{ 'Read' | translate }}
+        </a>
+      </td>
+    </ng-container>
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSize]="arrayData._meta.perPage" [showFirstLastButtons]="true"
+    [length]="arrayData._meta.totalCount" [pageIndex]="arrayData._meta.currentPage - 1" (page)="handlePage($event)">
+  </mat-paginator>
+</div>

@@ -3,13 +3,8 @@ import { User } from '../interfaces/common.interface';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
-import {
-  LogOutAction,
-  AuthorizedUpdateTokenAction,
-  AuthorizedSaveAdminAction,
-  LogOutAsUserAction,
-  AuthorizedUpdateUserAction
-} from '@app/store';
+import { LogOutAction, AuthorizedUpdateTokenAction, AuthorizedSaveAdminAction, LogOutAsUserAction,
+  AuthorizedUpdateUserAction } from '@app/store';
 
 @Injectable({
   providedIn: 'root'

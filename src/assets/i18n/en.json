@@ -85,7 +85,7 @@
 	"Telephone": "Phone",
     "to": "to",
 	"Timezone": "Timezone",
-	"Transacrion Id": "Transacrion Id",
+	"Transacrion Id": "Transaction Id",
 	"Transactions": "Transactions",
 	"Transactions - admin": "Transactions - admin",
 	"Transactions history": "Transactions history",
@@ -156,5 +156,15 @@
   "Type Content": "Type Content",
   "source_link": "Source Link",
   "text": "Text",
-  "Not format url": "Link does not match format"
+  "Not format url": "Link does not match format",
+  "Complication": "Complication",
+  "Volumes": "Volume text",
+  "Hide studied": "Hide studied",
+  "Search to keywords": "Keyword Search",
+  "Search": "Search",
+  "sym": "sym",
+  "Null value": "Empty value",
+  "Study": "Study",
+  "Look": "Look",
+  "Read": "Read"
 }

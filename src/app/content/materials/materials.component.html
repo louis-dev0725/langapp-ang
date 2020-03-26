@@ -1,1 +1,56 @@
-<p>materials works!</p>
+<div class="container">
+  <div class="card" *ngIf="isLoaded">
+    <h1 translate>Materials</h1>
+    <div class="filter">
+      <form [formGroup]="filterForm" class="form-filter">
+        <mat-form-field appearance="outline" class="input-filter">
+          <input matInput formControlName="keywords" placeholder="{{'Search to keywords' | translate}}">
+        </mat-form-field>
+
+        <div class="filter-button">
+          <button mat-raised-button (click)="onSubmitSearch()">{{'Search' | translate}}</button>
+        </div>
+      </form>
+
+      <mat-form-field class="select-filter" appearance="outline">
+        <mat-label>{{ 'Complication' | translate }}</mat-label>
+        <mat-select (selectionChange)="onChangeComplication($event)">
+          <mat-option [value]="">{{ 'Null value' | translate }}</mat-option>
+          <mat-option *ngFor="let complication of complications" [value]="complication.id">{{ complication.title }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="select-filter" appearance="outline">
+        <mat-label>{{ 'Type Content' | translate }}</mat-label>
+        <mat-select (selectionChange)="onChangeType($event)">
+          <mat-option [value]="">{{ 'Null value' | translate }}</mat-option>
+          <mat-option *ngFor="let type of types" [value]="type.id">{{ type.title }} {{ 'sym' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="select-filter" appearance="outline">
+        <mat-label>{{ 'Volumes' | translate }}</mat-label>
+        <mat-select (selectionChange)="onChangeVolumes($event)">
+          <mat-option [value]="">{{ 'Null value' | translate }}</mat-option>
+          <mat-option *ngFor="let volume of volumes" [value]="volume.id">{{ volume.title }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="filter-button-hide">
+        <button mat-flat-button color="primary">{{'Hide studied' | translate}}</button>
+      </div>
+    </div>
+
+    <app-list-materials *ngIf="isLoadedData" [arrayData]="daraSource" (dataChanged)="changePageTable($event)"></app-list-materials>
+
+    <mat-card *ngIf="!isLoadedData" style="display:flex;justify-content:center;align-items:center">
+      <mat-progress-spinner color="primary" mode="indeterminate">
+      </mat-progress-spinner>
+    </mat-card>
+  </div>
+
+  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
+  </mat-card>
+</div>
