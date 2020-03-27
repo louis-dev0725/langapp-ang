@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string $title
- * @property int $parent
+ * @property int $parent_id
  *
  * @property ContentCategory[] $contentCategories
  * @property Content[] $contents
@@ -31,8 +31,8 @@ class Category extends ActiveRecord {
     public function rules () {
         return [
             [['title'], 'required'],
-            [['parent'], 'default', 'value' => 0],
-            [['parent'], 'integer'],
+            [['parent_id'], 'default', 'value' => 0],
+            [['parent_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
         ];
     }
@@ -44,8 +44,15 @@ class Category extends ActiveRecord {
         return [
             'id' => 'ID',
             'title' => 'Title',
-            'parent' => 'Parent',
+            'parent_id' => 'Parent',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParentCategory () {
+        return $this->hasOne(Category::class, ['id' => 'parent_id']);
     }
 
     /**

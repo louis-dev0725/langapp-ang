@@ -33,4 +33,25 @@ class CategoryController extends ActiveController {
         return $dataProvider;
     }
 
+    /**
+     * @return ActiveDataProvider
+     * @throws NotFoundHttpException
+     */
+    public function actionAll() {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Category::find()->with('parentCategory'),
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ],
+            ]
+        ]);
+
+        if ($dataProvider->getTotalCount() == 0) {
+            throw new NotFoundHttpException('Category not found');
+        }
+
+        return $dataProvider;
+    }
+
 }

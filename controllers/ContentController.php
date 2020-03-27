@@ -12,9 +12,12 @@ use yii\web\NotFoundHttpException;
 class ContentController extends ActiveController {
     public $modelClass = Content::class;
 
+    /**
+     * @return array
+     */
     public function actions() {
         $actions = parent::actions();
-        unset($actions['index'], $actions['create']);
+        unset($actions['index'], $actions['create'], $actions['view'], $actions['update'], $actions['delete']);
         return $actions;
     }
 
@@ -25,7 +28,7 @@ class ContentController extends ActiveController {
     public function actionIndex() {
         $filter = Yii::$app->request->queryParams;
 
-        $query = Content::find();
+        $query = Content::find()->andWhere(['deleted' => 0]);
 
         if (array_key_exists('title', $filter) && $filter['title'] != 'undefined' && $filter['title'] != '') {
             $query->andWhere(['like', 'title', urldecode($filter['title'])]);
@@ -50,7 +53,12 @@ class ContentController extends ActiveController {
         }
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query
+            'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ],
+            ]
         ]);
 
 
@@ -61,6 +69,10 @@ class ContentController extends ActiveController {
         return $dataProvider;
     }
 
+    /**
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionCreate() {
         $content = new Content();
         $content->load(Yii::$app->getRequest()->getBodyParams(), '');
@@ -81,4 +93,66 @@ class ContentController extends ActiveController {
         }
     }
 
+    /**
+     * @param $id
+     *
+     * @return array|\yii\db\ActiveRecord|null
+     */
+    public function actionView($id) {
+        return Content::find()->with('categories')->where(['id' => $id])->asArray()->one();
+    }
+
+    /**
+     * @param $id
+     *
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionUpdate($id) {
+        $content = Content::find()->with('categories')->where(['id' => $id])->one();
+        $old_category = [];
+        foreach ($content->categories as $category) {
+            $old_category[] = $category->id;
+        }
+        $content->load(Yii::$app->getRequest()->getBodyParams(), '');
+        if ($content->validate()) {
+            $content->save();
+
+            if (!empty($content->category)) {
+                $new_category = $content->category;
+                $cat_del = array_diff($old_category, $new_category);
+                $cat_add = array_diff($new_category, $old_category);
+
+                $categories_del = Category::find()->where(['id' => $cat_del])->all();
+                foreach ($categories_del as $category) {
+                    $content->unlink('categories', $category, true);
+                }
+
+                $categories_add = Category::find()->where(['id' => $cat_add])->all();
+                foreach ($categories_add as $category) {
+                    $content->link('categories', $category);
+                }
+            }
+
+            return ['done' => true];
+        } else {
+            return ['done' => false];
+        }
+    }
+
+    /**
+     * @param $id
+     *
+     * @return array
+     */
+    public function actionDelete($id) {
+        $content = Content::find()->where(['id' => $id])->one();
+        $content['deleted'] = 1;
+
+        if ($content->save()) {
+            return ['done' => true];
+        } else {
+            return ['done' => false];
+        }
+    }
 }
