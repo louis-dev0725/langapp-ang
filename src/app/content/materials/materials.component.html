@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <app-list-materials *ngIf="isLoadedData" [arrayData]="daraSource" (dataChanged)="changePageTable($event)"></app-list-materials>
+    <app-list-materials *ngIf="isLoadedData" [arrayData]="daraSource" (deleteM)="deleteMaterial($event)" (dataChanged)="changePageTable($event)"></app-list-materials>
 
     <mat-card *ngIf="!isLoadedData" style="display:flex;justify-content:center;align-items:center">
       <mat-progress-spinner color="primary" mode="indeterminate">

@@ -72,7 +72,35 @@ export interface Materials {
 export interface Category {
   id?: number;
   title: string;
-  parent: number;
+  parent_id: number;
+}
+
+export interface CategoryArray {
+  items: [
+    {
+      id: number;
+      title: string;
+      parent_id: number;
+      parentCategory?: any;
+    }
+  ];
+  _links: {
+    self: {
+      href: string;
+    },
+    next?: {
+      href: string;
+    },
+    last?: {
+      href: string;
+    }
+  };
+  _meta: {
+    totalCount: number;
+    pageCount: number;
+    currentPage: number;
+    perPage: number;
+  };
 }
 
 export interface TypeContent {

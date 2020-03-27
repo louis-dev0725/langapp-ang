@@ -8,6 +8,7 @@ import { CreateMaterialsComponent } from './create-materials/create-materials.co
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@app/shared/shared.module';
 import { ListMaterialsComponent } from './materials/list-materials/list-materials.component';
+import { EditMaterialsComponent } from './edit-materials/edit-materials.component';
 
 const routes: Routes = [
    {
@@ -30,6 +31,13 @@ const routes: Routes = [
         },
       },
       {
+        path: 'edit/:id',
+        component: EditMaterialsComponent,
+        data: {
+          breadcrumb: 'Edit material'
+        },
+      },
+      {
         path: 'materials',
         component: MaterialsComponent,
         data: {
@@ -41,13 +49,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, ListMaterialsComponent],
+  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, EditMaterialsComponent, ListMaterialsComponent],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
     TranslateModule.forChild(),
     ReactiveFormsModule,
-    SharedModule,
+    SharedModule
   ]
 })
 export class ContentModule {}

@@ -111,7 +111,14 @@
 			"created": "Transaction created"
 		},
     "materials": {
-      "created": "Material created"
+      "created": "Material created",
+      "updated": "Material changed",
+      "deleted": "Material removed"
+    },
+    "categories": {
+      "created": "Category created",
+      "updated": "Category changed",
+      "deleted": "Category removed"
     }
 	},
 	"for user": "for user",
@@ -148,6 +155,7 @@
 	},
   "Materials": "Materials",
   "Create material": "Create material",
+  "Edit material": "Edit material",
   "Catalog materials": "Catalog materials",
   "Category materials": "Category materials",
   "Material Creation": "Material Creation",
@@ -166,5 +174,11 @@
   "Null value": "Empty value",
   "Study": "Study",
   "Look": "Look",
-  "Read": "Read"
+  "Read": "Read",
+  "Delete": "Delete",
+  "Create category": "Category creation",
+  "New category": "New category",
+  "Edit category": "Change category",
+  "Self Category": "Self Category",
+  "Parent": "Parent"
 }

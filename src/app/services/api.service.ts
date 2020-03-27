@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Materials, TypeContent, User } from '../interfaces/common.interface';
+import { Category, Materials, TypeContent, User } from '../interfaces/common.interface';
 import { Observable } from 'rxjs';
 import { ApiError } from './api-error';
 import { SessionService } from './session.service';
@@ -443,12 +443,80 @@ export class ApiService {
   }
 
   /**
-   * Создаём материал
+   * Получение всех категорий с пагинацией
    */
-  createMaterials(data: Materials): Observable<any> {
+  getAllCategories(data: any = ''): Observable<any> {
+    return new Observable((observer) => {
+      let query = '';
+      if (data !== '') {
+        query = '&' + data;
+      }
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + '/categories/all?expand=parentCategory' + query, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Создаём категорию
+   */
+  createCategory(data: Category): Observable<any> {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
-      this.http.post(this.apiHost + '/contents/create', data, { headers }).subscribe((res) => {
+      this.http.post(this.apiHost + '/categories/create', data, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Получаем определённую категорию
+   *
+   * @param id
+   */
+  getCategoryById(id: number): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + `/categories/${id}`, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Изменяем категорию
+   */
+  updateCategory(data: Category): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.patch(this.apiHost + '/categories/' + data.id, data, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Удаляем определённую категорию
+   *
+   * @param id
+   */
+  deleteCategory(id: number): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.delete(this.apiHost + `/categories/${id}`, { headers }).subscribe((res) => {
           observer.next(res);
         }, (error) => {
           observer.next(this.getApiError(error));
@@ -513,6 +581,70 @@ export class ApiService {
       }
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/contents/index' + query, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Создаём материал
+   */
+  createMaterials(data: Materials): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.post(this.apiHost + '/contents/create', data, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Получаем определённый материал
+   *
+   * @param id
+   */
+  getMaterialById(id: number): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + `/contents/${id}`, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Изменяем материал
+   */
+  updateMaterials(data: Materials): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.patch(this.apiHost + '/contents/' + data.id, data, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Удаляем определённый материал
+   *
+   * @param id
+   */
+  deleteMaterial(id: number): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.delete(this.apiHost + `/contents/${id}`, { headers }).subscribe((res) => {
           observer.next(res);
         }, (error) => {
           observer.next(this.getApiError(error));
