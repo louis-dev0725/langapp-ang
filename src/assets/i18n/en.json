@@ -180,5 +180,9 @@
   "New category": "New category",
   "Edit category": "Change category",
   "Self Category": "Self Category",
-  "Parent": "Parent"
+  "Parent": "Parent",
+  "Main language": "Native language",
+  "Language1": "Additional language 1",
+  "Language2": "Additional language 2",
+  "Language3": "Additional language 3"
 }

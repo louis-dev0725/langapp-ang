@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User } from '@app/interfaces/common.interface';
+import { Language, User } from '@app/interfaces/common.interface';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { MatSnackBar } from '@angular/material';
 import { SessionService } from '@app/services/session.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { combineLatest } from "rxjs";
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   isChangePassword = false;
   timeZones: any[] = [];
   user;
+
+  languages = [];
+
+  addLanguage2 = false;
+  addLanguage3 = false;
 
   private _errors = [];
   get errors() {
@@ -37,19 +43,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.api.meRequest().pipe(untilDestroyed(this)).subscribe(res => {
-      this.user = res;
+    combineLatest([this.api.meRequest(), this.api.getAllLanguage()]).pipe(untilDestroyed(this)).subscribe(([form, languages]) => {
+      this.user = form;
       this.settingsForm.patchValue({
-        id: res.id,
-        name: res.name,
-        email: res.email,
-        company: res.company,
-        site: res.site,
-        telephone: res.telephone,
-        wmr: res.wmr
+        id: form.id,
+        name: form.name,
+        email: form.email,
+        company: form.company,
+        site: form.site,
+        telephone: form.telephone,
+        wmr: form.wmr,
+        main_language: form.main_language !== null ? form.homeLanguage.id : null,
+        language1: form.language1 !== null ?  form.languageOne.id : null,
+        language2: form.language2 !== null ?  form.languageTwo.id : null,
+        language3: form.language3 !== null ?  form.languageThree.id : null
       });
-    });
 
+      this.languages = languages.items;
+      console.log(languages);
+    });
 
     this.api.getTimeZones().pipe(untilDestroyed(this)).subscribe((res: any) => {
       this.timeZones = res;
@@ -65,7 +77,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
       isServicePaused: [''],
       wmr: [''],
       timezone: [''],
-      language: ['']
+      language: [''],
+      main_language: [null, { validators: [Validators.required], updateOn: 'change' }],
+      language1: [null, { validators: [Validators.required], updateOn: 'change' }],
+      language2: [null],
+      language3: [null],
     });
   }
 
@@ -108,7 +124,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  visibleLanguage2() {
+    this.addLanguage2 = this.settingsForm.value.language1 !== null;
+    if (this.addLanguage2 === false) {
+      this.addLanguage3 = false;
+      this.settingsForm.value.language3 = null;
+    }
+  }
+
+  visibleLanguage3() {
+    this.addLanguage3 = this.settingsForm.value.language2 !== null;
+  }
+
   onSubmit(value: any) {
+    if (this.settingsForm.value.language1 === null || this.settingsForm.value.language1 === '') {
+      this.settingsForm.value.language2 = null;
+    }
+    if (this.settingsForm.value.language2 === null || this.settingsForm.value.language2 === '') {
+      this.settingsForm.value.language3 = null;
+    }
     this.api.updateUser(value).pipe(untilDestroyed(this)).subscribe(result => {
       if (result instanceof ApiError) {
         this._errors = result.error;

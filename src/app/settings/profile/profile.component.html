@@ -4,8 +4,7 @@
     <p class="note">{{'Your id' | translate}}: {{user?.id}}</p>
 
     <ng-container *ngIf="errors.length > 0">
-      <mat-card *ngFor="let err of errors"
-                class="err-alert">
+      <mat-card *ngFor="let err of errors" class="err-alert">
         <mat-card-content>{{err.message}}</mat-card-content>
       </mat-card>
     </ng-container>
@@ -15,55 +14,33 @@
         <input type="hidden" formControlName="id">
 
         <mat-form-field class="form-item">
-          <input
-            matInput
-            required
-            formControlName="name"
-            placeholder="{{'Name' | translate}}">
+          <input matInput required formControlName="name" placeholder="{{'Name' | translate}}">
           <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
         </mat-form-field>
 
         <mat-form-field class="form-item">
-          <input
-            matInput
-            formControlName="company"
-            placeholder="{{'Company' | translate }}">
+          <input matInput formControlName="company" placeholder="{{'Company' | translate }}">
         </mat-form-field>
 
         <mat-form-field class="form-item">
-          <input
-            matInput
-            formControlName="site"
-            placeholder="{{'Site' | translate}}">
+          <input matInput formControlName="site" placeholder="{{'Site' | translate}}">
         </mat-form-field>
 
         <mat-form-field class="form-item">
-          <input
-            matInput
-            formControlName="telephone"
-            placeholder="{{'Phone' | translate}}">
+          <input matInput formControlName="telephone" placeholder="{{'Phone' | translate}}">
         </mat-form-field>
 
         <mat-form-field class="form-item">
-          <input
-            matInput
-            required
-            formControlName="email"
-            placeholder="{{'Email' | translate}}">
+          <input matInput required formControlName="email" placeholder="{{'Email' | translate}}">
           <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
         </mat-form-field>
 
         <div class="form-item">
-          <mat-checkbox
-            formControlName="isServicePaused">{{'Is service paused' | translate}}
-          </mat-checkbox>
+          <mat-checkbox formControlName="isServicePaused">{{'Is service paused' | translate}}</mat-checkbox>
         </div>
 
         <mat-form-field class="form-item">
-          <input
-            matInput
-            formControlName="wmr"
-            placeholder="{{'WMR wallet' | translate}}">
+          <input matInput formControlName="wmr" placeholder="{{'WMR wallet' | translate}}">
         </mat-form-field>
 
         <mat-form-field class="form-item">
@@ -75,6 +52,42 @@
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field class="form-item">
+            <mat-label>{{ 'Main language' | translate }}</mat-label>
+            <mat-select formControlName="main_language">
+              <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
+            </mat-select>
+          <mat-error *ngIf="checkError('main_language')">{{getError('main_language')}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-item">
+            <mat-label>{{ 'Language1' | translate }}</mat-label>
+            <mat-select formControlName="language1" (selectionChange)="visibleLanguage2()">
+              <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
+            </mat-select>
+          <mat-error *ngIf="checkError('language1')">{{getError('language1')}}</mat-error>
+        </mat-form-field>
+
+        <ng-container *ngIf="addLanguage2">
+          <mat-form-field class="form-item">
+            <mat-label>{{ 'Language2' | translate }}</mat-label>
+            <mat-select formControlName="language2" (selectionChange)="visibleLanguage3()">
+              <mat-option [value]="null">{{ 'Null value' | translate }}</mat-option>
+              <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+
+        <ng-container *ngIf="addLanguage3">
+          <mat-form-field class="form-item">
+            <mat-label>{{ 'Language3' | translate }}</mat-label>
+            <mat-select formControlName="language3">
+              <mat-option [value]="null">{{ 'Null value' | translate }}</mat-option>
+              <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+
         <div class="form-item">
           <mat-checkbox
             (change)="onPasswordFlagChange()">{{'Is need to password change' | translate}}
@@ -84,34 +97,22 @@
         <div [ngClass]="{'hidden': !isChangePassword, 'foldable': isChangePassword}">
           <ng-container *ngIf="isChangePassword">
             <mat-form-field class="form-item">
-              <input
-                matInput
-                required
-                formControlName="password"
-                placeholder="{{'Password' | translate}}">
+              <input matInput required formControlName="password" placeholder="{{'Password' | translate}}">
               <mat-error *ngIf="checkError('password')">{{ getError('password') }}</mat-error>
             </mat-form-field>
 
             <mat-form-field class="form-item">
-              <input
-                matInput
-                required
-                formControlName="passrepeat"
-                placeholder="{{'Repeat password' | translate}}">
+              <input matInput required formControlName="passrepeat" placeholder="{{'Repeat password' | translate}}">
               <mat-error *ngIf="checkError('passrepeat')">{{getError('passrepeat')}}</mat-error>
             </mat-form-field>
           </ng-container>
         </div>
 
         <div class="form-item">
-          <button
-            (click)="onSubmit(settingsForm.value)"
-            mat-flat-button
-            [disabled]="!settingsForm.valid"
-            color="primary">{{'Save' | translate}}
+          <button (click)="onSubmit(settingsForm.value)" mat-flat-button [disabled]="!settingsForm.valid" color="primary">
+            {{'Save' | translate}}
           </button>
         </div>
-
       </form>
     </div>
   </div>

@@ -23,6 +23,14 @@ export interface User {
   comment?: any;
   currency?: any;
   config?: any;
+  main_language: any;
+  language1: any;
+  language2?: any;
+  language3?: any;
+  homeLanguage?: Language;
+  languageOne?: Language;
+  languageTwo?: Language;
+  languageThree?: Language;
 }
 
 export interface InvitedUser {
@@ -139,4 +147,9 @@ export interface Contents {
     currentPage: number;
     perPage: number;
   };
+}
+
+export interface Language {
+  id: number;
+  title: string;
 }

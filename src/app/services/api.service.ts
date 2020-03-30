@@ -235,7 +235,8 @@ export class ApiService {
   private getMeRequest(observer, token = null, isCurrentUser = true) {
     const headers = this.getHeadersWithToken(token);
 
-    this.http.get<User>(this.apiHost + '/users/me', { headers }).subscribe(
+    this.http.get<User>(this.apiHost + '/users/me?expand=homeLanguage,languageOne,languageTwo,languageThree',
+      { headers }).subscribe(
       (userRes: any) => {
         this.store.dispatch(new LoadAuthorizedSuccess(userRes));
         this.session.user = userRes;
@@ -645,6 +646,22 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.delete(this.apiHost + `/contents/${id}`, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Получаем все доступные языки
+   *
+   */
+  getAllLanguage(): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + '/languages/all', { headers }).subscribe((res) => {
           observer.next(res);
         }, (error) => {
           observer.next(this.getApiError(error));
