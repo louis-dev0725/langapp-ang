@@ -24,7 +24,7 @@
         <mat-label>{{ 'Type Content' | translate }}</mat-label>
         <mat-select (selectionChange)="onChangeType($event)">
           <mat-option [value]="">{{ 'Null value' | translate }}</mat-option>
-          <mat-option *ngFor="let type of types" [value]="type.id">{{ type.title }} {{ 'sym' | translate }}</mat-option>
+          <mat-option *ngFor="let type of types" [value]="type.id">{{ type.title }}</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -32,7 +32,7 @@
         <mat-label>{{ 'Volumes' | translate }}</mat-label>
         <mat-select (selectionChange)="onChangeVolumes($event)">
           <mat-option [value]="">{{ 'Null value' | translate }}</mat-option>
-          <mat-option *ngFor="let volume of volumes" [value]="volume.id">{{ volume.title }}</mat-option>
+          <mat-option *ngFor="let volume of volumes" [value]="volume.id">{{ volume.title }} {{ 'sym' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
 

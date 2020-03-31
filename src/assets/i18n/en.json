@@ -151,8 +151,9 @@
 		"email": "This is not valid email",
 		"min": "The amount must be equals to or greater than",
 		"passconfirm": "Password and repeat password are not equals",
-		"required": "This field is required"
-	},
+		"required": "This field is required",
+    "pattern": "Link does not match format"
+  },
   "Materials": "Materials",
   "Create material": "Create material",
   "Edit material": "Edit material",
@@ -164,7 +165,6 @@
   "Type Content": "Type Content",
   "source_link": "Source Link",
   "text": "Text",
-  "Not format url": "Link does not match format",
   "Complication": "Complication",
   "Volumes": "Volume text",
   "Hide studied": "Hide studied",
@@ -184,5 +184,7 @@
   "Main language": "Native language",
   "Language1": "Additional language 1",
   "Language2": "Additional language 2",
-  "Language3": "Additional language 3"
+  "Language3": "Additional language 3",
+  "No material": "No material",
+  "No categories": "No categories"
 }

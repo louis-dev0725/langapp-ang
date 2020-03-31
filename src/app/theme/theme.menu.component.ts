@@ -44,9 +44,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     private translatingService: TranslatingService,
     private store: Store<fromStore.State>,
   ) {
-    this.isLoggedIn$
-      .pipe(untilDestroyed(this))
-      .subscribe((authState: boolean) => this.isLoggedIn = authState);
+    this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => this.isLoggedIn = authState);
   }
 
   ngAfterViewInit() {
@@ -231,31 +229,16 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   template: `
     <ng-template ngFor let-child let-i="index" [ngForOf]="root ? item : item.items">
       <li [ngClass]="{ 'active-menuitem': isActive(i) }" [class]="child?.badgeStyleClass" *ngIf="!child?.hide">
-        <a
-          [href]="child.url || '#'"
-          (click)="itemClick($event, child, i)"
-          *ngIf="!child.routerLink && !child?.hide"
-          [attr.tabindex]="!visible ? '-1' : null"
-          [attr.target]="child.target"
-          (mouseenter)="onMouseEnter(i)"
-          class="ripplelink"
-        >
+        <a [href]="child.url || '#'" (click)="itemClick($event, child, i)" *ngIf="!child.routerLink && !child?.hide"
+          [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target" (mouseenter)="onMouseEnter(i)" class="ripplelink">
           <span class="menuitem-text">{{ child.label | translate }}</span>
           <i class="material-icons layout-submenu-toggler" *ngIf="child.items">keyboard_arrow_down</i>
           <span class="menuitem-badge" *ngIf="child.badge">{{ child.badge }}</span>
         </a>
 
-        <a
-          (click)="itemClick($event, child, i)"
-          *ngIf="child.routerLink"
-          [routerLink]="child.routerLink"
-          routerLinkActive="active-menuitem-routerlink"
-          [routerLinkActiveOptions]="{ exact: true }"
-          [attr.tabindex]="!visible ? '-1' : null"
-          [attr.target]="child.target"
-          (mouseenter)="onMouseEnter(i)"
-          class="ripplelink"
-        >
+        <a (click)="itemClick($event, child, i)" *ngIf="child.routerLink" [routerLink]="child.routerLink"
+           routerLinkActive="active-menuitem-routerlink" [routerLinkActiveOptions]="{ exact: true }"
+           [attr.tabindex]="!visible ? '-1' : null" [attr.target]="child.target" (mouseenter)="onMouseEnter(i)" class="ripplelink">
           <span class="menuitem-text">
             {{ child.label | translate }}
             <ng-container [ngSwitch]="child.name">
@@ -267,60 +250,27 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
           <i class="material-icons layout-submenu-toggler" *ngIf="child.items">keyboard_arrow_down</i>
           <span class="menuitem-badge" *ngIf="child.badge">{{ child.badge }}</span>
         </a>
-        <ul
-          app-theme-submenu
-          [item]="child"
-          *ngIf="child.items && isActive(i)"
-          [visible]="isActive(i)"
-          [reset]="reset"
-          [parentActive]="isActive(i)"
-          [@children]="
-            app.isHorizontal() && root ? (isActive(i) ? 'visible' : 'hidden') : isActive(i) ? 'visibleAnimated' : 'hiddenAnimated'
-          "
-        ></ul>
+
+        <ul app-theme-submenu [item]="child" *ngIf="child.items && isActive(i)" [visible]="isActive(i)" [reset]="reset"
+            [parentActive]="isActive(i)" [@children]="app.isHorizontal() && root ? (isActive(i) ? 'visible' : 'hidden')
+             : isActive(i) ? 'visibleAnimated' : 'hiddenAnimated'">
+        </ul>
       </li>
-    </ng-template>
-  `,
+    </ng-template>`,
   animations: [
     trigger('children', [
-      state(
-        'void',
-        style({
-          height: '0px'
-        })
-      ),
-      state(
-        'hiddenAnimated',
-        style({
-          height: '0px'
-        })
-      ),
-      state(
-        'visibleAnimated',
-        style({
-          height: '*'
-        })
-      ),
-      state(
-        'visible',
-        style({
-          height: '*',
-          'z-index': 100
-        })
-      ),
-      state(
-        'hidden',
-        style({
-          height: '0px',
-          'z-index': '*'
-        })
-      ),
+      state('void', style({height: '0'})),
+      state('hiddenAnimated', style({height: '0'})),
+      state('visibleAnimated', style({height: '*'})),
+      state('visible', style({height: '*'})),
+      state('hidden', style({height: '0'})),
       transition('visibleAnimated => hiddenAnimated', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')),
       transition('hiddenAnimated => visibleAnimated', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')),
       transition('void => visibleAnimated, visibleAnimated => void', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
     ])
   ]
 })
+
 export class ThemeSubMenuComponent {
   @Input() user;
 
@@ -356,23 +306,19 @@ export class ThemeSubMenuComponent {
       event.preventDefault();
     }
 
-    // avoid processing disabled items
     if (item.disabled) {
       event.preventDefault();
       return true;
     }
 
-    // activate current item and deactivate active sibling if any
     if (item.routerLink || item.items || item.command || item.url) {
       this.activeIndex = (this.activeIndex as number) === index ? -1 : index;
     }
 
-    // execute command
     if (item.command) {
       item.command({ originalEvent: event, item });
     }
 
-    // prevent hash change
     if (item.items || (!item.url && !item.routerLink)) {
       setTimeout(() => {
         this.appMenu.layoutMenuScrollerViewChild.moveBar();
@@ -381,18 +327,13 @@ export class ThemeSubMenuComponent {
       event.preventDefault();
     }
 
-    // hide menu
     if (!item.items) {
       if (this.app.isMobile()) {
         this.app.sidebarActive = false;
         this.app.mobileMenuActive = false;
       }
 
-      if (this.app.isHorizontal()) {
-        this.app.resetMenu = true;
-      } else {
-        this.app.resetMenu = false;
-      }
+      this.app.resetMenu = this.app.isHorizontal();
 
       this.app.menuHoverActive = !this.app.menuHoverActive;
     }

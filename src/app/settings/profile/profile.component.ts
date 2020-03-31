@@ -60,7 +60,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       });
 
       this.languages = languages.items;
-      console.log(languages);
     });
 
     this.api.getTimeZones().pipe(untilDestroyed(this)).subscribe((res: any) => {
@@ -79,7 +78,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       timezone: [''],
       language: [''],
       main_language: [null, { validators: [Validators.required], updateOn: 'change' }],
-      language1: [null, { validators: [Validators.required], updateOn: 'change' }],
+      language1: [null],
       language2: [null],
       language3: [null],
     });
@@ -127,6 +126,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   visibleLanguage2() {
     this.addLanguage2 = this.settingsForm.value.language1 !== null;
     if (this.addLanguage2 === false) {
+      this.settingsForm.value.language2 = null;
       this.addLanguage3 = false;
       this.settingsForm.value.language3 = null;
     }

@@ -55,7 +55,7 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
       title: ['', { validators: [Validators.required] }],
       category: ['', { validators: [Validators.required] }],
       type_content: ['', { validators: [Validators.required] }],
-      source_link: ['', { validators: [Validators.required, Validators.pattern(urlRegex)] }],
+      source_link: ['', { validators: [Validators.pattern(urlRegex)] }],
       text: ['', { validators: [Validators.required] }],
     });
   }
@@ -67,6 +67,8 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
   getError(fieldName: string) {
     const errors = this.materialsForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
+    console.log(errors);
+    console.log(key);
 
     return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }

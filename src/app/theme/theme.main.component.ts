@@ -69,20 +69,14 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     this.router.events.subscribe(async event => {
       if (event instanceof NavigationStart) {
         if (this.isLoggedIn) {
-          this.api
-            .meRequest()
-            .pipe(untilDestroyed(this))
-            .subscribe();
+          this.api.meRequest().pipe(untilDestroyed(this)).subscribe();
         }
       }
     });
     this.interval = setInterval(async () => {
       const isLoggedIn = await this.isLoggedIn$.toPromise();
       if (isLoggedIn) {
-        this.api
-          .meRequest()
-          .pipe(untilDestroyed(this))
-          .subscribe();
+        this.api.meRequest().pipe(untilDestroyed(this)).subscribe();
       }
     }, onRandomFromRange(500, 600));
   }
@@ -104,7 +98,6 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
         continue;
       }
 
-      // Element.matches() -> https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
       if (this.selectorMatches(target, '.ripplelink, .ui-button, .ui-listbox-item, .ui-multiselect-item, .ui-fieldset-toggler')) {
         const element = target;
         this.rippleEffect(element, e);

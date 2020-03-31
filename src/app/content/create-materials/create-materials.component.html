@@ -31,7 +31,7 @@
         </mat-form-field>
 
         <mat-form-field class="form-item">
-          <input type="url" matInput required formControlName="source_link" placeholder="{{'source_link' | translate}}">
+          <input type="url" matInput formControlName="source_link" placeholder="{{'source_link' | translate}}">
           <mat-error *ngIf="checkError('source_link')">{{ getError('source_link') | translate }}</mat-error>
         </mat-form-field>
 

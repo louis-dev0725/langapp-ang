@@ -6,10 +6,9 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { combineLatest } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { Contents } from '@app/interfaces/common.interface';
-import { NavigationEnd, Router } from '@angular/router';
-import { SessionService } from "@app/services/session.service";
-import { TranslatingService } from "@app/services/translating.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from '@angular/router';
+import { TranslatingService } from '@app/services/translating.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-materials',
