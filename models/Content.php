@@ -38,8 +38,9 @@ class Content extends ActiveRecord {
      */
     public function rules () {
         return [
-            [['title', 'type_content', 'source_link', 'text', 'count_symbol', 'level_JLPT'], 'required'],
+            [['title', 'type_content', 'text', 'count_symbol', 'level_JLPT'], 'required'],
             [['type_content'], 'default', 'value' => 1],
+            [['source_link'], 'default', 'value' => null],
             [['status', 'count_symbol', 'deleted'], 'default', 'value' => 0],
             [['type_content', 'status', 'count_symbol', 'deleted'], 'integer'],
             [['text'], 'string'],

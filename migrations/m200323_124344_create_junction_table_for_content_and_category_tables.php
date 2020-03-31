@@ -36,7 +36,7 @@ class m200323_124344_create_junction_table_for_content_and_category_tables exten
 
         // add foreign key for table `{{%category_content}}`
         $this->addForeignKey('{{%fk-content_category-category_id}}', '{{%content_category}}',
-            'category_id', '{{%category_content}}', 'id', 'CASCADE', 'NO ACTION');
+            'category_id', '{{%category}}', 'id', 'CASCADE', 'NO ACTION');
     }
 
     /**

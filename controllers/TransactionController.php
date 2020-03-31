@@ -86,7 +86,7 @@ class TransactionController extends ActiveController {
             }
         } else {
             $query->select(['transactions.*', 'users.name'])
-                ->leftJoin('users','users.id = transactions.userId');
+                ->leftJoin('users','users.id = transactions."userId"');
         }
 
         return Yii::createObject([
@@ -108,7 +108,10 @@ class TransactionController extends ActiveController {
      * @return ActiveQuery
      */
     private function prepareFilter($query, $filter) {
-        $isComplex = $filter[0] === 'AND';
+        $isComplex = false;
+        if (!empty($filter[0])) {
+            $isComplex = true;
+        }
         $replaceTransKeys = ['id', 'userId', 'addedDateTime', 'name', 'comment'];
 
         $wrapTableName = function ($fieldName, $filterItem) use ($query, $replaceTransKeys) {

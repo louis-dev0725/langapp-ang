@@ -17,7 +17,7 @@ class m200323_113116_create_content_table extends Migration {
             'id' => $this->primaryKey(),
             'title' => Schema::TYPE_STRING . ' NOT NULL',
             'type_content' => Schema::TYPE_TINYINT . ' NOT NULL',
-            'source_link' => Schema::TYPE_STRING . ' NOT NULL',
+            'source_link' => Schema::TYPE_STRING . ' NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
             'status' => Schema::TYPE_TINYINT . ' NOT NULL DEFAULT 0',
             'count_symbol' => Schema::TYPE_INTEGER . ' NOT NULL',

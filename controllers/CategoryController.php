@@ -18,27 +18,19 @@ class CategoryController extends ActiveController {
 
     /**
      * @return ActiveDataProvider
-     * @throws NotFoundHttpException
      */
     public function actionIndex() {
-		$dataProvider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => Category::find(),
             'pagination' => false,
         ]);
-
-        if ($dataProvider->getTotalCount() == 0) {
-            throw new NotFoundHttpException('Category not found');
-        }
-
-        return $dataProvider;
     }
 
     /**
      * @return ActiveDataProvider
-     * @throws NotFoundHttpException
      */
     public function actionAll() {
-        $dataProvider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => Category::find()->with('parentCategory'),
             'sort' => [
                 'defaultOrder' => [
@@ -46,12 +38,6 @@ class CategoryController extends ActiveController {
                 ],
             ]
         ]);
-
-        if ($dataProvider->getTotalCount() == 0) {
-            throw new NotFoundHttpException('Category not found');
-        }
-
-        return $dataProvider;
     }
 
 }

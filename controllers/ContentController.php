@@ -52,7 +52,7 @@ class ContentController extends ActiveController {
             }
         }
 
-        $dataProvider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => $query,
             'sort' => [
                 'defaultOrder' => [
@@ -60,13 +60,6 @@ class ContentController extends ActiveController {
                 ],
             ]
         ]);
-
-
-        if ($dataProvider->getTotalCount() == 0) {
-            throw new NotFoundHttpException('Materials not found');
-        }
-
-        return $dataProvider;
     }
 
     /**
