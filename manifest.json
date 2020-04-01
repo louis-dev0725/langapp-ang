@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "LangApp Extension",
+  "description": "Запускатор расширения LangApp",
+  "version": "1.0.0",
+  "icons": {
+    "128": "images/icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "script/jquery-3.4.1.min.js",
+        "script/extension.js"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": ["script/background.js"]
+  },
+  "permissions": [
+    "storage",
+    "http://localhost:8090/api/*"
+  ],
+  "browser_action": {
+    "default_title": "LangApp",
+    "default_icon": "images/icon.png",
+    "default_popup": "popup.html"
+  }
+}
