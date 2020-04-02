@@ -253,7 +253,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
         <ul app-theme-submenu [item]="child" *ngIf="child.items && isActive(i)" [visible]="isActive(i)" [reset]="reset"
             [parentActive]="isActive(i)" [@children]="app.isHorizontal() && root ? (isActive(i) ? 'visible' : 'hidden')
-             : isActive(i) ? 'visibleAnimated' : 'hiddenAnimated'">
+             : (isActive(i) ? 'visibleAnimated' : 'hiddenAnimated')">
         </ul>
       </li>
     </ng-template>`,
@@ -268,7 +268,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       transition('hiddenAnimated => visibleAnimated', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')),
       transition('void => visibleAnimated, visibleAnimated => void', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
     ])
-  ]
+   ]
 })
 
 export class ThemeSubMenuComponent {

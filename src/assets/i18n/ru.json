@@ -187,5 +187,14 @@
   "Language2": "Дополнительный язык 2",
   "Language3": "Дополнительный язык 3",
   "No material": "Материал отсутствуют",
-  "No categories": "Категории отсутствуют"
+  "No categories": "Категории отсутствуют",
+  "Settings plugin": "Настройки расширения",
+  "Plugin": "Настройки плагина",
+  "Shows translation": "Расширение показывает перевод",
+  "extension": {
+    "DoubleClick": "По двойному клику",
+    "DoubleClickCtrl": "По двойному клику при зажатом Ctrl",
+    "DoubleClickShift": "По двойному клику при зажатом Shift",
+    "DoubleClickAlt": "По двойному клику при зажатом Alt"
+  }
 }

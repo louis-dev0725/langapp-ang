@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Language, User } from '@app/interfaces/common.interface';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { MatSnackBar } from '@angular/material';
 import { SessionService } from '@app/services/session.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { combineLatest } from "rxjs";
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -34,13 +33,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     return this.user.isServicePaused !== undefined ? this.user.isServicePaused : false;
   }
 
-  constructor(
-    private api: ApiService,
-    private customValidator: CustomValidator,
-    private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
-    private session: SessionService
-  ) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar, private session: SessionService) {}
 
   ngOnInit() {
     combineLatest([this.api.meRequest(), this.api.getAllLanguage()]).pipe(untilDestroyed(this)).subscribe(([form, languages]) => {

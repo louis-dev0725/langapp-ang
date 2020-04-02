@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="card">
+    <h1>{{ 'Settings plugin' | translate }}</h1>
+    <p class="note">{{ 'Your id' | translate }}: {{ user.id }}</p>
+
+    <div class="container">
+      <form [formGroup]="settingsPluginForm" (ngSubmit)="onSubmit()">
+        <input type="hidden" formControlName="id">
+
+        <div class="form-item">
+          <label id="radio-group-label">{{ 'Shows translation' | translate }}:</label>
+          <br>
+          <mat-radio-group aria-labelledby="radio-group-label" formControlName="extensionShowTranslate">
+            <mat-radio-button class="example-radio-button" *ngFor="let option of translation_options" [value]="option">
+              {{ option | translate }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="form-item">
+          <button type="submit" mat-flat-button color="primary">
+            {{ 'Save' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

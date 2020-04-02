@@ -44,6 +44,7 @@ const routes: Routes = [
     canActivate: [CanactivateAdmin],
     loadChildren: () => import('./category/category.module').then(m => m.CategoryModule)
   },
+  {path: '', redirectTo: '/auth/signin', pathMatch: 'full'}
 ];
 
 @NgModule({

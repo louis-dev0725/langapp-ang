@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ApiError } from '@app/services/api-error';
 import { FieldError } from '@app/interfaces/common.interface';
 import { CustomValidator } from '@app/services/custom-validator';
@@ -13,7 +13,8 @@ import { CustomValidator } from '@app/services/custom-validator';
 })
 export class SigninComponent implements OnInit {
 
-  constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder, private router: Router) {}
+  constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder,
+    private router: Router, private route: ActivatedRoute) {}
 
   @Input()
   set isLoaded(val: boolean) {
@@ -25,6 +26,7 @@ export class SigninComponent implements OnInit {
   }
   signinForm: FormGroup;
   errors: FieldError[] = [];
+  activePlugin = false;
 
   private _isLoaded = true;
 
@@ -33,6 +35,14 @@ export class SigninComponent implements OnInit {
       email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
       password: ['', { validators: [Validators.required], updateOn: 'change' }]
     });
+
+    this.route.queryParams.subscribe(
+      (params: Params) => {
+        if (params.enterPlugin) {
+          this.activePlugin = true;
+        }
+      }
+    );
   }
 
   onSubmit(value: any) {
@@ -42,8 +52,11 @@ export class SigninComponent implements OnInit {
       if (res instanceof ApiError) {
         this.errors = res.error;
       } else {
-        // note: [SHR] place here default route
-        this.router.navigate(['/payment']);
+        if (this.activePlugin) {
+          this.router.navigate(['/settings/plugin']);
+        } else {
+          this.router.navigate(['/payment']);
+        }
       }
     });
   }

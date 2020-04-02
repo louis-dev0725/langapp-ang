@@ -83,7 +83,7 @@
 	"Subject": "Subject",
 	"Amount in": "Amount in",
 	"Telephone": "Phone",
-    "to": "to",
+  "to": "to",
 	"Timezone": "Timezone",
 	"Transacrion Id": "Transaction Id",
 	"Transactions": "Transactions",
@@ -97,7 +97,7 @@
 	"WMR wallet": "WMR wallet",
 	"Your account is successfully recharged": "Your account is successfully recharged",
 	"Your current balance": "Your current balance",
-    "Your balance": "Your balance",
+  "Your balance": "Your balance",
 	"balance": "balance",
 	"Your id": "Your id",
 	"addedDateTime": "Added date time",
@@ -186,5 +186,14 @@
   "Language2": "Additional language 2",
   "Language3": "Additional language 3",
   "No material": "No material",
-  "No categories": "No categories"
+  "No categories": "No categories",
+  "Settings plugin": "Extension settings",
+  "Plugin": "Plugin settings",
+  "Shows translation": "Extension shows translation",
+  "extension": {
+    "DoubleClick": "Double click",
+    "DoubleClickCtrl": "Double-click while holding Ctrl",
+    "DoubleClickShift": "Double-click while holding Shift",
+    "DoubleClickAlt": "Double-click while holding Alt"
+  }
 }

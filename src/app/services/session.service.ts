@@ -121,4 +121,12 @@ export class SessionService {
     this.store.dispatch(new AuthorizedUpdateUserAction(this.user));
     this.router.navigateByUrl('/');
   }
+
+  settingPluginGet(user_id) {
+     return localStorage.getItem('ExtensionSettingPlugin_' + user_id);
+  }
+
+  settingPluginSave(data, user_id) {
+    localStorage.setItem('ExtensionSettingPlugin_' + user_id, JSON.stringify(data));
+  }
 }
