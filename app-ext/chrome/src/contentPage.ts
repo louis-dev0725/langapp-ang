@@ -1,7 +1,9 @@
 chrome.runtime.onMessage.addListener((request, sender, respond) => {
   const handler = new Promise((resolve, reject) => {
     if (request) {
-      resolve(`Hi from contentPage! You are currently on: ${window.location.href}`);
+      let token = localStorage.getItem('token');
+      let user = localStorage.getItem('user');
+      resolve({token: token, user: user});
     } else {
       reject('request is empty.');
     }

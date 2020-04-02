@@ -14,7 +14,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../node_modules/@angular/core/__ivy_ngcc__/fesm5/core.js");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "../node_modules/rxjs/_esm5/index.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "../node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _providers_tab_id_provider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../providers/tab-id.provider */ "./src/app/providers/tab-id.provider.ts");
+/* harmony import */ var src_app_providers_tab_id_provider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/providers/tab-id.provider */ "./src/app/providers/tab-id.provider.ts");
 
 
 
@@ -32,46 +32,31 @@ var PopupComponent = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         _a = this;
-                        return [4 /*yield*/, Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(chrome.tabs.sendMessage.bind(this, this.tabId, 'request'))()
-                                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (msg) {
-                                return chrome.runtime.lastError
-                                    ? 'The current page is protected by the browser, goto: https://www.google.nl and try again.'
-                                    : msg;
-                            }))
-                                .toPromise()];
+                        return [4 /*yield*/, Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["bindCallback"])(chrome.tabs.sendMessage.bind(this, this.tabId, 'request'))().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (msg) { return msg; })).toPromise()];
                     case 1:
                         _a.message = _b.sent();
+                        this.token = this.message.token;
+                        this.user = JSON.parse(this.message.user);
+                        console.log(this.token);
+                        console.log(this.user);
                         return [2 /*return*/];
                 }
             });
         });
     };
-    PopupComponent.ɵfac = function PopupComponent_Factory(t) { return new (t || PopupComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_providers_tab_id_provider__WEBPACK_IMPORTED_MODULE_4__["TAB_ID"])); };
-    PopupComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: PopupComponent, selectors: [["app-popup"]], decls: 12, vars: 2, consts: [[3, "click"]], template: function PopupComponent_Template(rf, ctx) { if (rf & 1) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "h1");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, "Popup");
+    PopupComponent.prototype.onClickToken = function () { };
+    PopupComponent.ɵfac = function PopupComponent_Factory(t) { return new (t || PopupComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_providers_tab_id_provider__WEBPACK_IMPORTED_MODULE_4__["TAB_ID"])); };
+    PopupComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: PopupComponent, selectors: [["app-popup"]], decls: 5, vars: 0, consts: [[1, "content"], [1, "get_token_button", 3, "click"], [1, "setting_button", 3, "click"]], template: function PopupComponent_Template(rf, ctx) { if (rf & 1) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "button", 1);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function PopupComponent_Template_button_click_1_listener() { return ctx.onClickToken(); });
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u0442\u043E\u043A\u0435\u043D \u0430\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u0438");
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "p");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](3, "You can easily send messages from the popup to the content page with the provided Tab ID! (tabId=");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "strong");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](5);
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](6, ")");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](7, "button", 0);
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function PopupComponent_Template_button_click_7_listener() { return ctx.onClick(); });
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](8, "Click me to test");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "p");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](10, "strong");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](11);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "button", 2);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function PopupComponent_Template_button_click_3_listener() { return ctx.onClick(); });
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](4, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u043B\u0430\u0433\u0438\u043D\u0430");
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        } if (rf & 2) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](5);
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](ctx.tabId);
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](6);
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](ctx.message);
         } }, styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhbmd1bGFyL3NyYy9hcHAvbW9kdWxlcy9wb3B1cC9wYWdlcy9wb3B1cC9wb3B1cC5jb21wb25lbnQuc2NzcyJ9 */"] });
     return PopupComponent;
 }());
@@ -85,7 +70,7 @@ var PopupComponent = /** @class */ (function () {
             }]
     }], function () { return [{ type: undefined, decorators: [{
                 type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"],
-                args: [_providers_tab_id_provider__WEBPACK_IMPORTED_MODULE_4__["TAB_ID"]]
+                args: [src_app_providers_tab_id_provider__WEBPACK_IMPORTED_MODULE_4__["TAB_ID"]]
             }] }]; }, null); })();
 
 

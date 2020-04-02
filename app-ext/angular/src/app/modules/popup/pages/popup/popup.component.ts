@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { bindCallback } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TAB_ID } from '../../../../providers/tab-id.provider';
+
+import { TAB_ID } from 'src/app/providers/tab-id.provider';
 
 @Component({
   selector: 'app-popup',
@@ -9,19 +10,21 @@ import { TAB_ID } from '../../../../providers/tab-id.provider';
   styleUrls: ['popup.component.scss']
 })
 export class PopupComponent {
-  message: string;
+  message: any;
+  token: string;
+  user: any;
 
   constructor(@Inject(TAB_ID) readonly tabId: number) {}
 
-  async onClick(): Promise<void> {
-    this.message = await bindCallback<string>(chrome.tabs.sendMessage.bind(this, this.tabId, 'request'))()
-      .pipe(
-        map(msg =>
-          chrome.runtime.lastError
-            ? 'The current page is protected by the browser, goto: https://www.google.nl and try again.'
-            : msg
-        )
-      )
-      .toPromise();
+  async onClick(): Promise<any> {
+    this.message = await bindCallback<string>(chrome.tabs.sendMessage.bind(this, this.tabId, 'request'))().pipe(
+      map(msg => msg)
+      ).toPromise();
+    this.token = this.message.token;
+    this.user = JSON.parse(this.message.user);
+    console.log(this.token);
+    console.log(this.user);
   }
+
+  onClickToken() {}
 }

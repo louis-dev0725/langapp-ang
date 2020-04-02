@@ -1,7 +1,4 @@
-<h1>Popup</h1>
-<p>You can easily send messages from the popup to the content page with the provided Tab ID!
-  (tabId=<strong>{{ tabId }}</strong>)</p>
-
-<button (click)="onClick()">Click me to test</button>
-
-<p><strong>{{ message }}</strong></p>
+<div class="content">
+  <button (click)="onClickToken()" class="get_token_button">Получить токен авторизации</button>
+  <button (click)="onClick()" class="setting_button">Настройки плагина</button>
+</div>
