@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ApiError } from '@app/services/api-error';
 import { FieldError } from '@app/interfaces/common.interface';
 import { CustomValidator } from '@app/services/custom-validator';
@@ -12,9 +12,8 @@ import { CustomValidator } from '@app/services/custom-validator';
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
-
   constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder,
-    private router: Router, private route: ActivatedRoute) {}
+    private router: Router) {}
 
   @Input()
   set isLoaded(val: boolean) {
@@ -26,7 +25,6 @@ export class SigninComponent implements OnInit {
   }
   signinForm: FormGroup;
   errors: FieldError[] = [];
-  activePlugin = false;
 
   private _isLoaded = true;
 
@@ -35,14 +33,6 @@ export class SigninComponent implements OnInit {
       email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
       password: ['', { validators: [Validators.required], updateOn: 'change' }]
     });
-
-    this.route.queryParams.subscribe(
-      (params: Params) => {
-        if (params.enterPlugin) {
-          this.activePlugin = true;
-        }
-      }
-    );
   }
 
   onSubmit(value: any) {
@@ -52,11 +42,9 @@ export class SigninComponent implements OnInit {
       if (res instanceof ApiError) {
         this.errors = res.error;
       } else {
-        if (this.activePlugin) {
-          this.router.navigate(['/settings/plugin']);
-        } else {
-          this.router.navigate(['/payment']);
-        }
+        this.router.navigate(['/payment']);
+
+        window.postMessage({ type: 'LoginSuccess', text: 'Login'}, '*');
       }
     });
   }

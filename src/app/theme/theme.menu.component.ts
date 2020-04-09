@@ -192,6 +192,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         hide: !this.isLoggedIn,
         command: event => {
           this.logout();
+          window.postMessage({ type: 'Logout', text: 'Logout'}, '*');
         }
       }
     ];
@@ -209,9 +210,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         data: dialogModel
       });
 
-      dialogRef.afterClosed()
-      .pipe(untilDestroyed(this))
-      .subscribe(result => {
+      dialogRef.afterClosed().pipe(untilDestroyed(this)).subscribe(result => {
         if (result) {
           this.api.logout();
         }
