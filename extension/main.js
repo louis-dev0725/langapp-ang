@@ -45,11 +45,6 @@ var routes = [
         pathMatch: 'full',
         loadChildren: function () { return __webpack_require__.e(/*! import() | modules-popup-popup-module */ "modules-popup-popup-module").then(__webpack_require__.bind(null, /*! ./modules/popup/popup.module */ "./src/app/modules/popup/popup.module.ts")).then(function (m) { return m.PopupModule; }); }
     },
-    {
-        path: 'options',
-        pathMatch: 'full',
-        loadChildren: function () { return __webpack_require__.e(/*! import() | modules-options-options-module */ "modules-options-options-module").then(__webpack_require__.bind(null, /*! ./modules/options/options.module */ "./src/app/modules/options/options.module.ts")).then(function (m) { return m.OptionsModule; }); }
-    }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -155,26 +150,6 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/providers/tab-id.provider.ts":
-/*!**********************************************!*\
-  !*** ./src/app/providers/tab-id.provider.ts ***!
-  \**********************************************/
-/*! exports provided: TAB_ID */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TAB_ID", function() { return TAB_ID; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "../node_modules/@angular/core/__ivy_ngcc__/fesm5/core.js");
-
-/**
- * provides the currently opened tab id
- */
-var TAB_ID = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["InjectionToken"]('CHROME_TAB_ID');
-
-
-/***/ }),
-
 /***/ "./src/environments/environment.ts":
 /*!*****************************************!*\
   !*** ./src/environments/environment.ts ***!
@@ -212,27 +187,20 @@ var environment = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../node_modules/@angular/core/__ivy_ngcc__/fesm5/core.js");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var _app_providers_tab_id_provider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app/providers/tab-id.provider */ "./src/app/providers/tab-id.provider.ts");
-/* harmony import */ var _app_app_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app/app.module */ "./src/app/app.module.ts");
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "../node_modules/@angular/platform-browser/__ivy_ngcc__/fesm5/platform-browser.js");
-
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "../node_modules/@angular/core/__ivy_ngcc__/fesm5/core.js");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _app_app_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app/app.module */ "./src/app/app.module.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/platform-browser */ "../node_modules/@angular/platform-browser/__ivy_ngcc__/fesm5/platform-browser.js");
 
 
 
 
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    if (_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].production) {
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["enableProdMode"])();
+    if (_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].production) {
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["enableProdMode"])();
     }
-    var tab = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spreadArrays"])(tabs).pop();
-    var tabId = tab.id;
     // provides the current Tab ID so you can send messages to the content page
-    _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["platformBrowser"]([{ provide: _app_providers_tab_id_provider__WEBPACK_IMPORTED_MODULE_3__["TAB_ID"], useValue: tabId }]).bootstrapModule(_app_app_module__WEBPACK_IMPORTED_MODULE_4__["AppModule"])
-        .catch(function (error) { return console.error(error); });
+    _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__["platformBrowser"]([]).bootstrapModule(_app_app_module__WEBPACK_IMPORTED_MODULE_2__["AppModule"]).catch(function (error) { return console.error(error); });
 });
 
 

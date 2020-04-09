@@ -1,4 +1,12 @@
-<div class="content">
-  <button (click)="onClickToken()" class="get_token_button">Получить токен авторизации</button>
-  <button (click)="onClick()" class="setting_button">Настройки плагина</button>
+<div class="content" *ngIf="!siteAuth">
+  <h3>Для работы с плагинам и доступа к настройкам вам не обходимо авторизироваться на
+    <a href="http://localhost:4200">сайте</a>.
+  </h3>
+</div>
+
+<div class="content" *ngIf="siteAuth">
+  <h3>Id: {{ user.id }}</h3>
+  <h3>Имя: {{ user.name }}</h3>
+  <h3>E-mail: {{ user.email }}</h3>
+  <button [routerLink]="['http://localhost:4200/settings/plugin']" class="setting_button">Настройки плагина</button>
 </div>

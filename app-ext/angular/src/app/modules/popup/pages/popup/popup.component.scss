@@ -1,3 +1,23 @@
-.setting_button {
+.content {
+  display: flex;
+  flex-flow: column wrap;
+  padding: 20px;
+}
 
+.get_token_button,
+.setting_button {
+  background: transparent;
+  border: 1px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.get_token_button:hover,
+.setting_button:hover {
+  text-decoration: underline;
+}
+
+.setting_button {
+  margin-top: 20px;
 }

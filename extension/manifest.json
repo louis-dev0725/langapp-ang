@@ -16,7 +16,6 @@
     "default_icon": "assets/images/icon.png",
     "default_popup": "index.html?#/popup"
   },
-  "options_page": "index.html?#/options",
   "content_scripts": [
     {
       "all_frames": true,
@@ -24,13 +23,15 @@
         "contentPage.js"
       ],
       "matches": [
-        "<all_urls>"
+        "http://*/*",
+        "https://*/*"
       ]
     }
   ],
   "background": {
     "scripts": [
-      "backgroundPage.js"
+      "backgroundPage.js",
+      "runtime.js"
     ],
     "persistent": false
   },

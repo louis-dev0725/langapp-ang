@@ -7,11 +7,6 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () => import('./modules/popup/popup.module').then(m => m.PopupModule)
   },
-  {
-    path: 'options',
-    pathMatch: 'full',
-    loadChildren: () => import('./modules/options/options.module').then(m => m.OptionsModule)
-  }
 ];
 
 @NgModule({
