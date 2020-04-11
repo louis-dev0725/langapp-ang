@@ -45,5 +45,7 @@ export class PluginComponent implements OnInit {
   onSubmit() {
     this.session.settingPluginSave(this.settingsPluginForm.value, this.user.id);
     this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null, { duration: 3000 });
+
+    window.postMessage({ type: 'saveSettingExtension', text: 'ExtensionSettingPlugin_' + this.user.id}, '*');
   }
 }
