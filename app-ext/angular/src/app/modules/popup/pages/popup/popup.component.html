@@ -1,10 +1,10 @@
-<div class="content" *ngIf="!siteAuth">
+<div class="content" *ngIf="!siteAuthContent">
   <h3>Для работы с плагинам и доступа к настройкам вам не обходимо авторизироваться на
     <a href="http://localhost:4200">сайте</a>.
   </h3>
 </div>
 
-<div class="content" *ngIf="siteAuth">
+<div class="content" *ngIf="siteAuthContent">
   <h3>Id: {{ user.id }}</h3>
   <h3>Имя: {{ user.name }}</h3>
   <h3>E-mail: {{ user.email }}</h3>

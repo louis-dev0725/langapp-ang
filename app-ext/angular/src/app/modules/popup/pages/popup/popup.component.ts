@@ -6,10 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['popup.component.scss'],
 })
 export class PopupComponent implements OnInit {
-  token: string;
+  token = '';
   user: any = {};
   extension: any;
-  siteAuth = false;
+  siteAuthContent: boolean;
 
   constructor() {
     chrome.runtime.onMessage.addListener((message) => {
@@ -26,23 +26,23 @@ export class PopupComponent implements OnInit {
     chrome.storage.sync.get(['token'], (result) => {
       if (result.hasOwnProperty('token')) {
         this.token = result.token;
-        console.log(result);
       }
     });
 
     chrome.storage.sync.get(['user'], (result) => {
       if (result.hasOwnProperty('user')) {
         this.user = JSON.parse(result.user);
-        console.log(result);
       }
     });
+
+    this.siteAuthContent = this.token !== '' && this.user !== '';
   }
 
   siteAction(action, data: any = {}) {
     if (action === 'auth') {
       this.user = JSON.parse(data.user);
       this.token = data.token;
-      this.siteAuth = true;
+      this.siteAuthContent = true;
 
       chrome.storage.sync.set({ token: data.token }, () => {
         console.log('Set token');
@@ -51,15 +51,10 @@ export class PopupComponent implements OnInit {
         console.log('Set user');
       });
     }
+
     if (action === 'logout') {
-      this.siteAuth = false;
-      chrome.storage.sync.remove(['token', 'user']);
+      this.siteAuthContent = false;
+      chrome.storage.sync.remove(['token', 'user', 'settingExtension']);
     }
   }
-
-  // Принимаем данные которые нам послал contentPage.js
-  // chrome.extension.onMessage.addListener((request, sender, respond) => {});
-
-  // Послыаем данные в contentPage.js
-  // chrome.tabs.sendMessage();
 }

@@ -58,8 +58,8 @@ function PopupComponent_div_1_Template(rf, ctx) { if (rf & 1) {
 var PopupComponent = /** @class */ (function () {
     function PopupComponent() {
         var _this = this;
+        this.token = '';
         this.user = {};
-        this.siteAuth = false;
         chrome.runtime.onMessage.addListener(function (message) {
             if (message.type === 'siteAuth') {
                 _this.siteAction('auth', message.data);
@@ -74,22 +74,21 @@ var PopupComponent = /** @class */ (function () {
         chrome.storage.sync.get(['token'], function (result) {
             if (result.hasOwnProperty('token')) {
                 _this.token = result.token;
-                console.log(result);
             }
         });
         chrome.storage.sync.get(['user'], function (result) {
             if (result.hasOwnProperty('user')) {
                 _this.user = JSON.parse(result.user);
-                console.log(result);
             }
         });
+        this.siteAuthContent = this.token !== '' && this.user !== '';
     };
     PopupComponent.prototype.siteAction = function (action, data) {
         if (data === void 0) { data = {}; }
         if (action === 'auth') {
             this.user = JSON.parse(data.user);
             this.token = data.token;
-            this.siteAuth = true;
+            this.siteAuthContent = true;
             chrome.storage.sync.set({ token: data.token }, function () {
                 console.log('Set token');
             });
@@ -98,8 +97,8 @@ var PopupComponent = /** @class */ (function () {
             });
         }
         if (action === 'logout') {
-            this.siteAuth = false;
-            chrome.storage.sync.remove(['token', 'user']);
+            this.siteAuthContent = false;
+            chrome.storage.sync.remove(['token', 'user', 'settingExtension']);
         }
     };
     PopupComponent.ɵfac = function PopupComponent_Factory(t) { return new (t || PopupComponent)(); };
@@ -107,9 +106,9 @@ var PopupComponent = /** @class */ (function () {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](0, PopupComponent_div_0_Template, 6, 0, "div", 0);
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, PopupComponent_div_1_Template, 9, 5, "div", 0);
         } if (rf & 2) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", !ctx.siteAuth);
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", !ctx.siteAuthContent);
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.siteAuth);
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.siteAuthContent);
         } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterLink"]], styles: [".content[_ngcontent-%COMP%] {\n  display: flex;\n  flex-flow: column wrap;\n  padding: 20px;\n}\n\n.get_token_button[_ngcontent-%COMP%], .setting_button[_ngcontent-%COMP%] {\n  background: transparent;\n  border: 1px solid #000;\n  border-radius: 10px;\n  cursor: pointer;\n  text-decoration: none;\n}\n\n.get_token_button[_ngcontent-%COMP%]:hover, .setting_button[_ngcontent-%COMP%]:hover {\n  text-decoration: underline;\n}\n\n.setting_button[_ngcontent-%COMP%] {\n  margin-top: 20px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL0Q6XFxPcGVuU2VydmVyXFxkb21haW5zXFxpcF9MVlNcXGxhbmdhcHBcXGxhbmdhcHAtZXh0ZW5zaW9uXFxhcHAtZXh0L2FuZ3VsYXJcXHNyY1xcYXBwXFxtb2R1bGVzXFxwb3B1cFxccGFnZXNcXHBvcHVwXFxwb3B1cC5jb21wb25lbnQuc2NzcyIsImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL3BvcHVwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsYUFBQTtBQ0NGOztBREVBOztFQUVFLHVCQUFBO0VBQ0Esc0JBQUE7RUFDQSxtQkFBQTtFQUNBLGVBQUE7RUFDQSxxQkFBQTtBQ0NGOztBREVBOztFQUVFLDBCQUFBO0FDQ0Y7O0FERUE7RUFDRSxnQkFBQTtBQ0NGIiwiZmlsZSI6ImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL3BvcHVwLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmNvbnRlbnQge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgZmxleC1mbG93OiBjb2x1bW4gd3JhcDtcclxuICBwYWRkaW5nOiAyMHB4O1xyXG59XHJcblxyXG4uZ2V0X3Rva2VuX2J1dHRvbixcclxuLnNldHRpbmdfYnV0dG9uIHtcclxuICBiYWNrZ3JvdW5kOiB0cmFuc3BhcmVudDtcclxuICBib3JkZXI6IDFweCBzb2xpZCAjMDAwO1xyXG4gIGJvcmRlci1yYWRpdXM6IDEwcHg7XHJcbiAgY3Vyc29yOiBwb2ludGVyO1xyXG4gIHRleHQtZGVjb3JhdGlvbjogbm9uZTtcclxufVxyXG5cclxuLmdldF90b2tlbl9idXR0b246aG92ZXIsXHJcbi5zZXR0aW5nX2J1dHRvbjpob3ZlciB7XHJcbiAgdGV4dC1kZWNvcmF0aW9uOiB1bmRlcmxpbmU7XHJcbn1cclxuXHJcbi5zZXR0aW5nX2J1dHRvbiB7XHJcbiAgbWFyZ2luLXRvcDogMjBweDtcclxufVxyXG4iLCIuY29udGVudCB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZmxvdzogY29sdW1uIHdyYXA7XG4gIHBhZGRpbmc6IDIwcHg7XG59XG5cbi5nZXRfdG9rZW5fYnV0dG9uLFxuLnNldHRpbmdfYnV0dG9uIHtcbiAgYmFja2dyb3VuZDogdHJhbnNwYXJlbnQ7XG4gIGJvcmRlcjogMXB4IHNvbGlkICMwMDA7XG4gIGJvcmRlci1yYWRpdXM6IDEwcHg7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xufVxuXG4uZ2V0X3Rva2VuX2J1dHRvbjpob3Zlcixcbi5zZXR0aW5nX2J1dHRvbjpob3ZlciB7XG4gIHRleHQtZGVjb3JhdGlvbjogdW5kZXJsaW5lO1xufVxuXG4uc2V0dGluZ19idXR0b24ge1xuICBtYXJnaW4tdG9wOiAyMHB4O1xufSJdfQ== */"] });
     return PopupComponent;
 }());
