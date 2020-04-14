@@ -16,6 +16,9 @@ export class PopupComponent implements OnInit {
       if (message.type === 'siteAuth') {
         this.siteAction('auth', message.data);
       }
+      if (message.type === 'saveSetting') {
+        this.siteAction('saveSettingExtension', message.data);
+      }
       if (message.type === 'siteLogout') {
         this.siteAction('logout');
       }
@@ -49,6 +52,12 @@ export class PopupComponent implements OnInit {
       });
       chrome.storage.sync.set({ user: data.user }, () => {
         console.log('Set user');
+      });
+    }
+
+    if (action === 'saveSettingExtension') {
+      chrome.storage.sync.set({ settingExtensionAction: data.settingExtension }, () => {
+        console.log('Set setting extension');
       });
     }
 

@@ -2,6 +2,92 @@ let token = '';
 let user = '';
 let extensionSetting = false;
 let setting = '';
+let range: any = '';
+let translateObj = {
+  symbol: null,
+  all_text: null,
+  url: null,
+  offset: null
+};
+
+window.onload = function(ev) {
+  let isAuth = false;
+  if (ev.target.location.origin == 'http://localhost:4200') {
+    chrome.storage.sync.get(['token'], (result) => {
+      if (result.hasOwnProperty('token')) {
+        isAuth = true;
+      }
+    });
+
+    if (!isAuth) {
+      token = localStorage.getItem('token');
+      user = localStorage.getItem('user');
+
+      if (token != '' && user != '') {
+        chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
+        extensionSetting = true;
+      }
+    }
+  }
+
+  chrome.storage.sync.get(['settingExtensionAction'], (result) => {
+    if (result.hasOwnProperty('settingExtensionAction')) {
+      setting = result.settingExtensionAction;
+    }
+  });
+
+  chrome.storage.sync.get(['token'], (result) => {
+    if (result.hasOwnProperty('token')) {
+      token = result.token;
+      extensionSetting = true;
+    }
+  });
+
+  if (extensionSetting) {
+    if (setting == '') {
+      setting = 'extension.DoubleClick';
+    }
+    console.log('Есть доступ к настройкам плагина и функционалу');
+
+    document.addEventListener('dblclick', function(e) {
+      if (setting == 'extension.DoubleClick') {
+        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == false) {
+          console.log('Двойной клик');
+
+          range = document.caretRangeFromPoint(e.x, e.y);
+          console.log(getTranslateObject(range));
+        }
+      }
+
+      if (setting == 'extension.DoubleClickCtrl') {
+        if ((e.metaKey == true || e.ctrlKey == true) && e.shiftKey == false && e.altKey == false) {
+          console.log('Двойной клик + Ctrl');
+
+          range = document.caretRangeFromPoint(e.x, e.y);
+          console.log(getTranslateObject(range));
+        }
+      }
+
+      if (setting == 'extension.DoubleClickShift') {
+        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == true && e.altKey == false) {
+          console.log('Двойной клик + Shift');
+
+          range = document.caretRangeFromPoint(e.x, e.y);
+          console.log(getTranslateObject(range));
+        }
+      }
+
+      if (setting == 'extension.DoubleClickAlt') {
+        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == true) {
+          console.log('Двойной клик + Alt');
+
+          range = document.caretRangeFromPoint(e.x, e.y);
+          console.log(getTranslateObject(range));
+        }
+      }
+    });
+  }
+};
 
 window.addEventListener('message', function(event) {
   if (event.source != window) {
@@ -16,12 +102,10 @@ window.addEventListener('message', function(event) {
   }
 
   if (event.data.type && (event.data.type == 'saveSettingExtension') && (event.origin == 'http://localhost:4200')) {
-    setting = localStorage.getItem(event.data.message);
+    let settingExtension = JSON.parse(localStorage.getItem(event.data.text));
+    chrome.runtime.sendMessage({ type: 'saveSetting', data: { settingExtension: String(settingExtension.extensionShowTranslate) }});
 
-    chrome.storage.sync.set({ settingExtension: setting }, () => {
-      console.log('Set setting extension');
-    });
-    console.log(setting);
+    setting = String(settingExtension.extensionShowTranslate);
   }
 
   if (event.data.type && (event.data.type == 'Logout') && (event.origin == 'http://localhost:4200')) {
@@ -29,56 +113,13 @@ window.addEventListener('message', function(event) {
   }
 });
 
-chrome.storage.sync.get(['settingExtension'], (result) => {
-  if (result.hasOwnProperty('settingExtension')) {
-    setting = JSON.parse(result.settingExtension);
-    console.log(setting);
-  }
-});
-chrome.storage.sync.get(['token'], (result) => {
-  if (result.hasOwnProperty('token')) {
-    token = result.token;
-    extensionSetting = true;
-  }
-});
+function getTranslateObject (range) {
+  translateObj = null;
 
-if (extensionSetting) {
-  if (setting === '') {
-    setting = 'extension.DoubleClick';
-  }
-  console.log('Есть доступ к настройкам плагина и функционалу');
-
-  document.addEventListener("dblclick", function(e) {
-    //if (setting === 'extension.DoubleClick') {
-      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === false) {
-        console.log('Двойной клик');
-      }
-    //}
-    //if (setting === 'extension.DoubleClickCtrl') {
-      if ((e.metaKey === true || e.ctrlKey === true) && e.shiftKey === false && e.altKey === false) {
-        console.log('Двойной клик + Ctrl');
-      }
-    //}
-    //if (setting === 'extension.DoubleClickShift') {
-      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === true && e.altKey === false) {
-        console.log('Двойной клик + Shift');
-      }
-    //}
-    //if (setting === 'extension.DoubleClickAlt') {
-      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === true) {
-        console.log('Двойной клик + Alt');
-      }
-    //}
-
-    let selection = window.getSelection();
-    console.log(selection.toString());
-
-    console.log(e);
-  });
+  return translateObj = {
+    symbol: range.startContainer.data.substring(range.startOffset, range.startOffset + 1),
+    all_text: range.startContainer.data,
+    url: range.startContainer.ownerDocument.location.href,
+    offset: range.startOffset
+  };
 }
-
-// Послыаем данные куда-то в расширение
-// chrome.extension.sendMessage();
-
-// Принимаем данные от расширения
-// chrome.extension.onMessage.addListener((request, sender, respond) => {});
