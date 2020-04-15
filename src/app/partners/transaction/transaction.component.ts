@@ -42,9 +42,7 @@ export class TransactionComponent implements OnInit, OnDestroy {
   getTransactions(page = 0, sort = {}) {
     this.rows = [];
     this.paymentTable.isLoaded = false;
-    this.api.getUserPartnersTransactionsList(page, sort)
-    .pipe(untilDestroyed(this))
-    .subscribe(result => {
+    this.api.getUserPartnersTransactionsList(page, sort).pipe(untilDestroyed(this)).subscribe(result => {
       if (!(result instanceof ApiError)) {
         this.rows = result.items;
         this.paymentTable.isLoaded = true;
