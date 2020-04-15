@@ -1,13 +1,11 @@
 <?php
 
-
 namespace app\controllers;
 
 
 use app\components\Helpers;
 use app\models\Transaction;
 use app\models\TransactionSearch;
-use function Clue\StreamFilter\fun;
 use Yii;
 use yii\data\ActiveDataFilter;
 use yii\data\ActiveDataProvider;
@@ -25,7 +23,7 @@ class TransactionController extends ActiveController {
         $actions = parent::actions();
 
         $actions['index']['dataFilter'] = [
-            'class' => \yii\data\ActiveDataFilter::class,
+            'class' => ActiveDataFilter::class,
             'searchModel' => TransactionSearch::class,
         ];
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
@@ -35,7 +33,6 @@ class TransactionController extends ActiveController {
 
     public function behaviors() {
         $behaviors = parent::behaviors();
-
         $behaviors['access'] = [
             'class' => AccessControl::class,
             'except' => ['options'],
@@ -64,6 +61,7 @@ class TransactionController extends ActiveController {
      * @throws ForbiddenHttpException
      */
     public function prepareDataProvider($action, $filter) {
+        $isPartner = '';
         $requestParams = Yii::$app->getRequest()->getBodyParams();
         if (empty($requestParams)) {
             $requestParams = Yii::$app->getRequest()->getQueryParams();
@@ -71,7 +69,14 @@ class TransactionController extends ActiveController {
 
         $query = Transaction::find();
         if (!empty($filter)) {
+            $isPartner = $filter[2]['isPartner'];
+            unset($filter[2]);
+
             $query = $this->prepareFilter($query, $filter);
+        }
+
+        if ($isPartner != '') {
+            $query->andWhere(['transactions.isPartner' => $isPartner]);
         }
 
         if (!Helpers::isAdmin()) {
@@ -82,7 +87,7 @@ class TransactionController extends ActiveController {
 
             // Check works only for simple filters and doesn't guarantee that there is filter for userId
             if (empty($filter) || (isset($filter['userId']) && $filter['userId'] != $userId)) {
-                throw new ForbiddenHttpException("User can only access to own's transactions. You should add filter like ?filter[userId]=$userId");
+                throw new ForbiddenHttpException("User can only access to own's transactions. You should add filter like ?filter['userId']=$userId");
             }
         } else {
             $query->select(['transactions.*', 'users.name'])

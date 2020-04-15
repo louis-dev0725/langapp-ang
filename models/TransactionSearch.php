@@ -9,10 +9,8 @@ class TransactionSearch extends Transaction {
 
     public function rules () {
         return [
-            [
-                ['id', 'userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'],
-                'integer',
-            ], [['money'], 'number'],
+            [['id', 'userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'integer'],
+            [['money'], 'number'],
             [['comment', 'addedDateTime', 'dataJson'], 'safe'],
             [['name'], 'string'],
         ];
