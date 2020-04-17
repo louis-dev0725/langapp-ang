@@ -61,7 +61,6 @@ class TransactionController extends ActiveController {
      * @throws ForbiddenHttpException
      */
     public function prepareDataProvider($action, $filter) {
-        $isPartner = '';
         $requestParams = Yii::$app->getRequest()->getBodyParams();
         if (empty($requestParams)) {
             $requestParams = Yii::$app->getRequest()->getQueryParams();
@@ -69,14 +68,7 @@ class TransactionController extends ActiveController {
 
         $query = Transaction::find();
         if (!empty($filter)) {
-            $isPartner = $filter[2]['isPartner'];
-            unset($filter[2]);
-
             $query = $this->prepareFilter($query, $filter);
-        }
-
-        if ($isPartner != '') {
-            $query->andWhere(['transactions.isPartner' => $isPartner]);
         }
 
         if (!Helpers::isAdmin()) {
@@ -131,6 +123,8 @@ class TransactionController extends ActiveController {
                     $condition = ['like', '"users"."name"', $filterItem[$fieldName]];
                 } else if ($fieldName === 'comment') {
                     $condition = ['like', '"transactions"."comment"', $filterItem[$fieldName]];
+                } else if ($fieldName === 'isPartner') {
+                    $condition = ['like', '"transactions"."isPartner"', $filterItem[$fieldName]];
                 } else {
                     $condition = ['"transactions"."' . $fieldName . '"' => $filterItem[$fieldName]];
                 }
