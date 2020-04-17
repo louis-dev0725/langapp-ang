@@ -4,7 +4,7 @@ let extensionSetting = false;
 let setting = '';
 let range: any = '';
 let translateObj = {
-  symbol: null,
+  token: null,
   all_text: null,
   url: null,
   offset: null
@@ -47,15 +47,14 @@ window.onload = function(ev) {
     if (setting == '') {
       setting = 'extension.DoubleClick';
     }
-    console.log('Есть доступ к настройкам плагина и функционалу');
+    document.body.append(`<div id="overviewTranslate"><div id="modalTranslate"></div></div>`);
 
     document.addEventListener('dblclick', function(e) {
       if (setting == 'extension.DoubleClick') {
         if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == false) {
           console.log('Двойной клик');
 
-          range = document.caretRangeFromPoint(e.x, e.y);
-          console.log(getTranslateObject(range));
+          createModalTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
         }
       }
 
@@ -63,8 +62,7 @@ window.onload = function(ev) {
         if ((e.metaKey == true || e.ctrlKey == true) && e.shiftKey == false && e.altKey == false) {
           console.log('Двойной клик + Ctrl');
 
-          range = document.caretRangeFromPoint(e.x, e.y);
-          console.log(getTranslateObject(range));
+          createModalTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
         }
       }
 
@@ -72,8 +70,7 @@ window.onload = function(ev) {
         if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == true && e.altKey == false) {
           console.log('Двойной клик + Shift');
 
-          range = document.caretRangeFromPoint(e.x, e.y);
-          console.log(getTranslateObject(range));
+          createModalTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
         }
       }
 
@@ -81,8 +78,7 @@ window.onload = function(ev) {
         if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == true) {
           console.log('Двойной клик + Alt');
 
-          range = document.caretRangeFromPoint(e.x, e.y);
-          console.log(getTranslateObject(range));
+          createModalTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
         }
       }
     });
@@ -113,13 +109,23 @@ window.addEventListener('message', function(event) {
   }
 });
 
-function getTranslateObject (range) {
+function createModalTranslateObject (range, token) {
   translateObj = null;
+  //translateObj = {
+  //  token: token,
+  //  all_text: range.startContainer.data,
+  //  url: range.startContainer.ownerDocument.location.href,
+  //  offset: range.startOffset
+  //};
 
-  return translateObj = {
-    symbol: range.startContainer.data.substring(range.startOffset, range.startOffset + 1),
-    all_text: range.startContainer.data,
+  translateObj = {
+    token: token,
+    all_text: 'これは日本語の形態素解析のテストです。動詞の形も一般化できるようになっています。',
     url: range.startContainer.ownerDocument.location.href,
-    offset: range.startOffset
+    offset: 3
   };
+
+  chrome.runtime.sendMessage({ text: 'sendBackground', data: translateObj }, function (response) {
+    console.log(response);
+  });
 }
