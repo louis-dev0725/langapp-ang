@@ -13,7 +13,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         request.onload = function () {
             if (request.readyState == 4 && request.status == 200) {
                 result = JSON.parse(request.responseText);
-                console.log(result);
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         };

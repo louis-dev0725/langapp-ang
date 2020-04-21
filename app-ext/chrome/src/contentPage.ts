@@ -10,79 +10,85 @@ let translateObj = {
   offset: null
 };
 
-window.onload = function(ev) {
-  let isAuth = false;
-  if (ev.target.location.origin == 'http://localhost:4200') {
-    chrome.storage.sync.get(['token'], (result) => {
-      if (result.hasOwnProperty('token')) {
-        isAuth = true;
-      }
-    });
+const overview = document.createElement('div');
+const modal = document.createElement('div');
+const mHeader = document.createElement('div');
+const mBody = document.createElement('div');
 
-    if (!isAuth) {
-      token = localStorage.getItem('token');
-      user = localStorage.getItem('user');
+window.onload = (ev) => {
+  console.log('Загрузилась вся страница, включая стили, картинки и другие ресурсы.');
 
-      if (token != '' && user != '') {
-        chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
-        extensionSetting = true;
-      }
-    }
-  }
-
-  chrome.storage.sync.get(['settingExtensionAction'], (result) => {
-    if (result.hasOwnProperty('settingExtensionAction')) {
-      setting = result.settingExtensionAction;
-    }
-  });
-
+  console.log('Проверяем токен');
   chrome.storage.sync.get(['token'], (result) => {
     if (result.hasOwnProperty('token')) {
       token = result.token;
       extensionSetting = true;
+      console.log('Токен получен');
+    } else {
+      console.log('Токена нет');
+      if (ev.target.location.origin == 'http://localhost:4200') {
+        console.log('Мы на своём сайте.');
+        token = localStorage.getItem('token');
+        user = localStorage.getItem('user');
+
+        if (token != '' && user != '') {
+          chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
+          extensionSetting = true;
+          console.log('Отпрвляем данные для сохранения');
+        }
+      }
     }
   });
 
-  if (extensionSetting) {
-    if (setting == '') {
-      setting = 'extension.DoubleClick';
+  setTimeout(() => {
+    if (extensionSetting) {
+      console.log('Данные авторизации есть, определяем слушатель кнопок');
+      chrome.storage.sync.get(['settingExtensionAction'], (result) => {
+        if (result.hasOwnProperty('settingExtensionAction')) {
+          setting = result.settingExtensionAction;
+          console.log('Взяли настройки');
+        } else {
+          setting = 'extension.DoubleClick';
+        }
+      });
+
+      createModal();
+
+      document.addEventListener('dblclick', function(e) {
+        if (setting == 'extension.DoubleClick') {
+          if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == false) {
+            console.log('Двойной клик');
+
+            innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
+          }
+        }
+
+        if (setting == 'extension.DoubleClickCtrl') {
+          if ((e.metaKey == true || e.ctrlKey == true) && e.shiftKey == false && e.altKey == false) {
+            console.log('Двойной клик + Ctrl');
+
+            innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
+          }
+        }
+
+        if (setting == 'extension.DoubleClickShift') {
+          if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == true && e.altKey == false) {
+            console.log('Двойной клик + Shift');
+
+            innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
+          }
+        }
+
+        if (setting == 'extension.DoubleClickAlt') {
+          if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == true) {
+            console.log('Двойной клик + Alt');
+
+            innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
+          }
+        }
+      });
     }
-    document.body.append(`<div id="overviewTranslate"><div id="modalTranslate"></div></div>`);
-
-    document.addEventListener('dblclick', function(e) {
-      if (setting == 'extension.DoubleClick') {
-        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == false) {
-          console.log('Двойной клик');
-
-          createModalTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
-        }
-      }
-
-      if (setting == 'extension.DoubleClickCtrl') {
-        if ((e.metaKey == true || e.ctrlKey == true) && e.shiftKey == false && e.altKey == false) {
-          console.log('Двойной клик + Ctrl');
-
-          createModalTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
-        }
-      }
-
-      if (setting == 'extension.DoubleClickShift') {
-        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == true && e.altKey == false) {
-          console.log('Двойной клик + Shift');
-
-          createModalTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
-        }
-      }
-
-      if (setting == 'extension.DoubleClickAlt') {
-        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == true) {
-          console.log('Двойной клик + Alt');
-
-          createModalTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
-        }
-      }
-    });
-  }
+  }, 1000);
 };
 
 window.addEventListener('message', function(event) {
@@ -109,23 +115,114 @@ window.addEventListener('message', function(event) {
   }
 });
 
-function createModalTranslateObject (range, token) {
+function innerTranslateObject (range, token) {
   translateObj = null;
-  //translateObj = {
-  //  token: token,
-  //  all_text: range.startContainer.data,
-  //  url: range.startContainer.ownerDocument.location.href,
-  //  offset: range.startOffset
-  //};
-
   translateObj = {
     token: token,
-    all_text: 'これは日本語の形態素解析のテストです。動詞の形も一般化できるようになっています。',
+    all_text: range.startContainer.data,
     url: range.startContainer.ownerDocument.location.href,
-    offset: 3
+    offset: range.startOffset
   };
 
-  chrome.runtime.sendMessage({ text: 'sendBackground', data: translateObj }, function (response) {
-    console.log(response);
+  //translateObj = {
+  //  token: token,
+  //  all_text: 'これは日本語の形態素解析のテストです。動詞の形も一般化できるようになっています。',
+  //  url: range.startContainer.ownerDocument.location.href,
+  //  offset: 3
+  //};
+
+  chrome.runtime.sendMessage({ text: 'sendBackground', data: translateObj }, (response) => {
+    if (response.data.success) {
+      overview.style.display = 'flex';
+      mBody.innerHTML = '';
+      response.data.res.forEach((res) => {
+        const transObj = JSON.parse(res.sourceData);
+        let kanjiCounter = 0;
+        let senseCounter = 0;
+        transObj.kanji.forEach((trans) => {
+          if (kanjiCounter == 0) {
+            mBody.innerHTML += 'Kanji text: ';
+          }
+          if (kanjiCounter == transObj.kanji.length - 1) {
+            mBody.innerHTML += trans.text + '; ';
+          } else {
+            mBody.innerHTML += trans.text + ', ';
+          }
+          kanjiCounter++;
+        });
+
+        transObj.sense.forEach((sen) => {
+          if (senseCounter == 0) {
+            mBody.innerHTML += 'Sense, gloss text: ';
+          }
+
+          if (senseCounter == transObj.sense.length - 1) {
+            let glCounter = 0;
+            sen.gloss.forEach((gl) => {
+              if (glCounter == sen.gloss.length - 1) {
+                mBody.innerHTML += gl.text;
+              } else {
+                mBody.innerHTML += gl.text + ', ';
+              }
+            });
+          } else {
+            sen.gloss.forEach((gl) => {
+              mBody.innerHTML += gl.text + ', ';
+            });
+          }
+          senseCounter++;
+        });
+        mBody.innerHTML += '<br>';
+      });
+    }
   });
+}
+
+function createModal() {
+  modal.setAttribute('id', 'modalTranslate');
+  modal.style.display = 'flex';
+  modal.style.flexFlow = 'column nowrap';
+  modal.style.zIndex = '9999999';
+  modal.style.width = '600px';
+  modal.style.background = 'rgba(255, 255, 255, 1)';
+  modal.style.borderRadius = '10px';
+
+  overview.setAttribute('id', 'overviewTranslate');
+  overview.style.position = 'fixed';
+  overview.style.top = '0';
+  overview.style.left = '0';
+  overview.style.zIndex = '999999';
+  overview.style.display = 'none';
+  overview.style.width = '100vw';
+  overview.style.height = '100vh';
+  overview.style.alignItems = 'center';
+  overview.style.justifyContent = 'center';
+  overview.style.background = 'rgba(0, 0, 0, .7)';
+  document.body.appendChild(overview);
+  overview.appendChild(modal);
+
+  modal.appendChild(mHeader);
+  modal.appendChild(mBody);
+
+  mHeader.setAttribute('id', 'modal-translate-header');
+  mBody.setAttribute('id', 'modal-translate-body');
+
+  document.getElementById('modal-translate-header').style.display = 'flex';
+  document.getElementById('modal-translate-header').style.flexFlow = 'row nowrap';
+  document.getElementById('modal-translate-header').style.width = '100%';
+  document.getElementById('modal-translate-header').style.justifyContent = 'flex-end';
+  document.getElementById('modal-translate-header').style.height = '45px';
+
+  document.getElementById('modal-translate-body').style.boxSizing = 'border-box';
+  document.getElementById('modal-translate-body').style.display = 'flex';
+  document.getElementById('modal-translate-body').style.flexFlow = 'column nowrap';
+  document.getElementById('modal-translate-body').style.width = '100%';
+  document.getElementById('modal-translate-body').style.padding = '20px';
+
+  mHeader.innerHTML = '<button type="button" class="close" id="closeModal"><span>&times;</span></button>';
+  document.getElementById('closeModal').style.border = 'none';
+  document.getElementById('closeModal').style.background = 'transparent';
+  document.getElementById('closeModal').style.padding = '1rem 2rem';
+  document.getElementById('closeModal').style.fontSize = '2rem';
+  document.getElementById('closeModal').style.fontWeight = '700';
 }

@@ -64,6 +64,9 @@ var PopupComponent = /** @class */ (function () {
             if (message.type === 'siteAuth') {
                 _this.siteAction('auth', message.data);
             }
+            if (message.type === 'saveSetting') {
+                _this.siteAction('saveSettingExtension', message.data);
+            }
             if (message.type === 'siteLogout') {
                 _this.siteAction('logout');
             }
@@ -94,6 +97,11 @@ var PopupComponent = /** @class */ (function () {
             });
             chrome.storage.sync.set({ user: data.user }, function () {
                 console.log('Set user');
+            });
+        }
+        if (action === 'saveSettingExtension') {
+            chrome.storage.sync.set({ settingExtensionAction: data.settingExtension }, function () {
+                console.log('Set setting extension');
             });
         }
         if (action === 'logout') {
