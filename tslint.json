@@ -126,6 +126,17 @@
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
-  }
+    "directive-class-suffix": true,
+    "prefer-mapped-imports": [
+      true,
+      {
+        "prefix": "@src/",
+        "prefix-mapped-to": "src/",
+        "base-url": "./"
+      }
+    ]
+  },
+  "extends": [
+    "@nativescript/tslint-rules"
+  ]
 }
