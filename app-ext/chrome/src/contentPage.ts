@@ -16,79 +16,26 @@ const mHeader = document.createElement('div');
 const mBody = document.createElement('div');
 
 window.onload = (ev) => {
-  console.log('Загрузилась вся страница, включая стили, картинки и другие ресурсы.');
-
-  console.log('Проверяем токен');
   chrome.storage.sync.get(['token'], (result) => {
     if (result.hasOwnProperty('token')) {
       token = result.token;
       extensionSetting = true;
-      console.log('Токен получен');
+
+      createButtonListener();
     } else {
-      console.log('Токена нет');
       if (ev.target.location.origin == 'http://localhost:4200') {
-        console.log('Мы на своём сайте.');
         token = localStorage.getItem('token');
         user = localStorage.getItem('user');
 
         if (token != '' && user != '') {
           chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
           extensionSetting = true;
-          console.log('Отпрвляем данные для сохранения');
+
+          createButtonListener();
         }
       }
     }
   });
-
-  setTimeout(() => {
-    if (extensionSetting) {
-      console.log('Данные авторизации есть, определяем слушатель кнопок');
-      chrome.storage.sync.get(['settingExtensionAction'], (result) => {
-        if (result.hasOwnProperty('settingExtensionAction')) {
-          setting = result.settingExtensionAction;
-          console.log('Взяли настройки');
-        } else {
-          setting = 'extension.DoubleClick';
-        }
-      });
-
-      createModal();
-
-      document.addEventListener('dblclick', function(e) {
-        if (setting == 'extension.DoubleClick') {
-          if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == false) {
-            console.log('Двойной клик');
-
-            innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
-          }
-        }
-
-        if (setting == 'extension.DoubleClickCtrl') {
-          if ((e.metaKey == true || e.ctrlKey == true) && e.shiftKey == false && e.altKey == false) {
-            console.log('Двойной клик + Ctrl');
-
-            innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
-          }
-        }
-
-        if (setting == 'extension.DoubleClickShift') {
-          if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == true && e.altKey == false) {
-            console.log('Двойной клик + Shift');
-
-            innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
-          }
-        }
-
-        if (setting == 'extension.DoubleClickAlt') {
-          if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == true) {
-            console.log('Двойной клик + Alt');
-
-            innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
-          }
-        }
-      });
-    }
-  }, 1000);
 };
 
 window.addEventListener('message', function(event) {
@@ -115,67 +62,44 @@ window.addEventListener('message', function(event) {
   }
 });
 
-function innerTranslateObject (range, token) {
-  translateObj = null;
-  translateObj = {
-    token: token,
-    all_text: range.startContainer.data,
-    url: range.startContainer.ownerDocument.location.href,
-    offset: range.startOffset
-  };
+function createButtonListener() {
+  if (extensionSetting) {
+    chrome.storage.sync.get(['settingExtensionAction'], (result) => {
+      if (result.hasOwnProperty('settingExtensionAction')) {
+        setting = result.settingExtensionAction;
+      } else {
+        setting = 'extension.DoubleClick';
+      }
+    });
 
-  //translateObj = {
-  //  token: token,
-  //  all_text: 'これは日本語の形態素解析のテストです。動詞の形も一般化できるようになっています。',
-  //  url: range.startContainer.ownerDocument.location.href,
-  //  offset: 3
-  //};
+    createModal();
 
-  chrome.runtime.sendMessage({ text: 'sendBackground', data: translateObj }, (response) => {
-    if (response.data.success) {
-      overview.style.display = 'flex';
-      mBody.innerHTML = '';
-      response.data.res.forEach((res) => {
-        const transObj = JSON.parse(res.sourceData);
-        let kanjiCounter = 0;
-        let senseCounter = 0;
-        transObj.kanji.forEach((trans) => {
-          if (kanjiCounter == 0) {
-            mBody.innerHTML += 'Kanji text: ';
-          }
-          if (kanjiCounter == transObj.kanji.length - 1) {
-            mBody.innerHTML += trans.text + '; ';
-          } else {
-            mBody.innerHTML += trans.text + ', ';
-          }
-          kanjiCounter++;
-        });
+    document.addEventListener('dblclick', function(e) {
+      if (setting == 'extension.DoubleClick') {
+        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == false) {
+          innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
+        }
+      }
 
-        transObj.sense.forEach((sen) => {
-          if (senseCounter == 0) {
-            mBody.innerHTML += 'Sense, gloss text: ';
-          }
+      if (setting == 'extension.DoubleClickCtrl') {
+        if ((e.metaKey == true || e.ctrlKey == true) && e.shiftKey == false && e.altKey == false) {
+          innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
+        }
+      }
 
-          if (senseCounter == transObj.sense.length - 1) {
-            let glCounter = 0;
-            sen.gloss.forEach((gl) => {
-              if (glCounter == sen.gloss.length - 1) {
-                mBody.innerHTML += gl.text;
-              } else {
-                mBody.innerHTML += gl.text + ', ';
-              }
-            });
-          } else {
-            sen.gloss.forEach((gl) => {
-              mBody.innerHTML += gl.text + ', ';
-            });
-          }
-          senseCounter++;
-        });
-        mBody.innerHTML += '<br>';
-      });
-    }
-  });
+      if (setting == 'extension.DoubleClickShift') {
+        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == true && e.altKey == false) {
+          innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
+        }
+      }
+
+      if (setting == 'extension.DoubleClickAlt') {
+        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == true) {
+          innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
+        }
+      }
+    });
+  }
 }
 
 function createModal() {
@@ -225,4 +149,70 @@ function createModal() {
   document.getElementById('closeModal').style.padding = '1rem 2rem';
   document.getElementById('closeModal').style.fontSize = '2rem';
   document.getElementById('closeModal').style.fontWeight = '700';
+
+  document.getElementById('closeModal').onclick = () => {
+    overview.style.display = 'none';
+    mBody.innerHTML = '';
+  }
+
+  document.getElementById('overviewTranslate').onclick = () => {
+    overview.style.display = 'none';
+    mBody.innerHTML = '';
+  }
+}
+
+function innerTranslateObject (range, token) {
+  translateObj = null;
+  translateObj = {
+    token: token,
+    all_text: range.startContainer.data,
+    url: range.startContainer.ownerDocument.location.href,
+    offset: range.startOffset
+  };
+
+  chrome.runtime.sendMessage({ text: 'sendBackground', data: translateObj }, (response) => {
+    if (response.data.success) {
+      mBody.innerHTML = '';
+      response.data.res.forEach((res) => {
+        const transObj = JSON.parse(res.sourceData);
+        let kanjiCounter = 0;
+        let senseCounter = 0;
+        transObj.kanji.forEach((trans) => {
+          if (kanjiCounter == 0) {
+            mBody.innerHTML += 'Kanji text: ';
+          }
+          if (kanjiCounter == transObj.kanji.length - 1) {
+            mBody.innerHTML += trans.text + '; ';
+          } else {
+            mBody.innerHTML += trans.text + ', ';
+          }
+          kanjiCounter++;
+        });
+
+        transObj.sense.forEach((sen) => {
+          if (senseCounter == 0) {
+            mBody.innerHTML += 'Sense, gloss text: ';
+          }
+
+          if (senseCounter == transObj.sense.length - 1) {
+            let glCounter = 0;
+            sen.gloss.forEach((gl) => {
+              if (glCounter == sen.gloss.length - 1) {
+                mBody.innerHTML += gl.text;
+              } else {
+                mBody.innerHTML += gl.text + ', ';
+              }
+            });
+          } else {
+            sen.gloss.forEach((gl) => {
+              mBody.innerHTML += gl.text + ', ';
+            });
+          }
+          senseCounter++;
+        });
+        mBody.innerHTML += '<br>';
+      });
+      overview.style.display = 'flex';
+    }
+  });
 }
