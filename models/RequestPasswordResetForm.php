@@ -7,8 +7,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 
-class RequestPasswordResetForm extends Model
-{
+class RequestPasswordResetForm extends Model {
     public $email;
 
     /**
@@ -20,12 +19,12 @@ class RequestPasswordResetForm extends Model
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
-            ['email', 'exist', 'targetClass' => User::class, 'message' => Yii::t('app', 'Пользователь с таким E-mail не найден.')],
+            ['email', 'exist', 'targetClass' => User::class,
+                'message' => Yii::t('app', 'Пользователь с таким E-mail не найден.')],
         ];
     }
 
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'email' => 'E-mail',
         ];
@@ -36,8 +35,7 @@ class RequestPasswordResetForm extends Model
      *
      * @return bool whether the email was send
      */
-    public function sendEmail()
-    {
+    public function sendEmail() {
         $user = User::findByEmail($this->email);
         if (!$user) {
             return false;

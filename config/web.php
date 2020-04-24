@@ -61,7 +61,7 @@ $config = [
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => ['user', 'transaction', 'category', 'content', 'language', 'translate'],
+                    'controller' => ['user', 'transaction', 'category', 'content', 'language', 'translate', 'plugin'],
                     'prefix' => 'api',
                     'patterns' => [
                         'PUT,PATCH {id}' => 'update',

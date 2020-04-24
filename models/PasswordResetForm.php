@@ -6,8 +6,7 @@ use Yii;
 use yii\base\InvalidArgumentException;
 use yii\base\Model;
 
-class PasswordResetForm extends Model
-{
+class PasswordResetForm extends Model {
     public $token;
     public $password;
 
@@ -19,8 +18,7 @@ class PasswordResetForm extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             ['token', 'required'],
             ['token', 'string'],
@@ -30,23 +28,20 @@ class PasswordResetForm extends Model
         ];
     }
 
-    public function validateToken()
-    {
+    public function validateToken() {
         $this->user = User::findByPasswordResetToken($this->token);
         if ($this->user === null) {
             $this->addError('token', Yii::t('app', 'Неверный токен для сброса пароля'));
         }
     }
 
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'password' => Yii::t('app', 'Новый пароль'),
         ];
     }
 
-    public function resetPassword()
-    {
+    public function resetPassword() {
         $user = $this->user;
         $user->setPassword($this->password);
         $user->resetPasswordToken = '';

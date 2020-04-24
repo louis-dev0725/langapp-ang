@@ -10,21 +10,18 @@ use Yii;
  * @property int $id
  * @property int $userId
  */
-class Invoice extends \yii\db\ActiveRecord
-{
+class Invoice extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'invoices';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['userId'], 'required'],
             [['userId'], 'default', 'value' => null],
@@ -35,8 +32,7 @@ class Invoice extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'userId' => Yii::t('app', 'User ID'),
