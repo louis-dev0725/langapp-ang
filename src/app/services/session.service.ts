@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { User } from '../interfaces/common.interface';
+import { User } from '@src/app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
@@ -120,13 +120,5 @@ export class SessionService {
     this.store.dispatch(new AuthorizedUpdateTokenAction(this.user.accessToken));
     this.store.dispatch(new AuthorizedUpdateUserAction(this.user));
     this.router.navigateByUrl('/');
-  }
-
-  settingPluginGet(user_id) {
-     return localStorage.getItem('ExtensionSettingPlugin_' + user_id);
-  }
-
-  settingPluginSave(data, user_id) {
-    localStorage.setItem('ExtensionSettingPlugin_' + user_id, JSON.stringify(data));
   }
 }

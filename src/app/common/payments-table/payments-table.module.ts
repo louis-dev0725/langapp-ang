@@ -6,7 +6,7 @@
  */
 
 import { NgModule } from '@angular/core';
-import { PaymentsTableComponent } from './payments-table.component';
+import { PaymentsTableComponent } from '@src/app/common/payments-table/payments-table.component';
 import { MatCardModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';

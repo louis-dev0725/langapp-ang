@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { APP_NAME, APP_DATE_CREATED } from '@app/config/config';
 
 @Component({
@@ -12,7 +12,7 @@ import { APP_NAME, APP_DATE_CREATED } from '@app/config/config';
     </div>
   `
 })
-export class ThemeFooterComponent {
+export class ThemeFooterComponent implements OnInit {
   public appName = APP_NAME;
   public appDate = +APP_DATE_CREATED;
   public toDay = new Date();

@@ -133,7 +133,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
       this.addClass(inkEl, 'ink');
 
       if (this.hasClass(element, 'ripplelink') && element.querySelector('span')) {
-        element.querySelector('span').insertAdjacentHTML('afterend', "<span class='ink'></span>");
+        element.querySelector('span').insertAdjacentHTML('afterend', '<span class=\'ink\'></span>');
       } else {
         element.appendChild(inkEl);
       }

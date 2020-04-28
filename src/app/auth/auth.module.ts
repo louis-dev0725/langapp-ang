@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SigninComponent } from './signin/signin.component';
-import { SignupComponent } from './signup/signup.component';
-import { RestoreComponent } from './restore/restore.component';
-import { ApiService } from '../services/api.service';
+import { SigninComponent } from '@src/app/auth/signin/signin.component';
+import { SignupComponent } from '@src/app/auth/signup/signup.component';
+import { RestoreComponent } from '@src/app/auth/restore/restore.component';
+import { ApiService } from '@src/app/services/api.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthComponent } from '@app/auth/auth.component';

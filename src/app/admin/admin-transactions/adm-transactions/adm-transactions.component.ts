@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, LOCALE_ID, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatPaginator, MatSort, PageEvent } from '@angular/material';
 import { ApiService } from '@app/services/api.service';
 import { EventService } from '@app/event.service';
@@ -154,7 +154,7 @@ export class AdmTransactionsComponent implements OnInit, OnDestroy {
       if (!(result instanceof ApiError)) {
         this.rows = result.items.map(el => {
           const _mark = availableCurrencyList.find((item: any) => {
-            return item.label == el.currency;
+            return item.label === el.currency;
           }).value;
           return {
             ...el,

@@ -8,6 +8,10 @@
       "@src/*": [
         "src/*.tns.ts",
         "src/*.ts"
+      ],
+      "@app/*": [
+        "src/app/*.tns.ts",
+        "src/app/*.ts"
       ]
     }
   },

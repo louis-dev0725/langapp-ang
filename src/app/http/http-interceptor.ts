@@ -12,7 +12,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   constructor(private eventsService: EventsService, private snackBar: MatSnackBar) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let dupReq = request;
+    const dupReq = request;
     let loading = true;
 
     dupReq.headers.append('Accept-Language', localStorage.getItem('lang'));
@@ -33,7 +33,7 @@ export class HttpInterceptorService implements HttpInterceptor {
           loading = false;
           if (err instanceof HttpErrorResponse) {
             if (err.status !== 401 && err.status !== 403 && err.status !== 422) {
-              let config = new MatSnackBarConfig();
+              const config = new MatSnackBarConfig();
               config.duration = 3000;
               config.panelClass = ['snack-error'];
               this.snackBar.open(err.message, null, config);

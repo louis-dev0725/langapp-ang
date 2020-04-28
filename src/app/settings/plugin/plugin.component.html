@@ -3,9 +3,10 @@
     <h1>{{ 'Settings plugin' | translate }}</h1>
     <p class="note">{{ 'Your id' | translate }}: {{ user.id }}</p>
 
-    <div class="container">
+    <div class="container" *ngIf="isLoaded">
       <form [formGroup]="settingsPluginForm" (ngSubmit)="onSubmit()">
         <input type="hidden" formControlName="id">
+        <input type="hidden" formControlName="user_id">
 
         <div class="form-item">
           <label id="radio-group-label">{{ 'Shows translation' | translate }}:</label>
@@ -24,5 +25,10 @@
         </div>
       </form>
     </div>
+
+    <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
+      <mat-progress-spinner color="primary" mode="indeterminate">
+      </mat-progress-spinner>
+    </mat-card>
   </div>
 </div>

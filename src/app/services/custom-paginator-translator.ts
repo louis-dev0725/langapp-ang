@@ -18,7 +18,7 @@ export class CustomPaginatorTranslator extends MatPaginatorIntl {
     });
 
     this.getRangeLabel = (page, pageSize, length) => {
-      if (length == 0 || pageSize == 0) {
+      if (length === 0 || pageSize === 0) {
         return `0 ${this.rangeOf} ${length}`;
       }
       length = Math.max(length, 0);

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdmTransactionEditComponent } from './adm-transaction-edit.component';
+import { AdmTransactionEditComponent } from '@src/app/admin/admin-transactions/adm-transaction-edit/adm-transaction-edit.component';
 
 describe('AdmTransactionEditComponent', () => {
   let component: AdmTransactionEditComponent;

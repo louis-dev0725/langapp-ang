@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ThemeMainComponent } from './theme.main.component';
+import { ThemeMainComponent } from '@src/app/theme/theme.main.component';
 import { SessionService } from '@app/services/session.service';
 import { ApiService } from '@app/services/api.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';

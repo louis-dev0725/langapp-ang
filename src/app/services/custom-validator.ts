@@ -5,6 +5,15 @@ import { EventService } from '@app/event.service';
 
 @Injectable()
 export class CustomValidator {
+
+  constructor(private eventService: EventService, private translate: TranslateService) {
+    this.callTranslate();
+    this.eventService.emitter.subscribe(event => {
+      if (event.type === 'language-change') {
+        this.callTranslate();
+      }
+    });
+  }
   errorMap = {
     required: 'This field is required',
     email: 'This is not valid email',
@@ -19,13 +28,19 @@ export class CustomValidator {
     'snackbar.user-edit-success': 'User profile was successfully saved'
   };
 
-  constructor(private eventService: EventService, private translate: TranslateService) {
-    this.callTranslate();
-    this.eventService.emitter.subscribe(event => {
-      if (event.type === 'language-change') {
-        this.callTranslate();
-      }
-    });
+  /**
+   * this method used as a custom validator to check
+   * the password and repeat-password is equaled or not
+   * @param ctrl
+   */
+  static confirmPasswordCheck(ctrl: AbstractControl) {
+    const password = ctrl.get('password').value;
+    const passrepeat = ctrl.get('passrepeat').value;
+    if (password !== passrepeat) {
+      ctrl.get('passrepeat').setErrors({ passconfirm: true });
+    } else {
+      return null;
+    }
   }
 
   callTranslate() {
@@ -41,20 +56,5 @@ export class CustomValidator {
     this.translate.get(Object.keys(this.messagesMap)).subscribe(res => {
       this.messagesMap = res;
     });
-  }
-
-  /**
-   * this method used as a custom validator to check
-   * the password and repeat-password is equaled or not
-   * @param ctrl
-   */
-  static confirmPasswordCheck(ctrl: AbstractControl) {
-    const password = ctrl.get('password').value;
-    const passrepeat = ctrl.get('passrepeat').value;
-    if (password !== passrepeat) {
-      ctrl.get('passrepeat').setErrors({ passconfirm: true });
-    } else {
-      return null;
-    }
   }
 }

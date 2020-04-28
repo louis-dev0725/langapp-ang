@@ -1,2 +1,20 @@
-<!-- https://docs.nativescript.org/angular/core-concepts/angular-navigation.html#page-router-outlet -->
-<page-router-outlet></page-router-outlet>
+<RadSideDrawer #sideDrawer>
+  <StackLayout tkDrawerContent class="sidedrawer-left">
+    <StackLayout class="sidedrawer-header"></StackLayout>
+    <StackLayout class="sidedrawer-content">
+      <StackLayout class="sidedrawer-list-item">
+        <Button class="btn btn-primary sidedrawer-list-item-text" text="Featured"></Button>
+        <!--        <Button class="btn btn-primary sidedrawer-list-item-text" text="Featured" (tap)="navigateToFeatured()"></Button>-->
+      </StackLayout>
+      <StackLayout class="sidedrawer-list-item">
+        <Button class="btn btn-primary sidedrawer-list-item-text" text="Browse"></Button>
+      </StackLayout>
+      <StackLayout class="sidedrawer-list-item">
+        <Button class="btn btn-primary sidedrawer-list-item-text" text="Search"></Button>
+      </StackLayout>
+    </StackLayout>
+  </StackLayout>
+
+  <page-router-outlet (swipe)="onSwipe($event)" tkMainContent></page-router-outlet>
+</RadSideDrawer>
+

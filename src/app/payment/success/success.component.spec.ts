@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SuccessComponent } from './success.component';
+import { SuccessComponent } from '@src/app/payment/success/success.component';
 
 describe('SuccessComponent', () => {
   let component: SuccessComponent;

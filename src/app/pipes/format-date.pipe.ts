@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 })
 export class FormatDatePipe implements PipeTransform {
   transform(value: any, ...args: any[]): any {
-    const format = args[0] == 'en' ? 'yyyy-MM-dd' : 'dd.MM.yy';
+    const format = args[0] === 'en' ? 'yyyy-MM-dd' : 'dd.MM.yy';
     const datePipe = new DatePipe('en-US');
     return datePipe.transform(value, `${format} HH:mm:ss`);
   }

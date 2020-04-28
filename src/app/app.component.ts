@@ -10,7 +10,7 @@ import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  public isProgressBarLoading: boolean = false;
+  public isProgressBarLoading = false;
   public color = 'red';
   public mode = 'indeterminate';
   public value = 50;
@@ -45,6 +45,4 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {}
-
-
 }

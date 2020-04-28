@@ -153,3 +153,9 @@ export interface Language {
   id: number;
   title: string;
 }
+
+export interface SettingPlugin {
+  id?: number;
+  user_id: number;
+  text: string;
+}

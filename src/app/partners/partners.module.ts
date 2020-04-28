@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { AboutComponent } from './about/about.component';
+import { AboutComponent } from '@src/app/partners/about/about.component';
 import { RouterModule } from '@angular/router';
-import { ClientsComponent } from './clients/clients.component';
+import { ClientsComponent } from '@src/app/partners/clients/clients.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
-import { TransactionComponent } from './transaction/transaction.component';
-import { PaymentsTableModule } from '../common/payments-table/payments-table.module';
+import { TransactionComponent } from '@src/app/partners/transaction/transaction.component';
+import { PaymentsTableModule } from '@src/app/common/payments-table/payments-table.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { PartnersComponent } from '@app/partners/partners.component';
 import { PartnersRoutingModule } from '@app/partners/partners-routing.module';

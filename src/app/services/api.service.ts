@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Category, Materials, TypeContent, User } from '../interfaces/common.interface';
+import { Category, Materials, SettingPlugin, User } from '@src/app/interfaces/common.interface';
 import { Observable } from 'rxjs';
-import { ApiError } from './api-error';
-import { SessionService } from './session.service';
+import { ApiError } from '@src/app/services/api-error';
+import { SessionService } from '@src/app/services/session.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store';
 import { LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction,
@@ -726,8 +726,40 @@ export class ApiService {
     });
   }
 
+  /**
+   * Вроде закрываем уведомление
+   */
   onCloseNotify(data) {
     const headers = this.getHeadersWithToken();
     return this.http.post(this.apiHost + '/users/close-notification', data, { headers });
+  }
+
+  /**
+   * Получаем настройки плагина
+   *
+   * @param id
+   */
+  getSettingById(id: number): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + `/plugins/${id}`, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  createUpdateSettingById(data: SettingPlugin): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.patch(this.apiHost + '/plugins/' + data.user_id, data, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
   }
 }

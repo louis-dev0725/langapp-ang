@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from '../services/api.service';
+import { ApiService } from '@src/app/services/api.service';
 import { Router, UrlSerializer } from '@angular/router';
-import { CustomValidator } from '../services/custom-validator';
-import { ApiError } from '../services/api-error';
+import { CustomValidator } from '@src/app/services/custom-validator';
+import { ApiError } from '@src/app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
 import { untilDestroyed } from 'ngx-take-until-destroy';

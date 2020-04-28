@@ -1,4 +1,4 @@
-import * as fromAccount from '../actions/account.action';
+import * as fromAccount from '@src/app/store/actions/account.action';
 import { User } from '@app/interfaces/common.interface';
 
 export interface AccountState {

@@ -1,19 +1,16 @@
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
 
 import { AccountState } from '@app/store/reducers/account.reducer';
+import * as fromAuthorized from '@src/app/store/reducers/authorized.reducer';
+import * as fromAccount from '@src/app/store/reducers/account.reducer';
 
 export interface State {
   authorized: fromAuthorized.AuthorizedState;
-  // account: fromAccount.AccountState;
 }
 
 export const reducers: ActionReducerMap<State> = {
-  // account: fromAccount.reducer,
   authorized: fromAuthorized.reducer
 };
-
-// Account state
-import * as fromAccount from './account.reducer';
 
 export const getAccountState = createFeatureSelector<fromAccount.AccountState>('account');
 
@@ -26,9 +23,6 @@ export const getAccountLoaded = createSelector(
   (state: AccountState): boolean => state.loaded
 );
 
-// Authorized state
-
-import * as fromAuthorized from './authorized.reducer';
 export const getAuthorizedState = createFeatureSelector<fromAuthorized.AuthorizedState>('authorized');
 
 export const getAuthorized = createSelector(

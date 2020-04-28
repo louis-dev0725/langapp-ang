@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ContentComponent } from '@app/content/content.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaterialsComponent } from './materials/materials.component';
-import { CreateMaterialsComponent } from './create-materials/create-materials.component';
+import { MaterialsComponent } from '@src/app/content/materials/materials.component';
+import { CreateMaterialsComponent } from '@src/app/content/create-materials/create-materials.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@app/shared/shared.module';
-import { ListMaterialsComponent } from './materials/list-materials/list-materials.component';
-import { EditMaterialsComponent } from './edit-materials/edit-materials.component';
+import { ListMaterialsComponent } from '@src/app/content/materials/list-materials/list-materials.component';
+import { EditMaterialsComponent } from '@src/app/content/edit-materials/edit-materials.component';
 
 const routes: Routes = [
    {

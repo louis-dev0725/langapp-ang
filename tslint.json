@@ -137,6 +137,7 @@
     ]
   },
   "extends": [
+    "@nativescript/tslint-rules",
     "@nativescript/tslint-rules"
   ]
 }
