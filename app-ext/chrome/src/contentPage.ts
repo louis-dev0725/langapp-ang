@@ -1,8 +1,10 @@
+import * as config from './../../allParam.config'
+
 let token = '';
 let user = '';
 let extensionSetting = false;
 let setting = '';
-let range: any = '';
+let statusModal = null;
 let translateObj = {
   token: null,
   all_text: null,
@@ -16,18 +18,20 @@ const mHeader = document.createElement('div');
 const mBody = document.createElement('div');
 
 window.onload = (ev) => {
-  chrome.storage.sync.get(['token'], (result) => {
+  chrome.storage.local.get(['token'], (result) => {
     if (result.hasOwnProperty('token')) {
       token = result.token;
       extensionSetting = true;
 
       createButtonListener();
+      console.log('Есть данные авторизации');
     } else {
-      if (ev.target.location.origin == 'http://localhost:4200') {
+      console.log('Данных авторизации нет');
+      if (ev.target.baseURI === config.URIFront + '/') {
         token = localStorage.getItem('token');
         user = localStorage.getItem('user');
 
-        if (token != '' && user != '') {
+        if (token !== '' && user !== '') {
           chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
           extensionSetting = true;
 
@@ -43,28 +47,34 @@ window.addEventListener('message', function(event) {
     return;
   }
 
-  if (event.data.type && (event.data.type == 'LoginSuccess') && (event.origin == 'http://localhost:4200')) {
+  if (event.data.type && (event.data.type === 'LoginSuccess') && (event.origin === config.URIFront)) {
     token = localStorage.getItem('token');
     user = localStorage.getItem('user');
-
     chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
+
+    console.log('LoginSuccess');
   }
 
-  if (event.data.type && (event.data.type == 'saveSettingExtension') && (event.origin == 'http://localhost:4200')) {
+  if (event.data.type && (event.data.type === 'saveSettingExtension') && (event.origin === config.URIFront)) {
     let settingExtension = JSON.parse(localStorage.getItem(event.data.text));
-    chrome.runtime.sendMessage({ type: 'saveSetting', data: { settingExtension: String(settingExtension.extensionShowTranslate) }});
+    chrome.runtime.sendMessage({ type: 'saveSetting', data: {
+      settingExtension: String(settingExtension.extensionShowTranslate)
+    }});
 
     setting = String(settingExtension.extensionShowTranslate);
+
+    console.log('saveSettingExtension');
   }
 
-  if (event.data.type && (event.data.type == 'Logout') && (event.origin == 'http://localhost:4200')) {
+  if (event.data.type && (event.data.type === 'Logout') && (event.origin === config.URIFront)) {
     chrome.runtime.sendMessage({ type: 'siteLogout' });
+    console.log('Logout');
   }
 });
 
 function createButtonListener() {
   if (extensionSetting) {
-    chrome.storage.sync.get(['settingExtensionAction'], (result) => {
+    chrome.storage.local.get(['settingExtensionAction'], (result) => {
       if (result.hasOwnProperty('settingExtensionAction')) {
         setting = result.settingExtensionAction;
       } else {
@@ -72,29 +82,47 @@ function createButtonListener() {
       }
     });
 
-    createModal();
-
     document.addEventListener('dblclick', function(e) {
       if (setting == 'extension.DoubleClick') {
         if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == false) {
+          statusModal = document.getElementById('overviewTranslate');
+          if (statusModal === null) {
+            createModal();
+          }
+
           innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
         }
       }
 
       if (setting == 'extension.DoubleClickCtrl') {
         if ((e.metaKey == true || e.ctrlKey == true) && e.shiftKey == false && e.altKey == false) {
+          statusModal = document.getElementById('overviewTranslate');
+          if (statusModal === null) {
+            createModal();
+          }
+
           innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
         }
       }
 
       if (setting == 'extension.DoubleClickShift') {
         if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == true && e.altKey == false) {
+          statusModal = document.getElementById('overviewTranslate');
+          if (statusModal === null) {
+            createModal();
+          }
+
           innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
         }
       }
 
       if (setting == 'extension.DoubleClickAlt') {
         if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == true) {
+          statusModal = document.getElementById('overviewTranslate');
+          if (statusModal === null) {
+            createModal();
+          }
+
           innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token);
         }
       }
@@ -170,7 +198,7 @@ function innerTranslateObject (range, token) {
     offset: range.startOffset
   };
 
-  chrome.runtime.sendMessage({ text: 'sendBackground', data: translateObj }, (response) => {
+  chrome.runtime.sendMessage({ type: 'sendBackground', data: translateObj }, (response) => {
     if (response.data.success) {
       mBody.innerHTML = '';
       response.data.res.forEach((res) => {

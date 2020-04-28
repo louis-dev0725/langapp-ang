@@ -4,8 +4,11 @@
   padding: 20px;
 }
 
-.get_token_button,
 .setting_button {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #000;
+  text-align: center;
   background: transparent;
   border: 1px solid #000;
   border-radius: 10px;
@@ -13,11 +16,6 @@
   text-decoration: none;
 }
 
-.get_token_button:hover,
 .setting_button:hover {
   text-decoration: underline;
-}
-
-.setting_button {
-  margin-top: 20px;
 }
