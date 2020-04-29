@@ -1,4 +1,4 @@
-import * as config from '../../allParam.config'
+import * as config from '../../allParam.config';
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     let objData = message.data;
@@ -53,7 +53,7 @@ setInterval(() => {
             requestSettingsPlugin.send();
 
             requestSettingsPlugin.onload = function () {
-                if (requestSettingsPlugin.readyState == 4 && requestSettingsPlugin.status == 200) {
+                if (requestSettingsPlugin.readyState === 4 && requestSettingsPlugin.status === 200) {
                     let settingPlugin = JSON.parse(requestSettingsPlugin.responseText);
                     chrome.storage.local.set({ settingExtensionAction: String(settingPlugin.extensionShowTranslate) }, () => {
                         console.log('Set new setting extension');

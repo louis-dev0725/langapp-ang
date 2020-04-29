@@ -1,5 +1,7 @@
+const GenerateJsonFile = require('generate-json-file-webpack-plugin');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const { join } = require('path');
+const configParam = require('../allParam.config');
 
 module.exports = {
   mode: 'development',
@@ -21,7 +23,16 @@ module.exports = {
       }
     ]
   },
-  plugins: [new CheckerPlugin()],
+  plugins: [
+    new CheckerPlugin(),
+    new GenerateJsonFile({
+      jsonFile: join(__dirname, 'manifest.json'),
+      filename: 'manifest.json',
+      value: (manifest) => {
+        manifest.permissions.push(configParam.URIApi + "api/*");
+      }
+    })
+  ],
   resolve: {
     extensions: ['.ts', '.js']
   }

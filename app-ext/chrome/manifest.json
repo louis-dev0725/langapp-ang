@@ -8,8 +8,7 @@
   },
   "permissions": [
     "tabs",
-    "storage",
-    "http://localhost:8090/api/*"
+    "storage"
   ],
   "browser_action": {
     "default_title": "LangApp",

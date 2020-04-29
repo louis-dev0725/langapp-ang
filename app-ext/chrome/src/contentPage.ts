@@ -1,4 +1,4 @@
-import * as config from './../../allParam.config'
+import * as config from './../../allParam.config';
 
 let token = '';
 let user = '';
@@ -31,7 +31,7 @@ window.onload = (ev) => {
         token = localStorage.getItem('token');
         user = localStorage.getItem('user');
 
-        if (token !== '' && user !== '') {
+        if (token !== null && user !== null) {
           chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
           extensionSetting = true;
 
@@ -83,8 +83,8 @@ function createButtonListener() {
     });
 
     document.addEventListener('dblclick', function(e) {
-      if (setting == 'extension.DoubleClick') {
-        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == false) {
+      if (setting === 'extension.DoubleClick') {
+        if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === false) {
           statusModal = document.getElementById('overviewTranslate');
           if (statusModal === null) {
             createModal();
@@ -94,8 +94,8 @@ function createButtonListener() {
         }
       }
 
-      if (setting == 'extension.DoubleClickCtrl') {
-        if ((e.metaKey == true || e.ctrlKey == true) && e.shiftKey == false && e.altKey == false) {
+      if (setting === 'extension.DoubleClickCtrl') {
+        if ((e.metaKey === true || e.ctrlKey === true) && e.shiftKey === false && e.altKey === false) {
           statusModal = document.getElementById('overviewTranslate');
           if (statusModal === null) {
             createModal();
@@ -105,8 +105,8 @@ function createButtonListener() {
         }
       }
 
-      if (setting == 'extension.DoubleClickShift') {
-        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == true && e.altKey == false) {
+      if (setting === 'extension.DoubleClickShift') {
+        if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === true && e.altKey === false) {
           statusModal = document.getElementById('overviewTranslate');
           if (statusModal === null) {
             createModal();
@@ -116,8 +116,8 @@ function createButtonListener() {
         }
       }
 
-      if (setting == 'extension.DoubleClickAlt') {
-        if ((e.metaKey == false || e.ctrlKey == false) && e.shiftKey == false && e.altKey == true) {
+      if (setting === 'extension.DoubleClickAlt') {
+        if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === true) {
           statusModal = document.getElementById('overviewTranslate');
           if (statusModal === null) {
             createModal();
@@ -206,10 +206,10 @@ function innerTranslateObject (range, token) {
         let kanjiCounter = 0;
         let senseCounter = 0;
         transObj.kanji.forEach((trans) => {
-          if (kanjiCounter == 0) {
+          if (kanjiCounter === 0) {
             mBody.innerHTML += 'Kanji text: ';
           }
-          if (kanjiCounter == transObj.kanji.length - 1) {
+          if (kanjiCounter === transObj.kanji.length - 1) {
             mBody.innerHTML += trans.text + '; ';
           } else {
             mBody.innerHTML += trans.text + ', ';
@@ -218,14 +218,14 @@ function innerTranslateObject (range, token) {
         });
 
         transObj.sense.forEach((sen) => {
-          if (senseCounter == 0) {
+          if (senseCounter === 0) {
             mBody.innerHTML += 'Sense, gloss text: ';
           }
 
-          if (senseCounter == transObj.sense.length - 1) {
+          if (senseCounter === transObj.sense.length - 1) {
             let glCounter = 0;
             sen.gloss.forEach((gl) => {
-              if (glCounter == sen.gloss.length - 1) {
+              if (glCounter === sen.gloss.length - 1) {
                 mBody.innerHTML += gl.text;
               } else {
                 mBody.innerHTML += gl.text + ', ';

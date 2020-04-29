@@ -21,11 +21,12 @@ export class PopupComponent implements OnInit {
 
         this.zone.run(() => {
           this.siteAuthContent = this.token !== '' && this.user !== '';
+          console.log('this.siteAuthContent', this.siteAuthContent);
         });
-        console.log('this.siteAuthContent', this.siteAuthContent);
       } else {
         this.zone.run(() => {
           this.siteAuthContent = false;
+          console.log('this.siteAuthContent', this.siteAuthContent);
         });
       }
     });
