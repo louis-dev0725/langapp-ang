@@ -41,6 +41,7 @@ export class SigninComponent implements OnInit {
     this.api.login(value).subscribe(res => {
       if (res instanceof ApiError) {
         this.errors = res.error;
+        this.isLoaded = true;
       } else {
         this.router.navigate(['/payment']);
 

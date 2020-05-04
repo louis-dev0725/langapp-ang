@@ -11,7 +11,7 @@
 		android:xlargeScreens="true"/>
 
 	<uses-sdk
-		android:minSdkVersion="17"
+		android:minSdkVersion="21"
 		android:targetSdkVersion="__APILEVEL__"/>
 
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -29,6 +29,7 @@
 			android:name="com.tns.NativeScriptActivity"
 			android:label="@string/title_activity_kimera"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|locale|uiMode"
+      android:screenOrientation="portrait"
 			android:theme="@style/LaunchScreenTheme">
 
 			<meta-data android:name="SET_THEME_ON_LAUNCH" android:resource="@style/AppTheme" />

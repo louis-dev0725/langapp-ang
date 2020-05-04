@@ -1,7 +1,7 @@
 import { MatPaginatorIntl } from '@angular/material';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { SessionService } from '@app/services/session.service';
+import { SessionService } from '@src/app/services/session.service';
 
 @Injectable()
 export class CustomPaginatorTranslator extends MatPaginatorIntl {

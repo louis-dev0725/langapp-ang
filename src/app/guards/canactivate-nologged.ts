@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as fromStore from '@app/store';
+import * as fromStore from '@app/store/index';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
 import { map } from 'rxjs/operators';
 

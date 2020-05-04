@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Category, Materials, SettingPlugin, User } from '@src/app/interfaces/common.interface';
+import { Category, Materials, SettingPlugin, User } from '@app/interfaces/common.interface';
 import { Observable } from 'rxjs';
-import { ApiError } from '@src/app/services/api-error';
-import { SessionService } from '@src/app/services/session.service';
+import { ApiError } from '@app/services/api-error';
+import { SessionService } from '@app/services/session.service';
 import { Store } from '@ngrx/store';
-import * as fromStore from '@app/store';
+import * as fromStore from '@app/store/index';
 import { LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction,
-  LoadAuthorizedSuccess } from '@app/store';
+  LoadAuthorizedSuccess } from '@app/store/index';
 
 
 @Injectable({

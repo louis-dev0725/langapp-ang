@@ -1,6 +1,5 @@
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromAccount from '@app/store/reducers/account.reducer';
-import { AccountState } from '@app/store/reducers/account.reducer';
 import * as fromAuthorized from '@app/store/reducers/authorized.reducer';
 
 

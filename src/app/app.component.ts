@@ -18,7 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   title = 'call-rocket';
 
-  constructor(private translate: TranslateService, private breadCrumbsService: BreadCrumbsService, private eventsService: EventsService) {
+  constructor(private translate: TranslateService, private breadCrumbsService: BreadCrumbsService,
+    private eventsService: EventsService) {
     const langMap = {
       'ru-RU': 'ru',
       'en-US': 'en'

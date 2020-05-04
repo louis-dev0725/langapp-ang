@@ -4,13 +4,13 @@
     "outDir": "../out-tsc/app",
     "types": [],
     "paths": {
-      "@src/*": [
-        "src/*.web",
-        "src/*"
-      ],
       "@app/*": [
         "src/app/*.web",
         "src/app/*"
+      ],
+      "@src/*": [
+        "src/*.web",
+        "src/*"
       ]
     }
   },

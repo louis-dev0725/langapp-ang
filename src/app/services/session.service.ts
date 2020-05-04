@@ -1,10 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { User } from '@src/app/interfaces/common.interface';
+import { User } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import * as fromStore from '@app/store';
+import * as fromStore from '@app/store/index';
 import { LogOutAction, AuthorizedUpdateTokenAction, AuthorizedSaveAdminAction, LogOutAsUserAction,
-  AuthorizedUpdateUserAction } from '@app/store';
+  AuthorizedUpdateUserAction } from '@app/store/index';
 
 @Injectable({
   providedIn: 'root'
