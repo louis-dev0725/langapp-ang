@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PluginComponent } from '@src/app/settings/plugin/plugin.component';
+import { PluginComponent } from '@app/settings/plugin/plugin.component';
 
 describe('PluginComponent', () => {
   let component: PluginComponent;

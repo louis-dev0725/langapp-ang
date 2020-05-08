@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CategoryComponent } from '@app/category/category.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { CreateCategoryComponent } from '@src/app/category/create-category/create-category.component';
-import { EditCategoryComponent } from '@src/app/category/edit-category/edit-category.component';
+import { CreateCategoryComponent } from '@app/category/create-category/create-category.component';
+import { EditCategoryComponent } from '@app/category/edit-category/edit-category.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@app/shared/shared.module';
-import { ListCategoryComponent } from '@src/app/category/list-category/list-category.component';
+import { ListCategoryComponent } from '@app/category/list-category/list-category.component';
 
 const routes: Routes = [
   {

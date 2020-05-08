@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as fromStore from '@src/app/store';
-import { getAuthorizedIsLoggedIn } from '@src/app/store/selectors/authorized.selector';
+import * as fromStore from '@app/store';
+import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
 
 @Injectable()
 export class CanactivateLogged implements CanActivate, CanActivateChild {

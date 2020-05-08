@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from '@src/app/services/api.service';
+import { ApiService } from '@app/services/api.service';
 import { MatSnackBar } from '@angular/material';
-import { User } from '@src/app/interfaces/common.interface';
+import { User } from '@app/interfaces/common.interface';
 import { ReCaptcha2Component } from 'ngx-captcha';
-import { CustomValidator } from '@src/app/services/custom-validator';
+import { CustomValidator } from '@app/services/custom-validator';
 import { SessionService } from '@app/services/session.service';
 import { TranslatingService } from '@app/services/translating.service';
 

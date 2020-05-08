@@ -146,8 +146,5 @@
       }
     }
   },
-  "defaultProject": "call-rocket",
-  "cli": {
-    "defaultCollection": "@nativescript/schematics"
-  }
+  "defaultProject": "call-rocket"
 }

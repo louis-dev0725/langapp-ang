@@ -138,6 +138,9 @@
 		"request-sent": "An email has been sent to your E-mail with a link to reset your password. Check your email and follow the link received."
 	},
 	"rub": "rub",
+  "signin": {
+    "note": "To connect to the site of the Rocket Call system, you must log in."
+  },
 	"signup": {
 		"note": "To connect to the site of the Rocket Call system, you must register."
 	},

@@ -1,4 +1,4 @@
-import * as fromAuthorized from '@src/app/store/actions/authorized.action';
+import * as fromAuthorized from '@app/store/actions/authorized.action';
 
 export interface AuthorizedState {
   data: any;

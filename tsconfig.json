@@ -19,13 +19,6 @@
     "paths": {
       "@app/*": [
         "src/app/*"
-      ],
-      "@src/*": [
-        "src/*.android.ts",
-        "src/*.ios.ts",
-        "src/*.tns.ts",
-        "src/*.web.ts",
-        "src/*"
       ]
     },
     "lib": [

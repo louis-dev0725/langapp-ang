@@ -8,7 +8,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { ProfileComponent } from '@app/settings/profile/profile.component';
 import { SettingsRoutingModule } from '@app/settings/settings-routing.module';
 import { SettingsComponent } from '@app/settings/settings.component';
-import { PluginComponent } from '@src/app/settings/plugin/plugin.component';
+import { PluginComponent } from '@app/settings/plugin/plugin.component';
 
 @NgModule({
   declarations: [

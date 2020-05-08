@@ -1,8 +1,8 @@
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
 
 import { AccountState } from '@app/store/reducers/account.reducer';
-import * as fromAuthorized from '@src/app/store/reducers/authorized.reducer';
-import * as fromAccount from '@src/app/store/reducers/account.reducer';
+import * as fromAuthorized from '@app/store/reducers/authorized.reducer';
+import * as fromAccount from '@app/store/reducers/account.reducer';
 
 export interface State {
   authorized: fromAuthorized.AuthorizedState;

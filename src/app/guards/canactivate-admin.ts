@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SessionService } from '@src/app/services/session.service';
+import { SessionService } from '@app/services/session.service';
 
 @Injectable()
 export class CanactivateAdmin implements CanActivate {

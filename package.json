@@ -2,10 +2,6 @@
   "name": "call-rocket",
   "version": "1.0.0",
   "scripts": {
-    "android": "tns run android",
-    "ios": "tns run ios",
-    "mobile": "tns run",
-    "preview": "tns preview",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -33,7 +29,6 @@
     "@angular/platform-browser-dynamic": "^8.2.14",
     "@angular/router": "^8.2.14",
     "@fullcalendar/core": "^4.4.0",
-    "@nativescript/theme": "^2.3.3",
     "@ngrx/store": "^8.6.0",
     "@ngrx/store-devtools": "^8.6.0",
     "@ngx-translate/core": "^11.0.1",
@@ -42,9 +37,6 @@
     "chart.js": "^2.9.3",
     "core-js": "^2.6.11",
     "jstz": "^2.1.1",
-    "nativescript-angular": "~8.20.0",
-    "nativescript-localstorage": "^2.0.1",
-    "nativescript-ui-sidedrawer": "^8.0.1",
     "ngrx-store-freeze": "^0.2.4",
     "ngx-captcha": "^6.4.0",
     "ngx-take-until-destroy": "^5.4.0",
@@ -65,8 +57,6 @@
     "@angular/compiler-cli": "~8.0.3",
     "@angular/language-service": "~8.0.3",
     "@biesbjerg/ngx-translate-extract": "^2.3.4",
-    "@nativescript/schematics": "~1.0.0",
-    "@nativescript/tslint-rules": "~0.0.5",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "^2.0.8",
     "@types/moment": "^2.13.0",
@@ -79,18 +69,11 @@
     "karma-coverage-istanbul-reporter": "^2.0.6",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
-    "nativescript-dev-webpack": "~1.4.0",
     "protractor": "^5.4.4",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "tslint-sonarts": "^1.9.0",
     "typescript": "~3.4.5",
     "webpack-bundle-analyzer": "^3.7.0"
-  },
-  "nativescript": {
-    "id": "org.nativescript.ngsample",
-    "tns-android": {
-      "version": "6.5.0"
-    }
   }
 }

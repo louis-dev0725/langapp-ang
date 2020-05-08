@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditMaterialsComponent } from '@src/app/content/edit-materials/edit-materials.component';
+import { EditMaterialsComponent } from '@app/content/edit-materials/edit-materials.component';
 
 describe('EditMaterialsComponent', () => {
   let component: EditMaterialsComponent;

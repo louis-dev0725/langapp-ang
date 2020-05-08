@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditCategoryComponent } from '@src/app/category/edit-category/edit-category.component';
+import { EditCategoryComponent } from '@app/category/edit-category/edit-category.component';
 
 describe('EditCategoryComponent', () => {
   let component: EditCategoryComponent;

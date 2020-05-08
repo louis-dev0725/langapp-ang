@@ -2,7 +2,7 @@ import { Component, Input, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef, 
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { ThemeMainComponent } from '@src/app/theme/theme.main.component';
+import { ThemeMainComponent } from '@app/theme/theme.main.component';
 import { SessionService } from '@app/services/session.service';
 import { TranslatingService } from '@app/services/translating.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
