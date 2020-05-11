@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import * as config from './../../../../../../../allParam.config';
 
 @Component({
   selector: 'app-popup',
@@ -10,6 +11,7 @@ export class PopupComponent implements OnInit {
   user: any = {};
   extension: any;
   siteAuthContent: boolean;
+  siteUri = config.URIFront;
 
   constructor(private zone: NgZone) {}
 

@@ -1,6 +1,6 @@
 <div class="content" *ngIf="!siteAuthContent">
   <h3>Для работы с плагинам и доступа к настройкам вам не обходимо авторизироваться на
-    <a [href]="'http://localhost:4200/#/'" target="_blank">сайте</a>.
+    <a [href]="siteUri + '/#/'" target="_blank">сайте</a>.
   </h3>
 </div>
 
@@ -8,5 +8,5 @@
   <h3>Id: {{ user.id }}</h3>
   <h3>Имя: {{ user.name }}</h3>
   <h3>E-mail: {{ user.email }}</h3>
-  <a [href]="'http://localhost:4200/#/settings/plugin'" target="_blank" class="setting_button">Настройки плагина</a>
+  <a [href]="siteUri + '/#/settings/plugin'" target="_blank" class="setting_button">Настройки плагина</a>
 </div>

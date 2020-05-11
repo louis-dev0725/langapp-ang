@@ -133,9 +133,11 @@ function createButtonListener() {
 function createModal() {
   modal.setAttribute('id', 'modalTranslate');
   modal.style.display = 'flex';
-  modal.style.flexFlow = 'column nowrap';
+  modal.style.flexFlow = 'column';
   modal.style.zIndex = '9999999';
   modal.style.width = '600px';
+  modal.style.height = 'auto';
+  modal.style.maxHeight = '90vh';
   modal.style.background = 'rgba(255, 255, 255, 1)';
   modal.style.borderRadius = '10px';
 
@@ -159,17 +161,18 @@ function createModal() {
   mHeader.setAttribute('id', 'modal-translate-header');
   mBody.setAttribute('id', 'modal-translate-body');
 
-  document.getElementById('modal-translate-header').style.display = 'flex';
-  document.getElementById('modal-translate-header').style.flexFlow = 'row nowrap';
-  document.getElementById('modal-translate-header').style.width = '100%';
-  document.getElementById('modal-translate-header').style.justifyContent = 'flex-end';
-  document.getElementById('modal-translate-header').style.height = '45px';
+  mHeader.style.display = 'flex';
+  mHeader.style.flexFlow = 'row nowrap';
+  mHeader.style.width = '100%';
+  mHeader.style.justifyContent = 'flex-end';
+  mHeader.style.height = '45px';
 
-  document.getElementById('modal-translate-body').style.boxSizing = 'border-box';
-  document.getElementById('modal-translate-body').style.display = 'flex';
-  document.getElementById('modal-translate-body').style.flexFlow = 'column nowrap';
-  document.getElementById('modal-translate-body').style.width = '100%';
-  document.getElementById('modal-translate-body').style.padding = '20px';
+  mBody.style.boxSizing = 'border-box';
+  mBody.style.display = 'flex';
+  mBody.style.overflowY = 'scroll';
+  mBody.style.flexFlow = 'column nowrap';
+  mBody.style.width = '100%';
+  mBody.style.padding = '20px';
 
   mHeader.innerHTML = '<button type="button" class="close" id="closeModal"><span>&times;</span></button>';
   document.getElementById('closeModal').style.border = 'none';
@@ -238,7 +241,7 @@ function innerTranslateObject (range, token) {
           }
           senseCounter++;
         });
-        mBody.innerHTML += '<br>';
+        mBody.innerHTML += '<hr style="color:#003300;width:100%;height:1px;"><br>';
       });
       overview.style.display = 'flex';
     }
