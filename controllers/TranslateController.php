@@ -40,6 +40,7 @@ class TranslateController extends ActiveController {
             $query = DictionaryWord::find()->where(['&^', 'query', $str_search])->asArray()->limit(100)->all();
             return [
                 'success' => true,
+                'word' => $str_search,
                 'res' => $query
             ];
         }
