@@ -1,4 +1,19 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["modules-popup-popup-module"],{
+(window["webpackJsonpExtension"] = window["webpackJsonpExtension"] || []).push([["modules-popup-popup-module"],{
+
+/***/ "../allParam.config.js":
+/*!*****************************!*\
+  !*** ../allParam.config.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = {
+    URIApi: 'http://localhost:8090/',
+    URIFront: 'http://localhost:4200'
+};
+
+
+/***/ }),
 
 /***/ "./src/app/modules/popup/pages/popup/popup.component.ts":
 /*!**************************************************************!*\
@@ -11,8 +26,9 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PopupComponent", function() { return PopupComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "../node_modules/@angular/core/__ivy_ngcc__/fesm5/core.js");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "../node_modules/@angular/common/__ivy_ngcc__/fesm5/common.js");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "../node_modules/@angular/router/__ivy_ngcc__/fesm5/router.js");
+/* harmony import */ var _allParam_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../../../../../../allParam.config */ "../allParam.config.js");
+/* harmony import */ var _allParam_config__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_allParam_config__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "../node_modules/@angular/common/__ivy_ngcc__/fesm5/common.js");
 
 
 
@@ -27,8 +43,11 @@ function PopupComponent_div_0_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, ". ");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+} if (rf & 2) {
+    var ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](3);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("href", ctx_r0.siteUri + "/#/", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵsanitizeUrl"]);
 } }
-var _c0 = function () { return ["http://localhost:4200/settings/plugin"]; };
 function PopupComponent_div_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 1);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "h3");
@@ -40,7 +59,7 @@ function PopupComponent_div_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "h3");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "button", 3);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "a", 3);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043F\u043B\u0430\u0433\u0438\u043D\u0430");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -53,71 +72,43 @@ function PopupComponent_div_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"]("E-mail: ", ctx_r1.user.email, "");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("routerLink", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpureFunction0"](4, _c0));
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("href", ctx_r1.siteUri + "/#/settings/plugin", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵsanitizeUrl"]);
 } }
 var PopupComponent = /** @class */ (function () {
-    function PopupComponent() {
-        var _this = this;
+    function PopupComponent(zone) {
+        this.zone = zone;
         this.token = '';
         this.user = {};
-        chrome.runtime.onMessage.addListener(function (message) {
-            if (message.type === 'siteAuth') {
-                _this.siteAction('auth', message.data);
-            }
-            if (message.type === 'saveSetting') {
-                _this.siteAction('saveSettingExtension', message.data);
-            }
-            if (message.type === 'siteLogout') {
-                _this.siteAction('logout');
-            }
-        });
+        this.siteUri = _allParam_config__WEBPACK_IMPORTED_MODULE_1__["URIFront"];
     }
     PopupComponent.prototype.ngOnInit = function () {
         var _this = this;
-        chrome.storage.sync.get(['token'], function (result) {
-            if (result.hasOwnProperty('token')) {
+        chrome.storage.local.get(['token', 'user'], function (result) {
+            if (result.hasOwnProperty('token') && result.hasOwnProperty('user')) {
                 _this.token = result.token;
-            }
-        });
-        chrome.storage.sync.get(['user'], function (result) {
-            if (result.hasOwnProperty('user')) {
                 _this.user = JSON.parse(result.user);
+                _this.zone.run(function () {
+                    _this.siteAuthContent = _this.token !== '' && _this.user !== '';
+                    console.log('this.siteAuthContent', _this.siteAuthContent);
+                });
+            }
+            else {
+                _this.zone.run(function () {
+                    _this.siteAuthContent = false;
+                    console.log('this.siteAuthContent', _this.siteAuthContent);
+                });
             }
         });
-        this.siteAuthContent = this.token !== '' && this.user !== '';
     };
-    PopupComponent.prototype.siteAction = function (action, data) {
-        if (data === void 0) { data = {}; }
-        if (action === 'auth') {
-            this.user = JSON.parse(data.user);
-            this.token = data.token;
-            this.siteAuthContent = true;
-            chrome.storage.sync.set({ token: data.token }, function () {
-                console.log('Set token');
-            });
-            chrome.storage.sync.set({ user: data.user }, function () {
-                console.log('Set user');
-            });
-        }
-        if (action === 'saveSettingExtension') {
-            chrome.storage.sync.set({ settingExtensionAction: data.settingExtension }, function () {
-                console.log('Set setting extension');
-            });
-        }
-        if (action === 'logout') {
-            this.siteAuthContent = false;
-            chrome.storage.sync.remove(['token', 'user', 'settingExtension']);
-        }
-    };
-    PopupComponent.ɵfac = function PopupComponent_Factory(t) { return new (t || PopupComponent)(); };
-    PopupComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: PopupComponent, selectors: [["app-popup"]], decls: 2, vars: 2, consts: [["class", "content", 4, "ngIf"], [1, "content"], ["href", "http://localhost:4200"], [1, "setting_button", 3, "routerLink"]], template: function PopupComponent_Template(rf, ctx) { if (rf & 1) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](0, PopupComponent_div_0_Template, 6, 0, "div", 0);
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, PopupComponent_div_1_Template, 9, 5, "div", 0);
+    PopupComponent.ɵfac = function PopupComponent_Factory(t) { return new (t || PopupComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgZone"])); };
+    PopupComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: PopupComponent, selectors: [["app-popup"]], decls: 2, vars: 2, consts: [["class", "content", 4, "ngIf"], [1, "content"], ["target", "_blank", 3, "href"], ["target", "_blank", 1, "setting_button", 3, "href"]], template: function PopupComponent_Template(rf, ctx) { if (rf & 1) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](0, PopupComponent_div_0_Template, 6, 1, "div", 0);
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, PopupComponent_div_1_Template, 9, 4, "div", 0);
         } if (rf & 2) {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", !ctx.siteAuthContent);
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.siteAuthContent);
-        } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterLink"]], styles: [".content[_ngcontent-%COMP%] {\n  display: flex;\n  flex-flow: column wrap;\n  padding: 20px;\n}\n\n.get_token_button[_ngcontent-%COMP%], .setting_button[_ngcontent-%COMP%] {\n  background: transparent;\n  border: 1px solid #000;\n  border-radius: 10px;\n  cursor: pointer;\n  text-decoration: none;\n}\n\n.get_token_button[_ngcontent-%COMP%]:hover, .setting_button[_ngcontent-%COMP%]:hover {\n  text-decoration: underline;\n}\n\n.setting_button[_ngcontent-%COMP%] {\n  margin-top: 20px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL0Q6XFxPcGVuU2VydmVyXFxkb21haW5zXFxpcF9MVlNcXGxhbmdhcHBcXGxhbmdhcHAtZXh0ZW5zaW9uXFxhcHAtZXh0L2FuZ3VsYXJcXHNyY1xcYXBwXFxtb2R1bGVzXFxwb3B1cFxccGFnZXNcXHBvcHVwXFxwb3B1cC5jb21wb25lbnQuc2NzcyIsImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL3BvcHVwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsYUFBQTtBQ0NGOztBREVBOztFQUVFLHVCQUFBO0VBQ0Esc0JBQUE7RUFDQSxtQkFBQTtFQUNBLGVBQUE7RUFDQSxxQkFBQTtBQ0NGOztBREVBOztFQUVFLDBCQUFBO0FDQ0Y7O0FERUE7RUFDRSxnQkFBQTtBQ0NGIiwiZmlsZSI6ImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL3BvcHVwLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmNvbnRlbnQge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgZmxleC1mbG93OiBjb2x1bW4gd3JhcDtcclxuICBwYWRkaW5nOiAyMHB4O1xyXG59XHJcblxyXG4uZ2V0X3Rva2VuX2J1dHRvbixcclxuLnNldHRpbmdfYnV0dG9uIHtcclxuICBiYWNrZ3JvdW5kOiB0cmFuc3BhcmVudDtcclxuICBib3JkZXI6IDFweCBzb2xpZCAjMDAwO1xyXG4gIGJvcmRlci1yYWRpdXM6IDEwcHg7XHJcbiAgY3Vyc29yOiBwb2ludGVyO1xyXG4gIHRleHQtZGVjb3JhdGlvbjogbm9uZTtcclxufVxyXG5cclxuLmdldF90b2tlbl9idXR0b246aG92ZXIsXHJcbi5zZXR0aW5nX2J1dHRvbjpob3ZlciB7XHJcbiAgdGV4dC1kZWNvcmF0aW9uOiB1bmRlcmxpbmU7XHJcbn1cclxuXHJcbi5zZXR0aW5nX2J1dHRvbiB7XHJcbiAgbWFyZ2luLXRvcDogMjBweDtcclxufVxyXG4iLCIuY29udGVudCB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZmxvdzogY29sdW1uIHdyYXA7XG4gIHBhZGRpbmc6IDIwcHg7XG59XG5cbi5nZXRfdG9rZW5fYnV0dG9uLFxuLnNldHRpbmdfYnV0dG9uIHtcbiAgYmFja2dyb3VuZDogdHJhbnNwYXJlbnQ7XG4gIGJvcmRlcjogMXB4IHNvbGlkICMwMDA7XG4gIGJvcmRlci1yYWRpdXM6IDEwcHg7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xufVxuXG4uZ2V0X3Rva2VuX2J1dHRvbjpob3Zlcixcbi5zZXR0aW5nX2J1dHRvbjpob3ZlciB7XG4gIHRleHQtZGVjb3JhdGlvbjogdW5kZXJsaW5lO1xufVxuXG4uc2V0dGluZ19idXR0b24ge1xuICBtYXJnaW4tdG9wOiAyMHB4O1xufSJdfQ== */"] });
+        } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["NgIf"]], styles: [".content[_ngcontent-%COMP%] {\n  display: flex;\n  flex-flow: column wrap;\n  padding: 20px;\n}\n\n.setting_button[_ngcontent-%COMP%] {\n  margin-top: 20px;\n  font-size: 14px;\n  color: #000;\n  text-align: center;\n  background: transparent;\n  border: 1px solid #000;\n  border-radius: 10px;\n  cursor: pointer;\n  text-decoration: none;\n}\n\n.setting_button[_ngcontent-%COMP%]:hover {\n  text-decoration: underline;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL0Q6XFxPcGVuU2VydmVyXFxkb21haW5zXFxpcF9MVlNcXGxhbmdhcHBcXGxhbmdhcHAtZXh0ZW5zaW9uXFxhcHAtZXh0L2FuZ3VsYXJcXHNyY1xcYXBwXFxtb2R1bGVzXFxwb3B1cFxccGFnZXNcXHBvcHVwXFxwb3B1cC5jb21wb25lbnQuc2NzcyIsImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL3BvcHVwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsYUFBQTtBQ0NGOztBREVBO0VBQ0UsZ0JBQUE7RUFDQSxlQUFBO0VBQ0EsV0FBQTtFQUNBLGtCQUFBO0VBQ0EsdUJBQUE7RUFDQSxzQkFBQTtFQUNBLG1CQUFBO0VBQ0EsZUFBQTtFQUNBLHFCQUFBO0FDQ0Y7O0FERUE7RUFDRSwwQkFBQTtBQ0NGIiwiZmlsZSI6ImFuZ3VsYXIvc3JjL2FwcC9tb2R1bGVzL3BvcHVwL3BhZ2VzL3BvcHVwL3BvcHVwLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmNvbnRlbnQge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgZmxleC1mbG93OiBjb2x1bW4gd3JhcDtcclxuICBwYWRkaW5nOiAyMHB4O1xyXG59XHJcblxyXG4uc2V0dGluZ19idXR0b24ge1xyXG4gIG1hcmdpbi10b3A6IDIwcHg7XHJcbiAgZm9udC1zaXplOiAxNHB4O1xyXG4gIGNvbG9yOiAjMDAwO1xyXG4gIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICBiYWNrZ3JvdW5kOiB0cmFuc3BhcmVudDtcclxuICBib3JkZXI6IDFweCBzb2xpZCAjMDAwO1xyXG4gIGJvcmRlci1yYWRpdXM6IDEwcHg7XHJcbiAgY3Vyc29yOiBwb2ludGVyO1xyXG4gIHRleHQtZGVjb3JhdGlvbjogbm9uZTtcclxufVxyXG5cclxuLnNldHRpbmdfYnV0dG9uOmhvdmVyIHtcclxuICB0ZXh0LWRlY29yYXRpb246IHVuZGVybGluZTtcclxufVxyXG4iLCIuY29udGVudCB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZmxvdzogY29sdW1uIHdyYXA7XG4gIHBhZGRpbmc6IDIwcHg7XG59XG5cbi5zZXR0aW5nX2J1dHRvbiB7XG4gIG1hcmdpbi10b3A6IDIwcHg7XG4gIGZvbnQtc2l6ZTogMTRweDtcbiAgY29sb3I6ICMwMDA7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgYmFja2dyb3VuZDogdHJhbnNwYXJlbnQ7XG4gIGJvcmRlcjogMXB4IHNvbGlkICMwMDA7XG4gIGJvcmRlci1yYWRpdXM6IDEwcHg7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xufVxuXG4uc2V0dGluZ19idXR0b246aG92ZXIge1xuICB0ZXh0LWRlY29yYXRpb246IHVuZGVybGluZTtcbn0iXX0= */"] });
     return PopupComponent;
 }());
 
@@ -128,7 +119,7 @@ var PopupComponent = /** @class */ (function () {
                 templateUrl: 'popup.component.html',
                 styleUrls: ['popup.component.scss'],
             }]
-    }], function () { return []; }, null); })();
+    }], function () { return [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["NgZone"] }]; }, null); })();
 
 
 /***/ }),

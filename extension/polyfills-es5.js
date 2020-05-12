@@ -1,4 +1,5 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["polyfills-es5"],{
+var Extension =
+(window["webpackJsonpExtension"] = window["webpackJsonpExtension"] || []).push([["polyfills-es5"],{
 
 /***/ "../node_modules/@angular-devkit/build-angular/node_modules/core-js/es/date/index.js":
 /*!*******************************************************************************************!*\

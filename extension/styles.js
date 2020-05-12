@@ -1,4 +1,5 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["styles"],{
+var Extension =
+(window["webpackJsonpExtension"] = window["webpackJsonpExtension"] || []).push([["styles"],{
 
 /***/ "../node_modules/@angular-devkit/build-angular/src/angular-cli-files/plugins/raw-css-loader.js!../node_modules/postcss-loader/src/index.js?!../node_modules/sass-loader/dist/cjs.js?!./src/styles.scss":
 /*!***********************************************************************************************************************************************************************************************************************!*\

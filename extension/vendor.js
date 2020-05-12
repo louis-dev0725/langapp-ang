@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["vendor"],{
+(window["webpackJsonpExtension"] = window["webpackJsonpExtension"] || []).push([["vendor"],{
 
 /***/ "../node_modules/@angular/common/__ivy_ngcc__/fesm5/common.js":
 /*!********************************************************************!*\

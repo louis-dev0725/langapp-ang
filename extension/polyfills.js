@@ -1,4 +1,5 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["polyfills"],{
+var Extension =
+(window["webpackJsonpExtension"] = window["webpackJsonpExtension"] || []).push([["polyfills"],{
 
 /***/ "../node_modules/zone.js/dist/zone.js":
 /*!********************************************!*\

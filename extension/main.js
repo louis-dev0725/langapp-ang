@@ -1,4 +1,5 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["main"],{
+var Extension =
+(window["webpackJsonpExtension"] = window["webpackJsonpExtension"] || []).push([["main"],{
 
 /***/ "./src/$$_lazy_route_resource lazy recursive":
 /*!**********************************************************!*\
@@ -39,13 +40,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var routes = [
-    {
+var routes = [{
         path: 'popup',
         pathMatch: 'full',
         loadChildren: function () { return __webpack_require__.e(/*! import() | modules-popup-popup-module */ "modules-popup-popup-module").then(__webpack_require__.bind(null, /*! ./modules/popup/popup.module */ "./src/app/modules/popup/popup.module.ts")).then(function (m) { return m.PopupModule; }); }
-    },
-];
+    }];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
     }
