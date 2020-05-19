@@ -56,4 +56,29 @@ class TranslateController extends ActiveController {
 
         return ['success' => false];
     }
+
+    public function actionSelect () {
+        $filter = Yii::$app->getRequest()->getBodyParams();
+
+        $res = [];
+        $queries = DictionaryWord::find()->where(['&^', 'query', $filter['text']])->asArray()->limit(100)->all();
+
+        if (!empty($queries)) {
+            foreach ($queries as $query) {
+                $rest = substr($query['query'], 1);
+                $rest = substr($rest, 0, -1);
+
+                $res_str = explode(",", $rest);
+                foreach ($res_str as $str) {
+                    if (strcasecmp($str, $filter['text']) == 0) {
+                        $res[] = $query;
+                    }
+                }
+            }
+
+            return ['success' => true, 'word' =>  $filter['text'], 'res' => $res];
+        } else {
+            return ['success' => false];
+        }
+    }
 }
