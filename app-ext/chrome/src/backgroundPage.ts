@@ -2,16 +2,32 @@ import * as config from '../../allParam.config';
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     let objData = message.data;
+    let result = '';
+    let jwt_token = objData.token;
+    delete objData.token;
+    let objWord = JSON.stringify(objData);
+
     if (message.type === 'sendBackground') {
-        let result = '';
-        let jwt_token = objData.token;
-        delete objData.token;
-        let filter = JSON.stringify(objData);
         let request = new XMLHttpRequest();
         request.open('POST', config.URIApi + 'api/translates', true);
         request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         request.setRequestHeader('Authorization', `Bearer ${jwt_token}`);
-        request.send(filter);
+        request.send(objWord);
+
+        request.onload = (() => {
+            if (request.readyState === 4 && request.status === 200) {
+                result = JSON.parse(request.responseText);
+                sendResponse({ type: 'sendTranslateModal', data: result });
+            }
+        });
+
+        return true;
+    } else if (message.type === 'sendSelectedBackground') {
+        let request = new XMLHttpRequest();
+        request.open('POST', config.URIApi + 'api/translates/select', true);
+        request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        request.setRequestHeader('Authorization', `Bearer ${jwt_token}`);
+        request.send(objWord);
 
         request.onload = (() => {
             if (request.readyState === 4 && request.status === 200) {
@@ -22,10 +38,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         return true;
     } else if (message.type === 'sendToDictionary') {
-        let result = '';
-        let jwt_token = objData.token;
-        delete objData.token;
-        let objWord = JSON.stringify(objData);
         let request = new XMLHttpRequest();
         request.open('POST', config.URIApi + 'api/dictionaries', true);
         request.setRequestHeader('Content-type', 'application/json; charset=utf-8');

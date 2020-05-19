@@ -11,6 +11,11 @@ let translateObj = {
   url: null,
   offset: null
 };
+let selectedObj = {
+  token: null,
+  text: null,
+  url: null,
+};
 let dictionaryWord = {
     token: null,
     user_id: null,
@@ -130,6 +135,20 @@ function createButtonListener() {
         }
       }
     });
+
+    document.addEventListener('click', (e) => {
+      if ((e.metaKey === true || e.ctrlKey === true) && e.shiftKey === false && e.altKey === false) {
+        let selectedText = window.getSelection().toString().replace("\n", ' ');
+        if (selectedText.length > 0) {
+          statusModal = document.getElementById('modalTranslate');
+          if (statusModal === null) {
+            createModal();
+          }
+
+          innerSelectedTranslateObject(selectedText, window.location, token, user, e.pageX, e.pageY);
+        }
+      }
+    });
   }
 }
 
@@ -183,6 +202,70 @@ function createModal() {
   mBody.style.margin = '10px 0';
 
   mBody.innerHTML = '<ul id="list-translate"></ul>';
+}
+
+function innerSelectedTranslateObject (selectedText, urlPage, token, user, offsetX, offsetY) {
+  selectedObj = null;
+  selectedObj = {
+    token: token,
+    text: selectedText,
+    url: urlPage.href
+  };
+
+  chrome.runtime.sendMessage({ type: 'sendSelectedBackground', data: selectedObj }, (response) => {
+    if (response.data.success) {
+      wordT.setAttribute('class', 'word-translate');
+      mHeader.insertBefore(wordT, document.getElementById('closeModal'));
+      wordT.style.textAlign = 'center';
+
+      if (response.data.res.length > 0) {
+        mBody.innerHTML = '<ul id="list-translate"></ul>';
+        wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
+            + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+
+        let listTranslate = document.getElementById('list-translate');
+
+        response.data.res.forEach((res) => {
+          const transObj = JSON.parse(res.sourceData);
+
+          transObj.sense.forEach((sen) => {
+            sen.gloss.forEach((gl) => {
+              listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                  + '<a class="textDictionary" data-word="' + response.data.word
+                  + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+            });
+          });
+        });
+
+        let listDictionary = document.getElementsByClassName('textDictionary');
+        for (let i = 0; i < listDictionary.length; i++) {
+          listDictionary[i].addEventListener('click', () => {
+            addToDictionary(translateObj.token, user, translateObj.url, translateObj.all_text,
+                listDictionary[i].getAttribute('data-translate'),
+                listDictionary[i].getAttribute('data-word'),
+                listDictionary[i].getAttribute('data-id')
+            );
+          });
+        }
+
+        document.getElementById('list-translate').style.border = '1px solid #000';
+        document.getElementById('list-translate').style.borderRadius = '5px';
+        document.getElementById('list-translate').style.listStyle = 'none';
+        document.getElementById('list-translate').style.padding = '0';
+        document.getElementById('list-translate').style.borderBottom = 'none';
+      } else {
+        wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+        mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
+      }
+
+      modal.style.top = parseInt(offsetY) + 15 + 'px';
+      modal.style.left = '0';
+      if (parseInt(offsetX) - 150 > 0) {
+        modal.style.left = parseInt(offsetX) - 150 + 'px';
+      }
+      modal.style.display = 'flex';
+    }
+  });
 }
 
 function innerTranslateObject (range, token, user, offsetX, offsetY) {
