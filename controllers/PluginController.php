@@ -24,7 +24,7 @@ class PluginController extends ActiveController {
      * @return array|\yii\db\ActiveRecord|null
      */
     public function actionView($id) {
-        return SettingPlugin::find()->where(['user_id' => $id])->asArray()->one();
+        return SettingPlugin::find()->joinWith('user.homeLanguage')->where(['user_id' => $id])->asArray()->one();
     }
 
     /**

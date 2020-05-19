@@ -26,8 +26,8 @@ class Languages extends ActiveRecord {
      */
     public function rules () {
         return [
-            [['title'], 'required'],
-            [['title'], 'string', 'max' => 255],
+            [['title', 'code'], 'required'],
+            [['title', 'code'], 'string', 'max' => 255],
         ];
     }
 
@@ -38,6 +38,7 @@ class Languages extends ActiveRecord {
         return [
             'id' => 'ID',
             'title' => 'Title',
+            'code' => 'Code',
         ];
     }
 }

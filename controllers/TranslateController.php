@@ -24,11 +24,11 @@ class TranslateController extends ActiveController {
         $str_search = '';
         $filter = Yii::$app->getRequest()->getBodyParams();
         $meCab = new meCab();
-        $str_arTranslate = $meCab->analysis(preg_replace('/\s+/', '', $filter['all_text']));
+        $str_arTranslate = $meCab->analysis(preg_replace('/\s+/', ' ', $filter['all_text']));
 
         foreach ($str_arTranslate as $str) {
-            $str_offset = (int)iconv_strlen($str->getText());
-            if ($offset + $str_offset <= $filter['offset']) {
+            $str_offset = (int)mb_strlen($str->getText());
+            if ($offset + $str_offset < $filter['offset']) {
                 $offset += (int)$str_offset;
             } else {
                 $str_search = $str->getText();
@@ -37,15 +37,23 @@ class TranslateController extends ActiveController {
         }
 
         if ($str_search != '') {
-            $query = DictionaryWord::find()->where(['&^', 'query', $str_search])->asArray()->limit(100)->all();
-            return [
-                'success' => true,
-                'word' => $str_search,
-                'res' => $query
-            ];
+            $res = [];
+            $queries = DictionaryWord::find()->where(['&^', 'query', $str_search])->asArray()->limit(100)->all();
+            foreach ($queries as $query) {
+                $rest = substr($query['query'], 1);
+                $rest = substr($rest, 0, -1);
+
+                $res_str = explode(",", $rest);
+                foreach ($res_str as $str) {
+                    if (strcasecmp($str, $str_search) == 0) {
+                        $res[] = $query;
+                    }
+                }
+            }
+
+            return ['success' => true, 'word' => $str_search, 'res' => $res];
         }
 
         return ['success' => false];
     }
-
 }

@@ -19,16 +19,16 @@ class m200330_094319_add_main_language_column_to_users_table extends Migration {
         $this->addColumn('{{%users}}', 'language3', Schema::TYPE_INTEGER . ' NULL');
 
         $this->addForeignKey('{{%fk-users-main_language}}', '{{%users}}',
-            'main_language', '{{%users}}', 'id', 'SET NULL', 'NO ACTION');
+            'main_language', '{{%languages}}', 'id', 'SET NULL', 'NO ACTION');
 
         $this->addForeignKey('{{%fk-users-language1}}', '{{%users}}',
-            'language1', '{{%users}}', 'id', 'SET NULL', 'NO ACTION');
+            'language1', '{{%languages}}', 'id', 'SET NULL', 'NO ACTION');
 
         $this->addForeignKey('{{%fk-users-language2}}', '{{%users}}',
-            'language2', '{{%users}}', 'id', 'SET NULL', 'NO ACTION');
+            'language2', '{{%languages}}', 'id', 'SET NULL', 'NO ACTION');
 
         $this->addForeignKey('{{%fk-users-language3}}', '{{%users}}',
-            'language3', '{{%users}}', 'id', 'SET NULL', 'NO ACTION');
+            'language3', '{{%languages}}', 'id', 'SET NULL', 'NO ACTION');
     }
 
     /**
