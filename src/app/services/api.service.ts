@@ -656,12 +656,66 @@ export class ApiService {
 
   /**
    * Получаем все доступные языки
-   *
    */
   getAllLanguage(): Observable<any> {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/languages/all', { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Получаем список слов и канзи и пользовательского словаря
+   */
+  getUserDictionary(data: any): Observable<any> {
+    return new Observable((observer) => {
+      let query = '';
+      if (data !== '') {
+        query = '?' + data;
+      }
+      query += '&expand=dictionaryWord';
+
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + '/dictionaries/index' + query, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Удаляем выделенные элементы(слова или иероглифы)
+   *
+   * @param ids
+   */
+  deleteUserDictionaries(ids: number[]): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.post(this.apiHost + '/dictionaries/delete-select', ids, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Удаляем выделенный элемент(слово или иероглиф)
+   *
+   * @param id
+   */
+  deleteUserDictionary(id: number): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.delete(this.apiHost + `/dictionaries/${id}`, { headers }).subscribe((res) => {
           observer.next(res);
         }, (error) => {
           observer.next(this.getApiError(error));

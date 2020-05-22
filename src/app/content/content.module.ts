@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContentComponent } from '@app/content/content.component';
 import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { TranslateModule } from '@ngx-translate/core';
+
+import { ContentComponent } from '@app/content/content.component';
 import { MaterialsComponent } from '@app/content/materials/materials.component';
 import { CreateMaterialsComponent } from '@app/content/create-materials/create-materials.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@app/shared/shared.module';
 import { ListMaterialsComponent } from '@app/content/materials/list-materials/list-materials.component';
 import { EditMaterialsComponent } from '@app/content/edit-materials/edit-materials.component';

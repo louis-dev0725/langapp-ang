@@ -115,6 +115,16 @@
       "updated": "Material changed",
       "deleted": "Material removed"
     },
+    "dictionaries": {
+      "created": "Words or hieroglyphs added to the dictionary",
+      "updated": "Words or hieroglyphs modified",
+      "deleted": "Words or hieroglyphs deleted"
+    },
+    "dictionary": {
+      "created": "Word or character added to dictionary",
+      "updated": "Word or hieroglyph modified",
+      "deleted": "Word or character remotely"
+    },
     "categories": {
       "created": "Category created",
       "updated": "Category changed",
@@ -198,5 +208,11 @@
     "DoubleClickCtrl": "Double-click while holding Ctrl",
     "DoubleClickShift": "Double-click while holding Shift",
     "DoubleClickAlt": "Double-click while holding Alt"
-  }
+  },
+  "Dictionary": "Dictionary",
+  "Word": "Word",
+  "Kanji": "Kanji",
+  "No user dictionary": "There are no words in your dictionary",
+  "Delete selected": "Delete selected",
+  "All selected": "Choose all"
 }

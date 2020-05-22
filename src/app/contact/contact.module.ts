@@ -9,6 +9,7 @@ import { NgxCaptchaModule } from 'ngx-captcha';
 
 @NgModule({
   declarations: [ContactComponent],
-  imports: [FormsModule, ReactiveFormsModule, TranslateModule, NgxCaptchaModule, CommonModule, ContactRoutingModule, SharedModule]
+  imports: [FormsModule, ReactiveFormsModule, TranslateModule, NgxCaptchaModule, CommonModule, ContactRoutingModule,
+    SharedModule]
 })
 export class ContactModule {}

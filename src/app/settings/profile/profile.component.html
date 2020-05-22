@@ -12,6 +12,7 @@
     <div class="container">
       <form [formGroup]="settingsForm">
         <input type="hidden" formControlName="id">
+        <input type="hidden" formControlName="language">
 
         <mat-form-field class="form-item">
           <input matInput required formControlName="name" placeholder="{{'Name' | translate}}">
@@ -54,7 +55,7 @@
 
         <mat-form-field class="form-item">
             <mat-label>{{ 'Main language' | translate }}</mat-label>
-            <mat-select formControlName="main_language">
+            <mat-select required formControlName="main_language">
               <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
             </mat-select>
           <mat-error *ngIf="checkError('main_language')">{{getError('main_language')}}</mat-error>

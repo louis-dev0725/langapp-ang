@@ -1,0 +1,57 @@
+<div class="container">
+  <div *ngIf="arrayData.items?.length !== 0">
+    <table mat-table [dataSource]="arrayData.items" class="table-dictionary">
+      <ng-container matColumnDef="id">
+        <td mat-cell *matCellDef="let element" class="table-id">
+          <mat-checkbox [value]="element.id" [(ngModel)]="element.checked" (change)="onToggle($event)"></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="original_word">
+        <td mat-cell *matCellDef="let element" class="table-word">{{ element.original_word }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="literal">
+        <td mat-cell *matCellDef="let element" class="table-literal">
+          <span *ngIf="element.type == 1">
+            On: {{ element.dictionaryWord.sourceData.readings.ja_on[0] }}
+            Kun: {{ element.dictionaryWord.sourceData.readings.ja_kun[0] }}
+          </span>
+          <span *ngIf="element.type == 0">
+            {{ element.dictionaryWord.sourceData.kana[0].text }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="translate_word">
+        <td mat-cell *matCellDef="let element" class="table-translate-word">
+          {{ element.translate_word !== null ? element.translate_word : null }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="workout_progress">
+        <td mat-cell *matCellDef="let element" class="table-workout-progress">
+          {{ element.success_training }}/{{ element.number_training }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="button_delete">
+        <td mat-cell *matCellDef="let element" class="table-button">
+          <button (click)="deleteElement(element.id)" mat-flat-button *ngIf="element.checked">
+            <i class="material-icons">delete</i>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="arrayData._meta.perPage" [showFirstLastButtons]="true"
+                   [length]="arrayData._meta.totalCount" [pageIndex]="arrayData._meta.currentPage - 1"
+                   (page)="handlePage($event)">
+    </mat-paginator>
+  </div>
+  <div *ngIf="arrayData.items?.length === 0">
+    <h1 translate>No user dictionary</h1>
+  </div>
+</div>

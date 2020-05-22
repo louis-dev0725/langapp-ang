@@ -2,20 +2,25 @@ import { Component, Input, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef, 
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
+
 import { ThemeMainComponent } from '@app/theme/theme.main.component';
 import { SessionService } from '@app/services/session.service';
 import { TranslatingService } from '@app/services/translating.service';
-import { untilDestroyed } from 'ngx-take-until-destroy';
-import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
 import { APP_NAME } from '@app/config/config';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-dialog/confirm-dialog.component';
-import { MatDialog } from '@angular/material';
 import { ApiService } from '@app/services/api.service';
-import { MenuItem } from 'primeng/api';
-import { Observable } from 'rxjs';
 import * as fromStore from '@app/store';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
+
+import { untilDestroyed } from 'ngx-take-until-destroy';
+
+import { TranslateService } from '@ngx-translate/core';
+
+import { MenuItem } from 'primeng/api';
+import { Observable } from 'rxjs';
+
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -25,25 +30,21 @@ import { Store } from '@ngrx/store';
 export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   public appName = APP_NAME;
   public user;
+  public isLoggedIn: boolean;
+
   model = [];
   languages = ['Русский', 'English'];
-  @Input() reset: boolean;
+
   private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
-  public isLoggedIn: boolean;
+
+  @Input() reset: boolean;
 
   @ViewChild('scrollPanel', { static: true }) layoutMenuScrollerViewChild;
 
-  constructor(
-    public app: ThemeMainComponent,
-    public api: ApiService,
-    public session: SessionService,
-    private cd: ChangeDetectorRef,
-    private eventService: EventService,
-    private translate: TranslateService,
-    private confirmDialog: MatDialog,
-    private translatingService: TranslatingService,
-    private store: Store<fromStore.State>,
-  ) {
+  constructor(public app: ThemeMainComponent, public api: ApiService, public session: SessionService,
+              private cd: ChangeDetectorRef, private eventService: EventService, private translate: TranslateService,
+              private confirmDialog: MatDialog, private translatingService: TranslatingService,
+              private store: Store<fromStore.State>) {
     this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => this.isLoggedIn = authState);
   }
 
@@ -100,11 +101,11 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         items: [
           {
             label: 'Clients',
-            routerLink: ['admin/users']
+            routerLink: ['/admin/users']
           },
           {
             label: 'Transactions',
-            routerLink: ['admin/transactions']
+            routerLink: ['/admin/transactions']
           }
         ]
       },
@@ -131,7 +132,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         items: [
           {
             label: 'About',
-            routerLink: ['partners/about']
+            routerLink: ['/partners/about']
           },
           {
             label: 'Clients',
@@ -146,7 +147,7 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       {
         label: 'Payment',
         name: 'payment',
-        routerLink: ['payment'],
+        routerLink: ['/payment'],
         hide: !this.isLoggedIn
       },
       {
@@ -156,11 +157,11 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         items: [
           {
             label: 'Create material',
-            routerLink: ['content/create']
+            routerLink: ['/content/create']
           },
           {
             label: 'Catalog materials',
-            routerLink: ['content/materials']
+            routerLink: ['/content/materials']
           }
         ]
       },
@@ -168,6 +169,11 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         label: 'Category materials',
         routerLink: ['/category'],
         hide: !this.isAdmin || (this.isAdmin && this.isOpenedAdmin)
+      },
+      {
+        label: 'Dictionary',
+        routerLink: ['/dictionary'],
+        hide: !this.isLoggedIn,
       },
       {
         label: 'Contacts',

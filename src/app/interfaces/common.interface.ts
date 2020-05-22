@@ -159,3 +159,41 @@ export interface SettingPlugin {
   user_id: number;
   text: string;
 }
+
+export interface Dictionary {
+  items: [
+    {
+      context: string;
+      date: string;
+      dictionary_word_id: number;
+      id: number;
+      number_training: number;
+      original_word: string;
+      success_training: number;
+      translate_word: string;
+      type: number;
+      url: string;
+      user_id: number;
+      workout_progress_card: number;
+      workout_progress_word_translate: number;
+      checked: boolean;
+    }
+  ];
+  _links: {
+    self: {
+      href: string;
+    },
+    next?: {
+      href: string;
+    },
+    last?: {
+      href: string;
+    }
+  };
+  _meta: {
+    totalCount: number;
+    pageCount: number;
+    currentPage: number;
+    perPage: number;
+  };
+}

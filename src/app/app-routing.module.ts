@@ -24,6 +24,10 @@ const routes: Routes = [{
   path: 'contacts',
   loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule)
 }, {
+  path: 'dictionary',
+  canActivate: [CanactivateLogged],
+  loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule)
+}, {
   path: 'payment',
   canActivate: [CanactivateLogged],
   loadChildren: () => import('./payment/payment.module').then(m => m.PaymentModule)

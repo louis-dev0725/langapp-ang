@@ -78,3 +78,55 @@ mat-progress-bar.mat-progress-bar {
     padding: 0;
   }
 }
+
+.filter-dictionary {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+
+  padding-left: 24px;
+
+  .all-select-checkbox {
+    padding-top: 10px;
+  }
+
+  .filter-select-button,
+  .filter-delete-button {
+    margin-left: 20px;
+  }
+
+  .dictionary-button-filter {
+    margin-left: auto;
+
+    .filter-button {
+      width: 130px;
+      margin: 0 10px;
+    }
+  }
+}
+
+.table-dictionary {
+  width: 100%;
+
+  .table-id {
+    width: 40px;
+  }
+
+  .table-word,
+  .table-literal {
+    text-align: left;
+    padding-left: 20px;
+  }
+
+  .table-word {
+    width: 160px;
+  }
+
+  .table-literal {
+    width: 270px;
+  }
+
+  .table-button {
+    width: 80px;
+  }
+}

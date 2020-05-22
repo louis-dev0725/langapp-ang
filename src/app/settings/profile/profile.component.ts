@@ -39,6 +39,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     combineLatest([this.api.meRequest(), this.api.getAllLanguage()]).pipe(untilDestroyed(this)).subscribe(([form, languages]) => {
       this.user = form;
+
       this.settingsForm.patchValue({
         id: form.id,
         name: form.name,
@@ -47,6 +48,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         site: form.site,
         telephone: form.telephone,
         wmr: form.wmr,
+        timezone: form.timezone,
+        language: form.language,
         main_language: form.main_language !== null ? form.homeLanguage.id : null,
         language1: form.language1 !== null ?  form.languageOne.id : null,
         language2: form.language2 !== null ?  form.languageTwo.id : null,
