@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\DictionaryWord;
 use app\models\UserDictionary;
 use Yii;
+use yii\data\ActiveDataProvider;
 
 class DictionaryController extends ActiveController {
     public $modelClass = UserDictionary::class;
@@ -15,10 +16,42 @@ class DictionaryController extends ActiveController {
      */
     public function actions() {
         $actions = parent::actions();
-        unset($actions['create']);
+        unset($actions['index'], $actions['create']);
         return $actions;
     }
 
+    /**
+     * @return ActiveDataProvider
+     */
+    public function actionIndex() {
+        $filter = Yii::$app->request->queryParams;
+
+        $query = UserDictionary::find()->joinWith('dictionaryWord')->where(['user_id' => (int)$filter['user_id']]);
+
+        if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
+            if (strcasecmp('kanji', $filter['type']) == 0) {
+                $type = UserDictionary::TYPE_KANJI;
+            } else {
+                $type = UserDictionary::TYPE_WORD;
+            }
+
+            $query->andWhere(['type' => (int)$type]);
+        }
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ],
+            ]
+        ]);
+    }
+
+    /**
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionCreate () {
         $objWord = Yii::$app->getRequest()->getBodyParams();
 
@@ -47,8 +80,8 @@ class DictionaryController extends ActiveController {
             preg_match_all('/[\x{4E00}-\x{9FFF}]/u', $objWord['word'], $kanjis);
             foreach ($kanjis as $kanji) {
                 $all_k = UserDictionary::find()->where(['like', 'original_word', $kanji])
-                    ->andWhere(['user_id' => $objWord['user_id']])->andWhere(['type' => UserDictionary::TYPE_KANJI])
-                    ->asArray()->one();
+                    ->andWhere(['user_id' => $objWord['user_id'], 'type' => UserDictionary::TYPE_KANJI])->asArray()
+                    ->one();
 
                 if (empty($all_k)) {
                     $d_id = DictionaryWord::find()->where(['&@', 'query', $kanji])->andWhere(['dictionary' => 2])
@@ -83,5 +116,22 @@ class DictionaryController extends ActiveController {
                 'text' => 'Данное слово уже есть в словаре.'
             ];
         }
+    }
+
+    /**
+     * @return bool[]
+     * @throws \Throwable
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionDeleteSelect() {
+        $filter = Yii::$app->getRequest()->getBodyParams();
+
+        $dictionaries = UserDictionary::find()->where(['id' => $filter])->all();
+        foreach ($dictionaries as $dictionary) {
+            $dictionary->delete();
+        }
+
+        return ['done' => true];
     }
 }
