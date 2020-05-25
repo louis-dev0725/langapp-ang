@@ -103,7 +103,12 @@ var PopupComponent = /** @class */ (function () {
                 _this.token = result.token;
                 _this.user = result.user;
                 _this.zone.run(function () {
-                    _this.translate.setDefaultLang(_this.user.homeLanguage.code);
+                    if (_this.user.homeLanguage) {
+                        _this.translate.setDefaultLang(_this.user.homeLanguage.code);
+                    }
+                    else {
+                        _this.translate.setDefaultLang('en');
+                    }
                     _this.siteAuthContent = _this.token !== '' && _this.user !== '';
                     console.log('this.siteAuthContent', _this.siteAuthContent);
                 });

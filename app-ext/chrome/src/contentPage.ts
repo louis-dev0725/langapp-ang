@@ -1,23 +1,19 @@
 import * as config from './../../allParam.config';
 
-let token = null;
 let user = null;
 let extensionSetting = false;
 let setting = null;
 let statusModal = null;
 let translateObj = {
-  token: null,
   all_text: null,
   url: null,
   offset: null
 };
 let selectedObj = {
-  token: null,
   text: null,
   url: null,
 };
 let dictionaryWord = {
-    token: null,
     user_id: null,
     word: null,
     translate: null,
@@ -34,14 +30,13 @@ const wordT = document.createElement('div');
 window.onload = ((ev) => {
   chrome.storage.local.get(['token', 'user'], (result) => {
     if (result.hasOwnProperty('token') && result.hasOwnProperty('user')) {
-      token = result.token;
       user = result.user;
       extensionSetting = true;
 
       createButtonListener();
     } else {
       if (ev.target.baseURI === config.URIFront + '/') {
-        token = localStorage.getItem('token');
+        const token = localStorage.getItem('token');
         user = localStorage.getItem('user');
 
         if (token !== null && user !== null) {
@@ -61,9 +56,11 @@ window.addEventListener('message', (event) => {
   }
 
   if (event.data.type && (event.data.type === 'LoginSuccess') && (event.origin === config.URIFront)) {
-    token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     user = localStorage.getItem('user');
     chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
+
+    extensionSetting = true;
   }
 
   if (event.data.type && (event.data.type === 'saveSettingExtension') && (event.origin === config.URIFront)) {
@@ -77,79 +74,81 @@ window.addEventListener('message', (event) => {
 
   if (event.data.type && (event.data.type === 'Logout') && (event.origin === config.URIFront)) {
     chrome.runtime.sendMessage({ type: 'siteLogout' });
+
+    extensionSetting = false;
   }
 });
 
 function createButtonListener() {
-  if (extensionSetting) {
-    chrome.storage.local.get(['settingExtensionAction'], (result) => {
-      if (result.hasOwnProperty('settingExtensionAction')) {
-        setting = result.settingExtensionAction;
-      } else {
-        setting = 'extension.DoubleClick';
-      }
-    });
+  chrome.runtime.sendMessage({ type: 'setToToken', data: '' }, () => {});
 
-    document.addEventListener('dblclick', (e) => {
-      if (setting === 'extension.DoubleClick') {
-        if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === false) {
-          statusModal = document.getElementById('modalTranslate');
-          if (statusModal === null) {
-            createModal();
-          }
+  chrome.storage.local.get(['settingExtensionAction'], (result) => {
+    if (result.hasOwnProperty('settingExtensionAction')) {
+      setting = result.settingExtensionAction;
+    } else {
+      setting = 'extension.DoubleClick';
+    }
+  });
 
-          innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token, user, e.pageX, e.pageY);
+  document.addEventListener('dblclick', (e) => {
+    if (setting === 'extension.DoubleClick') {
+      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === false) {
+        statusModal = document.getElementById('modalTranslate');
+        if (statusModal === null) {
+          createModal();
         }
+
+        innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageX, e.pageY);
       }
+    }
 
-      if (setting === 'extension.DoubleClickCtrl') {
-        if ((e.metaKey === true || e.ctrlKey === true) && e.shiftKey === false && e.altKey === false) {
-          statusModal = document.getElementById('modalTranslate');
-          if (statusModal === null) {
-            createModal();
-          }
-
-          innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token, user, e.pageX, e.pageY);
-        }
-      }
-
-      if (setting === 'extension.DoubleClickShift') {
-        if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === true && e.altKey === false) {
-          statusModal = document.getElementById('modalTranslate');
-          if (statusModal === null) {
-            createModal();
-          }
-
-          innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token, user, e.pageX, e.pageY);
-        }
-      }
-
-      if (setting === 'extension.DoubleClickAlt') {
-        if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === true) {
-          statusModal = document.getElementById('modalTranslate');
-          if (statusModal === null) {
-            createModal();
-          }
-
-          innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), token, user, e.pageX, e.pageY);
-        }
-      }
-    });
-
-    document.addEventListener('click', (e) => {
+    if (setting === 'extension.DoubleClickCtrl') {
       if ((e.metaKey === true || e.ctrlKey === true) && e.shiftKey === false && e.altKey === false) {
-        let selectedText = window.getSelection().toString().replace("\n", ' ');
-        if (selectedText.length > 0) {
-          statusModal = document.getElementById('modalTranslate');
-          if (statusModal === null) {
-            createModal();
-          }
-
-          innerSelectedTranslateObject(selectedText, window.location, token, user, e.pageX, e.pageY);
+        statusModal = document.getElementById('modalTranslate');
+        if (statusModal === null) {
+          createModal();
         }
+
+        innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageX, e.pageY);
       }
-    });
-  }
+    }
+
+    if (setting === 'extension.DoubleClickShift') {
+      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === true && e.altKey === false) {
+        statusModal = document.getElementById('modalTranslate');
+        if (statusModal === null) {
+          createModal();
+        }
+
+        innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageX, e.pageY);
+      }
+    }
+
+    if (setting === 'extension.DoubleClickAlt') {
+      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === true) {
+        statusModal = document.getElementById('modalTranslate');
+        if (statusModal === null) {
+          createModal();
+        }
+
+        innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageX, e.pageY);
+      }
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if ((e.metaKey === true || e.ctrlKey === true) && e.shiftKey === false && e.altKey === false) {
+      let selectedText = window.getSelection().toString().replace("\n", ' ');
+      if (selectedText.length > 0) {
+        statusModal = document.getElementById('modalTranslate');
+        if (statusModal === null) {
+          createModal();
+        }
+
+        innerSelectedTranslateObject(selectedText, window.location, user, e.pageX, e.pageY);
+      }
+    }
+  });
 }
 
 function createModal() {
@@ -204,139 +203,151 @@ function createModal() {
   mBody.innerHTML = '<ul id="list-translate"></ul>';
 }
 
-function innerSelectedTranslateObject (selectedText, urlPage, token, user, offsetX, offsetY) {
+function innerSelectedTranslateObject (selectedText, urlPage, user, offsetX, offsetY) {
   selectedObj = null;
-  selectedObj = {
-    token: token,
-    text: selectedText,
-    url: urlPage.href
-  };
 
-  chrome.runtime.sendMessage({ type: 'sendSelectedBackground', data: selectedObj }, (response) => {
-    if (response.data.success) {
-      wordT.setAttribute('class', 'word-translate');
-      mHeader.insertBefore(wordT, document.getElementById('closeModal'));
-      wordT.style.textAlign = 'center';
+  if (extensionSetting) {
+    selectedObj = {
+      text: selectedText,
+      url: urlPage.href
+    };
 
-      if (response.data.res.length > 0) {
-        mBody.innerHTML = '<ul id="list-translate"></ul>';
-        wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
-            + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+    chrome.runtime.sendMessage({ type: 'sendSelectedBackground', data: selectedObj }, (response) => {
+      if (response.data.success) {
+        wordT.setAttribute('class', 'word-translate');
+        mHeader.insertBefore(wordT, document.getElementById('closeModal'));
+        wordT.style.textAlign = 'center';
 
-        let listTranslate = document.getElementById('list-translate');
+        if (response.data.res.length > 0) {
+          mBody.innerHTML = '<ul id="list-translate"></ul>';
+          wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
+              + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
 
-        response.data.res.forEach((res) => {
-          const transObj = JSON.parse(res.sourceData);
+          let listTranslate = document.getElementById('list-translate');
 
-          transObj.sense.forEach((sen) => {
-            sen.gloss.forEach((gl) => {
-              listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
-                  + '<a class="textDictionary" data-word="' + response.data.word
-                  + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+          response.data.res.forEach((res) => {
+            const transObj = JSON.parse(res.sourceData);
+
+            transObj.sense.forEach((sen) => {
+              sen.gloss.forEach((gl) => {
+                listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                    + '<a class="textDictionary" data-word="' + response.data.word
+                    + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+              });
             });
           });
-        });
 
-        let listDictionary = document.getElementsByClassName('textDictionary');
-        for (let i = 0; i < listDictionary.length; i++) {
-          listDictionary[i].addEventListener('click', () => {
-            addToDictionary(translateObj.token, user, translateObj.url, translateObj.all_text,
-                listDictionary[i].getAttribute('data-translate'),
-                listDictionary[i].getAttribute('data-word'),
-                listDictionary[i].getAttribute('data-id')
-            );
-          });
+          let listDictionary = document.getElementsByClassName('textDictionary');
+          for (let i = 0; i < listDictionary.length; i++) {
+            listDictionary[i].addEventListener('click', () => {
+              addToDictionary(user, translateObj.url, translateObj.all_text,
+                  listDictionary[i].getAttribute('data-translate'),
+                  listDictionary[i].getAttribute('data-word'),
+                  listDictionary[i].getAttribute('data-id')
+              );
+            });
+          }
+
+          document.getElementById('list-translate').style.border = '1px solid #000';
+          document.getElementById('list-translate').style.borderRadius = '5px';
+          document.getElementById('list-translate').style.listStyle = 'none';
+          document.getElementById('list-translate').style.padding = '0';
+          document.getElementById('list-translate').style.borderBottom = 'none';
+        } else {
+          wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+          mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
         }
 
-        document.getElementById('list-translate').style.border = '1px solid #000';
-        document.getElementById('list-translate').style.borderRadius = '5px';
-        document.getElementById('list-translate').style.listStyle = 'none';
-        document.getElementById('list-translate').style.padding = '0';
-        document.getElementById('list-translate').style.borderBottom = 'none';
-      } else {
-        wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
-        mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
+        modal.style.top = parseInt(offsetY) + 15 + 'px';
+        modal.style.left = '0';
+        if (parseInt(offsetX) - 150 > 0) {
+          modal.style.left = parseInt(offsetX) - 150 + 'px';
+        }
+        modal.style.display = 'flex';
       }
-
-      modal.style.top = parseInt(offsetY) + 15 + 'px';
-      modal.style.left = '0';
-      if (parseInt(offsetX) - 150 > 0) {
-        modal.style.left = parseInt(offsetX) - 150 + 'px';
-      }
-      modal.style.display = 'flex';
-    }
-  });
+    });
+  } else {
+    mBody.innerHTML = '<h3>Для использования расширения нужно авторизоваться в сервисе.</h3>';
+    modal.style.margin = ' 0 auto';
+    modal.style.display = 'flex';
+  }
 }
 
-function innerTranslateObject (range, token, user, offsetX, offsetY) {
+function innerTranslateObject (range, user, offsetX, offsetY) {
   translateObj = null;
-  translateObj = {
-    token: token,
-    all_text: range.startContainer.data,
-    url: range.startContainer.ownerDocument.location.href,
-    offset: range.startOffset
-  };
 
-  chrome.runtime.sendMessage({ type: 'sendBackground', data: translateObj }, (response) => {
-    if (response.data.success) {
-      wordT.setAttribute('class', 'word-translate');
-      mHeader.insertBefore(wordT, document.getElementById('closeModal'));
-      wordT.style.textAlign = 'center';
+  if (extensionSetting) {
+    translateObj = {
+      all_text: range.startContainer.data,
+      url: range.startContainer.ownerDocument.location.href,
+      offset: range.startOffset
+    };
 
-      if (response.data.res.length > 0) {
-        mBody.innerHTML = '<ul id="list-translate"></ul>';
-        wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
-            + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+    chrome.runtime.sendMessage({ type: 'sendBackground', data: translateObj }, (response) => {
+      if (response.data.success) {
+        wordT.setAttribute('class', 'word-translate');
+        mHeader.insertBefore(wordT, document.getElementById('closeModal'));
+        wordT.style.textAlign = 'center';
 
-        let listTranslate = document.getElementById('list-translate');
+        if (response.data.res.length > 0) {
+          mBody.innerHTML = '<ul id="list-translate"></ul>';
+          wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
+              + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
 
-        response.data.res.forEach((res) => {
-          const transObj = JSON.parse(res.sourceData);
+          let listTranslate = document.getElementById('list-translate');
 
-          transObj.sense.forEach((sen) => {
-            sen.gloss.forEach((gl) => {
-              listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
-                  + '<a class="textDictionary" data-word="' + response.data.word
-                  + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+          response.data.res.forEach((res) => {
+            const transObj = JSON.parse(res.sourceData);
+
+            transObj.sense.forEach((sen) => {
+              sen.gloss.forEach((gl) => {
+                listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                    + '<a class="textDictionary" data-word="' + response.data.word
+                    + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+              });
             });
           });
-        });
 
-        let listDictionary = document.getElementsByClassName('textDictionary');
-        for (let i = 0; i < listDictionary.length; i++) {
-          listDictionary[i].addEventListener('click', () => {
-            addToDictionary(translateObj.token, user, translateObj.url, translateObj.all_text,
-                listDictionary[i].getAttribute('data-translate'),
-                listDictionary[i].getAttribute('data-word'),
-                listDictionary[i].getAttribute('data-id')
-            );
-          });
+          let listDictionary = document.getElementsByClassName('textDictionary');
+          for (let i = 0; i < listDictionary.length; i++) {
+            listDictionary[i].addEventListener('click', () => {
+              addToDictionary(user, translateObj.url, translateObj.all_text,
+                  listDictionary[i].getAttribute('data-translate'),
+                  listDictionary[i].getAttribute('data-word'),
+                  listDictionary[i].getAttribute('data-id')
+              );
+            });
+          }
+
+          document.getElementById('list-translate').style.border = '1px solid #000';
+          document.getElementById('list-translate').style.borderRadius = '5px';
+          document.getElementById('list-translate').style.listStyle = 'none';
+          document.getElementById('list-translate').style.padding = '0';
+          document.getElementById('list-translate').style.borderBottom = 'none';
+        } else {
+          wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+          mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
         }
 
-        document.getElementById('list-translate').style.border = '1px solid #000';
-        document.getElementById('list-translate').style.borderRadius = '5px';
-        document.getElementById('list-translate').style.listStyle = 'none';
-        document.getElementById('list-translate').style.padding = '0';
-        document.getElementById('list-translate').style.borderBottom = 'none';
-      } else {
-        wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
-        mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
-      }
+        modal.style.left = '0';
+        if (parseInt(offsetX) - 150 > 0) {
+          modal.style.left = parseInt(offsetX) - 150 + 'px';
+        }
 
-      modal.style.top = parseInt(offsetY) + 15 + 'px';
-      modal.style.left = '0';
-      if (parseInt(offsetX) - 150 > 0) {
-        modal.style.left = parseInt(offsetX) - 150 + 'px';
+        modal.style.top = parseInt(offsetY) + 15 + 'px';
+        modal.style.display = 'flex';
       }
-      modal.style.display = 'flex';
-    }
-  });
+    });
+  } else {
+    mBody.innerHTML = '<h3>Для использования расширения нужно авторизоваться в сервисе.</h3>';
+    modal.style.margin = ' 0 auto';
+    modal.style.display = 'flex';
+  }
 }
 
-function addToDictionary(token, user, url, allText, translate, word, dictionary_id) {
+function addToDictionary(user, url, allText, translate, word, dictionary_id) {
   dictionaryWord = null;
   dictionaryWord = {
-      token: token,
       user_id: user.id,
       word: word,
       translate: translate,

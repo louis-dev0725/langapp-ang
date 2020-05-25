@@ -25,7 +25,12 @@ export class PopupComponent implements OnInit {
         this.user = result.user;
 
         this.zone.run(() => {
-          this.translate.setDefaultLang(this.user.homeLanguage.code);
+          if (this.user.homeLanguage) {
+            this.translate.setDefaultLang(this.user.homeLanguage.code);
+          } else {
+            this.translate.setDefaultLang('en');
+          }
+
           this.siteAuthContent = this.token !== '' && this.user !== '';
           console.log('this.siteAuthContent', this.siteAuthContent);
         });

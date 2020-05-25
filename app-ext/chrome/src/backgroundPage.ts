@@ -1,17 +1,17 @@
 import * as config from '../../allParam.config';
 
+let token = '';
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     let objData = message.data;
     let result = '';
-    let jwt_token = objData.token;
-    delete objData.token;
-    let objWord = JSON.stringify(objData);
 
     if (message.type === 'sendBackground') {
+        let objWord = JSON.stringify(objData);
+
         let request = new XMLHttpRequest();
         request.open('POST', config.URIApi + 'api/translates', true);
         request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        request.setRequestHeader('Authorization', `Bearer ${jwt_token}`);
+        request.setRequestHeader('Authorization', `Bearer ${token}`);
         request.send(objWord);
 
         request.onload = (() => {
@@ -23,10 +23,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         return true;
     } else if (message.type === 'sendSelectedBackground') {
+        let objWord = JSON.stringify(objData);
+
         let request = new XMLHttpRequest();
         request.open('POST', config.URIApi + 'api/translates/select', true);
         request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        request.setRequestHeader('Authorization', `Bearer ${jwt_token}`);
+        request.setRequestHeader('Authorization', `Bearer ${token}`);
         request.send(objWord);
 
         request.onload = (() => {
@@ -38,10 +40,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         return true;
     } else if (message.type === 'sendToDictionary') {
+        let objWord = JSON.stringify(objData);
+
         let request = new XMLHttpRequest();
         request.open('POST', config.URIApi + 'api/dictionaries', true);
         request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        request.setRequestHeader('Authorization', `Bearer ${jwt_token}`);
+        request.setRequestHeader('Authorization', `Bearer ${token}`);
         request.send(objWord);
 
         request.onload = (() => {
@@ -53,10 +57,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         return true;
     } else if (message.type === 'siteAuth') {
-        this.user = JSON.parse(objData.user);
-        this.token = objData.token;
+        const user = JSON.parse(objData.user);
+        token = objData.token;
 
-        chrome.storage.local.set({ token: objData.token, user: objData.user }, () => {
+        chrome.storage.local.set({ token: token, user: user }, () => {
             console.log('Set token and user');
         });
     } else if (message.type === 'saveSetting') {
@@ -64,7 +68,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             console.log('Set setting extension');
         });
     } else if (message.type === 'siteLogout') {
-        chrome.storage.local.remove(['token', 'user', 'settingExtension']);
+        token = '';
+        chrome.storage.local.clear(() => {
+            console.log('Remove extension, token, user');
+        });
+    } else if (message.type === 'setToToken') {
+        chrome.storage.local.get(['token'], (result) => {
+            if (result.hasOwnProperty('token')) {
+                token = result.token;
+
+                console.log('Writing a token into a variable');
+            }
+        });
     }
 });
 
