@@ -42,10 +42,10 @@ window.onload = ((ev) => {
         if (token !== null && user !== null) {
           chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user }});
           extensionSetting = true;
-
-          createButtonListener();
         }
       }
+
+      createButtonListener();
     }
   });
 });
@@ -268,7 +268,8 @@ function innerSelectedTranslateObject (selectedText, urlPage, user, offsetX, off
     });
   } else {
     mBody.innerHTML = '<h3>Для использования расширения нужно авторизоваться в сервисе.</h3>';
-    modal.style.margin = ' 0 auto';
+    modal.style.left = (window.innerWidth / 2 - 150) + 'px';
+    modal.style.top = '200px';
     modal.style.display = 'flex';
   }
 }
@@ -340,7 +341,8 @@ function innerTranslateObject (range, user, offsetX, offsetY) {
     });
   } else {
     mBody.innerHTML = '<h3>Для использования расширения нужно авторизоваться в сервисе.</h3>';
-    modal.style.margin = ' 0 auto';
+    modal.style.left = (window.innerWidth / 2 - 150) + 'px';
+    modal.style.top = '200px';
     modal.style.display = 'flex';
   }
 }
