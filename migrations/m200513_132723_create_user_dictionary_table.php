@@ -25,8 +25,8 @@ class m200513_132723_create_user_dictionary_table extends Migration {
             'url' => Schema::TYPE_STRING . ' NULL',
             'success_training' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
             'number_training' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
-            'workout_progress_card' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
-            'workout_progress_word_translate' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0'
+            'workout_progress_card' => Schema::TYPE_JSON . " NOT NULL DEFAULT '[]'",
+            'workout_progress_word_translate' => Schema::TYPE_JSON . " NOT NULL DEFAULT '[]'"
         ]);
 
         $this->addForeignKey('user_dictionary_users_fk', '{{%user_dictionary}}', 'user_id',

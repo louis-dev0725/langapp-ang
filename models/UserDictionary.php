@@ -19,8 +19,8 @@ use yii\db\ActiveRecord;
  * @property string $url
  * @property int $success_training
  * @property int $number_training
- * @property int $workout_progress_card
- * @property int $workout_progress_word_translate
+ * @property string $workout_progress_card
+ * @property string $workout_progress_word_translate
  *
  * @property DictionaryWord $dictionaryWord
  * @property User $user
@@ -43,11 +43,10 @@ class UserDictionary extends ActiveRecord {
     public function rules() {
         return [
             [['user_id', 'dictionary_word_id', 'original_word', 'date'], 'required'],
-            [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training',
-                'workout_progress_card', 'workout_progress_word_translate'], 'default', 'value' => null],
-            [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training',
-                'workout_progress_card', 'workout_progress_word_translate'], 'integer'],
-            [['date'], 'safe'],
+            [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training'], 'default',
+                'value' => null],
+            [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training'], 'integer'],
+            [['date', 'workout_progress_card', 'workout_progress_word_translate'], 'safe'],
             [['context'], 'string'],
             [['original_word', 'translate_word', 'url'], 'string', 'max' => 255],
             [['dictionary_word_id'], 'exist', 'skipOnError' => true, 'targetClass' => DictionaryWord::class,
