@@ -28,6 +28,10 @@ const routes: Routes = [{
   canActivate: [CanactivateLogged],
   loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule)
 }, {
+  path: 'training',
+  canActivate: [CanactivateLogged],
+  loadChildren: () => import('./training/training.module').then(m => m.TrainingModule)
+}, {
   path: 'payment',
   canActivate: [CanactivateLogged],
   loadChildren: () => import('./payment/payment.module').then(m => m.PaymentModule)

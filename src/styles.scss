@@ -79,6 +79,21 @@ mat-progress-bar.mat-progress-bar {
   }
 }
 
+.block_center {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+
+  width: 90%;
+  min-width: 1000px;
+  margin: 10px auto;
+
+  button {
+    width: 250px;
+  }
+}
+
 .filter-dictionary {
   display: flex;
   flex-flow: row nowrap;
@@ -91,8 +106,13 @@ mat-progress-bar.mat-progress-bar {
   }
 
   .filter-select-button,
-  .filter-delete-button {
+  .filter-delete-button,
+  .type-training {
     margin-left: 20px;
+  }
+
+  .active_button {
+    background: #00d729;
   }
 
   .dictionary-button-filter {

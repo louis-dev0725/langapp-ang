@@ -176,6 +176,11 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         hide: !this.isLoggedIn,
       },
       {
+        label: 'Training',
+        routerLink: ['/training'],
+        hide: !this.isLoggedIn,
+      },
+      {
         label: 'Contacts',
         routerLink: ['/contacts']
       },
@@ -198,7 +203,6 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
         hide: !this.isLoggedIn,
         command: event => {
           this.logout();
-          window.postMessage({ type: 'Logout', text: 'Logout'}, '*');
         }
       }
     ];
@@ -224,6 +228,8 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.api.logout();
     }
+
+    window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
   }
 }
 

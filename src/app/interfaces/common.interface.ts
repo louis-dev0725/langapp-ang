@@ -197,3 +197,23 @@ export interface Dictionary {
     perPage: number;
   };
 }
+
+export interface CardReview {
+  id?: number;
+  date: Date;
+  answer: number;
+  oldInterval: number;
+  newInterval: number;
+  oldEaseFactor: number;
+  newEaseFactor: number;
+}
+
+export interface Card {
+  id?: number;
+  status: number;
+  due: Date;
+  interval: number;
+  reviews: CardReview[];
+  easeFactor: number;
+  consecutiveCorrectAnswers: number;
+}

@@ -1,0 +1,20 @@
+<div class="block_center" *ngIf="!openCard">
+  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton('checkYourself')">
+    {{ 'CheckYourself' | translate }}
+  </button>
+</div>
+
+<div class="block_center" *ngIf="openCard">
+  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton(1)">
+    {{ 'NotRemember' | translate }}
+  </button>
+  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton(2)">
+    {{ 'RememberBadly' | translate }}
+  </button>
+  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton(3)">
+    {{ 'Remember' | translate }}
+  </button>
+  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton(4)">
+    {{ 'Easy' | translate }}
+  </button>
+</div>

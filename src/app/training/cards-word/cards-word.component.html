@@ -1,0 +1,13 @@
+<div class="container">
+  <div *ngIf="isLoaded">
+    <div class="main_block">
+
+    </div>
+    <app-navigate-action-card (clickActionCardButton)="checkButton($event)" ></app-navigate-action-card>
+  </div>
+
+  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
+  </mat-card>
+</div>

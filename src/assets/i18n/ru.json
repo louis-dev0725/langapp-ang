@@ -215,5 +215,15 @@
   "Kanji": "Кандзи",
   "No user dictionary": "В вашем словаре нет слов",
   "Delete selected": "Удалить выделенные",
-  "All selected": "Выбрать всё"
+  "All selected": "Выбрать всё",
+  "Training": "Тренировка",
+  "CardsWordKanji": "Карточки 'Слова + кандзи'",
+  "CardsWord": "Карточки 'Только слова'",
+  "CardsKanji": "Карточки 'Только кандзи'",
+  "WordTranslate": "Слово-перевод",
+  "CheckYourself": "Проверить себя",
+  "NotRemember": "Не помню",
+  "RememberBadly": "Плохо помню",
+  "Remember": "Помню",
+  "Easy": "Слишком просто"
 }

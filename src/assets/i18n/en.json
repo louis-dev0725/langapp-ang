@@ -214,5 +214,15 @@
   "Kanji": "Kanji",
   "No user dictionary": "There are no words in your dictionary",
   "Delete selected": "Delete selected",
-  "All selected": "Choose all"
+  "All selected": "Choose all",
+  "Training": "Training",
+  "CardsWordKanji": "'Words + Kanji' Cards",
+  "CardsWord": "'Only words' cards",
+  "CardsKanji": "'Only kanji' cards",
+  "WordTranslate": "Translation-word",
+  "CheckYourself": "Check yourself",
+  "NotRemember": "I do not remember",
+  "RememberBadly": "I remember badly",
+  "Remember": "I remember",
+  "Easy": "Too easy"
 }
