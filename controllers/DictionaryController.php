@@ -7,6 +7,7 @@ use app\models\DictionaryWord;
 use app\models\UserDictionary;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 
 class DictionaryController extends ActiveController {
     public $modelClass = UserDictionary::class;
@@ -56,8 +57,7 @@ class DictionaryController extends ActiveController {
         $objWord = Yii::$app->getRequest()->getBodyParams();
 
         $word = UserDictionary::find()->where(['like', 'original_word', $objWord['word']])
-            ->andWhere(['user_id' => $objWord['user_id']])->andWhere(['type' => UserDictionary::TYPE_WORD])->asArray()
-            ->one();
+            ->andWhere(['user_id' => $objWord['user_id'], 'type' => UserDictionary::TYPE_WORD])->asArray()->one();
 
         if (empty($word)) {
             $context = preg_replace('/\s+/', ' ', $objWord['context']);
@@ -71,6 +71,7 @@ class DictionaryController extends ActiveController {
             $new_word->date = date('Y-m-d');
             $new_word->context = $context;
             $new_word->url = $objWord['url'];
+            $new_word->workout_progress_card = '{"cardsWord": {"deu": "' . time() .'"}, "cardsWordKanji": {"deu": "' . time() .'"}}';
             $new_word->success_training = 0;
             $new_word->number_training = 0;
             $new_word->save();
@@ -95,6 +96,7 @@ class DictionaryController extends ActiveController {
                         $new_k->date = date('Y-m-d');
                         $new_k->context = null;
                         $new_k->url = null;
+                        $new_k->workout_progress_card = '{"cardsKanji": {"due": "' . time() .'"}, "cardsWordKanji": {"deu": "' . time() .'"}}';
                         $new_k->success_training = 0;
                         $new_k->number_training = 0;
                         $new_k->save(false);
@@ -112,6 +114,47 @@ class DictionaryController extends ActiveController {
                 'text' => 'Данное слово уже есть в словаре.'
             ];
         }
+    }
+
+    public function actionQueryOne() {
+        $filter = Yii::$app->request->queryParams;
+
+        $query = UserDictionary::find()->joinWith('dictionaryWord')->where(['user_id' => (int)$filter['user_id'],
+            'type' => UserDictionary::TYPE_WORD])->andWhere(['like', 'original_word' , $filter['word']]);
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+    }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function actionAll() {
+        $filter = Yii::$app->request->queryParams;
+
+        $query = UserDictionary::find()->joinWith('dictionaryWord')
+            ->where(['user_dictionary.user_id' => (int)$filter['user_id']]);
+
+        if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
+            if (strcasecmp('kanji', $filter['type']) == 0) {
+                $type = UserDictionary::TYPE_KANJI;
+            } else {
+                $type = UserDictionary::TYPE_WORD;
+            }
+
+            $query->andWhere(['type' => (int)$type]);
+        }
+
+        if (array_key_exists('sort', $filter) && $filter['sort'] != 'undefined' && $filter['sort'] != '') {
+            $query->orderBy(new Expression("workout_progress_card->>'" . $filter['sort'] . "' ASC"));
+        }
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
     }
 
     /**

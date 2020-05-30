@@ -51,7 +51,7 @@ class TranslateController extends ActiveController {
                 }
             }
 
-            return ['success' => true, 'word' => $str_search, 'res' => $res];
+            return ['success' => true, 'word' => $str_search, 'res' => $res, 'offset' => $offset];
         }
 
         return ['success' => false];
