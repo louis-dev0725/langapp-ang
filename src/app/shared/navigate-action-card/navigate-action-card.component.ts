@@ -8,16 +8,16 @@ import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 export class NavigateActionCardComponent {
 
   openCard = false;
-  @Output() clickActionCardButton: EventEmitter<number> = new EventEmitter<number>();
+  @Output() clickActionCardButton: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
   onCheckButton(res) {
     if (res === 'checkYourself') {
       this.openCard = true;
-    } else {
-      this.clickActionCardButton.emit(res);
     }
+
+    this.clickActionCardButton.emit(res);
   }
 
   @HostListener('window:keydown', ['$event']) spaceEvent(event: any) {

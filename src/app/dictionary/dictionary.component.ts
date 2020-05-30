@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
-import { Dictionary } from '@app/interfaces/common.interface';
+import { DictionaryArray } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
 import { TranslatingService } from '@app/services/translating.service';
 import { ApiError } from '@app/services/api-error';
@@ -18,7 +18,7 @@ import { ListWordsComponent } from '@app/dictionary/list-words/list-words.compon
   styleUrls: ['./dictionary.component.scss']
 })
 export class DictionaryComponent implements OnInit, OnDestroy {
-  daraSource: Dictionary;
+  daraSource: DictionaryArray;
   typeFilter = '';
   word = false;
   kanji = false;

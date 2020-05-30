@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Contents, User } from '@app/interfaces/common.interface';
+import { ContentsArray, User } from '@app/interfaces/common.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { SessionService } from '@app/services/session.service';
 
@@ -10,7 +10,7 @@ import { SessionService } from '@app/services/session.service';
 })
 export class ListMaterialsComponent implements OnInit {
 
-  @Input() arrayData: Contents;
+  @Input() arrayData: ContentsArray;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @Output() dataChanged: EventEmitter<any> = new EventEmitter<any>();
   @Output() deleteM: EventEmitter<any> = new EventEmitter<any>();

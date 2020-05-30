@@ -130,8 +130,14 @@
       "created": "Категория создана",
       "updated": "Категория изменёна",
       "deleted": "Категория удалёна"
+    },
+    "user_dictionary": {
+      "saved": "Результат сохранен",
+      "finish_kanji": "В словаре больше нет кандзи",
+      "finish_word": "В словаре больше нет слов",
+      "finish_all": "В словаре больше нет слов или кандзи"
     }
-	},
+  },
 	"for user": "для пользователя",
 	"id": "ID",
 	"isServicePaused": "Активность сервиса",
@@ -213,7 +219,10 @@
   "Dictionary": "Словарь",
   "Word": "Слова",
   "Kanji": "Кандзи",
-  "No user dictionary": "В вашем словаре нет слов",
+  "No user dictionary": "В вашем словаре нет слов или кандзи",
+  "No user dictionary word": "В вашем словаре нет слов",
+  "No user dictionary kanji": "В вашем словаре нет кандзи",
+  "DictionaryEmpty": "Ваш словарь пуст",
   "Delete selected": "Удалить выделенные",
   "All selected": "Выбрать всё",
   "Training": "Тренировка",
@@ -225,5 +234,6 @@
   "NotRemember": "Не помню",
   "RememberBadly": "Плохо помню",
   "Remember": "Помню",
-  "Easy": "Слишком просто"
+  "Easy": "Слишком просто",
+  "Translate": "Перевод"
 }

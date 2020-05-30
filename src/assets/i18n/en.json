@@ -129,6 +129,12 @@
       "created": "Category created",
       "updated": "Category changed",
       "deleted": "Category removed"
+    },
+    "user_dictionary": {
+      "saved": "Result Saved",
+      "finish_kanji": "No more kanji in the dictionary",
+      "finish_word": "There are no more words in the dictionary",
+      "finish_all": "No more words or kanji in the dictionary"
     }
 	},
 	"for user": "for user",
@@ -212,7 +218,10 @@
   "Dictionary": "Dictionary",
   "Word": "Word",
   "Kanji": "Kanji",
-  "No user dictionary": "There are no words in your dictionary",
+  "No user dictionary": "There are no words or kanji in your word",
+  "No user dictionary word": "There are no words in your word",
+  "No user dictionary kanji": "There is no kanji in your dictionary",
+  "DictionaryEmpty": "Your dictionary is empty",
   "Delete selected": "Delete selected",
   "All selected": "Choose all",
   "Training": "Training",
@@ -224,5 +233,6 @@
   "NotRemember": "I do not remember",
   "RememberBadly": "I remember badly",
   "Remember": "I remember",
-  "Easy": "Too easy"
+  "Easy": "Too easy",
+  "Translate": "Translate"
 }

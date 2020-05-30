@@ -117,19 +117,19 @@ export interface TypeContent {
 }
 
 export interface Contents {
-  items: [
-    {
-      id: number;
-      title: string;
-      type_content: number;
-      source_link: string;
-      text: string;
-      status: number;
-      count_symbol: number;
-      level_JLPT: string;
-      deleted: number;
-    }
-  ];
+  id: number;
+  title: string;
+  type_content: number;
+  source_link: string;
+  text: string;
+  status: number;
+  count_symbol: number;
+  level_JLPT: string;
+  deleted: number;
+}
+
+export interface ContentsArray {
+  items: Contents[];
   _links: {
     self: {
       href: string;
@@ -161,24 +161,29 @@ export interface SettingPlugin {
 }
 
 export interface Dictionary {
-  items: [
-    {
-      context: string;
-      date: string;
-      dictionary_word_id: number;
-      id: number;
-      number_training: number;
-      original_word: string;
-      success_training: number;
-      translate_word: string;
-      type: number;
-      url: string;
-      user_id: number;
-      workout_progress_card: number;
-      workout_progress_word_translate: number;
-      checked: boolean;
-    }
-  ];
+  id?: number;
+  context: string;
+  date: string;
+  dictionary_word_id: number;
+  number_training: number;
+  original_word: string;
+  success_training: number;
+  translate_word: string;
+  type: number;
+  url: string;
+  user_id: number;
+  workout_progress_card: any;
+  workout_progress_word_translate: any;
+  checked: boolean;
+  words?: any;
+  word_on?: string;
+  word_kun?: string;
+  word_translate?: string;
+  dictionaryWord?: any;
+}
+
+export interface DictionaryArray {
+  items: Dictionary[];
   _links: {
     self: {
       href: string;

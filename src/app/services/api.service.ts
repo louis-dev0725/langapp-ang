@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Category, Materials, SettingPlugin, User } from '@app/interfaces/common.interface';
+import { Category, Dictionary, Materials, SettingPlugin, User } from '@app/interfaces/common.interface';
 import { Observable } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
@@ -682,6 +682,63 @@ export class ApiService {
 
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/dictionaries/index' + query, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Получаем список слов и канзи и пользовательского словаря без пагинации
+   */
+  getAllUserDictionary(data: any): Observable<any> {
+    return new Observable((observer) => {
+      let query = '';
+      if (data !== '') {
+        query = '?' + data;
+      }
+      query += '&expand=dictionaryWord';
+
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + '/dictionaries/all' + query, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Получаем связанные слова с кандзи
+   */
+  getQueryUserDictionary(data: any): Observable<any> {
+    return new Observable((observer) => {
+      let query = '';
+      if (data !== '') {
+        query = '?' + data;
+      }
+      query += '&expand=dictionaryWord';
+
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + '/dictionaries/query-one' + query, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Изменяем слова из пользовательского словаря
+   */
+  updateUserDictionary(data: Dictionary): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.patch(this.apiHost + '/dictionaries/' + data.id, data, { headers }).subscribe((res) => {
           observer.next(res);
         }, (error) => {
           observer.next(this.getApiError(error));

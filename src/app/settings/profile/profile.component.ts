@@ -37,7 +37,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar, private session: SessionService) {}
 
   ngOnInit() {
-    combineLatest([this.api.meRequest(), this.api.getAllLanguage()]).pipe(untilDestroyed(this)).subscribe(([form, languages]) => {
+    combineLatest([this.api.meRequest(), this.api.getAllLanguage()]).pipe(untilDestroyed(this))
+      .subscribe(([form, languages]) => {
       this.user = form;
 
       this.settingsForm.patchValue({

@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomValidator } from '@app/services/custom-validator';
 import { combineLatest } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
-import { Contents } from '@app/interfaces/common.interface';
+import { ContentsArray } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import { TranslatingService } from '@app/services/translating.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,7 +20,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   complications = [];
   types = [];
   volumes = [];
-  daraSource: Contents;
+  daraSource: ContentsArray;
   keyword = '';
   complication = '';
   type = '';

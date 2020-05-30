@@ -146,7 +146,44 @@ mat-progress-bar.mat-progress-bar {
     width: 270px;
   }
 
+  .table-translate-word{
+    padding: 7px 0;
+  }
+
+  .table-workout-progress {
+    width: 75px;
+    text-align: center;
+  }
+
   .table-button {
     width: 80px;
+  }
+}
+
+.main_block {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 50vh;
+
+  .hh1 {
+    font-size: 8rem;
+  }
+
+  .info {
+    margin: 10px 0;
+    max-width: 800px;
+    text-align: center;
+
+    .translate,
+    .on_kun {
+      margin: 10px 0;
+    }
+
+    .words {
+      margin-top: 20px;
+    }
   }
 }

@@ -103,7 +103,7 @@ export class SrsService {
       return 1;
     }
 
-    const delay = card.due ? this.diffDays(new Date(), card.due) : 0;
+    const delay = card.due ? this.diffDays(new Date(), new Date(card.due)) : 0;
     if (delay >= 0) {
       const intervalHard = this.constrainedInterval(card.interval * this.hardFactorForced, card.interval, fuzz);
       if (answer === this.cardAnswer.HARD) {

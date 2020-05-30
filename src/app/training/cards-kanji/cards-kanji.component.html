@@ -1,12 +1,30 @@
 <div class="container">
   <div *ngIf="isLoaded">
-    <div class="main_block">
-
+    <div *ngIf="cards !== null">
+      <div class="main_block">
+        <div class="hh1">{{ cards.original_word }}</div>
+        <div class="info" *ngIf="checkYourself">
+          <div class="translate">{{ cards.word_translate }}</div>
+          <div class="on_kun">
+            On`yomi: {{ cards.word_on }} <br>
+            Kun`yomi: {{ cards.word_kun }}
+          </div>
+          <div class="words" *ngIf="cards.words.length > 0">
+            <div *ngFor="let word of cards.words">
+              {{ word.original_word }} ({{ word.dictionaryWord.sourceData.kana[0].text }}) {{ word.translate_word }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-navigate-action-card (clickActionCardButton)="checkButton($event)"></app-navigate-action-card>
     </div>
-    <app-navigate-action-card (clickActionCardButton)="checkButton($event)" ></app-navigate-action-card>
+    <div *ngIf="cards === null" style="display:flex;justify-content:center;align-items:center">
+      <h1 translate *ngIf="!endTraining">No user dictionary kanji</h1>
+      <h1 translate *ngIf="endTraining">{{ endTrainingText }}</h1>
+    </div>
   </div>
 
-  <mat-card class="block_center" *ngIf="!isLoaded">
+  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
     <mat-progress-spinner color="primary" mode="indeterminate">
     </mat-progress-spinner>
   </mat-card>
