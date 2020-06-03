@@ -24,7 +24,7 @@ class TranslateController extends ActiveController {
         $str_search = '';
         $filter = Yii::$app->getRequest()->getBodyParams();
         $meCab = new meCab();
-        $str_arTranslate = $meCab->analysis(preg_replace('/\s+/', ' ', $filter['all_text']));
+        $str_arTranslate = $meCab->analysis(preg_replace('/\s/', '', $filter['all_text']));
 
         foreach ($str_arTranslate as $str) {
             $str_offset = (int)mb_strlen($str->getText());
