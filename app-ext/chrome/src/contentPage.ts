@@ -400,11 +400,13 @@ function innerTranslateObject (range, user, pageY) {
   const seekPrev = seekBackward(range.startContainer, range.startOffset, 100);
   context = seekPrev.content + seekNext.content;
 
+  let countSpace = range.startContainer.data.slice(0, range.startOffset).split(' ').length - 1;
+
   if (extensionSetting) {
     translateObj = {
       all_text: range.startContainer.data,
       url: range.startContainer.ownerDocument.location.href,
-      offset: range.startOffset
+      offset: range.startOffset - countSpace - 1
     };
 
     chrome.runtime.sendMessage({ type: 'sendBackground', data: translateObj }, (response) => {
