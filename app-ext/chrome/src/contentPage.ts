@@ -436,7 +436,7 @@ function innerTranslateObject (range, user, pageY) {
             });
           });
 
-          let listDictionary = document.getElementsByClassName('textDictionary');
+          let listDictionary = modalShadowRoot.querySelectorAll('.textDictionary');
           for (let i = 0; i < listDictionary.length; i++) {
             listDictionary[i].addEventListener('click', () => {
               addToDictionary(user, translateObj.url, context,
@@ -508,7 +508,7 @@ function innerSelectedTranslateObject (selectedText, urlPage, user, range) {
             });
           });
 
-          let listDictionary = document.getElementsByClassName('textDictionary');
+          let listDictionary = modalShadowRoot.querySelectorAll('.textDictionary');
           for (let i = 0; i < listDictionary.length; i++) {
             listDictionary[i].addEventListener('click', () => {
               addToDictionary(user, translateObj.url, context,
