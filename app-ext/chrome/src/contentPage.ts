@@ -21,6 +21,9 @@ let dictionaryWord = {
     context: null,
     url: null
 };
+let context = null;
+
+const IGNORE_TEXT_PATTERN = /\u200c/;
 
 const modalShadowElement = document.createElement('div');
 const modalShadowRoot = modalShadowElement.attachShadow({mode: 'open'});
@@ -143,6 +146,193 @@ function createAndSendData(e) {
   innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY);
 }
 
+function seekForward(node, offset, length) {
+  const state = {node, offset, remainder: length, content: ''};
+  if (length <= 0) {
+    return state;
+  }
+
+  const TEXT_NODE = Node.TEXT_NODE;
+  const ELEMENT_NODE = Node.ELEMENT_NODE;
+  let resetOffset = false;
+
+  const ruby = getRubyElement(node);
+  if (ruby !== null) {
+    node = ruby;
+    resetOffset = true;
+  }
+
+  while (node !== null) {
+    let visitChildren = true;
+    const nodeType = node.nodeType;
+
+    if (nodeType === TEXT_NODE) {
+      state.node = node;
+      if (seekForwardTextNode(state, resetOffset)) {
+        break;
+      }
+      resetOffset = true;
+    } else if (nodeType === ELEMENT_NODE) {
+      visitChildren = shouldEnter(node);
+    }
+
+    node = getNextNode(node, visitChildren);
+  }
+
+  return state;
+}
+
+function getRubyElement(node) {
+  node = getParentElement(node);
+  if (node !== null && node.nodeName.toUpperCase() === 'RT') {
+    node = node.parentNode;
+    return (node !== null && node.nodeName.toUpperCase() === 'RUBY') ? node : null;
+  }
+  return null;
+}
+
+function shouldEnter(node) {
+  switch (node.nodeName.toUpperCase()) {
+    case 'RT':
+    case 'SCRIPT':
+    case 'STYLE':
+      return false;
+  }
+
+  const style = window.getComputedStyle(node);
+  return !(
+      style.visibility === 'hidden' ||
+      style.display === 'none' ||
+      parseFloat(style.fontSize) === 0
+  );
+}
+
+function getParentElement(node) {
+  while (node !== null && node.nodeType !== Node.ELEMENT_NODE) {
+    node = node.parentNode;
+  }
+  return node;
+}
+
+function getNextNode(node, visitChildren) {
+  let next = visitChildren ? node.firstChild : null;
+  if (next === null) {
+    while (true) {
+      next = node.nextSibling;
+      if (next !== null) { break; }
+
+      next = node.parentNode;
+      if (next === null) { break; }
+
+      node = next;
+    }
+  }
+  return next;
+}
+
+function seekForwardTextNode(state, resetOffset) {
+  const nodeValue = state.node.nodeValue;
+  const nodeValueLength = nodeValue.length;
+  let content = state.content;
+  let offset = resetOffset ? 0 : state.offset;
+  let remainder = state.remainder;
+  let result = false;
+
+  for (; offset < nodeValueLength; ++offset) {
+    const c = nodeValue[offset];
+    if (!IGNORE_TEXT_PATTERN.test(c)) {
+      content += c;
+      if (--remainder <= 0) {
+        result = true;
+        ++offset;
+        break;
+      }
+    }
+  }
+
+  state.offset = offset;
+  state.content = content;
+  state.remainder = remainder;
+  return result;
+}
+
+function seekBackward(node, offset, length) {
+  const state = {node, offset, remainder: length, content: ''};
+  if (length <= 0) {
+    return state;
+  }
+
+  const TEXT_NODE = Node.TEXT_NODE;
+  const ELEMENT_NODE = Node.ELEMENT_NODE;
+  let resetOffset = false;
+
+  const ruby = getRubyElement(node);
+  if (ruby !== null) {
+    node = ruby;
+    resetOffset = true;
+  }
+
+  while (node !== null) {
+    let visitChildren = true;
+    const nodeType = node.nodeType;
+
+    if (nodeType === TEXT_NODE) {
+      state.node = node;
+      if (seekBackwardTextNode(state, resetOffset)) {
+        break;
+      }
+      resetOffset = true;
+    } else if (nodeType === ELEMENT_NODE) {
+      visitChildren = shouldEnter(node);
+    }
+
+    node = getPreviousNode(node, visitChildren);
+  }
+
+  return state;
+}
+
+function seekBackwardTextNode(state, resetOffset) {
+  const nodeValue = state.node.nodeValue;
+  let content = state.content;
+  let offset = resetOffset ? nodeValue.length : state.offset;
+  let remainder = state.remainder;
+  let result = false;
+
+  for (; offset > 0; --offset) {
+    const c = nodeValue[offset - 1];
+    if (!IGNORE_TEXT_PATTERN.test(c)) {
+      content = c + content;
+      if (--remainder <= 0) {
+        result = true;
+        --offset;
+        break;
+      }
+    }
+  }
+
+  state.offset = offset;
+  state.content = content;
+  state.remainder = remainder;
+  return result;
+}
+
+function getPreviousNode(node, visitChildren) {
+  let next = visitChildren ? node.lastChild : null;
+  if (next === null) {
+    while (true) {
+      next = node.previousSibling;
+      if (next !== null) { break; }
+
+      next = node.parentNode;
+      if (next === null) { break; }
+
+      node = next;
+    }
+  }
+  return next;
+}
+
 function createModal() {
   document.body.appendChild(modalShadowElement);
 
@@ -206,6 +396,10 @@ function createModal() {
 function innerTranslateObject (range, user, pageY) {
   translateObj = null;
 
+  const seekNext = seekForward(range.startContainer, range.startOffset, 100);
+  const seekPrev = seekBackward(range.startContainer, range.startOffset, 100);
+  context = seekPrev.content + seekNext.content;
+
   if (extensionSetting) {
     translateObj = {
       all_text: range.startContainer.data,
@@ -245,7 +439,7 @@ function innerTranslateObject (range, user, pageY) {
           let listDictionary = document.getElementsByClassName('textDictionary');
           for (let i = 0; i < listDictionary.length; i++) {
             listDictionary[i].addEventListener('click', () => {
-              addToDictionary(user, translateObj.url, translateObj.all_text,
+              addToDictionary(user, translateObj.url, context,
                   listDictionary[i].getAttribute('data-translate'),
                   listDictionary[i].getAttribute('data-word'),
                   listDictionary[i].getAttribute('data-id')
@@ -262,8 +456,6 @@ function innerTranslateObject (range, user, pageY) {
           wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
           mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
         }
-
-        console.log(rect);
 
         modal.style.left = rect.x + 'px';
         modal.style.top = pageY + 20 + 'px';
@@ -319,7 +511,7 @@ function innerSelectedTranslateObject (selectedText, urlPage, user, range) {
           let listDictionary = document.getElementsByClassName('textDictionary');
           for (let i = 0; i < listDictionary.length; i++) {
             listDictionary[i].addEventListener('click', () => {
-              addToDictionary(user, translateObj.url, translateObj.all_text,
+              addToDictionary(user, translateObj.url, context,
                   listDictionary[i].getAttribute('data-translate'),
                   listDictionary[i].getAttribute('data-word'),
                   listDictionary[i].getAttribute('data-id')
