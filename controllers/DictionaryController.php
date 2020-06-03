@@ -62,6 +62,15 @@ class DictionaryController extends ActiveController {
         if (empty($word)) {
             $context = preg_replace('/\s+/', ' ', $objWord['context']);
 
+            $workout_progress_card = [
+                "cardsWord" => [
+                    "due" => (string)time()
+                ],
+                "cardsWordKanji" => [
+                    "deu" => (string)time()
+                ]
+            ];
+
             $new_word = new UserDictionary();
             $new_word->user_id = $objWord['user_id'];
             $new_word->type = UserDictionary::TYPE_WORD;
@@ -71,7 +80,7 @@ class DictionaryController extends ActiveController {
             $new_word->date = date('Y-m-d');
             $new_word->context = $context;
             $new_word->url = $objWord['url'];
-            $new_word->workout_progress_card = '{"cardsWord": {"deu": "' . time() .'"}, "cardsWordKanji": {"deu": "' . time() .'"}}';
+            $new_word->workout_progress_card = $workout_progress_card;
             $new_word->success_training = 0;
             $new_word->number_training = 0;
             $new_word->save();
@@ -87,6 +96,15 @@ class DictionaryController extends ActiveController {
                         ->asArray()->one();
 
                     if (!empty($d_id)) {
+                        $workout_progress_card = [
+                            "cardsKanji" => [
+                                "due" => (string)time()
+                            ],
+                            "cardsWordKanji" => [
+                                "deu" => (string)time()
+                            ]
+                        ];
+
                         $new_k = new UserDictionary();
                         $new_k->user_id = $objWord['user_id'];
                         $new_k->type = UserDictionary::TYPE_KANJI;
@@ -96,7 +114,7 @@ class DictionaryController extends ActiveController {
                         $new_k->date = date('Y-m-d');
                         $new_k->context = null;
                         $new_k->url = null;
-                        $new_k->workout_progress_card = '{"cardsKanji": {"due": "' . time() .'"}, "cardsWordKanji": {"deu": "' . time() .'"}}';
+                        $new_k->workout_progress_card = $workout_progress_card;
                         $new_k->success_training = 0;
                         $new_k->number_training = 0;
                         $new_k->save(false);
