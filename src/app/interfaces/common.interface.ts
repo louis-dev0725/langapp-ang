@@ -216,7 +216,7 @@ export interface CardReview {
 export interface Card {
   id?: number;
   status: number;
-  due: Date;
+  due: number;
   interval: number;
   reviews: CardReview[];
   easeFactor: number;

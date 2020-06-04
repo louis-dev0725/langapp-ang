@@ -116,7 +116,7 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
 
       let card: Card = {
         consecutiveCorrectAnswers: 0,
-        due: undefined,
+        due: 0,
         easeFactor: 0,
         interval: 0,
         reviews: [],

@@ -699,7 +699,7 @@ export class ApiService {
       if (data !== '') {
         query = '?' + data;
       }
-      query += '&time=' + new Date().toISOString() + '&expand=dictionaryWord';
+      query += '&expand=dictionaryWord';
 
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/dictionaries/all' + query, { headers }).subscribe((res) => {

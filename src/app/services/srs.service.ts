@@ -23,13 +23,6 @@ export class SrsService {
     EASY: 4
   };
 
-  cardStatus = {
-    New: 0,
-    Learning: 1,
-    Review: 2,
-    Relearning: 3
-  };
-
   processAnswer(card: Card, answer: number) {
     const review: CardReview = {
       answer: 0,
@@ -60,7 +53,7 @@ export class SrsService {
 
     card.interval = this.calculateInterval(card, answer);
     review.newInterval = card.interval;
-    card.due = this.addDays(new Date(), card.interval);
+    card.due = Math.round(this.addDays(new Date(), card.interval).getTime() / 1000);
 
     card.easeFactor = this.calculateFactor(card, answer);
     review.newEaseFactor = card.easeFactor;
@@ -68,16 +61,6 @@ export class SrsService {
     card.reviews.push(review);
 
     return card;
-  }
-
-  protected calculateCardStatus(card: Card, answer: number) {
-    if (card.consecutiveCorrectAnswers > 1) {
-      return this.cardStatus.Review;
-    } else if (card.status === this.cardStatus.Review || card.status === this.cardStatus.Relearning) {
-      return this.cardStatus.Relearning;
-    } else {
-      return this.cardStatus.Learning;
-    }
   }
 
   protected calculateFactor(card: Card, answer: number) {
@@ -103,7 +86,7 @@ export class SrsService {
       return 1;
     }
 
-    const delay = card.due ? this.diffDays(new Date(), new Date(card.due)) : 0;
+    const delay = card.due ? this.diffDays(new Date(), new Date(card.due * 1000)) : 0;
     if (delay >= 0) {
       const intervalHard = this.constrainedInterval(card.interval * this.hardFactorForced, card.interval, fuzz);
       if (answer === this.cardAnswer.HARD) {
@@ -179,13 +162,6 @@ export class SrsService {
   addDays (dateA: Date, numDays: number) {
     const date = new Date(dateA);
     date.setDate(date.getDate() + numDays);
-
-    return date;
-  }
-
-  subtractDays (dateA: Date, numDays: number) {
-    const date = new Date(dateA);
-    date.setDate(date.getDate() - numDays);
 
     return date;
   }
