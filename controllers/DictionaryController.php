@@ -8,6 +8,7 @@ use app\models\UserDictionary;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
+use yii\db\JsonExpression;
 
 class DictionaryController extends ActiveController {
     public $modelClass = UserDictionary::class;
@@ -60,15 +61,10 @@ class DictionaryController extends ActiveController {
             ->andWhere(['user_id' => $objWord['user_id'], 'type' => UserDictionary::TYPE_WORD])->asArray()->one();
 
         if (empty($word)) {
-            $context = preg_replace('/\s+/', ' ', $objWord['context']);
+            $context = preg_replace('/\s/', '', $objWord['context']);
 
             $workout_progress_card = [
-                "cardsWord" => [
-                    "due" => (string)time()
-                ],
-                "cardsWordKanji" => [
-                    "deu" => (string)time()
-                ]
+                "due" => (string)time()
             ];
 
             $new_word = new UserDictionary();
@@ -97,12 +93,7 @@ class DictionaryController extends ActiveController {
 
                     if (!empty($d_id)) {
                         $workout_progress_card = [
-                            "cardsKanji" => [
-                                "due" => (string)time()
-                            ],
-                            "cardsWordKanji" => [
-                                "deu" => (string)time()
-                            ]
+                            "due" => (string)time()
                         ];
 
                         $new_k = new UserDictionary();
@@ -154,6 +145,7 @@ class DictionaryController extends ActiveController {
 
         $query = UserDictionary::find()->joinWith('dictionaryWord')
             ->where(['user_dictionary.user_id' => (int)$filter['user_id']]);
+//            ->andWhere(['<=', 'workout_progress_card', new JsonExpression(['due' => (string)$filter['time']])]);
 
         if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
             if (strcasecmp('kanji', $filter['type']) == 0) {
@@ -165,9 +157,7 @@ class DictionaryController extends ActiveController {
             $query->andWhere(['type' => (int)$type]);
         }
 
-        if (array_key_exists('sort', $filter) && $filter['sort'] != 'undefined' && $filter['sort'] != '') {
-            $query->orderBy(new Expression("workout_progress_card->>'" . $filter['sort'] . "' ASC"));
-        }
+        $query->orderBy(new Expression("workout_progress_card->>'due' ASC"));
 
         return new ActiveDataProvider([
             'query' => $query,
