@@ -40,11 +40,20 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
               private session: SessionService, private translatingService: TranslatingService) { }
 
   ngOnInit() {
-    const data = 'user_id=' + this.session.user.id + '&sort=cardsWordKanji';
+    const data = 'user_id=' + this.session.user.id;
     this.api.getAllUserDictionary(data).pipe(untilDestroyed(this)).subscribe(res => {
       if (!(res instanceof ApiError)) {
         this.cardsArray = res.items;
-        this.editCardElem(this.cardsArray);
+
+        if (this.cardsArray.length > 0) {
+          this.editCardElem(this.cardsArray);
+        } else {
+          this.cards = null;
+          this.endTraining = true;
+          this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_all;
+
+          this._isLoaded = true;
+        }
       } else {
         this.snackBar.open(String(res.error), null, {duration: 3000});
       }
@@ -69,12 +78,16 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
         element.word_kun = '';
         element.word_translate = '';
 
-        if (element.dictionaryWord.sourceData.readings.ja_on.length > 0) {
-          element.word_on += element.dictionaryWord.sourceData.readings.ja_on.join(', ');
+        if (element.dictionaryWord.sourceData.readings.ja_on) {
+          if (element.dictionaryWord.sourceData.readings.ja_on.length > 0) {
+            element.word_on += element.dictionaryWord.sourceData.readings.ja_on.join(', ');
+          }
         }
 
-        if (element.dictionaryWord.sourceData.readings.ja_kun.length > 0) {
-          element.word_kun += element.dictionaryWord.sourceData.readings.ja_kun.join(', ');
+        if (element.dictionaryWord.sourceData.readings.ja_kun) {
+          if (element.dictionaryWord.sourceData.readings.ja_kun.length > 0) {
+            element.word_kun += element.dictionaryWord.sourceData.readings.ja_kun.join(', ');
+          }
         }
 
         const meanArr = Object.entries(element.dictionaryWord.sourceData.meanings);
@@ -112,16 +125,16 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
         status: 0
       };
 
-      if (this.cards.workout_progress_card.cardsWordKanji.hasOwnProperty('consecutiveCorrectAnswers')) {
-        card = this.cards.workout_progress_card.cardsWordKanji;
+      if (this.cards.workout_progress_card.hasOwnProperty('consecutiveCorrectAnswers')) {
+        card = this.cards.workout_progress_card;
       }
 
-      if (action === 3 || action === 4) {
+      if (action === 2 || action === 3 || action === 4) {
         this.cards.success_training++;
       }
       this.cards.number_training++;
 
-      this.cards.workout_progress_card.cardsWordKanji = this.srsService.processAnswer(card, action);
+      this.cards.workout_progress_card = this.srsService.processAnswer(card, action);
 
       this.api.updateUserDictionary(this.cards).pipe(untilDestroyed(this)).subscribe(res => {
         if (!(res instanceof ApiError)) {

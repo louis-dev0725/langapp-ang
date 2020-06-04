@@ -30,12 +30,16 @@ export class ListWordsComponent implements OnInit {
       item.word_translate = '';
 
       if (item.type === 1) {
-        if (item.dictionaryWord.sourceData.readings.ja_on.length > 0) {
-          item.word_on += item.dictionaryWord.sourceData.readings.ja_on.join(', ');
+        if (item.dictionaryWord.sourceData.readings.ja_on) {
+          if (item.dictionaryWord.sourceData.readings.ja_on.length > 0) {
+            item.word_on += item.dictionaryWord.sourceData.readings.ja_on.join(', ');
+          }
         }
 
-        if (item.dictionaryWord.sourceData.readings.ja_kun.length > 0) {
-          item.word_kun += item.dictionaryWord.sourceData.readings.ja_kun.join(', ');
+        if (item.dictionaryWord.sourceData.readings.ja_kun) {
+          if (item.dictionaryWord.sourceData.readings.ja_kun.length > 0) {
+            item.word_kun += item.dictionaryWord.sourceData.readings.ja_kun.join(', ');
+          }
         }
 
         const meanArr = Object.entries(item.dictionaryWord.sourceData.meanings);

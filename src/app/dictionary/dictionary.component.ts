@@ -104,8 +104,7 @@ export class DictionaryComponent implements OnInit, OnDestroy {
   changePageTable(data) {
     this._isLoadedData = false;
 
-    const href = 'user_id=' + this.session.user.id + '&type=' + this.typeFilter
-      + this.daraSource._links.self.href.split('?')[1].split('page')[0]
+    const href = this.daraSource._links.self.href.split('?')[1].split('page')[0]
       + '&page=' + (+(data.pageIndex) + 1) + '&per-page=' + data.pageSize;
 
     this.api.getUserDictionary(href).pipe(untilDestroyed(this)).subscribe((res) => {

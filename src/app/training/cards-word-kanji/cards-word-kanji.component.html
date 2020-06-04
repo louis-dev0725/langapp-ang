@@ -15,6 +15,7 @@
             </div>
           </div>
           <div class="on_kun" *ngIf="cards.type === 0">
+            {{ cards.translate_word }}<br>
             {{ cards.dictionaryWord.sourceData.kana[0].text }}
           </div>
           <div class="words" *ngIf="cards.type === 0">

@@ -40,11 +40,20 @@ export class CardsWordComponent implements OnInit, OnDestroy {
               private session: SessionService, private translatingService: TranslatingService) { }
 
   ngOnInit() {
-    const data = 'user_id=' + this.session.user.id + '&type=word&sort=cardsWord';
+    const data = 'user_id=' + this.session.user.id + '&type=word';
     this.api.getAllUserDictionary(data).pipe(untilDestroyed(this)).subscribe(res => {
       if (!(res instanceof ApiError)) {
         this.cardsArray = res.items;
-        this.cards = this.cardsArray[0];
+
+        if (this.cardsArray.length > 0) {
+          this.cards = this.cardsArray[0];
+        } else {
+          this.cards = null;
+          this.endTraining = true;
+          this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_word;
+
+          this._isLoaded = true;
+        }
       } else {
         this.snackBar.open(String(res.error), null, {duration: 3000});
       }
@@ -68,16 +77,16 @@ export class CardsWordComponent implements OnInit, OnDestroy {
         status: 0
       };
 
-      if (this.cards.workout_progress_card.cardsWord.hasOwnProperty('consecutiveCorrectAnswers')) {
-        card = this.cards.workout_progress_card.cardsWord;
+      if (this.cards.workout_progress_card.hasOwnProperty('consecutiveCorrectAnswers')) {
+        card = this.cards.workout_progress_card;
       }
 
-      if (action === 3 || action === 4) {
+      if (action === 2 || action === 3 || action === 4) {
         this.cards.success_training++;
       }
       this.cards.number_training++;
 
-      this.cards.workout_progress_card.cardsWord = this.srsService.processAnswer(card, action);
+      this.cards.workout_progress_card = this.srsService.processAnswer(card, action);
 
       this.api.updateUserDictionary(this.cards).pipe(untilDestroyed(this)).subscribe(res => {
         if (!(res instanceof ApiError)) {
