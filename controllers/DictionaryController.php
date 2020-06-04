@@ -64,7 +64,7 @@ class DictionaryController extends ActiveController {
             $context = preg_replace('/\s/', '', $objWord['context']);
 
             $workout_progress_card = [
-                "due" => (string)time()
+                "due" => time()
             ];
 
             $new_word = new UserDictionary();
@@ -93,7 +93,7 @@ class DictionaryController extends ActiveController {
 
                     if (!empty($d_id)) {
                         $workout_progress_card = [
-                            "due" => (string)time()
+                            "due" => time()
                         ];
 
                         $new_k = new UserDictionary();
@@ -144,8 +144,8 @@ class DictionaryController extends ActiveController {
         $filter = Yii::$app->request->queryParams;
 
         $query = UserDictionary::find()->joinWith('dictionaryWord')
-            ->where(['user_dictionary.user_id' => (int)$filter['user_id']]);
-//            ->andWhere(['<=', 'workout_progress_card', new JsonExpression(['due' => (string)$filter['time']])]);
+            ->where(['user_dictionary.user_id' => (int)$filter['user_id']])
+            ->andWhere(new Expression("workout_progress_card->>'due' <= '" . time() . "'"));
 
         if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
             if (strcasecmp('kanji', $filter['type']) == 0) {
