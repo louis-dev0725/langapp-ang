@@ -86,7 +86,9 @@ window.addEventListener('message', (event) => {
 });
 
 function createButtonListener() {
-  chrome.runtime.sendMessage({ type: 'setToToken', data: '' }, () => {});
+  chrome.runtime.sendMessage({ type: 'setToToken', data: '' }, () => {
+    console.log('Set token to background');
+  });
 
   chrome.storage.local.get(['settingExtensionAction'], (result) => {
     if (result.hasOwnProperty('settingExtensionAction')) {
@@ -131,7 +133,7 @@ function createButtonListener() {
           createModal();
         }
 
-        innerSelectedTranslateObject(selectedText, window.location, user, document.caretRangeFromPoint(e.x, e.y));
+        innerSelectedTranslateObject(selectedText, window.location, user, document.caretRangeFromPoint(e.x, e.y), e.pageY);
       }
     }
   });
@@ -144,6 +146,291 @@ function createAndSendData(e) {
   }
 
   innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY);
+}
+
+function createModal() {
+  document.body.appendChild(modalShadowElement);
+
+  modal.setAttribute('id', 'modalTranslate');
+  modal.style.position = 'absolute';
+  modal.style.display = 'flex';
+  modal.style.flexFlow = 'column';
+  modal.style.zIndex = '999999';
+  modal.style.width = '300px';
+  modal.style.height = 'auto';
+  modal.style.maxHeight = '60vh';
+  modal.style.background = '#fff';
+  modal.style.borderRadius = '10px';
+  modal.style.padding = '10px';
+  modal.style.border = '1px solid #000';
+
+  modalShadowRoot.appendChild(modal);
+
+  modal.appendChild(mHeader);
+  modal.appendChild(mBody);
+
+  mHeader.setAttribute('id', 'modal-translate-header');
+  mBody.setAttribute('id', 'modal-translate-body');
+
+  mHeader.innerHTML = '<button type="button" class="close" id="closeModal"><span>&times;</span></button>';
+
+  modalShadowRoot.getElementById('closeModal').style.border = 'none';
+  modalShadowRoot.getElementById('closeModal').style.background = 'transparent';
+  modalShadowRoot.getElementById('closeModal').style.padding = '0.5rem 1rem';
+  modalShadowRoot.getElementById('closeModal').style.fontSize = '1.5rem';
+  modalShadowRoot.getElementById('closeModal').style.fontWeight = '700';
+  modalShadowRoot.getElementById('closeModal').style.marginLeft = 'auto';
+
+  modalShadowRoot.getElementById('closeModal').onclick = (() => {
+    mBody.innerHTML = '<ul id="list-translate"></ul>';
+    modal.style.display = 'none';
+  });
+
+  document.body.onclick = (() => {
+    wordT.innerHTML = '';
+    mBody.innerHTML = '<ul id="list-translate"></ul>';
+    modal.style.display = 'none';
+  });
+
+  mHeader.style.display = 'flex';
+  mHeader.style.flexFlow = 'row nowrap';
+  mHeader.style.width = '100%';
+  mHeader.style.justifyContent = 'space-between';
+  mHeader.style.height = '60px';
+
+  mBody.style.boxSizing = 'border-box';
+  mBody.style.display = 'flex';
+  mBody.style.overflowY = 'scroll';
+  mBody.style.flexFlow = 'column nowrap';
+  mBody.style.width = '100%';
+  mBody.style.padding = '0 15px';
+  mBody.style.margin = '10px 0';
+
+  mBody.innerHTML = '<ul id="list-translate"></ul>';
+}
+
+function innerTranslateObject (range, user, pageY) {
+  translateObj = null;
+
+  const seekNext = seekForward(range.startContainer, range.startOffset, 100);
+  const seekPrev = seekBackward(range.startContainer, range.startOffset, 100);
+  context = seekPrev.content + seekNext.content;
+
+  if (extensionSetting) {
+    translateObj = {
+      all_text: context,
+      url: range.startContainer.ownerDocument.location.href,
+      offset: range.startOffset + seekPrev.content.length
+    };
+
+    let new_range = new Range();
+    new_range.setStart(range.startContainer, range.startOffset);
+    let rect = new_range.getBoundingClientRect();
+
+    if (user.language === 'ru') {
+      mBody.innerHTML = '<h3>Загрузка...</h3>';
+    } else {
+      mBody.innerHTML = '<h3>Loading...</h3>';
+    }
+    modal.style.left = rect.x + 'px';
+    modal.style.top = pageY + 20 + 'px';
+    modal.style.display = 'flex';
+
+    chrome.runtime.sendMessage({ type: 'sendBackground', data: translateObj }, (response) => {
+      if (response.data.success) {
+        wordT.setAttribute('class', 'word-translate');
+        mHeader.insertBefore(wordT, modalShadowRoot.getElementById('closeModal'));
+        wordT.style.textAlign = 'center';
+
+        if (response.data.res.length > 0) {
+          mBody.innerHTML = '<ul id="list-translate"></ul>';
+          wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
+              + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+
+          let listTranslate = modalShadowRoot.getElementById('list-translate');
+
+          response.data.res.forEach((res) => {
+            const transObj = JSON.parse(res.sourceData);
+
+            transObj.sense.forEach((sen) => {
+              sen.gloss.forEach((gl) => {
+                listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                    + '<a class="textDictionary" data-word="' + response.data.word
+                    + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+              });
+            });
+          });
+
+          let listDictionary = modalShadowRoot.querySelectorAll('.textDictionary');
+          for (let i = 0; i < listDictionary.length; i++) {
+            listDictionary[i].addEventListener('click', () => {
+              addToDictionary(user, translateObj.url, context,
+                  listDictionary[i].getAttribute('data-translate'),
+                  listDictionary[i].getAttribute('data-word'),
+                  listDictionary[i].getAttribute('data-id')
+              );
+            });
+          }
+
+          modalShadowRoot.getElementById('list-translate').style.border = '1px solid #000';
+          modalShadowRoot.getElementById('list-translate').style.borderRadius = '5px';
+          modalShadowRoot.getElementById('list-translate').style.listStyle = 'none';
+          modalShadowRoot.getElementById('list-translate').style.padding = '0';
+          modalShadowRoot.getElementById('list-translate').style.borderBottom = 'none';
+        } else {
+          wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+
+          if (user.language === 'ru') {
+            mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
+          } else {
+            mBody.innerHTML = '<h3>Translation not found... for now</h3>';
+          }
+        }
+      } else {
+        if (response.data.error === 'nonAuth') {
+          if (user.language === 'ru') {
+            mBody.innerHTML = '<h3>Произошла неизвестная ошибка при передаче данных авторизации, пожалуйста авторизуйтесь в сервисе заново.</h3>';
+          } else {
+            mBody.innerHTML = '<h3>An unknown error occurred while transferring authorization data, please log in to the service again.</h3>';
+          }
+        } else {
+          if (user.language === 'ru') {
+            mBody.innerHTML = '<h3>На сервере произошла неизвестная ошибка, пожалуйста попробуйте позже.</h3>';
+          } else {
+            mBody.innerHTML = '<h3>An unknown error has occurred on the server, please try again later.</h3>';
+          }
+        }
+      }
+    });
+  } else {
+    if (user.language === 'ru') {
+      mBody.innerHTML = '<h3>Для использования расширения нужно авторизоваться в сервисе.</h3>';
+    } else {
+      mBody.innerHTML = '<h3>To use the extension you need to log in to the service.</h3>';
+    }
+
+    modal.style.left = (window.innerWidth / 2 - 150) + 'px';
+    modal.style.top = '200px';
+    modal.style.display = 'flex';
+  }
+}
+
+function innerSelectedTranslateObject (selectedText, urlPage, user, range, pageY) {
+  selectedObj = null;
+
+  if (extensionSetting) {
+    selectedObj = {
+      text: selectedText,
+      url: urlPage.href
+    };
+
+    let new_range = new Range();
+    new_range.setStart(range.startContainer, range.startOffset);
+    let rect = new_range.getBoundingClientRect();
+
+    if (user.language === 'ru') {
+      mBody.innerHTML = '<h3>Загрузка...</h3>';
+    } else {
+      mBody.innerHTML = '<h3>Loading...</h3>';
+    }
+    modal.style.left = rect.x + 'px';
+    modal.style.top = pageY + 20 + 'px';
+    modal.style.display = 'flex';
+
+    chrome.runtime.sendMessage({ type: 'sendSelectedBackground', data: selectedObj }, (response) => {
+      if (response.data.success) {
+        wordT.setAttribute('class', 'word-translate');
+        mHeader.insertBefore(wordT, modalShadowRoot.getElementById('closeModal'));
+        wordT.style.textAlign = 'center';
+
+        if (response.data.res.length > 0) {
+          mBody.innerHTML = '<ul id="list-translate"></ul>';
+          wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
+              + '<h1 style="font-size:2em;text-align:center;line-height:normal;margin-top:0;margin-bottom:10px;">'
+              + response.data.word + '</h1>';
+
+          let listTranslate = modalShadowRoot.getElementById('list-translate');
+
+          response.data.res.forEach((res) => {
+            const transObj = JSON.parse(res.sourceData);
+
+            transObj.sense.forEach((sen) => {
+              sen.gloss.forEach((gl) => {
+                listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                    + '<a class="textDictionary" data-word="' + response.data.word + '" data-id="'
+                    + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+              });
+            });
+          });
+
+          let listDictionary = modalShadowRoot.querySelectorAll('.textDictionary');
+          for (let i = 0; i < listDictionary.length; i++) {
+            listDictionary[i].addEventListener('click', () => {
+              addToDictionary(user, translateObj.url, context,
+                  listDictionary[i].getAttribute('data-translate'),
+                  listDictionary[i].getAttribute('data-word'),
+                  listDictionary[i].getAttribute('data-id')
+              );
+            });
+          }
+
+          modalShadowRoot.getElementById('list-translate').style.border = '1px solid #000';
+          modalShadowRoot.getElementById('list-translate').style.borderRadius = '5px';
+          modalShadowRoot.getElementById('list-translate').style.listStyle = 'none';
+          modalShadowRoot.getElementById('list-translate').style.padding = '0';
+          modalShadowRoot.getElementById('list-translate').style.borderBottom = 'none';
+        } else {
+          wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+
+          if (user.language === 'ru') {
+            mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
+          } else {
+            mBody.innerHTML = '<h3>Translation not found... for now</h3>';
+          }
+        }
+      } else {
+        if (response.data.error === 'nonAuth') {
+          if (user.language === 'ru') {
+            mBody.innerHTML = '<h3>Произошла неизвестная ошибка при передаче данных авторизации, пожалуйста авторизуйтесь в сервисе заново.</h3>';
+          } else {
+            mBody.innerHTML = '<h3>An unknown error occurred while transferring authorization data, please log in to the service again.</h3>';
+          }
+        } else {
+          if (user.language === 'ru') {
+            mBody.innerHTML = '<h3>На сервере произошла неизвестная ошибка, пожалуйста попробуйте позже.</h3>';
+          } else {
+            mBody.innerHTML = '<h3>An unknown error has occurred on the server, please try again later.</h3>';
+          }
+        }
+      }
+    });
+  } else {
+    if (user.language === 'ru') {
+      mBody.innerHTML = '<h3>Для использования расширения нужно авторизоваться в сервисе.</h3>';
+    } else {
+      mBody.innerHTML = '<h3>To use the extension you need to log in to the service.</h3>';
+    }
+
+    modal.style.left = (window.innerWidth / 2 - 150) + 'px';
+    modal.style.top = '200px';
+    modal.style.display = 'flex';
+  }
+}
+
+function addToDictionary(user, url, allText, translate, word, dictionary_id) {
+  dictionaryWord = null;
+  dictionaryWord = {
+      user_id: user.id,
+      word: word,
+      translate: translate,
+      dictionary_id: parseInt(dictionary_id),
+      context: allText,
+      url: url
+  };
+
+  chrome.runtime.sendMessage({ type: 'sendToDictionary', data: dictionaryWord }, (response) => {
+    alert(response.data.text);
+  });
 }
 
 function seekForward(node, offset, length) {
@@ -188,6 +475,7 @@ function getRubyElement(node) {
     node = node.parentNode;
     return (node !== null && node.nodeName.toUpperCase() === 'RUBY') ? node : null;
   }
+
   return null;
 }
 
@@ -211,6 +499,7 @@ function getParentElement(node) {
   while (node !== null && node.nodeType !== Node.ELEMENT_NODE) {
     node = node.parentNode;
   }
+
   return node;
 }
 
@@ -227,6 +516,7 @@ function getNextNode(node, visitChildren) {
       node = next;
     }
   }
+
   return next;
 }
 
@@ -253,6 +543,7 @@ function seekForwardTextNode(state, resetOffset) {
   state.offset = offset;
   state.content = content;
   state.remainder = remainder;
+
   return result;
 }
 
@@ -314,6 +605,7 @@ function seekBackwardTextNode(state, resetOffset) {
   state.offset = offset;
   state.content = content;
   state.remainder = remainder;
+
   return result;
 }
 
@@ -330,232 +622,6 @@ function getPreviousNode(node, visitChildren) {
       node = next;
     }
   }
+
   return next;
-}
-
-function createModal() {
-  document.body.appendChild(modalShadowElement);
-
-  modal.setAttribute('id', 'modalTranslate');
-  modal.style.position = 'absolute';
-  modal.style.display = 'flex';
-  modal.style.flexFlow = 'column';
-  modal.style.zIndex = '999999';
-  modal.style.width = '300px';
-  modal.style.height = 'auto';
-  modal.style.maxHeight = '60vh';
-  modal.style.background = '#fff';
-  modal.style.borderRadius = '10px';
-  modal.style.padding = '10px';
-  modal.style.border = '1px solid #000';
-
-  modalShadowRoot.appendChild(modal);
-
-  modal.appendChild(mHeader);
-  modal.appendChild(mBody);
-
-  mHeader.setAttribute('id', 'modal-translate-header');
-  mBody.setAttribute('id', 'modal-translate-body');
-
-  mHeader.innerHTML = '<button type="button" class="close" id="closeModal"><span>&times;</span></button>';
-
-  modalShadowRoot.getElementById('closeModal').style.border = 'none';
-  modalShadowRoot.getElementById('closeModal').style.background = 'transparent';
-  modalShadowRoot.getElementById('closeModal').style.padding = '0.5rem 1rem';
-  modalShadowRoot.getElementById('closeModal').style.fontSize = '1.5rem';
-  modalShadowRoot.getElementById('closeModal').style.fontWeight = '700';
-  modalShadowRoot.getElementById('closeModal').style.marginLeft = 'auto';
-
-  modalShadowRoot.getElementById('closeModal').onclick = (() => {
-    mBody.innerHTML = '<ul id="list-translate"></ul>';
-    modal.style.display = 'none';
-  });
-
-  document.body.onclick = (() => {
-    mBody.innerHTML = '<ul id="list-translate"></ul>';
-    modal.style.display = 'none';
-  });
-
-  mHeader.style.display = 'flex';
-  mHeader.style.flexFlow = 'row nowrap';
-  mHeader.style.width = '100%';
-  mHeader.style.justifyContent = 'space-between';
-  mHeader.style.height = '60px';
-
-  mBody.style.boxSizing = 'border-box';
-  mBody.style.display = 'flex';
-  mBody.style.overflowY = 'scroll';
-  mBody.style.flexFlow = 'column nowrap';
-  mBody.style.width = '100%';
-  mBody.style.padding = '0 15px';
-  mBody.style.margin = '10px 0';
-
-  mBody.innerHTML = '<ul id="list-translate"></ul>';
-}
-
-function innerTranslateObject (range, user, pageY) {
-  translateObj = null;
-
-  const seekNext = seekForward(range.startContainer, range.startOffset, 100);
-  const seekPrev = seekBackward(range.startContainer, range.startOffset, 100);
-  context = seekPrev.content + seekNext.content;
-
-  let countSpace = range.startContainer.data.slice(0, range.startOffset).split(' ').length - 1;
-
-  if (extensionSetting) {
-    translateObj = {
-      all_text: range.startContainer.data,
-      url: range.startContainer.ownerDocument.location.href,
-      offset: range.startOffset - countSpace - 1
-    };
-
-    chrome.runtime.sendMessage({ type: 'sendBackground', data: translateObj }, (response) => {
-      if (response.data.success) {
-        let new_range = new Range();
-        new_range.setStart(range.startContainer, response.data.offset);
-        let rect = new_range.getBoundingClientRect();
-
-        wordT.setAttribute('class', 'word-translate');
-        mHeader.insertBefore(wordT, modalShadowRoot.getElementById('closeModal'));
-        wordT.style.textAlign = 'center';
-
-        if (response.data.res.length > 0) {
-          mBody.innerHTML = '<ul id="list-translate"></ul>';
-          wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
-              + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
-
-          let listTranslate = modalShadowRoot.getElementById('list-translate');
-
-          response.data.res.forEach((res) => {
-            const transObj = JSON.parse(res.sourceData);
-
-            transObj.sense.forEach((sen) => {
-              sen.gloss.forEach((gl) => {
-                listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
-                    + '<a class="textDictionary" data-word="' + response.data.word
-                    + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
-              });
-            });
-          });
-
-          let listDictionary = modalShadowRoot.querySelectorAll('.textDictionary');
-          for (let i = 0; i < listDictionary.length; i++) {
-            listDictionary[i].addEventListener('click', () => {
-              addToDictionary(user, translateObj.url, context,
-                  listDictionary[i].getAttribute('data-translate'),
-                  listDictionary[i].getAttribute('data-word'),
-                  listDictionary[i].getAttribute('data-id')
-              );
-            });
-          }
-
-          modalShadowRoot.getElementById('list-translate').style.border = '1px solid #000';
-          modalShadowRoot.getElementById('list-translate').style.borderRadius = '5px';
-          modalShadowRoot.getElementById('list-translate').style.listStyle = 'none';
-          modalShadowRoot.getElementById('list-translate').style.padding = '0';
-          modalShadowRoot.getElementById('list-translate').style.borderBottom = 'none';
-        } else {
-          wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
-          mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
-        }
-
-        modal.style.left = rect.x + 'px';
-        modal.style.top = pageY + 20 + 'px';
-        modal.style.display = 'flex';
-      }
-    });
-  } else {
-    mBody.innerHTML = '<h3>Для использования расширения нужно авторизоваться в сервисе.</h3>';
-    modal.style.left = (window.innerWidth / 2 - 150) + 'px';
-    modal.style.top = '200px';
-    modal.style.display = 'flex';
-  }
-}
-
-function innerSelectedTranslateObject (selectedText, urlPage, user, range) {
-  selectedObj = null;
-
-  if (extensionSetting) {
-    selectedObj = {
-      text: selectedText,
-      url: urlPage.href
-    };
-
-    chrome.runtime.sendMessage({ type: 'sendSelectedBackground', data: selectedObj }, (response) => {
-      if (response.data.success) {
-        let new_range = new Range();
-        new_range.setStart(range.startContainer, range.startOffset);
-        let rect = new_range.getBoundingClientRect();
-
-        wordT.setAttribute('class', 'word-translate');
-        mHeader.insertBefore(wordT, modalShadowRoot.getElementById('closeModal'));
-        wordT.style.textAlign = 'center';
-
-        if (response.data.res.length > 0) {
-          mBody.innerHTML = '<ul id="list-translate"></ul>';
-          wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
-              + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
-
-          let listTranslate = modalShadowRoot.getElementById('list-translate');
-
-          response.data.res.forEach((res) => {
-            const transObj = JSON.parse(res.sourceData);
-
-            transObj.sense.forEach((sen) => {
-              sen.gloss.forEach((gl) => {
-                listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
-                    + '<a class="textDictionary" data-word="' + response.data.word
-                    + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
-              });
-            });
-          });
-
-          let listDictionary = modalShadowRoot.querySelectorAll('.textDictionary');
-          for (let i = 0; i < listDictionary.length; i++) {
-            listDictionary[i].addEventListener('click', () => {
-              addToDictionary(user, translateObj.url, context,
-                  listDictionary[i].getAttribute('data-translate'),
-                  listDictionary[i].getAttribute('data-word'),
-                  listDictionary[i].getAttribute('data-id')
-              );
-            });
-          }
-
-          modalShadowRoot.getElementById('list-translate').style.border = '1px solid #000';
-          modalShadowRoot.getElementById('list-translate').style.borderRadius = '5px';
-          modalShadowRoot.getElementById('list-translate').style.listStyle = 'none';
-          modalShadowRoot.getElementById('list-translate').style.padding = '0';
-          modalShadowRoot.getElementById('list-translate').style.borderBottom = 'none';
-        } else {
-          wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
-          mBody.innerHTML = '<h3>Перевод не найден... пока-что</h3>';
-        }
-
-        modal.style.left = rect.x + 'px';
-        modal.style.top = rect.y + 20 + 'px';
-        modal.style.display = 'flex';
-      }
-    });
-  } else {
-    mBody.innerHTML = '<h3>Для использования расширения нужно авторизоваться в сервисе.</h3>';
-    modal.style.left = (window.innerWidth / 2 - 150) + 'px';
-    modal.style.top = '200px';
-    modal.style.display = 'flex';
-  }
-}
-
-function addToDictionary(user, url, allText, translate, word, dictionary_id) {
-  dictionaryWord = null;
-  dictionaryWord = {
-      user_id: user.id,
-      word: word,
-      translate: translate,
-      dictionary_id: parseInt(dictionary_id),
-      context: allText,
-      url: url
-  };
-
-  chrome.runtime.sendMessage({ type: 'sendToDictionary', data: dictionaryWord }, (response) => {
-    alert(response.data.text);
-  });
 }

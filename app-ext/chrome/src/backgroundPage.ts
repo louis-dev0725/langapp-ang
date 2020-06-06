@@ -1,9 +1,9 @@
 import * as config from '../../allParam.config';
 
-let token = '';
+let token = null;
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     let objData = message.data;
-    let result = '';
+    let result: any = '';
 
     if (message.type === 'sendBackground') {
         let objWord = JSON.stringify(objData);
@@ -20,8 +20,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
-
-        return true;
     } else if (message.type === 'sendSelectedBackground') {
         let objWord = JSON.stringify(objData);
 
@@ -35,10 +33,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (request.readyState === 4 && request.status === 200) {
                 result = JSON.parse(request.responseText);
                 sendResponse({ type: 'sendTranslateModal', data: result });
+            } else if (request.status === 401) {
+                result = {
+                    status: false,
+                    error: 'nonAuth'
+                };
+                sendResponse({ type: 'sendTranslateModal', data: result });
+            } else {
+                result = {
+                    status: false,
+                    error: 'errorToServer'
+                };
+                sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
-
-        return true;
     } else if (message.type === 'sendToDictionary') {
         let objWord = JSON.stringify(objData);
 
@@ -52,10 +60,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (request.readyState === 4 && request.status === 200) {
                 result = JSON.parse(request.responseText);
                 sendResponse({ type: 'sendResultDictionary', data: result });
+            } else if (request.status === 401) {
+                result = {
+                    status: false,
+                    error: 'nonAuth'
+                };
+                sendResponse({ type: 'sendTranslateModal', data: result });
+            } else {
+                result = {
+                    status: false,
+                    error: 'errorToServer'
+                };
+                sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
-
-        return true;
     } else if (message.type === 'siteAuth') {
         const user = JSON.parse(objData.user);
         token = objData.token;
@@ -81,6 +99,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }
         });
     }
+
+    return true;
 });
 
 setInterval(() => {
@@ -105,3 +125,16 @@ setInterval(() => {
         }
     });
 }, 3600000);
+
+
+setTimeout(() => {
+    if (token === null) {
+        chrome.storage.local.get(['token'], (result) => {
+            if (result.hasOwnProperty('token')) {
+                token = result.token;
+
+                console.log('Writing a token into a variable, to timeout.');
+            }
+        });
+    }
+}, 12000);

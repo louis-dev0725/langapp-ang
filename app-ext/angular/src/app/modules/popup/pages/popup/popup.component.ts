@@ -25,20 +25,18 @@ export class PopupComponent implements OnInit {
         this.user = result.user;
 
         this.zone.run(() => {
-          if (this.user.homeLanguage) {
-            this.translate.setDefaultLang(this.user.homeLanguage.code);
+          if (this.user.language === 'ru') {
+            this.translate.setDefaultLang(this.user.language);
           } else {
             this.translate.setDefaultLang('en');
           }
 
           this.siteAuthContent = this.token !== '' && this.user !== '';
-          console.log('this.siteAuthContent', this.siteAuthContent);
         });
       } else {
         this.zone.run(() => {
           this.translate.setDefaultLang('en');
           this.siteAuthContent = false;
-          console.log('this.siteAuthContent', this.siteAuthContent);
         });
       }
     });
