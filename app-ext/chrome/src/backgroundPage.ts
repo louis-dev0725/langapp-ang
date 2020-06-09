@@ -20,6 +20,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
+
+        return true;
     } else if (message.type === 'sendSelectedBackground') {
         let objWord = JSON.stringify(objData);
 
@@ -47,6 +49,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
+
+        return true;
     } else if (message.type === 'sendToDictionary') {
         let objWord = JSON.stringify(objData);
 
@@ -74,6 +78,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
+
+        return true;
     } else if (message.type === 'siteAuth') {
         const user = JSON.parse(objData.user);
         token = objData.token;
@@ -99,8 +105,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }
         });
     }
-
-    return true;
 });
 
 setInterval(() => {

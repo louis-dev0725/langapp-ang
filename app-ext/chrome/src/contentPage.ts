@@ -220,7 +220,7 @@ function innerTranslateObject (range, user, pageY) {
     translateObj = {
       all_text: context,
       url: range.startContainer.ownerDocument.location.href,
-      offset: range.startOffset + seekPrev.content.length
+      offset: seekPrev.content.length
     };
 
     let new_range = new Range();
@@ -277,6 +277,11 @@ function innerTranslateObject (range, user, pageY) {
           modalShadowRoot.getElementById('list-translate').style.listStyle = 'none';
           modalShadowRoot.getElementById('list-translate').style.padding = '0';
           modalShadowRoot.getElementById('list-translate').style.borderBottom = 'none';
+
+          // new_range.setStart(range.startContainer, range.startOffset);
+          // let rect = new_range.getBoundingClientRect();
+          // modal.style.left = rect.x + 'px';
+
         } else {
           wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
 
