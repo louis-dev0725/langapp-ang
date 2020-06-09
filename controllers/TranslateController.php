@@ -21,32 +21,91 @@ class TranslateController extends ActiveController {
 
     public function actionCreate () {
         $offset = 0;
+        $count_text = 0;
+        $count_sub = 0;
+//        $str_search = [];
         $str_search = '';
+//        $str_search_original = [];
+        $str_search_original = '';
         $filter = Yii::$app->getRequest()->getBodyParams();
         $meCab = new meCab();
-        $str_arTranslate = $meCab->analysis(preg_replace('/\s/', '', $filter['all_text']));
+
+        $sub_str = mb_substr($filter['all_text'], 0, $filter['offset']);
+        $text = preg_replace('/\s/', '', $filter['all_text'], -1, $count_text);
+
+        preg_replace('/\s/', '', $sub_str, -1, $count_sub);
+
+        $str_arTranslate = $meCab->analysis($text);
 
         foreach ($str_arTranslate as $str) {
             $str_offset = (int)mb_strlen($str->getText());
-            if ($offset + $str_offset < $filter['offset']) {
+//            if ($offset + $str_offset < $filter['offset'] - $count_sub - 10) {
+            if ($offset + $str_offset < $filter['offset'] - $count_sub) {
                 $offset += (int)$str_offset;
             } else {
-                $str_search = $str->getText();
-                break;
+//                if ($offset + $str_offset < $filter['offset'] - $count_sub + 5) {
+//                    $offset += (int)$str_offset;
+//                    $str_search[$offset] = $str->getText();
+                    $str_search = $str->getText();
+//                    $str_search_original[$offset] = $str->getOriginal();
+                    $str_search_original = $str->getOriginal();
+//                }
             }
         }
 
-        if ($str_search != '') {
+        Yii::info($str_search);
+        Yii::info($str_search_original);
+
+//        $pattern = "/[\\\~^°!\"§$%\/()=?`';,\.:_{\[\]}\|<>@+#]/";
+//
+//        foreach ($str_search as $key => $search) {
+//            if (preg_match($pattern, $search)) {
+//                unset($str_search[$key]);
+//            }
+//            if ($search == null || $search == '') {
+//                unset($str_search[$key]);
+//            }
+//        }
+//
+//        foreach ($str_search_original as $key => $search_original) {
+//            if (preg_match($pattern, $search_original)) {
+//                unset($str_search_original[$key]);
+//            }
+//            if ($search_original == null || $search_original == '') {
+//                unset($str_search_original[$key]);
+//            }
+//        }
+//
+//        Yii::info($str_search);
+//        Yii::info($str_search_original);
+
+        if (!empty($str_search)) {
             $res = [];
             $queries = DictionaryWord::find()->where(['&^', 'query', $str_search])->asArray()->limit(100)->all();
-            foreach ($queries as $query) {
-                $rest = substr($query['query'], 1);
-                $rest = substr($rest, 0, -1);
+            if (!empty($queries)) {
+                foreach ($queries as $query) {
+                    $rest = substr($query['query'], 1);
+                    $rest = substr($rest, 0, -1);
 
-                $res_str = explode(",", $rest);
-                foreach ($res_str as $str) {
-                    if (strcasecmp($str, $str_search) == 0) {
-                        $res[] = $query;
+                    $res_str = explode(',', $rest);
+                    foreach ($res_str as $str) {
+                        if (strcasecmp($str, $str_search) == 0) {
+                            $res[] = $query;
+                        }
+                    }
+                }
+            } else {
+                $queries1 = DictionaryWord::find()->where(['&^', 'query', $str_search_original])->asArray()->limit(100)->all();
+                if (!empty($queries1)) {
+                    foreach ($queries1 as $query) {
+                        $rest = substr($query['query'], 1);
+                        $rest = substr($rest, 0, -1);
+                        $res_str = explode(',', $rest);
+                        foreach ($res_str as $str) {
+                            if (strcasecmp($str, $str_search_original) == 0) {
+                                $res[] = $query;
+                            }
+                        }
                     }
                 }
             }

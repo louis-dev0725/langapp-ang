@@ -151,7 +151,8 @@ class User extends ActiveRecord implements IdentityInterface {
 
     public function scenarios () {
         return [
-            self::SCENARIO_LOGIN => ['email', 'password'], self::SCENARIO_REGISTER => [
+            self::SCENARIO_LOGIN => ['email', 'password'],
+            self::SCENARIO_REGISTER => [
                 'name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone',
                 'language',
             ], self::SCENARIO_PROFILE => [
