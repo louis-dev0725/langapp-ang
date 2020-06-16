@@ -87,8 +87,8 @@ class TranslateController extends ActiveController {
                                 strcasecmp(mb_substr($text, (int)$current_arr[0], mb_strlen($query)), $query) == 0) {
                                 if (empty($res)) {
                                     $word_offset['word'] = $query;
-                                    $word_offset['s_offset'] = (int)$current_arr[0];
-                                    $word_offset['e_offset'] = (int)$current_arr[0] + mb_strlen($query);
+                                    $word_offset['s_offset'] = (int)$current_arr[0] + $count_sub;
+                                    $word_offset['e_offset'] = (int)$current_arr[0] + mb_strlen($query) + $count_sub;
                                 }
                                 $res[] = $wordFromDict;
                                 break;
