@@ -18,6 +18,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (request.readyState === 4 && request.status === 200) {
                 result = JSON.parse(request.responseText);
                 sendResponse({ type: 'sendTranslateModal', data: result });
+            } else if (request.status === 401) {
+                result = {
+                    status: false,
+                    error: 'nonAuth'
+                };
+                sendResponse({ type: 'sendTranslateModal', data: result });
+            } else {
+                result = {
+                    status: false,
+                    error: 'errorToServer'
+                };
+                sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
 

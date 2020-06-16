@@ -196,7 +196,6 @@ function createModal() {
   mHeader.style.flexFlow = 'row nowrap';
   mHeader.style.width = '100%';
   mHeader.style.justifyContent = 'space-between';
-  mHeader.style.height = '60px';
 
   mBody.style.boxSizing = 'border-box';
   mBody.style.display = 'flex';
@@ -212,8 +211,8 @@ function createModal() {
 function innerTranslateObject (range, user, pageY) {
   translateObj = null;
 
-  const seekNext = seekForward(range.startContainer, range.startOffset, 100);
   const seekPrev = seekBackward(range.startContainer, range.startOffset, 100);
+  const seekNext = seekForward(range.startContainer, range.startOffset, 100);
   context = seekPrev.content + seekNext.content;
 
   if (extensionSetting) {
@@ -222,6 +221,8 @@ function innerTranslateObject (range, user, pageY) {
       url: range.startContainer.ownerDocument.location.href,
       offset: seekPrev.content.length
     };
+
+    let prev_length = seekPrev.content.length - range.startOffset;
 
     let new_range = new Range();
     new_range.setStart(range.startContainer, range.startOffset);
@@ -244,18 +245,18 @@ function innerTranslateObject (range, user, pageY) {
 
         if (response.data.res.length > 0) {
           mBody.innerHTML = '<ul id="list-translate"></ul>';
-          wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
-              + '<h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
+          wordT.innerHTML = '<span>' + response.data.res[0].sourceData.kana[0].text + '</span>'
+              + '<h1 style="font-size:2em;text-align:center;margin:.5rem 0;">' + response.data.word.word + '</h1>';
 
           let listTranslate = modalShadowRoot.getElementById('list-translate');
 
           response.data.res.forEach((res) => {
-            const transObj = JSON.parse(res.sourceData);
+            const transObj = res.sourceData;
 
             transObj.sense.forEach((sen) => {
               sen.gloss.forEach((gl) => {
                 listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
-                    + '<a class="textDictionary" data-word="' + response.data.word
+                    + '<a class="textDictionary" data-word="' + response.data.word.word
                     + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
               });
             });
@@ -278,10 +279,26 @@ function innerTranslateObject (range, user, pageY) {
           modalShadowRoot.getElementById('list-translate').style.padding = '0';
           modalShadowRoot.getElementById('list-translate').style.borderBottom = 'none';
 
-          // new_range.setStart(range.startContainer, range.startOffset);
-          // let rect = new_range.getBoundingClientRect();
-          // modal.style.left = rect.x + 'px';
+          let sel = window.getSelection();
+          sel.removeAllRanges();
 
+          const s_offset =  parseInt(response.data.word.s_offset) - parseInt(String(prev_length));
+          const e_offset =  parseInt(response.data.word.e_offset) - parseInt(String(prev_length));
+
+          new_range.setStart(range.startContainer, s_offset);
+
+          if (e_offset <= range.startContainer.length) {
+            new_range.setEnd(range.startContainer, e_offset);
+          } else {
+            const nextLength = e_offset - range.startContainer.length
+            const next = seekForward(range.startContainer, range.startOffset, nextLength)
+            new_range.setEnd(next.node, nextLength);
+          }
+
+          rect = new_range.getBoundingClientRect();
+          modal.style.left = rect.x + 'px';
+
+          sel.addRange(new_range);
         } else {
           wordT.innerHTML = '<span></span><h1 style="font-size:2em;text-align:center;">' + response.data.word + '</h1>';
 
@@ -350,14 +367,20 @@ function innerSelectedTranslateObject (selectedText, urlPage, user, range, pageY
 
         if (response.data.res.length > 0) {
           mBody.innerHTML = '<ul id="list-translate"></ul>';
-          wordT.innerHTML = '<span>' + JSON.parse(response.data.res[0].sourceData).kana[0].text + '</span>'
+          wordT.innerHTML = '<span>' + response.data.res[0].sourceData.kana[0].text + '</span>'
               + '<h1 style="font-size:2em;text-align:center;line-height:normal;margin-top:0;margin-bottom:10px;">'
               + response.data.word + '</h1>';
 
           let listTranslate = modalShadowRoot.getElementById('list-translate');
 
-          response.data.res.forEach((res) => {
-            const transObj = JSON.parse(res.sourceData);
+          const arrRes = Array.from(Object.entries(response.data.res));
+          let res = [];
+          arrRes.forEach((el) => {
+            res.push(el[1]);
+          });
+
+          res.forEach((res) => {
+            const transObj = res.sourceData;
 
             transObj.sense.forEach((sen) => {
               sen.gloss.forEach((gl) => {
