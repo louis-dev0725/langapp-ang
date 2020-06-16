@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\DictionaryWord;
 use meCab\meCab;
 use Yii;
+use yii\db\ArrayExpression;
 
 class TranslateController extends ActiveController {
     public $modelClass = DictionaryWord::class;
@@ -21,12 +22,8 @@ class TranslateController extends ActiveController {
 
     public function actionCreate () {
         $offset = 0;
-        $count_text = 0;
-        $count_sub = 0;
-//        $str_search = [];
-        $str_search = '';
-//        $str_search_original = [];
-        $str_search_original = '';
+        $word_offset = [];
+        $str_search = [];
         $filter = Yii::$app->getRequest()->getBodyParams();
         $meCab = new meCab();
 
@@ -37,80 +34,71 @@ class TranslateController extends ActiveController {
 
         $str_arTranslate = $meCab->analysis($text);
 
+        $requestedOffset = $filter['offset'] - $count_sub;
+
         foreach ($str_arTranslate as $str) {
             $str_offset = (int)mb_strlen($str->getText());
-//            if ($offset + $str_offset < $filter['offset'] - $count_sub - 10) {
-            if ($offset + $str_offset < $filter['offset'] - $count_sub) {
+            if ($offset + $str_offset < $requestedOffset - 10) {
                 $offset += (int)$str_offset;
             } else {
-//                if ($offset + $str_offset < $filter['offset'] - $count_sub + 5) {
-//                    $offset += (int)$str_offset;
-//                    $str_search[$offset] = $str->getText();
-                    $str_search = $str->getText();
-//                    $str_search_original[$offset] = $str->getOriginal();
-                    $str_search_original = $str->getOriginal();
-//                }
+                $str_search[$offset] = $str->getText();
+                $str_search[$offset . '_1'] = $str->getOriginal();
+                $offset += (int)$str_offset;
+                if ($offset > $requestedOffset) {
+                    break;
+                }
             }
         }
 
-        Yii::info($str_search);
-        Yii::info($str_search_original);
+        $pattern = "/[\\\~^°!\"§$%\/()=?`';,\.:_{\[\]}\|<>@+#]/";
 
-//        $pattern = "/[\\\~^°!\"§$%\/()=?`';,\.:_{\[\]}\|<>@+#]/";
-//
-//        foreach ($str_search as $key => $search) {
-//            if (preg_match($pattern, $search)) {
-//                unset($str_search[$key]);
-//            }
-//            if ($search == null || $search == '') {
-//                unset($str_search[$key]);
-//            }
-//        }
-//
-//        foreach ($str_search_original as $key => $search_original) {
-//            if (preg_match($pattern, $search_original)) {
-//                unset($str_search_original[$key]);
-//            }
-//            if ($search_original == null || $search_original == '') {
-//                unset($str_search_original[$key]);
-//            }
-//        }
-//
-//        Yii::info($str_search);
-//        Yii::info($str_search_original);
+        foreach ($str_search as $key => $search) {
+            if (preg_match($pattern, $search)) {
+                unset($str_search[$key]);
+            }
+            if ($search == null || $search == '') {
+                unset($str_search[$key]);
+            }
+        }
 
-        if (!empty($str_search)) {
+        $search_arr = array_unique($str_search);
+
+        if (!empty($search_arr)) {
             $res = [];
-            $queries = DictionaryWord::find()->where(['&^', 'query', $str_search])->asArray()->limit(100)->all();
+            $queries = DictionaryWord::find()->where(['&^|', 'query', new ArrayExpression($search_arr)])->distinct()
+                ->orderBy(['id' => SORT_ASC])->all();
             if (!empty($queries)) {
-                foreach ($queries as $query) {
-                    $rest = substr($query['query'], 1);
-                    $rest = substr($rest, 0, -1);
-
-                    $res_str = explode(',', $rest);
-                    foreach ($res_str as $str) {
-                        if (strcasecmp($str, $str_search) == 0) {
-                            $res[] = $query;
+                foreach ($search_arr as $key => $currentWord) {
+                    $currentSearchResults = array_filter($queries, function($value) use ($currentWord) {
+                        foreach ($value->query as $query) {
+                            if (substr($query, 0, strlen($currentWord)) == $currentWord) {
+                                return true;
+                            }
                         }
-                    }
-                }
-            } else {
-                $queries1 = DictionaryWord::find()->where(['&^', 'query', $str_search_original])->asArray()->limit(100)->all();
-                if (!empty($queries1)) {
-                    foreach ($queries1 as $query) {
-                        $rest = substr($query['query'], 1);
-                        $rest = substr($rest, 0, -1);
-                        $res_str = explode(',', $rest);
-                        foreach ($res_str as $str) {
-                            if (strcasecmp($str, $str_search_original) == 0) {
-                                $res[] = $query;
+                        return false;
+                    });
+
+                    $current_arr = explode('_', $key);
+
+                    $minWordLength = $requestedOffset - (int)$current_arr[0] + 1;
+                    foreach ($currentSearchResults as $wordFromDict) {
+                        foreach ($wordFromDict->query as $query) {
+                            if (mb_strlen($query) >= $minWordLength &&
+                                strcasecmp(mb_substr($text, (int)$current_arr[0], mb_strlen($query)), $query) == 0) {
+                                if (empty($res)) {
+                                    $word_offset['word'] = $query;
+                                    $word_offset['s_offset'] = (int)$current_arr[0];
+                                    $word_offset['e_offset'] = (int)$current_arr[0] + mb_strlen($query);
+                                }
+                                $res[] = $wordFromDict;
+                                break;
                             }
                         }
                     }
                 }
             }
 
-            return ['success' => true, 'word' => $str_search, 'res' => $res, 'offset' => $offset];
+            return ['success' => true, 'word' => $word_offset, 'res' => $res];
         }
 
         return ['success' => false];
@@ -120,16 +108,12 @@ class TranslateController extends ActiveController {
         $filter = Yii::$app->getRequest()->getBodyParams();
 
         $res = [];
-        $queries = DictionaryWord::find()->where(['&^', 'query', $filter['text']])->asArray()->limit(100)->all();
+        $queries = DictionaryWord::find()->where(['&^', 'query', $filter['text']])->limit(100)->all();
 
         if (!empty($queries)) {
             foreach ($queries as $query) {
-                $rest = substr($query['query'], 1);
-                $rest = substr($rest, 0, -1);
-
-                $res_str = explode(",", $rest);
-                foreach ($res_str as $str) {
-                    if (strcasecmp($str, $filter['text']) == 0) {
+                foreach ($query->query as $q) {
+                    if (strcasecmp($q, $filter['text']) == 0) {
                         $res[] = $query;
                     }
                 }
