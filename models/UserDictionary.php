@@ -21,9 +21,11 @@ use yii\db\ActiveRecord;
  * @property int $number_training
  * @property string $workout_progress_card
  * @property string $workout_progress_word_translate
+ * @property int $mnemonic_id
  *
  * @property DictionaryWord $dictionaryWord
  * @property User $user
+ * @property Mnemonics $mnemonic
  */
 class UserDictionary extends ActiveRecord {
 
@@ -43,7 +45,7 @@ class UserDictionary extends ActiveRecord {
     public function rules() {
         return [
             [['user_id', 'dictionary_word_id', 'original_word', 'date'], 'required'],
-            [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training'], 'default',
+            [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training', 'mnemonic_id'], 'default',
                 'value' => null],
             [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training'], 'integer'],
             [['date', 'workout_progress_card', 'workout_progress_word_translate'], 'safe'],
@@ -53,6 +55,8 @@ class UserDictionary extends ActiveRecord {
                 'targetAttribute' => ['dictionary_word_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class,
                 'targetAttribute' => ['user_id' => 'id']],
+            [['mnemonic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Mnemonics::class,
+                'targetAttribute' => ['mnemonic_id' => 'id']],
         ];
     }
 
@@ -74,6 +78,7 @@ class UserDictionary extends ActiveRecord {
             'number_training' => 'Number Training',
             'workout_progress_card' => 'Workout Progress Card',
             'workout_progress_word_translate' => 'Workout Progress Word Translate',
+            'mnemonic_id' => 'Mnemonic ID',
         ];
     }
 
@@ -89,5 +94,12 @@ class UserDictionary extends ActiveRecord {
      */
     public function getUser() {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMnemonic() {
+        return $this->hasOne(Mnemonics::class, ['id' => 'mnemonic_id']);
     }
 }

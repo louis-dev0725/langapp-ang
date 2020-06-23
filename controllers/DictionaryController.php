@@ -4,11 +4,11 @@ namespace app\controllers;
 
 
 use app\models\DictionaryWord;
+use app\models\Mnemonics;
 use app\models\UserDictionary;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
-use yii\db\JsonExpression;
 
 class DictionaryController extends ActiveController {
     public $modelClass = UserDictionary::class;
@@ -28,7 +28,8 @@ class DictionaryController extends ActiveController {
     public function actionIndex() {
         $filter = Yii::$app->request->queryParams;
 
-        $query = UserDictionary::find()->joinWith('dictionaryWord')->where(['user_id' => (int)$filter['user_id']]);
+        $query = UserDictionary::find()->joinWith('dictionaryWord')
+            ->where(['user_dictionary.user_id' => (int)$filter['user_id']]);
 
         if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
             if (strcasecmp('kanji', $filter['type']) == 0) {
@@ -37,7 +38,7 @@ class DictionaryController extends ActiveController {
                 $type = UserDictionary::TYPE_WORD;
             }
 
-            $query->andWhere(['type' => (int)$type]);
+            $query->andWhere(['user_dictionary.type' => (int)$type]);
         }
 
         return new ActiveDataProvider([
@@ -79,6 +80,7 @@ class DictionaryController extends ActiveController {
             $new_word->workout_progress_card = $workout_progress_card;
             $new_word->success_training = 0;
             $new_word->number_training = 0;
+            $new_word->mnemonic = null;
             $new_word->save();
 
             preg_match_all('/[\x{4E00}-\x{9FFF}]/u', $objWord['word'], $kanjis);
@@ -108,6 +110,7 @@ class DictionaryController extends ActiveController {
                         $new_k->workout_progress_card = $workout_progress_card;
                         $new_k->success_training = 0;
                         $new_k->number_training = 0;
+                        $new_k->mnemonic = null;
                         $new_k->save(false);
                     }
                 }
@@ -128,13 +131,17 @@ class DictionaryController extends ActiveController {
     public function actionQueryOne() {
         $filter = Yii::$app->request->queryParams;
 
-        $query = UserDictionary::find()->joinWith('dictionaryWord')->where(['user_id' => (int)$filter['user_id'],
-            'type' => UserDictionary::TYPE_WORD])->andWhere(['like', 'original_word' , $filter['word']]);
+        $query = UserDictionary::find()->joinWith('dictionaryWord')
+            ->where(['user_dictionary.user_id' => (int)$filter['user_id'], 'type' => UserDictionary::TYPE_WORD])
+            ->andWhere(['or like', 'user_dictionary.original_word' , explode(',', $filter['word'])])->all();
 
-        return new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => false
-        ]);
+        $query1 = Mnemonics::find()->where(['user_id' => (int)$filter['user_id']])
+            ->andWhere(['word' => explode(',', $filter['mnemonic'])])->orderBy(['rating' => SORT_DESC])->all();
+
+        return [
+            'words' => $query,
+            'mnemonics' => $query1
+        ];
     }
 
     /**
@@ -143,9 +150,9 @@ class DictionaryController extends ActiveController {
     public function actionAll() {
         $filter = Yii::$app->request->queryParams;
 
-        $query = UserDictionary::find()->joinWith('dictionaryWord')
+        $query = UserDictionary::find()->joinWith(['dictionaryWord', 'mnemonic'])
             ->where(['user_dictionary.user_id' => (int)$filter['user_id']])
-            ->andWhere(new Expression("workout_progress_card->>'due' <= '" . time() . "'"));
+            ->andWhere(new Expression("user_dictionary.workout_progress_card->>'due' <= '" . time() . "'"));
 
         if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
             if (strcasecmp('kanji', $filter['type']) == 0) {
@@ -154,10 +161,10 @@ class DictionaryController extends ActiveController {
                 $type = UserDictionary::TYPE_WORD;
             }
 
-            $query->andWhere(['type' => (int)$type]);
+            $query->andWhere(['user_dictionary.type' => (int)$type]);
         }
 
-        $query->orderBy(new Expression("workout_progress_card->>'due' ASC"));
+        $query->orderBy(new Expression("user_dictionary.workout_progress_card->>'due' ASC"));
 
         return new ActiveDataProvider([
             'query' => $query,
