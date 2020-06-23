@@ -24,6 +24,8 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
   arrIndex = 0;
   endTraining = false;
   endTrainingText = null;
+  user_id = 0;
+  openModal = false;
 
   @Input()
   set isLoaded(val: boolean) {
@@ -40,17 +42,18 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
               private session: SessionService, private translatingService: TranslatingService) { }
 
   ngOnInit() {
-    const data = 'user_id=' + this.session.user.id + '&type=kanji';
+    this.user_id = this.session.user.id;
+    const data = 'user_id=' + this.user_id + '&type=kanji';
     this.api.getAllUserDictionary(data).pipe(untilDestroyed(this)).subscribe(res => {
       if (!(res instanceof ApiError)) {
         this.cardsArray = res.items;
 
         if (this.cardsArray.length > 0) {
-          this.editCardElem(this.cardsArray);
+          this.getOtherInfoElement(this.cardsArray);
         } else {
           this.cards = null;
           this.endTraining = true;
-          this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_kanji;
+          this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_all;
 
           this._isLoaded = true;
         }
@@ -60,22 +63,61 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
     });
   }
 
-  editCardElem(elements) {
+  getOtherInfoElement(elements) {
+    let words = null;
+    let mnemonic = null;
     elements.forEach((element) => {
-      const query = 'user_id=' + this.session.user.id + '&word=' + element.original_word;
-      this.api.getQueryUserDictionary(query).pipe(untilDestroyed(this)).subscribe(res => {
-        if (!(res instanceof ApiError)) {
-          element.words = res.items;
+      if (element.type === 1) {
+        if (words === null) {
+          words = element.original_word;
         } else {
-          this.snackBar.open(String(res.error), null, {duration: 3000});
+          words += ',' + element.original_word;
         }
+      }
+      if (mnemonic === null) {
+        mnemonic = element.original_word;
+      } else {
+        mnemonic += ',' + element.original_word;
+      }
+    });
 
-        this._isLoaded = true;
-      });
+    const query = 'user_id=' + this.user_id + '&word=' + words + '&mnemonic=' + mnemonic;
+    this.api.getQueryUserDictionary(query).pipe(untilDestroyed(this)).subscribe((res) => {
+      if (!(res instanceof ApiError)) {
+        this.editCardElem(this.cardsArray, res);
+      } else {
+        this.snackBar.open(String(res.error), null, {duration: 3000});
+      }
 
+      this._isLoaded = true;
+    });
+  }
+
+  editCardElem(elements, result) {
+    elements.forEach((element) => {
       element.word_on = '';
       element.word_kun = '';
       element.word_translate = '';
+
+      if (result.words.length > 0) {
+        element.words = [];
+        result.words.forEach((word) => {
+          if (word.original_word.indexOf(element.original_word) !== -1) {
+            element.words.push(word);
+          }
+        });
+      }
+
+      if (result.mnemonics.length > 0) {
+        if (element.mnemonic_id === null) {
+          element.mnemonic = result.mnemonics[0];
+        }
+        result.mnemonics.forEach((mnemonic) => {
+          if (mnemonic.word === element.original_word) {
+            element.mnemonic_all = mnemonic;
+          }
+        });
+      }
 
       if (element.dictionaryWord.sourceData.readings.ja_on) {
         if (element.dictionaryWord.sourceData.readings.ja_on.length > 0) {
@@ -151,10 +193,14 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
       } else {
         this.cards = null;
         this.endTraining = true;
-        this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_kanji;
+        this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_all;
       }
     } else {
       this.checkYourself = true;
     }
+  }
+
+  onChangeMnemonic(status: boolean) {
+    this.openModal = status;
   }
 }

@@ -1,0 +1,33 @@
+<div class="modal" *ngIf="status">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ 'Mnemonics' | translate }}</h3>
+        <a title="{{ 'Close' | translate }}" class="close" (click)="onCloseModal()">×</a>
+      </div>
+      <div class="modal-body">
+        <button>{{ 'Add Mnemonics' | translate }}</button>
+        <div class="mnemonics" *ngIf="elem.mnemonic_all">
+          <div class="mnemonic_box" *ngFor="let mnemonic of elem.mnemonic_all"
+               [class.active]="mnemonic.id === elem.mnemonic_id">
+            <div class="image_text">
+              <ng-container *ngIf="mnemonic.images !== null">
+                <img src="{{ mnemonic.images }}" alt="">
+              </ng-container>
+
+              <ng-container *ngIf="mnemonic.text !== null">
+                <p>{{ mnemonic.text }}</p>
+              </ng-container>
+            </div>
+            <div class="rating" *ngIf="mnemonic.user_id === elem.user_id">
+              <button class="plus" (click)="ratingChange(mnemonic.id, 'plus')">+</button>
+              <span>{{ mnemonic.rating }}</span>
+              <button class="minus" (click)="ratingChange(mnemonic.id, 'minus')">-</button>
+            </div>
+            <button></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

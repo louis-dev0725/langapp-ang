@@ -13,11 +13,13 @@ import { CardsWordKanjiComponent } from './cards-word-kanji/cards-word-kanji.com
 import { CardsKanjiComponent } from './cards-kanji/cards-kanji.component';
 import { CardsWordComponent } from './cards-word/cards-word.component';
 import { WordTranslateComponent } from './word-translate/word-translate.component';
+import { ModalMnemonicComponent } from './modal-mnemonic/modal-mnemonic.component';
+import { CreateMnemonicModalComponent } from './create-mnemonic-modal/create-mnemonic-modal.component';
 
 
 @NgModule({
   declarations: [TrainingComponent, CardsWordKanjiComponent, CardsKanjiComponent, CardsWordComponent,
-    WordTranslateComponent, NavigateActionCardComponent],
+    WordTranslateComponent, NavigateActionCardComponent, ModalMnemonicComponent, CreateMnemonicModalComponent],
   imports: [FormsModule, ReactiveFormsModule, TranslateModule, CommonModule, TrainingRoutingModule,
     SharedModule]
 })

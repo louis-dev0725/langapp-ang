@@ -24,6 +24,8 @@ export class CardsWordComponent implements OnInit, OnDestroy {
   arrIndex = 0;
   endTraining = false;
   endTrainingText = null;
+  user_id = 0;
+  openModal = false;
 
   @Input()
   set isLoaded(val: boolean) {
@@ -40,7 +42,8 @@ export class CardsWordComponent implements OnInit, OnDestroy {
               private session: SessionService, private translatingService: TranslatingService) { }
 
   ngOnInit() {
-    const data = 'user_id=' + this.session.user.id + '&type=word';
+    this.user_id = this.session.user.id;
+    const data = 'user_id=' + this.user_id + '&type=word';
     this.api.getAllUserDictionary(data).pipe(untilDestroyed(this)).subscribe(res => {
       if (!(res instanceof ApiError)) {
         this.cardsArray = res.items;
@@ -50,7 +53,7 @@ export class CardsWordComponent implements OnInit, OnDestroy {
         } else {
           this.cards = null;
           this.endTraining = true;
-          this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_word;
+          this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_all;
 
           this._isLoaded = true;
         }
@@ -105,10 +108,14 @@ export class CardsWordComponent implements OnInit, OnDestroy {
       } else {
         this.cards = null;
         this.endTraining = true;
-        this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_word;
+        this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_all;
       }
     } else {
       this.checkYourself = true;
     }
+  }
+
+  onChangeMnemonic(status: boolean) {
+    this.openModal = status;
   }
 }

@@ -132,9 +132,10 @@
     },
     "user_dictionary": {
       "saved": "Result Saved",
-      "finish_kanji": "No more kanji in the dictionary",
-      "finish_word": "There are no more words in the dictionary",
-      "finish_all": "No more words or kanji in the dictionary"
+      "finish_all": "All workouts are over! Add new words or try tomorrow."
+    },
+    "mnemonics": {
+      "created": "Mnemonic loaded"
     }
 	},
 	"for user": "for user",
@@ -218,7 +219,7 @@
   "Dictionary": "Dictionary",
   "Word": "Word",
   "Kanji": "Kanji",
-  "No user dictionary": "There are no words or kanji in your word",
+  "No user dictionary": "All workouts are over! Add new words or try tomorrow.",
   "No user dictionary word": "There are no words in your word",
   "No user dictionary kanji": "There is no kanji in your dictionary",
   "DictionaryEmpty": "Your dictionary is empty",
@@ -234,5 +235,12 @@
   "RememberBadly": "I remember badly",
   "Remember": "I remember",
   "Easy": "Too easy",
-  "Translate": "Translate"
+  "Translate": "Translate",
+  "OtherMnemonics": "Other mnemonics",
+  "Close": "Close",
+  "Mnemonics": "Mnemonics",
+  "No mnemonic": "No mnemonics were found for this word or kanji. You can download the mnemonics yourself.",
+  "Upload mnemonic": "Upload mnemonics",
+  "Add Mnemonics": "Add Mnemonics",
+  "Adding Mnemonics": "Adding Mnemonics"
 }

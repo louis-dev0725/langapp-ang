@@ -1,0 +1,25 @@
+<div class="modal" *ngIf="status_add">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ 'Adding Mnemonics' | translate }}</h3>
+        <a title="{{ 'Close' | translate }}" class="close" (click)="onCloseModal()">×</a>
+      </div>
+      <div class="modal-body">
+        <div class="loaded_box">
+          <div *ngIf="!isLoaded">
+            <input type="file" (change)="onFileSelected($event)" >
+            <button mat-flat-button type="button" color="primary" (click)="onUpload()">
+              {{ 'Upload mnemonic' | translate }}
+            </button>
+          </div>
+
+          <mat-card *ngIf="isLoaded" style="display:flex;justify-content:center;align-items:center">
+            <mat-progress-spinner color="primary" mode="indeterminate">
+            </mat-progress-spinner>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -20,16 +20,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private translate: TranslateService, private breadCrumbsService: BreadCrumbsService,
     private eventsService: EventsService) {
-    const langMap = {
-      'ru-RU': 'ru',
-      'en-US': 'en'
-    };
     let langVal = localStorage.getItem('lang');
     if (!langVal) {
-      langVal = navigator.language;
-      if (langMap[langVal]) {
-        langVal = langMap[langVal];
-      }
+      langVal = window.navigator.language.slice(0, 2).toLowerCase();
       if (langVal !== 'ru' && langVal !== 'en') {
         langVal = 'en';
       }

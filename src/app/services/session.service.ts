@@ -1,17 +1,19 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { User } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store/index';
 import { LogOutAction, AuthorizedUpdateTokenAction, AuthorizedSaveAdminAction, LogOutAsUserAction,
   AuthorizedUpdateUserAction } from '@app/store/index';
+
+import { Store } from '@ngrx/store';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  private static locales = { ru: 'ru-RU', en: 'en-US' };
+  private static locales = { ru: 'ru', en: 'en' };
 
   public changingUser = new EventEmitter();
 
@@ -71,7 +73,7 @@ export class SessionService {
   static getLang(): string {
     let lang = localStorage.getItem('lang');
     if (!lang) {
-      lang = 'ru';
+      lang = 'en';
     }
     return lang;
   }
@@ -82,6 +84,15 @@ export class SessionService {
 
   constructor(private router: Router,  private store: Store<fromStore.State>) {}
 
+  changeUserLanguage(language: string) {
+    if (language !== '') {
+      const userAttr = JSON.parse(localStorage.getItem('user'));
+      userAttr.language = language;
+      localStorage.setItem('user', JSON.stringify(userAttr));
+      this._user = userAttr;
+    }
+  }
+
   logout() {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
@@ -89,7 +100,6 @@ export class SessionService {
     this.store.dispatch(new LogOutAction());
     this.router.navigateByUrl('/');
   }
-
 
   saveAdmin() {
     const token = localStorage.getItem('token');

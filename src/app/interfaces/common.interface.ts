@@ -1,28 +1,23 @@
 export interface User {
-  accessToken?: string;
-  balance?: number;
-  balancePartner: number;
   id?: number;
   name: string;
-  company?: string;
-  telephone?: string;
+  company: string;
+  site: string;
+  telephone: string;
   email: string;
-  timezone: string;
-  language: string;
-  site?: string;
-  isLoggedIn: boolean;
-  isAdmin: boolean;
-  isServicePaused?: boolean;
-  wmr?: string;
+  balance: number;
+  balancePartner: number;
   registerIp?: string;
   lastLoginIp?: string;
   addedDateTime?: string;
-  isPartner?: any;
-  invitedByUserId?: any;
-  enablePartnerPayments?: any;
   comment?: any;
-  currency?: any;
-  config?: any;
+  isServicePaused?: boolean;
+  invitedByUserId?: any;
+  isPartner?: any;
+  enablePartnerPayments?: any;
+  wmr?: string;
+  timezone: string;
+  language: string;
   main_language: any;
   language1: any;
   language2?: any;
@@ -31,10 +26,15 @@ export interface User {
   languageOne?: Language;
   languageTwo?: Language;
   languageThree?: Language;
+  accessToken?: string;
+  isLoggedIn: boolean;
+  isAdmin: boolean;
+  currency?: any;
+  config?: any;
 }
 
 export interface InvitedUser {
-  id: number;
+  id?: number;
   name: string;
   partnerEarned: number;
 }
@@ -45,7 +45,7 @@ export interface FieldError {
 }
 
 export interface Operations {
-  id: number;
+  id?: number;
   addedDateTime: string;
   money: number;
   comment: number;
@@ -81,22 +81,16 @@ export interface Category {
   id?: number;
   title: string;
   parent_id: number;
+  parentCategory?: any;
 }
 
 export interface CategoryArray {
-  items: [
-    {
-      id: number;
-      title: string;
-      parent_id: number;
-      parentCategory?: any;
-    }
-  ];
+  items: Category[];
   _links: {
-    self: {
+    next?: {
       href: string;
     },
-    next?: {
+    self: {
       href: string;
     },
     last?: {
@@ -111,13 +105,8 @@ export interface CategoryArray {
   };
 }
 
-export interface TypeContent {
-  id: number;
-  title: string;
-}
-
 export interface Contents {
-  id: number;
+  id?: number;
   title: string;
   type_content: number;
   source_link: string;
@@ -150,7 +139,7 @@ export interface ContentsArray {
 }
 
 export interface Language {
-  id: number;
+  id?: number;
   title: string;
 }
 
@@ -174,21 +163,35 @@ export interface Dictionary {
   user_id: number;
   workout_progress_card: any;
   workout_progress_word_translate: any;
+  mnemonic_id: number;
   checked: boolean;
-  words?: any;
+  words?: Dictionary[];
   word_on?: string;
+  mnemonic_all?: Mnemonic[];
+  mnemonic?: Mnemonic;
   word_kun?: string;
   word_translate?: string;
   dictionaryWord?: any;
 }
 
+export interface Mnemonic {
+  id?: number;
+  user_id: number;
+  word: string;
+  text: string;
+  images: string;
+  rating: number;
+  addedDateTime: number;
+  updateDateTime: number;
+}
+
 export interface DictionaryArray {
   items: Dictionary[];
   _links: {
-    self: {
+    next?: {
       href: string;
     },
-    next?: {
+    self: {
       href: string;
     },
     last?: {

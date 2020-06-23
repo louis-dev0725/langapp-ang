@@ -41,7 +41,7 @@ export class SignupComponent implements OnInit {
   }
 
   getLanguage() {
-    return navigator.language;
+    return window.navigator.language.slice(0, 2).toLowerCase();
   }
 
   getInvatedId(): string | boolean {
@@ -60,6 +60,8 @@ export class SignupComponent implements OnInit {
         this.errors = res.error;
       } else {
         this.router.navigate(['/payment']);
+
+        window.postMessage({ type: 'LoginSuccess', text: 'Login'}, '*');
       }
     });
   }

@@ -65,10 +65,20 @@ export class ThemeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   setLanguage(lang: any) {
-    const idx = this.languages.indexOf(lang);
-    this.session.lang = idx > 0 ? 'en' : 'ru';
-    this.translate.use(this.session.lang);
+    let language: string;
+    if (lang === 'Русский') {
+      language = 'ru';
+    } else {
+      language = 'en';
+    }
+    localStorage.setItem('lang', language);
+    this.translate.use(language);
     this.eventService.emitChangeEvent({ type: 'language-change' });
+    if (this.session.user !== null) {
+      this.session.changeUserLanguage(language);
+      const user = this.session.user;
+      this.api.updateUser({ id: user.id, language: user.language }).pipe(untilDestroyed(this)).subscribe(() => {});
+    }
   }
 
   public updateItems(el) {

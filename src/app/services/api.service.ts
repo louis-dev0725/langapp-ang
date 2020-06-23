@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Category, Dictionary, Materials, SettingPlugin, User } from '@app/interfaces/common.interface';
+import { Category, Dictionary, Materials, Mnemonic, SettingPlugin, User } from '@app/interfaces/common.interface';
 import { Observable } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
@@ -866,6 +866,37 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch(this.apiHost + '/plugins/' + data.user_id, data, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+
+  /**
+   * Создаём мнемонику
+   */
+  createMnemonic(data): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.post(this.apiHost + '/mnemonics/create', data, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
+
+  /**
+   * Обновляем мнемонику
+   */
+  updateMnemonic(data: Mnemonic): Observable<any> {
+    return new Observable((observer) => {
+      const headers = this.getHeadersWithToken();
+      this.http.post(this.apiHost + '/mnemonics/' + data.id, data, { headers }).subscribe((res) => {
           observer.next(res);
         }, (error) => {
           observer.next(this.getApiError(error));

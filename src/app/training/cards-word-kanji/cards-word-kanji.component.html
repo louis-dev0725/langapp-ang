@@ -1,26 +1,56 @@
 <div class="container">
   <div *ngIf="isLoaded">
     <div *ngIf="cards !== null">
+      <button mat-flat-button class="other-mnemonic-button" color="primary" *ngIf="checkYourself"
+              (click)="onChangeMnemonic(true)">{{ 'OtherMnemonics' | translate }}</button>
+
       <div class="main_block">
         <div class="hh1">{{ cards.original_word }}</div>
         <div class="info" *ngIf="checkYourself">
           <div class="translate">{{ cards.word_translate }}</div>
-          <div class="on_kun" *ngIf="cards.type === 1">
-            On`yomi: {{ cards.word_on }} <br>
-            Kun`yomi: {{ cards.word_kun }}
-          </div>
-          <div class="words" *ngIf="cards.type === 1 && cards.words.length > 0">
-            <div *ngFor="let word of cards.words">
-              {{ word.original_word }} ({{ word.dictionaryWord.sourceData.kana[0].text }}) {{ word.translate_word }}
+
+          <ng-container *ngIf="cards.type === 1">
+            <div class="on_kun">
+              On`yomi: {{ cards.word_on }} <br>
+              Kun`yomi: {{ cards.word_kun }}
             </div>
+
+            <div class="words" *ngIf="cards.words.length > 0">
+              <div *ngFor="let obj_word of cards.words">
+                {{ obj_word.original_word }} ({{ obj_word.dictionaryWord.sourceData.kana[0].text }}) - {{ obj_word.translate_word }}
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="cards.type === 0">
+            <div class="on_kun">
+              {{ cards.translate_word }}<br>
+              {{ cards.dictionaryWord.sourceData.kana[0].text }}
+            </div>
+
+            <div class="words">
+              {{ cards.context }}
+            </div>
+          </ng-container>
+
+          <div class="mnemonic">
+            <ng-container *ngIf="cards.mnemonic">
+              <ng-container *ngIf="cards.mnemonic.images !== null">
+                <img src="{{ cards.mnemonic.images }}" alt="">
+              </ng-container>
+
+              <ng-container *ngIf="cards.mnemonic.text !== null">
+                <p>{{ cards.mnemonic.text }}</p>
+              </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="!cards.mnemonic">
+              <p>{{ 'No mnemonic' | translate }}</p>
+            </ng-container>
           </div>
-          <div class="on_kun" *ngIf="cards.type === 0">
-            {{ cards.translate_word }}<br>
-            {{ cards.dictionaryWord.sourceData.kana[0].text }}
-          </div>
-          <div class="words" *ngIf="cards.type === 0">
-            {{ cards.context }}
-          </div>
+
+          <app-modal-mnemonic [elem]="cards" [status]="openModal" (closeModal)="onChangeMnemonic(false)">
+          </app-modal-mnemonic>
         </div>
       </div>
       <app-navigate-action-card (clickActionCardButton)="checkButton($event)"></app-navigate-action-card>

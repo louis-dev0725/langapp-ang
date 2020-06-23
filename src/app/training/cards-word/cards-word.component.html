@@ -1,6 +1,9 @@
 <div class="container">
   <div *ngIf="isLoaded">
     <div *ngIf="cards !== null">
+      <button mat-flat-button class="other-mnemonic-button" color="primary" *ngIf="checkYourself"
+              (click)="onChangeMnemonic(true)">{{ 'OtherMnemonics' | translate }}</button>
+
       <div class="main_block">
         <div class="hh1">{{ cards.original_word }}</div>
         <div class="info" *ngIf="checkYourself">
@@ -11,6 +14,23 @@
           <div class="words">
             {{ cards.context }}
           </div>
+
+          <div class="mnemonic">
+            <ng-container *ngIf="cards.mnemonic.images !== null && cards.mnemonic.text === null">
+              <img src="{{ cards.mnemonic.images }}" alt="">
+            </ng-container>
+
+            <ng-container *ngIf="cards.mnemonic.text !== null && cards.mnemonic.images === null">
+              <p>{{ cards.mnemonic.text }}</p>
+            </ng-container>
+
+            <ng-container *ngIf="cards.mnemonic.text === null && cards.mnemonic.images === null">
+              <p>{{ 'No mnemonic' | translate }}</p>
+            </ng-container>
+          </div>
+
+          <app-modal-mnemonic [elem]="cards" [status]="openModal" (closeModal)="onChangeMnemonic(false)">
+          </app-modal-mnemonic>
         </div>
       </div>
       <app-navigate-action-card (clickActionCardButton)="checkButton($event)"></app-navigate-action-card>
