@@ -135,7 +135,9 @@
       "finish_all": "All workouts are over! Add new words or try tomorrow."
     },
     "mnemonics": {
-      "created": "Mnemonic loaded"
+      "created": "Mnemonic loaded",
+      "rating_up": "Rating up",
+      "rating_down": "Rating reduced"
     }
 	},
 	"for user": "for user",
@@ -242,5 +244,8 @@
   "No mnemonic": "No mnemonics were found for this word or kanji. You can download the mnemonics yourself.",
   "Upload mnemonic": "Upload mnemonics",
   "Add Mnemonics": "Add Mnemonics",
-  "Adding Mnemonics": "Adding Mnemonics"
+  "Adding Mnemonics": "Adding Mnemonics",
+  "EmptyOneField": "At least one field must be filled",
+  "MnemonicText": "Text Mnemonics",
+  "Select": "Выбрать"
 }

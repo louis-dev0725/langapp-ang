@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslatingService } from '@app/services/translating.service';
 
-import { Dictionary } from '@app/interfaces/common.interface';
+import { Dictionary, Mnemonic } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
 import { ApiService } from '@app/services/api.service';
 
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslatingService } from '@app/services/translating.service';
 
 
 @Component({
@@ -14,11 +14,17 @@ import { TranslatingService } from '@app/services/translating.service';
   templateUrl: './modal-mnemonic.component.html',
   styleUrls: ['./modal-mnemonic.component.scss']
 })
-export class ModalMnemonicComponent implements OnInit {
+export class ModalMnemonicComponent implements OnInit, OnDestroy {
 
   @Input() elem: Dictionary;
   @Input() status: boolean;
   @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
+  @Output() enterChangeMnemonic: EventEmitter<any> = new EventEmitter<any>();
+
+  openCreateModal = false;
+  twoModal = false;
+  // @ts-ignore
+  domain = window.rocket.apiHost;
 
   @Input()
   set isLoaded(val: boolean) {
@@ -36,18 +42,17 @@ export class ModalMnemonicComponent implements OnInit {
   ngOnInit() {}
 
   ratingChange(id: number, r_change: string) {
-    console.log(id);
-    console.log(r_change);
-
     this._isLoaded = true;
     const mnemonic_index = this.elem.mnemonic_all.findIndex(item => item.id === id);
     const mnemonic = this.elem.mnemonic_all[mnemonic_index];
 
     if (r_change === 'plus') {
       mnemonic.rating += 1;
+      mnemonic.user_rating = { user_id: this.elem.user_id, rating: 'plus' };
       this.api.updateMnemonic(mnemonic).pipe(untilDestroyed(this)).subscribe(res => {
         if (!(res instanceof ApiError)) {
-          this.snackBar.open(this.translatingService.translates['confirm'].mnemonics.created, null, {duration: 3000});
+          this.snackBar.open(this.translatingService.translates['confirm'].mnemonics.rating_up, null,
+            {duration: 3000});
         } else {
           this.snackBar.open(String(res.error), null, {duration: 3000});
         }
@@ -56,9 +61,11 @@ export class ModalMnemonicComponent implements OnInit {
       });
     } else {
       mnemonic.rating -= 1;
+      mnemonic.user_rating = { user_id: this.elem.user_id, rating: 'minus' };
       this.api.updateMnemonic(mnemonic).pipe(untilDestroyed(this)).subscribe(res => {
         if (!(res instanceof ApiError)) {
-          this.snackBar.open(this.translatingService.translates['confirm'].mnemonics.created, null, {duration: 3000});
+          this.snackBar.open(this.translatingService.translates['confirm'].mnemonics.rating_down, null,
+            {duration: 3000});
         } else {
           this.snackBar.open(String(res.error), null, {duration: 3000});
         }
@@ -71,4 +78,27 @@ export class ModalMnemonicComponent implements OnInit {
   onCloseModal() {
     this.closeModal.emit();
   }
+
+  onCreateMnemonic(status: boolean) {
+    this.openCreateModal = status;
+    if (status) {
+      this.twoModal = true;
+    } else {
+      this.twoModal = false;
+    }
+  }
+
+  onAddMnemonicArray(data) {
+    if (data.id !== null) {
+      const mnemonic: Mnemonic = { id: data.id, text: data.text, images: data.image, rating: 0,
+        user_id: this.elem.user_id, word: this.elem.original_word, mnemonicsUsers: [] };
+      this.elem.mnemonic_all.push(mnemonic);
+    }
+  }
+
+  enterMnemonic(id: number) {
+    this.enterChangeMnemonic.emit(id);
+  }
+
+  ngOnDestroy() {}
 }

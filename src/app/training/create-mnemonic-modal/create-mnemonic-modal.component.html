@@ -1,24 +1,39 @@
-<div class="modal" *ngIf="status_add">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title">{{ 'Adding Mnemonics' | translate }}</h3>
-        <a title="{{ 'Close' | translate }}" class="close" (click)="onCloseModal()">×</a>
-      </div>
-      <div class="modal-body">
-        <div class="loaded_box">
-          <div *ngIf="!isLoaded">
-            <input type="file" (change)="onFileSelected($event)" >
-            <button mat-flat-button type="button" color="primary" (click)="onUpload()">
-              {{ 'Upload mnemonic' | translate }}
-            </button>
-          </div>
+<div class="modal-dialog" *ngIf="status_add">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'Adding Mnemonics' | translate }}</h3>
+      <a title="{{ 'Close' | translate }}" class="close" (click)="onCloseModal()">×</a>
+    </div>
+    <div class="modal-body">
+      <ng-container *ngIf="errors.length > 0">
+        <mat-card *ngFor="let err of errors" class="err-alert">
+          <mat-card-content>{{ err.message }}</mat-card-content>
+        </mat-card>
+      </ng-container>
 
-          <mat-card *ngIf="isLoaded" style="display:flex;justify-content:center;align-items:center">
-            <mat-progress-spinner color="primary" mode="indeterminate">
-            </mat-progress-spinner>
-          </mat-card>
+      <div class="loaded_box">
+        <div *ngIf="!isLoaded">
+          <form [formGroup]="mnemonicForm">
+            <mat-form-field class="form-item">
+              <input type="text" matInput formControlName="text_mnemonic" placeholder="{{ 'MnemonicText' | translate }}">
+            </mat-form-field>
+
+            <div class="form-item">
+              <input type="file" formControlName="image_mnemonic" (change)="onFileSelected($event)">
+            </div>
+
+            <div class="form-item">
+              <button (click)="onSubmit()" mat-flat-button [disabled]="!mnemonicForm.valid"
+                      color="primary">{{ 'Upload mnemonic' | translate }}
+              </button>
+            </div>
+          </form>
         </div>
+
+        <mat-card *ngIf="isLoaded" style="display:flex;justify-content:center;align-items:center">
+          <mat-progress-spinner color="primary" mode="indeterminate">
+          </mat-progress-spinner>
+        </mat-card>
       </div>
     </div>
   </div>

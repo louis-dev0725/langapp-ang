@@ -181,8 +181,16 @@ export interface Mnemonic {
   text: string;
   images: string;
   rating: number;
-  addedDateTime: number;
-  updateDateTime: number;
+  user_rating?: any;
+  mnemonicsUsers: MnemonicUser[];
+  addedDateTime?: number;
+  updateDateTime?: number;
+}
+
+export interface MnemonicUser {
+  mnemonics_id: number;
+  users_id: number;
+  rating: string;
 }
 
 export interface DictionaryArray {

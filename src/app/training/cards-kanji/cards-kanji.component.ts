@@ -26,6 +26,8 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
   endTrainingText = null;
   user_id = 0;
   openModal = false;
+  // @ts-ignore
+  domain = window.rocket.apiHost;
 
   @Input()
   set isLoaded(val: boolean) {
@@ -95,6 +97,25 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
 
   editCardElem(elements, result) {
     elements.forEach((element) => {
+      element.mnemonic_all = [];
+
+      if (result.mnemonics.length > 0) {
+        if (element.mnemonic_id === null) {
+          element.mnemonic = result.mnemonics[0];
+          element.mnemonic_id = result.mnemonics[0].id;
+        }
+        result.mnemonics.forEach((mnemonic) => {
+          if (mnemonic.word === element.original_word) {
+            const idx_rating = mnemonic.mnemonicsUsers.findIndex(item => item.users_id === this.user_id);
+            mnemonic.user_rating = null;
+            if (idx_rating !== -1) {
+              mnemonic.user_rating = mnemonic.mnemonicsUsers[idx_rating].rating;
+            }
+            element.mnemonic_all.push(mnemonic);
+          }
+        });
+      }
+
       element.word_on = '';
       element.word_kun = '';
       element.word_translate = '';
@@ -202,5 +223,13 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
 
   onChangeMnemonic(status: boolean) {
     this.openModal = status;
+  }
+
+  onEnterMnemonic(id: number) {
+    const mnemonicIndex = this.cards.mnemonic_all.findIndex(item => item.id === id);
+    const mnemonic = this.cards.mnemonic_all[mnemonicIndex];
+
+    this.cards.mnemonic = mnemonic;
+    this.cards.mnemonic_id = mnemonic.id;
   }
 }

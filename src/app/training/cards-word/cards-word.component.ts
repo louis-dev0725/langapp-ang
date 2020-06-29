@@ -26,6 +26,8 @@ export class CardsWordComponent implements OnInit, OnDestroy {
   endTrainingText = null;
   user_id = 0;
   openModal = false;
+  // @ts-ignore
+  domain = window.rocket.apiHost;
 
   @Input()
   set isLoaded(val: boolean) {
@@ -49,7 +51,7 @@ export class CardsWordComponent implements OnInit, OnDestroy {
         this.cardsArray = res.items;
 
         if (this.cardsArray.length > 0) {
-          this.cards = this.cardsArray[0];
+          this.getOtherInfoElement(this.cardsArray);
         } else {
           this.cards = null;
           this.endTraining = true;
@@ -63,6 +65,53 @@ export class CardsWordComponent implements OnInit, OnDestroy {
 
       this._isLoaded = true;
     });
+  }
+
+  getOtherInfoElement(elements) {
+    let mnemonic = null;
+    elements.forEach((element) => {
+      if (mnemonic === null) {
+        mnemonic = element.original_word;
+      } else {
+        mnemonic += ',' + element.original_word;
+      }
+    });
+
+    const query = 'user_id=' + this.user_id + '&mnemonic=' + mnemonic;
+    this.api.getMnemonics(query).pipe(untilDestroyed(this)).subscribe((res) => {
+      if (!(res instanceof ApiError)) {
+        this.editCardElem(this.cardsArray, res);
+      } else {
+        this.snackBar.open(String(res.error), null, {duration: 3000});
+      }
+
+      this._isLoaded = true;
+    });
+  }
+
+  editCardElem(elements, result) {
+    elements.forEach((element) => {
+      element.mnemonic_all = [];
+
+      if (result.mnemonics.length > 0) {
+        if (element.mnemonic_id === null) {
+          element.mnemonic = result.mnemonics[0];
+          element.mnemonic_id = result.mnemonics[0].id;
+        }
+        result.mnemonics.forEach((mnemonic) => {
+          if (mnemonic.word === element.original_word) {
+            const idx_rating = mnemonic.mnemonicsUsers.findIndex(item => item.users_id === this.user_id);
+            mnemonic.user_rating = null;
+            if (idx_rating !== -1) {
+              mnemonic.user_rating = mnemonic.mnemonicsUsers[idx_rating].rating;
+            }
+            element.mnemonic_all.push(mnemonic);
+          }
+        });
+      }
+    });
+
+    this.cards = elements[0];
   }
 
   ngOnDestroy() {}
@@ -117,5 +166,13 @@ export class CardsWordComponent implements OnInit, OnDestroy {
 
   onChangeMnemonic(status: boolean) {
     this.openModal = status;
+  }
+
+  onEnterMnemonic(id: number) {
+    const mnemonicIndex = this.cards.mnemonic_all.findIndex(item => item.id === id);
+    const mnemonic = this.cards.mnemonic_all[mnemonicIndex];
+
+    this.cards.mnemonic = mnemonic;
+    this.cards.mnemonic_id = mnemonic.id;
   }
 }

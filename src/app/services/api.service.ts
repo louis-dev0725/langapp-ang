@@ -699,7 +699,7 @@ export class ApiService {
       if (data !== '') {
         query = '?' + data;
       }
-      query += '&expand=dictionaryWord';
+      query += '&expand=dictionaryWord,mnemonic';
 
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/dictionaries/all' + query, { headers }).subscribe((res) => {
@@ -720,7 +720,7 @@ export class ApiService {
       if (data !== '') {
         query = '?' + data;
       }
-      query += '&expand=dictionaryWord';
+      query += '&expand=dictionaryWord,mnemonicsUsers';
 
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/dictionaries/query-one' + query, { headers }).subscribe((res) => {
@@ -874,6 +874,26 @@ export class ApiService {
     });
   }
 
+  /**
+   * Получаем мнемоники
+   */
+  getMnemonics(data): Observable<any> {
+    return new Observable((observer) => {
+      let query = '';
+      if (data !== '') {
+        query = '?' + data;
+      }
+      query += '&expand=mnemonicsUsers';
+
+      const headers = this.getHeadersWithToken();
+      this.http.get(this.apiHost + '/mnemonics/index' + query, { headers }).subscribe((res) => {
+          observer.next(res);
+        }, (error) => {
+          observer.next(this.getApiError(error));
+        }
+      );
+    });
+  }
 
   /**
    * Создаём мнемонику
@@ -896,7 +916,7 @@ export class ApiService {
   updateMnemonic(data: Mnemonic): Observable<any> {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
-      this.http.post(this.apiHost + '/mnemonics/' + data.id, data, { headers }).subscribe((res) => {
+      this.http.patch(this.apiHost + '/mnemonics/' + data.id, data, { headers }).subscribe((res) => {
           observer.next(res);
         }, (error) => {
           observer.next(this.getApiError(error));

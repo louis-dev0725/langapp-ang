@@ -19,20 +19,23 @@
           </div>
 
           <div class="mnemonic">
-            <ng-container *ngIf="cards.mnemonic.images !== null && cards.mnemonic.text === null">
-              <img src="{{ cards.mnemonic.images }}" alt="">
+            <ng-container *ngIf="cards.mnemonic">
+              <ng-container *ngIf="cards.mnemonic.images !== null">
+                <img src="{{ domain }}{{ cards.mnemonic.images }}" alt="">
+              </ng-container>
+
+              <ng-container *ngIf="cards.mnemonic.text !== null">
+                <p>{{ cards.mnemonic.text }}</p>
+              </ng-container>
             </ng-container>
 
-            <ng-container *ngIf="cards.mnemonic.text !== null && cards.mnemonic.images === null">
-              <p>{{ cards.mnemonic.text }}</p>
-            </ng-container>
-
-            <ng-container *ngIf="cards.mnemonic.text === null && cards.mnemonic.images === null">
+            <ng-container *ngIf="!cards.mnemonic">
               <p>{{ 'No mnemonic' | translate }}</p>
             </ng-container>
           </div>
 
-          <app-modal-mnemonic [elem]="cards" [status]="openModal" (closeModal)="onChangeMnemonic(false)">
+          <app-modal-mnemonic [elem]="cards" [status]="openModal" (closeModal)="onChangeMnemonic(false)"
+                              (enterChangeMnemonic)="onEnterMnemonic($event)">
           </app-modal-mnemonic>
         </div>
       </div>
