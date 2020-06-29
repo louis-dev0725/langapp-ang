@@ -132,11 +132,12 @@ class DictionaryController extends ActiveController {
         $filter = Yii::$app->request->queryParams;
 
         $query = UserDictionary::find()->joinWith('dictionaryWord')
-            ->where(['user_dictionary.user_id' => (int)$filter['user_id'], 'type' => UserDictionary::TYPE_WORD])
+            ->where(['user_dictionary.user_id' => (int)$filter['user_id'], 'user_dictionary.type' => UserDictionary::TYPE_WORD])
             ->andWhere(['or like', 'user_dictionary.original_word' , explode(',', $filter['word'])])->all();
 
-        $query1 = Mnemonics::find()->where(['user_id' => (int)$filter['user_id']])
-            ->andWhere(['word' => explode(',', $filter['mnemonic'])])->orderBy(['rating' => SORT_DESC])->all();
+        $query1 = Mnemonics::find()->joinWith('mnemonicsUsers')
+            ->where(['mnemonics.word' => explode(',', $filter['mnemonic'])])
+            ->orderBy(['mnemonics.rating' => SORT_DESC])->all();
 
         return [
             'words' => $query,

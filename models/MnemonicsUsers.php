@@ -10,7 +10,7 @@ use yii\db\ActiveRecord;
  *
  * @property int $mnemonics_id
  * @property int $users_id
- * @property int|null $rating
+ * @property string $rating
  *
  * @property Mnemonics $mnemonics
  * @property User $users
@@ -30,7 +30,7 @@ class MnemonicsUsers extends ActiveRecord {
         return [
             [['mnemonics_id', 'users_id'], 'required'],
             [['mnemonics_id', 'users_id', 'rating'], 'default', 'value' => null],
-            [['mnemonics_id', 'users_id', 'rating'], 'integer'],
+            [['mnemonics_id', 'users_id', 'rating'], 'string'],
             [['mnemonics_id', 'users_id'], 'unique', 'targetAttribute' => ['mnemonics_id', 'users_id']],
             [['mnemonics_id'], 'exist', 'skipOnError' => true, 'targetClass' => Mnemonics::class,
                 'targetAttribute' => ['mnemonics_id' => 'id']],

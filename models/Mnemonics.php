@@ -23,6 +23,9 @@ use yii\db\ActiveRecord;
  * @property User[] $users
  */
 class Mnemonics extends ActiveRecord {
+
+    public $image;
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +36,7 @@ class Mnemonics extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function behaviors(){
+    public function behaviors() {
         return [
             [
                 'class' => TimestampBehavior::class,
@@ -51,11 +54,14 @@ class Mnemonics extends ActiveRecord {
     public function rules() {
         return [
             [['user_id', 'word'], 'required'],
-            [['user_id', 'rating'], 'default', 'value' => null],
+            [['text', 'images'], 'default', 'value' => null],
+            [['rating'], 'default', 'value' => 0],
             [['user_id', 'rating'], 'integer'],
             [['word', 'text', 'images'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class,
                 'targetAttribute' => ['user_id' => 'id']],
+
+            [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
