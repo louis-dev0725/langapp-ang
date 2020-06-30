@@ -22,8 +22,11 @@ class TranslateController extends ActiveController {
 
     public function actionCreate () {
         $offset = 0;
+        $a = 0;
+        $word_offset_arr = [];
         $word_offset = [];
         $str_search = [];
+        $res = [];
         $filter = Yii::$app->getRequest()->getBodyParams();
         $meCab = new meCab();
 
@@ -64,7 +67,6 @@ class TranslateController extends ActiveController {
         $search_arr = array_unique($str_search);
 
         if (!empty($search_arr)) {
-            $res = [];
             $queries = DictionaryWord::find()->where(['&^|', 'query', new ArrayExpression($search_arr)])->distinct()
                 ->orderBy(['id' => SORT_ASC])->all();
             if (!empty($queries)) {
@@ -85,12 +87,12 @@ class TranslateController extends ActiveController {
                         foreach ($wordFromDict->query as $query) {
                             if (mb_strlen($query) >= $minWordLength &&
                                 strcasecmp(mb_substr($text, (int)$current_arr[0], mb_strlen($query)), $query) == 0) {
-                                if (empty($res)) {
-                                    $word_offset['word'] = $query;
-                                    $word_offset['s_offset'] = (int)$current_arr[0] + $count_sub;
-                                    $word_offset['e_offset'] = (int)$current_arr[0] + mb_strlen($query) + $count_sub;
-                                }
+                                $word_offset_arr[$a]['word'] = $query;
+                                $word_offset_arr[$a]['kana'] = $wordFromDict->sourceData['kana'][0]['text'];
+                                $word_offset_arr[$a]['s_offset'] = (int)$current_arr[0] + $count_sub;
+                                $word_offset_arr[$a]['e_offset'] = (int)$current_arr[0] + mb_strlen($query) + $count_sub;
                                 $res[] = $wordFromDict;
+                                $a++;
                                 break;
                             }
                         }
@@ -98,7 +100,18 @@ class TranslateController extends ActiveController {
                 }
             }
 
-            return ['success' => true, 'word' => $word_offset, 'res' => $res];
+            usort($word_offset_arr, function($a, $b) {
+                $aa = mb_strlen($a['word']);
+                $bb = mb_strlen($b['word']);
+
+                if ($aa == $bb) {
+                    return 0;
+                }
+                return ($aa < $bb) ? 1 : -1;
+            });
+            $word_offset = $word_offset_arr[0];
+
+            return ['success' => true, 'word' => $word_offset, 'res' => $res, 'words' => $word_offset_arr];
         }
 
         return ['success' => false];

@@ -51,6 +51,12 @@ $config = [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning', 'info'],
                 ],
+                [
+                    'class' => 'components\LogTargetExtension',
+                    'categories' => ['log_extension'],
+                    'logFile' => '@runtime/logs/extension.log',
+                    'logVars' => []
+                ],
             ],
         ],
         'db' => $db,
@@ -62,7 +68,7 @@ $config = [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['user', 'transaction', 'category', 'content', 'language', 'translate',
-                        'plugin', 'dictionary', 'mnemonic'],
+                        'plugin', 'dictionary', 'mnemonic', 'log'],
                     'prefix' => 'api',
                     'patterns' => [
                         'PUT,PATCH {id}' => 'update',
