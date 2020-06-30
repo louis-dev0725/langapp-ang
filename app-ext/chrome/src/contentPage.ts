@@ -163,6 +163,7 @@ function createModal() {
   modal.style.borderRadius = '10px';
   modal.style.padding = '10px';
   modal.style.border = '1px solid #000';
+  modal.style.overflowY = 'auto';
 
   modalShadowRoot.appendChild(modal);
 
@@ -188,7 +189,7 @@ function createModal() {
 
   document.body.onclick = (() => {
     wordT.innerHTML = '';
-    mBody.innerHTML = '<ul id="list-translate"></ul>';
+    mBody.innerHTML = '';
     modal.style.display = 'none';
   });
 
@@ -199,13 +200,10 @@ function createModal() {
 
   mBody.style.boxSizing = 'border-box';
   mBody.style.display = 'flex';
-  mBody.style.overflowY = 'scroll';
   mBody.style.flexFlow = 'column nowrap';
   mBody.style.width = '100%';
-  mBody.style.padding = '0 15px';
-  mBody.style.margin = '10px 0';
 
-  mBody.innerHTML = '<ul id="list-translate"></ul>';
+  mBody.innerHTML = '';
 }
 
 function innerTranslateObject (range, user, pageY) {
@@ -243,23 +241,62 @@ function innerTranslateObject (range, user, pageY) {
         mHeader.insertBefore(wordT, modalShadowRoot.getElementById('closeModal'));
         wordT.style.textAlign = 'center';
 
+        let i = 0;
         if (response.data.res.length > 0) {
-          mBody.innerHTML = '<ul id="list-translate"></ul>';
-          wordT.innerHTML = '<span>' + response.data.res[0].sourceData.kana[0].text + '</span>'
-              + '<h1 style="font-size:2em;text-align:center;margin:.5rem 0;">' + response.data.word.word + '</h1>';
-
-          let listTranslate = modalShadowRoot.getElementById('list-translate');
-
-          response.data.res.forEach((res) => {
-            const transObj = res.sourceData;
-
-            transObj.sense.forEach((sen) => {
-              sen.gloss.forEach((gl) => {
-                listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
-                    + '<a class="textDictionary" data-word="' + response.data.word.word
-                    + '" data-id="' + res.id + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+          response.data.words.forEach((word) => {
+            let result = ''
+            response.data.res.forEach((res) => {
+              res.query.forEach((q) => {
+                if (word.word === q) {
+                  result = res;
+                }
               });
             });
+
+            if (i === 0) {
+              wordT.innerHTML = '<span>' + word.kana + '</span>'
+                  + '<h1 style="font-size:2em;text-align:center;margin:.5rem 0;">' + word.word + '</h1>';
+
+              mBody.innerHTML = '<div style="padding:0 15px;margin:10px 0">'
+                  + '<ul id="list-translate_' + i + '" style="border:1px solid #000;border-radius:5px;'
+                  + 'list-style:none;padding:0;border-bottom:none;"></ul></div>';
+
+              let listTranslate = modalShadowRoot.getElementById('list-translate_' + i );
+              // @ts-ignore
+              const transObj = result.sourceData;
+
+              transObj.sense.forEach((sen) => {
+                sen.gloss.forEach((gl) => {
+                  listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                      + '<a class="textDictionary" data-word="' + word.word + '" data-id="' + transObj.id + '" data-translate="'
+                      + gl.text + '">' + gl.text + '</a></li>';
+                });
+              });
+            } else {
+              mBody.innerHTML += '<div id="modal-translate-header" style="display:flex;flex-flow:row nowrap;width:100%;'
+                  + 'justify-content:space-between;border-top:1px solid #000;margin-top:10px;">'
+                  + '<div class="word-translate" style="text-align:center;">'
+                  + '<span>' + word.kana + '</span>'
+                  + '<h1 style="font-size:2em;text-align:center;margin:.5rem 0;">' + word.word + '</h1></div></div>';
+
+              mBody.innerHTML += '<div style="padding:0 15px;margin:10px 0">'
+                  + '<ul id="list-translate_' + i + '" style="border:1px solid #000;border-radius:5px;'
+                  + 'list-style:none;padding:0;border-bottom:none;"></ul></div>';
+
+              let listTranslate = modalShadowRoot.getElementById('list-translate_' + i );
+              // @ts-ignore
+              const transObj = result.sourceData;
+
+              transObj.sense.forEach((sen) => {
+                sen.gloss.forEach((gl) => {
+                  listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                      + '<a class="textDictionary" data-word="' + word.word + '" data-id="' + transObj.id
+                      + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+                });
+              });
+            }
+
+            i++;
           });
 
           let listDictionary = modalShadowRoot.querySelectorAll('.textDictionary');
@@ -272,12 +309,6 @@ function innerTranslateObject (range, user, pageY) {
               );
             });
           }
-
-          modalShadowRoot.getElementById('list-translate').style.border = '1px solid #000';
-          modalShadowRoot.getElementById('list-translate').style.borderRadius = '5px';
-          modalShadowRoot.getElementById('list-translate').style.listStyle = 'none';
-          modalShadowRoot.getElementById('list-translate').style.padding = '0';
-          modalShadowRoot.getElementById('list-translate').style.borderBottom = 'none';
 
           let sel = window.getSelection();
           sel.removeAllRanges();
