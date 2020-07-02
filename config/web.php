@@ -46,13 +46,15 @@ $config = [
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
+            'flushInterval' => 1,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning', 'info'],
+                    'levels' => ['error', 'warning', 'info']
                 ],
                 [
-                    'class' => 'components\LogTargetExtension',
+                    'class' => 'yii\log\FileTarget',
+                    'exportInterval' => 1,
                     'categories' => ['log_extension'],
                     'logFile' => '@runtime/logs/extension.log',
                     'logVars' => []

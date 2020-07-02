@@ -24,7 +24,6 @@ class TranslateController extends ActiveController {
         $offset = 0;
         $a = 0;
         $word_offset_arr = [];
-        $word_offset = [];
         $str_search = [];
         $res = [];
         $filter = Yii::$app->getRequest()->getBodyParams();
