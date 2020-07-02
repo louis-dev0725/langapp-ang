@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { SrsService } from '@app/services/srs.service';
@@ -7,6 +7,8 @@ import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
 import { TranslatingService } from '@app/services/translating.service';
 import { Card, Dictionary } from '@app/interfaces/common.interface';
+
+import { ModalMnemonicComponent } from '@app/training/modal-mnemonic/modal-mnemonic.component';
 
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
@@ -39,6 +41,7 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
   }
 
   private _isLoaded = false;
+  @ViewChild(ModalMnemonicComponent, { static: false }) mmc: ModalMnemonicComponent;
 
   constructor(private srsService: SrsService, private api: ApiService, private snackBar: MatSnackBar,
               private session: SessionService, private translatingService: TranslatingService) { }
@@ -233,5 +236,10 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
 
     this.cards.mnemonic = mnemonic;
     this.cards.mnemonic_id = mnemonic.id;
+  }
+
+  openCreateMnemonicModal() {
+    this.onChangeMnemonic(true);
+    this.mmc.onCreateMnemonic(true);
   }
 }

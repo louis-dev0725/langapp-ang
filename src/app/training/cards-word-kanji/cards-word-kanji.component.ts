@@ -8,8 +8,9 @@ import { ApiError } from '@app/services/api-error';
 import { TranslatingService } from '@app/services/translating.service';
 import { Card, Dictionary } from '@app/interfaces/common.interface';
 
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { ModalMnemonicComponent } from '@app/training/modal-mnemonic/modal-mnemonic.component';
+
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 
 @Component({
