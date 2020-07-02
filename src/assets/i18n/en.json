@@ -241,11 +241,13 @@
   "OtherMnemonics": "Other mnemonics",
   "Close": "Close",
   "Mnemonics": "Mnemonics",
-  "No mnemonic": "No mnemonics were found for this word or kanji. You can download the mnemonics yourself.",
+  "No mnemonic": "No mnemonics were found for this word or kanji.",
+  "No mnemonic click": "You can download the mnemonics yourself.",
   "Upload mnemonic": "Upload mnemonics",
   "Add Mnemonics": "Add Mnemonics",
   "Adding Mnemonics": "Adding Mnemonics",
   "EmptyOneField": "At least one field must be filled",
   "MnemonicText": "Text Mnemonics",
-  "Select": "Выбрать"
+  "Select": "Select",
+  "ErrorMnemonicSize": "The size of the mnemonics should not exceed 10mb"
 }

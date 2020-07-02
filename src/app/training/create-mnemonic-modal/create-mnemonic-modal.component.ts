@@ -42,18 +42,23 @@ export class CreateMnemonicModalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.mnemonicForm = this.formBuilder.group({
-      text_mnemonic: ['', { validators: [] }],
-      image_mnemonic: ['', { validators: [] }],
+      text_mnemonic: [null, { validators: [] }],
+      image_mnemonic: [null, { validators: [] }],
     });
   }
 
   onFileSelected(event) {
     this.selectedFile = <File>event.target.files[0];
+
+    this.errors = [];
+    if (this.selectedFile.size > 10 * 1024 * 1024) {
+      this.errors.push({ message: this.translatingService.translates.ErrorMnemonicSize });
+    }
   }
 
 
   onSubmit() {
-    this._isLoaded = false;
+    this._isLoaded = true;
 
     const mnemonic = {
       ...this.mnemonicForm.value,
@@ -65,20 +70,27 @@ export class CreateMnemonicModalComponent implements OnInit, OnDestroy {
 
     if (mnemonic.text_mnemonic === '' && mnemonic.image_mnemonic === '') {
       this.errors.push({ message: this.translatingService.translates.EmptyOneField });
+      this._isLoaded = false;
     } else {
       this.errors = [];
 
-      fd.append('text', this.mnemonicForm.value.text_mnemonic);
-      fd.append('image', this.selectedFile, this.selectedFile.name);
+      if (this.mnemonicForm.value.text_mnemonic !== null) {
+        fd.append('text', this.mnemonicForm.value.text_mnemonic);
+      }
+
+      if (this.selectedFile !== null) {
+        fd.append('image', this.selectedFile, this.selectedFile.name);
+      }
 
       this._isLoaded = true;
       this.api.createMnemonic(fd).pipe(untilDestroyed(this)).subscribe(res => {
         if (!(res instanceof ApiError)) {
+          this.mnemonicForm.reset();
           this.snackBar.open(this.translatingService.translates['confirm'].mnemonics.created, null,
             { duration: 3000 });
 
           this.createMnemonic.emit({ id: res.id, text: res.text, image: res.image });
-          this.closeModalCreate.emit();
+          this.closeModalCreate.emit(true);
         } else {
           this.snackBar.open(String(res.error), null, { duration: 3000 });
         }

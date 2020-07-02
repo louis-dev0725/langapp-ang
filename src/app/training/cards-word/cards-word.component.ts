@@ -61,9 +61,8 @@ export class CardsWordComponent implements OnInit, OnDestroy {
         }
       } else {
         this.snackBar.open(String(res.error), null, {duration: 3000});
+        this._isLoaded = true;
       }
-
-      this._isLoaded = true;
     });
   }
 
@@ -94,12 +93,13 @@ export class CardsWordComponent implements OnInit, OnDestroy {
       element.mnemonic_all = [];
 
       if (result.mnemonics.length > 0) {
-        if (element.mnemonic_id === null) {
-          element.mnemonic = result.mnemonics[0];
-          element.mnemonic_id = result.mnemonics[0].id;
-        }
         result.mnemonics.forEach((mnemonic) => {
           if (mnemonic.word === element.original_word) {
+            if (element.mnemonic_id === null) {
+              element.mnemonic = mnemonic;
+              element.mnemonic_id = mnemonic.id;
+            }
+
             const idx_rating = mnemonic.mnemonicsUsers.findIndex(item => item.users_id === this.user_id);
             mnemonic.user_rating = null;
             if (idx_rating !== -1) {

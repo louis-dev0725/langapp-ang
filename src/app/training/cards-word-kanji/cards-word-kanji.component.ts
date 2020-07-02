@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { SrsService } from '@app/services/srs.service';
@@ -9,6 +9,7 @@ import { TranslatingService } from '@app/services/translating.service';
 import { Card, Dictionary } from '@app/interfaces/common.interface';
 
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { ModalMnemonicComponent } from '@app/training/modal-mnemonic/modal-mnemonic.component';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
   }
 
   private _isLoaded = false;
+  @ViewChild(ModalMnemonicComponent, { static: false }) mmc: ModalMnemonicComponent;
 
   constructor(private srsService: SrsService, private api: ApiService, private snackBar: MatSnackBar,
               private session: SessionService, private translatingService: TranslatingService) { }
@@ -61,6 +63,7 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
         }
       } else {
         this.snackBar.open(String(res.error), null, {duration: 3000});
+        this._isLoaded = true;
       }
     });
   }
@@ -100,12 +103,13 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
       element.mnemonic_all = [];
 
       if (result.mnemonics.length > 0) {
-        if (element.mnemonic_id === null) {
-          element.mnemonic = result.mnemonics[0];
-          element.mnemonic_id = result.mnemonics[0].id;
-        }
         result.mnemonics.forEach((mnemonic) => {
           if (mnemonic.word === element.original_word) {
+            if (element.mnemonic_id === null) {
+              element.mnemonic = mnemonic;
+              element.mnemonic_id = mnemonic.id;
+            }
+
             const idx_rating = mnemonic.mnemonicsUsers.findIndex(item => item.users_id === this.user_id);
             mnemonic.user_rating = null;
             if (idx_rating !== -1) {
@@ -222,5 +226,10 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
 
     this.cards.mnemonic = mnemonic;
     this.cards.mnemonic_id = mnemonic.id;
+  }
+
+  openCreateMnemonicModal() {
+    this.onChangeMnemonic(true);
+    this.mmc.onCreateMnemonic(true);
   }
 }

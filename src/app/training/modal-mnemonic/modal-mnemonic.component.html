@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <app-create-mnemonic-modal [elem]="elem" [status_add]="openCreateModal" (closeModalCreate)="onCreateMnemonic(false)"
+  <app-create-mnemonic-modal [elem]="elem" [status_add]="openCreateModal" (closeModalCreate)="onCreateMnemonic(false, $event)"
                              (createMnemonic)="onAddMnemonicArray($event)">
   </app-create-mnemonic-modal>
 </div>

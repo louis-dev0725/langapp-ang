@@ -46,6 +46,7 @@
 
             <ng-container *ngIf="!cards.mnemonic">
               <p>{{ 'No mnemonic' | translate }}</p>
+              <p class="createMnemonic" (click)="openCreateMnemonicModal()">{{ 'No mnemonic click' | translate }}</p>
             </ng-container>
           </div>
 

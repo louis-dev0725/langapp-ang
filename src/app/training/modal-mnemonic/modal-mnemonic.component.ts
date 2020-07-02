@@ -79,12 +79,11 @@ export class ModalMnemonicComponent implements OnInit, OnDestroy {
     this.closeModal.emit();
   }
 
-  onCreateMnemonic(status: boolean) {
+  onCreateMnemonic(status: boolean, ev: boolean = false) {
     this.openCreateModal = status;
-    if (status) {
-      this.twoModal = true;
-    } else {
-      this.twoModal = false;
+    this.twoModal = status;
+    if (ev) {
+      this.onCloseModal();
     }
   }
 
@@ -93,6 +92,7 @@ export class ModalMnemonicComponent implements OnInit, OnDestroy {
       const mnemonic: Mnemonic = { id: data.id, text: data.text, images: data.image, rating: 0,
         user_id: this.elem.user_id, word: this.elem.original_word, mnemonicsUsers: [] };
       this.elem.mnemonic_all.push(mnemonic);
+      this.enterChangeMnemonic.emit(mnemonic.id);
     }
   }
 

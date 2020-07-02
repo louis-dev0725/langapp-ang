@@ -203,6 +203,14 @@ mat-progress-bar.mat-progress-bar {
         width: auto;
         height: auto;
       }
+
+      .createMnemonic {
+        text-decoration: none;
+      }
+
+      .createMnemonic:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
