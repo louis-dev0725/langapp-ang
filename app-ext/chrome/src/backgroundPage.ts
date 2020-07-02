@@ -23,12 +23,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     status: false,
                     error: 'nonAuth'
                 };
+
+                const text = request.responseText;
+                sendToLog({ objWord, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
                     status: false,
                     error: 'errorToServer'
                 };
+
+                const text = request.responseText;
+                sendToLog({ objWord, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
@@ -52,12 +58,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     status: false,
                     error: 'nonAuth'
                 };
+
+                const text = request.responseText;
+                sendToLog({ objWord, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
                     status: false,
                     error: 'errorToServer'
                 };
+
+                const text = request.responseText;
+                sendToLog({ objWord, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
@@ -81,12 +93,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     status: false,
                     error: 'nonAuth'
                 };
+
+                const text = request.responseText;
+                sendToLog({ objWord, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
                     status: false,
                     error: 'errorToServer'
                 };
+
+                const text = request.responseText;
+                sendToLog({ objWord, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
@@ -116,6 +134,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 console.log('Writing a token into a variable');
             }
         });
+    }else if (message.type === 'sendLogServer') {
+        let objWord = JSON.stringify(objData);
+
+        sendToLog({ objWord });
     }
 });
 
@@ -154,3 +176,19 @@ setTimeout(() => {
         });
     }
 }, 12000);
+
+function sendToLog(data) {
+    let request = new XMLHttpRequest();
+    request.open('POST', config.URIApi + 'api/logs/create', true);
+    request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    request.setRequestHeader('Authorization', `Bearer ${token}`);
+    request.send(data);
+
+    request.onload = (() => {
+        if (request.readyState === 4 && request.status === 200) {
+            console.log('Ошибка отправлена.');
+        } else {
+            console.log('Ошибку не смогли отправить.');
+        }
+    });
+}

@@ -9,10 +9,12 @@ let translateObj = {
   url: null,
   offset: null
 };
+
 let selectedObj = {
   text: null,
   url: null,
 };
+
 let dictionaryWord = {
     user_id: null,
     word: null,
@@ -21,12 +23,13 @@ let dictionaryWord = {
     context: null,
     url: null
 };
+
 let context = null;
 
 const IGNORE_TEXT_PATTERN = /\u200c/;
 
 const modalShadowElement = document.createElement('div');
-const modalShadowRoot = modalShadowElement.attachShadow({mode: 'open'});
+const modalShadowRoot = modalShadowElement.attachShadow({ mode: 'open' });
 
 const modal = document.createElement('div');
 const mHeader = document.createElement('div');
@@ -39,7 +42,11 @@ window.onload = ((ev) => {
       user = result.user;
       extensionSetting = true;
 
-      createButtonListener();
+      try {
+        createButtonListener();
+      } catch (e) {
+        chrome.runtime.sendMessage({ type: 'sendLogServer', data: e }, () => {});
+      }
     } else {
       if (ev.target.baseURI === config.URIFront + '/') {
         const token = localStorage.getItem('token');
@@ -51,7 +58,11 @@ window.onload = ((ev) => {
         }
       }
 
-      createButtonListener();
+      try {
+        createButtonListener();
+      } catch (e) {
+        chrome.runtime.sendMessage({ type: 'sendLogServer', data: e }, () => {});
+      }
     }
   });
 });
@@ -165,6 +176,8 @@ function createModal() {
   modal.style.border = '1px solid #000';
   modal.style.overflowY = 'auto';
 
+  modalShadowRoot.innerHTML = `<style>:host { all: initial; }</style>`;
+
   modalShadowRoot.appendChild(modal);
 
   modal.appendChild(mHeader);
@@ -183,7 +196,7 @@ function createModal() {
   modalShadowRoot.getElementById('closeModal').style.marginLeft = 'auto';
 
   modalShadowRoot.getElementById('closeModal').onclick = (() => {
-    mBody.innerHTML = '<ul id="list-translate"></ul>';
+    mBody.innerHTML = '';
     modal.style.display = 'none';
   });
 
@@ -321,9 +334,14 @@ function innerTranslateObject (range, user, pageY) {
           if (e_offset <= range.startContainer.length) {
             new_range.setEnd(range.startContainer, e_offset);
           } else {
-            const nextLength = e_offset - range.startContainer.length
-            const next = seekForward(range.startContainer, range.startOffset, nextLength)
-            new_range.setEnd(next.node, nextLength);
+            const nextLength = e_offset - range.startContainer.length;
+            const next = seekForward(range.startContainer, range.startOffset, nextLength);
+
+            if (nextLength > next.node.length) {
+              new_range.setEnd(next.node, next.node.length);
+            } else {
+              new_range.setEnd(next.node, nextLength);
+            }
           }
 
           rect = new_range.getBoundingClientRect();
