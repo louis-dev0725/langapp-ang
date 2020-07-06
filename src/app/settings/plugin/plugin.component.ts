@@ -6,7 +6,9 @@ import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiService } from '@app/services/api.service';
+
 import { untilDestroyed } from 'ngx-take-until-destroy';
+
 
 @Component({
   selector: 'app-plugin',
@@ -21,9 +23,10 @@ export class PluginComponent implements OnInit, OnDestroy {
     'extension.DoubleClick', 'extension.DoubleClickCtrl', 'extension.DoubleClickShift', 'extension.DoubleClickAlt'
   ];
   formValue = {
-    id: '',
-    user_id: '',
-    extensionShowTranslate: '',
+    id: null,
+    user_id: null,
+    extensionShowTranslate: null,
+    extensionSubtitleTranslate: true,
   };
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private customValidator: CustomValidator,
@@ -44,23 +47,26 @@ export class PluginComponent implements OnInit, OnDestroy {
     this.user = this.session.user;
 
     this.settingsPluginForm = new FormGroup({
-      id: new FormControl('', [Validators.required]),
+      id: new FormControl(null, [Validators.required]),
       user_id: new FormControl(this.user.id, [Validators.required]),
       extensionShowTranslate: new FormControl('extension.DoubleClick', [Validators.required]),
+      extensionSubtitleTranslate: new FormControl(true, [Validators.required]),
     });
 
     this.api.getSettingById(this.user.id).pipe(untilDestroyed(this)).subscribe((res) => {
       if (res === null) {
         this.settingsPluginForm.patchValue({
-          id: '',
+          id: null,
           user_id: this.user.id,
-          extensionShowTranslate: 'extension.DoubleClick'
+          extensionShowTranslate: 'extension.DoubleClick',
+          extensionSubtitleTranslate: true
         });
       } else {
         this.settingsPluginForm.patchValue({
           id: res.id,
           user_id: res.user_id,
           extensionShowTranslate: res.extensionShowTranslate,
+          extensionSubtitleTranslate: res.extensionSubtitleTranslate
         });
       }
 
@@ -73,8 +79,10 @@ export class PluginComponent implements OnInit, OnDestroy {
 
      this.api.createUpdateSettingById(this.settingsPluginForm.value).pipe(untilDestroyed(this)).subscribe(res => {
       if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null, { duration: 3000 });
-        window.postMessage({ type: 'saveSettingExtension', text: 'ExtensionSettingPlugin_' + this.user.id}, '*');
+        this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null,
+          { duration: 3000 });
+        window.postMessage({ type: 'saveSettingExtension', text: 'ExtensionSettingPlugin_' + this.user.id },
+          '*');
       }
 
       this._isLoaded = true;
