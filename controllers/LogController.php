@@ -17,7 +17,7 @@ class LogController extends ActiveController {
     }
 
     public function actionCreate() {
-        $log = $filter = Yii::$app->getRequest()->getBodyParams();
+        $log = Yii::$app->getRequest()->getBodyParams();
 
         Yii::info($log, 'log_extension');
     }
