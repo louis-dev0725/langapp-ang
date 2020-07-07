@@ -3,9 +3,11 @@
 namespace app\controllers;
 
 
+use app\models\SettingPlugin;
 use Yii;
 
 class LogController extends ActiveController {
+    public $modelClass = SettingPlugin::class;
 
     /**
      * @return array
