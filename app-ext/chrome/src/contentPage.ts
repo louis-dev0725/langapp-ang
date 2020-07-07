@@ -3,6 +3,7 @@ import * as config from './../../allParam.config';
 let user = null;
 let extensionSetting = false;
 let setting = null;
+let subtitleTranslate = true;
 let statusModal = null;
 let translateObj = {
   all_text: null,
@@ -25,6 +26,13 @@ let dictionaryWord = {
 };
 
 let context = null;
+
+let videoC = {
+  x_start: 0,
+  y_start: 0,
+  x_end: 0,
+  y_end: 0
+}
 
 const IGNORE_TEXT_PATTERN = /\u200c/;
 
@@ -83,10 +91,12 @@ window.addEventListener('message', (event) => {
   if (event.data.type && (event.data.type === 'saveSettingExtension') && (event.origin === config.URIFront)) {
     let settingExtension = JSON.parse(localStorage.getItem(event.data.text));
     chrome.runtime.sendMessage({ type: 'saveSetting', data: {
-      settingExtension: String(settingExtension.extensionShowTranslate)
+      settingExtension: String(settingExtension.extensionShowTranslate),
+      settingExtensionSubtitle: Boolean(settingExtension.extensionSubtitleTranslate)
     }});
 
     setting = String(settingExtension.extensionShowTranslate);
+    subtitleTranslate = Boolean(settingExtension.extensionSubtitleTranslate);
   }
 
   if (event.data.type && (event.data.type === 'Logout') && (event.origin === config.URIFront)) {
@@ -101,13 +111,24 @@ function createButtonListener() {
     console.log('Set token to background');
   });
 
-  chrome.storage.local.get(['settingExtensionAction'], (result) => {
+  chrome.storage.local.get(['settingExtensionAction', 'settingExtensionSubtitle'], (result) => {
     if (result.hasOwnProperty('settingExtensionAction')) {
       setting = result.settingExtensionAction;
     } else {
       setting = 'extension.DoubleClick';
     }
+
+    if (result.hasOwnProperty('settingExtensionSubtitle')) {
+      subtitleTranslate = result.settingExtensionSubtitle;
+    }
   });
+
+  let video = document.getElementsByTagName('video');
+  let coor = video[0].getBoundingClientRect();
+  videoC.x_start = coor.left;
+  videoC.x_end = coor.right;
+  videoC.y_start = coor.top;
+  videoC.y_end = coor.bottom;
 
   document.addEventListener('dblclick', (e) => {
     if (setting === 'extension.DoubleClick') {
@@ -148,18 +169,38 @@ function createButtonListener() {
       }
     }
   });
+
+  if ((video.length > 0) && subtitleTranslate) {
+    document.addEventListener('click', (e) => {
+      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === true) {
+        createAndSendData(e, true, video);
+        video[0].pause();
+      }
+    });
+  }
 }
 
-function createAndSendData(e) {
+function createAndSendData(e, subtitle = false, video = null) {
   statusModal = modalShadowRoot.getElementById('modalTranslate');
+  let text_subtitle = null;
   if (statusModal === null) {
-    createModal();
+    createModal(subtitle, video);
   }
 
-  innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY);
+  if (subtitle) {
+    text_subtitle = e.path[0].innerText;
+    if (((videoC.x_start <= e.pageX) && (e.pageX <= videoC.x_end)) && ((videoC.y_start <= e.pageY) && (e.pageY <= videoC.y_end))) {
+      innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
+    }
+  } else {
+    if (((videoC.x_start <= e.pageX) && (e.pageX <= videoC.x_end)) && ((videoC.y_start <= e.pageY) && (e.pageY <= videoC.y_end))) {
+    } else {
+      innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
+    }
+  }
 }
 
-function createModal() {
+function createModal(subtitle = false, video = null) {
   document.body.appendChild(modalShadowElement);
 
   modal.setAttribute('id', 'modalTranslate');
@@ -198,12 +239,20 @@ function createModal() {
   modalShadowRoot.getElementById('closeModal').onclick = (() => {
     mBody.innerHTML = '';
     modal.style.display = 'none';
+
+    if (subtitle) {
+      video[0].play();
+    }
   });
 
   document.body.onclick = (() => {
     wordT.innerHTML = '';
     mBody.innerHTML = '';
     modal.style.display = 'none';
+
+    if (subtitle) {
+      video[0].play();
+    }
   });
 
   mHeader.style.display = 'flex';
@@ -219,21 +268,32 @@ function createModal() {
   mBody.innerHTML = '';
 }
 
-function innerTranslateObject (range, user, pageY) {
+function innerTranslateObject (range, user, pageY, subtitle, text = null) {
   translateObj = null;
-
-  const seekPrev = seekBackward(range.startContainer, range.startOffset, 100);
-  const seekNext = seekForward(range.startContainer, range.startOffset, 100);
-  context = seekPrev.content + seekNext.content;
+  let prev_length = 0;
 
   if (extensionSetting) {
-    translateObj = {
-      all_text: context,
-      url: range.startContainer.ownerDocument.location.href,
-      offset: seekPrev.content.length
-    };
+    if (subtitle) {
+      translateObj = {
+        all_text: text,
+        url: range.startContainer.ownerDocument.location.href,
+        offset: range.startOffset
+      };
 
-    let prev_length = seekPrev.content.length - range.startOffset;
+      prev_length = 0
+    } else {
+      const seekPrev = seekBackward(range.startContainer, range.startOffset, 100);
+      const seekNext = seekForward(range.startContainer, range.startOffset, 100);
+      context = seekPrev.content + seekNext.content;
+
+      translateObj = {
+        all_text: context,
+        url: range.startContainer.ownerDocument.location.href,
+        offset: seekPrev.content.length
+      };
+
+      prev_length = seekPrev.content.length - range.startOffset;
+    }
 
     let new_range = new Range();
     new_range.setStart(range.startContainer, range.startOffset);
@@ -326,21 +386,26 @@ function innerTranslateObject (range, user, pageY) {
           let sel = window.getSelection();
           sel.removeAllRanges();
 
-          const s_offset =  parseInt(response.data.word.s_offset) - parseInt(String(prev_length));
-          const e_offset =  parseInt(response.data.word.e_offset) - parseInt(String(prev_length));
-
-          new_range.setStart(range.startContainer, s_offset);
-
-          if (e_offset <= range.startContainer.length) {
-            new_range.setEnd(range.startContainer, e_offset);
+          if (subtitle) {
+            new_range.setStart(range.startContainer, parseInt(response.data.word.s_offset));
+            new_range.setEnd(range.startContainer, parseInt(response.data.word.e_offset));
           } else {
-            const nextLength = e_offset - range.startContainer.length;
-            const next = seekForward(range.startContainer, range.startOffset, nextLength);
+            const s_offset = parseInt(response.data.word.s_offset) - parseInt(String(prev_length));
+            const e_offset = parseInt(response.data.word.e_offset) - parseInt(String(prev_length));
 
-            if (nextLength > next.node.length) {
-              new_range.setEnd(next.node, next.node.length);
+            new_range.setStart(range.startContainer, s_offset);
+
+            if (e_offset <= range.startContainer.length) {
+              new_range.setEnd(range.startContainer, e_offset);
             } else {
-              new_range.setEnd(next.node, nextLength);
+              const nextLength = e_offset - range.startContainer.length;
+              const next = seekForward(range.startContainer, range.startOffset, nextLength);
+
+              if (nextLength > next.node.length) {
+                new_range.setEnd(next.node, next.node.length);
+              } else {
+                new_range.setEnd(next.node, nextLength);
+              }
             }
           }
 

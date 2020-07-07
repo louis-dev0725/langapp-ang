@@ -25,7 +25,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 };
 
                 const text = request.responseText;
-                sendToLog({ objWord, result, text });
+                const res = JSON.stringify(result);
+                sendToLog({ objWord, res, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
@@ -34,7 +35,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 };
 
                 const text = request.responseText;
-                sendToLog({ objWord, result, text });
+                const res = JSON.stringify(result);
+                sendToLog({ objWord, res, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
@@ -60,7 +62,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 };
 
                 const text = request.responseText;
-                sendToLog({ objWord, result, text });
+                const res = JSON.stringify(result);
+                sendToLog({ objWord, res, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
@@ -69,7 +72,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 };
 
                 const text = request.responseText;
-                sendToLog({ objWord, result, text });
+                const res = JSON.stringify(result);
+                sendToLog({ objWord, res, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
@@ -95,7 +99,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 };
 
                 const text = request.responseText;
-                sendToLog({ objWord, result, text });
+                const res = JSON.stringify(result);
+                sendToLog({ objWord, res, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
@@ -104,7 +109,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 };
 
                 const text = request.responseText;
-                sendToLog({ objWord, result, text });
+                const res = JSON.stringify(result);
+                sendToLog({ objWord, res, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
@@ -118,7 +124,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             console.log('Set token and user');
         });
     } else if (message.type === 'saveSetting') {
-        chrome.storage.local.set({ settingExtensionAction: objData.settingExtension }, () => {
+        chrome.storage.local.set({ settingExtensionAction: objData.settingExtension,
+            settingExtensionSubtitle: objData.settingExtensionSubtitle }, () => {
             console.log('Set setting extension');
         });
     } else if (message.type === 'siteLogout') {
@@ -155,6 +162,7 @@ setInterval(() => {
                     let settingPlugin = JSON.parse(requestSettingsPlugin.responseText);
 
                     chrome.storage.local.set({ settingExtensionAction: String(settingPlugin.extensionShowTranslate),
+                        settingExtensionSubtitle: String(settingPlugin.extensionSubtitleTranslate),
                         user: settingPlugin.user }, () => {
                         console.log('Set new setting extension and user data');
                     });
