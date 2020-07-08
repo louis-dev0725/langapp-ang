@@ -203,6 +203,12 @@ function createAndSendData(e, subtitle = false, video = null) {
 function createModal(subtitle = false, video = null) {
   document.body.appendChild(modalShadowElement);
 
+  if (subtitle) {
+    const styleBlock = document.createElement('style');
+    styleBlock.innerHTML = `.select_style { user-select: text !important }`;
+    document.body.appendChild(styleBlock);
+  }
+
   modal.setAttribute('id', 'modalTranslate');
   modal.style.position = 'absolute';
   modal.style.display = 'flex';
@@ -281,6 +287,8 @@ function innerTranslateObject (range, user, pageY, subtitle, text = null) {
       };
 
       prev_length = 0
+
+      range.startContainer.parentElement.classList.add('select_style');
     } else {
       const seekPrev = seekBackward(range.startContainer, range.startOffset, 100);
       const seekNext = seekForward(range.startContainer, range.startOffset, 100);

@@ -24,9 +24,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     error: 'nonAuth'
                 };
 
-                const text = request.responseText;
-                const res = JSON.stringify(result);
-                sendToLog({ objWord, res, text });
+                const text = JSON.parse(request.responseText);
+                sendToLog({ objData, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
@@ -34,9 +33,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     error: 'errorToServer'
                 };
 
-                const text = request.responseText;
-                const res = JSON.stringify(result);
-                sendToLog({ objWord, res, text });
+                const text = JSON.parse(request.responseText);
+                sendToLog({ objData, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
@@ -61,9 +59,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     error: 'nonAuth'
                 };
 
-                const text = request.responseText;
-                const res = JSON.stringify(result);
-                sendToLog({ objWord, res, text });
+                const text = JSON.parse(request.responseText);
+                sendToLog({ objData, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
@@ -71,9 +68,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     error: 'errorToServer'
                 };
 
-                const text = request.responseText;
-                const res = JSON.stringify(result);
-                sendToLog({ objWord, res, text });
+                const text = JSON.parse(request.responseText);
+                sendToLog({ objData, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             }
         });
@@ -98,9 +94,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     error: 'nonAuth'
                 };
 
-                const text = request.responseText;
-                const res = JSON.stringify(result);
-                sendToLog({ objWord, res, text });
+                const text = JSON.parse(request.responseText);
+                sendToLog({ objData, result, text });
                 sendResponse({ type: 'sendTranslateModal', data: result });
             } else {
                 result = {
@@ -190,7 +185,7 @@ function sendToLog(data) {
     request.open('POST', config.URIApi + 'api/logs/create', true);
     request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     request.setRequestHeader('Authorization', `Bearer ${token}`);
-    request.send(data);
+    request.send(JSON.stringify(data));
 
     request.onload = (() => {
         if (request.readyState === 4 && request.status === 200) {
