@@ -137,9 +137,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }
         });
     }else if (message.type === 'sendLogServer') {
-        let objWord = JSON.stringify(objData);
-
-        sendToLog({ objWord });
+        sendToLog({ objData });
     }
 });
 
@@ -184,14 +182,14 @@ function sendToLog(data) {
     let request = new XMLHttpRequest();
     request.open('POST', config.URIApi + 'api/logs/create', true);
     request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    request.setRequestHeader('Authorization', `Bearer ${token}`);
+    // request.setRequestHeader('Authorization', `Bearer ${token}`);
     request.send(JSON.stringify(data));
 
     request.onload = (() => {
         if (request.readyState === 4 && request.status === 200) {
             console.log('Ошибка отправлена.');
         } else {
-            console.log('Ошибку не смогли отправить.');
+            console.log('Статус: ' + request.status + ' Ошибку не смогли отправить.');
         }
     });
 }

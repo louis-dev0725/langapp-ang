@@ -27,13 +27,6 @@ let dictionaryWord = {
 
 let context = null;
 
-let videoC = {
-  x_start: 0,
-  y_start: 0,
-  x_end: 0,
-  y_end: 0
-}
-
 const IGNORE_TEXT_PATTERN = /\u200c/;
 
 const modalShadowElement = document.createElement('div');
@@ -124,11 +117,6 @@ function createButtonListener() {
   });
 
   let video = document.getElementsByTagName('video');
-  let coor = video[0].getBoundingClientRect();
-  videoC.x_start = coor.left;
-  videoC.x_end = coor.right;
-  videoC.y_start = coor.top;
-  videoC.y_end = coor.bottom;
 
   document.addEventListener('dblclick', (e) => {
     if (setting === 'extension.DoubleClick') {
@@ -172,10 +160,7 @@ function createButtonListener() {
 
   if ((video.length > 0) && subtitleTranslate) {
     document.addEventListener('click', (e) => {
-      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === true) {
-        createAndSendData(e, true, video);
-        video[0].pause();
-      }
+      createAndSendData(e, true, video);
     });
   }
 }
@@ -189,14 +174,14 @@ function createAndSendData(e, subtitle = false, video = null) {
 
   if (subtitle) {
     text_subtitle = e.path[0].innerText;
-    if (((videoC.x_start <= e.pageX) && (e.pageX <= videoC.x_end)) && ((videoC.y_start <= e.pageY) && (e.pageY <= videoC.y_end))) {
-      innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
+    if (findUpClass(e.target, ['caption-visual-line', 'vjs-text-track-cue'])) {
+      if (!video[0].paused) {
+        video[0].pause();
+      }
+      innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle, video);
     }
   } else {
-    if (((videoC.x_start <= e.pageX) && (e.pageX <= videoC.x_end)) && ((videoC.y_start <= e.pageY) && (e.pageY <= videoC.y_end))) {
-    } else {
-      innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
-    }
+    innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
   }
 }
 
@@ -246,8 +231,8 @@ function createModal(subtitle = false, video = null) {
     mBody.innerHTML = '';
     modal.style.display = 'none';
 
-    if (subtitle) {
-      video[0].play();
+    if (subtitle && video[0].paused) {
+        video[0].play();
     }
   });
 
@@ -256,7 +241,7 @@ function createModal(subtitle = false, video = null) {
     mBody.innerHTML = '';
     modal.style.display = 'none';
 
-    if (subtitle) {
+    if (subtitle && video[0].paused) {
       video[0].play();
     }
   });
@@ -274,7 +259,7 @@ function createModal(subtitle = false, video = null) {
   mBody.innerHTML = '';
 }
 
-function innerTranslateObject (range, user, pageY, subtitle, text = null) {
+function innerTranslateObject (range, user, pageY, subtitle, text = null, video = null) {
   translateObj = null;
   let prev_length = 0;
 
@@ -364,7 +349,7 @@ function innerTranslateObject (range, user, pageY, subtitle, text = null) {
                   + '<ul id="list-translate_' + i + '" style="border:1px solid #000;border-radius:5px;'
                   + 'list-style:none;padding:0;border-bottom:none;"></ul></div>';
 
-              let listTranslate = modalShadowRoot.getElementById('list-translate_' + i );
+              let listTranslate = modalShadowRoot.getElementById('list-translate_' + i);
               // @ts-ignore
               const transObj = result.sourceData;
 
@@ -774,4 +759,14 @@ function getPreviousNode(node, visitChildren) {
   }
 
   return next;
+}
+
+function findUpClass(el, class_Name: Array<string>) {
+  while (el.parentNode) {
+    el = el.parentNode;
+    if (class_Name.indexOf(el.className) !== -1) {
+      return true;
+    }
+  }
+  return false;
 }
