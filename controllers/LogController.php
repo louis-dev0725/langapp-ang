@@ -20,6 +20,8 @@ class LogController extends ActiveController {
     }
 
 	public function behaviors() {
+        $behaviors = parent::behaviors();
+
         $behaviors['access'] = [
             'class' => AccessControl::class,
             'except' => ['options'],
