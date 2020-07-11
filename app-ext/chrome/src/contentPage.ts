@@ -186,7 +186,7 @@ function createAndSendData(e, subtitle = false, videos = null) {
     text_subtitle = e.path[0].innerText;
     if (findUpClass(e.target, ['caption-visual-line', 'vjs-text-track-cue'])) {
       if (video !== null && !video.paused) {
-        video.pause();
+        // video.pause(); Ломает стандартный функционал паузу у плеера
       }
       innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
     }
@@ -242,7 +242,7 @@ function createModal(subtitle = false, video = null) {
     modal.style.display = 'none';
 
     if (subtitle && video.paused) {
-        video.play();
+        // video.play(); Ломает стандартный функционал паузу у плеера
     }
   });
 
@@ -252,7 +252,7 @@ function createModal(subtitle = false, video = null) {
     modal.style.display = 'none';
 
     if (subtitle && video.paused) {
-      video.play();
+      // video.play(); Ломает стандартный функционал паузу у плеера
     }
   });
 

@@ -182,7 +182,6 @@ function sendToLog(data) {
     let request = new XMLHttpRequest();
     request.open('POST', config.URIApi + 'api/logs/create', true);
     request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    // request.setRequestHeader('Authorization', `Bearer ${token}`);
     request.send(JSON.stringify(data));
 
     request.onload = (() => {
