@@ -1,0 +1,51 @@
+<div class="container">
+  <div *ngIf="arrayData.items?.length !== 0">
+    <table mat-table [dataSource]="arrayData.items">
+      <ng-container matColumnDef="title">
+        <td mat-cell *matCellDef="let element" class="table-title">{{element.title}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="level_JLPT">
+        <td mat-cell *matCellDef="let element" class="table-column">{{element.level_JLPT}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="count_symbol">
+        <td mat-cell *matCellDef="let element" class="table-column">{{element.count_symbol}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="button">
+        <td mat-cell *matCellDef="let element" class="table-button">
+          <a *ngIf="element.type_content == 2" [href]="element.source_link" target="_blank" mat-flat-button>
+            {{ 'Study' | translate }}
+          </a>
+          <a *ngIf="element.type_content == 3" [href]="element.source_link" target="_blank" mat-flat-button>
+            {{ 'Look' | translate }}
+          </a>
+          <a *ngIf="element.type_content == 1" [href]="element.source_link" target="_blank" mat-flat-button>
+            {{ 'Read' | translate }}
+          </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="admin_column" *ngIf="user.isAdmin">
+        <td mat-cell *matCellDef="let element" class="table-button">
+          <a [routerLink]="['/content/edit', element.id]" mat-flat-button>
+            {{ 'Edit' | translate }}
+          </a>
+          <button (click)="deleteElement(element.id)" mat-flat-button>
+            {{ 'Delete' | translate }}
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="arrayData._meta.perPage" [showFirstLastButtons]="true"
+      [length]="arrayData._meta.totalCount" [pageIndex]="arrayData._meta.currentPage - 1" (page)="handlePage($event)">
+    </mat-paginator>
+  </div>
+  <div *ngIf="arrayData.items?.length === 0">
+    <h1 translate>No material</h1>
+  </div>
+</div>

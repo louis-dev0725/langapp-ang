@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="card">
+    <h1 translate>Add transaction</h1>
+    <a [routerLink]="['../../users/'+ user?.id]">{{'User' | translate}} #{{user?.id}}</a>
+    <ng-container *ngIf="errors.length > 0">
+      <mat-card *ngFor="let err of errors"
+                class="err-alert">
+        <mat-card-content>{{err.message}}</mat-card-content>
+      </mat-card>
+    </ng-container>
+    <div class="container">
+      <form [formGroup]="transactionForm">
+        <input type="hidden" formControlName="userId">
+        <mat-form-field class="form-item">
+          <input
+            matInput
+            required
+            type="number"
+            formControlName="money"
+            [value]="transactionForm.get('money').value | formatNumbers: session.lang"
+            placeholder="{{'Amount' | translate}}">
+          <mat-error *ngIf="checkError('money')">{{getError('money')}}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-item">
+        <textarea
+          matInput
+          formControlName="comment"
+          placeholder="{{'Comment' | translate}}"></textarea>
+          <mat-error *ngIf="checkError('comment')">{{getError('comment')}}</mat-error>
+        </mat-form-field>
+        <div class="form-item">
+          <mat-checkbox
+            formControlName="isPartner">{{'Partner transaction' | translate}}
+          </mat-checkbox>
+        </div>
+        <div class="form-item">
+          <mat-checkbox
+              formControlName="isRealMoney">{{'Is real money' | translate}}
+          </mat-checkbox>
+        </div>
+      </form>
+
+      <a [disabled]="!transactionForm.valid" color="primary" (click)="onCreateTransaction()" mat-flat-button>
+        {{'Create transaction' | translate}}
+      </a>
+    </div>
+  </div>
+</div>

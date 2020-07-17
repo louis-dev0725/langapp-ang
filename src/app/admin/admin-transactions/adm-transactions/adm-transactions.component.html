@@ -1,0 +1,122 @@
+<div class="container">
+  <div class="card">
+    <h1 translate>Transactions - admin</h1>
+    <div class="container">
+      <button
+          mat-flat-button
+          (click)="isFilterShown = !isFilterShown">
+        <ng-container *ngTemplateOutlet="isFilterShown ? hideFilter : showFilter"></ng-container>
+      </button>
+      <ng-template #hideFilter>{{'Hide filter' | translate}}</ng-template>
+      <ng-template #showFilter>{{'Show filter' | translate}}</ng-template>
+
+      <div class="filter-container" [ngClass]="{folded: !isFilterShown}">
+        <h2 fxLayout="row" translate>Filter</h2>
+        <div class="container" fxLayout="row wrap">
+          <ng-container *ngFor="let item of fieldKeys; let i = index">
+            <mat-form-field fxFlex="20%" *ngIf="!isDate(item)">
+              <input
+                  type="text"
+                  matInput placeholder="{{translatedKeys[item] }}"
+                  (keyup)="runFilter()"
+                  [(ngModel)]="filter[item]">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="20%" *ngIf="isDate(item)">
+              <input
+                  matInput
+                  [matDatepicker]="picker"
+                  placeholder="{{'Choose a date' | translate}}"
+                  (dateChange)="changeDate($event.value)"
+                  [(ngModel)]="filter.addedDateTime">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+          </ng-container>
+        </div>
+        <a mat-flat-button color="primary" (click)="clearFilter()">Clear filter</a>
+      </div>
+    </div>
+    <div class="container">
+      <div class="wrap-table">
+        <table mat-table [dataSource]="transactionList" matSort>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let row">{{row.id}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'User' | translate}}</th>
+          <td mat-cell *matCellDef="let row">
+            <a
+                (click)="showEditUser(row)"
+                class="edit-link">{{row.user.id}}# {{(row.user.name)}}
+            </a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="money">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount' | translate}}</th>
+          <td mat-cell *matCellDef="let row">{{row.money | formatCurrency : session.lang}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="currency">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Currency' | translate}}</th>
+          <td mat-cell *matCellDef="let row">{{row.currency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount in" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Amount in' | translate}}</th>
+          <!--<td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatNumbers: session.lang}}{{row?.currencyMark}}</td>-->
+          <td mat-cell *matCellDef="let row">{{row.moneyBaseCurrency | formatCurrency : session.lang}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef>{{'Comment' | translate}}</th>
+          <td mat-cell *matCellDef="let row">{{row.comment}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="addedDateTime">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Added date' | translate}}</th>
+          <td mat-cell *matCellDef="let row">{{row.addedDateTime | formatDate: session.lang}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="isPartner">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Is partner' | translate}}</th>
+          <td mat-cell *matCellDef="let row">{{row.isPartner}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef>{{'Edit' | translate}}</th>
+          <td mat-cell *matCellDef="let row">
+            <a [routerLink]="['../' + row.id]" class="edit-link">
+              <mat-icon>create</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+
+      </table>
+        <mat-paginator (page)="onPageChange($event)"></mat-paginator>
+      </div>
+
+      <mat-card *ngIf="!isLoaded"
+                style="display: flex; justify-content: center; align-items: center">
+        <mat-progress-spinner
+            color="primary"
+            mode="indeterminate">
+        </mat-progress-spinner>
+      </mat-card>
+
+      <div class="container" *ngIf="isEmptyTable && isLoaded">
+        <h3 translate>No records found</h3>
+      </div>
+
+    </div>
+  </div>
+</div>

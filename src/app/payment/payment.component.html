@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="card">
+    <h1 translate>Account replenishment</h1>
+    <form [formGroup]="paymentForm">
+      <mat-form-field class="form-item">
+        <input
+          matInput
+          required
+          class="no-spinners"
+          formControlName="amount"
+          type="number"
+          placeholder="{{'Amount' | translate}}">
+        <mat-error *ngIf="!paymentForm.valid">{{ getError() }}</mat-error>
+      </mat-form-field>
+
+      <div class="form-item">
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="!paymentForm.valid"
+          (click)="onPayment()">{{'Pay' | translate}}</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+<div class="container">
+  <div class="card">
+  <h1 translate>Transactions history</h1>
+    <app-payments-table
+      [pageSize]="50"
+      [isShowComment]="true"
+      [moneyTitle]="'Amount' | translate"
+      [rows]="rows"
+      [isPaginator]="true"></app-payments-table>
+  </div>
+</div>
+
+

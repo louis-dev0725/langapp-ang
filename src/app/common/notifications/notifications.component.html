@@ -1,0 +1,9 @@
+<div class="container" *ngIf="(isLoggedIn$ | async) && messages.length">
+  <div *ngFor="let message of messages">
+    <p-messages  [showTransitionOptions]="'0ms'"
+                 [hideTransitionOptions]="'0ms'"
+                 (valueChange)="onValueChange(message)"
+                 [(value)]="message.data">
+    </p-messages>
+  </div>
+</div>

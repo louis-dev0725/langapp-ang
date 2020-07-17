@@ -1,0 +1,20 @@
+table {
+  width: 100%;
+}
+
+.table-title {
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-column {
+  width: 5%;
+  min-width: 40px;
+}
+
+.table-button {
+  width: 8%;
+  min-width: 90px;
+}

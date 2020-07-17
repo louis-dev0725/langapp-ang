@@ -1,0 +1,13 @@
+.action-item {
+  margin-right: 20px;
+}
+:host {
+  ::ng-deep {
+    .edit-link {
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+    }
+  }
+}

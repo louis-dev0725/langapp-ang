@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="card" *ngIf="isLoaded">
+    <h1>{{ 'Edit category' | translate }} - #{{ category_id }}</h1>
+    <ng-container *ngIf="errors.length > 0">
+      <mat-card *ngFor="let err of errors" class="err-alert">
+        <mat-card-content>{{ err.message }}</mat-card-content>
+      </mat-card>
+    </ng-container>
+
+    <div class="container">
+      <form [formGroup]="categoryForm">
+        <input type="hidden" formControlName="id">
+
+        <mat-form-field class="form-item">
+          <input matInput required formControlName="title" placeholder="{{'title' | translate}}">
+          <mat-error *ngIf="checkError('title')">{{getError('title')}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-item">
+          <mat-label>{{ 'Parent' | translate }}</mat-label>
+          <mat-select formControlName="parent_id" required>
+            <mat-option [value]="0">{{ 'Self Category' | translate }}</mat-option>
+            <mat-option *ngFor="let parent of parents" [value]="parent.id" [disabled]="checkUserSelection(parent.id)">
+              {{ parent.title }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="checkError('parent_id')">{{ getError('parent_id') }}</mat-error>
+        </mat-form-field>
+
+        <div class="form-item">
+          <button (click)="onSubmit()" mat-flat-button [disabled]="!categoryForm.valid" color="primary">
+            {{ 'Save' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center;">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
+  </mat-card>
+</div>

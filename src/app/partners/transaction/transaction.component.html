@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="card">
+    <h1 translate>Partnership program: transactions</h1>
+    <p>{{'On your affiliate account' | translate}}: {{parnterBalance | formatCurrency : session.lang}}</p>
+  </div>
+</div>
+<div class="container">
+  <div class="card">
+    <h2 translate>Transactions history</h2>
+    <app-payments-table
+      [moneyTitle]="'Amount' | translate"
+      [isShowComment]="true"
+      [isPaginator]="true"
+      [rows]="rows"></app-payments-table>
+  </div>
+</div>

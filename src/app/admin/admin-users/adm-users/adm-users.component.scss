@@ -1,0 +1,49 @@
+// common tables
+table {
+  width: 100%;
+}
+
+/*td, th {
+  width: 25%;
+}*/
+
+.edit-link {
+  cursor: pointer;
+  &:hover {
+    color: #039be5;
+  }
+}
+
+.filter-container {
+  overflow: hidden;
+  height: 320px;
+  padding-bottom: 5px;
+  transition: height .5s ease-in-out;
+}
+
+.folded {
+  height: 0;
+}
+
+textarea {
+  max-width: 300px;
+  margin: 5px;
+}
+
+.wrap-filter {
+  margin: 0 -10px;
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+
+    .filter-item {
+      width: 20%;
+      box-sizing: border-box;
+    }
+  }
+
+  mat-form-field {
+    padding: 0 10px;
+  }
+}

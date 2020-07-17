@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="card">
+    <h1 translate>Partnership program</h1>
+
+    <ng-container *ngIf="session.lang === 'ru'">
+      <p>Вознаграждение партнера составляет 30% от платежей привлеченного клиента. Выплаты производятся на WMR
+        кошелек.<br>
+        Указать номер WMR кошелька можно в <a routerLink="/users/settings">настройках</a>. Полные правила партнерской
+        программы <a target="_blank" href="/docs/pravila.pdf">по ссылке</a>.
+      </p>
+      <p>Если у вас есть вопросы или предложения – <a href="/users/contact">напишите нам</a>.
+    </ng-container>
+
+    <ng-container *ngIf="session.lang === 'en'">
+      <p>Partner remuneration is 30% of the payments of the attracted client. Payments are made to the WMR wallet.<br>
+        Specify the WMR wallet number in the <a routerLink="/users/settings">settings</a>. The full rules of the affiliate program -
+        <a target="_blank" href="/docs/pravila.pdf">click here</a>.
+      </p>
+
+      If you have any questions or suggestions - write to us.
+    </ng-container>
+
+    <p class="notation">{{'On your affiliate account' | translate}} {{user.balancePartner | formatCurrency: session.lang }}.</p>
+
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+  <h2 translate>Referal links</h2>
+    <div class="container">
+      <div class="form-item">
+        <mat-form-field >
+          <mat-label translate>Link for the Main page</mat-label>
+          <input
+              value="http://callrocket.ru/?rr={{user?.id}}"
+              matInput
+              readonly="readonly">
+        </mat-form-field>
+      </div>
+      <div class="form-item">
+        <mat-form-field>
+          <mat-label translate>Link for the Registration page</mat-label>
+          <input
+              value="http://callrocket.ru/users/create?rr={{user?.id}}"
+              matInput
+              readonly="readonly">
+        </mat-form-field>
+      <!--  <label
+          for="url_create"
+          class="active" translate>Link for the Registration page</label>
+
+        <input id="url_create" class="partner-url"
+               readonly="readonly"
+               type="text"
+               value="http://callrocket.ru/users/create?rr={{user?.id}}">-->
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,43 @@
+<div class="modal" *ngIf="status">
+  <div class="modal-dialog" *ngIf="!twoModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ 'Mnemonics' | translate }}</h3>
+        <a title="{{ 'Close' | translate }}" class="close" (click)="onCloseModal()">×</a>
+      </div>
+      <div class="modal-body">
+        <button mat-flat-button color="primary" (click)="onCreateMnemonic(true)">{{ 'Add Mnemonics' | translate }}</button>
+        <div class="mnemonics" *ngIf="elem.mnemonic_all">
+          <div class="mnemonic_box" *ngFor="let mnemonic of elem.mnemonic_all"
+               [class.active]="mnemonic.id === elem.mnemonic_id">
+            <div class="image_text">
+              <ng-container *ngIf="mnemonic.images !== null">
+                <img src="{{ domain }}{{ mnemonic.images }}" alt="">
+              </ng-container>
+
+              <ng-container *ngIf="mnemonic.text !== null">
+                <p>{{ mnemonic.text }}</p>
+              </ng-container>
+            </div>
+            <div class="rating">
+              <button mat-flat-button color="primary" class="plus" (click)="ratingChange(mnemonic.id, 'plus')"
+                      *ngIf="mnemonic.user_id !== elem.user_id" [class.active]="mnemonic.user_rating === 'plus'"
+                      [disabled]="mnemonic.user_rating !== null">+</button>
+              <span class="count_rating">{{ mnemonic.rating }}</span>
+              <button mat-flat-button color="primary" class="minus" (click)="ratingChange(mnemonic.id, 'minus')"
+                      *ngIf="mnemonic.user_id !== elem.user_id" [class.active]="mnemonic.user_rating === 'minus'"
+                      [disabled]="mnemonic.user_rating !== null">-</button>
+            </div>
+            <button mat-flat-button color="primary" class="enter_mnemonic" (click)="enterMnemonic(mnemonic.id)">
+              {{ 'Select' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-create-mnemonic-modal [elem]="elem" [status_add]="openCreateModal" (closeModalCreate)="onCreateMnemonic(false, $event)"
+                             (createMnemonic)="onAddMnemonicArray($event)">
+  </app-create-mnemonic-modal>
+</div>

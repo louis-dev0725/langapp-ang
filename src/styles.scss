@@ -1,0 +1,366 @@
+/* You can add global styles to this file, and also import other style files */
+@import "assets/scss/index";
+$color-blue-link: #039be5;
+$color-red-danger: #f44336;
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+strong {
+  font-weight: 500;
+}
+
+.container {
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.notation {
+  font-size: 20px;
+}
+
+.form-item {
+  width: 100%;
+  margin-bottom: 20px;
+
+  mat-form-field {
+    min-width: 40%;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+}
+
+.form-item-link {
+  color: $color-blue-link;
+}
+
+// alert at the forms-top
+.err-alert {
+  background-color: $color-red-danger;
+}
+
+// flat input field
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+snack-bar-container.snack-error {
+  background: $color-red-danger;
+  color: #fff;
+  //color: rgba(0,0,0,.87);
+}
+
+mat-progress-bar.mat-progress-bar {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+
+.container {
+  .container {
+    padding: 0;
+  }
+}
+
+.block_center {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+
+  width: 90%;
+  min-width: 1000px;
+  margin: 10px auto;
+
+  button {
+    width: 250px;
+  }
+}
+
+.filter-dictionary {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+
+  padding-left: 24px;
+
+  .all-select-checkbox {
+    padding-top: 10px;
+  }
+
+  .filter-select-button,
+  .filter-delete-button,
+  .type-training {
+    margin-left: 20px;
+  }
+
+  .active_button {
+    background: #00d729;
+  }
+
+  .dictionary-button-filter {
+    margin-left: auto;
+
+    .filter-button {
+      width: 130px;
+      margin: 0 10px;
+    }
+  }
+}
+
+.table-dictionary {
+  width: 100%;
+
+  .table-id {
+    width: 40px;
+  }
+
+  .table-word,
+  .table-literal {
+    text-align: left;
+    padding-left: 20px;
+  }
+
+  .table-word {
+    width: 160px;
+  }
+
+  .table-literal {
+    width: 270px;
+  }
+
+  .table-translate-word{
+    padding: 7px 0;
+  }
+
+  .table-workout-progress {
+    width: 75px;
+    text-align: center;
+  }
+
+  .table-button {
+    width: 80px;
+  }
+}
+
+.main_block {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 50vh;
+
+  .hh1 {
+    font-size: 8rem;
+  }
+
+  .info {
+    margin: 10px 0;
+    max-width: 800px;
+    text-align: center;
+
+    .translate,
+    .on_kun {
+      margin: 10px 0;
+    }
+
+    .words {
+      margin-top: 20px;
+    }
+
+    .mnemonic {
+      display: flex;
+      flex-flow: column;
+      margin: 20px auto;
+
+      width: 400px;
+      height: 250px;
+
+      align-items: center;
+      justify-content: center;
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+      }
+
+      .createMnemonic {
+        text-decoration: none;
+      }
+
+      .createMnemonic:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.other-mnemonic-button {
+  float: right;
+  margin-top: -36px !important;
+}
+
+.modal {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999999;
+  -webkit-transition: opacity 200ms ease-in;
+  transition: opacity 200ms ease-in;
+  pointer-events: auto;
+  margin: 0;
+  padding: 0;
+
+  .modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 10px;
+
+    .modal-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid rgba(0,0,0,.2);
+      border-radius: .3rem;
+      outline: 0;
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        border-bottom: 1px solid #eceeef;
+      }
+
+      .modal-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        line-height: 1.5;
+        font-size: 1.25rem;
+        font-weight: 500;
+      }
+
+      .close {
+        float: right;
+        font-family: sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        opacity: .5;
+        text-decoration: none;
+      }
+
+      .close:focus,
+      .close:hover {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        opacity: .75;
+      }
+
+      .modal-body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+
+        .mnemonics {
+          display: flex;
+          flex-flow: row wrap;
+
+          .mnemonic_box {
+            display: flex;
+            flex-flow: column;
+            margin: 10px;
+
+            padding: 15px;
+
+            &.active {
+              border: 1px solid #000;
+            }
+
+            .image_text {
+              width: 200px;
+              height: 200px;
+
+              img {
+                max-width: 100%;
+                max-height: 100%;
+                width: auto;
+                height: auto;
+              }
+            }
+
+            .rating {
+              height: 40px;
+              margin: 10px;
+
+              .count_rating {
+                margin: 10px;
+              }
+
+              .plus {
+                &.active {
+                  border: 1px solid #02c108;
+                }
+              }
+
+              .minus {
+                &.active {
+                  border: 1px solid #02c108;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: 576px) {
+    .modal-dialog {
+      max-width: 1024px;
+      margin: 30px auto;
+      min-width: 250px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .modal-dialog {
+      margin: 30px auto;
+      width: 95%;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="card" *ngIf="isLoaded">
+    <h1 translate>Dictionary</h1>
+    <div class="filter-dictionary">
+      <mat-checkbox class="all-select-checkbox" [(ngModel)]="allSelect" [(indeterminate)]="indeterminate"
+                    (change)="allSelectedToggle($event)"></mat-checkbox>
+      <button mat-flat-button class="filter-select-button" (click)="allSelectedClick()" color="primary"
+              *ngIf="!indeterminate && !allSelect">
+        {{ 'All selected' | translate }}
+      </button>
+      <button mat-flat-button class="filter-delete-button" (click)="onDeleteSelected()" color="primary"
+              *ngIf="indeterminate || allSelect">
+        {{ 'Delete selected' | translate }}
+      </button>
+
+      <div class="dictionary-button-filter">
+        <button mat-flat-button class="filter-button" (click)="onFilter('word')" color="primary">
+          {{ 'Word' | translate }}
+        </button>
+        <button mat-flat-button class="filter-button" (click)="onFilter('kanji')" color="primary">
+          {{ 'Kanji' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <app-list-words *ngIf="isLoadedData" [arrayData]="daraSource" (interTrue)="indeterminateTrue($event)"
+                    (dataChanged)="changePageTable($event)" (deleteD)="deleteDictionary($event)"></app-list-words>
+
+    <mat-card *ngIf="!isLoadedData" style="display:flex;justify-content:center;align-items:center">
+      <mat-progress-spinner color="primary" mode="indeterminate">
+      </mat-progress-spinner>
+    </mat-card>
+  </div>
+
+  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
+    <mat-progress-spinner color="primary" mode="indeterminate">
+    </mat-progress-spinner>
+  </mat-card>
+</div>

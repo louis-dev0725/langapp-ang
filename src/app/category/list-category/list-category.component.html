@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="card">
+    <h1 translate>Categories
+      <a [routerLink]="['/category/create']" mat-flat-button class="newButton" color="primary">
+        {{ 'New category' | translate }}
+      </a>
+    </h1>
+    <div *ngIf="isLoaded">
+      <div *ngIf="categories.items.length !== 0">
+        <table mat-table [dataSource]="categories.items">
+          <ng-container matColumnDef="title">
+            <td mat-cell *matCellDef="let element" class="table-title">{{ element.title }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="parent_category">
+            <td mat-cell *matCellDef="let element" class="table-column">
+              <span *ngIf="element.parent_id === 0">{{ 'Self Category' | translate }}</span>
+              <span *ngIf="element.parent_id !== 0">{{ element.parentCategory.title }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="button_edit">
+            <td mat-cell *matCellDef="let element" class="table-button">
+              <a [routerLink]="['/category/edit', element.id]" mat-flat-button>
+                {{ 'Edit' | translate }}
+              </a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="button_delete">
+            <td mat-cell *matCellDef="let element" class="table-button">
+              <button (click)="deleteCategory(element.id)" mat-flat-button>
+                {{ 'Delete' | translate }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSize]="categories._meta.perPage" [showFirstLastButtons]="true"
+                       [length]="categories._meta.totalCount" [pageIndex]="categories._meta.currentPage - 1" (page)="handlePage($event)">
+        </mat-paginator>
+      </div>
+      <div *ngIf="categories.items.length === 0">
+        <h1 translate>No categories</h1>
+      </div>
+    </div>
+    <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
+      <mat-progress-spinner color="primary" mode="indeterminate">
+      </mat-progress-spinner>
+    </mat-card>
+  </div>
+</div>

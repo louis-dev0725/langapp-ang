@@ -1,0 +1,12 @@
+.hidden {
+  max-height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  transition: all ease-out .25s;
+}
+
+.foldable {
+  opacity: 1;
+  max-height: 200px;
+  transition: max-height ease-out .25s, opacity ease-out .45s;
+}

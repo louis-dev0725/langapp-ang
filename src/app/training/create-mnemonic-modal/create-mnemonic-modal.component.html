@@ -1,0 +1,41 @@
+<div class="modal-dialog" *ngIf="status_add">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'Adding Mnemonics' | translate }}</h3>
+      <a title="{{ 'Close' | translate }}" class="close" (click)="onCloseModal()">×</a>
+    </div>
+    <div class="modal-body">
+      <ng-container *ngIf="errors.length > 0">
+        <mat-card *ngFor="let err of errors" class="err-alert">
+          <mat-card-content>{{ err.message }}</mat-card-content>
+        </mat-card>
+      </ng-container>
+
+      <div class="loaded_box">
+        <div *ngIf="!isLoaded">
+          <form [formGroup]="mnemonicForm">
+            <mat-form-field class="form-item">
+              <input type="text" matInput formControlName="text_mnemonic" placeholder="{{ 'MnemonicText' | translate }}">
+            </mat-form-field>
+
+            <div class="form-item">
+              <input type="file" formControlName="image_mnemonic" (change)="onFileSelected($event)"
+                     accept="image/jpeg,image/png">
+            </div>
+
+            <div class="form-item">
+              <button (click)="onSubmit()" mat-flat-button [disabled]="!mnemonicForm.valid && errors.length > 0"
+                      color="primary">{{ 'Upload mnemonic' | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <mat-card *ngIf="isLoaded" style="display:flex;justify-content:center;align-items:center">
+          <mat-progress-spinner color="primary" mode="indeterminate">
+          </mat-progress-spinner>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

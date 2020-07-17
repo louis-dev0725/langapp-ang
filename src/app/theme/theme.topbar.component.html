@@ -1,0 +1,35 @@
+<div class="layout-topbar">
+
+  <a routerLink="/" *ngIf="app.isHorizontal() && !app.isMobile()" class="topbar-logo">
+    <img alt="logo" src="assets/layout/images/logo-slim.png"/>
+    <span class="app-name">SERENITY</span>
+  </a>
+
+  <img alt="logo" src="assets/layout/images/logo-slim.png" class="mobile-logo"/>
+
+  <a href="#" class="menu-btn" (click)="app.onMenuButtonClick($event)">
+    <i class="material-icons">&#xE5D2;</i>
+  </a>
+
+  <div class="layout-topbar-menu-wrapper">
+    <ul class="custom-topbar-menu topbar-menu fadeInDown" [ngClass]="{'topbar-menu-active': app.topbarMenuActive}"
+        (click)="app.onTopbarMenuClick($event)">
+      <li class="topbar-item" *ngIf="(isLoggedIn$ | async )">
+        <span>
+          8 (800) 000-00-00 <br>
+          {{'from' | translate}} 11:00 {{'to' | translate}} 19:00
+        </span>
+      </li>
+      <li class="topbar-item">
+        <span *ngIf="(isLoggedIn$ | async ) && !isOpenedAdmin">{{'Your id' | translate}}{{': ' + user?.id}}</span>
+        <span *ngIf="(isLoggedIn$ | async ) && isOpenedAdmin">{{'Logged in as ID' | translate}}{{': ' + user?.id}}</span>
+      </li>
+      <li class="topbar-item" *ngIf="(isLoggedIn$ | async )">
+        <span *ngIf="user?.balance">
+          {{'Your balance' | translate}}: {{user?.balance | formatCurrency : session.lang}}<br>
+          <a class="default-link" routerLink="/payment">{{'Refill' | translate}}</a>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>

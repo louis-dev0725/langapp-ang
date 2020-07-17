@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="card" *ngIf="isLoaded">
+    <h1 translate>Sign in</h1>
+    <p class="note" translate>signin.note</p>
+
+    <ng-container *ngIf="errors.length > 0">
+      <mat-card *ngFor="let err of errors"
+        class="err-alert">
+        <mat-card-content>{{err.message}}</mat-card-content>
+      </mat-card>
+    </ng-container>
+
+    <div class="container">
+      <form [formGroup]="signinForm" (ngSubmit)="onSubmit(signinForm.value)">
+        <mat-form-field class="form-item">
+          <mat-label translate>Email</mat-label>
+          <input matInput required formControlName="email" placeholder="{{'Email' | translate}}">
+          <mat-error *ngIf="checkError('email')">{{ getErrors('email')}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-item">
+          <mat-label translate>Password</mat-label>
+          <input matInput type="password" formControlName="password" required placeholder="{{'Password' | translate}}">
+          <mat-error *ngIf="checkError('password')">{{ getErrors('password')}}</mat-error>
+        </mat-form-field>
+
+        <div class="form-item">
+          <a routerLink="/auth/restore" class="form-item-link" translate>Forgot password?</a>
+        </div>
+
+        <div class="form-item">
+          <button mat-flat-button color="primary" type="submit" [disabled]="!signinForm.valid">{{'Sign in' | translate}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center;">
+    <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+  </mat-card>
+</div>

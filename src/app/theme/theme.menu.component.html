@@ -1,0 +1,14 @@
+<div class="layout-sidebar" [ngClass]="{'layout-sidebar-active': app.sidebarActive, 'layout-sidebar-dark': app.darkMenu}"
+    (click)="app.onSidebarClick($event)" (mouseover)="app.sidebarActive=true" (mouseleave)="app.sidebarActive=false">
+    <div class="sidebar-logo">
+        <a routerLink="/">
+            <img alt="logo" src="assets/layout/images/logo-slim.png" />
+            <span class="app-name">{{appName}}</span>
+        </a>
+    </div>
+
+    <p-scrollPanel #scrollPanel [style]="{height: '100%'}">
+      <ul [user]="user" app-theme-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset"
+        parentActive="true"></ul>
+    </p-scrollPanel>
+</div>
