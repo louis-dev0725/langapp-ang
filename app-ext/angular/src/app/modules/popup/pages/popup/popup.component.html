@@ -1,0 +1,12 @@
+<div class="content" *ngIf="!siteAuthContent">
+  <h3>{{ 'TextNoAuth' | translate }}
+    <a [href]="siteUri + '/#/'" target="_blank">{{ 'Site' | translate }}</a>.
+  </h3>
+</div>
+
+<div class="content" *ngIf="siteAuthContent">
+  <h3>{{ 'Id' | translate }}: {{ user.id }}</h3>
+  <h3>{{ 'Name' | translate }}: {{ user.name }}</h3>
+  <h3>E-mail: {{ user.email }}</h3>
+  <a [href]="siteUri + '/#/settings/plugin'" target="_blank" class="setting_button">{{ 'Setting' | translate }}</a>
+</div>
