@@ -1,15 +1,17 @@
+const GenerateJsonFile = require('generate-json-file-webpack-plugin');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const { join } = require('path');
-const { optimize } = require('webpack');
+const configParam = require('../allParam.config');
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
+  devtool: 'inline-source-map',
   entry: {
     contentPage: join(__dirname, 'src/contentPage.ts'),
     backgroundPage: join(__dirname, 'src/backgroundPage.ts')
   },
   output: {
-    path: join(__dirname, '../../extension'),
+    path: join(__dirname, '../dist'),
     filename: '[name].js'
   },
   module: {
@@ -23,8 +25,13 @@ module.exports = {
   },
   plugins: [
     new CheckerPlugin(),
-    new optimize.AggressiveMergingPlugin(),
-    new optimize.OccurrenceOrderPlugin()
+    new GenerateJsonFile({
+      jsonFile: join(__dirname, 'manifest.json'),
+      filename: 'manifest.json',
+      value: (manifest) => {
+        manifest.permissions.push(configParam.URIApi + "api/*");
+      }
+    })
   ],
   resolve: {
     extensions: ['.ts', '.js']
