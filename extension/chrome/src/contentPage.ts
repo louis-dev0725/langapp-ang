@@ -27,13 +27,6 @@ let dictionaryWord = {
 
 let context = null;
 
-let videoC = {
-  x_start: 0,
-  y_start: 0,
-  x_end: 0,
-  y_end: 0
-}
-
 const IGNORE_TEXT_PATTERN = /\u200c/;
 
 const modalShadowElement = document.createElement('div');
@@ -123,12 +116,7 @@ function createButtonListener() {
     }
   });
 
-  let video = document.getElementsByTagName('video');
-  let coor = video[0].getBoundingClientRect();
-  videoC.x_start = coor.left;
-  videoC.x_end = coor.right;
-  videoC.y_start = coor.top;
-  videoC.y_end = coor.bottom;
+  let videos = document.getElementsByTagName('video');
 
   document.addEventListener('dblclick', (e) => {
     if (setting === 'extension.DoubleClick') {
@@ -170,33 +158,40 @@ function createButtonListener() {
     }
   });
 
-  if ((video.length > 0) && subtitleTranslate) {
+  if ((videos.length > 0) && subtitleTranslate) {
     document.addEventListener('click', (e) => {
-      if ((e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === true) {
-        createAndSendData(e, true, video);
-        video[0].pause();
-      }
+      createAndSendData(e, true, videos);
     });
   }
 }
 
-function createAndSendData(e, subtitle = false, video = null) {
+function createAndSendData(e, subtitle = false, videos = null) {
   statusModal = modalShadowRoot.getElementById('modalTranslate');
   let text_subtitle = null;
+
+  let video = null;
+  if (videos !== null) {
+    for (let el of videos) {
+      if (!el.paused) {
+        video = el
+      }
+    }
+  }
+
   if (statusModal === null) {
     createModal(subtitle, video);
   }
 
   if (subtitle) {
     text_subtitle = e.path[0].innerText;
-    if (((videoC.x_start <= e.pageX) && (e.pageX <= videoC.x_end)) && ((videoC.y_start <= e.pageY) && (e.pageY <= videoC.y_end))) {
+    if (findUpClass(e.target, ['caption-visual-line', 'vjs-text-track-cue'])) {
+      if (video !== null && !video.paused) {
+        // video.pause(); Ломает стандартный функционал паузу у плеера
+      }
       innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
     }
   } else {
-    if (((videoC.x_start <= e.pageX) && (e.pageX <= videoC.x_end)) && ((videoC.y_start <= e.pageY) && (e.pageY <= videoC.y_end))) {
-    } else {
-      innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
-    }
+    innerTranslateObject(document.caretRangeFromPoint(e.x, e.y), user, e.pageY, subtitle, text_subtitle);
   }
 }
 
@@ -246,8 +241,8 @@ function createModal(subtitle = false, video = null) {
     mBody.innerHTML = '';
     modal.style.display = 'none';
 
-    if (subtitle) {
-      video[0].play();
+    if (subtitle && video.paused) {
+        // video.play(); Ломает стандартный функционал паузу у плеера
     }
   });
 
@@ -256,8 +251,8 @@ function createModal(subtitle = false, video = null) {
     mBody.innerHTML = '';
     modal.style.display = 'none';
 
-    if (subtitle) {
-      video[0].play();
+    if (subtitle && video.paused) {
+      // video.play(); Ломает стандартный функционал паузу у плеера
     }
   });
 
@@ -323,61 +318,65 @@ function innerTranslateObject (range, user, pageY, subtitle, text = null) {
         wordT.style.textAlign = 'center';
 
         let i = 0;
+        let otherArray: Array<number> = [];
         if (response.data.res.length > 0) {
           response.data.words.forEach((word) => {
-            let result = ''
+            let result = null;
             response.data.res.forEach((res) => {
               res.query.forEach((q) => {
-                if (word.word === q) {
+                if (word.word === q && otherArray.indexOf(res.id) === -1) {
+                  otherArray.push(res.id);
                   result = res;
+
+                  if (i === 0) {
+                    wordT.innerHTML = '<span>' + word.kana + '</span>'
+                        + '<h1 style="font-size:2em;text-align:center;margin:.5rem 0;">' + word.word + '</h1>';
+
+                    mBody.innerHTML = '<div style="padding:0 15px;margin:10px 0">'
+                        + '<ul id="list-translate_' + i + '" style="border:1px solid #000;border-radius:5px;'
+                        + 'list-style:none;padding:0;border-bottom:none;"></ul></div>';
+
+                    let listTranslate = modalShadowRoot.getElementById('list-translate_' + i );
+                    // @ts-ignore
+                    const transObj = result.sourceData;
+
+                    transObj.sense.forEach((sen) => {
+                      sen.gloss.forEach((gl) => {
+                        listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                            + '<a class="textDictionary" data-word="' + word.word + '" data-id="' + result.id + '" data-translate="'
+                            + gl.text + '">' + gl.text + '</a></li>';
+                      });
+                    });
+
+                    i++;
+                  } else {
+                    mBody.innerHTML += '<div id="modal-translate-header" style="display:flex;flex-flow:row nowrap;width:100%;'
+                        + 'justify-content:space-between;border-top:1px solid #000;margin-top:10px;">'
+                        + '<div class="word-translate" style="text-align:center;">'
+                        + '<span>' + word.kana + '</span>'
+                        + '<h1 style="font-size:2em;text-align:center;margin:.5rem 0;">' + word.word + '</h1></div></div>';
+
+                    mBody.innerHTML += '<div style="padding:0 15px;margin:10px 0">'
+                        + '<ul id="list-translate_' + i + '" style="border:1px solid #000;border-radius:5px;'
+                        + 'list-style:none;padding:0;border-bottom:none;"></ul></div>';
+
+                    let listTranslate = modalShadowRoot.getElementById('list-translate_' + i);
+                    // @ts-ignore
+                    const transObj = result.sourceData;
+
+                    transObj.sense.forEach((sen) => {
+                      sen.gloss.forEach((gl) => {
+                        listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
+                            + '<a class="textDictionary" data-word="' + word.word + '" data-id="' + result.id
+                            + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
+                      });
+                    });
+
+                    i++;
+                  }
                 }
               });
             });
-
-            if (i === 0) {
-              wordT.innerHTML = '<span>' + word.kana + '</span>'
-                  + '<h1 style="font-size:2em;text-align:center;margin:.5rem 0;">' + word.word + '</h1>';
-
-              mBody.innerHTML = '<div style="padding:0 15px;margin:10px 0">'
-                  + '<ul id="list-translate_' + i + '" style="border:1px solid #000;border-radius:5px;'
-                  + 'list-style:none;padding:0;border-bottom:none;"></ul></div>';
-
-              let listTranslate = modalShadowRoot.getElementById('list-translate_' + i );
-              // @ts-ignore
-              const transObj = result.sourceData;
-
-              transObj.sense.forEach((sen) => {
-                sen.gloss.forEach((gl) => {
-                  listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
-                      + '<a class="textDictionary" data-word="' + word.word + '" data-id="' + transObj.id + '" data-translate="'
-                      + gl.text + '">' + gl.text + '</a></li>';
-                });
-              });
-            } else {
-              mBody.innerHTML += '<div id="modal-translate-header" style="display:flex;flex-flow:row nowrap;width:100%;'
-                  + 'justify-content:space-between;border-top:1px solid #000;margin-top:10px;">'
-                  + '<div class="word-translate" style="text-align:center;">'
-                  + '<span>' + word.kana + '</span>'
-                  + '<h1 style="font-size:2em;text-align:center;margin:.5rem 0;">' + word.word + '</h1></div></div>';
-
-              mBody.innerHTML += '<div style="padding:0 15px;margin:10px 0">'
-                  + '<ul id="list-translate_' + i + '" style="border:1px solid #000;border-radius:5px;'
-                  + 'list-style:none;padding:0;border-bottom:none;"></ul></div>';
-
-              let listTranslate = modalShadowRoot.getElementById('list-translate_' + i );
-              // @ts-ignore
-              const transObj = result.sourceData;
-
-              transObj.sense.forEach((sen) => {
-                sen.gloss.forEach((gl) => {
-                  listTranslate.innerHTML += '<li style="padding-left:10px;border-bottom:1px solid #000;">'
-                      + '<a class="textDictionary" data-word="' + word.word + '" data-id="' + transObj.id
-                      + '" data-translate="' + gl.text + '">' + gl.text + '</a></li>';
-                });
-              });
-            }
-
-            i++;
           });
 
           let listDictionary = modalShadowRoot.querySelectorAll('.textDictionary');
@@ -774,4 +773,14 @@ function getPreviousNode(node, visitChildren) {
   }
 
   return next;
+}
+
+function findUpClass(el, class_Name: Array<string>) {
+  while (el.parentNode) {
+    el = el.parentNode;
+    if (class_Name.indexOf(el.className) !== -1) {
+      return true;
+    }
+  }
+  return false;
 }
