@@ -29,7 +29,8 @@
     "hiqdev/omnipay-robokassa": "^3.1",
     "ateliee/mecab": "dev-master",
     "ext-json": "*",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "gregwar/image": "^2.0"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.1.0",

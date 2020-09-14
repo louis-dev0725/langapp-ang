@@ -2,108 +2,91 @@
 
 namespace app\models\traits;
 
-use Yii;
+use app\exceptions\FileException;
+use Exception;
+use Gregwar\Image\Image;
+use yii\db\ActiveRecord;
+use yii\web\UploadedFile;
 
-trait UploadFilesTrait {
-
+trait UploadFilesTrait
+{
     /**
-     * Функция загрузки изображения
+     * @param ActiveRecord $model
+     * @param string $field
+     * @param string $pathToFile
      *
-     * @param $model_name
-     * @param $field
-     * @param string $path_to_file
-     * @param string $oldFile
-     *
-     * @return bool|string
+     * @return string
+     * @throws FileException
      */
-    public function uploadImage($model_name, $field, $path_to_file = 'undefined', $oldFile = '') {
-        if (file_exists('upload')) {
-            if (!file_exists('upload/' . $path_to_file)) {
-                mkdir('upload/' . $path_to_file, 0755);
-            }
-        } else {
-            mkdir('upload', 0755);
-            mkdir('upload/' . $path_to_file, 0755);
+    public function uploadImage(ActiveRecord $model, string $field, string $pathToFile = 'undefined'): string
+    {
+        $this->checkDirectory($pathToFile);
+
+        if (!$model->$field instanceof UploadedFile) {
+            throw FileException::fieldIsNotUploadFileObject($field);
         }
 
-        if ($model_name->validate()) {
-            $name_image = time() . '.' . $model_name->$field->extension;
-            $new_name_image = 'upload/temp_files/' . $model_name->$field->baseName . '.' . $model_name->$field->extension;
-            $new_name_image2 = 'upload/temp_files/' . $model_name->$field->baseName . '_1.' . $model_name->$field->extension;
-            $path = 'upload/' . $path_to_file . '/' . $name_image;
-            shell_exec('convert ' . $new_name_image . ' -auto-orient -quality 90 ' . $new_name_image2);
-            shell_exec('convert ' . $new_name_image2 . ' ' . substr($name_image, 0, -4) . '_profile.icm');
-            shell_exec('convert ' . $new_name_image2 . ' -strip -profile ' . substr($name_image, 0, -4) . '_profile.icm ' . $path);
-
-            $model_name->$field->saveAs($path);
-
-            @unlink($new_name_image);
-            @unlink($new_name_image2);
-            if ($oldFile != '') {
-                @unlink($oldFile);
-            }
-
-            return '/' . $path;
-        } else {
-            return false;
+        /** @var UploadedFile $uploadModel */
+        $uploadModel = $model->$field;
+        $nameImage = time().'.'.$uploadModel->extension;
+        $path = 'upload/'.$pathToFile.'/'.$nameImage;
+        try {
+            Image::open($uploadModel->tempName)->save($path);
+        } catch (Exception $exception) {
+            throw FileException::uploadError();
         }
+
+        return '/'.$path;
     }
 
     /**
-     * Функция загрузки нескольких изображений
+     * @param string $imagePath
+     * @param int $width
+     * @param int $height
+     * @param bool $crop
      *
-     * @param $model_name
-     * @param $field
-     * @param string $path_to_file
-     *
-     * @return array|bool
+     * @throws Exception
      */
-    public function uploadGallery($model_name, $field, $path_to_file = 'undefined') {
-        if (file_exists('upload')) {
-            if (!file_exists('upload/' . $path_to_file)) {
-                mkdir('upload/' . $path_to_file, 0755);
-            }
-        } else {
-            mkdir('upload', 0755);
-            mkdir('upload/' . $path_to_file, 0755);
+    public function preview(string $imagePath, int $width = 0, int $height = 0, bool $crop = false): void
+    {
+        if ('/' === $imagePath[0]) {
+            $imagePath = substr($imagePath, 1);
         }
 
-        $arrFile = [];
-        if ($model_name->validate()) {
-            foreach ($model_name->$field as $key => $file) {
-                $randTempNameFile = time() . '_' . preg_replace("/[^ \w]+/", "_", $file->baseName) . '.' . $file->extension;
-                $randTempNameFile2 = time() . '_' . $key . '_' . preg_replace("/[^ \w]+/", "_", $file->baseName) . '.' . $file->extension;
-                $name_image = time() . '.' . $file->extension;
-                if ($file->type == 'image/jpeg' || $file->type == 'image/pjpeg' || $file->type == 'image/png') {
-                        $new_name_image = 'upload/temp_files/' . $randTempNameFile;
-						$new_name_image2 = 'upload/temp_files/' . $randTempNameFile2;
-                        $path = 'upload/' . $path_to_file . '/' . $name_image;
-                        shell_exec('convert ' . $new_name_image . ' -auto-orient -quality 90 ' . $new_name_image2);
-						shell_exec('convert ' . $new_name_image2 . ' ' . substr($name_image, 0, -4) . '_profile.icm');
-						shell_exec('convert ' . $new_name_image2 . ' -strip -profile ' . substr($name_image, 0, -4) . '_profile.icm ' . $path);
-                        $file->saveAs($path);
-                        $model_name->$field[$key]->saveAs($path);
+        $image = Image::open($imagePath);
 
-                        $arrFile[$key]['type'] = 0;
-                        $arrFile[$key]['path'] = $path;
-                        $arrFile[$key]['name'] = $name_image;
+        $explodedPath = explode('/', $imagePath);
+        $filename = $explodedPath[count($explodedPath)-1];
+        $extension = $image->guessType();
 
-                    @unlink($new_name_image);
-					@unlink($new_name_image2);
-                } else {
-                    $path = 'upload/' . $path_to_file . '/' . preg_replace("/[^ \w]+/", "_", $file->baseName) . '.' . $file->extension;
-                    $file->saveAs($path);
-                    $model_name->$field[$key]->saveAs($path);
+        if ($width !== 0 || $height !== 0) {
+            $widthNullable = $width > 0 ? $width : null;
+            $heightNullable = $height > 0 ? $height : null;
+            $rescale = null === $widthNullable || null === $heightNullable;
+            $image = $image->resize($widthNullable, $heightNullable, 'transparent', false, $rescale, $crop);
+        }
 
-                    $arrFile[$key]['type'] = 1;
-                    $arrFile[$key]['path'] = $path;
-                    $arrFile[$key]['name'] = preg_replace("/[^ \w]+/", "_", $file->baseName);
-                }
-            }
+        header("Content-type: image/$extension");
+        header("Cache-Control: no-store, no-cache");
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        $image->save('php://output');
+        exit();
+    }
 
-            return $arrFile;
-        } else {
-            return false;
+    /**
+     * @param string $pathToFile
+     *
+     * @throws FileException
+     */
+    private function checkDirectory(string $pathToFile): void
+    {
+        if (!file_exists('upload') && !mkdir('upload', 0755) && !is_dir('upload')) {
+            throw FileException::directoryWasNotCreated('upload');
+        }
+
+        $path = 'upload/'.$pathToFile;
+        if (!file_exists($path) && !mkdir($path, 0755) && !is_dir($path)) {
+            throw FileException::directoryWasNotCreated($path);
         }
     }
 }

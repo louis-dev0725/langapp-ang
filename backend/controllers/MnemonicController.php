@@ -2,16 +2,18 @@
 
 namespace app\controllers;
 
-
+use app\exceptions\FileException;
 use app\models\Mnemonics;
 use app\models\MnemonicsUsers;
 use app\models\traits\UploadFilesTrait;
-use app\models\User;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
 use yii\web\ServerErrorHttpException;
 use yii\web\UploadedFile;
 
-class MnemonicController extends ActiveController {
+class MnemonicController extends ActiveController
+{
     use UploadFilesTrait;
 
     public $modelClass = Mnemonics::class;
@@ -19,13 +21,16 @@ class MnemonicController extends ActiveController {
     /**
      * @return array
      */
-    public function actions() {
+    public function actions(): array
+    {
         $actions = parent::actions();
         unset($actions['index'], $actions['create'], $actions['update']);
+
         return $actions;
     }
 
-    public function actionIndex() {
+    public function actionIndex(): array
+    {
         $filter = Yii::$app->request->queryParams;
 
         $query = Mnemonics::find()->joinWith('mnemonicsUsers')
@@ -33,14 +38,16 @@ class MnemonicController extends ActiveController {
             ->orderBy(['mnemonics.rating' => SORT_DESC])->all();
 
         return [
-            'mnemonics' => $query
+            'mnemonics' => $query,
         ];
     }
 
     /**
      * @return array
+     * @throws FileException
      */
-    public function actionCreate() {
+    public function actionCreate(): array
+    {
         $mnemonic = new Mnemonics();
 
         $mnemonic_data = Yii::$app->request->post();
@@ -49,7 +56,7 @@ class MnemonicController extends ActiveController {
         $mnemonic->word = $mnemonic_data['word'];
         $mnemonic->text = $mnemonic_data['text'];
         $mnemonic->image = UploadedFile::getInstanceByName('image');
-        if ($mnemonic->image) {
+        if ($mnemonic->image && $mnemonic->validate()) {
             $mnemonic->images = $this->uploadImage($mnemonic, 'image', 'mnemonic');
         }
         $mnemonic->save(false);
@@ -58,17 +65,19 @@ class MnemonicController extends ActiveController {
             'success' => true,
             'text' => $mnemonic->text,
             'image' => $mnemonic->images,
-            'id' => $mnemonic->id
+            'id' => $mnemonic->id,
         ];
     }
 
     /**
      * @param $id
      *
-     * @return array|\yii\db\ActiveRecord|null
-     * @throws \yii\base\InvalidConfigException
+     * @return array|ActiveRecord|null
+     * @throws InvalidConfigException
+     * @throws ServerErrorHttpException
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = Mnemonics::find()->where(['id' => $id])->one();
 
         $user = Yii::$app->getRequest()->getBodyParams()['user_rating'];
