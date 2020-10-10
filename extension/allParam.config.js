@@ -1,4 +1,4 @@
 module.exports = {
-    URIApi: 'http://localhost:8090/',
-    URIFront: 'http://localhost:4200'
+    URIApi: 'http://localhost/',
+    URIFront: 'http://localhost'
 };

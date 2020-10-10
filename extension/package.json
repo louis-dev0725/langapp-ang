@@ -4,6 +4,7 @@
   "description": "Generated with @larscom/ng-chrome-extension",
   "scripts": {
     "ng": "ng",
+    "rimraf": "node ./node_modules/rimraf/bin.js",
     "start": "npm run watch",
     "build:angular": "ng build",
     "build:angular-production": "ng build --prod",
@@ -14,8 +15,8 @@
     "build": "npm run clean && npm run build:angular && npm run build:chrome",
     "build:production": "npm run build:angular-production && npm run build:chrome-production && npm run pack",
     "watch": "npm run clean && npm-run-all --parallel watch:*",
-    "clean": "rimraf ../extension",
-    "pack": "cd ../extension && bestzip ../../extension-build.zip *"
+    "clean": "rimraf ./dist",
+    "pack": "cd ./dist && bestzip ../extension-build.zip *"
   },
   "private": true,
   "dependencies": {

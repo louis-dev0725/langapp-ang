@@ -1,2 +1,2 @@
-export const APP_NAME = 'Service Template';
-export const APP_DATE_CREATED = '2018';
+export const APP_NAME = 'LangApp';
+export const APP_DATE_CREATED = '2020';

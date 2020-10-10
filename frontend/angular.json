@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "call-rocket": {
+    "langapp": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -24,7 +24,7 @@
                 "externals": "prepend"
               }
             },
-            "outputPath": "dist/call-rocket",
+            "outputPath": "dist/langapp",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -71,18 +71,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "call-rocket:build"
+            "browserTarget": "langapp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "call-rocket:build:production"
+              "browserTarget": "langapp:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "call-rocket:build"
+            "browserTarget": "langapp:build"
           }
         },
         "test": {
@@ -117,7 +117,7 @@
         }
       }
     },
-    "call-rocket-e2e": {
+    "langapp-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -126,11 +126,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "call-rocket:serve"
+            "devServerTarget": "langapp:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "call-rocket:serve:production"
+              "devServerTarget": "langapp:serve:production"
             }
           }
         },
@@ -146,5 +146,5 @@
       }
     }
   },
-  "defaultProject": "call-rocket"
+  "defaultProject": "langapp"
 }

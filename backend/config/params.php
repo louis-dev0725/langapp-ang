@@ -3,8 +3,8 @@
 $params = [
     'adminEmail' => 'support@localhost',
     'noreplyEmail' => 'support@localhost',
-    'siteName' => 'Service Template',
-    'fromName' => 'Service Template',
+    'siteName' => 'LangApp',
+    'fromName' => 'LangApp',
     'hostName' => 'localhost:8080',
     'baseUrl' => 'https://localhost:8080',
 ];

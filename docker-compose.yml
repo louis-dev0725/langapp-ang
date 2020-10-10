@@ -1,0 +1,73 @@
+version: "3.8"
+services:
+  db:
+    #image: postgres:12-alpine
+    image: groonga/pgroonga:latest-alpine-12-slim
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_HOST_AUTH_METHOD:-trust}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./:/app:delegated
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 0
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 0
+      GUNICORN_ACCESS_LOGFILE: /dev/null
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json
+      - ./docker/pgadmin/.pgpass:/pgadmin4/.pgpass
+    ports:
+      - "127.0.0.1:${PGADMIN_PORT:-5001}:80"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "127.0.0.1:${ADMINER_PORT:-5002}:8080"
+
+  backend:
+    build:
+      context: ./docker/backend-dev
+    ports:
+      - "127.0.0.1:${HTTP_PORT:-80}:80"
+      - "127.0.0.1:${HTTPS_PORT:-443}:80"
+    volumes:
+      - composer-cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
+      - ./docker/backend-dev/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf
+      - ./docker/backend-dev/nginx/vhost-dev.conf:/opt/docker/etc/nginx/vhost-dev.conf
+      - ./docker/backend-dev/php/php.ini:/opt/docker/etc/php/php.ini
+      - ./docker/backend-dev/postfix/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf
+      - ./docker/backend-dev/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh
+      - node-modules:/app/frontend/node_modules
+    environment:
+      - PHP_DISPLAY_ERRORS=1
+      - PHP_DEBUGGER=xdebug
+    # Can be activated when docker-compose will support "host-gateway" value
+    # Currently:
+    # on Windows and macOS host.docker.internal added automatically by Docker Desktop
+    # on Linux host.docker.internal added in entrypoint.sh
+    #extra_hosts:
+    #  - host.docker.internal:host-gateway
+  frontend:
+    build:
+      context: ./docker/frontend-dev
+    volumes:
+      - npm-cache:/root/.npm
+      - ./:/app:delegated
+      - node-modules:/app/frontend/node_modules
+volumes:
+  db-data:
+  pgadmin:
+  composer-cache:
+  npm-cache:
+  node-modules:

@@ -22,7 +22,7 @@
               "mergeStrategies": { "externals": "replace" }
             },
             "aot": true,
-            "outputPath": "../extension",
+            "outputPath": "./dist",
             "index": "angular/src/index.html",
             "main": "angular/src/main.ts",
             "polyfills": "angular/src/polyfills.ts",

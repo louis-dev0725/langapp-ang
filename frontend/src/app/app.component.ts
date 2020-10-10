@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public value = 50;
   public bufferValue = 75;
 
-  title = 'call-rocket';
+  title = 'langapp';
 
   constructor(private translate: TranslateService, private breadCrumbsService: BreadCrumbsService,
     private eventsService: EventsService) {

@@ -101,17 +101,22 @@ $config = [
     'params' => $params,
 ];
 
+
+
 if (YII_ENV_DEV) {
+    $config['components']['assetManager']['baseUrl'] = '@web/yii-assets';
+    $config['components']['assetManager']['basePath'] = '@webroot/yii-assets';
+
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '::1', '172.*'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '::1', '172.*'],
     ];
 }
 

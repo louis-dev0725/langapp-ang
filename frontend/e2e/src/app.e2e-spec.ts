@@ -1,4 +1,4 @@
-import { AppPage } from 'D:/OpenServer/domains/ip_LVS/langapp/langapp-front/e2e/src/app.po';
+import { AppPage } from './app.po';
 
 describe('workspace-project App', () => {
   let page: AppPage;
@@ -9,6 +9,6 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('Welcome to call-rocket!');
+    expect(page.getTitleText()).toEqual('Welcome to langapp!');
   });
 });

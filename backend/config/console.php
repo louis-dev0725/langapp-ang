@@ -36,6 +36,11 @@ $config = [
         'migration' => [
             'class' => 'bizley\migration\controllers\MigrationController',
         ],
+        'migrate-data' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => '@app/migrations/data',
+            'migrationTable' => '{{%migration_data}}'
+        ],
     ],
     'params' => $params,
     /*
