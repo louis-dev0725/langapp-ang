@@ -34,5 +34,7 @@ tests/_support/_generated
 
 web/index-local.php
 rbac/assignments.php
+rbac/items.php
+rbac/rules.php
 
 web/upload/mnemonic

@@ -27,10 +27,7 @@ class RbacController extends Controller
 
     public function actionInit()
     {
-        $this->am->removeAll();
-
-        $admin = $this->am->createRole('admin');
-        $this->am->add($admin);
+        echo $this->ansiFormat('rbac/init is deprecated. To add roles just run ./yii migrate-data', Console::FG_RED);
     }
 
     public function actionCreateUser($email, $password) {
