@@ -9,6 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'sourceLanguage' => 'en-US',
     'language' => 'ru-RU',
+    'timeZone' => 'UTC',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
@@ -30,6 +31,7 @@ $config = [
             'identityClass' => 'app\models\User',
             //'enableAutoLogin' => true,
             'enableSession' => false,
+            'on afterLogin' => ['app\models\User', 'afterLogin'],
             'loginUrl' => null,
         ],
         'errorHandler' => [
