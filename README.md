@@ -7,7 +7,7 @@
 3. (внутри WSL) `cd ~`
 4. (внутри WSL) `git clone git@gitlab.com:mangoproject/langapp.git`
 5. (внутри WSL) `cd langapp`
-6. (внутри WSL) `./run-dev.sh`
+6. (внутри WSL) `./run/start-dev.sh`
 7. Дождитесь сообщения `ℹ ｢wdm｣: Compiled successfully.`
 8. Откройте в браузере http://localhost/
 
@@ -22,18 +22,18 @@
 
 1. [Установите Docker](https://docs.docker.com/get-docker/) если ещё не стоит.
 2. `git clone git@gitlab.com:mangoproject/langapp.git`
-3. `./run-dev.sh`
+3. `./run/start-dev.sh`
 4. Дождитесь сообщения `ℹ ｢wdm｣: Compiled successfully.`
 5. Откройте в браузере http://localhost/
 
 # Запуск
 
 1. Запустите `wsl` в PowerShell в Windows или откройте терминал в Linux или macOS.
-2. Запустите `./run-dev.sh`
+2. Запустите `./run/start-dev.sh`
 3. Дождитесь сообщения `ℹ ｢wdm｣: Compiled successfully.`
 4. Откройте в браузере http://localhost/
 
-Если у вас занят какой-то из портов, который используется при запуске (например 80, 443, 5432), то вы можете поменять его в `run-dev.env`.\
+Если у вас занят какой-то из портов, который используется при запуске (например 80, 443, 5432), то вы можете поменять его в `run/dev.env`.\
 Если вы меняете HTTP_PORT (по умолчанию 80), то его также необходимо поменять в `frontend/src/index.html`.
 
 # Информация

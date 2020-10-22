@@ -9,9 +9,36 @@ services:
       POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_HOST_AUTH_METHOD:-trust}
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./docker/db/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
       - ./:/app:delegated
     ports:
       - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+
+  web:
+    build:
+      context: ./docker/web
+    ports:
+      - "127.0.0.1:${HTTP_PORT:-80}:80"
+      - "127.0.0.1:${HTTPS_PORT:-443}:80"
+    volumes:
+      - composer-cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
+      - ./docker/web/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf
+      - ./docker/web/nginx/vhost-dev.conf:/opt/docker/etc/nginx/vhost-dev.conf
+      - ./docker/web/php/php.ini:/opt/docker/etc/php/php.ini
+      - ./docker/web/postfix/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf
+      - ./docker/web/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh
+#      - node-modules:/app/frontend/node_modules
+      - npm-cache:/root/.npm
+    environment:
+      - PHP_DISPLAY_ERRORS=1
+      - PHP_DEBUGGER=xdebug
+    # Can be activated when docker-compose will support "host-gateway" value
+    # Currently:
+    # on Windows and macOS host.docker.internal added automatically by Docker Desktop
+    # on Linux host.docker.internal added in entrypoint.sh
+    #extra_hosts:
+    #  - host.docker.internal:host-gateway
 
   pgadmin:
     image: dpage/pgadmin4
@@ -34,40 +61,9 @@ services:
     ports:
       - "127.0.0.1:${ADMINER_PORT:-5002}:8080"
 
-  backend:
-    build:
-      context: ./docker/backend-dev
-    ports:
-      - "127.0.0.1:${HTTP_PORT:-80}:80"
-      - "127.0.0.1:${HTTPS_PORT:-443}:80"
-    volumes:
-      - composer-cache:/root/.composer/cache:delegated
-      - ./:/app:delegated
-      - ./docker/backend-dev/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf
-      - ./docker/backend-dev/nginx/vhost-dev.conf:/opt/docker/etc/nginx/vhost-dev.conf
-      - ./docker/backend-dev/php/php.ini:/opt/docker/etc/php/php.ini
-      - ./docker/backend-dev/postfix/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf
-      - ./docker/backend-dev/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh
-      - node-modules:/app/frontend/node_modules
-    environment:
-      - PHP_DISPLAY_ERRORS=1
-      - PHP_DEBUGGER=xdebug
-    # Can be activated when docker-compose will support "host-gateway" value
-    # Currently:
-    # on Windows and macOS host.docker.internal added automatically by Docker Desktop
-    # on Linux host.docker.internal added in entrypoint.sh
-    #extra_hosts:
-    #  - host.docker.internal:host-gateway
-  frontend:
-    build:
-      context: ./docker/frontend-dev
-    volumes:
-      - npm-cache:/root/.npm
-      - ./:/app:delegated
-      - node-modules:/app/frontend/node_modules
 volumes:
   db-data:
   pgadmin:
   composer-cache:
   npm-cache:
-  node-modules:
+#  node-modules:
