@@ -23,15 +23,15 @@ class m201014_061328_add_test_users extends Migration
 
             $user = new User();
             $user->scenario = User::SCENARIO_ADMIN;
-            $user->email = 'test@example.org';
-            $user->password = 'testpassword';
+            $user->email = 'user@example.org';
+            $user->password = 'userpassword';
             $user->save();
         }
     }
 
     public function safeDown()
     {
-        User::deleteAll(['email' => 'test@example.org']);
+        User::deleteAll(['email' => 'user@example.org']);
         User::deleteAll(['email' => 'admin@example.org']);
     }
 }
