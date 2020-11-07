@@ -10,12 +10,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
         --install-dir=/usr/local/bin && \
     composer clear-cache
 
-# Install composer plugins
-RUN composer global require --optimize-autoloader \
-        "hirak/prestissimo:${VERSION_PRESTISSIMO_PLUGIN}" && \
-    composer global dumpautoload --optimize && \
-    composer clear-cache
-
 # Install Yii framework bash autocompletion
 RUN curl -L https://raw.githubusercontent.com/yiisoft/yii2/master/contrib/completion/bash/yii \
         -o /etc/bash_completion.d/yii
@@ -68,5 +62,3 @@ RUN set -ex \
 
 # Application environment
 WORKDIR /app/
-
-CMD ["app"]

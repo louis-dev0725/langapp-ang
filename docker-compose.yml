@@ -7,19 +7,20 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_HOST_AUTH_METHOD:-trust}
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./docker/db/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./docker/db/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./:/app:delegated
     ports:
-      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+      - "${LISTEN_HOST:-127.0.0.1}:${POSTGRES_PORT:-5432}:5432"
 
   web:
     build:
       context: ./docker/web
     ports:
-      - "127.0.0.1:${HTTP_PORT:-80}:80"
-      - "127.0.0.1:${HTTPS_PORT:-443}:80"
+      - "${LISTEN_HOST:-127.0.0.1}:${HTTP_PORT:-80}:80"
+      - "${LISTEN_HOST:-127.0.0.1}:${HTTPS_PORT:-443}:80"
     volumes:
       - composer-cache:/root/.composer/cache:delegated
       - ./:/app:delegated
@@ -28,7 +29,7 @@ services:
       - ./docker/web/php/php.ini:/opt/docker/etc/php/php.ini
       - ./docker/web/postfix/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf
       - ./docker/web/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh
-#      - node-modules:/app/frontend/node_modules
+      - node-modules:${NODE_MODULES_MOUNT:-/app/frontend/node_modules}
       - npm-cache:/root/.npm
     environment:
       - PHP_DISPLAY_ERRORS=1
@@ -53,17 +54,17 @@ services:
       - ./docker/pgadmin/servers.json:/pgadmin4/servers.json
       - ./docker/pgadmin/.pgpass:/pgadmin4/.pgpass
     ports:
-      - "127.0.0.1:${PGADMIN_PORT:-5001}:80"
+      - "${LISTEN_HOST:-127.0.0.1}:${PGADMIN_PORT:-5001}:80"
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - "127.0.0.1:${ADMINER_PORT:-5002}:8080"
+      - "${LISTEN_HOST:-127.0.0.1}:${ADMINER_PORT:-5002}:8080"
 
 volumes:
   db-data:
   pgadmin:
   composer-cache:
   npm-cache:
-#  node-modules:
+  node-modules:
