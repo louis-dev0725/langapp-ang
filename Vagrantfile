@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   #config.vm.provision :docker
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder ".", "/langapp", type: "rsync", rsync__exclude: [".git/", ".idea/"], rsync__rsync_ownership: true, rsync__verbose: true, rsync__chown: false
+  config.vm.synced_folder ".", "/langapp", type: "rsync", rsync__exclude: [".git/", ".idea/"], rsync__rsync_ownership: true, rsync__chown: false
   
   config.vm.provision "shell", inline: "apt update"
   config.vm.provision "shell", inline: "apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y"
