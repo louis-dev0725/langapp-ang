@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/focal64"
 
   config.vm.provider "virtualbox" do |v|
-    v.memory = 2048
+    v.memory = 3072
     v.cpus = 4
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   #config.vm.provision :docker
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder ".", "/langapp", type: "rsync", rsync__exclude: [".git/", ".idea/", "backend-ts/dist/", "backend-ts/node_modules/", "frontend/node_modules/", "backend/runtime/"], rsync__rsync_ownership: true, rsync__chown: false
+  #config.vm.synced_folder ".", "/langapp", type: "rsync", rsync__exclude: [".git/", ".idea/", "backend-ts/dist/", "backend-ts/node_modules/", "frontend/node_modules/", "backend/runtime/"], rsync__rsync_ownership: true, rsync__chown: false
   
   config.vm.provision "shell", inline: "apt update"
   config.vm.provision "shell", inline: "apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y"
