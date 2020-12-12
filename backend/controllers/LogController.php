@@ -19,16 +19,18 @@ class LogController extends ActiveController {
         return $actions;
     }
 
-	public function behaviors() {
+    public function behaviors () {
         $behaviors = parent::behaviors();
-
+        $availableToEveryone = ['options', 'create'];
+        $behaviors['authenticator']['optional'] = $availableToEveryone;
         $behaviors['access'] = [
             'class' => AccessControl::class,
             'except' => ['options'],
             'rules' => [
                 [
                     'allow' => true,
-                    'roles' => ['?', '@'],
+                    'actions' => $availableToEveryone,
+                    //'roles' => ['?'],
                 ]
             ],
         ];
@@ -41,5 +43,4 @@ class LogController extends ActiveController {
 
         Yii::info($log, 'log_extension');
     }
-
 }
