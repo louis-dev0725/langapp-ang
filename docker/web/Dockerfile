@@ -39,8 +39,8 @@ RUN set -x \
     && make install \
     && rm -R /tmp/mecab-ipadic-[0-9]*
 
-# Install postgres client
-RUN apt-get update && apt-get install -y postgresql-client iproute2 iputils-ping --no-install-recommends && apt-get clean
+# Install postgres client, iputils, screen
+RUN apt-get update && apt-get install -y postgresql-client iproute2 iputils-ping screen --no-install-recommends && apt-get clean
 
 # Install node (see https://github.com/nodejs/docker-node/blob/master/12/buster/Dockerfile)
 ENV NODE_VERSION 12.19.0

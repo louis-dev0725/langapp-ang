@@ -100,7 +100,7 @@ Yii Debugger доступен по адресу http://localhost/debug
 
 # Полезные команды
 
-В случае запуска через Vagrant, команды нужно выполнять в терминале внутри виртуальной машины.
+В случае запуска через Vagrant, команды нужно выполнять в терминале внутри виртуальной машины (используйте `run-vagrant/terminal-vagrant.cmd`).
 
 ```bash
 # Docker
@@ -110,7 +110,8 @@ docker-compose down # Остановка и удаление docker контей
 docker-compose down --volumes # Остановка и удаление docker контейнеров вместе с volumes (база данных, кеши и т.д.)
 
 # Контейнер web (backend и frontend)
-docker-compose exec web [command] # Запуск команды в контейнере backend
+docker-compose exec web [command] # Запуск команды в контейнере web
+docker-compose exec web bash # Запуск bash в контейнере web (см. также run/terminal-web.sh)
 docker-compose exec web composer install # composer install 
 docker-compose exec web ./yii migrate/up --interactive 0 # Миграции
 docker-compose exec web ./yii migrate-data/up --interactive 0 # Миграции для данных (словарь и т.д.)
@@ -119,6 +120,8 @@ docker-compose exec web sh -c 'NG_CLI_ANALYTICS=ci npm install --no-audit' # npm
 docker-compose exec web npm start -- --host 0.0.0.0 # npm start (запускает ng serve)
 docker-compose exec web npm run ng -- --help # Запуск ng  
 docker-compose exec web npm run ng -- build --prod # запускает ng build --prod
+docker-compose exec web screen -ls # Список процессов, запущеных через screen (frontend, backend-ts, juman и другие)
+docker-compose exec web screen -r frontend # Приконнектится к консоли, в которой запущен frontend (например)
 ```
 
 # Полезные скрипты
@@ -129,7 +132,7 @@ docker-compose exec web npm run ng -- build --prod # запускает ng build
 - `run/terminal-web.sh` открывает терминал в Docker контейнере web (доступ к консоли yii, npm и так далее)
 
 ## Windows (Vagrant)
-- `run-vagrant/start-dev.cmd` запуск всего необходимого для разработки (подготавливает виртуальную машину через Vagrant, запускает в ней `run/start-dev.sh`, запускает автоматическую синхронизацию файлов через unison)
+- `run-vagrant/start-dev.cmd` запуск всего необходимого для разработки (подготавливает виртуальную машину через Vagrant, запускает в ней `run/start-dev.sh`, запускает автоматическую синхронизацию файлов)
 - `run-vagrant/stop-dev.cmd` остановка виртуальных машин (через Vagrant)
 - `run-vagrant/start-sync.cmd` запуск автоматической синхронизации файлов через unsion (этот скрипт автоматически запускается из `run-vagrant/start-dev.cmd`)
 - `run-vagrant/terminal-web.cmd` открывает терминал в Docker контейнере web (доступ к консоли yii, npm и так далее)
