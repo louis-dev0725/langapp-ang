@@ -1,0 +1,35 @@
+[
+  {
+    "resultsPath": "/app/backend-ts/src/models/",
+    "pluralizeNames": true,
+    "noConfigs": false,
+    "convertCaseFile": "pascal",
+    "convertCaseEntity": "pascal",
+    "convertCaseProperty": "camel",
+    "convertEol": "LF",
+    "propertyVisibility": "none",
+    "lazy": false,
+    "activeRecord": true,
+    "generateConstructor": false,
+    "customNamingStrategyPath": "",
+    "relationIds": false,
+    "strictMode": "none",
+    "skipSchema": false,
+    "indexFile": false,
+    "exportType": "named"
+  },
+  {
+    "host": "db",
+    "port": 5432,
+    "databaseName": "postgres",
+    "user": "postgres",
+    "password": "postgres",
+    "databaseType": "postgres",
+    "schemaName": "public",
+    "ssl": false,
+    "skipTables": [],
+    "onlyTables": [
+      "dictionary_word"
+    ]
+  }
+]

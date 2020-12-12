@@ -30,6 +30,7 @@ services:
       - ./docker/web/postfix/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf
       - ./docker/web/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh
       - node-modules:${NODE_MODULES_MOUNT:-/app/frontend/node_modules}
+      - node-modules-backend:${NODE_MODULES_BACKEND_MOUNT:-/app/backend-ts/node_modules}
       - npm-cache:/root/.npm
     environment:
       - PHP_DISPLAY_ERRORS=1
@@ -68,3 +69,4 @@ volumes:
   composer-cache:
   npm-cache:
   node-modules:
+  node-modules-backend:
