@@ -31,6 +31,7 @@ export interface User {
   isAdmin: boolean;
   currency?: any;
   config?: any;
+  extensionSettings: any;
 }
 
 export interface InvitedUser {

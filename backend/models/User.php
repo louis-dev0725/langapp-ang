@@ -8,6 +8,25 @@ use Yii;
 
 class User extends \app\base\models\User
 {
+
+    public function getExtensionSettings()
+    {
+        return $this->dataJson['extensionSettings'] ?? [];
+    }
+
+    public function setExtensionSettings($value)
+    {
+        if (!is_array($value)) {
+            $this->addError('extensionSettings', 'extentionSettings should be an array.');
+            return false;
+        } else {
+            $dataJson = $this->dataJson;
+            $dataJson['extensionSettings'] = $value;
+            $this->dataJson = $dataJson;
+            return true;
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -15,8 +34,8 @@ class User extends \app\base\models\User
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_REGISTER] = [...$scenarios[self::SCENARIO_PROFILE], 'main_language', 'language1', 'language2', 'language3'];
-        $scenarios[self::SCENARIO_PROFILE] = [...$scenarios[self::SCENARIO_PROFILE], 'main_language', 'language1', 'language2', 'language3'];
-        $scenarios[self::SCENARIO_ADMIN] = [...$scenarios[self::SCENARIO_PROFILE], 'main_language', 'language1', 'language2', 'language3'];
+        $scenarios[self::SCENARIO_PROFILE] = [...$scenarios[self::SCENARIO_PROFILE], 'main_language', 'language1', 'language2', 'language3', 'extensionSettings'];
+        $scenarios[self::SCENARIO_ADMIN] = [...$scenarios[self::SCENARIO_PROFILE], 'main_language', 'language1', 'language2', 'language3', 'extensionSettings'];
 
         return $scenarios;
     }
@@ -29,7 +48,10 @@ class User extends \app\base\models\User
         $fields = parent::fields();
 
         if ($this->scenario == static::SCENARIO_PROFILE) {
-            $fields = array_merge($fields, ['main_language', 'language1', 'language2', 'language3']);
+            $fields = array_merge($fields, ['main_language', 'language1', 'language2', 'language3', 'extensionSettings']);
+        }
+        if ($this->scenario == static::SCENARIO_ADMIN) {
+            $fields = array_merge($fields, ['main_language', 'language1', 'language2', 'language3', 'extensionSettings']);
         }
 
         return $fields;
@@ -43,6 +65,7 @@ class User extends \app\base\models\User
         $rules = parent::rules();
 
         $rules[] = [['main_language', 'language1', 'language2', 'language3'], 'default', 'value' => null];
+        $rules[] = ['extensionSettings', 'safe'];
 
         return $rules;
     }

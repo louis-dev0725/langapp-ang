@@ -5,21 +5,18 @@
 
     <div class="container" *ngIf="isLoaded">
       <form [formGroup]="settingsPluginForm" (ngSubmit)="onSubmit()">
-        <input type="hidden" formControlName="id">
-        <input type="hidden" formControlName="user_id">
-
         <div class="form-item">
           <label id="radio-group-label">{{ 'Shows translation' | translate }}:</label>
           <br>
-          <mat-radio-group aria-labelledby="radio-group-label" formControlName="extensionShowTranslate">
+          <mat-radio-group aria-labelledby="radio-group-label" formControlName="clickModifier">
             <mat-radio-button class="example-radio-button" *ngFor="let option of translation_options" [value]="option">
-              {{ option | translate }}
+              {{ 'extension.' + option | translate }}
             </mat-radio-button>
           </mat-radio-group>
         </div>
 
         <div class="form-item">
-          <mat-checkbox class="example-margin" formControlName="extensionSubtitleTranslate">
+          <mat-checkbox class="example-margin" formControlName="processSubtitles">
             {{ 'Show subtitle translation' | translate }}
           </mat-checkbox>
         </div>

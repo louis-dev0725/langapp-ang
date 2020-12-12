@@ -8,6 +8,7 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { ApiService } from '@app/services/api.service';
 
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { User } from '@app/interfaces/common.interface';
 
 
 @Component({
@@ -20,13 +21,11 @@ export class PluginComponent implements OnInit, OnDestroy {
   settingsPluginForm: FormGroup;
   user;
   translation_options: string[] = [
-    'extension.DoubleClick', 'extension.DoubleClickCtrl', 'extension.DoubleClickShift', 'extension.DoubleClickAlt'
+    'DoubleClick', 'DoubleClickCtrl', 'DoubleClickShift', 'DoubleClickAlt'
   ];
   formValue = {
-    id: null,
-    user_id: null,
-    extensionShowTranslate: null,
-    extensionSubtitleTranslate: true,
+    clickModifier: null,
+    processSubtitles: true,
   };
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private customValidator: CustomValidator,
@@ -47,47 +46,33 @@ export class PluginComponent implements OnInit, OnDestroy {
     this.user = this.session.user;
 
     this.settingsPluginForm = new FormGroup({
-      id: new FormControl(null, [Validators.required]),
-      user_id: new FormControl(this.user.id, [Validators.required]),
-      extensionShowTranslate: new FormControl('extension.DoubleClick', [Validators.required]),
-      extensionSubtitleTranslate: new FormControl(true, [Validators.required]),
+      clickModifier: new FormControl('DoubleClick', [Validators.required]),
+      processSubtitles: new FormControl(true, [Validators.required]),
     });
 
-    this.api.getSettingById(this.user.id).pipe(untilDestroyed(this)).subscribe((res) => {
-      if (res === null) {
-        this.settingsPluginForm.patchValue({
-          id: null,
-          user_id: this.user.id,
-          extensionShowTranslate: 'extension.DoubleClick',
-          extensionSubtitleTranslate: true
-        });
-      } else {
-        this.settingsPluginForm.patchValue({
-          id: res.id,
-          user_id: res.user_id,
-          extensionShowTranslate: res.extensionShowTranslate,
-          extensionSubtitleTranslate: res.extensionSubtitleTranslate
-        });
-      }
+    this.api.meRequest().pipe(untilDestroyed(this)).subscribe((user : User) => {
+      this.user = user;
+      this.settingsPluginForm.patchValue({
+        clickModifier: (user.extensionSettings.clickModifier !== undefined ? user.extensionSettings.clickModifier : 'DoubleClick'),
+        processSubtitles: (user.extensionSettings.processSubtitles !== undefined ? user.extensionSettings.processSubtitles : true)
+      });
 
       this._isLoaded = true;
     });
   }
 
   onSubmit() {
-     this._isLoaded = false;
+    this._isLoaded = false;
 
-     this.api.createUpdateSettingById(this.settingsPluginForm.value).pipe(untilDestroyed(this)).subscribe(res => {
+    this.api.updateUser({ id: this.user.id, extensionSettings: this.settingsPluginForm.value }).pipe(untilDestroyed(this)).subscribe(res => {
       if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null,
-          { duration: 3000 });
-        window.postMessage({ type: 'saveSettingExtension', text: 'ExtensionSettingPlugin_' + this.user.id },
-          '*');
+        this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null, { duration: 3000 });
+        window.postMessage({ type: 'saveSettingExtension', text: 'ExtensionSettingPlugin_' + this.user.id }, '*');
       }
 
       this._isLoaded = true;
-     });
+    });
   }
 
-  ngOnDestroy (): void {}
+  ngOnDestroy(): void { }
 }

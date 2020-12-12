@@ -215,7 +215,7 @@ export class ApiService {
    * url: /users/update/
    * @var value
    */
-  updateUser(value: any): Observable<any> {
+  updateUser(value: Partial<User>): Observable<any> {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch<User>(this.apiHost + '/users/' + value.id, value, { headers }).subscribe(
@@ -843,35 +843,6 @@ export class ApiService {
   onCloseNotify(data) {
     const headers = this.getHeadersWithToken();
     return this.http.post(this.apiHost + '/users/close-notification', data, { headers });
-  }
-
-  /**
-   * Получаем настройки плагина
-   *
-   * @param id
-   */
-  getSettingById(id: number): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.getHeadersWithToken();
-      this.http.get(this.apiHost + `/plugins/${id}`, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
-      );
-    });
-  }
-
-  createUpdateSettingById(data: SettingPlugin): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.getHeadersWithToken();
-      this.http.patch(this.apiHost + '/plugins/' + data.user_id, data, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
-      );
-    });
   }
 
   /**
