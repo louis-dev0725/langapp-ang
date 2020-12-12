@@ -2,7 +2,7 @@ import { Component, Input, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef, 
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { ThemeMainComponent } from '@app/theme/theme.main.component';
 import { SessionService } from '@app/services/session.service';

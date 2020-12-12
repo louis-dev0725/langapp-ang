@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NavigateActionCardComponent } from './navigate-action-card.component';
 
@@ -6,7 +6,7 @@ describe('NavigateActionCardComponent', () => {
   let component: NavigateActionCardComponent;
   let fixture: ComponentFixture<NavigateActionCardComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ NavigateActionCardComponent ]
     })

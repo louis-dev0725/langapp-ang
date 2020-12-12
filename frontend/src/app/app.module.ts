@@ -4,7 +4,8 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
 import { ApiService } from '@app/services/api.service';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatPaginatorIntl } from '@angular/material';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
@@ -33,6 +34,7 @@ import { reducers } from '@app/store/reducers';
 import { environment } from 'src/environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { WebpackTranslateLoader } from './WebpackTranslateLoader';
 
 export const metaReducers: MetaReducer<any>[] = !environment.production ? [storeFreeze] : [];
 
@@ -45,8 +47,7 @@ export const metaReducers: MetaReducer<any>[] = !environment.production ? [store
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient]
+        useClass: WebpackTranslateLoader
       }
     }),
     StoreModule.forRoot(reducers, { metaReducers }),
@@ -63,7 +64,7 @@ export const metaReducers: MetaReducer<any>[] = !environment.production ? [store
     CustomValidator,
     BreadCrumbsService,
     { provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator },
-    { provide: LOCALE_ID, useFactory: SessionService.getLocale() },
+    { provide: LOCALE_ID, useFactory: () => SessionService.getLocale() },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 3000 } },
     {
       provide: HTTP_INTERCEPTORS,

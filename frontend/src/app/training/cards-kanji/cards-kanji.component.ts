@@ -41,7 +41,7 @@ export class CardsKanjiComponent implements OnInit, OnDestroy {
   }
 
   private _isLoaded = false;
-  @ViewChild(ModalMnemonicComponent, { static: false }) mmc: ModalMnemonicComponent;
+  @ViewChild(ModalMnemonicComponent) mmc: ModalMnemonicComponent;
 
   constructor(private srsService: SrsService, private api: ApiService, private snackBar: MatSnackBar,
               private session: SessionService, private translatingService: TranslatingService) { }

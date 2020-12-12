@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, PageEvent } from '@angular/material';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '@app/services/api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SessionService } from '@app/services/session.service';
@@ -62,7 +64,7 @@ export class PaymentsTableComponent implements OnInit, OnDestroy {
 
   columns: string[] = ['addedDateTime', 'money'];
 
-  @ViewChild(MatPaginator, { static: false }) paginator;
+  @ViewChild(MatPaginator) paginator;
   @ViewChild(MatSort, { static: true }) sort;
 
   @Input() moneyTitle: any;

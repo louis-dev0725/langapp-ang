@@ -8,8 +8,11 @@ import { FlexModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
 import { SharedModule } from '@app/shared/shared.module';
-import { MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, MatTableModule
-} from '@angular/material';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { AddTransactionComponent } from '@app/admin/admin-transactions/add-transaction/add-transaction.component';
 import {

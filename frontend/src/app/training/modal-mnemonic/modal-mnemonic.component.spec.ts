@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ModalMnemonicComponent } from './modal-mnemonic.component';
 
@@ -6,7 +6,7 @@ describe('ModalMnemonicComponent', () => {
   let component: ModalMnemonicComponent;
   let fixture: ComponentFixture<ModalMnemonicComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ModalMnemonicComponent ]
     })

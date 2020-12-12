@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatPaginator, MatSort, PageEvent } from '@angular/material';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { ApiService } from '@app/services/api.service';
 import { EventService } from '@app/event.service';
 import { ActivatedRoute, Router } from '@angular/router';

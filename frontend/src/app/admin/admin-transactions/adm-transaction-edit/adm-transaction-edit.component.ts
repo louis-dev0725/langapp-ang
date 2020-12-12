@@ -3,7 +3,7 @@ import { Transaction } from '@app/interfaces/common.interface';
 import { SessionService } from '@app/services/session.service';
 import { ApiService } from '@app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { TranslatingService } from '@app/services/translating.service';

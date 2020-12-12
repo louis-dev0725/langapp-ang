@@ -14,7 +14,8 @@ import { BreadcrumbModule, MessageService, ScrollPanelModule } from 'primeng/pri
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { HocBreadCrumbComponent } from '@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
-import { MatDialogModule, MatSnackBarModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsComponent } from '@app/common/notifications/notifications.component';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';

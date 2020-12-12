@@ -4,7 +4,7 @@ import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import { EventService } from '@app/event.service';
 import { CustomValidator } from '@app/services/custom-validator';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Transaction, User } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
 import { Router } from '@angular/router';

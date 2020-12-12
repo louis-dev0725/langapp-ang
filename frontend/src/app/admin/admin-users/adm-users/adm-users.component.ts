@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
-import { MatPaginator, MatSort, PageEvent } from '@angular/material';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { Subject, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
@@ -63,7 +64,7 @@ export class AdmUsersComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort;
   isLoaded = false;
 
-  @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
+  @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
   triggerResize() {
     this.ngZone.onStable.pipe(take(1)).subscribe(() => this.autosize.resizeToFitContent(true));

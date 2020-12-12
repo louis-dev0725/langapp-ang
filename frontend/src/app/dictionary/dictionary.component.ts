@@ -25,7 +25,7 @@ export class DictionaryComponent implements OnInit, OnDestroy {
   allSelect = false;
   indeterminate = false;
 
-  @ViewChild(ListWordsComponent, {static: false})
+  @ViewChild(ListWordsComponent)
   private listComponent: ListWordsComponent;
 
   constructor(private api: ApiService, private formBuilder: FormBuilder,

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '@app/interfaces/common.interface';
 import { ReCaptcha2Component } from 'ngx-captcha';
 import { CustomValidator } from '@app/services/custom-validator';

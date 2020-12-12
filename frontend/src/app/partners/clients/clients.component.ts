@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '@app/services/api.service';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
