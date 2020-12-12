@@ -80,12 +80,12 @@ class DictionaryController extends ActiveController {
             $new_word->workout_progress_card = $workout_progress_card;
             $new_word->success_training = 0;
             $new_word->number_training = 0;
-            $new_word->mnemonic = null;
+            //$new_word->mnemonic = null;
             $new_word->save();
 
             preg_match_all('/[\x{4E00}-\x{9FFF}]/u', $objWord['word'], $kanjis);
             foreach ($kanjis[0] as $kanji) {
-                $all_k = UserDictionary::find()->where(['like', 'original_word', $kanji])
+                $all_k = UserDictionary::find()->where(['original_word' => $kanji])
                     ->andWhere(['user_id' => $objWord['user_id'], 'type' => UserDictionary::TYPE_KANJI])->asArray()
                     ->one();
 
@@ -110,7 +110,7 @@ class DictionaryController extends ActiveController {
                         $new_k->workout_progress_card = $workout_progress_card;
                         $new_k->success_training = 0;
                         $new_k->number_training = 0;
-                        $new_k->mnemonic = null;
+                        //$new_k->mnemonic = null;
                         $new_k->save(false);
                     }
                 }
