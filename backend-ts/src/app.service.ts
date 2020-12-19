@@ -3,7 +3,7 @@ import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DictionaryWord } from './entities/DictionaryWord';
 import { FormDetection } from './form.detection';
-import { distributeFurigana, distributeFuriganaInflected } from './japanese.utils';
+import { distributeFurigana, distributeFuriganaInflected, isStringEntirelyKana } from './japanese.utils';
 import { JumanppJumandicClient as JumanppClient } from './proto/jumandic-svc_grpc_pb';
 import { AnalysisRequest } from './proto/jumandic-svc_pb';
 import { JumanMorpheme, JumanSentence, JumanStringPos } from './proto/juman_pb';
@@ -32,45 +32,59 @@ export class AppService {
     });
   }
 
-  async processText(originalText: string, clickedOffsetOriginal: number, languages: string[]): Promise<any> {
+  async processText(originalText: string, clickedOffsetOriginal: number, languages: string[], exactMatch: boolean = false): Promise<any> {
     let toReturn: any = {};
+    let allVariants: Variant[] = [];
 
-    let text = originalText.replace(/\s/g, ' ');
-    this.logger.log('Start');
-    //let queries = ['こんにちは'];
-    //let query = '動きたい';
-
-    //this.logger.log(JSON.stringify(this.formDetection.reasons));
-    //this.logger.log(JSON.stringify(this.formDetection.deinflect(query)));
-
-    this.logger.log('Send grpc request');
-    let request = new AnalysisRequest();
-    request.setSentence(text);
-
-    let resultTmp = await this.callJuman(request);
-    this.logger.log('Got response from grpc');
-
-    this.logger.log('Response to object');
-    let mecabResult = (resultTmp).toObject();
-
-    this.logger.log('Look for click position');
-    let morphemesList = mecabResult.morphemesList;
-    let currentPosition = 0;
-    let nextPosition;
-    let clickedIndex;
-    let clickedOffset = 0;
-    for (let i = 0; i < morphemesList.length; i++) {
-      //console.log(currentPosition, morphemesList[i], morphemesList[i].surface.length);
-      nextPosition = currentPosition + morphemesList[i].surface.length;
-      if (nextPosition > clickedOffsetOriginal) {
-        clickedIndex = i;
-        clickedOffset = currentPosition;
-        break;
-      }
-      currentPosition = nextPosition;
+    if (exactMatch) {
+      let text = originalText.replace(/\s/g, '');
+      allVariants.push({
+        value: text,
+        isBaseform: false,
+        offsetStart: 0,
+        offsetEnd: originalText.length,
+        reading: '',
+        reasons: [],
+      });
     }
+    else {
+      let text = originalText.replace(/\s/g, ' ');
+      this.logger.log('Start');
 
-    if (clickedIndex) {
+      this.logger.log('Send grpc request');
+      let request = new AnalysisRequest();
+      request.setSentence(text);
+
+      let resultTmp = await this.callJuman(request);
+      this.logger.log('Got response from grpc');
+
+      this.logger.log('Response to object');
+      let mecabResult = (resultTmp).toObject();
+
+      this.logger.log('Look for click position');
+      let morphemesList = mecabResult.morphemesList;
+      let currentPosition = 0;
+      let nextPosition;
+      let clickedIndex;
+      let clickedOffset = 0;
+      for (let i = 0; i < morphemesList.length; i++) {
+        //console.log(currentPosition, morphemesList[i], morphemesList[i].surface.length);
+        nextPosition = currentPosition + morphemesList[i].surface.length;
+        if (nextPosition > clickedOffsetOriginal) {
+          clickedIndex = i;
+          clickedOffset = currentPosition;
+          break;
+        }
+        currentPosition = nextPosition;
+      }
+
+      if (clickedIndex === undefined) {
+        return { success: false, error: 'Unable to find clickedIndex.' };
+      }
+
+      //this.logger.log(morphemesList);
+      console.log('Clicked word', morphemesList[clickedIndex]);
+
       this.logger.log('Lookback');
       // Lookback
       let lookback = this.lookaround(morphemesList, clickedIndex, clickedOffset, -1, []);
@@ -79,85 +93,119 @@ export class AppService {
       let forLookaheadVariants = lookback.filter(v => !v.isBaseform);
       let lookahead = this.lookaround(morphemesList, clickedIndex, clickedOffset, +1, forLookaheadVariants);
 
-      let allVariants = [...lookback, ...lookahead];
+      allVariants = [...lookback, ...lookahead];
       allVariants = allVariants.filter(v => v.value.length <= 10);
 
-      //console.log(allVariants);
-
       this.logger.log('Done');
+    }
 
-      let queries = allVariants.map(v => v.value);
+    if (allVariants.length == 0) {
+      return { success: true };
+    }
 
-      this.logger.log('Query words in DB');
-      let wordsFromDb = await this.dictionaryWordRepository.createQueryBuilder("words").where("query && ARRAY[:...queries]", { queries }).getMany();
-      this.logger.log('Done');
+    let queries = allVariants.map(v => v.value);
 
-      let resultWords: (DictionaryWord & Variant)[] = [];
-      for (let word of wordsFromDb) {
-        let variant = allVariants.find(v => word.query.indexOf(v.value) !== -1);
-        if (variant) {
-          resultWords.push({
-            ...word,
-            ...variant
-          });
-        }
-        else {
-          this.logger.log('Strange. Result from DB "' + JSON.stringify(word.query) + " was not found in variants.");
-        }
+    this.logger.log('Query words in DB');
+    this.logger.log(queries);
+    let wordsFromDb = await this.dictionaryWordRepository.createQueryBuilder("words").where("query && ARRAY[:...queries]", { queries }).getMany();
+    this.logger.log('Done, found ' + wordsFromDb.length + ' words.');
+
+    let resultWords: (DictionaryWord & Variant)[] = [];
+    for (let word of wordsFromDb) {
+      let variant = allVariants.find(v => word.query.indexOf(v.value) !== -1);
+      if (variant) {
+        resultWords.push({
+          ...word,
+          ...variant
+        });
       }
+      else {
+        this.logger.log('Strange. Result from DB "' + JSON.stringify(word.query) + " was not found in variants.");
+      }
+    }
 
-      resultWords.sort((a, b) => {
-        let r = b.value.length - a.value.length;
-        if (r == 0) {
-          r = (a.isBaseform ? 1 : 0) - (b.isBaseform ? 1 : 0);
-        }
-        return r;
-      });
+    toReturn.success = true;
+    toReturn.words = resultWords;
 
-      toReturn.success = true;
-      toReturn.words = resultWords;
-
-      console.log({ languages });
-      for (let word of toReturn.words) {
-        word.translations = [];
-        if (word?.sourceData?.sense) {
-          for (let sense of word?.sourceData?.sense) {
-            for (let translation of sense.gloss) {
-              if (languages.indexOf(translation.lang) !== -1) {
-                word.translations.push(translation);
-              }
+    for (let word of toReturn.words) {
+      word.translations = [];
+      word.partOfSpeech = [];
+      if (word?.sourceData?.sense) {
+        for (let sense of word?.sourceData?.sense) {
+          word.partOfSpeech.push(...sense.partOfSpeech);
+          for (let translation of sense.gloss) {
+            if (languages.indexOf(translation.lang) !== -1) {
+              word.translations.push(translation);
             }
           }
         }
-        word.translations.sort((a, b) => {
-          return languages.indexOf(a.lang) - languages.indexOf(b.lang);
-        });
+      }
+      word.partOfSpeech = [...new Set(word.partOfSpeech)]; // unique values
+      word.translations.sort((a, b) => {
+        return languages.indexOf(a.lang) - languages.indexOf(b.lang);
+      });
 
-        word.kana = [];
-        if (word?.sourceData?.kana) {
+      word.readings = [];
+      word.currentReadingIsCommon = false;
+      if (word?.sourceData?.kana) {
+        let isKanaWord = isStringEntirelyKana(word.value);
+        let addedAdditionalKanaOnly = false;
+        let kanjiList = word?.sourceData?.kanji;
+        if (kanjiList.length == 0) {
+          kanjiList.push({ text: '', common: true });
+        }
+        for (let kanjiTmp of kanjiList) {
           for (let kanaTmp of word?.sourceData?.kana) {
-            let kana : any = { text: kanaTmp.text, common: kanaTmp.common };
-            kana.furigana = distributeFurigana(word.value, kana.text);
-            word.kana.push(kana);
+            if (kanaTmp.appliesToKanji.indexOf('*') !== -1 || kanaTmp.appliesToKanji.indexOf(kanjiTmp.text)) {
+              if (!addedAdditionalKanaOnly && kanjiTmp != '' && isKanaWord && kanaTmp.text == word.value) {
+                word.readings.push({
+                  text: kanaTmp.text,
+                  common: kanaTmp.common,
+                  furigana: [
+                    { furigana: '', text: kanaTmp.text }
+                  ],
+                  current: true
+                });
+                if (kanaTmp.common && !word.currentReadingIsCommon) {
+                  word.currentReadingIsCommon = true;
+                }
+                addedAdditionalKanaOnly = true;
+              }
+
+              let reading: any = { kanji: kanjiTmp.text, kana: kanaTmp.text, common: kanjiTmp.common && kanaTmp.common };
+              reading.furigana = distributeFurigana(reading.kanji, reading.kana);
+              reading.current = word.value == reading.kanji || (reading.kanji == '' && word.value == reading.kana);
+              if (reading.current && reading.common && !word.currentReadingIsCommon) {
+                word.currentReadingIsCommon = true;
+              }
+              word.readings.push(reading);
+            }
           }
         }
       }
-
-      if (resultWords[0]) {
-        toReturn.offsetStart = resultWords[0].offsetStart;
-        toReturn.offsetEnd = resultWords[0].offsetEnd;
-      }
-
-      return toReturn;
     }
 
+    toReturn.words.sort((a, b) => {
+      // Same partOfSpeech (currently checks only particles)
+      let r = ((a.reasons?.[0]?.pos == "助詞" && a.partOfSpeech.indexOf('prt')) ? 1 : 0) - ((b.reasons?.[0]?.pos == "助詞" && b.partOfSpeech.indexOf('prt')) ? 1 : 0);
+      if (r == 0) {
+        r = b.value.length - a.value.length;
+        if (r == 0) {
+          r = (a.isBaseform ? 1 : 0) - (b.isBaseform ? 1 : 0);
+          if (r == 0) {
+            r = (b.currentReadingIsCommon ? 1 : 0) - (a.currentReadingIsCommon ? 1 : 0);
+          }
+        }
+      }
+      return r;
+    });
 
-    //let result = await this.dictionaryWordRepository.createQueryBuilder("words").where("query &^| ARRAY[:...queries]", {queries}).getMany();
-    //this.logger.log(JSON.stringify(result.toObject()));
-    //return JSON.stringify(result);
-    //this.logger.log("got result");
+    if (resultWords[0]) {
+      toReturn.offsetStart = resultWords[0].offsetStart;
+      toReturn.offsetEnd = resultWords[0].offsetEnd;
+    }
 
-    return { success: false };
+    return toReturn;
   }
 
   lookaround(morphemesList: JumanMorpheme.AsObject[], clickedIndex: number, clickedOffset: number, direction: number = -1, startVariants: Variant[] = []): Variant[] {
@@ -207,7 +255,7 @@ export class AppService {
           }
           let value: string;
           let reading: string;
-          let valueBaseform: string;
+          let valuesWithBaseforms: string[] = [];
           if (direction == -1) {
             value = current.surface + currentVariant.value;
             reading = current.reading + currentVariant.reading;
@@ -216,7 +264,9 @@ export class AppService {
           }
           else {
             if (!currentVariant.isBaseform && current.surface != current.baseform) {
-              valueBaseform = currentVariant.value + this.processBaseform(current.baseform);
+              for (let baseformValue of this.getBaseforms(current)) {
+                valuesWithBaseforms.push(currentVariant.value + baseformValue);
+              }
             }
             value = currentVariant.value + current.surface;
             reading = currentVariant.reading + current.reading;
@@ -233,9 +283,9 @@ export class AppService {
             offsetEnd,
           };
 
-          if (valueBaseform) {
+          for (let baseformValue of valuesWithBaseforms) {
             variants.push({
-              value: valueBaseform,
+              value: baseformValue,
               reading,
               reasons,
               isBaseform: true,
@@ -251,20 +301,22 @@ export class AppService {
           variants.push({
             value: current.surface,
             reading: current.reading,
-            reasons: addToReasons ? [current.stringPos] : [],
+            reasons: [current.stringPos],
             isBaseform: false,
             offsetStart,
             offsetEnd,
           });
           if (current.surface != current.baseform) {
-            variants.push({
-              value: this.processBaseform(current.baseform),
-              reading: current.reading,
-              reasons: addToReasons ? [current.stringPos] : [],
-              isBaseform: true,
-              offsetStart,
-              offsetEnd,
-            });
+            for (let baseformValue of this.getBaseforms(current)) {
+              variants.push({
+                value: baseformValue,
+                reading: current.reading,
+                reasons: [current.stringPos],
+                isBaseform: true,
+                offsetStart,
+                offsetEnd,
+              });
+            }
           }
         }
       }
@@ -277,17 +329,17 @@ export class AppService {
         break;
       }
 
-      //if (!isSuffix) {
-      if (lookedLength <= 10) {
-        if (!reachedTheWord || !isPartical) {
+      if (!isSuffix) {
+        if (lookedLength <= 10) {
+          //if (!reachedTheWord || !isPartical) {}
           allVariants.push(...variants);
           reachedTheWord = true;
+          //}
+        }
+        else {
+          break;
         }
       }
-      else {
-        break;
-      }
-      //}
       //console.log({ offset: direction * lookedLength, current, isSuffix, variants });
       if (direction == +1) {
         lookedLength += current.surface.length;
@@ -298,14 +350,29 @@ export class AppService {
     return allVariants;
   }
 
-  processBaseform(baseform: string): string {
-    if (baseform.substr(-1) == 'だ') {
-      return baseform.substr(0, baseform.length - 1);
+  getBaseforms(current: JumanMorpheme.AsObject): string[] {
+    let baseforms: string[] = [];
+    if (current.baseform.substr(-1) == 'だ') {
+      baseforms.push(current.baseform.substr(0, current.baseform.length - 1));
+      if (current.stringPos.conjType == 'デアル列タ形') {
+        baseforms.push(current.baseform.substr(0, current.baseform.length - 1) + 'である');
+      }
     }
-    if (baseform.substr(-2) == 'する') {
-      return baseform.substr(0, baseform.length - 2);
+    else if (current.baseform.substr(-2) == 'する') {
+      baseforms.push(current.baseform.substr(0, current.baseform.length - 2));
     }
-    return baseform;
+    else {
+      baseforms.push(current.baseform);
+    }
+
+    for (let feature of current.featuresList) {
+      let value = /^([^/]*)/.exec(feature.value)[0]; // for example take "書く" from "書く/かく"
+      if (baseforms.indexOf(value) == -1) {
+        baseforms.push(value);
+      }
+    }
+
+    return baseforms;
   }
 }
 

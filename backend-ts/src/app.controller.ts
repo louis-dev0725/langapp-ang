@@ -14,6 +14,7 @@ export class ProcessTextBody {
   url: string;
   @IsNotEmpty()
   languages: string[];
+  exactMatch = false;
 }
 
 @Controller()
@@ -29,6 +30,6 @@ export class AppController {
 
     console.log(params);
 
-    return await this.appService.processText(params.text, params.offset, params.languages);
+    return await this.appService.processText(params.text, params.offset, params.languages, params.exactMatch);
   }
 }
