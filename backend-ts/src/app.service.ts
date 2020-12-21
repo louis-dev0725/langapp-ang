@@ -60,47 +60,14 @@ export class AppService {
 
       this.logger.log('Response to object');
       let mecabResult = (resultTmp).toObject();
-
-      this.logger.log('Look for click position');
       let morphemesList = mecabResult.morphemesList;
-      let currentPosition = 0;
-      let nextPosition;
-      let clickedIndex;
-      let clickedOffset = 0;
-      for (let i = 0; i < morphemesList.length; i++) {
-        //console.log(currentPosition, morphemesList[i], morphemesList[i].surface.length);
-        nextPosition = currentPosition + morphemesList[i].surface.length;
-        if (nextPosition > clickedOffsetOriginal) {
-          clickedIndex = i;
-          clickedOffset = currentPosition;
-          break;
-        }
-        currentPosition = nextPosition;
-      }
 
-      if (clickedIndex === undefined) {
-        return { success: false, error: 'Unable to find clickedIndex.' };
-      }
-
-      //this.logger.log(morphemesList);
-      console.log('Clicked word', morphemesList[clickedIndex]);
-
-      this.logger.log('Lookback');
-      // Lookback
-      let lookback = this.lookaround(morphemesList, clickedIndex, clickedOffset, -1, []);
       this.logger.log('Lookahead');
-      // Lookahead
-      let forLookaheadVariants = lookback.filter(v => !v.isBaseform);
-      let lookahead = this.lookaround(morphemesList, clickedIndex, clickedOffset, +1, forLookaheadVariants);
-
-      allVariants = [...lookback, ...lookahead];
-      allVariants = allVariants.filter(v => v.value.length <= 10);
-
-      this.logger.log('Done');
+      allVariants = this.lookahead(morphemesList, clickedOffsetOriginal);
     }
 
     if (allVariants.length == 0) {
-      return { success: true };
+      return { success: false };
     }
 
     let queries = allVariants.map(v => v.value);
@@ -208,167 +175,160 @@ export class AppService {
     return toReturn;
   }
 
-  lookaround(morphemesList: JumanMorpheme.AsObject[], clickedIndex: number, clickedOffset: number, direction: number = -1, startVariants: Variant[] = []): Variant[] {
+  lookahead(morphemesList: JumanMorpheme.AsObject[], clickedOffset: number): Variant[] {
     let allVariants: Variant[] = [];
-    let variants: Variant[] = startVariants;
-    let lookedLength = 0;
-    let reachedTheWord = false;
-    let addIndividualWords = true;
-    let skipFirstAdd = direction == +1;
-    // Lookback/lookahead
-    for (let i = clickedIndex; i >= 0 && i < morphemesList.length; i = i + direction) {
+    let variants: Variant[] = [];
+
+    let wordStartOffset = -1;
+    let wordInfections = [];
+    let currentWordInfections = [];
+    let insideClickedWord = false;
+
+    let currentOffset = 0;
+    let nextOffset = 0;
+    for (let i = 0; i < morphemesList.length; i++) {
       let current = morphemesList[i];
-      let isPartical = current.stringPos.pos == "助詞";
-      let isSuffix = current.stringPos.pos == "接尾辞";
-      let isVerb = current.stringPos.pos == "動詞";
-      let addToReasons = isSuffix || isVerb;
-      if (direction == -1 && i != clickedIndex) {
-        lookedLength += current.surface.length;
+      currentOffset = nextOffset;
+      nextOffset = currentOffset + current.surface.length;
+      // Skip until reached 10 letters before clicked offset
+      if (nextOffset < clickedOffset - 10) {
+        continue;
       }
-      if (direction == +1 && isSuffix) {
-        addIndividualWords = false;
-      }
-      if (!skipFirstAdd) {
-        let offsetStart: number;
-        let offsetEnd: number;
-        let variantsLength = variants.length;
-        for (let vI = 0; vI < variantsLength; vI++) {
-          let currentVariant = variants[vI];
-          if (direction == +1 && currentVariant.isBaseform) {
-            continue;
-          }
-          let reasons;
-          if (addToReasons) {
-            if (direction == -1) {
-              reasons = [current.stringPos, ...currentVariant.reasons];
-            }
-            else {
-              reasons = [...currentVariant.reasons, current.stringPos];
-            }
-          }
-          else {
-            if (direction == -1) {
-              reasons = currentVariant.reasons;
-            } else {
-              reasons = [];
-            }
-          }
-          let value: string;
-          let reading: string;
-          let valuesWithBaseforms: string[] = [];
-          if (direction == -1) {
-            value = current.surface + currentVariant.value;
-            reading = current.reading + currentVariant.reading;
-            offsetStart = clickedOffset + direction * lookedLength;
-            offsetEnd = currentVariant.offsetEnd;
-          }
-          else {
-            if (!currentVariant.isBaseform && current.surface != current.baseform) {
-              for (let baseformValue of this.getBaseforms(current)) {
-                valuesWithBaseforms.push(currentVariant.value + baseformValue);
-              }
-            }
-            value = currentVariant.value + current.surface;
-            reading = currentVariant.reading + current.reading;
-            offsetStart = currentVariant.offsetStart;
-            offsetEnd = offsetStart + value.length;
-          }
-          // new object on purpose
-          variants[vI] = {
-            value,
-            reading,
-            reasons,
-            isBaseform: currentVariant.isBaseform,
-            offsetStart,
-            offsetEnd,
-          };
 
-          for (let baseformValue of valuesWithBaseforms) {
-            variants.push({
-              value: baseformValue,
-              reading,
-              reasons,
-              isBaseform: true,
-              offsetStart,
-              offsetEnd,
-            });
-          }
+      let currentPos = current.stringPos.pos;
+      let isPartical = currentPos == "助詞";
+      let isSuffix = currentPos == "接尾辞";
+      let isVerb = currentPos == "動詞";
+      let isPunctuation = currentPos == "特殊";
+      if (!insideClickedWord) {
+        insideClickedWord = currentOffset >= clickedOffset && currentOffset < nextOffset;
+      }
+
+      if (isPunctuation) {
+        if (currentOffset > clickedOffset) {
+          break;
         }
+        else {
+          // Reset varinats on punctuation
+          variants = [];
+          allVariants = [];
+          //wordInfections = [];
+          wordStartOffset = nextOffset;
+          insideClickedWord = false;
+          continue;
+        }
+      }
 
-        if (addIndividualWords && !reachedTheWord) {
-          let offsetStart = clickedOffset + direction * lookedLength;
-          let offsetEnd = offsetStart + current.surface.length; // Same for baseform
+      // When word is ended
+      if (!isSuffix) { // TODO: いる, ある, etc marked as verb not as suffix
+        wordStartOffset = currentOffset;
+        //wordInfections = [];
+        insideClickedWord = false;
+      }
+
+      let currentOffsetEnd = currentOffset + current.surface.length;
+
+      let variantsLength = variants.length;
+      for (let vI = 0; vI < variantsLength; vI++) {
+        let currentVariant = variants[vI];
+
+        if (currentVariant.isBaseform) {
+          continue;
+        }
+        let reasons = [];
+
+        //if (isSuffix || isVerb) {
+        //  reasons = [...currentVariant.reasons, current.stringPos];
+        //}
+        let offsetStart = currentVariant.offsetStart;
+        let offsetEnd = currentOffsetEnd;
+        // new object on purpose
+        variants[vI] = {
+          value: currentVariant.value + current.surface,
+          reading: currentVariant.reading + current.reading,
+          reasons,
+          isBaseform: currentVariant.isBaseform,
+          offsetStart,
+          offsetEnd,
+        };
+
+        for (let baseformValue of this.getBaseforms(current)) {
           variants.push({
-            value: current.surface,
-            reading: current.reading,
-            reasons: [current.stringPos],
-            isBaseform: false,
+            value: currentVariant.value + baseformValue,
+            reading: currentVariant.reading + current.reading,
+            reasons,
+            isBaseform: true,
             offsetStart,
             offsetEnd,
           });
-          if (current.surface != current.baseform) {
-            for (let baseformValue of this.getBaseforms(current)) {
-              variants.push({
-                value: baseformValue,
-                reading: current.reading,
-                reasons: [current.stringPos],
-                isBaseform: true,
-                offsetStart,
-                offsetEnd,
-              });
-            }
-          }
         }
       }
-      else {
-        skipFirstAdd = false;
+
+      //if (!isSuffix) {
+      variants.push({
+        value: current.surface,
+        reading: current.reading,
+        reasons: [current.stringPos],
+        isBaseform: false,
+        offsetStart: currentOffset,
+        offsetEnd: currentOffsetEnd,
+      });
+      for (let baseformValue of this.getBaseforms(current)) {
+        variants.push({
+          value: baseformValue,
+          reading: current.reading,
+          reasons: [current.stringPos],
+          isBaseform: true,
+          offsetStart: currentOffset,
+          offsetEnd: currentOffsetEnd,
+        });
+      }
+      //}
+
+      for (let currentVariant of allVariants) {
+        if (currentVariant.offsetStart >= wordStartOffset) {
+          currentVariant.offsetEnd = currentOffsetEnd;
+          currentVariant.reasons.unshift(current.stringPos);
+        }
       }
 
-      let nextIsPunctuation = morphemesList[i + direction]?.stringPos.pos == "特殊";
-      if (nextIsPunctuation) {
+      allVariants.push(...variants);
+
+      // Stop after scanning 10 letters after clicked offset
+      if (nextOffset > clickedOffset + 10) {
         break;
       }
-
-      if (!isSuffix) {
-        if (lookedLength <= 10) {
-          //if (!reachedTheWord || !isPartical) {}
-          allVariants.push(...variants);
-          reachedTheWord = true;
-          //}
-        }
-        else {
-          break;
-        }
-      }
-      //console.log({ offset: direction * lookedLength, current, isSuffix, variants });
-      if (direction == +1) {
-        lookedLength += current.surface.length;
-      }
     }
-    allVariants.push(...variants);
+
+    // Only phrases that were clicked, with length 10 or less
+    allVariants = allVariants.filter(v => v.value.length <= 10 && v.offsetStart <= clickedOffset && v.offsetEnd > clickedOffset);
 
     return allVariants;
   }
 
   getBaseforms(current: JumanMorpheme.AsObject): string[] {
     let baseforms: string[] = [];
-    if (current.baseform.substr(-1) == 'だ') {
-      baseforms.push(current.baseform.substr(0, current.baseform.length - 1));
-      if (current.stringPos.conjType == 'デアル列タ形') {
-        baseforms.push(current.baseform.substr(0, current.baseform.length - 1) + 'である');
+    if (current.baseform) {
+      if (current.baseform.length > 1 && current.baseform.substr(-1) == 'だ') {
+        baseforms.push(current.baseform.substr(0, current.baseform.length - 1));
+        if (current.stringPos.conjType == 'デアル列タ形') {
+          baseforms.push(current.baseform.substr(0, current.baseform.length - 1) + 'である');
+        }
       }
-    }
-    else if (current.baseform.substr(-2) == 'する') {
-      baseforms.push(current.baseform.substr(0, current.baseform.length - 2));
-    }
-    else {
-      baseforms.push(current.baseform);
+      else if (current.baseform.length > 2 && current.baseform.substr(-2) == 'する') {
+        baseforms.push(current.baseform.substr(0, current.baseform.length - 2));
+      }
+      else if (current.surface != current.baseform) {
+        baseforms.push(current.baseform);
+      }
     }
 
     for (let feature of current.featuresList) {
-      let value = /^([^/]*)/.exec(feature.value)[0]; // for example take "書く" from "書く/かく"
-      if (baseforms.indexOf(value) == -1) {
-        baseforms.push(value);
+      if (['代表表記', '可能動詞'].indexOf(feature.key) !== -1 && feature.value) {
+        let value = /^([^/]*)/.exec(feature.value)[0]; // for example take "書く" from "書く/かく"
+        if (baseforms.indexOf(value) == -1 && value != current.surface) {
+          baseforms.push(value);
+        }
       }
     }
 
