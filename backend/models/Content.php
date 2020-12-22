@@ -18,6 +18,8 @@ use yii\db\ActiveRecord;
  * @property int $count_symbol
  * @property string $level_JLPT
  * @property int $deleted
+ * @property int[] $tagsJson
+ * @property array $dataJson
  *
  * @property ContentCategory[] $contentCategories
  * @property Category[] $categories
