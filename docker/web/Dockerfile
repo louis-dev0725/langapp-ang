@@ -40,7 +40,7 @@ RUN set -x \
     && rm -R /tmp/mecab-ipadic-[0-9]*
 
 # Install postgres client, iputils, screen
-RUN apt-get update && apt-get install -y postgresql-client iproute2 iputils-ping screen --no-install-recommends && apt-get clean
+RUN (apt-get update || true) && apt-get install -y postgresql-client iproute2 iputils-ping screen --no-install-recommends && apt-get clean
 
 # Install node (see https://github.com/nodejs/docker-node/blob/master/12/buster/Dockerfile)
 ENV NODE_VERSION 12.19.0
@@ -59,6 +59,11 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz
+
+RUN set -ex \
+    && wget 'https://github.com/ku-nlp/jumanpp/releases/download/v2.0.0-rc3/jumanpp-2.0.0-rc3.tar.xz' \
+    && mkdir -p /var/lib/jumanpp \
+    && tar xf jumanpp-2.0.0-rc3.tar.xz --strip-components=2 -C /var/lib/jumanpp jumanpp-2.0.0-rc3/model/jumandic.jppmdl
 
 # Application environment
 WORKDIR /app/
