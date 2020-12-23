@@ -29,16 +29,11 @@
     "ateliee/mecab": "dev-master",
     "ext-json": "*",
     "ext-mbstring": "*",
-    "gregwar/image": "^2.0"
+    "gregwar/image": "^2.0",
+    "yiisoft/yii2-gii": "~2.1.0",
+    "yiisoft/yii2-debug": "~2.1.0"
   },
   "require-dev": {
-    "yiisoft/yii2-debug": "~2.1.0",
-    "yiisoft/yii2-gii": "~2.1.0",
-    "yiisoft/yii2-faker": "~2.0.0",
-    "codeception/base": "~2.3.0",
-    "codeception/verify": "~0.4.0",
-    "codeception/specify": "~0.4.6",
-    "symfony/browser-kit": ">=2.7 <=4.2.4",
     "bizley/migration": "3.2"
   },
   "config": {
