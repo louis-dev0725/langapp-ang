@@ -70,16 +70,25 @@ RUN set -ex \
 WORKDIR /app/
 
 
-FROM dev as prod
+FROM dev as prod-backend
 COPY backend/composer.json backend/composer.lock /app/backend/
 RUN cd /app/backend/ && composer install --prefer-dist --no-scripts --no-dev --no-autoloader && rm -rf /root/.composer
+COPY ./backend /app/backend
+RUN cd /app/backend/ && composer dump-autoload --no-scripts --no-dev --optimize
 
+FROM dev as prod-backend-ts
 COPY backend-ts/package.json backend-ts/package-lock.json /app/backend-ts/
 RUN cd /app/backend-ts/ && npm ci
+COPY ./backend-ts /app/backend-ts
+RUN cd /app/backend-ts/ && npm run build
 
+FROM dev as prod-frontend
 COPY frontend/package.json frontend/package-lock.json /app/frontend/
 RUN cd /app/frontend/ && npm ci
+COPY ./frontend /app/frontend
+RUN cd /app/frontend/ && npm run build # TODO: build-prod
 
+FROM dev as prod
 COPY ./docker/web/nginx/vhost.conf /opt/docker/etc/nginx/vhost.conf
 COPY ./docker/web/nginx/vhost-prod.conf /opt/docker/etc/nginx/vhost-prod.conf
 COPY ./docker/web/php/php.ini /opt/docker/etc/php/php.ini
@@ -87,8 +96,7 @@ COPY ./docker/web/supervisord/postfix.conf /opt/docker/etc/supervisor.d/postfix.
 COPY ./docker/web/supervisord/juman.conf /opt/docker/etc/supervisor.d/juman.conf
 COPY ./docker/web/supervisord/backendts.conf /opt/docker/etc/supervisor.d/backendts.conf
 COPY ./docker/web/entrypoint.sh /opt/docker/bin/entrypoint.d/app.sh
-
-COPY . /app
-RUN cd /app/backend/ && composer dump-autoload --no-scripts --no-dev --optimize
-RUN cd /app/backend-ts/ && npm run build
-RUN cd /app/frontend/ && npm run build # TODO: build-prod
+COPY ./docker ./run /app/
+COPY --from=prod-backend /app/backend /app/backend
+COPY --from=prod-backend-ts /app/backend-ts /app/backend-ts
+COPY --from=prod-frontend /app/frontend /app/frontend
