@@ -10,7 +10,7 @@ fi
 cd /app/backend
 
 if [[ -n "$DISABLE_BEFORE_START_PROD" ]]; then
-  exec /app/run/_web-before-start-prod.sh
+  bash /app/run/_web-before-start-prod.sh
 fi
 
 ## Start services
