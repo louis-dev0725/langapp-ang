@@ -61,9 +61,10 @@ RUN set -ex \
   && rm yarn-v$YARN_VERSION.tar.gz
 
 RUN set -ex \
-    && wget 'https://github.com/ku-nlp/jumanpp/releases/download/v2.0.0-rc3/jumanpp-2.0.0-rc3.tar.xz' \
+    && curl -fsSLO --compressed "https://github.com/ku-nlp/jumanpp/releases/download/v2.0.0-rc3/jumanpp-2.0.0-rc3.tar.xz" \
     && mkdir -p /var/lib/jumanpp \
-    && tar xf jumanpp-2.0.0-rc3.tar.xz --strip-components=2 -C /var/lib/jumanpp jumanpp-2.0.0-rc3/model/jumandic.jppmdl
+    && tar xf jumanpp-2.0.0-rc3.tar.xz --strip-components=2 -C /var/lib/jumanpp jumanpp-2.0.0-rc3/model/jumandic.jppmdl \
+    && rm jumanpp-2.0.0-rc3.tar.xz
 
 # Application environment
 WORKDIR /app/
