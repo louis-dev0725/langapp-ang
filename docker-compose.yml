@@ -18,7 +18,9 @@ services:
   web:
     build:
       context: ./docker/web
-      target: 'dev'
+      target: "dev"
+      args:
+        BASE_IMAGE: "php-nginx-dev"
     ports:
       - "${LISTEN_HOST:-127.0.0.1}:${HTTP_PORT:-80}:80"
       - "${LISTEN_HOST:-127.0.0.1}:${HTTPS_PORT:-443}:80"
@@ -37,6 +39,7 @@ services:
     environment:
       - PHP_DISPLAY_ERRORS=1
       - PHP_DEBUGGER=xdebug
+      - DISABLE_BEFORE_START_PROD=1
     # Can be activated when docker-compose will support "host-gateway" value
     # Currently:
     # on Windows and macOS host.docker.internal added automatically by Docker Desktop

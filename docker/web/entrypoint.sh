@@ -8,7 +8,10 @@ if [ $? -ne 0 ]; then
 fi
 
 cd /app/backend
-#composer install
+
+if [[ -n "$DISABLE_BEFORE_START_PROD" ]]; then
+  exec /app/run/_web-before-start-prod.sh
+fi
 
 ## Start services
 exec /opt/docker/bin/service.d/supervisor.sh

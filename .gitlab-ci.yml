@@ -46,10 +46,13 @@ variables:
   # KUBE_INGRESS_BASE_DOMAIN is the application deployment domain and should be set as a variable at the group or project level.
   # KUBE_INGRESS_BASE_DOMAIN: domain.example.com
 
-  POSTGRES_USER: user
-  POSTGRES_PASSWORD: testing-password
-  POSTGRES_ENABLED: "true"
-  POSTGRES_DB: $CI_ENVIRONMENT_SLUG
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  # Do not use postgres from Auto Devops as we need postgres with pgroonga
+  #POSTGRES_ENABLED: "true"
+  #POSTGRES_DB: $CI_ENVIRONMENT_SLUG
+  POSTGRES_DB: postgres
+  POSTGRES_HOST_AUTH_METHOD: trust
 
   DOCKER_DRIVER: overlay2
 
@@ -69,6 +72,8 @@ variables:
   CONTAINER_SCANNING_DISABLED: 1
   DAST_DISABLED: 1
   CODE_INTELLIGENCE_DISABLED: 1
+  
+  LOAD_TEST_DATA: 1
 
 stages:
   - build
@@ -85,6 +90,10 @@ stages:
   - incremental rollout 100%
   - performance
   - cleanup
+
+services:
+  - name: groonga/pgroonga:latest-alpine-12-slim
+    alias: db
 
 workflow:
   rules:

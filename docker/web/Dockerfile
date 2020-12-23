@@ -1,8 +1,8 @@
-FROM webdevops/php-nginx-dev:7.4 AS dev
+ARG BASE_IMAGE=php-nginx
+FROM webdevops/${BASE_IMAGE}:7.4 AS dev
 
 # Environment settings
-ENV COMPOSER_ALLOW_SUPERUSER=1 \
-    VERSION_PRESTISSIMO_PLUGIN=^0.3.7
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
