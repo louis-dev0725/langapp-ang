@@ -18,6 +18,7 @@ services:
   web:
     build:
       context: ./docker/web
+      target: 'dev'
     ports:
       - "${LISTEN_HOST:-127.0.0.1}:${HTTP_PORT:-80}:80"
       - "${LISTEN_HOST:-127.0.0.1}:${HTTPS_PORT:-443}:80"
@@ -27,7 +28,8 @@ services:
       - ./docker/web/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf
       - ./docker/web/nginx/vhost-dev.conf:/opt/docker/etc/nginx/vhost-dev.conf
       - ./docker/web/php/php.ini:/opt/docker/etc/php/php.ini
-      - ./docker/web/postfix/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf
+      - ./docker/web/supervisord/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf
+      - ./docker/web/supervisord/juman.conf:/opt/docker/etc/supervisor.d/juman.conf
       - ./docker/web/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh
       - node-modules:${NODE_MODULES_MOUNT:-/app/frontend/node_modules}
       - node-modules-backend:${NODE_MODULES_BACKEND_MOUNT:-/app/backend-ts/node_modules}

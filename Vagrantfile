@@ -15,8 +15,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
   #config.vm.synced_folder ".", "/langapp", type: "rsync", rsync__exclude: [".git/", ".idea/", "backend-ts/dist/", "backend-ts/node_modules/", "frontend/node_modules/", "backend/runtime/"], rsync__rsync_ownership: true, rsync__chown: false
-  
+
   config.vm.provision "shell", inline: "apt update"
+  config.vm.provision "shell", inline: "apt install swapspace -y"
   config.vm.provision "shell", inline: "apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y"
   config.vm.provision "shell", inline: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -"
   config.vm.provision "shell", inline: "add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable' -y"

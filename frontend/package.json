@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-prod": "ng build --prod --aot=true --buildOptimizer=true --vendor-chunk --output-hashing=all",
     "build-stats": "ng build --prod --aot=true --buildOptimizer=true --stats-json",
     "bundle-report": "webpack-bundle-analyzer ./dist/langapp/stats.json",
     "test": "ng test",

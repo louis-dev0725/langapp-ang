@@ -1,4 +1,4 @@
-FROM webdevops/php-nginx-dev:7.4
+FROM webdevops/php-nginx-dev:7.4 AS dev
 
 # Environment settings
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
@@ -62,3 +62,27 @@ RUN set -ex \
 
 # Application environment
 WORKDIR /app/
+
+
+FROM dev as prod
+COPY backend/composer.json backend/composer.lock /app/backend/
+RUN cd /app/backend/ && composer install --prefer-dist --no-scripts --no-dev --no-autoloader && rm -rf /root/.composer
+
+COPY backend-ts/package.json backend-ts/package-lock.json /app/backend-ts/
+RUN cd /app/backend-ts/ && npm ci
+
+COPY frontend/package.json frontend/package-lock.json /app/frontend/
+RUN cd /app/frontend/ && npm ci
+
+COPY ./docker/web/nginx/vhost.conf /opt/docker/etc/nginx/vhost.conf
+COPY ./docker/web/nginx/vhost-prod.conf /opt/docker/etc/nginx/vhost-prod.conf
+COPY ./docker/web/php/php.ini /opt/docker/etc/php/php.ini
+COPY ./docker/web/supervisord/postfix.conf /opt/docker/etc/supervisor.d/postfix.conf
+COPY ./docker/web/supervisord/juman.conf /opt/docker/etc/supervisor.d/juman.conf
+COPY ./docker/web/supervisord/backendts.conf /opt/docker/etc/supervisor.d/backendts.conf
+COPY ./docker/web/entrypoint.sh /opt/docker/bin/entrypoint.d/app.sh
+
+COPY . /app
+RUN cd /app/backend/ && composer dump-autoload --no-scripts --no-dev --optimize
+RUN cd /app/backend-ts/ && npm run build
+RUN cd /app/frontend/ && npm run build # TODO: build-prod
