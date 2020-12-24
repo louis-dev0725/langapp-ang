@@ -1,9 +1,9 @@
 <?php
 $db = [
     'class' => 'yii\db\Connection',
-    'dsn' => 'pgsql:host=db;port=5432;dbname=postgres',
-    'username' => 'postgres',
-    'password' => 'postgres',
+    'dsn' => 'pgsql:host=' . (isset($_SERVER['POSTGRES_HOST']) ? $_SERVER['POSTGRES_HOST'] : 'db') . ';port=5432;dbname=' . (isset($_SERVER['POSTGRES_DB']) ? $_SERVER['POSTGRES_DB'] : 'postgres'),
+    'username' => isset($_SERVER['POSTGRES_USER']) ? $_SERVER['POSTGRES_USER'] : 'postgres',
+    'password' => isset($_SERVER['POSTGRES_PASSWORD']) ? $_SERVER['POSTGRES_PASSWORD'] : 'postgres',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

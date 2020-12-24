@@ -23,7 +23,8 @@ variables:
   CODE_INTELLIGENCE_DISABLED: 1
 
   LOAD_TEST_DATA: 1
-  CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
+  #CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
+  FF_GITLAB_REGISTRY_HELPER_IMAGE: 'true'
 
 services:
   - name: groonga/pgroonga:latest-alpine-12-slim
@@ -32,3 +33,4 @@ services:
 include:
   # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Auto-DevOps.gitlab-ci.yml
   - template: Auto-DevOps.gitlab-ci.yml
+  - local: .gitlab/ci/Build.yml

@@ -1,0 +1,119 @@
+build:
+  stage: build
+  image: "registry.gitlab.com/gitlab-org/cluster-integration/auto-build-image:v0.4.0"
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - name: docker:19.03.12-dind
+      #command: ['--experimental']
+  script:
+    - |
+      if [[ -z "$CI_COMMIT_TAG" ]]; then
+        export CI_APPLICATION_REPOSITORY=${CI_APPLICATION_REPOSITORY:-$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG}
+        export CI_APPLICATION_TAG=${CI_APPLICATION_TAG:-$CI_COMMIT_SHA}
+      else
+        export CI_APPLICATION_REPOSITORY=${CI_APPLICATION_REPOSITORY:-$CI_REGISTRY_IMAGE}
+        export CI_APPLICATION_TAG=${CI_APPLICATION_TAG:-$CI_COMMIT_TAG}
+      fi
+      export CI_CACHE_REPOSITORY=${CI_CACHE_REPOSITORY:-$CI_REGISTRY_IMAGE/cache}
+    #- /build/build.sh #https://gitlab.com/gitlab-org/cluster-integration/auto-build-image/-/blob/master/src/build.sh
+    - |
+      echo "Using build script from repo"
+      if ! docker info &>/dev/null; then
+        if [ -z "$DOCKER_HOST" ] && [ "$KUBERNETES_PORT" ]; then
+          export DOCKER_HOST='tcp://localhost:2375'
+        fi
+      fi
+
+      if [[ -n "$CI_REGISTRY" && -n "$CI_REGISTRY_USER" ]]; then
+        echo "Logging to GitLab Container Registry with CI credentials..."
+        echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+      fi
+
+      image_previous="$CI_APPLICATION_REPOSITORY:$CI_COMMIT_BEFORE_SHA"
+      image_tagged="$CI_APPLICATION_REPOSITORY:$CI_APPLICATION_TAG"
+      image_latest="$CI_APPLICATION_REPOSITORY:latest"
+      image_cache="$CI_CACHE_REPOSITORY:latest"
+
+      if [[ -n "${DOCKERFILE_PATH}" ]]; then
+        echo "Building Dockerfile-based application using '${DOCKERFILE_PATH}'..."
+      else
+        export DOCKERFILE_PATH="Dockerfile"
+
+        if [[ -f "${DOCKERFILE_PATH}" ]]; then
+          echo "Building Dockerfile-based application..."
+        else
+          echo "Building Heroku-based application using gliderlabs/herokuish docker image..."
+          erb -T - /build/Dockerfile.erb > "${DOCKERFILE_PATH}"
+        fi
+      fi
+
+      if [[ ! -f "${DOCKERFILE_PATH}" ]]; then
+        echo "Unable to find '${DOCKERFILE_PATH}'. Exiting..." >&2
+        exit 1
+      fi
+
+      #build_secret_args=''
+      #if [[ -n "$AUTO_DEVOPS_BUILD_IMAGE_FORWARDED_CI_VARIABLES" ]]; then
+      #  build_secret_file_path=/tmp/auto-devops-build-secrets
+      #  "$(dirname "$0")"/export-build-secrets > "$build_secret_file_path"
+      #  build_secret_args="--secret id=auto-devops-build-secrets,src=$build_secret_file_path"
+      #
+      #  echo 'Activating Docker BuildKit to forward CI variables with --secret'
+      #  export DOCKER_BUILDKIT=1
+      #fi
+
+      echo "Attempting to pull a previously built image for use with --cache-from..."
+      docker image pull --quiet "$image_previous" || \
+        docker image pull --quiet "$image_cache" || \
+        docker image pull --quiet "$image_latest" || \
+        echo "No previously cached image found. The docker build will proceed without using a cached image"
+
+      #apk --no-cache add curl
+      #mkdir -p ~/.docker/cli-plugins && \
+      #  curl -L "https://github.com/docker/buildx/releases/download/v0.5.1/buildx-v0.5.1.linux-amd64" -o ~/.docker/cli-plugins/docker-buildx && \
+      #  chmod a+x ~/.docker/cli-plugins/docker-buildx
+      #export DOCKER_CLI_EXPERIMENTAL=enabled
+      
+      # shellcheck disable=SC2154 # missing variable warning for the lowercase variables
+      # shellcheck disable=SC2086 # double quoting for globbing warning for $build_secret_args and $AUTO_DEVOPS_BUILD_IMAGE_EXTRA_ARGS
+      
+        #--cache-from=type=registry,ref=$image_cache \
+        #--cache-from=type=registry,ref=$image_previous \
+        #--cache-to=type=inline,mode=max \
+      docker build \
+        --cache-from "$image_previous" \
+        --cache-from "$image_latest" \
+        --cache-from "$image_cache" \
+        $build_secret_args \
+        -f "$DOCKERFILE_PATH" \
+        --build-arg BUILDPACK_URL="$BUILDPACK_URL" \
+        --build-arg HTTP_PROXY="$HTTP_PROXY" \
+        --build-arg http_proxy="$http_proxy" \
+        --build-arg HTTPS_PROXY="$HTTPS_PROXY" \
+        --build-arg https_proxy="$https_proxy" \
+        --build-arg FTP_PROXY="$FTP_PROXY" \
+        --build-arg ftp_proxy="$ftp_proxy" \
+        --build-arg NO_PROXY="$NO_PROXY" \
+        --build-arg no_proxy="$no_proxy" \
+        $AUTO_DEVOPS_BUILD_IMAGE_EXTRA_ARGS \
+        --tag "$image_tagged" \
+        --tag "$image_cache" \
+        --tag "$image_latest" .
+
+      docker push "$image_tagged"
+      docker push "$image_latest"
+      docker push "$image_cache"
+
+  rules:
+    - if: '$AUTO_DEVOPS_PLATFORM_TARGET == "EC2"'
+      when: never
+    - if: "$CI_COMMIT_TAG || $CI_COMMIT_BRANCH"
+
+build_artifact:
+  stage: build
+  script:
+    - printf "To build your project, please create a build_artifact job into your .gitlab-ci.yml file.\nMore information at https://docs.gitlab.com/ee/ci/cloud_deployment\n"
+    - exit 1
+  rules:
+    - if: '$AUTO_DEVOPS_PLATFORM_TARGET == "EC2"'

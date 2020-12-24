@@ -4,7 +4,9 @@ services:
     #image: postgres:12-alpine
     image: groonga/pgroonga:latest-alpine-12-slim
     environment:
+      POSTGRES_HOST: ${POSTGRES_HOST:-db}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_HOST_AUTH_METHOD:-trust}
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
@@ -17,7 +19,8 @@ services:
 
   web:
     build:
-      context: ./docker/web
+      context: ./
+      dockerfile: ./docker/web/Dockerfile
       target: "dev"
       args:
         BASE_IMAGE: "php-nginx-dev"
@@ -37,9 +40,13 @@ services:
       - node-modules-backend:${NODE_MODULES_BACKEND_MOUNT:-/app/backend-ts/node_modules}
       - npm-cache:/root/.npm
     environment:
-      - PHP_DISPLAY_ERRORS=1
-      - PHP_DEBUGGER=xdebug
-      - DISABLE_BEFORE_START_PROD=1
+      PHP_DISPLAY_ERRORS: "1"
+      PHP_DEBUGGER: "xdebug"
+      DISABLE_BEFORE_START_PROD: "1"
+      POSTGRES_HOST: ${POSTGRES_HOST:-db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     # Can be activated when docker-compose will support "host-gateway" value
     # Currently:
     # on Windows and macOS host.docker.internal added automatically by Docker Desktop
