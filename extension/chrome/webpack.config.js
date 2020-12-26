@@ -7,8 +7,8 @@ module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
   entry: {
-    contentPage: join(__dirname, 'src/contentPage.ts'),
-    backgroundPage: join(__dirname, 'src/backgroundPage.ts')
+    contentScript: join(__dirname, 'src/fg/contentScript.ts'),
+    backgroundPage: join(__dirname, 'src/bg/backgroundPage.ts')
   },
   output: {
     path: join(__dirname, '../dist'),
@@ -20,6 +20,15 @@ module.exports = {
         exclude: /node_modules/,
         test: /\.ts?$/,
         use: 'awesome-typescript-loader?{configFileName: "chrome/tsconfig.json"}'
+      },
+      {
+        test: /\.ejs$/,
+        use: [
+          {
+            loader: "ejs-compiled-loader",
+            options: {}
+          }
+        ]
       }
     ]
   },
@@ -35,5 +44,8 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.ts', '.js']
+  },
+  optimization: {
+    minimize: true
   }
 };

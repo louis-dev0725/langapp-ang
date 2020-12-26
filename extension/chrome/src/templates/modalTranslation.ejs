@@ -1,0 +1,27 @@
+<% if (locals.words) { %>
+<!--<div id="modal-translate-header" style="display: flex; flex-flow: row nowrap; width: 100%; justify-content: space-between;">
+</div>-->
+<div id="modal-translate-body" style="box-sizing: border-box; display: flex; flex-flow: column nowrap; width: 100%;">
+    <div style="padding:0 15px;margin:10px 0">
+        <% for (let word of words) { %>
+        <% for (let reading of word.readings) { %>
+        <div class="reading-variant<%= reading.common ? ' reading-variant-common' : ' reading-variant-uncommon' %><%= reading.current ? ' reading-variant-current' : '' %>">
+            <ruby>
+                <% for (let f of reading.furigana) { %>
+                <%= f.text %>
+                <% if (f.furigana && f.furigana != '') { %>
+                <rt><%= f.furigana %></rt>
+                <% } %>
+                <% } %>
+            </ruby>
+        </div>
+        <% } %>
+        <ul id="list-translate_0" style="border:1px solid #000;border-radius:5px;list-style:none;padding:0;border-bottom:none;">
+            <% for (let translation of word.translations) { %>
+            <li style="padding-left:10px;border-bottom:1px solid #000;"><a class="textDictionary" data-translation="<%= JSON.stringify(translation) %>"><%= translation.text %></a></li>
+            <% } %>
+        </ul>
+        <% } %>
+    </div>
+</div>
+<% } %>

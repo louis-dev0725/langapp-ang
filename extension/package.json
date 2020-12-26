@@ -1,7 +1,7 @@
 {
   "name": "langapp-extension",
   "version": "1.0.0",
-  "description": "Generated with @larscom/ng-chrome-extension",
+  "description": "",
   "scripts": {
     "ng": "ng",
     "rimraf": "node ./node_modules/rimraf/bin.js",
@@ -32,6 +32,9 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "@ngx-translate/i18n-polyfill": "^1.0.0",
     "core-js": "^2.6.11",
+    "ejs-compiled-loader": "^3.0.0",
+    "ejs-webpack-loader": "^2.2.2",
+    "i18next": "^19.8.4",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "^0.10.3"
