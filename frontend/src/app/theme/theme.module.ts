@@ -10,7 +10,6 @@ import { ThemeFooterComponent } from '@app/theme/theme.footer.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@app/shared/shared.module';
-import { BreadcrumbModule, MessageService, ScrollPanelModule } from 'primeng/primeng';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { HocBreadCrumbComponent } from '@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
@@ -19,6 +18,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsComponent } from '@app/common/notifications/notifications.component';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { MessageService } from 'primeng/api';
 @NgModule({
   imports: [
     CommonModule,
