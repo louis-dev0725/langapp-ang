@@ -29,7 +29,8 @@
     "ssl": false,
     "skipTables": [],
     "onlyTables": [
-      "dictionary_word"
+      "dictionary_word",
+      "content"
     ]
   }
 ]

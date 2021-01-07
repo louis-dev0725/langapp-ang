@@ -512,3 +512,13 @@ export function distributeFuriganaInflected(expression: string, reading: string,
 
     return output;
 }
+
+const simpleJapaneseRegex = /[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]|[\u4E00-\u9FAF]/g;
+
+export function isStringContainsJapanese(string: string): boolean {
+    return simpleJapaneseRegex.test(string);
+}
+
+export function removeJapaneseChars(string: string): string {
+    return string.replace(simpleJapaneseRegex, '');
+}

@@ -1,5 +1,11 @@
 version: "3.8"
 services:
+  redis:
+    image: redis:6-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+
   db:
     #image: postgres:12-alpine
     image: groonga/pgroonga:latest-alpine-12-slim
@@ -47,6 +53,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      REDIS_HOST: ${REDIS_HOST:-redis}
     # Can be activated when docker-compose will support "host-gateway" value
     # Currently:
     # on Windows and macOS host.docker.internal added automatically by Docker Desktop
@@ -82,3 +89,4 @@ volumes:
   npm-cache:
   node-modules:
   node-modules-backend:
+  redis-data:

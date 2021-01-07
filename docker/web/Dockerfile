@@ -81,13 +81,13 @@ RUN cd /app/backend/ && composer dump-autoload --no-scripts --no-dev --optimize
 #FROM dev as prod-backend-ts
 COPY ./backend-ts/package.json ./backend-ts/package-lock.json /app/backend-ts/
 RUN cd /app/backend-ts/ && npm ci
-COPY ./backend-ts /app/backend-ts
+COPY ./backend-ts/ /app/backend-ts/
 RUN cd /app/backend-ts/ && npm run build
 
 #FROM dev as prod-frontend
 COPY ./frontend/package.json ./frontend/package-lock.json /app/frontend/
 RUN cd /app/frontend/ && npm ci
-COPY ./frontend /app/frontend
+COPY ./frontend/ /app/frontend/
 RUN cd /app/frontend/ && npm run build # TODO: build-prod
 
 #FROM dev as prod

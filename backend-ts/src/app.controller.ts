@@ -3,6 +3,7 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 import { text } from 'express';
 import { url } from 'inspector';
 import { AppService } from './app.service';
+import { QueueService } from './queue.service';
 
 export class ProcessTextBody {
   @IsNotEmpty()
@@ -17,9 +18,22 @@ export class ProcessTextBody {
   exactMatch = false;
 }
 
+export class AddToQueueBody {
+  @IsNotEmpty()
+  name: string;
+  @IsNotEmpty()
+  params: any;
+}
+
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(private readonly appService: AppService, private readonly queueService: QueueService) { }
+
+  @Post("addToQueue")
+  @HttpCode(200)
+  async addToQueue(@Body() params : AddToQueueBody) {
+    return await this.queueService.addToQueue(params.name, params.params);
+  }
 
   @Post("processText")
   @HttpCode(200)

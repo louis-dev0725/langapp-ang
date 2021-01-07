@@ -91,7 +91,7 @@ export class AppService {
       }
     }
 
-    toReturn.success = true;
+    toReturn.success = resultWords.length > 0;
     toReturn.words = resultWords;
 
     for (let word of toReturn.words) {
