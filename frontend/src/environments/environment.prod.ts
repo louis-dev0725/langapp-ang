@@ -1,4 +1,6 @@
 export const environment = {
   development: false,
-  production: true
+  production: true,
+  apiUrl: '/api',
+  siteKey: ''
 };

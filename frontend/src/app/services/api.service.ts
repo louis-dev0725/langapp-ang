@@ -6,8 +6,11 @@ import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store/index';
-import { LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction,
-  LoadAuthorizedSuccess } from '@app/store/index';
+import {
+  LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction,
+  LoadAuthorizedSuccess
+} from '@app/store/index';
+import { environment } from '../../environments/environment'
 
 
 @Injectable({
@@ -17,18 +20,14 @@ export class ApiService {
   private readonly pageSize = 50;
 
   get apiHost(): string {
-    return this.windowConfig.apiHost + this.windowConfig.apiPrefix;
+    return environment.apiUrl;
   }
 
   get siteKey(): string {
-    return this.windowConfig.siteKey;
+    return environment.siteKey;
   }
 
-  get windowConfig(): any {
-    return (window as any).rocket;
-  }
-
-  constructor(private http: HttpClient, private session: SessionService, private store: Store<fromStore.State>) {}
+  constructor(private http: HttpClient, private session: SessionService, private store: Store<fromStore.State>) { }
 
   /**
    * Авторизация
@@ -237,15 +236,15 @@ export class ApiService {
 
     this.http.get<User>(this.apiHost + '/users/me?expand=homeLanguage,languageOne,languageTwo,languageThree',
       { headers }).subscribe(
-      (userRes: any) => {
-        this.store.dispatch(new LoadAuthorizedSuccess(userRes));
-        this.session.user = userRes;
-        observer.next(userRes);
-      },
-      error => {
-        observer.next(this.getApiError(error));
-      }
-    );
+        (userRes: any) => {
+          this.store.dispatch(new LoadAuthorizedSuccess(userRes));
+          this.session.user = userRes;
+          observer.next(userRes);
+        },
+        error => {
+          observer.next(this.getApiError(error));
+        }
+      );
   }
 
   /**
@@ -435,10 +434,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/categories', { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -454,10 +453,10 @@ export class ApiService {
       }
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/categories/all?expand=parentCategory' + query, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -469,10 +468,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.post(this.apiHost + '/categories/create', data, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -486,10 +485,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + `/categories/${id}`, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -501,10 +500,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch(this.apiHost + '/categories/' + data.id, data, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -518,10 +517,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.delete(this.apiHost + `/categories/${id}`, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -532,9 +531,9 @@ export class ApiService {
   getTypeContent(): Observable<any> {
     return new Observable((observer) => {
       const typeContent = [
-        { id: 1, title: 'Текст'},
-        { id: 2, title: 'Аудио'},
-        { id: 3, title: 'Видео'}
+        { id: 1, title: 'Текст' },
+        { id: 2, title: 'Аудио' },
+        { id: 3, title: 'Видео' }
       ];
       observer.next(typeContent);
     });
@@ -546,10 +545,10 @@ export class ApiService {
   getVolumeContent(): Observable<any> {
     return new Observable((observer) => {
       const volumeContent = [
-        { id: '0,500', title: '0 - 500'},
-        { id: '501,1500', title: '501 - 1500'},
-        { id: '1501,5000', title: '1501 - 5000'},
-        { id: '5000,unlimited', title: '> 5000'}
+        { id: '0,500', title: '0 - 500' },
+        { id: '501,1500', title: '501 - 1500' },
+        { id: '1501,5000', title: '1501 - 5000' },
+        { id: '5000,unlimited', title: '> 5000' }
       ];
       observer.next(volumeContent);
     });
@@ -561,11 +560,11 @@ export class ApiService {
   getComplicationContent(): Observable<any> {
     return new Observable((observer) => {
       const complicationContent = [
-        { id: 'N1', title: 'N1'},
-        { id: 'N2', title: 'N2'},
-        { id: 'N3', title: 'N3'},
-        { id: 'N4', title: 'N4'},
-        { id: 'N5', title: 'N5'}
+        { id: 'N1', title: 'N1' },
+        { id: 'N2', title: 'N2' },
+        { id: 'N3', title: 'N3' },
+        { id: 'N4', title: 'N4' },
+        { id: 'N5', title: 'N5' }
       ];
       observer.next(complicationContent);
     });
@@ -582,10 +581,10 @@ export class ApiService {
       }
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/contents/index' + query, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -597,10 +596,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.post(this.apiHost + '/contents/create', data, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -614,10 +613,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + `/contents/${id}`, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -629,10 +628,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch(this.apiHost + '/contents/' + data.id, data, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -646,10 +645,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.delete(this.apiHost + `/contents/${id}`, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -661,10 +660,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/languages/all', { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -682,10 +681,10 @@ export class ApiService {
 
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/dictionaries/index' + query, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -703,10 +702,10 @@ export class ApiService {
 
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/dictionaries/all' + query, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -724,10 +723,10 @@ export class ApiService {
 
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/dictionaries/query-one' + query, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -739,10 +738,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch(this.apiHost + '/dictionaries/' + data.id, data, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -756,10 +755,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.post(this.apiHost + '/dictionaries/delete-select', ids, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -773,10 +772,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.delete(this.apiHost + `/dictionaries/${id}`, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -858,10 +857,10 @@ export class ApiService {
 
       const headers = this.getHeadersWithToken();
       this.http.get(this.apiHost + '/mnemonics/index' + query, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -873,10 +872,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.post(this.apiHost + '/mnemonics/create', data, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
@@ -888,10 +887,10 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch(this.apiHost + '/mnemonics/' + data.id, data, { headers }).subscribe((res) => {
-          observer.next(res);
-        }, (error) => {
-          observer.next(this.getApiError(error));
-        }
+        observer.next(res);
+      }, (error) => {
+        observer.next(this.getApiError(error));
+      }
       );
     });
   }
