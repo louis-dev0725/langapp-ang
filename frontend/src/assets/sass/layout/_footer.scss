@@ -1,0 +1,36 @@
+.layout-footer {
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+    background-color: $contentBgColor;
+    padding: 21px 32px;
+    @include flex();
+    @include flex-align-center();
+    @include flex-justify-between();
+
+    > img {
+        height: 30px;
+        width: auto;
+    }
+
+    .social-icons {
+        @include flex();
+        @include flex-align-center();
+
+        a {
+            color: $textColor;
+            margin-left: 18px;
+            cursor: pointer;
+            padding: 6px;
+
+            i {
+                font-size: 22px;
+                @include transition(color $transitionDuration);
+            }
+            
+            &:hover {
+                i {
+                    color: $primaryColor;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,105 @@
+.menu-wrapper {
+    background-color: $menuBgColor;
+    box-shadow: $menuShadow;
+ 
+    .layout-menu-container {
+
+        .layout-menu {
+            > li {
+                > div {
+                    .layout-menuitem-text {
+                        color: $rootMenuTextColor;
+                    }
+                }
+
+                 a {
+                    color: $rootMenuItemTextColor;
+
+                    i {
+                        color: $menuItemIconColor;
+                    }
+
+                    &:hover {
+                        background-color: $rootMenuItemHoverBgColor;
+                    }
+                }
+
+                &.active-menuitem {
+                    > a {
+                        color: $activeRootMenuItemTextColor;
+                    }
+                }
+
+                > ul {
+                    li {
+                        a {
+                            color: $submenuItemTextColor;
+
+                            i {
+                                color: $menuItemIconColor;
+                            }
+        
+                            &:hover {
+                                background-color: $submenuItemHoverBgColor;
+                            }
+                        }
+
+                        &.active-menuitem {
+                            > a {
+                                background-color: $submenuItemHoverBgColor;
+                                color: $activeSubmenuItemTextColor;
+                            }
+                        }
+                    }
+
+                    > li {
+                        &.layout-root-menuitem {
+                            &.active-menuitem {
+                                background-color: $rootMenuItemHoverBgColor;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 993px) {
+    
+    @mixin extrenalSubmenuitem {
+        li {
+            > a {
+                color: $rootMenuItemTextColor;
+
+                &:hover {
+                    background-color: $submenuItemHoverBgColor;
+                }
+            }
+
+            &.active-menuitem {
+                background-color: $externalSubmenuBgColor;
+                > a {
+                    color: $activeRootMenuItemTextColor;
+                }
+            }
+        }
+    }
+
+    &.layout-horizontal {
+        .menu-wrapper {
+            .layout-menu-container {
+                .layout-menu {
+                    > li {
+                        > ul {
+                            background-color: $externalSubmenuBgColor;
+                            box-shadow: $menuShadow;
+                            
+                            @include extrenalSubmenuitem;
+                        }
+                    }
+                } 
+            }
+        }
+    }
+}

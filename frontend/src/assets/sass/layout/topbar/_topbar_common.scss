@@ -1,0 +1,434 @@
+.layout-topbar {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    @include transition(width $transitionDuration);
+    height: 56px;
+
+    .layout-topbar-wrapper {
+        height: 100%;
+        @include flex();
+        @include flex-align-center();
+
+        .layout-topbar-left {
+            height: 100%;
+            width: 240px;
+            padding: 11px 14px 13px;
+            @include flex();
+            @include flex-align-center();
+
+            .layout-topbar-logo {
+                > img {
+                    height: 32px;
+                }
+            }
+        }
+
+        .layout-topbar-right {
+            height: 100%;
+            flex-grow: 1;
+            padding: 10px 32px 10px 12px;
+            @include flex();
+            @include flex-align-center();
+            @include flex-justify-between();
+            border-right: solid 1px transparent;
+
+            .menu-button {
+                @include flex();
+                @include flex-align-center();
+                @include flex-justify-center();
+                @include border-radius(50%);
+                z-index: 999;
+                width: 36px;
+                height: 36px;
+
+                > i {
+                    font-size: 18px;
+                }
+            }
+
+            .layout-topbar-actions {
+                @include flex();
+                @include flex-align-center();
+                @include flex-justify-end();
+                flex-grow: 1;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                height: 100%;
+
+                > li {
+                    position: relative;
+                    @include flex-center();
+                    height: 100%;
+
+                    > a {
+                        padding: 10px 10px 7px;
+                        margin: 0 6px;
+                        @include border-radius(10px);
+
+                        > .topbar-icon {
+                            i {
+                                font-size: 18px;
+                            }
+
+                            .p-badge {
+                                height: 14px;
+                                width: 14px;
+                                min-width: 14px;
+                                font-size: 10px;
+                                line-height: 14px;
+                            }
+
+                        }
+
+                        &.layout-rightpanel-button {
+                            i {
+                                @include transition(transform $transitionDuration);
+                            }
+                        }
+                    }
+
+                    > ul {
+                        display: none;
+                        position: absolute;
+                        top: 46px;
+                        right: 0px;
+                        list-style-type: none;
+                        margin: 0;
+                        padding: 0;
+                        z-index: 1000;
+                        min-width: 260px;
+                        animation-duration: $transitionDuration;
+
+                        .layout-submenu-header {
+                            padding: 12px;
+                            @include flex();
+                            @include flex-align-center();
+                            @include flex-justify-between();
+
+                            h6 {
+                                font-weight: 600;
+                                margin: 0;
+                                margin-left: 4px;
+                            }
+                        }
+
+                        .angle-icon {
+                            @include flex();
+                            @include flex-justify-end();
+                            flex-grow: 1;
+                        }
+
+                        > li {
+                            padding: 7px 12px;
+                            margin-bottom: 6px;
+                            @include flex();
+                            @include flex-align-center();
+                            cursor: pointer;
+
+                            > a {
+                                @include flex();
+                                @include flex-align-center();
+                                width: 100%;
+
+                                h6 {
+                                    margin: 0;
+
+                                    > span {
+                                        font-size: 14px;
+                                        font-weight: 600;
+                                    }
+                                }
+
+                                > div {
+                                    > span {
+                                        font-size: 12px;
+
+                                        > span {
+                                            font-weight: 600;
+                                        }
+                                    }
+                                }
+
+                                > img {
+                                    width: 28px;
+                                    height: 28px;
+                                    margin-right: 6px;
+                                }
+
+                                > i {
+                                    width: 28px;
+                                    height: 28px;
+                                    margin-right: 6px;
+                                    @include border-radius(50%);
+                                    @include flex();
+                                    @include flex-align-center();
+                                    @include flex-justify-center();
+                                    font-size: 16px;
+                                }
+
+                                > .p-inputswitch {
+                                    margin-right: 6px;
+                                }
+                            }
+                        }
+                    }
+
+                    &.search-item {
+                        margin: 0 12px;
+
+                        > a {
+                            display: none;
+                        }
+
+                        > .search-input-wrapper {
+                            position: relative;
+
+                            input {
+                                @include border-radius(18px);
+                                border: none;
+                                width: 200px;
+                                padding: 8px 8px 8px 30px;
+                            }
+                        }
+
+                        ul {
+                            > .search-input-wrapper {
+                                input {
+                                    @include border-radius(0);
+                                    width: 100%;
+                                    border: 0 none;
+                                }
+
+                                i {
+                                    font-weight: bold;
+                                }
+                            }
+
+                        }
+                    }
+
+                    &.user-profile {
+                        > a {
+                            @include flex();
+                            margin: 0 6px;
+                            padding: 10px;
+
+                            > img {
+                                width: 32px;
+                                height: 32px;
+                            }
+
+                            .profile-info {
+                                margin-left: 7px;
+
+                                h6 {
+                                    font-weight: 600;
+                                    margin: 0;
+                                }
+
+                                span {
+                                    display: block;
+                                    font-size: 12px;
+                                    font-weight: normal;
+                                }
+                            }
+                        }
+
+                        > ul {
+                            > hr {
+                                margin: 2px 8px;
+                            }
+
+                            .layout-submenu-header {
+                                padding: 12px 16px;
+                                @include flex();
+                                @include flex-align-center();
+                                @include flex-justify-start();
+
+                                img {
+                                    width: 36px;
+                                    height: 36px;
+                                    margin-right: 6px;
+                                }
+
+                                .profile-info {
+                                    margin-left: 7px;
+
+                                    h6 {
+                                        font-weight: 600;
+                                        margin: 0;
+                                    }
+
+                                    span {
+                                        display: block;
+                                        font-size: 11px;
+                                        font-weight: normal;
+                                    }
+                                }
+                            }
+
+                            > li {
+                                > a {
+                                    > i {
+                                        font-size: 16px;
+                                        margin-right: 10px;
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                    &.active-topmenuitem {
+                        > ul {
+                            display: block;
+                        }
+                    }
+
+                    &.notifications, &.settings {
+                        > ul {
+                            > li {
+                                &:nth-child(2){
+                                    > a{
+                                        > i {
+                                            background-color: rgba(#2f8ee5,0.2) ;
+                                            color: #2f8ee5;
+                                        }
+                                    }
+                                }
+                                &:nth-child(3){
+                                    > a{
+                                        > i {
+                                            background-color: rgba(#02acac,0.2) ;
+                                            color: #02acac;
+                                        }
+                                    }
+                                }
+                                &:nth-child(4){
+                                    > a{
+                                        > i {
+                                            background-color: rgba(#f16383,0.2) ;
+                                            color: #f16383;
+                                        }
+                                    }
+                                }
+                                &:nth-child(5){
+                                    > a{
+                                        > i {
+                                            background-color: rgba(#2f8ee5,0.2) ;
+                                            color: #2f8ee5;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .layout-rightpanel-button {
+                @include flex();
+                @include flex-align-center();
+                @include flex-justify-center();
+                @include border-radius(50%);
+                z-index: 999;
+                width: 36px;
+                height: 36px;
+
+                > i {
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 992px) {
+    .layout-topbar {
+        height: 104px;
+
+        .layout-topbar-wrapper {
+            @include flex-align-start();
+            flex-direction: column;
+            position: relative;
+
+            .layout-topbar-left {
+                width: 100%;
+                height: 56px;
+                margin-left: 0;
+                @include flex-center();
+            }
+
+            .layout-topbar-right {
+                height: 48px;
+                width: 100%;
+                padding: 0;
+
+                .menu-button {
+                    position: absolute;
+                    top: 10px;
+                    left: 16px;
+                    margin: 0;
+                }
+
+                .layout-topbar-actions {
+                    width: 100%;
+                    @include flex-justify-start();
+                    padding: 0 16px;
+
+                    > .topbar-item {
+                        margin: 0;
+                        width: 100%;
+
+                        &.search-item {
+                            margin: 0;
+
+                            > .search-input-wrapper {
+                                display: none;
+                            }
+
+                            > a {
+                                display: flex;
+                            }
+                        }
+
+                        > a {
+                            margin: 0;
+                        }
+
+                        > ul {
+                            top: 104px;
+                            width: 90%;
+                            left: 5%;
+                            position: fixed;
+                        }
+
+                        &.user-profile {
+                            position: absolute;
+                            top: 1px;
+                            right: 8px;
+                            height: auto;
+                            width: auto;
+
+                            a {
+                                margin: 0;
+
+                                .profile-info {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .layout-rightpanel-button {
+                    margin-right: 16px;
+                }
+            }
+        }
+    }
+
+}

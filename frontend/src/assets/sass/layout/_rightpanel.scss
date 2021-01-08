@@ -1,0 +1,115 @@
+.layout-rightpanel {
+    position: fixed;
+    z-index: 1000;
+    right: 0;
+    top:56px;
+    height: calc(100% - 56px);
+    padding: 0;
+    width: 294px;
+    overflow: auto;
+    background-color: lighten($contentBgColor, 3%);
+    transform: translate3d(294px, 0px, 0px);
+    @include transition(transform $transitionDuration);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+
+    .rightpanel-wrapper {
+        height: 100%;
+        padding: 12px 10px;
+        padding-right: 0;
+
+        .section-tasks {
+            h5 {
+                margin:30px 20px 10px;
+                color: $textColor;
+                opacity: .8;
+            }
+
+            > ul {
+                padding: 30px 0px;
+                margin: 0;
+                list-style-type: none;
+
+                > li {
+                    @include flex();
+                    padding: 8px 24px;
+                    margin: 0 0 4px;
+
+                    .p-checkbox {
+                        width: 32px;
+                        height: 32px;
+                        .p-checkbox-box  {
+                            width: 32px;
+                            height: 32px;
+                            @include border-radius(50%);
+
+                            &.p-highlight {
+                                color: $textColor;
+                                background-color: transparent;
+                                border-color: transparent;
+
+                                .p-checkbox-icon {
+                                    color: $textColor;
+                                }
+
+                                &:hover {
+                                    border-color: #D9DEE6;
+                                }
+                            }
+
+                        }
+                    }
+
+                    .task {
+                        margin-left: 12px;
+
+                        h6 {
+                            margin: 0;
+                            color: $textColor;
+                        }
+
+                        span {
+                            display: block;
+                            font-size: 12px;
+                            color: $textColor;
+                            opacity: 0.5;
+                        }
+
+                        &.done {
+                            h6 {
+                                text-decoration: line-through;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        hr {
+            border: none;
+            background-image: linear-gradient(to right, $dividerColor, $contentBgColor 100%);
+            height: 1px;
+            margin: 0;
+            margin-left: 20px;
+        }
+    }
+}
+
+.layout-wrapper {
+    &.layout-rightpanel-active {
+        .layout-rightpanel {
+            transform: translate3d(0px, 0px, 0px);
+        }
+    }
+}
+
+@media(max-width:992px) {
+    .layout-rightpanel {
+        top:104px;
+        width: 254px;
+        transform: translate3d(254px, 0px, 0px);
+        height: calc(100% - 104px);
+    }
+}

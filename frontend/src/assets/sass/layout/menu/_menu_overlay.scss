@@ -1,0 +1,217 @@
+.menu-wrapper {
+    height: calc(100% - 56px);
+    width: 240px;
+    position: fixed;
+    left: 0;
+    top: 56px;
+    z-index: 998;
+    transform: none;
+    @include transition(transform $transitionDuration);
+
+    .layout-menu-container {
+        overflow: auto;
+        height: 100%;
+
+        .layout-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0 ;
+            padding-bottom: 36px;
+
+            li {
+                padding: 0px;
+                @include border-radius-left(10px);
+                &.active-menuitem {
+                    > a {
+                        i.layout-submenu-toggler {
+                            @include rotate(-180deg);
+                        }
+                    }
+                }
+
+                &.layout-root-menuitem {
+                    > a {
+                        display: none;
+                    }
+                    > div {
+                        padding-left: 12px;
+                        margin-bottom: 6px;
+                        margin-top: 24px;
+
+                        > .layout-menuitem-text {
+                            font-size: 12px;
+                            font-weight: 600;
+                            text-transform: uppercase;
+                        }
+                    }
+                }
+
+                .layout-menu-tooltip {
+                    display: none;
+                }
+
+                > a {
+                    margin: 0px;
+                    padding: 7px 20px 6px 8px;
+                    @include flex();
+                    @include flex-align-center();
+                    @include transition(all $transitionDuration);
+                    font-size: 13px;
+                    font-weight: 500;
+                    border-radius: 0;
+                    cursor: pointer;
+                    user-select: none;
+                    @include border-radius-left(10px);
+
+                    .layout-menuitem-text {
+                        margin: 0 11px;
+                    }
+
+                    &.rotated-icon {
+                        .layout-menuitem-icon {
+                            transform: rotate(90deg);
+                        }
+                    }
+
+                    i {
+                        font-size: 14px;
+                        &.layout-submenu-toggler {
+                            @include transition(all $transitionDuration);
+                            margin-left: auto;
+                            font-size: 14px;
+                        }
+                    }
+                }
+
+                > ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                    padding-left: 19px;
+
+                    li {
+                        ul {
+                            padding: 0 0 4px;
+                            overflow: hidden;
+
+                            li {
+                                a {
+                                    border-radius: 0;
+                                }
+                            }
+                        }
+                    }
+
+                    > li {
+                        padding: 0;
+                        margin-top: 8px;
+                        &.layout-root-menuitem {
+                            > a {
+                                @include flex();
+                            }
+                        }
+                        &.active-menuitem {
+                            &.layout-root-menuitem {
+                                > a {
+                                    @include flex();
+                                    border-bottom-left-radius: 0;
+
+                                    &.active-menuitem-routerlink {
+                                        border-bottom-left-radius: 10px;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        > div {
+                            display: none;
+                        }
+
+                        @include nested-submenu-indents(10, 2, 10);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: $tabletBreakpoint + 1) {
+    .layout-overlay {
+        .menu-wrapper {
+            -webkit-transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
+            transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
+            transform: translate3d(-241px, 0px, 0px);
+        }
+
+        &.layout-overlay-active {
+            .menu-wrapper {
+                transform: translate3d(0px, 0px, 0px);
+            }
+        }
+
+        .layout-topbar {
+            .layout-topbar-wrapper {
+                .layout-topbar-right {
+                    .menu-button {
+                        @include flex();
+                    }
+                }
+            }
+        }
+    }
+
+    .layout-static {
+        .menu-wrapper {
+            transform: translate3d(-241px, 0px, 0px);
+        }
+
+        .layout-main {
+            @include transition(margin-left $transitionDuration);
+        }
+
+        &.layout-static-active {
+            .menu-wrapper {
+                transform: translate3d(0px, 0px, 0px);
+            }
+
+            .layout-main {
+                margin-left: 240px;
+            }
+        }
+        .layout-topbar {
+            .layout-topbar-wrapper {
+                .layout-topbar-right {
+                    .menu-button {
+                        @include flex();
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: $tabletBreakpoint) {
+    .layout-wrapper {
+        .menu-wrapper {
+            top: 104px;
+            height: calc(100% - 104px);
+            -webkit-transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
+            transition-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
+            transform: translate3d(-260px, 0px, 0px);
+        }
+
+        &.layout-mobile-active {
+            overflow: hidden;
+            height: 100vh;
+
+            .menu-wrapper {
+                transform: translate3d(0px, 0px, 0px);
+            }
+
+            .layout-mask {
+                display: block;
+            }
+        }
+    }
+}

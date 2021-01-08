@@ -1,0 +1,10 @@
+$primaryLightColor: #72BFED;
+$primaryColor: #4D9FDC;
+$primaryDarkColor: #1B74C5;
+$primaryDarkerColor: #135AA9;
+$primaryTextColor: #f8fafc;
+
+$highlightBg: $primaryColor;
+$highlightTextColor: $primaryTextColor;
+
+@import '../../sass/theme/_theme_dark';

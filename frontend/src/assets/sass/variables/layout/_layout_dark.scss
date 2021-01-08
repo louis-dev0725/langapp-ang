@@ -1,0 +1,17 @@
+$bodyBgColor:linear-gradient(99deg, #394149 0%, #2F363E 100%)!default;
+$textColor:#E5E8EC !default;
+$textSecondaryColor:#CDD2DB !default;
+
+$contentBgColor:#434B54 !default;
+$contentAltBgColor:#4E565F !default;
+$dividerColor:#4E565F !default;
+
+$menuTooltipBgColor:#1c202c !default;
+$menuTooltipTextColor:#ffffff !default;
+
+
+:root{
+    --content-alt-bg-color:#{$contentAltBgColor};
+}
+
+@import './_layout_common';

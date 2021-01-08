@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CanactivateAdmin } from '@app/guards/canactivate-admin';
 import { CanactivateNologged } from '@app/guards/canactivate-nologged';
 import { CanactivateLogged } from '@app/guards/canactivate-logged';
+import { ThemeMainComponent } from '@app/theme/theme.main.component.ts';
 
 const routes: Routes = [{
   path: 'admin',
@@ -43,14 +44,23 @@ const routes: Routes = [{
   path: 'category',
   canActivate: [CanactivateAdmin],
   loadChildren: () => import('./category/category.module').then(m => m.CategoryModule)
-}, {
-  path: '',
-  redirectTo: '/payment',
-  pathMatch: 'full'
 }];
 
+const rootRoutes: Routes = [
+  {
+    path: '',
+    redirectTo: '/payment',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
+    component: ThemeMainComponent,
+    children: routes,
+  },
+];
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(rootRoutes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

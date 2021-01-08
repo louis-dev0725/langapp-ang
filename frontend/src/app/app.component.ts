@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { EventsService } from '@app/services/events.service';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,6 +18,14 @@ export class AppComponent implements OnInit, OnDestroy {
   public bufferValue = 75;
 
   title = 'langapp';
+
+  topbarTheme = 'light';
+  menuTheme = 'dim';
+  layoutMode = 'light';
+  menuMode = 'static';
+  isRTL = false;
+  inputStyle = 'outlined';
+  ripple = false;
 
   constructor(private translate: TranslateService, private breadCrumbsService: BreadCrumbsService,
     private eventsService: EventsService) {

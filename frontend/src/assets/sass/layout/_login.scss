@@ -1,81 +1,79 @@
 .login-body {
-    background-image: url("../../layout/images/login/login-bg.jpg");
+    background: linear-gradient(180deg, #525D72 0%, #69768D 100%);
+    color:#c3ccdd;
     height: 100vh;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
 
-    .login-panel {
-        width: 550px;
-        height: 480px;
-        background-color: #ffffff;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        margin-left: -275px;
-        margin-top: -240px;
-        padding: 0;
-        @include border-radius(2px);
-        @include multi-shadow(0 3px 5px 0 rgba(0, 0, 0, 0.2), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 6px 10px 0 rgba(0, 0, 0, 0.14));
+    .login-wrapper {
+        @include flex();
+        @include flex-align-center();
+        @include flex-justify-center();
+        height: 100vh;
 
-        .login-panel-header {
-            background-color: $primaryColor;
+        .login-panel {
+            width: 30%;
+            height: 100%;
             text-align: center;
-            padding: 8px 14px;
+            padding: 40px 20px;
+            @include flex();
+            @include flex-align-center();
+            @include flex-justify-between();
+            @include flex-direction-column();
 
-            img {
-                vertical-align: middle;
-                width: 50px;
-            }
-        }
-
-        .login-panel-content {
-            padding: 50px 100px;
-
-            h1 {
-                font-size: 16px;
-                margin-top: 0;
-                margin-bottom: 16px;
-                text-align: center;
+            .logo {
+                img {
+                    height: 45px;
+                }
             }
 
-            .ui-g-12, .ui-g-6 {
-                padding: 1em;
+            .login-form {
+                > p {
+                    font-weight: 600;
+                    margin: 0;
+                    color:#c3ccdd;
+                    margin-bottom: 32px;
 
-                &:last-child {
-                    text-align: center;
-
-                    a {
-                        color: $accentColor;
+                    > a {
+                        color: #f4f7f9;
+                        cursor: pointer;
                     }
                 }
-            }
 
-            .password-reset {
-                text-align: right;
+                > input {
+                    width: 85%;
+                    max-width: 310px;
+                    margin-bottom: 20px;
+                    background-color: #F6F9FE;
+                    color: #515C66;
 
-                a {
-                    color: $textSecondaryColor;
+                    &::placeholder {
+                        color: #515C66;
+                    }
+                }
+
+                > button {
+                    width: 85%;
+                    max-width: 310px;
                 }
             }
 
-            .ui-chkbox-label {
-                margin: 0 0 0 8px;
-                vertical-align: middle;
+            p {
+                font-weight: 600;
+                margin: 0;
+                color:#c3ccdd;
+
+                > a {
+                    color: #f4f7f9;
+                }
             }
         }
     }
 }
 
-@media (max-width: 640px) {
+@media(max-width:992px) {
     .login-body {
-        .login-panel {
-            left: 0;
-            margin-left: 0;
-            width: 100%;
-            
-            .login-panel-content {
-                padding: 50px 25px;
+        .login-wrapper {
+            .login-panel {
+                width: 100%;
             }
         }
     }

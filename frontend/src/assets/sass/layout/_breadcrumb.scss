@@ -1,0 +1,53 @@
+.layout-breadcrumb {
+    background-color: transparent;
+    padding: 12px 32px;
+    @include flex();
+    align-items: center;
+    justify-content: space-between;
+
+    .breadcrumb{
+        @include flex();
+        @include flex-align-center();
+
+        .route-bar-breadcrumb {
+            list-style: none;
+            @include flex();
+            justify-content: space-around;
+            align-items: center;
+            padding: 0;
+
+            > li {
+                padding: 0;
+                padding-right: 12px;
+                font-size: 12px;
+                font-weight: normal;
+                color: $textSecondaryColor;
+                text-transform: uppercase;
+
+                i {
+                    font-size: 10px;
+                }
+
+
+                .p-link {
+                    color: $textColor;
+                    @include transition(color $transitionDuration);
+                    font-size: 12px;
+
+                    &:hover {
+                        color: $primaryColor;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width : 992px){
+    .layout-breadcrumb {
+
+        .breadcrumb{
+            width: 100%;
+        }
+    }
+}

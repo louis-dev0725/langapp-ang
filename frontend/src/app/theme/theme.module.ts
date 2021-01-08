@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
-import { ThemeMenuComponent, ThemeSubMenuComponent } from '@app/theme/theme.menu.component';
+import { ThemeMenuComponent } from '@app/theme/theme.menu.component';
+import { ThemeMenuitemComponent } from '@app/theme/theme.menuitem.component';
 import { ThemeTopbarComponent } from '@app/theme/theme.topbar.component';
 import { ThemeMainComponent } from '@app/theme/theme.main.component';
 import { ThemeFooterComponent } from '@app/theme/theme.footer.component';
@@ -21,6 +22,7 @@ import { MessageModule } from 'primeng/message';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { MessageService } from 'primeng/api';
+import { MenuService } from './theme.menu.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -40,7 +42,7 @@ import { MessageService } from 'primeng/api';
   ],
   declarations: [
     ThemeMenuComponent,
-    ThemeSubMenuComponent,
+    ThemeMenuitemComponent,
     ThemeTopbarComponent,
     ThemeMainComponent,
     ThemeFooterComponent,
@@ -49,7 +51,7 @@ import { MessageService } from 'primeng/api';
   ],
   exports: [
     ThemeMenuComponent,
-    ThemeSubMenuComponent,
+    ThemeMenuitemComponent,
     ThemeTopbarComponent,
     ThemeMainComponent,
     ThemeFooterComponent,
@@ -59,6 +61,10 @@ import { MessageService } from 'primeng/api';
     HocBreadCrumbComponent,
     MatSnackBarModule
   ],
-  providers: [BreadCrumbsService, MessageService]
+  providers: [
+    BreadCrumbsService,
+    MessageService,
+    MenuService,
+  ]
 })
-export class ThemeModule {}
+export class ThemeModule { }

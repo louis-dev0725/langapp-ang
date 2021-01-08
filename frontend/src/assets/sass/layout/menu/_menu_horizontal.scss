@@ -1,0 +1,107 @@
+
+@media (min-width:993px) {
+    .layout-wrapper {
+        &.layout-horizontal {
+            .menu-wrapper {
+                top: 56px;
+                width: 100%;
+                height: 44px;
+
+                .layout-menu-container {
+                    overflow: visible;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    
+                    .layout-menu {
+                        list-style-type: none;
+                        margin: 0px 16px;
+                        padding-bottom: 0px;
+                        @include flex();
+                        @include flex-direction-row();
+    
+                        li {
+                            a{
+                                @include border-radius(6px);
+                            }
+                         
+                            &.active-menuitem {
+                                > a {                    
+                                    i.layout-submenu-toggler {
+                                        @include rotate(-180deg);
+                                    }
+                                }
+    
+                                > ul {
+                                    display: block;
+                                }
+                            }
+                        }
+            
+                        > li {
+                            padding: 0;
+                            position: relative;
+    
+                            .layout-menu-tooltip {
+                                display: none;
+                            }
+            
+                            > a {
+                                margin-right: 6px;
+                                padding: 6px;
+                                @include flex();
+                                @include flex-align-center();
+                                @include flex-justify-between();
+                                @include transition(all $transitionDuration);
+                            }
+    
+                            &.layout-root-menuitem {
+                                > div {
+                                    display: none;
+                                }
+                            }
+            
+                            > ul {
+                                display: none;
+                                list-style-type: none;
+                                top: 35px;
+                                left: 0px;
+                                width: 230px;
+                                position: absolute;
+                                padding: 8px 0;
+                                margin: 0;
+                                z-index: 100;
+                                overflow: auto;
+                                max-height: 450px;
+                                @include border-radius-bottom(2px);
+                                @include shadow(0 2px 8px 0 rgba(0, 0, 0, 0.08));
+            
+                                > li {
+                                    padding:0px 8px;
+                                    border: 0 none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .layout-topbar{
+                .layout-topbar-wrapper {
+                    .layout-topbar-right {
+                        .menu-button {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            .layout-main {
+                padding-top: 104px;
+            }
+        }
+    }
+}
+
+
+

@@ -32,11 +32,8 @@ registerLocaleData(localeRu);
 import { StoreModule, MetaReducer } from '@ngrx/store';
 import { reducers } from '@app/store/reducers';
 import { environment } from 'src/environments/environment';
-import { storeFreeze } from 'ngrx-store-freeze';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { WebpackTranslateLoader } from './WebpackTranslateLoader';
-
-export const metaReducers: MetaReducer<any>[] = !environment.production ? [storeFreeze] : [];
 
 @NgModule({
   declarations: [AppComponent],
@@ -50,7 +47,7 @@ export const metaReducers: MetaReducer<any>[] = !environment.production ? [store
         useClass: WebpackTranslateLoader
       }
     }),
-    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreModule.forRoot(reducers),
     environment.development ? StoreDevtoolsModule.instrument() : [],
     BrowserAnimationsModule,
     ThemeModule,
@@ -78,4 +75,4 @@ export const metaReducers: MetaReducer<any>[] = !environment.production ? [store
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,9 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
-@import "assets/scss/index";
+$gutter: 1rem; //for primeflex grid system
+$fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+@import "../node_modules/primeng/resources/primeng.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+@import "assets/theme/denim/theme-light.scss";
+@import "assets/layout/css/layout-light.scss";
+//@import "../node_modules/prismjs/themes/prism-coy.css";
+//@import "../node_modules/@fullcalendar/core/main.min.css";
+//@import "../node_modules/@fullcalendar/daygrid/main.min.css";
+//@import "../node_modules/@fullcalendar/timegrid/main.min.css";
+
+
 $color-blue-link: #039be5;
 $color-red-danger: #f44336;
 
-html, body {
+/*html, body {
   height: 100%;
 }
 
@@ -77,7 +89,7 @@ mat-progress-bar.mat-progress-bar {
   .container {
     padding: 0;
   }
-}
+}*/
 
 .block_center {
   display: flex;

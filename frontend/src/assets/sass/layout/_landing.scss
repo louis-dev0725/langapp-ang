@@ -1,551 +1,627 @@
-.landing-body {
-    background-color: $bodyBgColor;
-    
-    * {
-        @include border-box-sizing();
-    }
-    
-    p {
-        line-height: 1.5;
-    }
-    
-    #header {  
-        background-color: $bodyBgColor;
-             
-        > div {
-            width: 960px;
-            margin: 0 auto;
-            height: 90px;
-            padding: 15px 0;
-            
-            img {
-                height: 60px;
-            }
-            
-            #landing-menu {
-                float: right;
-                list-style-type: none;
-                padding: 0;
-                margin: 20px 0 0 0;
-                
-                > li {
-                    display: inline-block;
-                    
-                    a {
-                        border-bottom: 5px solid transparent;
-                        color: #616161;
-                        display: inline-block;
-                        min-width: 80px;
-                        text-align: center;
-                        height: 55px;
-                        font-size: 15px;
-                        @include transition(border-color $transitionDuration);
-                    }
+.landing-wrapper {
+    background: #ffffff;
+
+    .landing-topbar {
+        height: 120px;
+        background: linear-gradient(180deg, #525D72 0%, #69768D 100%);
+        @include flex();
+        @include flex-align-center();
+        @include flex-justify-between();
+        width: 100%;
+        z-index: 999;
+
+        #landing-menu-button {
+            display: none;
+            padding: 0 8px;
+            cursor: pointer;
+        }
+
+        .logo {
+            padding: 0 120px;
+        }
+
+        > ul {
+            list-style-type: none;
+            @include flex();
+            @include flex-align-center();
+            margin: 0;
+            padding: 0;
+            padding-right: 120px;
+
+            > li {
+                #landing-menu-close {
+                    display: none;
+                }
+                > a{
+                    font-weight: 500;
+                    letter-spacing: 0.08px;
+                    color: #ffffff;
+                    padding:8px 16px;
+                    margin: 0 6px;
+                    border-radius: 5px;
+                    @include transition(background-color $transitionDuration);
 
                     &:hover {
-                        a {
-                            color: #3f51b5;
-                            border-color: #3f51b5;
-                        }
+                        background-color: rgba(#5cacf4,.3);
+                        color:#ffffff ;
                     }
-                }
-            }
-            
-            #landing-menu-button {
-                color: #3f51b5;
-                display: none;
-                float: right;
-                margin-right: 15px;
-                margin-top: 5px;
-                
-                i {
-                    font-size: 48px;
-                }                
-            }
-        }
-    }
-    
-    #introduction {
-        > div {
-            background:  url("../images/landing/landing-header.png");
-            min-height: 400px;
-            color: #ffffff;
-            text-align: center;
-            padding-top: 120px;
-            background-size: cover;
-            
-            h1 {
-                padding: 0;
-                margin: 0 0 20px 0;
-            }
-            
-            p {
-                max-width: 400px;
-                margin: 0 auto;
-                margin-bottom: 40px; 
-            }
-            
-            button {
-                min-width: 180px;
-            }
-        }
-    }
-    
-    #features {
-        > div {
-            width: 960px;
-            margin: 0 auto;
-            padding: 60px 0;
-            
-            .feature-box {
-                @include clearfix();
-                padding: 30px 15px 30px 0;
-                
-                img {
-                    float: left;
-                    margin-right: 30px;
-                }
-                
-                > div {
-                    padding: 16px 0;
-                    
-                    h3 {
-                        font-size: 15px;
-                        margin: 0;
-                    }
-                    
-                    p {
-                        color: $textSecondaryColor;
-                        margin: 8px;
-                    }
+
                 }
             }
         }
     }
-    
-    #stats {
-        @include background-gradient-top2bottom(#212121, #424242);
-        
-        > div {
-            width: 960px;
-            margin: 0 auto;
-            padding: 40px 0;
-            
-            .ui-g-12 {
-                padding: 20px;
-            }
-            
-            .stat-box {
-                @include border-radius($borderRadius);
-                background-color: #ffffff;
-                @include multi-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.14));
-                padding: 18px;
-                text-align: center;
-                color: #e91e63;
-                
-                h3 {
-                    font-weight: 400;
-                    margin: 0;
-                }
-                
-                p {
-                    margin: 0;
-                }
-                
-                &.stat-box-active {
-                    background-color: #e91e63;
+    .landing-banner{
+        background: linear-gradient(180deg, #69768D 0%, #ffffff 100%);
+        @include flex();
+        @include flex-justify-between();
+        @include flex-align-center();
+        padding:120px 120px 180px;
+
+        .landing-banner-content {
+            > h2 {
+                font-weight: 600;
+                margin: 0;
+                margin-bottom: 12px;
+                color:#ffffff ;
+
+                > span {
                     color: #ffffff;
                 }
             }
-        }
-    }
-    
-    #video {
-        @include multi-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.14));
-        
-        > div {
-            width: 960px;
-            margin: 0 auto;
-            padding: 60px 0;
-            
-            .video-description {
-                padding-top: 80px;
-                padding-right: 50px;
-                
-                h3 {
-                    font-weight: 400;
-                    font-size: 24px;
-                    margin: 0 0 12px 0;
-                }
-                
-                p {
-                    margin: 0 0 24px 0;
-                }
-            }
-        }
-    }
-    
-    #pricing {
-        > div {
-            width: 960px;
-            margin: 0 auto;
-            padding: 60px 0;
-            text-align: center;
-            
-            > h2 {
-                font-size: 24px;
+
+            > h6 {
+                font-size: 15px;
                 font-weight: normal;
-                margin: 0 0 12px 0;
+                margin: 0;
+                margin-bottom: 24px;
+                color:#ffffff ;
+                max-width: 480px;
+                line-height: 1.5;
             }
-            
-            > p {
-                color: $textSecondaryColor;
-                margin: 0 0 40px 0;
+
+            > button {
+                padding: 8px 20px;
+                span {
+                    padding: 0;
+                    display: block;
+                }
             }
-            
-            .pricing-box {
-                width: 100%;
+
+        }
+        .landing-banner-image {
+            text-align: right;
+            img {
+                width: 80%;
+                height: auto;
+                max-height: 400px;
+                opacity: .8;
+            }
+        }
+    }
+
+    .section-header {
+        @include flex();
+        flex-direction: column;
+        @include flex-justify-center();
+        @include flex-align-center();
+        text-align: center;
+        padding: 0 120px;
+
+        > h2 {
+            font-weight: 500;
+            margin: 0;
+            margin-bottom: 14px;
+            color: #2C3D57;
+        }
+        > h6 {
+            font-weight: normal;
+            margin: 0;
+            color: #2C3D57;
+            max-width: 480px;
+            line-height: 1.33;
+        }
+    }
+
+    .landing-features {
+        padding: 120px 0;
+
+        .features-cards {
+            padding: 120px 120px 0;
+
+            .feature-card {
+                @include border-radius(5px);
+                background-color: #ffffff;
+                padding: 24px 12px 36px;
                 text-align: left;
-                @include border-radius($borderRadius);
-                
-                .pricing-header {
-                    background-color: #212121;
-                    padding: 16px;
-                    text-align: center;
-                    
-                    h3 {
-                        margin: 0;
-                        color: #ffffff;
-                        font-size: 15px;
-                        font-weight: 400;
-                        padding-bottom: 4px;
-                        border-bottom: 1px solid #a7a5a5;
-                    }
-                    
-                    p {
-                        color: #a7a5a5;
-                        margin: 0;
-                        padding: 4px 0 0 0;
+                cursor: pointer;
+                @include transition(all $transitionDuration);
+
+                &:hover {
+                    transform: scale3d(1.02, 1.02, 1);
+                }
+
+                h5 {
+                    margin: 6px 0 12px;
+                }
+
+                > img {
+                    height: 100px;
+                    width: auto;
+                }
+
+                span {
+                    line-height: 1.4;
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .landing-promo {
+        background: linear-gradient(360deg, #69768D 0%, #78849B 100%);
+        @include flex();
+        @include flex-justify-between();
+        @include flex-align-center();
+        padding: 60px 120px;
+
+        .landing-promo-content {
+            > h2 {
+                font-weight: 600;
+                margin: 0;
+                margin-bottom: 14px;
+                color:#ffffff ;
+
+                > span {
+                    color: #ffffff;
+                }
+                max-width: 650px;
+            }
+
+            > h6 {
+                font-size: 15px;
+                font-weight: normal;
+                margin: 0;
+                margin-bottom: 14px;
+                color:#ffffff ;
+                max-width: 480px;
+                line-height: 1.33;
+            }
+
+            > button {
+                padding: 8px 20px;
+                span {
+                    padding: 0;
+                    display: block;
+                }
+            }
+
+        }
+        .landing-promo-image {
+            text-align: right;
+            img {
+                width: 60%;
+                height: auto;
+                max-height: 400px;
+            }
+        }
+    }
+
+    .landing-testimonials {
+        padding: 120px 120px 60px;
+
+        .testimonials {
+            @include flex();
+            @include flex-justify-center();
+
+            .testimonials-wrapper {
+                overflow: hidden;
+                position: relative;
+                max-width: 100%;
+
+                .testimonials-content {
+                    @include flex();
+                    padding: 32px 0 0;
+                    flex-direction: row;
+                    transition: transform 1000ms ease 0s;
+                    transform: translate3d(0px, 0px, 0px);
+
+                    .testimonial {
+                        flex: 1 0 100vw;
+                        @include transition(visibility .8s);
+                        @include transition(transform 1000ms ease 0s);
+                        max-width: 33%;
+
+                        .testimonial-content {
+                            opacity: .9;
+                            margin: 0 6px;
+                            position: relative;
+                            height: 100%;
+                            background-color: #ffffff;
+                            padding: 65px 42px 66px;
+                            @include flex();
+                            @include flex-justify-between();
+                            flex-direction: column;
+
+                            > span {
+                                display: block;
+                                font-size: 14px;
+                                line-height: 1.5;
+                                color:#2C3D57;
+                                margin-bottom: 20px;
+                                flex-grow: 1;
+                            }
+
+                            > h5 {
+                                font-weight: 500;
+                                line-height: 1.2;
+                                color:#2C3D57;
+                                margin: 0;
+                            }
+
+                            > h6 {
+                                font-weight: 500;
+                                line-height: 1.5;
+                                color: #66768D;
+                                margin: 0;
+                            }
+
+                        }
                     }
                 }
-                
-                .pricing-content {
-                    padding: 16px;
-                    min-height: 350px;
-                    position: relative;
-                    @include multi-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.14));
-                    
-                    ul {
-                        list-style-type: none;
-                        margin: 0;
-                        padding: 0;
-                        
-                        
-                        li {
-                            padding: 8px 0;
-                            
-                            i {
-                                color: #4caf50;
-                                vertical-align: middle;
-                                margin-right: 6px;
+
+                .link-points {
+                    .points {
+                        @include flex();
+                        @include flex-align-center();
+                        @include flex-justify-center();
+                        padding-top: 36px;
+
+                        .point {
+                            width: 15px;
+                            height: 15px;
+                            background-color:#E6E9EF;
+                            @include border-radius(50%);
+                            margin: 3px;
+                            cursor: pointer;
+
+                            &.active-point{
+                                width:  19px;
+                                height: 19px;
+                                background-color: #2C3D57;
+                            }
+
+                            &.mobile {
+                                display: none;
                             }
                         }
                     }
-                    
-                    button {
-                        position: absolute;
-                        min-width: 180px;
-                        bottom: 20px;
-                        left: 50%;
-                        margin-left: -90px;
-                    }
-                    
-                    .pricing-fee {
-                        position: absolute;
-                        top: -24px;
-                        right: 14px;
-                        margin-left: -90px;
-                        text-align: center;
-                        font-size: 16px;
-                        width: 48px;
-                        height: 48px;
-                        line-height: 48px;
-                        background-color: #e91e63;
-                        color: #ffffff;
-                        @include border-radius(50%);
-                        @include multi-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.14));
-                    }
-                }
-                
-                &.pricing-box-pro {
-                    .pricing-header {
-                        background-color: #e91e63;
-                        color: #ffffff;
-                        
-                        h3 {
-                            border-bottom: 1px solid #ffffff;
-                        }
-                        
-                        p {
-                            color: #ffffff;
-                        }
-                    }
-                    
-                    .pricing-content {
-                        .pricing-fee {
-                            background-color: #212121;
-                            color: #ffffff;
-                        }
-                    }    
                 }
             }
         }
-    }
-    
-    #contact {
-        background-color: #424242;
-        
-        > div {
-            width: 960px;
-            margin: 0 auto;
-            padding: 60px 0;
-            text-align: center;
-            
-            > h2 {
-                font-size: 24px;
-                font-weight: normal;
-                margin: 0 0 12px 0;
-                color: #f5f5f5;
-            }
-            
-            > p {
-                margin: 0 0 40px 0;
-                color: #e0e0e0;
-            }
-            
-            .contact-form {   
-                text-align: left;
-                
-                > div {
-                    padding: 1em .5em;
-                }                     
-                        
-                button {
-                    width: auto;
-                    min-width: 180px;
-                    margin-left: 15px;
-                    margin-top: 40px;
-                }
-                
-                .md-inputfield {
-                    input:focus ~ label,
-                    input.ui-state-filled ~ label,
-                    textarea:focus ~ label,
-                    textarea.ui-state-filled ~ label,
-                    .md-inputwrapper-focus ~ label,
-                    .md-inputwrapper-filled ~ label {
-                      color:$primaryLightColor;
-                    }
 
-                    input:-webkit-autofill ~ label {
-                      color:$primaryLightColor;
+    }
+
+    .landing-pricing {
+        padding: 120px 0;
+        .section-header {
+            @include flex-justify-center();
+            @include flex-align-center();
+            text-align: center;
+        }
+
+        .pricing-cards {
+            padding: 60px 120px;
+
+            .pricing-card {
+                margin: 12px;
+                height: auto;
+            }
+        }
+    }
+
+    .landing-contact {
+        padding: 60px 0 0;
+        background: linear-gradient(360deg, #69768D 0%, #ffffff 100%);
+
+        .section-header {
+            @include flex-justify-center();
+            @include flex-align-center();
+            text-align: center;
+            > h2 {
+                color: #2C3D57;
+            }
+            > h6 {
+                color: #2C3D57;
+            }
+        }
+
+        .landing-contact-content {
+            @include flex();
+            @include flex-justify-center();
+            padding: 60px 180px;
+            position: relative;
+            text-align: center;
+
+            .landing-contact-form {
+                padding: 20px;
+
+                > h3 {
+                    font-size: 16px;
+                    color: #ffffff;
+                    margin: 0;
+                    font-weight: 500;
+                    margin-bottom: 20px;
+                }
+
+                > input,
+                > textarea {
+                    width: 100%;
+                    margin-bottom: 16px;
+                    border-radius: 4px;
+                    border: 1px solid #CED4DA;
+                    padding: 10px 12px;
+                    background-color: #F6F9FE;
+                    color: #515C66;
+
+                    &::placeholder {
+                        color: #515C66;
                     }
-                    
-                    input:focus {
-                        border-color: $primaryLightColor;
-                    }
-                    
-                    input {
-                        color: #ffffff;
+                }
+                > button {
+                    width: 100%;
+                }
+
+            }
+        }
+
+    }
+
+    .landing-footer {
+        background: linear-gradient(360deg, #525D72 0%, #69768D 100%);
+        padding: 21px 120px;
+        @include flex();
+        @include flex-align-center();
+        @include flex-justify-between();
+
+        > img {
+            height: 30px;
+            width: auto;
+        }
+
+        .social-icons {
+            @include flex();
+            @include flex-align-center();
+
+            a {
+                color: #ffffff;
+                margin-left: 18px;
+                cursor: pointer;
+                padding: 6px;
+
+                i {
+                    font-size: 22px;
+                    @include transition(color $transitionDuration);
+                }
+
+                &:hover {
+                    i {
+                        color: #CED4DA;
                     }
                 }
             }
         }
     }
-    
-    #footer {
-        background-color: #212121;
-        color: #ffffff;
-        
-        > div {
-            width: 960px;
-            margin: 0 auto;
-            padding: 30px 0;
-            
-            .footer-logo {
-                height: 54px;
-                float: left;
-                margin-right: 14px;
-            }
-            
-            h4 {
-                margin: 0 0 8px 0;
-                font-weight: 700;
-            }
-            
-            p {
-                margin: 0;
-                line-height: 1.5;
-                
-                &:last-child {
-                    margin-top: 8px;
-                }
-            }
-            
-            i {
-                vertical-align: middle;
-            }
-            
-            .footer-social {
-                a {
-                    margin-right: 14px;
-                    @include opacity(.7);
-                    
-                    img {
-                        width: 30px;
-                        height: 30px;
-                    }
-                    
-                    &:hover {
-                        @include opacity(1);
-                    }
-                }
-            }
-        }
+
+    .p-button-text {
+        width: 100%;
     }
 }
 
-@media screen and (max-width: 64em) {
-    
+
+@media (max-width: $tabletBreakpoint) {
     .landing-body {
-        padding-top: 90px;
-                    
-        #header {   
-            position: fixed;
-            top: 0;
-            z-index: 100;
-            width: 100%;
-            @include multi-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.14));
-              
-            > div {
-                width: 100%;
-                padding-left: 15px;
-                
-                #landing-menu-button {
+        &.block-scroll {
+            overflow: hidden;
+
+            .landing-wrapper {
+                .landing-mask {
                     display: block;
                 }
-                
-                #landing-menu {
-                    -webkit-animation-duration: .5s;
-                    -moz-animation-duration: .5s;
-                    animation-duration: .5s;
-                    display: none;
-                    float: none;
-                    width: 100%;
-                    text-align: center;
-                    background-color: $bodyBgColor;
+            }
+        }
+       .landing-wrapper {
+            &.landing-menu-active {
+                .landing-topbar {
+                    .landing-menu {
+                        transform: translate3d(0px, 0px, 0px);
+                    }
+                }
+
+            }
+            .landing-topbar {
+                .logo {
+                    padding: 0 33px;
+                }
+                .landing-menu {
                     position: fixed;
-                    top: 70px;
-                    left: 0;
-                    @include multi-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.14));
-                    
-                    li {
-                        display: block;
-                        
-                        a {
-                            height: auto;
-                            border-bottom: 0 none;
-                            padding: 15px;
+                    flex-direction: column;
+                    @include flex-align-end();
+                    right: 0;
+                    top: 0;
+                    padding: 40px 20px;
+                    z-index: 999;
+                    width: 240px;
+                    height: 100%;
+                    background-color: #69768D;
+                    box-shadow: 0 24px 64px -2px rgba(0, 0, 0, 0.02), 0 6px 16px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -2px rgba(0, 0, 0, 0.08);
+                    transform: translate3d(260px, 0px, 0px);
+                    @include transition(transform $transitionDuration);
+
+                    > li {
+                        margin: 0;
+                        width: 100%;
+                        margin-bottom: 12px;
+
+                        > a {
+                            padding: 6px 16px;
+                            font-size: 14px;
+                            text-align: left;
+                            display: block;
+                            color: #ffffff;
+                            @include transition(background-color $transitionDuration);
+                            &:hover {
+                                background-color: rgba(#5cacf4,.3);
+                                color:#ffffff ;
+                            }
+                        }
+
+
+                        #landing-menu-close {
+                            display: block;
+                            font-size: 20px;
+                            text-align: right;
+                            color: #5cacf4;
+                            @include transition(color $transitionDuration);
+
+                            &:hover {
+                                background-color: #69768D;
+                                color: #ffffff;
+                            }
                         }
                     }
-                    
-                    &.landing-menu-active {
-                        display: block;
+                }
+
+                #landing-menu-button {
+                    display: block;
+                    color: #ffffff;
+                    font-size: 20px;
+                    padding: 0 33px;
+                }
+            }
+
+            .landing-banner {
+                padding: 120px 42px 180px;
+                .landing-banner-content{
+                    text-align: center;
+                    width: 100%;
+                    h6 {
+                        max-width: 100%;
                     }
                 }
-            }
-        }
-        
-        #introduction {
-            width: 100%;
-            
-            > div {
-                h1, p {
-                    padding-left: 15px;
-                    padding-right: 15px;
+
+                .landing-banner-image {
+                    display: none;
                 }
+
             }
-        }
-        
-        #features {
-            > div {
-                width: 100%;
-                padding-left: 15px;
-            }
-        }
-        
-        #stats {
-            > div {
-                width: 100%;
-            }
-        }   
-        
-        #video {
-            > div {
-                width: 100%;
-                text-align: center;
-                padding-left: 15px;
-                padding-right: 15px;
-                
-                .video-description {
-                    padding-top: 0;
-                    padding-right: 0;
+
+            .landing-features {
+                padding: 42px 16px;
+
+                .features-cards {
+                    padding: 0;
+
+                    .feature-card {
+                        text-align: center;
+                        margin: 30px 0;
+                    }
                 }
-                
-                iframe {
-                    width: 300px;
-                    height: 200px;
-                }
-            }
-        } 
-        
-        #pricing {
-            > div {
-                width: 100%;
-                adding-left: 15px;
-                padding-right: 15px;
-            }
-        }
-        
-        #contact {
-            > div {
-                width: 100%;
-                text-align: center;
-                
-                .contact-map {
-                    text-align: center;
-                    
+
+                .features-content {
+                    padding: 0;
+                    flex-direction: column;
+
                     img {
                         width: 100%;
                     }
-                }
-                
-                .contact-form {
-                    .ui-g-12 {
-                        padding: 15px;
+
+                    ul {
+                        li {
+                            margin: 16px 0;
+                            max-width: 400px;
+
+                            img {
+                                width: 64px;
+                            }
+                        }
                     }
                 }
             }
-        } 
-        
-        #footer {
-            > div {
-                width: 100%;
-                
-                .ui-g-12 {
-                    padding-top: 24px;
+
+            .section-header {
+                padding: 0px ;
+            }
+
+            .landing-promo {
+                padding: 36px 42px 64px;
+
+                .landing-promo-content {
+                    text-align: center;
+                    width: 100%;
+                    h6 {
+                        max-width: 100%;
+                    }
+                }
+                .landing-promo-image {
+                    display: none;
                 }
             }
-        }
+
+            .landing-pricing {
+                padding: 36px 42px 64px;
+
+                .pricing-cards {
+                    padding: 0;
+                }
+            }
+
+            .landing-testimonials {
+                padding: 36px 42px 64px;
+
+                .testimonials {
+                    @include flex();
+                    @include flex-justify-center();
+
+                    .testimonials-wrapper {
+                        overflow: hidden;
+                        position: relative;
+                        max-width: 100%;
+
+                        .testimonials-content {
+                            text-align: center;
+                            padding: 0;
+                            .testimonial {
+                                max-width: 100%;
+                            }
+                        }
+
+                        .link-points {
+                            .points {
+                                .point {
+                                    &.mobile {
+                                        @include flex();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            .landing-contact {
+                padding: 36px 42px 64px;
+                .landing-contact-content {
+                    padding: 0;
+                }
+                .landing-contact-form {
+                    width: 100%;
+                }
+            }
+
+            .landing-footer {
+                padding: 18px 24px 64px;
+            }
+       }
     }
 }
