@@ -4,7 +4,9 @@ import { SessionService } from '@app/services/session.service';
 import * as fromStore from '@app/store';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
 import { Store } from '@ngrx/store';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+@UntilDestroy()
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',

@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-hoc-bread-crumb',
   templateUrl: './hoc-bread-crumb.component.html',

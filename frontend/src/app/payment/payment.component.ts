@@ -6,8 +6,9 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',

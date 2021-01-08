@@ -7,9 +7,9 @@ import { ApiError } from '@app/services/api-error';
 import { ApiService } from '@app/services/api.service';
 import { TranslatingService } from '@app/services/translating.service';
 
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-
+@UntilDestroy()
 @Component({
   selector: 'app-create-mnemonic-modal',
   templateUrl: './create-mnemonic-modal.component.html',

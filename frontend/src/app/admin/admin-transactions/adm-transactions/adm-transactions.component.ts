@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { availableCurrencyList } from '@app/config/availableCurrencyList';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 export const MY_FORMATS = {
   parse: {
@@ -25,6 +25,7 @@ export const MY_FORMATS = {
   }
 };
 
+@UntilDestroy()
 @Component({
   selector: 'app-adm-transactions',
   templateUrl: './adm-transactions.component.html',

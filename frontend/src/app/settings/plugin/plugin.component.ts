@@ -7,10 +7,10 @@ import { SessionService } from '@app/services/session.service';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiService } from '@app/services/api.service';
 
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { User } from '@app/interfaces/common.interface';
 
-
+@UntilDestroy()
 @Component({
   selector: 'app-plugin',
   templateUrl: './plugin.component.html',

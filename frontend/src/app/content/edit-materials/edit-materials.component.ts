@@ -6,11 +6,12 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Materials } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
 import { combineLatest } from 'rxjs';
 
+@UntilDestroy()
 @Component({
   selector: 'app-edit-materials',
   templateUrl: './edit-materials.component.html',

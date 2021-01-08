@@ -10,9 +10,9 @@ import { Card, Dictionary } from '@app/interfaces/common.interface';
 
 import { ModalMnemonicComponent } from '@app/training/modal-mnemonic/modal-mnemonic.component';
 
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-
+@UntilDestroy()
 @Component({
   selector: 'app-cards-word-kanji',
   templateUrl: './cards-word-kanji.component.html',

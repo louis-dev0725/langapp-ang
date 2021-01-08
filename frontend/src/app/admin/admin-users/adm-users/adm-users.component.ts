@@ -9,9 +9,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
 import { debounceTime, take } from 'rxjs/operators';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 
+@UntilDestroy()
 @Component({
   selector: 'app-adm-users',
   templateUrl: './adm-users.component.html',

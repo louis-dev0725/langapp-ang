@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { DictionaryArray } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
@@ -12,6 +12,7 @@ import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { ListWordsComponent } from '@app/dictionary/list-words/list-words.component';
 
+@UntilDestroy()
 @Component({
   selector: 'app-dictionary',
   templateUrl: './dictionary.component.html',

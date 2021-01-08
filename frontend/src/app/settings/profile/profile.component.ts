@@ -5,9 +5,10 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionService } from '@app/services/session.service';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 
+@UntilDestroy()
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',

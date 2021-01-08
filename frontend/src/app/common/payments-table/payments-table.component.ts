@@ -5,8 +5,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '@app/services/api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SessionService } from '@app/services/session.service';
-import { untilDestroyed } from 'ngx-take-until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-payments-table',
   templateUrl: './payments-table.component.html',
