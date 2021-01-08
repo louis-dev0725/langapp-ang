@@ -5,16 +5,14 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-prod": "ng build --prod --aot=true --buildOptimizer=true --vendor-chunk --output-hashing=all",
-    "build-stats": "ng build --prod --aot=true --buildOptimizer=true --stats-json",
+    "build:prod": "ng build --prod --aot=true --build-optimizer=true --output-hashing=all",
+    "build:stats": "ng build --prod --aot=true --build-optimizer=true --stats-json --sourceMap=true",
     "bundle-report": "webpack-bundle-analyzer ./dist/langapp/stats.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:stats": "ng build --prod --stats-json",
     "analyze": "webpack-bundle-analyzer dist/langapp/stats-es5.json",
-    "translate-extract": "./node_modules/.bin/ngx-translate-extract -i ./src -o ./src/assets/i18n/*.json --format namespaced-json --marker _ --clean --sort",
-    "postinstall": "ngcc"
+    "translate-extract": "./node_modules/.bin/ngx-translate-extract -i ./src -o ./src/assets/i18n/*.json --format namespaced-json --marker _ --clean --sort"
   },
   "private": true,
   "dependencies": {
