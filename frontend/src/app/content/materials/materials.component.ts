@@ -84,7 +84,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
 
   onChangeComplication(event) {
     this._isLoadedData = false;
-    this.complication = event.value;
+    this.complication = event.value?.id;
     let data = 'complication=' + this.complication;
     if (this.keyword !== undefined && this.keyword !== '') {
       data = data + '&keyword=' + encodeURIComponent(this.keyword);
@@ -108,7 +108,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
 
   onChangeType(event) {
     this._isLoadedData = false;
-    this.type = event.value;
+    this.type = event.value?.id;
     let data = '';
     if (this.keyword !== undefined && this.keyword !== '') {
       data = data + 'keyword=' + encodeURIComponent(this.keyword);
@@ -133,7 +133,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
 
   onChangeVolumes(event) {
     this._isLoadedData = false;
-    this.volume = event.value;
+    this.volume = event.value?.id;
     let data = '';
     if (this.keyword !== undefined && this.keyword !== '') {
       data = data + 'keyword=' + encodeURIComponent(this.keyword);

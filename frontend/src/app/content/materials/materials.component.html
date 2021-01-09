@@ -1,44 +1,23 @@
 <div class="container">
   <div class="card" *ngIf="isLoaded">
-    <h1 translate>Materials</h1>
-    <div class="filter">
-      <form [formGroup]="filterForm" class="form-filter">
-        <mat-form-field appearance="outline" class="input-filter">
-          <input matInput formControlName="keywords" placeholder="{{'Search to keywords' | translate}}">
-        </mat-form-field>
+    <h4 translate>Materials</h4>
+    <div class="filter p-d-flex p-flex-column p-flex-md-row p-jc-md-start p-mb-2">
+      <!--<form [formGroup]="filterForm" class="form-filter">
+        <input pInputText formControlName="keywords" placeholder="{{'Search to keywords' | translate}}">
 
         <div class="filter-button">
-          <button mat-raised-button (click)="onSubmitSearch()">{{'Search' | translate}}</button>
+          <button pButton (click)="onSubmitSearch()" label="{{'Search' | translate}}"></button>
         </div>
-      </form>
+      </form>-->
 
-      <mat-form-field class="select-filter" appearance="outline">
-        <mat-label>{{ 'Complication' | translate }}</mat-label>
-        <mat-select (selectionChange)="onChangeComplication($event)">
-          <mat-option [value]="">{{ 'Null value' | translate }}</mat-option>
-          <mat-option *ngFor="let complication of complications" [value]="complication.id">{{ complication.title }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <p-dropdown [options]="complications" optionLabel="title" placeholder="{{ 'JLPT Level' | translate }}" [showClear]="true" (onChange)="onChangeComplication($event)" [style]="{width: '150px'}" class="p-mr-md-2"></p-dropdown>
 
-      <mat-form-field class="select-filter" appearance="outline">
-        <mat-label>{{ 'Type Content' | translate }}</mat-label>
-        <mat-select (selectionChange)="onChangeType($event)">
-          <mat-option [value]="">{{ 'Null value' | translate }}</mat-option>
-          <mat-option *ngFor="let type of types" [value]="type.id">{{ type.title }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <p-dropdown [options]="types" optionLabel="title" placeholder="{{ 'Content Type' | translate }}" [showClear]="true" (onChange)="onChangeType($event)" [style]="{width: '170px'}" class="p-mr-md-2"></p-dropdown>
 
-      <mat-form-field class="select-filter" appearance="outline">
-        <mat-label>{{ 'Volumes' | translate }}</mat-label>
-        <mat-select (selectionChange)="onChangeVolumes($event)">
-          <mat-option [value]="">{{ 'Null value' | translate }}</mat-option>
-          <mat-option *ngFor="let volume of volumes" [value]="volume.id">{{ volume.title }} {{ 'sym' | translate }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <p-dropdown [options]="volumes" optionLabel="title" placeholder="{{ 'Amount of text' | translate }}" [showClear]="true" (onChange)="onChangeVolumes($event)" [style]="{width: '200px'}" class="p-mr-md-2"></p-dropdown>
 
-      <div class="filter-button-hide">
-        <button mat-flat-button color="primary">{{'Hide studied' | translate}}</button>
-      </div>
+
+      <p-toggleButton onLabel="Hide studied" offLabel="Show studied" [style]="{'width': '10rem'}"></p-toggleButton>
     </div>
 
     <app-list-materials *ngIf="isLoadedData" [arrayData]="daraSource" (deleteM)="deleteMaterial($event)" (dataChanged)="changePageTable($event)"></app-list-materials>
