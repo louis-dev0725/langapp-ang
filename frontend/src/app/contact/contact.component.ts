@@ -74,7 +74,8 @@ export class ContactComponent implements OnInit {
   }
 
   checkError(fieldName: string) {
-    return !this.contactForm.get(fieldName).valid;
+    let field = this.contactForm.get(fieldName);
+    return (field.touched || field.dirty) && !field.valid;
   }
 
   getError(fieldName: string) {
