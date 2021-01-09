@@ -19,7 +19,6 @@ import { CustomValidator } from '@app/services/custom-validator';
 import { HttpInterceptorService } from '@app/http/http-interceptor';
 import { ThemeModule } from '@app/theme/theme.module';
 import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
-import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
 
 export function createTranslateLoader(http: HttpClient) {
@@ -59,7 +58,6 @@ import { WebpackTranslateLoader } from './WebpackTranslateLoader';
     CanactivateLogged,
     CanactivateNologged,
     CustomValidator,
-    BreadCrumbsService,
     { provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator },
     { provide: LOCALE_ID, useFactory: () => SessionService.getLocale() },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 3000 } },

@@ -531,9 +531,9 @@ export class ApiService {
   getTypeContent(): Observable<any> {
     return new Observable((observer) => {
       const typeContent = [
-        { id: 1, title: 'Текст' },
-        { id: 2, title: 'Аудио' },
-        { id: 3, title: 'Видео' }
+        { id: 1, title: 'Text' },
+        { id: 2, title: 'Audio' },
+        { id: 3, title: 'Video' }
       ];
       observer.next(typeContent);
     });
@@ -545,10 +545,10 @@ export class ApiService {
   getVolumeContent(): Observable<any> {
     return new Observable((observer) => {
       const volumeContent = [
-        { id: '0,500', title: '0 - 500' },
-        { id: '501,1500', title: '501 - 1500' },
-        { id: '1501,5000', title: '1501 - 5000' },
-        { id: '5000,unlimited', title: '> 5000' }
+        { id: '0,500', title: '0 - 500 characters' },
+        { id: '501,1500', title: '501 - 1500 characters' },
+        { id: '1501,5000', title: '1501 - 5000 characters' },
+        { id: '5000,unlimited', title: '> 5000 characters' }
       ];
       observer.next(volumeContent);
     });

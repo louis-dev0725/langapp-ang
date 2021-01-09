@@ -16,11 +16,29 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RoundToPipe } from '@app/pipes/round-to.pipe';
 import { FormatCurrencyPipe } from '@app/pipes/format-currency.pipe';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { DropdownModule } from 'primeng/dropdown';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @NgModule({
   declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe],
   imports: [
     CommonModule,
+
+    // primeng
+    InputTextModule,
+    InputTextareaModule,
+    ButtonModule,
+    MessagesModule,
+    MessageModule,
+    DropdownModule,
+    ToggleButtonModule,
+
+    // material
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
@@ -38,6 +56,17 @@ import { FormatCurrencyPipe } from '@app/pipes/format-currency.pipe';
     FormatNumbersPipe,
     RoundToPipe,
     FormatCurrencyPipe,
+
+    // primeng
+    InputTextModule,
+    InputTextareaModule,
+    ButtonModule,
+    MessagesModule,
+    MessageModule,
+    DropdownModule,
+    ToggleButtonModule,
+
+    // material
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
@@ -51,4 +80,4 @@ import { FormatCurrencyPipe } from '@app/pipes/format-currency.pipe';
     MatRadioModule
   ]
 })
-export class SharedModule {}
+export class SharedModule { }

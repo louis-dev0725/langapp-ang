@@ -49,6 +49,7 @@
     "rxjs": "^6.6.3",
     "tns-core-modules": "~6.3.0",
     "tslib": "^2.0.0",
+    "xng-breadcrumb": "^6.5.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

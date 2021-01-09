@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { EventsService } from '@app/services/events.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 
 @UntilDestroy()
 @Component({
@@ -27,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   inputStyle = 'outlined';
   ripple = false;
 
-  constructor(private translate: TranslateService, private breadCrumbsService: BreadCrumbsService,
+  constructor(private translate: TranslateService,
     private eventsService: EventsService) {
     let langVal = localStorage.getItem('lang');
     if (!langVal) {
@@ -44,8 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.eventsService.progressBarLoading.pipe(untilDestroyed(this)).subscribe((event: boolean) => {
       this.isProgressBarLoading = event;
     });
-    this.breadCrumbsService.initBreadCrumbs();
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 }

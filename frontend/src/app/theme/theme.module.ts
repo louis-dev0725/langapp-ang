@@ -8,12 +8,11 @@ import { ThemeMenuitemComponent } from '@app/theme/theme.menuitem.component';
 import { ThemeTopbarComponent } from '@app/theme/theme.topbar.component';
 import { ThemeMainComponent } from '@app/theme/theme.main.component';
 import { ThemeFooterComponent } from '@app/theme/theme.footer.component';
+import { ThemeBreadcrumbComponent } from '@app/theme/theme.breadcrumb.component';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@app/shared/shared.module';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
-import { HocBreadCrumbComponent } from '@app/shared/hoc/hoc-bread-crumb/hoc-bread-crumb.component';
-import { BreadCrumbsService } from '@app/services/bread-crumbs.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsComponent } from '@app/common/notifications/notifications.component';
@@ -23,6 +22,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { MessageService } from 'primeng/api';
 import { MenuService } from './theme.menu.service';
+import { BreadcrumbModule as XngBreadcrumbModule } from 'xng-breadcrumb';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +39,8 @@ import { MenuService } from './theme.menu.service';
     MatDialogModule,
     MatSnackBarModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    XngBreadcrumbModule,
   ],
   declarations: [
     ThemeMenuComponent,
@@ -46,7 +48,7 @@ import { MenuService } from './theme.menu.service';
     ThemeTopbarComponent,
     ThemeMainComponent,
     ThemeFooterComponent,
-    HocBreadCrumbComponent,
+    ThemeBreadcrumbComponent,
     NotificationsComponent
   ],
   exports: [
@@ -55,14 +57,13 @@ import { MenuService } from './theme.menu.service';
     ThemeTopbarComponent,
     ThemeMainComponent,
     ThemeFooterComponent,
+    ThemeBreadcrumbComponent,
     BreadcrumbModule,
     ScrollPanelModule,
     VirtualScrollerModule,
-    HocBreadCrumbComponent,
     MatSnackBarModule
   ],
   providers: [
-    BreadCrumbsService,
     MessageService,
     MenuService,
   ]

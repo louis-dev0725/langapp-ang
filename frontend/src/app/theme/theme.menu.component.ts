@@ -207,10 +207,10 @@ export class ThemeMenuComponent implements OnInit {
         ],
       },
       {
-        label: 'Contacts',
+        label: 'Support',
         items: [
           {
-            label: 'Contacts',
+            label: 'Support',
             routerLink: ['/contacts']
           },
         ],

@@ -6,7 +6,7 @@ export const environment = {
   development: true,
   production: false,
   apiUrl: '/api',
-  siteKey: ''
+  siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
 };
 
 /*
