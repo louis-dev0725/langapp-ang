@@ -1,7 +1,9 @@
 import { Logger, Injectable, Dependencies } from '@nestjs/common';
 import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DictionaryWord } from './entities/DictionaryWord';
+import { DictionaryType, DictionaryWord } from './entities/DictionaryWord';
+import { JapaneseWord } from './entities/JapaneseWord';
+import { JapaneseWordData, Reading } from './entities/JapaneseWordData';
 import { FormDetection } from './form.detection';
 import { distributeFurigana, distributeFuriganaInflected, isStringEntirelyKana } from './japanese.utils';
 import { JumanppJumandicClient as JumanppClient } from './proto/jumandic-svc_grpc_pb';
@@ -32,8 +34,8 @@ export class AppService {
     });
   }
 
-  async processText(originalText: string, clickedOffsetOriginal: number, languages: string[], exactMatch: boolean = false): Promise<any> {
-    let toReturn: any = {};
+  async processText(originalText: string, clickedOffsetOriginal: number, requestedLanguages: string[], exactMatch: boolean = false): Promise<any> {
+    let toReturn: ProcessTextResponse = new ProcessTextResponse();
     let allVariants: Variant[] = [];
 
     if (exactMatch) {
@@ -74,15 +76,17 @@ export class AppService {
 
     this.logger.log('Query words in DB');
     this.logger.log(queries);
-    let wordsFromDb = await this.dictionaryWordRepository.createQueryBuilder("words").where("query && ARRAY[:...queries]", { queries }).getMany();
+    let wordsFromDb = <JapaneseWord[]>await this.dictionaryWordRepository.createQueryBuilder("words").where("query && ARRAY[:...queries]", { queries }).getMany();
     this.logger.log('Done, found ' + wordsFromDb.length + ' words.');
 
-    let resultWords: (DictionaryWord & Variant)[] = [];
+    let resultWords: JapaneseResultItem[] = [];
     for (let word of wordsFromDb) {
       let variant = allVariants.find(v => word.query.indexOf(v.value) !== -1);
       if (variant) {
         resultWords.push({
-          ...word,
+          id: word.id,
+          type: word.type,
+          ...word.data,
           ...variant
         });
       }
@@ -95,6 +99,7 @@ export class AppService {
     toReturn.words = resultWords;
 
     for (let word of toReturn.words) {
+      /*
       word.translations = [];
       word.partOfSpeech = [];
       if (word?.sourceData?.sense) {
@@ -108,11 +113,15 @@ export class AppService {
         }
       }
       word.partOfSpeech = [...new Set(word.partOfSpeech)]; // unique values
-      word.translations.sort((a, b) => {
+      */
+      /*word.translations.sort((a, b) => {
         return languages.indexOf(a.lang) - languages.indexOf(b.lang);
-      });
+      });*/
+      word.meanings = word.meanings.filter(m => requestedLanguages.indexOf(m.lang) !== -1).sort((a, b) => {
+        return requestedLanguages.indexOf(a.lang) - requestedLanguages.indexOf(b.lang);
+      })
 
-      word.readings = [];
+      /*word.readings = [];
       word.currentReadingIsCommon = false;
       if (word?.sourceData?.kana) {
         let isKanaWord = isStringEntirelyKana(word.value);
@@ -123,7 +132,7 @@ export class AppService {
         }
         for (let kanjiTmp of kanjiList) {
           for (let kanaTmp of word?.sourceData?.kana) {
-            if (kanaTmp.appliesToKanji.indexOf('*') !== -1 || kanaTmp.appliesToKanji.indexOf(kanjiTmp.text)) {
+            if (kanaTmp.appliesToKanji.indexOf('*') !== -1 || kanaTmp.appliesToKanji.indexOf(kanjiTmp.text) !== -1) {
               if (!addedAdditionalKanaOnly && kanjiTmp != '' && isKanaWord && kanaTmp.text == word.value) {
                 word.readings.push({
                   text: kanaTmp.text,
@@ -149,18 +158,67 @@ export class AppService {
             }
           }
         }
+      }*/
+
+      let mainReading: Reading = null;
+
+      word.currentReadingIsCommon = false;
+      let hasCurrentReading = false;
+      for (let reading of word.readings) {
+        reading.current = reading.kanji == word.value || (reading.kanji == '' && word.value == reading.kana);
+        if (reading.current) {
+          hasCurrentReading = true;
+          if (mainReading == null || !mainReading.common) {
+            mainReading = reading;
+          }
+        }
+        if (reading.current && reading.common && !word.currentReadingIsCommon) {
+          word.currentReadingIsCommon = true;
+        }
+      }
+      let isKanaWord = isStringEntirelyKana(word.value);
+      if (!hasCurrentReading && isKanaWord) {
+        for (let reading of word.readings) {
+          reading.current = word.value == reading.kana;
+          if (reading.current) {
+            hasCurrentReading = true;
+            if (mainReading == null || !mainReading.common) {
+              mainReading = reading;
+            }
+          }
+          //if (reading.current && reading.common && !word.currentReadingIsCommon) {
+          //  word.currentReadingIsCommon = true;
+          //}
+        }
+      }
+
+      if (mainReading == null) {
+        mainReading = word.readings[0];
+      }
+      if (mainReading) {
+        mainReading.currentMain = true;
       }
     }
 
     toReturn.words.sort((a, b) => {
       // Same partOfSpeech (currently checks only particles)
-      let r = ((a.reasons?.[0]?.pos == "助詞" && a.partOfSpeech.indexOf('prt')) ? 1 : 0) - ((b.reasons?.[0]?.pos == "助詞" && b.partOfSpeech.indexOf('prt')) ? 1 : 0);
+      let aIsParticle = (a.reasons?.[0]?.pos == "助詞" && a.partOfSpeech.some(p => p.value == 'prt')) ? 1 : 0;
+      let bIsParticle = (b.reasons?.[0]?.pos == "助詞" && b.partOfSpeech.some(p => p.value == 'prt')) ? 1 : 0;
+
+      let r = bIsParticle - aIsParticle;
+      if (r != 0) {
+        console.log(a.readings[0].kanji, aIsParticle);
+        console.log(b.readings[0].kanji, bIsParticle);
+      }
       if (r == 0) {
         r = b.value.length - a.value.length;
         if (r == 0) {
           r = (a.isBaseform ? 1 : 0) - (b.isBaseform ? 1 : 0);
           if (r == 0) {
             r = (b.currentReadingIsCommon ? 1 : 0) - (a.currentReadingIsCommon ? 1 : 0);
+            if (r == 0) {
+              r = b.frequencyPmw > a.frequencyPmw ? 1 : -1;
+            }
           }
         }
       }
@@ -347,4 +405,17 @@ interface Variant {
 
 interface VariantsByValue {
   [key: string]: Variant;
+}
+
+type JapaneseResultItem = JapaneseWordData & Variant & {
+  id: number;
+  type: DictionaryType;
+  currentReadingIsCommon?: boolean;
+};
+
+class ProcessTextResponse {
+  success: boolean;
+  offsetStart: number;
+  offsetEnd: number;
+  words: JapaneseResultItem[];
 }

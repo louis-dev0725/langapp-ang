@@ -4,23 +4,37 @@ import {
   Index,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { JapaneseKanjiData } from "./JapaneseKanjiData";
+import { JapaneseWordData } from "./JapaneseWordData";
+
+export enum DictionaryType {
+    JapaneseWords = 1,
+    JapaneseKanji = 2,
+}
 
 @Index("dictionary_word_pkey", ["id"], { unique: true })
 @Index("dictionary_word_pgroonga_index", ["query"], {})
 @Entity("dictionary_word", { schema: "public" })
 export class DictionaryWord {
-  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("smallint", { name: "dictionary", default: () => "0" })
-  dictionary: number;
+  @Column({
+      type: 'int2',
+      default: 0
+  })
+  type: DictionaryType;
 
-  @Column("integer", { name: "idInDictionary", default: () => "0" })
-  idInDictionary: number;
-
-  @Column("text", { name: "query", array: true, default: () => "ARRAY[]" })
+  @Column({
+      type: "text",
+      array: true,
+      default: 'ARRAY[]'
+  })
   query: string[];
 
-  @Column("jsonb", { name: "sourceData", default: {} })
-  sourceData: object;
+  @Column({
+      type: "jsonb",
+      default: '{}'
+  })
+  data: JapaneseWordData | JapaneseKanjiData;
 }

@@ -29,9 +29,6 @@ use yii\db\ActiveRecord;
  */
 class UserDictionary extends ActiveRecord {
 
-    const TYPE_WORD = 0;
-    const TYPE_KANJI = 1;
-
     /**
      * {@inheritdoc}
      */
