@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		],
+		"declaration": false,
+		"isolatedModules": true,
+		/* Additional Checks */
+		"useDefineForClassFields": true,
+		"skipLibCheck": true,
+		"newLine": "lf",
+		"removeComments": true,
+		"strict": false,
+		/*"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,*/
+		"strictPropertyInitialization": false,
+		"noImplicitThis": true,
+		/*"alwaysStrict": true,*/
+		"forceConsistentCasingInFileNames": true,
+	},
+	"include": [
+		"src",
+		"webpack.config.js"
+	]
+}

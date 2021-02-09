@@ -1,0 +1,32 @@
+{
+	"extends": [
+		"@abhijithvijayan/eslint-config/typescript",
+		"@abhijithvijayan/eslint-config/node"
+	],
+	"parserOptions": {
+		"project": [
+			"./tsconfig.json"
+		],
+		"sourceType": "module"
+	},
+	"rules": {
+		"no-console": "off",
+		"no-extend-native": "off",
+		"jsx-a11y/label-has-associated-control": "off",
+		"class-methods-use-this": "off",
+		"max-classes-per-file": "off",
+		"node/no-missing-import": "off",
+		"node/no-unpublished-import": "off",
+		"node/no-unsupported-features/es-syntax": ["error", {
+			"ignores": ["modules"]
+		}]
+	},
+	"env": {
+		"webextensions": true
+	},
+	"settings": {
+		"node": {
+			"tryExtensions": [".tsx"] // append tsx to the list as well
+		}
+	}
+}
