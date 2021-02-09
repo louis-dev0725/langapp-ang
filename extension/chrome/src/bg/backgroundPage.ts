@@ -190,7 +190,7 @@ async function loadUserFromStorage() {
             if (result.user) {
                 user = result.user;
             }
-            resolve();
+            resolve(null);
         });
     });
 }

@@ -1,27 +1,26 @@
-<% if (locals.words) { %>
+<% if (locals.response && locals.response.words) { %>
 <!--<div id="modal-translate-header" style="display: flex; flex-flow: row nowrap; width: 100%; justify-content: space-between;">
 </div>-->
-<div id="modal-translate-body" style="box-sizing: border-box; display: flex; flex-flow: column nowrap; width: 100%;">
-    <div style="padding:0 15px;margin:10px 0">
-        <% for (let word of words) { %>
-        <% for (let reading of word.readings) { %>
-        <div class="reading-variant<%= reading.common ? ' reading-variant-common' : ' reading-variant-uncommon' %><%= reading.current ? ' reading-variant-current' : '' %>">
-            <ruby>
-                <% for (let f of reading.furigana) { %>
-                <%= f.text %>
-                <% if (f.furigana && f.furigana != '') { %>
-                <rt><%= f.furigana %></rt>
-                <% } %>
-                <% } %>
-            </ruby>
-        </div>
-        <% } %>
-        <ul id="list-translate_0" style="border:1px solid #000;border-radius:5px;list-style:none;padding:0;border-bottom:none;">
-            <% for (let translation of word.translations) { %>
-            <li style="padding-left:10px;border-bottom:1px solid #000;"><a class="textDictionary" data-translation="<%= JSON.stringify(translation) %>"><%= translation.text %></a></li>
+<div id="modal-translate-body" class="response" style="box-sizing: border-box; display: flex; flex-flow: column nowrap; width: 100%;" lang="ja-JP">
+    <% for (let word of response.words) { %>
+        <div class="word-variant" data-word="<%= JSON.stringify(word) %>">
+            <% for (let [i, reading] of word.readings.entries()) { %>
+                <div class="reading-variant<%= reading.common ? ' reading-variant-common' : ' reading-variant-uncommon' %><%= reading.current ? ' reading-variant-current' : '' %><%= reading.currentMain ? ' reading-variant-current-main' : '' %>">
+                    <ruby>
+                        <% for (let f of reading.furigana) { %>
+                            <%= f.ruby %>
+                            <rt><%= f.rt || '' %></rt>
+                        <% } %>
+                    </ruby>
+                </div>
             <% } %>
-        </ul>
-        <% } %>
-    </div>
+            
+            <div class="meanings">
+                <% for (let translation of word.meanings) { %>
+                <div class="meaning-variant" data-meaning="<%= JSON.stringify(translation) %>"><%= translation.value %></div>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
 </div>
 <% } %>

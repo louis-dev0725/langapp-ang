@@ -1,0 +1,103 @@
+<style>
+    :host {
+        all: initial;
+        font-size: 16px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #modalOuter {
+        position: absolute;
+        
+        /* Dynamically changes in JS */
+        width: 400px;
+        height: auto;
+        max-height: 60vh;
+        
+        overflow-y: auto;
+        display: flex;
+        flex-flow: column;
+        /*background: rgb(255, 255, 255);
+        border-radius: 10px;
+        padding: 10px;
+        border: 1px solid rgb(0, 0, 0);*/
+
+        background: #FDFEFF;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .12);
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        z-index: 999999;
+    }
+
+    #closeModal {
+        cursor: pointer;
+        position: absolute;
+        right: 0;
+        top: 0;
+        border: none;
+        background: transparent;
+        padding: 8px 6px;
+        margin: 0px;
+        font-size: 20px;
+        font-weight: 700;
+        margin-left: auto;
+    }
+
+    #closeModal span {
+        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxzdHlsZT4uY2xzLTF7ZmlsbDpub25lO3N0cm9rZTojMDAwO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6MnB4O308L3N0eWxlPjwvZGVmcz48dGl0bGUvPjxnIGlkPSJjcm9zcyI+PGxpbmUgY2xhc3M9ImNscy0xIiB4MT0iNyIgeDI9IjI1IiB5MT0iNyIgeTI9IjI1Ii8+PGxpbmUgY2xhc3M9ImNscy0xIiB4MT0iNyIgeDI9IjI1IiB5MT0iMjUiIHkyPSI3Ii8+PC9nPjwvc3ZnPg==') no-repeat;
+        display: block;
+        width: 20px;
+        height: 20px;
+    }
+
+    #closeModal:hover {
+        opacity: 0.8;
+    }
+
+    .word-variant {
+        margin-bottom: 20px;
+    }
+
+    .reading-variant {
+        font-size: 28px;
+        display: none;
+    }
+
+    .reading-variant-uncommon {
+        opacity: 0.5;
+    }
+
+    .reading-variant-current-main {
+        display: block;
+    }
+
+    /*.reading-variant-current {
+        color: green;
+    }*/
+
+    .meanings {
+        margin-top: 12px;
+        padding: 0.25rem 0;
+        background: #FDFEFF;
+        color: #515C66;
+        border: 1px solid #E4E5E5;
+        border-radius: 5px;
+    }
+
+    .meaning-variant {
+        cursor: pointer;
+        margin: 0;
+        padding: 0.5rem 1rem;
+        border: 0 none;
+        color: #515C66;
+        transition: box-shadow 0.2s;
+        border-radius: 0;
+    }
+
+    .meaning-variant:hover {
+        color: #515C66;
+        background: rgba(232, 241, 248, 0.7);
+    }
+</style>

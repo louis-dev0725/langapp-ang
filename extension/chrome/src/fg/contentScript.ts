@@ -1,15 +1,10 @@
 import * as config from '../../../allParam.config';
-import { TextSeeker } from './textSeeker';
+import { TextSeeker } from './TextSeeker';
 import { t, i18n } from '../i18n';
-import * as templates from '../templates';
-import User from '../interfaces/user';
-import { ProcessTextRequest } from '../interfaces/processTextRequest';
-import { Modal } from './modal';
+import { ProcessTextRequest } from '../interfaces/ProcessTextRequest';
 import { ProcessTextResponse } from '../interfaces/ProcessTextResponse';
-import { isStringContainsJapanese } from './utils';
-
-let user: User = null;
-let modal = new Modal();
+import { apiCall, isStringContainsJapanese, state } from './common';
+import { showSnackbar } from './Snackbar';
 
 function log(message: string) {
   chrome.runtime.sendMessage({ type: 'sendLogServer', data: message }, () => { });
@@ -19,21 +14,21 @@ async function init() {
   return new Promise((resolve, reject) => {
     chrome.storage.local.get(['token', 'user'], (result) => {
       if (result.hasOwnProperty('token') && result.hasOwnProperty('user')) {
-        user = result.user;
-        i18n.changeLanguage(user.language);
-        console.log(user);
+        state.user = result.user;
+        i18n.changeLanguage(state.user.language);
+        console.log(state.user);
       }
-      resolve();
+      resolve(null);
     });
   });
 }
 
 async function initOnAppPage() {
   const token = localStorage.getItem('token');
-  user = JSON.parse(localStorage.getItem('user'));
+  state.user = JSON.parse(localStorage.getItem('user'));
 
-  if (token !== null && user !== null) {
-    chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user } });
+  if (token !== null && state.user !== null) {
+    chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: state.user } });
   }
 }
 
@@ -57,8 +52,8 @@ window.addEventListener('message', (event) => {
 
   if (event.data.type && (event.data.type === 'LoginSuccess') && (event.origin === config.URIFront)) {
     const token = localStorage.getItem('token');
-    user = JSON.parse(localStorage.getItem('user'));
-    chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: user } });
+    state.user = JSON.parse(localStorage.getItem('user'));
+    chrome.runtime.sendMessage({ type: 'siteAuth', data: { token: token, user: state.user } });
   }
 
   if (event.data.type && (event.data.type === 'saveSettingExtension') && (event.origin === config.URIFront)) {
@@ -67,12 +62,12 @@ window.addEventListener('message', (event) => {
 
   if (event.data.type && (event.data.type === 'Logout') && (event.origin === config.URIFront)) {
     chrome.runtime.sendMessage({ type: 'siteLogout' });
-    user = null;
+    state.user = null;
   }
 });
 
 function shouldReactToDblClick(e: MouseEvent) {
-  switch (user.extensionSettings.clickModifier) {
+  switch (state.user.extensionSettings.clickModifier) {
     case 'DoubleClick':
       return (e.metaKey === false || e.ctrlKey === false) && e.shiftKey === false && e.altKey === false;
     case 'DoubleClickCtrl':
@@ -92,8 +87,8 @@ function shouldReactToClick(e: MouseEvent) {
 
 function createButtonListener() {
   document.addEventListener('dblclick', (e) => {
-    if (!user) {
-      showNotification(t('please_login'));
+    if (!state.user) {
+      showSnackbar(t('please_login'), { duration: 0 });
       return;
     }
     if (shouldReactToDblClick(e)) {
@@ -103,17 +98,15 @@ function createButtonListener() {
 
   document.addEventListener('click', (e) => {
     if (shouldReactToClick(e)) {
-      let selectedRange = window.getSelection().getRangeAt(0);
-      if (selectedRange.toString().length > 0) {
-        innerTranslateObject(selectedRange, e.pageY, true);
+      let selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+        let selectedRange = selection.getRangeAt(0);
+        if (selectedRange.toString().length > 0) {
+          innerTranslateObject(selectedRange, e.pageY, true);
+        }
       }
     }
   });
-}
-
-function showNotification(message: string) {
-  // TODO: show notification on page
-  console.log('Notification from contentPage:', message);
 }
 
 async function innerTranslateObject(range: Range, pageY: number, exactMatch: boolean = false) {
@@ -142,19 +135,19 @@ async function innerTranslateObject(range: Range, pageY: number, exactMatch: boo
 
   let firstSymbolRange = new Range();
   firstSymbolRange.setStart(range.startContainer, range.startOffset);
-  let firstSymbolPos = firstSymbolRange.getBoundingClientRect();
-  modal.showText(t('loading'));
-  modal.updatePosition(firstSymbolPos.x, pageY + 20);
+  state.modal.showText(t('loading'));
+  state.modal.updatePosition(firstSymbolRange);
 
   let response: ProcessTextResponse = <ProcessTextResponse>await apiCall('POST', 'processText', request);
   if (!response.success) {
-    modal.showText(t('no_words_found'))
+    showSnackbar(t('no_words_found'));
+    state.modal.hide();
   }
   else {
-    modal.showRawHtml(templates.modalTranslation({ t, ...response }));
+    state.modal.showTranslations(request, response);
   }
 
-  // TODO: call addToDictionary(user, translateObj.url, context, listDictionary[i].getAttribute('data-translate'), listDictionary[i].getAttribute('data-word'), listDictionary[i].getAttribute('data-id') ); on click
+  // TODO: call addToDictionary(context.user, translateObj.url, context, listDictionary[i].getAttribute('data-translate'), listDictionary[i].getAttribute('data-word'), listDictionary[i].getAttribute('data-id') ); on click
 
   let newSelectionRange = new Range();
   let newSelectionStart = response.offsetStart - prevLength;
@@ -170,22 +163,13 @@ async function innerTranslateObject(range: Range, pageY: number, exactMatch: boo
     sel.removeAllRanges();
     sel.addRange(newSelectionRange);
 
-    let selectionPos = newSelectionRange.getBoundingClientRect();
-    modal.updatePosition(selectionPos.x);
+    state.modal.updatePosition(newSelectionRange);
   }
-}
-
-async function apiCall(httpMethod: string, apiMethod: string, body: any) {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ type: 'apiCall', httpMethod, apiMethod, body }, (response) => {
-      resolve(response.response);
-    });
-  });
 }
 
 function addToDictionary(user, url, allText, translate, word, dictionary_id) {
   let request = {
-    user_id: user.id,
+    user_id: state.user.id,
     word: word,
     translate: translate,
     dictionary_id: parseInt(dictionary_id),
