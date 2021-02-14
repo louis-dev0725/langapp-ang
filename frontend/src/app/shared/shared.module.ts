@@ -23,6 +23,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe],
@@ -37,6 +38,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     MessageModule,
     DropdownModule,
     ToggleButtonModule,
+    ProgressSpinnerModule,
 
     // material
     MatIconModule,
@@ -65,6 +67,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     MessageModule,
     DropdownModule,
     ToggleButtonModule,
+    ProgressSpinnerModule,
 
     // material
     MatIconModule,

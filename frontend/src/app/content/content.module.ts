@@ -11,6 +11,8 @@ import { CreateMaterialsComponent } from '@app/content/create-materials/create-m
 import { SharedModule } from '@app/shared/shared.module';
 import { ListMaterialsComponent } from '@app/content/materials/list-materials/list-materials.component';
 import { EditMaterialsComponent } from '@app/content/edit-materials/edit-materials.component';
+import { ContentViewComponent } from './content-view/content-view.component';
+import { VideojsComponent } from './videojs/videojs.component';
 
 const routes: Routes = [
    {
@@ -40,6 +42,13 @@ const routes: Routes = [
         },
       },
       {
+        path: 'view/:id',
+        component: ContentViewComponent,
+        data: {
+          breadcrumb: 'View material'
+        },
+      },
+      {
         path: 'materials',
         component: MaterialsComponent,
         data: {
@@ -51,7 +60,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, EditMaterialsComponent, ListMaterialsComponent],
+  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, EditMaterialsComponent, ListMaterialsComponent, ContentViewComponent, VideojsComponent],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,

@@ -1,0 +1,20 @@
+<div class="container">
+    <div *ngIf="content$ | async as content">
+        <div class="p-grid">
+            <div class="p-col-8">
+                <div class="card" style="height: 80vh;">
+                    <app-videojs *ngIf="videoOptions$ | async as videoOptions" [options]="videoOptions"></app-videojs>
+                </div>
+            </div>
+            <div class="p-col-4">
+                <div class="card">
+                    <div [innerHTML]="cleanTextHtml$ | async"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="p-d-flex p-jc-center" *ngIf="loading$ | async">
+    <p-progressSpinner></p-progressSpinner>
+</div>
