@@ -560,11 +560,11 @@ export class ApiService {
   getComplicationContent(): Observable<any> {
     return new Observable((observer) => {
       const complicationContent = [
-        { id: 'N1', title: 'N1' },
-        { id: 'N2', title: 'N2' },
-        { id: 'N3', title: 'N3' },
-        { id: 'N4', title: 'N4' },
-        { id: 'N5', title: 'N5' }
+        { id: 'N1', title: 'JLPT N1' },
+        { id: 'N2', title: 'JLPT N2' },
+        { id: 'N3', title: 'JLPT N3' },
+        { id: 'N4', title: 'JLPT N4' },
+        { id: 'N5', title: 'JLPT N5' }
       ];
       observer.next(complicationContent);
     });

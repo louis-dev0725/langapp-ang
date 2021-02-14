@@ -9,19 +9,26 @@ import { EventsService } from '@app/services/events.service';
   providedIn: 'root'
 })
 export class HttpInterceptorService implements HttpInterceptor {
-  constructor(private eventsService: EventsService, private snackBar: MatSnackBar) {}
+  constructor(private eventsService: EventsService, private snackBar: MatSnackBar) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const dupReq = request;
+    let newRequest = request;
     let loading = true;
 
-    dupReq.headers.append('Accept-Language', localStorage.getItem('lang'));
+    if (request.url.startsWith('/') || request.url.startsWith(window.location.origin)) {
+      newRequest = request.clone({
+        setHeaders: {
+          'Accept-Language': localStorage.getItem('lang'),
+          'Authorization': 'Bearer ' + localStorage.getItem('token'),
+        }
+      });
+    }
     setTimeout(() => {
       if (loading) {
         this.eventsService.progressBarLoading.emit(true);
       }
     }, 200);
-    return next.handle(dupReq).pipe(
+    return next.handle(newRequest).pipe(
       tap(
         (event: HttpEvent<any>) => {
           if (event instanceof HttpResponse) {

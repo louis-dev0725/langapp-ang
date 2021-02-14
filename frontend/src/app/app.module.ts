@@ -33,6 +33,10 @@ import { reducers } from '@app/store/reducers';
 import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { WebpackTranslateLoader } from './WebpackTranslateLoader';
+import { EntityDataModule } from '@ngrx/data';
+import { dataServiceConfig, entityConfig } from './data.config';
+import { DefaultDataServiceConfig } from '@ngrx/data';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -47,10 +51,12 @@ import { WebpackTranslateLoader } from './WebpackTranslateLoader';
       }
     }),
     StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([]), 
+    EntityDataModule.forRoot(entityConfig),
     environment.development ? StoreDevtoolsModule.instrument() : [],
     BrowserAnimationsModule,
     ThemeModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
   ],
   providers: [
     ApiService,
@@ -69,6 +75,10 @@ import { WebpackTranslateLoader } from './WebpackTranslateLoader';
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
+    },
+    {
+      provide: DefaultDataServiceConfig,
+      useValue: dataServiceConfig,
     }
   ],
   bootstrap: [AppComponent]
