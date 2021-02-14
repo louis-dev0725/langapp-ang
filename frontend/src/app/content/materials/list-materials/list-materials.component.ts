@@ -16,7 +16,7 @@ export class ListMaterialsComponent implements OnInit {
   @Output() deleteM: EventEmitter<any> = new EventEmitter<any>();
 
   user: User;
-  displayedColumns: string[] = ['title', 'level_JLPT', 'count_symbol', 'button'];
+  displayedColumns: string[] = ['title', 'level', 'length', 'button'];
 
 
   constructor(public session: SessionService) { }

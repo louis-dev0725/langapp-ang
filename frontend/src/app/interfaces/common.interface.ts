@@ -68,12 +68,12 @@ export interface Transaction {
 export interface Materials {
   id?: number;
   title: string;
-  type_content: number;
-  source_link: string;
+  type: number;
+  sourceLink: string;
   text: string;
   status: number;
-  count_symbol: number;
-  level_JLPT: string;
+  length: number;
+  level: string;
   deleted: number;
   category?: any;
 }
@@ -106,20 +106,49 @@ export interface CategoryArray {
   };
 }
 
-export interface Contents {
+export interface Content {
   id?: number;
   title: string;
-  type_content: number;
-  source_link: string;
+  type: number;
+  sourceLink: string;
   text: string;
   status: number;
-  count_symbol: number;
-  level_JLPT: string;
+  length: number;
+  level: string;
   deleted: number;
+  tagsJson: string[];
+  dataJson: DataJson;
+  format: string;
+  cleanText?: any;
+}
+
+export interface DataJson {
+  duration?: number;
+  youtubeVideo?: YoutubeVideo;
+}
+
+export interface YoutubeVideo {
+  channel: Channel;
+  videoId: string;
+  channelId: string;
+  likeCount: number;
+  published: string;
+  viewCount: number;
+  wilsonScore: number;
+  dislikeCount: number;
+  averageRating: number;
+  subtitleLanguages: string[];
+}
+
+export interface Channel {
+  id: string;
+  title: string;
+  videoCount: number;
+  subscriberCount: number;
 }
 
 export interface ContentsArray {
-  items: Contents[];
+  items: Content[];
   _links: {
     self: {
       href: string;

@@ -55,8 +55,8 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
     this.materialsForm = this.formBuilder.group({
       title: ['', { validators: [Validators.required] }],
       category: ['', { validators: [Validators.required] }],
-      type_content: ['', { validators: [Validators.required] }],
-      source_link: ['', { validators: [Validators.pattern(urlRegex)] }],
+      type: ['', { validators: [Validators.required] }],
+      sourceLink: ['', { validators: [Validators.pattern(urlRegex)] }],
       text: ['', { validators: [Validators.required] }],
     });
   }
@@ -79,8 +79,8 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
 
     const materials = {
       ...this.materialsForm.value,
-      count_symbol: this.materialsForm.value.text.length,
-      level_JLPT: 'N1',
+      length: this.materialsForm.value.text.length,
+      level: 'N1',
       status: 0,
       deleted: 0
     };

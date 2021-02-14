@@ -66,8 +66,8 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
       id: ['', { validators: [Validators.nullValidator] }],
       title: ['', { validators: [Validators.required] }],
       category: ['', { validators: [Validators.required] }],
-      type_content: ['', { validators: [Validators.required] }],
-      source_link: ['', { validators: [Validators.required, Validators.pattern(urlRegex)] }],
+      type: ['', { validators: [Validators.required] }],
+      sourceLink: ['', { validators: [Validators.required, Validators.pattern(urlRegex)] }],
       text: ['', { validators: [Validators.required] }],
     });
   }
@@ -99,8 +99,8 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
 
     const materials = {
       ...this.materialForm.value,
-      count_symbol: this.materialForm.value.text.length,
-      level_JLPT: 'N3',
+      length: this.materialForm.value.text.length,
+      level: 'N3',
       status: this.material.status,
       deleted: this.material.deleted
     };

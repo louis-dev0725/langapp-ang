@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-
+use app\components\Helpers;
 use app\models\Category;
 use app\models\Content;
 use Yii;
@@ -30,25 +30,29 @@ class ContentController extends ActiveController {
 
         $query = Content::find()->andWhere(['deleted' => 0]);
 
+        if (!Helpers::isAdmin()) {
+            $query->andWhere(['status' => 1]);
+        }
+
         if (array_key_exists('title', $filter) && $filter['title'] != 'undefined' && $filter['title'] != '') {
             $query->andWhere(['like', 'title', urldecode($filter['title'])]);
         }
 
         if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
-            $query->andWhere(['type_content' => (int)$filter['type']]);
+            $query->andWhere(['type' => (int)$filter['type']]);
         }
 
         if (array_key_exists('complication', $filter) && $filter['complication'] != 'undefined' &&
             $filter['complication'] != '') {
-            $query->andWhere(['level_JLPT' => $filter['complication']]);
+            $query->andWhere(['level' => $filter['complication']]);
         }
 
         if (array_key_exists('volume', $filter) && $filter['volume'] != 'undefined' && $filter['volume'] != '') {
             $arrV = explode(',', $filter['volume']);
             if ($arrV[1] != 'unlimited') {
-                $query->andWhere(['between', 'count_symbol', (int)$arrV[0], (int)$arrV[1]]);
+                $query->andWhere(['between', 'length', (int)$arrV[0], (int)$arrV[1]]);
             } else {
-                $query->andWhere(['>=', 'count_symbol', (int)$arrV[0]]);
+                $query->andWhere(['>=', 'length', (int)$arrV[0]]);
             }
         }
 
@@ -92,7 +96,7 @@ class ContentController extends ActiveController {
      * @return array|\yii\db\ActiveRecord|null
      */
     public function actionView($id) {
-        return Content::find()->with('categories')->where(['id' => $id])->asArray()->one();
+        return Content::find()->with('categories')->where(['id' => $id])->one();
     }
 
     /**

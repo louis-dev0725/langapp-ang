@@ -24,15 +24,15 @@
 
         <mat-form-field class="form-item">
           <mat-label>{{ 'Type Content' | translate }}</mat-label>
-          <mat-select formControlName="type_content" required>
+          <mat-select formControlName="type" required>
             <mat-option *ngFor="let type of types" [value]="type.id">{{ type.title }}</mat-option>
           </mat-select>
-          <mat-error *ngIf="checkError('type_content')">{{ getError('type_content') }}</mat-error>
+          <mat-error *ngIf="checkError('type')">{{ getError('type') }}</mat-error>
         </mat-form-field>
 
         <mat-form-field class="form-item">
-          <input type="url" matInput formControlName="source_link" placeholder="{{'source_link' | translate}}">
-          <mat-error *ngIf="checkError('source_link')">{{ getError('source_link') | translate }}</mat-error>
+          <input type="url" matInput formControlName="sourceLink" placeholder="{{'sourceLink' | translate}}">
+          <mat-error *ngIf="checkError('sourceLink')">{{ getError('sourceLink') | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field class="form-item">

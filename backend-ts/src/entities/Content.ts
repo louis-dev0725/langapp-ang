@@ -14,11 +14,11 @@ export class Content {
   @Column("character varying", { name: "title", length: 255 })
   title: string;
 
-  @Column("smallint", { name: "type_content" })
-  typeContent: number;
+  @Column("smallint", { name: "type" })
+  type: number;
 
   @Column("character varying", {
-    name: "source_link",
+    name: "sourceLink",
     nullable: true,
     length: 255,
   })
@@ -30,11 +30,11 @@ export class Content {
   @Column("smallint", { name: "status", default: () => "0" })
   status: number;
 
-  @Column("integer", { name: "count_symbol" })
-  countSymbol: number;
+  @Column("integer", { name: "length" })
+  length: number;
 
-  @Column("character varying", { name: "level_JLPT", length: 255 })
-  levelJlpt: string;
+  @Column("smallint", { name: "level" })
+  level: number;
 
   @Column("smallint", { name: "deleted", default: () => "0" })
   deleted: number;

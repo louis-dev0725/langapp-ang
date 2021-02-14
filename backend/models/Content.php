@@ -11,12 +11,12 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string $title
- * @property int $type_content
- * @property string $source_link
+ * @property int $type
+ * @property string $sourceLink
  * @property string $text
  * @property int $status
- * @property int $count_symbol
- * @property string $level_JLPT
+ * @property int $length
+ * @property string $level
  * @property int $deleted
  * @property int[] $tagsJson
  * @property array $dataJson
@@ -40,13 +40,13 @@ class Content extends ActiveRecord {
      */
     public function rules () {
         return [
-            [['title', 'type_content', 'text', 'count_symbol', 'level_JLPT'], 'required'],
-            [['type_content'], 'default', 'value' => 1],
-            [['source_link'], 'default', 'value' => null],
-            [['status', 'count_symbol', 'deleted'], 'default', 'value' => 0],
-            [['type_content', 'status', 'count_symbol', 'deleted'], 'integer'],
+            [['title', 'type', 'text', 'length', 'level'], 'required'],
+            [['type'], 'default', 'value' => 1],
+            [['sourceLink'], 'default', 'value' => null],
+            [['status', 'length', 'deleted'], 'default', 'value' => 0],
+            [['type', 'status', 'length', 'deleted'], 'integer'],
             [['text'], 'string'],
-            [['title', 'source_link', 'level_JLPT'], 'string', 'max' => 255],
+            [['title', 'sourceLink', 'level'], 'string', 'max' => 255],
             ['category', 'safe']
         ];
     }
@@ -58,12 +58,12 @@ class Content extends ActiveRecord {
         return [
             'id' => 'ID',
             'title' => 'Title',
-            'type_content' => 'Type Content',
-            'source_link' => 'Source Link',
+            'type' => 'Type Content',
+            'sourceLink' => 'Source Link',
             'text' => 'Text',
             'status' => 'Status',
-            'count_symbol' => 'Count Symbol',
-            'level_JLPT' => 'Level Jlpt',
+            'length' => 'Count Symbol',
+            'level' => 'Level Jlpt',
             'deleted' => 'Deleted',
         ];
     }
