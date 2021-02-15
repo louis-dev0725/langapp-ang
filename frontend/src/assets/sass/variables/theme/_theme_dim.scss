@@ -14,7 +14,7 @@ $fontSize:1rem !default;
 $fontWeight:normal !default;
 $textColor:$shade000 !default;
 $textSecondaryColor:$shade100 !default;
-$borderRadius:5px !default;
+$borderRadius:3px !default;
 $transitionDuration:.2s !default;
 $formElementTransition:background-color $transitionDuration, color $transitionDuration, border-color $transitionDuration, box-shadow $transitionDuration !default;
 $actionIconTransition:background-color $transitionDuration, color $transitionDuration, box-shadow $transitionDuration !default;
@@ -634,6 +634,7 @@ $overlayMenuBg:$menuBg !default;
 $overlayMenuBorder:1px solid $shade600 !default;
 $overlayMenuShadow:0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12) !default;
 $verticalMenuPadding:.25rem 0 !default;
+$verticalMenuitemMargin:0;
 $menuSeparatorMargin:.25rem 0 !default;
 
 $breadcrumbPadding:1rem !default;
@@ -673,7 +674,7 @@ $tagPadding:.25rem .4rem !default;
 //carousel
 $carouselIndicatorsPadding:1rem !default;
 $carouselIndicatorBg:$shade600 !default;
-$carouselIndicatorHoverBg:$hoverBg !default;
+$carouselIndicatorHoverBg:scale-color($shade600, $lightness: 10%) !default;
 $carouselIndicatorBorderRadius:0 !default;
 $carouselIndicatorWidth:2rem !default;
 $carouselIndicatorHeight:.5rem !default;
@@ -706,7 +707,7 @@ $galleriaCaptionPadding:1rem !default;
 
 $galleriaIndicatorsPadding:1rem !default;
 $galleriaIndicatorBg:$shade600 !default;
-$galleriaIndicatorHoverBg:rgba(255,255,255,0.1) !default;
+$galleriaIndicatorHoverBg:scale-color($shade600, $lightness: 10%) !default;
 $galleriaIndicatorBorderRadius:50% !default;
 $galleriaIndicatorWidth:1rem !default;
 $galleriaIndicatorHeight:1rem !default;
@@ -723,6 +724,40 @@ $galleriaThumbnailNavigatorHoverColor:#f8f9fa !default;
 $galleriaThumbnailNavigatorBorderRadius:50% !default;
 $galleriaThumbnailNavigatorWidth:2rem !default;
 $galleriaThumbnailNavigatorHeight:2rem !default;
+
+//divider
+$dividerHorizontalMargin:1rem 0;
+$dividerHorizontalPadding:0 1rem;
+$dividerVerticalMargin:0 1rem;
+$dividerVerticalPadding:1rem 0;
+$dividerSize:1px;
+$dividerColor:$shade600;
+
+//avatar
+$avatarBg:$shade600;
+$avatarTextColor:$textColor;
+
+//chip
+$chipBg:$shade600;
+$chipTextColor:$textColor;
+$chipBorderRadius: 16px;
+
+//scrollTop
+$scrollTopBg:$highlightBg;
+$scrollTopHoverBg:scale-color($highlightBg, $alpha: 24%);
+$scrollTopWidth:3rem;
+$scrollTopHeight:3rem;
+$scrollTopBorderRadius:50%;
+$scrollTopFontSize:1.5rem;
+$scrollTopTextColor:$highlightTextColor;
+
+//skeleton
+$skeletonBg:rgba(255,255,255,.06);
+$skeletonAnimationBg:rgba(255,255,255,.04);
+
+//splitter
+$splitterGutterBg:rgba(255,255,255,.03);
+$splitterGutterHandleBg:$shade600;
 
 :root {
     --surface-a:#{$shade800};

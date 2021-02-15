@@ -4,6 +4,7 @@
 //Input
 @import './components/input/_autocomplete';
 @import './components/input/_calendar';
+@import './components/input/_cascadeselect';
 @import './components/input/_checkbox';
 @import './components/input/_chips';
 @import './components/input/_colorpicker';
@@ -45,9 +46,11 @@
 //Panel
 @import './components/panel/_accordion';
 @import './components/panel/_card';
+@import './components/panel/_divider';
 @import './components/panel/_fieldset';
 @import './components/panel/_panel';
 @import './components/panel/_scrollpanel';
+@import './components/panel/_splitter';
 @import './components/panel/_tabview';
 @import './components/panel/_toolbar';
 
@@ -82,8 +85,13 @@
 @import './components/multimedia/_galleria';
 
 //Misc
+@import './components/misc/_avatar';
+@import './components/misc/_badge';
+@import './components/misc/_blockui';
+@import './components/misc/_chip';
 @import './components/misc/_inplace';
 @import './components/misc/_progressbar';
+@import './components/misc/_scrolltop';
+@import './components/misc/_skeleton';
+@import './components/misc/_tag';
 @import './components/misc/_terminal';
-@import './components/misc/_blockui';
-@import './components/misc/_badge';

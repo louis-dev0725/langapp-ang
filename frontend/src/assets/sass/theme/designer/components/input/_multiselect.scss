@@ -42,11 +42,6 @@
         border-top-right-radius: $borderRadius;
         border-bottom-right-radius: $borderRadius;
     }
-
-    &.p-error,
-    &.p-invalid {
-        @include invalid-input();
-    }
 }
 
 .p-inputwrapper-filled {
@@ -125,6 +120,15 @@
             .p-checkbox {
                 margin-right: $inlineSpacing;
             }
+        }
+
+
+        .p-multiselect-item-group {
+            margin: $submenuHeaderMargin;
+            padding: $submenuHeaderPadding;
+            color: $submenuHeaderTextColor;
+            background: $submenuHeaderBg;
+            font-weight: $submenuHeaderFontWeight;
         }
 
         .p-multiselect-empty-message {

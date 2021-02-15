@@ -43,11 +43,6 @@
             }
         }
     }
-
-    &.p-error > .p-button,
-    &.p-invalid > .p-button {
-        @include invalid-input();
-    }
 }
 
 p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {

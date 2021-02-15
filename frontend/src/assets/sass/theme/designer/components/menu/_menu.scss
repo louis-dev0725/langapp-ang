@@ -30,4 +30,12 @@
         border-top: $divider;
         margin: $menuSeparatorMargin;
     }
+
+    .p-menuitem {
+        margin: $verticalMenuitemMargin;
+
+        &:last-child {
+            margin: 0;
+        }
+    }
 }

@@ -34,7 +34,7 @@
   opacity: 0.6;
 }
 
-.p-error, .p-invalid {
+.p-error {
   color: #f44336;
 }
 
@@ -49,7 +49,7 @@
 .p-link {
   font-size: 1rem;
   font-family: "Open Sans";
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-link:focus {
   outline: 0 none;
@@ -63,40 +63,37 @@
 .p-autocomplete.p-autocomplete-dd .p-autocomplete-loader {
   right: 2.857rem;
 }
-.p-autocomplete.p-autocomplete-multiple .p-autocomplete-multiple-container {
+.p-autocomplete .p-autocomplete-multiple-container {
   padding: 0.25rem 0.5rem;
 }
-.p-autocomplete.p-autocomplete-multiple .p-autocomplete-multiple-container:not(.p-disabled):hover {
+.p-autocomplete .p-autocomplete-multiple-container:not(.p-disabled):hover {
   border-color: #A46B3E;
 }
-.p-autocomplete.p-autocomplete-multiple .p-autocomplete-multiple-container:not(.p-disabled).p-focus {
+.p-autocomplete .p-autocomplete-multiple-container:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem #C8996A;
   border-color: #A46B3E;
 }
-.p-autocomplete.p-autocomplete-multiple .p-autocomplete-multiple-container .p-autocomplete-input-token {
+.p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-input-token {
   padding: 0.25rem 0;
 }
-.p-autocomplete.p-autocomplete-multiple .p-autocomplete-multiple-container .p-autocomplete-input-token input {
+.p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-input-token input {
   font-family: "Open Sans";
   font-size: 1rem;
   color: #515C66;
   padding: 0;
   margin: 0;
 }
-.p-autocomplete.p-autocomplete-multiple .p-autocomplete-multiple-container .p-autocomplete-token {
+.p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-token {
   padding: 0.25rem 0.5rem;
   margin-right: 0.5rem;
   background: #A46B3E;
   color: #f8fafc;
-  border-radius: 5px;
+  border-radius: 3px;
 }
-.p-autocomplete.p-autocomplete-multiple .p-autocomplete-multiple-container .p-autocomplete-token .p-autocomplete-token-icon {
+.p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-token .p-autocomplete-token-icon {
   margin-left: 0.5rem;
-}
-.p-autocomplete.p-error > .p-inputtext, .p-autocomplete.p-invalid > .p-inputtext {
-  border-color: #f44336;
 }
 
 p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
@@ -107,7 +104,7 @@ p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   background: #FDFEFF;
   color: #515C66;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 .p-autocomplete-panel .p-autocomplete-items {
@@ -130,9 +127,12 @@ p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   color: #f8fafc;
   background: #A46B3E;
 }
-
-.p-calendar.p-error > .p-inputtext, .p-calendar.p-invalid > .p-inputtext {
-  border-color: #f44336;
+.p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item-group {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  color: #515C66;
+  background: #FDFEFF;
+  font-weight: 600;
 }
 
 p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
@@ -144,7 +144,7 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
   background: #FDFEFF;
   color: #515C66;
   border: 1px solid #D7D8D9;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-datepicker:not(.p-datepicker-inline) {
   background: #FDFEFF;
@@ -161,8 +161,8 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
   font-weight: 600;
   margin: 0;
   border-bottom: 1px solid #E4E5E5;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-datepicker .p-datepicker-header .p-datepicker-prev,
 .p-datepicker .p-datepicker-header .p-datepicker-next {
@@ -288,7 +288,7 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
 .p-datepicker .p-monthpicker .p-monthpicker-month {
   padding: 0.5rem;
   transition: box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-datepicker .p-monthpicker .p-monthpicker-month.p-highlight {
   color: #f8fafc;
@@ -330,6 +330,94 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
     padding: 0;
   }
 }
+.p-cascadeselect {
+  background: #FDFEFF;
+  border: 1px solid #D7D8D9;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  border-radius: 3px;
+}
+.p-cascadeselect:not(.p-disabled):hover {
+  border-color: #A46B3E;
+}
+.p-cascadeselect:not(.p-disabled).p-focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2rem #C8996A;
+  border-color: #A46B3E;
+}
+.p-cascadeselect .p-cascadeselect-label {
+  background: transparent;
+  border: 0 none;
+  padding: 0.5rem 0.5rem;
+}
+.p-cascadeselect .p-cascadeselect-label.p-placeholder {
+  color: #657380;
+}
+.p-cascadeselect .p-cascadeselect-label:enabled:focus {
+  outline: 0 none;
+  box-shadow: none;
+}
+.p-cascadeselect .p-cascadeselect-trigger {
+  background: transparent;
+  color: #657380;
+  width: 2.357rem;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.p-cascadeselect-panel {
+  background: #FDFEFF;
+  color: #515C66;
+  border: 0 none;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  min-width: 12.5rem;
+}
+.p-cascadeselect-panel .p-cascadeselect-items {
+  padding: 0.5rem 0;
+}
+.p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item {
+  margin: 0;
+  border: 0 none;
+  color: #515C66;
+  background: transparent;
+  transition: box-shadow 0.2s;
+  border-radius: 0;
+}
+.p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item .p-cascadeselect-item-content {
+  padding: 0.5rem 1rem;
+}
+.p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item .p-cascadeselect-item-content:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 0.15rem #C8996A;
+}
+.p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item.p-highlight {
+  color: #f8fafc;
+  background: #A46B3E;
+}
+.p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item:not(.p-highlight):not(.p-disabled):hover {
+  color: #515C66;
+  background: rgba(232, 241, 248, 0.7);
+}
+.p-cascadeselect-panel .p-cascadeselect-items .p-cascadeselect-item .p-cascadeselect-group-icon {
+  font-size: 0.875rem;
+}
+
+p-cascadeselect.ng-dirty.ng-invalid > .p-cascadeselect {
+  border-color: #f44336;
+}
+
+.p-input-filled .p-cascadeselect {
+  background: #F6F9FE;
+}
+.p-input-filled .p-cascadeselect:not(.p-disabled):hover {
+  background-color: #F6F9FE;
+}
+.p-input-filled .p-cascadeselect:not(.p-disabled).p-focus {
+  background-color: #FDFEFF;
+}
+
 .p-checkbox {
   width: 20px;
   height: 20px;
@@ -340,7 +428,7 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
   width: 20px;
   height: 20px;
   color: #515C66;
-  border-radius: 5px;
+  border-radius: 3px;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .p-checkbox .p-checkbox-box .p-checkbox-icon {
@@ -365,9 +453,6 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
   border-color: #763B1F;
   background: #763B1F;
   color: #f8fafc;
-}
-.p-checkbox.p-error > .p-checkbox-box, .p-checkbox.p-invalid > .p-checkbox-box {
-  border-color: #f44336;
 }
 
 p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
@@ -412,7 +497,7 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
   margin-right: 0.5rem;
   background: #A46B3E;
   color: #f8fafc;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-chips .p-chips-multiple-container .p-chips-token .p-chips-token-icon {
   margin-left: 0.5rem;
@@ -427,15 +512,13 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
   padding: 0;
   margin: 0;
 }
-.p-chips.p-error > .p-inputtext, .p-chips.p-invalid > .p-inputtext {
-  border-color: #f44336;
-}
 
 p-chips.ng-dirty.ng-invalid > .p-chips > .p-inputtext {
   border-color: #f44336;
 }
 
-.p-colorpicker-preview {
+.p-colorpicker-preview,
+.p-fluid .p-colorpicker-preview.p-inputtext {
   width: 2rem;
   height: 2rem;
 }
@@ -457,7 +540,7 @@ p-chips.ng-dirty.ng-invalid > .p-chips > .p-inputtext {
   background: #FDFEFF;
   border: 1px solid #D7D8D9;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-dropdown:not(.p-disabled):hover {
   border-color: #A46B3E;
@@ -486,8 +569,8 @@ p-chips.ng-dirty.ng-invalid > .p-chips > .p-inputtext {
   background: transparent;
   color: #657380;
   width: 2.357rem;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 .p-dropdown .p-dropdown-clear-icon {
   color: #657380;
@@ -498,7 +581,7 @@ p-chips.ng-dirty.ng-invalid > .p-chips > .p-inputtext {
   background: #FDFEFF;
   color: #515C66;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 .p-dropdown-panel .p-dropdown-header {
@@ -507,8 +590,8 @@ p-chips.ng-dirty.ng-invalid > .p-chips > .p-inputtext {
   color: #515C66;
   background: #F6F9FE;
   margin: 0;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
   padding-right: 1.5rem;
@@ -549,9 +632,6 @@ p-chips.ng-dirty.ng-invalid > .p-chips > .p-inputtext {
   background: #FDFEFF;
   font-weight: 600;
 }
-.p-dropdown-panel.p-error, .p-dropdown-panel.p-invalid {
-  border-color: #f44336;
-}
 
 p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
   border-color: #f44336;
@@ -569,8 +649,8 @@ p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
 
 .p-editor-container .p-editor-toolbar {
   background: #F6F9FE;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-editor-container .p-editor-toolbar.ql-snow {
   border: 1px solid #E4E5E5;
@@ -607,20 +687,22 @@ p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
   background: #FDFEFF;
   border: 0 none;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
+  border-radius: 3px;
+  padding: 0.5rem 0;
 }
 .p-editor-container .p-editor-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options .ql-picker-item {
   color: #515C66;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
 }
 .p-editor-container .p-editor-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options .ql-picker-item:hover {
   color: #515C66;
   background: rgba(232, 241, 248, 0.7);
 }
+.p-editor-container .p-editor-toolbar.ql-snow .ql-picker.ql-expanded:not(.ql-icon-picker) .ql-picker-item {
+  padding: 0.5rem 1rem;
+}
 .p-editor-container .p-editor-content {
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-editor-container .p-editor-content.ql-snow {
   border: 1px solid #E4E5E5;
@@ -628,8 +710,8 @@ p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
 .p-editor-container .p-editor-content .ql-editor {
   background: #FDFEFF;
   color: #515C66;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-editor-container .ql-snow.ql-toolbar button:hover,
 .p-editor-container .ql-snow.ql-toolbar button:focus {
@@ -698,25 +780,25 @@ p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
 .p-inputgroup-addon:first-child,
 .p-inputgroup button:first-child,
 .p-inputgroup input:first-child {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
 .p-inputgroup .p-float-label:first-child input {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
 .p-inputgroup-addon:last-child,
 .p-inputgroup button:last-child,
 .p-inputgroup input:last-child {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .p-inputgroup .p-float-label:last-child input {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .p-fluid .p-inputgroup .p-button {
@@ -772,9 +854,6 @@ p-inputnumber.ng-dirty.ng-invalid > .p-inputnumber > .p-inputtext {
 .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
   background: #8D522D;
 }
-.p-inputswitch.p-error, .p-inputswitch.p-invalid {
-  border-color: #f44336;
-}
 
 p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   border-color: #f44336;
@@ -789,7 +868,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   border: 1px solid #D7D8D9;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   appearance: none;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-inputtext:enabled:hover {
   border-color: #A46B3E;
@@ -800,7 +879,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   box-shadow: 0 0 0 0.2rem #C8996A;
   border-color: #A46B3E;
 }
-.p-inputtext.p-error, .p-inputtext.p-invalid, .p-inputtext.ng-dirty.ng-invalid {
+.p-inputtext.ng-dirty.ng-invalid {
   border-color: #f44336;
 }
 .p-inputtext.p-inputtext-sm {
@@ -818,6 +897,10 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   transition-duration: 0.2s;
 }
 
+.p-float-label > .ng-invalid.ng-dirty + label {
+  color: #f44336;
+}
+
 .p-input-icon-left > i:first-of-type {
   left: 0.5rem;
   color: #657380;
@@ -825,6 +908,10 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
 
 .p-input-icon-left > .p-inputtext {
   padding-left: 2rem;
+}
+
+.p-input-icon-left.p-float-label > label {
+  left: 2rem;
 }
 
 .p-input-icon-right > i:last-of-type {
@@ -876,7 +963,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   background: #FDFEFF;
   color: #515C66;
   border: 1px solid #D7D8D9;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-listbox .p-listbox-header {
   padding: 0.5rem 1rem;
@@ -884,8 +971,8 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   color: #515C66;
   background: #F6F9FE;
   margin: 0;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-listbox .p-listbox-header .p-listbox-filter {
   padding-right: 1.5rem;
@@ -920,12 +1007,16 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
 .p-listbox .p-listbox-list .p-listbox-item .p-checkbox {
   margin-right: 0.5rem;
 }
+.p-listbox .p-listbox-list .p-listbox-item-group {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  color: #515C66;
+  background: #FDFEFF;
+  font-weight: 600;
+}
 .p-listbox:not(.p-disabled) .p-listbox-item:not(.p-highlight):not(.p-disabled):hover {
   color: #515C66;
   background: rgba(232, 241, 248, 0.7);
-}
-.p-listbox.p-error, .p-listbox.p-invalid {
-  border-color: #f44336;
 }
 
 p-listbox.ng-dirty.ng-invalid > .p-listbox {
@@ -936,7 +1027,7 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   background: #FDFEFF;
   border: 1px solid #D7D8D9;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-multiselect:not(.p-disabled):hover {
   border-color: #A46B3E;
@@ -959,7 +1050,7 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   margin-right: 0.5rem;
   background: #A46B3E;
   color: #f8fafc;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-multiselect.p-multiselect-chip .p-multiselect-token .p-multiselect-token-icon {
   margin-left: 0.5rem;
@@ -968,11 +1059,8 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   background: transparent;
   color: #657380;
   width: 2.357rem;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-.p-multiselect.p-error, .p-multiselect.p-invalid {
-  border-color: #f44336;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label {
@@ -983,7 +1071,7 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   background: #FDFEFF;
   color: #515C66;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 .p-multiselect-panel .p-multiselect-header {
@@ -992,8 +1080,8 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
   color: #515C66;
   background: #F6F9FE;
   margin: 0;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-inputtext {
   padding-right: 1.5rem;
@@ -1053,6 +1141,13 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
 .p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox {
   margin-right: 0.5rem;
 }
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item-group {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  color: #515C66;
+  background: #FDFEFF;
+  font-weight: 600;
+}
 .p-multiselect-panel .p-multiselect-items .p-multiselect-empty-message {
   padding: 0.5rem 1rem;
   color: #515C66;
@@ -1079,7 +1174,7 @@ p-multiselect.ng-dirty.ng-invalid > .p-multiselect {
   color: #515C66;
   border: 0 none;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-password-panel .p-password-meter {
   margin-bottom: 0.5rem;
@@ -1121,9 +1216,6 @@ p-multiselect.ng-dirty.ng-invalid > .p-multiselect {
   border-color: #763B1F;
   background: #763B1F;
   color: #f8fafc;
-}
-.p-radiobutton.p-error > .p-radiobutton-box, .p-radiobutton.p-invalid > .p-radiobutton-box {
-  border-color: #f44336;
 }
 
 p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
@@ -1219,9 +1311,6 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 .p-selectbutton .p-button.p-highlight:hover .p-button-icon-right {
   color: #f8fafc;
 }
-.p-selectbutton.p-error > .p-button, .p-selectbutton.p-invalid > .p-button {
-  border-color: #f44336;
-}
 
 p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
   border-color: #f44336;
@@ -1230,7 +1319,7 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
 .p-slider {
   background: #E4E5E5;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-slider.p-slider-horizontal {
   height: 0.286rem;
@@ -1316,9 +1405,6 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
 .p-togglebutton.p-button.p-highlight:hover .p-button-icon-right {
   color: #f8fafc;
 }
-.p-togglebutton.p-button.p-error, .p-togglebutton.p-button.p-invalid {
-  border-color: #f44336;
-}
 
 p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-color: #f44336;
@@ -1331,7 +1417,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-button:enabled:hover {
   background: #8D522D;
@@ -2076,8 +2162,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-width: 0 0 1px 0;
   padding: 1rem 1rem;
   font-weight: 600;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 .p-dataview .p-dataview-loading-icon {
   font-size: 2rem;
@@ -2143,7 +2229,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
   min-width: 12.5rem;
 }
@@ -2183,8 +2269,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #515C66;
   background: #F6F9FE;
   margin: 0;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-column-filter-overlay-menu .p-column-filter-constraint {
   padding: 1rem;
@@ -2237,7 +2323,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border: 1px solid #A46B3E;
   font-size: 1rem;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
   display: flex;
   align-items: center;
 }
@@ -2308,12 +2394,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-radius: 0;
 }
 .fc .fc-toolbar .fc-button-group .fc-button:first-child {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .fc .fc-toolbar .fc-button-group .fc-button:last-child {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .p-orderlist .p-orderlist-controls {
@@ -2328,8 +2414,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border: 1px solid #E4E5E5;
   padding: 1rem;
   border-bottom: 0 none;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-orderlist .p-orderlist-header .p-orderlist-title {
   font-weight: 600;
@@ -2352,8 +2438,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   padding: 0.5rem 0;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-orderlist .p-orderlist-list .p-orderlist-item {
   padding: 0.5rem 1rem;
@@ -2441,7 +2527,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border: solid rgba(232, 241, 248, 0.7);
   border-width: 0;
   padding: 0.5rem 1rem;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-paginator .p-paginator-first,
 .p-paginator .p-paginator-prev,
@@ -2454,7 +2540,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   height: 2.357rem;
   margin: 0.143rem;
   transition: box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
 .p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
@@ -2465,12 +2551,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #515C66;
 }
 .p-paginator .p-paginator-first {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-paginator .p-paginator-last {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 .p-paginator .p-dropdown {
   margin-left: 0.5rem;
@@ -2496,7 +2582,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   height: 2.357rem;
   margin: 0.143rem;
   transition: box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background: #A46B3E;
@@ -2521,8 +2607,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border: 1px solid #E4E5E5;
   padding: 1rem;
   border-bottom: 0 none;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-picklist .p-picklist-header .p-picklist-title {
   font-weight: 600;
@@ -2545,8 +2631,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   padding: 0.5rem 0;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-picklist .p-picklist-list .p-picklist-item {
   padding: 0.5rem 1rem;
@@ -2635,13 +2721,13 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   padding: 1rem;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-tree .p-tree-container .p-treenode {
   padding: 0.143rem;
 }
 .p-tree .p-tree-container .p-treenode .p-treenode-content {
-  border-radius: 5px;
+  border-radius: 3px;
   transition: box-shadow 0.2s;
   padding: 0.5rem;
 }
@@ -2721,7 +2807,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background-color: #835632;
 }
 .p-tree.p-tree-horizontal .p-treenode .p-treenode-content {
-  border-radius: 5px;
+  border-radius: 3px;
   border: 1px solid #E4E5E5;
   background-color: #FDFEFF;
   color: #515C66;
@@ -2970,8 +3056,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-width: 0 0 1px 0;
   padding: 1rem 1rem;
   font-weight: 600;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .p-accordion .p-accordion-header .p-accordion-header-link {
@@ -2980,7 +3066,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #515C66;
   background: #F6F9FE;
   font-weight: 600;
-  border-radius: 5px;
+  border-radius: 3px;
   transition: box-shadow 0.2s;
 }
 .p-accordion .p-accordion-header .p-accordion-header-link .p-accordion-toggle-icon {
@@ -3016,8 +3102,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-top: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-accordion p-accordiontab .p-accordion-tab {
   margin-bottom: 0;
@@ -3035,23 +3121,23 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-top: 0 none;
 }
 .p-accordion p-accordiontab:first-child .p-accordion-header .p-accordion-header-link {
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-accordion p-accordiontab:last-child .p-accordion-header:not(.p-highlight) .p-accordion-header-link {
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-accordion p-accordiontab:last-child .p-accordion-content {
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
 .p-card {
   background: #FDFEFF;
   color: #515C66;
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-card .p-card-body {
   padding: 1rem;
@@ -3073,11 +3159,35 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   padding: 1rem 0 0 0;
 }
 
+.p-divider .p-divider-content {
+  background-color: #FDFEFF;
+}
+.p-divider.p-divider-horizontal {
+  margin: 1rem 0;
+  padding: 0 1rem;
+}
+.p-divider.p-divider-horizontal:before {
+  border-top: 1px #E4E5E5;
+}
+.p-divider.p-divider-horizontal .p-divider-content {
+  padding: 0 0.5rem;
+}
+.p-divider.p-divider-vertical {
+  margin: 0 1rem;
+  padding: 1rem 0;
+}
+.p-divider.p-divider-vertical:before {
+  border-left: 1px #E4E5E5;
+}
+.p-divider.p-divider-vertical .p-divider-content {
+  padding: 0.5rem 0;
+}
+
 .p-fieldset {
   border: 1px solid #E4E5E5;
   background: #FDFEFF;
   color: #515C66;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-fieldset .p-fieldset-legend {
   padding: 1rem;
@@ -3085,7 +3195,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #515C66;
   background: #F6F9FE;
   font-weight: 600;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-fieldset.p-fieldset-toggleable .p-fieldset-legend {
   padding: 0;
@@ -3094,7 +3204,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
   padding: 1rem;
   color: #515C66;
-  border-radius: 5px;
+  border-radius: 3px;
   transition: box-shadow 0.2s;
 }
 .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a .p-fieldset-toggler {
@@ -3119,8 +3229,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   padding: 1rem;
   background: #F6F9FE;
   color: #515C66;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-panel .p-panel-header .p-panel-title {
   font-weight: 600;
@@ -3152,8 +3262,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border: 1px solid #E4E5E5;
   background: #FDFEFF;
   color: #515C66;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
   border-top: 0 none;
 }
 .p-panel .p-panel-footer {
@@ -3167,6 +3277,23 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-scrollpanel .p-scrollpanel-bar {
   background: #F6F9FE;
   border: 0 none;
+}
+
+.p-splitter {
+  border: 1px solid #E4E5E5;
+  background: #FDFEFF;
+  border-radius: 3px;
+  color: #515C66;
+}
+.p-splitter .p-splitter-gutter {
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  background: #F6F9FE;
+}
+.p-splitter .p-splitter-gutter .p-splitter-gutter-handle {
+  background: #E4E5E5;
+}
+.p-splitter .p-splitter-gutter-resizing {
+  background: #E4E5E5;
 }
 
 .p-tabview .p-tabview-nav {
@@ -3185,8 +3312,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #657380;
   padding: 1rem;
   font-weight: 600;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
   transition: box-shadow 0.2s;
   margin: 0 0 -2px 0;
 }
@@ -3219,15 +3346,15 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   padding: 1rem;
   border: 0 none;
   color: #515C66;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
 .p-toolbar {
   background: #F6F9FE;
   border: 1px solid #E4E5E5;
   padding: 1rem;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-toolbar .p-toolbar-separator {
   margin: 0 0.5rem;
@@ -3237,7 +3364,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
 }
 .p-confirm-popup .p-confirm-popup-content {
@@ -3278,7 +3405,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 }
 
 .p-dialog {
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
   border: 0 none;
 }
@@ -3287,8 +3414,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   padding: 1.5rem;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-dialog .p-dialog-header .p-dialog-title {
   font-weight: 600;
@@ -3328,8 +3455,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #515C66;
   padding: 0 1.5rem 1.5rem 1.5rem;
   text-align: right;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-dialog .p-dialog-footer button {
   margin: 0 0.5rem 0 0;
@@ -3350,7 +3477,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
 }
 .p-overlaypanel .p-overlaypanel-content {
@@ -3424,7 +3551,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #FDFEFF;
   padding: 0.5rem 0.5rem;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-tooltip.p-tooltip-right .p-tooltip-arrow {
   border-right-color: #515C66;
@@ -3445,8 +3572,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border: 1px solid #E4E5E5;
   color: #515C66;
   border-bottom: 0 none;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-fileupload .p-fileupload-buttonbar .p-button {
   margin-right: 0.5rem;
@@ -3461,8 +3588,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   padding: 2rem 1rem;
   border: 1px solid #E4E5E5;
   color: #515C66;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-fileupload .p-progressbar {
   height: 0.25rem;
@@ -3488,12 +3615,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-breadcrumb {
   background: #FDFEFF;
   border: 1px solid #E4E5E5;
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 1rem;
 }
 .p-breadcrumb ul li .p-menuitem-link {
   transition: box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-breadcrumb ul li .p-menuitem-link:focus {
   outline: 0 none;
@@ -3565,6 +3692,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border: 0 none;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
+.p-contextmenu .p-menuitem {
+  margin: 0;
+}
+.p-contextmenu .p-menuitem:last-child {
+  margin: 0;
+}
 .p-contextmenu .p-menuitem.p-menuitem-active > .p-menuitem-link {
   background: rgba(232, 241, 248, 0.7);
 }
@@ -3587,12 +3720,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #F6F9FE;
   color: #515C66;
   border: 1px solid #E4E5E5;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-megamenu .p-megamenu-root-list > .p-menuitem > .p-menuitem-link {
   padding: 0.75rem 1rem;
   color: #515C66;
-  border-radius: 5px;
+  border-radius: 3px;
   transition: box-shadow 0.2s;
   user-select: none;
 }
@@ -3686,8 +3819,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #515C66;
   background: #FDFEFF;
   font-weight: 600;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-megamenu .p-megamenu-submenu {
   padding: 0.25rem 0;
@@ -3696,6 +3829,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-megamenu .p-megamenu-submenu .p-menu-separator {
   border-top: 1px solid #E4E5E5;
   margin: 0.25rem 0;
+}
+.p-megamenu .p-megamenu-submenu .p-menuitem {
+  margin: 0;
+}
+.p-megamenu .p-megamenu-submenu .p-menuitem:last-child {
+  margin: 0;
 }
 .p-megamenu .p-menuitem.p-menuitem-active > .p-menuitem-link {
   background: rgba(232, 241, 248, 0.7);
@@ -3710,13 +3849,19 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   width: 12.5rem;
   padding: 0.25rem 0;
 }
+.p-megamenu.p-megamenu-vertical .p-menuitem {
+  margin: 0;
+}
+.p-megamenu.p-megamenu-vertical .p-menuitem:last-child {
+  margin: 0;
+}
 
 .p-menu {
   padding: 0.25rem 0;
   background: #FDFEFF;
   color: #515C66;
   border: 1px solid #E4E5E5;
-  border-radius: 5px;
+  border-radius: 3px;
   width: 12.5rem;
 }
 .p-menu .p-menuitem-link {
@@ -3771,13 +3916,19 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-top: 1px solid #E4E5E5;
   margin: 0.25rem 0;
 }
+.p-menu .p-menuitem {
+  margin: 0;
+}
+.p-menu .p-menuitem:last-child {
+  margin: 0;
+}
 
 .p-menubar {
   padding: 0.5rem;
   background: #F6F9FE;
   color: #515C66;
   border: 1px solid #E4E5E5;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-menubar .p-menuitem-link {
   padding: 0.75rem 1rem;
@@ -3816,7 +3967,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link {
   padding: 0.75rem 1rem;
   color: #515C66;
-  border-radius: 5px;
+  border-radius: 3px;
   transition: box-shadow 0.2s;
   user-select: none;
 }
@@ -3877,6 +4028,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 }
 .p-menubar .p-submenu-list .p-submenu-icon {
   font-size: 0.875rem;
+}
+.p-menubar .p-submenu-list .p-menuitem {
+  margin: 0;
+}
+.p-menubar .p-submenu-list .p-menuitem:last-child {
+  margin: 0;
 }
 .p-menubar .p-menuitem.p-menuitem-active > .p-menuitem-link {
   background: rgba(232, 241, 248, 0.7);
@@ -4016,7 +4173,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #515C66;
   background: #F6F9FE;
   font-weight: 600;
-  border-radius: 5px;
+  border-radius: 3px;
   transition: box-shadow 0.2s;
 }
 .p-panelmenu .p-panelmenu-header > a .p-panelmenu-icon {
@@ -4059,8 +4216,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-top: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link {
   padding: 0.75rem 1rem;
@@ -4118,16 +4275,16 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border-top: 0 none;
 }
 .p-panelmenu .p-panelmenu-panel:first-child .p-panelmenu-header > a {
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .p-panelmenu .p-panelmenu-panel:last-child .p-panelmenu-header:not(.p-highlight) > a {
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 .p-panelmenu .p-panelmenu-panel:last-child .p-panelmenu-content {
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
 .p-slidemenu {
@@ -4135,7 +4292,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   border: 1px solid #E4E5E5;
-  border-radius: 5px;
+  border-radius: 3px;
   width: 12.5rem;
 }
 .p-slidemenu .p-menuitem-link {
@@ -4207,7 +4364,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-steps .p-steps-item .p-menuitem-link {
   background: transparent;
   transition: box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
   background: #FDFEFF;
 }
 .p-steps .p-steps-item .p-menuitem-link .p-steps-number {
@@ -4265,8 +4422,8 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   color: #657380;
   padding: 1rem;
   font-weight: 600;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
   transition: box-shadow 0.2s;
   margin: 0 0 -2px 0;
 }
@@ -4294,7 +4451,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background: #FDFEFF;
   color: #515C66;
   border: 1px solid #E4E5E5;
-  border-radius: 5px;
+  border-radius: 3px;
   width: 12.5rem;
 }
 .p-tieredmenu .p-menuitem-link {
@@ -4342,6 +4499,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   border: 0 none;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
+.p-tieredmenu .p-menuitem {
+  margin: 0;
+}
+.p-tieredmenu .p-menuitem:last-child {
+  margin: 0;
+}
 .p-tieredmenu .p-menuitem.p-menuitem-active > .p-menuitem-link {
   background: rgba(232, 241, 248, 0.7);
 }
@@ -4362,7 +4525,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-inline-message {
   padding: 0.5rem 0.5rem;
   margin: 0;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-inline-message.p-inline-message-info {
   background: #B3E5FC;
@@ -4413,7 +4576,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 
 .p-message {
   margin: 1rem 0;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-message .p-message-wrapper {
   padding: 1rem 1.5rem;
@@ -4502,7 +4665,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-toast .p-toast-message {
   margin: 0 0 1rem 0;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-toast .p-toast-message .p-toast-message-content {
   padding: 1rem;
@@ -4598,7 +4761,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   width: 4rem;
   height: 4rem;
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
-  border-radius: 5px;
+  border-radius: 3px;
   margin: 0 0.5rem;
 }
 .p-galleria .p-galleria-item-nav .p-galleria-item-prev-icon,
@@ -4682,50 +4845,29 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
-.p-inplace .p-inplace-display {
-  padding: 0.5rem 0.5rem;
-  border-radius: 5px;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+.p-avatar {
+  background-color: #E4E5E5;
+  border-radius: 3px;
 }
-.p-inplace .p-inplace-display:not(.p-disabled):hover {
-  background: rgba(232, 241, 248, 0.7);
-  color: #515C66;
+.p-avatar.p-avatar-lg {
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
 }
-.p-inplace .p-inplace-display:focus {
-  outline: 0 none;
-  outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C8996A;
+.p-avatar.p-avatar-lg .p-avatar-icon {
+  font-size: 1.5rem;
 }
-
-.p-progressbar {
-  border: 0 none;
-  height: 1.5rem;
-  background: #E4E5E5;
-  border-radius: 5px;
+.p-avatar.p-avatar-xl {
+  width: 4rem;
+  height: 4rem;
+  font-size: 2rem;
 }
-.p-progressbar .p-progressbar-value {
-  border: 0 none;
-  margin: 0;
-  background: #A46B3E;
-}
-.p-progressbar .p-progressbar-label {
-  color: #515C66;
-  line-height: 1.5rem;
+.p-avatar.p-avatar-xl .p-avatar-icon {
+  font-size: 2rem;
 }
 
-.p-terminal {
-  background: #FDFEFF;
-  color: #515C66;
-  border: 1px solid #E4E5E5;
-  padding: 1rem;
-}
-.p-terminal .p-terminal-input {
-  font-size: 1rem;
-  font-family: "Open Sans";
-}
-
-.p-blockui.p-component-overlay {
-  background: rgba(0, 0, 0, 0.4);
+.p-avatar-group .p-avatar {
+  border: 2px solid #FDFEFF;
 }
 
 .p-badge {
@@ -4770,13 +4912,107 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
   line-height: 3rem;
 }
 
+.p-blockui.p-component-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.p-chip {
+  background-color: #E4E5E5;
+  color: #515C66;
+  border-radius: 16px;
+  padding: 0 0.5rem;
+}
+.p-chip .p-chip-text {
+  line-height: 1.5;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.p-chip .p-chip-icon {
+  margin-right: 0.5rem;
+}
+.p-chip .pi-chip-remove-icon {
+  margin-left: 0.5rem;
+}
+.p-chip img {
+  width: 2rem;
+  height: 2rem;
+  margin-left: -0.5rem;
+  margin-right: 0.5rem;
+}
+.p-chip .pi-chip-remove-icon {
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.p-chip .pi-chip-remove-icon:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2rem #C8996A;
+}
+
+.p-inplace .p-inplace-display {
+  padding: 0.5rem 0.5rem;
+  border-radius: 3px;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.p-inplace .p-inplace-display:not(.p-disabled):hover {
+  background: rgba(232, 241, 248, 0.7);
+  color: #515C66;
+}
+.p-inplace .p-inplace-display:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0.2rem #C8996A;
+}
+
+.p-progressbar {
+  border: 0 none;
+  height: 1.5rem;
+  background: #E4E5E5;
+  border-radius: 3px;
+}
+.p-progressbar .p-progressbar-value {
+  border: 0 none;
+  margin: 0;
+  background: #A46B3E;
+}
+.p-progressbar .p-progressbar-label {
+  color: #515C66;
+  line-height: 1.5rem;
+}
+
+.p-scrolltop {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.p-scrolltop.p-link {
+  background: rgba(0, 0, 0, 0.7);
+}
+.p-scrolltop.p-link:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+.p-scrolltop .p-scrolltop-icon {
+  font-size: 1.5rem;
+  color: #F6F9FE;
+}
+
+.p-skeleton {
+  background-color: rgba(232, 241, 248, 0.7);
+  border-radius: 3px;
+}
+.p-skeleton:after {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+}
+
 .p-tag {
   background: #A46B3E;
   color: #f8fafc;
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.25rem 0.4rem;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .p-tag.p-tag-success {
   background-color: #689F38;
@@ -4793,6 +5029,21 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 .p-tag.p-tag-danger {
   background-color: #D32F2F;
   color: #ffffff;
+}
+.p-tag .p-tag-icon {
+  margin-right: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.p-terminal {
+  background: #FDFEFF;
+  color: #515C66;
+  border: 1px solid #E4E5E5;
+  padding: 1rem;
+}
+.p-terminal .p-terminal-input {
+  font-size: 1rem;
+  font-family: "Open Sans";
 }
 
 /* Add your customizations of the theme here */

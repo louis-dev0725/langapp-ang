@@ -61,6 +61,14 @@
             border-top: $divider;
             margin: $menuSeparatorMargin;
         }
+
+        .p-menuitem {
+            margin: $verticalMenuitemMargin;
+    
+            &:last-child {
+                margin: 0;
+            }
+        }
     }
 
     .p-menuitem {
@@ -82,5 +90,13 @@
     &.p-megamenu-vertical {
         width: $menuWidth;
         padding: $verticalMenuPadding;
+
+        .p-menuitem {
+            margin: $verticalMenuitemMargin;
+    
+            &:last-child {
+                margin: 0;
+            }
+        }
     }
 }

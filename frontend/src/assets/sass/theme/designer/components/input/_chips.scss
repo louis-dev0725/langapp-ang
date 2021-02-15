@@ -34,11 +34,6 @@
             }
         }
     }
-
-    &.p-error > .p-inputtext,
-    &.p-invalid > .p-inputtext {
-        @include invalid-input();
-    }
 }
 
 p-chips.ng-dirty.ng-invalid > .p-chips > .p-inputtext {

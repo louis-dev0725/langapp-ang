@@ -24,6 +24,12 @@
     }
 
     .p-menuitem {
+        margin: $verticalMenuitemMargin;
+    
+        &:last-child {
+            margin: 0;
+        }
+
         &.p-menuitem-active {
             > .p-menuitem-link {
                 background: $menuitemActiveBg;

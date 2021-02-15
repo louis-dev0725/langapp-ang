@@ -51,16 +51,21 @@
                         border:$inputOverlayBorder;
                         box-shadow:$inputOverlayShadow;
                         border-radius: $borderRadius;
+                        padding: $inputListPadding;
 
                         .ql-picker-item {
                             color: $inputListItemTextColor;
-                            padding: $inputListItemPadding;
-                            border-radius: $borderRadius;
-
+                            
                             &:hover {
                                 color: $inputListItemTextHoverColor;
                                 background: $inputListItemHoverBg;
                             }
+                        }
+                    }
+
+                    &:not(.ql-icon-picker) {
+                        .ql-picker-item {
+                            padding: $inputListItemPadding;
                         }
                     }
                 }

@@ -37,11 +37,6 @@
             }
         }
     }
-
-    &.p-error > .p-radiobutton-box,
-    &.p-invalid > .p-radiobutton-box {
-        @include invalid-input();
-    }
 }
 
 p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {

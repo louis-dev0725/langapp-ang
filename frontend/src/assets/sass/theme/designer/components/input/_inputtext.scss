@@ -17,8 +17,6 @@
         @include focused-input();
     }
 
-    &.p-error,
-    &.p-invalid,
     &.ng-dirty.ng-invalid {
         @include invalid-input();
     }
@@ -40,6 +38,10 @@
     transition-duration: $transitionDuration;
 }
 
+.p-float-label > .ng-invalid.ng-dirty + label {
+    color: $inputErrorBorderColor;
+}
+
 .p-input-icon-left > i:first-of-type {
     left: nth($inputPadding, 2);
     color: $inputIconColor;
@@ -47,6 +49,10 @@
 
 .p-input-icon-left > .p-inputtext {
     padding-left: nth($inputPadding, 2) * 2 + $primeIconFontSize;
+}
+
+.p-input-icon-left.p-float-label > label {
+    left: nth($inputPadding, 2) * 2 + $primeIconFontSize;
 }
 
 .p-input-icon-right > i:last-of-type  {
@@ -69,7 +75,7 @@
         &:enabled:hover {
             background-color: $inputFilledHoverBg;
         }
-    
+
         &:enabled:focus {
             background-color: $inputFilledFocusBg;
         }

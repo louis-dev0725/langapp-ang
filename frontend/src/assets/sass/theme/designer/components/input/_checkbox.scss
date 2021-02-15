@@ -40,11 +40,6 @@
             }
         }
     }
-
-    &.p-error > .p-checkbox-box,
-    &.p-invalid > .p-checkbox-box {
-        @include invalid-input();
-    }
 }
 
 p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {

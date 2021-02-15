@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'langapp';
 
   topbarTheme = 'light';
-  menuTheme = 'dim';
+  menuTheme = 'light';
   layoutMode = 'light';
   menuMode = 'static';
   isRTL = false;

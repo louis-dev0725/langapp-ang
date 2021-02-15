@@ -51,11 +51,6 @@
             }
         }
     }
-
-    &.p-error,
-    &.p-invalid {
-        @include invalid-input();
-    }
 }
 
 p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {

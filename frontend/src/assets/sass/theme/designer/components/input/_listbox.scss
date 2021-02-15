@@ -51,6 +51,14 @@
                 margin-right: $inlineSpacing;
             }
         }
+
+        .p-listbox-item-group {
+            margin: $submenuHeaderMargin;
+            padding: $submenuHeaderPadding;
+            color: $submenuHeaderTextColor;
+            background: $submenuHeaderBg;
+            font-weight: $submenuHeaderFontWeight;
+        }
     }
 
     &:not(.p-disabled) {
@@ -60,11 +68,6 @@
                 background: $inputListItemHoverBg;
             }
         }
-    }
-
-    &.p-error,
-    &.p-invalid {
-        @include invalid-input();
     }
 }
 
