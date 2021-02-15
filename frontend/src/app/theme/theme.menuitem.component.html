@@ -20,7 +20,7 @@
         <div class="layout-menu-tooltip-text">{{item.label | translate}}</div>
     </div>
     <ul *ngIf="(item.items && root) || (item.items && active)" [@children]="root ? 'visible' : active ? 'visibleAnimated' : 'hiddenAnimated'">
-        <ng-template ngFor let-child let-i="index" [ngForOf]="item.items">
+        <ng-template ngFor let-child let-i="index" [ngForOf]="item.items" [ngForTrackBy]="trackByIdentify">
             <li app-menuitem [item]="child" [index]="i" [parentKey]="key" [class]="child.badgeClass"></li>
         </ng-template>
     </ul>

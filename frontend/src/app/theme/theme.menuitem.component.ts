@@ -94,6 +94,10 @@ export class ThemeMenuitemComponent implements OnInit, OnDestroy {
         this.key = this.parentKey ? this.parentKey + '-' + this.index : String(this.index);
     }
 
+    trackByIdentify(index: number, item: any) {
+      return item.id ?? item.label;
+    }
+
     updateActiveStateFromRoute() {
         this.active = this.router.isActive(this.item.routerLink[0], this.item.items ? false : true);
     }

@@ -95,6 +95,10 @@ export class ThemeMenuComponent implements OnInit {
     return el;
   }
 
+  trackByIdentify(index: number, item: any) {
+    return item.id ?? item.label;
+  }
+
   public getModel() {
     return [
       {
