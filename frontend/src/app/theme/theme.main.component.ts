@@ -11,6 +11,11 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { AppComponent } from '@app/app.component';
 import { MenuService } from '@app/theme/theme.menu.service';
 import { PrimeNGConfig } from 'primeng/api';
+import { UserService } from '@app/services/user.service';
+import { TranslateService } from '@ngx-translate/core';
+import { EventService } from '@app/event.service';
+import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @UntilDestroy()
 @Component({
@@ -54,9 +59,20 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
   public isLoggedIn: boolean;
 
+  languages = ['Русский', 'English'];
+
   constructor(public zone: NgZone,
     private store: Store<fromStore.State>,
-    private router: Router, private api: ApiService, private sessionService: SessionService, public renderer: Renderer2, private menuService: MenuService, private primengConfig: PrimeNGConfig,
+    private router: Router,
+    private api: ApiService,
+    private sessionService: SessionService,
+    public renderer: Renderer2,
+    private menuService: MenuService,
+    private userService: UserService,
+    private translateService: TranslateService,
+    private eventService: EventService,
+    private primengConfig: PrimeNGConfig,
+    private confirmDialog: MatDialog,
     public app: AppComponent) {
     this.setUpSubscriptions();
   }
@@ -103,6 +119,45 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
       this.menuClick = false;
       this.rightPanelClick = false;
     });
+  }
+
+  setLanguage(lang: any) {
+    localStorage.setItem('lang', lang);
+    this.translateService.use(lang);
+    this.eventService.emitChangeEvent({ type: 'language-change' });
+    if (this.sessionService.user !== null) {
+      this.sessionService.changeUserLanguage(lang);
+      const user = this.sessionService.user;
+      this.api.updateUser({ id: user.id, language: user.language }).pipe(untilDestroyed(this)).subscribe(() => { });
+    }
+  }
+
+  get isOpenedAdmin(): boolean {
+    return this.sessionService.openedAdmin;
+  }
+
+  logout() {
+    if (!this.isOpenedAdmin) {
+      const dialogModel = new ConfirmDialogModel(
+        this.translateService.instant('Logout confirm title'),
+        this.translateService.instant('Logout confirm msg')
+      );
+
+      const dialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
+        maxWidth: '400px',
+        data: dialogModel
+      });
+
+      dialogRef.afterClosed().pipe(untilDestroyed(this)).subscribe(result => {
+        if (result) {
+          this.api.logout();
+        }
+      });
+    } else {
+      this.api.logout();
+    }
+
+    window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
   }
 
   onMenuButtonClick(event) {

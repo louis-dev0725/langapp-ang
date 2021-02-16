@@ -1,7 +1,8 @@
 import { EntityMetadataMap, EntityDataModuleConfig, DefaultDataServiceConfig } from '@ngrx/data';
 
 const entityMetadata: EntityMetadataMap = {
-  Content: {}
+  Content: {},
+  User: {},
 };
 
 const pluralNames = {
@@ -13,7 +14,7 @@ export const entityConfig: EntityDataModuleConfig = {
 };
 
 
-export const dataServiceConfig : DefaultDataServiceConfig = {
+export const dataServiceConfig: DefaultDataServiceConfig = {
   root: '/api',
   timeout: 15000,
   getDelay: 300,
@@ -21,7 +22,11 @@ export const dataServiceConfig : DefaultDataServiceConfig = {
   entityHttpResourceUrls: {
     Content: {
       entityResourceUrl: '/api/contents/',
-        collectionResourceUrl: '/api/contents/',
+      collectionResourceUrl: '/api/contents/',
     },
-  }, 
+    User: {
+      entityResourceUrl: '/api/users/',
+      collectionResourceUrl: '/api/users/',
+    },
+  },
 };

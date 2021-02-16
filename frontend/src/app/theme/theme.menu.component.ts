@@ -31,19 +31,20 @@ import { AppComponent } from '@app/app.component';
 })
 export class ThemeMenuComponent implements OnInit {
 
-  model: any[];
+  model: MenuItem[];
 
   public appName = APP_NAME;
   public user;
   public isLoggedIn: boolean;
 
-  languages = ['Русский', 'English'];
-
   private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
 
-  constructor(public app: AppComponent, public appTheme: ThemeMainComponent, public api: ApiService, public session: SessionService,
-    private cd: ChangeDetectorRef, private eventService: EventService, private translate: TranslateService,
-    private confirmDialog: MatDialog, private translatingService: TranslatingService,
+  constructor(public app: AppComponent,
+    public appTheme: ThemeMainComponent,
+    public api: ApiService,
+    public session: SessionService,
+    private cd: ChangeDetectorRef,
+    private translate: TranslateService,
     private store: Store<fromStore.State>) {
     this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => this.isLoggedIn = authState);
   }
@@ -67,43 +68,15 @@ export class ThemeMenuComponent implements OnInit {
     return this.session.isAdmin;
   }
 
-  setLanguage(lang: any) {
-    let language: string;
-    if (lang === 'Русский') {
-      language = 'ru';
-    } else {
-      language = 'en';
-    }
-    localStorage.setItem('lang', language);
-    this.translate.use(language);
-    this.eventService.emitChangeEvent({ type: 'language-change' });
-    if (this.session.user !== null) {
-      this.session.changeUserLanguage(language);
-      const user = this.session.user;
-      this.api.updateUser({ id: user.id, language: user.language }).pipe(untilDestroyed(this)).subscribe(() => { });
-    }
-  }
-
-  public updateItems(el) {
-    el['hide'] = !this.isLoggedIn;
-    el['admin'] = this.session.isAdmin;
-    if (el['items']) {
-      el.items = el.items.map(res => {
-        return this.updateItems(res);
-      });
-    }
-    return el;
-  }
-
   trackByIdentify(index: number, item: any) {
     return item.id ?? item.label;
   }
 
-  public getModel() {
+  public getModel() : MenuItem[] {
     return [
       {
         label: 'Admin',
-        hide: !this.isAdmin || (this.isAdmin && this.isOpenedAdmin),
+        visible: this.isAdmin && !this.isOpenedAdmin,
         items: [
           {
             label: 'Clients',
@@ -120,30 +93,12 @@ export class ThemeMenuComponent implements OnInit {
         ]
       },
       {
-        label: 'Language',
-        items: [
-          {
-            label: 'Русский',
-            command: event => {
-              this.setLanguage('Русский');
-            }
-          },
-          {
-            label: 'English',
-            command: event => {
-              this.setLanguage('English');
-            }
-          }
-        ]
-      },
-      {
         label: 'Learning',
-        hide: !this.isLoggedIn,
+        visible: this.isLoggedIn,
         items: [
           {
             label: 'Study new words',
             routerLink: ['/training'],
-            hide: !this.isLoggedIn,
           },
           {
             label: 'Explore content',
@@ -156,7 +111,6 @@ export class ThemeMenuComponent implements OnInit {
           {
             label: 'My word list',
             routerLink: ['/dictionary'],
-            hide: !this.isLoggedIn,
           },
         ]
       },
@@ -164,18 +118,14 @@ export class ThemeMenuComponent implements OnInit {
         label: 'Account',
         items: [
           {
-            label: 'Payment',
-            name: 'payment',
-            routerLink: ['/payment'],
-            hide: !this.isLoggedIn
-          },
-          {
             label: 'Settings',
-            routerLink: ['/settings/profile']
+            routerLink: ['/settings/profile'],
+            visible: this.isLoggedIn,
           },
           {
             label: 'Affiliate program',
-            hide: !this.isLoggedIn,
+            visible: this.isLoggedIn,
+            routerLink: ['/partners'],
             items: [
               {
                 label: 'About',
@@ -194,55 +144,26 @@ export class ThemeMenuComponent implements OnInit {
           {
             label: 'Sign up',
             routerLink: ['/auth/signup'],
-            hide: this.isLoggedIn
+            visible: !this.isLoggedIn
           },
           {
             label: 'Sign in',
             routerLink: ['/auth/signin'],
-            hide: this.isLoggedIn
+            visible: !this.isLoggedIn
           },
-          {
+          /*{
             label: 'Logout',
-            hide: !this.isLoggedIn,
+            visible: this.isLoggedIn,
             command: event => {
-              this.logout();
+              this.appTheme.logout();
             }
-          }
-        ],
-      },
-      {
-        label: 'Support',
-        items: [
+          }*/
           {
             label: 'Support',
             routerLink: ['/contacts']
           },
         ],
-      },
+      }
     ];
-  }
-
-  logout() {
-    if (!this.isOpenedAdmin) {
-      const dialogModel = new ConfirmDialogModel(
-        this.translatingService.translates['Logout confirm title'],
-        this.translatingService.translates['Logout confirm msg']
-      );
-
-      const dialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
-        maxWidth: '400px',
-        data: dialogModel
-      });
-
-      dialogRef.afterClosed().pipe(untilDestroyed(this)).subscribe(result => {
-        if (result) {
-          this.api.logout();
-        }
-      });
-    } else {
-      this.api.logout();
-    }
-
-    window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
   }
 }
