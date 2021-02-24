@@ -1,5 +1,5 @@
 <div class="container">
-    <div *ngIf="content$ | async as content">
+    <div *ngIf="content$ | async as content; else loading">
         <div class="p-grid">
             <div class="p-col-8">
                 <div class="card" style="height: 80vh;">
@@ -15,6 +15,8 @@
     </div>
 </div>
 
-<div class="p-d-flex p-jc-center" *ngIf="loading$ | async">
-    <p-progressSpinner></p-progressSpinner>
-</div>
+<ng-template #loading>
+    <div class="p-d-flex p-jc-center">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+</ng-template>

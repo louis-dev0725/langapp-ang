@@ -39,12 +39,12 @@ export class HttpInterceptorService implements HttpInterceptor {
         (err: any) => {
           loading = false;
           if (err instanceof HttpErrorResponse) {
-            if (err.status !== 401 && err.status !== 403 && err.status !== 422) {
-              const config = new MatSnackBarConfig();
-              config.duration = 3000;
-              config.panelClass = ['snack-error'];
-              this.snackBar.open(err.message, null, config);
-            }
+            //if (err.status !== 401 && err.status !== 403 && err.status !== 422) {
+            const config = new MatSnackBarConfig();
+            config.duration = 3000;
+            config.panelClass = ['snack-error'];
+            this.snackBar.open(err.message, null, config);
+            //}
             loading = false;
             this.eventsService.progressBarLoading.emit(false);
           }

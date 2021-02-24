@@ -34,6 +34,30 @@ export interface User {
   extensionSettings: any;
 }
 
+export interface ListResponse<T> {
+  items: T[];
+  _links: {
+    self: {
+      href: string;
+    },
+    first?: {
+      href: string;
+    },
+    next?: {
+      href: string;
+    },
+    last?: {
+      href: string;
+    }
+  };
+  _meta: {
+    totalCount: number;
+    pageCount: number;
+    currentPage: number;
+    perPage: number;
+  };
+}
+
 export interface InvitedUser {
   id?: number;
   name: string;
@@ -114,12 +138,13 @@ export interface Content {
   text: string;
   status: number;
   length: number;
-  level: string;
+  level: number;
   deleted: number;
   tagsJson: string[];
   dataJson: DataJson;
   format: string;
   cleanText?: any;
+  imageUrl?: string;
 }
 
 export interface DataJson {
@@ -179,7 +204,7 @@ export interface SettingPlugin {
   text: string;
 }
 
-export interface Dictionary {
+export interface UserDictionary {
   id?: number;
   context: string;
   date: string;
@@ -195,7 +220,7 @@ export interface Dictionary {
   workout_progress_word_translate: any;
   mnemonic_id: number;
   checked: boolean;
-  words?: Dictionary[];
+  words?: UserDictionary[];
   word_on?: string;
   mnemonic_all?: Mnemonic[];
   mnemonic?: Mnemonic;
@@ -224,7 +249,7 @@ export interface MnemonicUser {
 }
 
 export interface DictionaryArray {
-  items: Dictionary[];
+  items: UserDictionary[];
   _links: {
     next?: {
       href: string;

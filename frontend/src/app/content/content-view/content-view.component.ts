@@ -13,20 +13,19 @@ import { VideoJsPlayerOptions } from 'video.js';
   styleUrls: ['./content-view.component.scss']
 })
 export class ContentViewComponent implements OnInit {
-  loading$: Observable<boolean>;
   content$: Observable<Content>;
   cleanTextHtml$: Observable<string>;
   videoOptions$: Observable<VideoJsPlayerOptions>;
 
-  constructor(private route: ActivatedRoute, private contentService: ContentService) {
-    this.loading$ = contentService.loading$;
+  constructor(private route: ActivatedRoute,
+    private api: ApiService) {
   }
 
   ngOnInit(): void {
     this.content$ = this.route.paramMap.pipe(
       switchMap(params => {
         let id = params.get('id');
-        return this.contentService.getByKey(id);
+        return this.api.contentById(Number(id));
       })
     );
     this.cleanTextHtml$ = this.content$.pipe(map(p => {
@@ -39,12 +38,13 @@ export class ContentViewComponent implements OnInit {
           "type": "video/youtube",
           "src": p.sourceLink
         }],
+        autoplay: true,
         // @ts-ignore
         youtube: {
           "iv_load_policy": 3,
           "cc_load_policy": 3,
           "hl": "ja",
-          "autoplay": 1,
+          //"autoplay": 1,
         },
       };
       return options;

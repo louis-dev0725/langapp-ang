@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Category, Dictionary, Materials, Mnemonic, SettingPlugin, User } from '@app/interfaces/common.interface';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Category, Content, UserDictionary, ListResponse, Materials, Mnemonic, SettingPlugin, User } from '@app/interfaces/common.interface';
+import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,31 @@ import {
   LoadAuthorizedSuccess
 } from '@app/store/index';
 import { environment } from '../../environments/environment'
+import { catchError } from 'rxjs/operators';
+import { MessageService } from 'primeng/api';
 
+type ParamsInterface = HttpParams | {
+  [param: string]: string | string[];
+};
+
+type HeadersInterface = HttpHeaders | {
+  [header: string]: string | string[];
+};
+
+interface OptionsInterface {
+  body?: any;
+  headers?: HeadersInterface;
+  params?: ParamsInterface;
+  reportProgress?: boolean;
+  observe?: 'body';
+  responseType?: 'json';
+  withCredentials?: boolean;
+}
+
+export interface SimpleListItem {
+  title: string;
+  value: any;
+};
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +51,34 @@ export class ApiService {
     return environment.siteKey;
   }
 
-  constructor(private http: HttpClient, private session: SessionService, private store: Store<fromStore.State>) { }
+  constructor(
+    private http: HttpClient,
+    private session: SessionService,
+    private store: Store<fromStore.State>,
+    private messageService: MessageService) { }
+
+  apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, displayValidationErrors = false) {
+    return <Observable<T>>this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(
+      catchError((r) => this.handleError(r, displayValidationErrors))
+    );
+  }
+
+  private handleError(response: HttpErrorResponse, displayValidationErrors = false) {
+    if (response.error instanceof ErrorEvent) {
+      this.messageService.add({ severity: 'error', summary: 'Error: Unable to connect to server', detail: response.error.message, sticky: true });
+      return of(new ApiError([{ field: 'all', message: 'Unable to connect to server. Error: ' + response.error.message }], false));
+    } else if (response.error) {
+      if (displayValidationErrors) {
+        let fieldsErrorText = response.error?.[0]?.message ? response.error.map(e => e.message).join("\n") : '';
+        this.messageService.add({ severity: 'error', summary: 'Server error', detail: response.statusText + "\n" + fieldsErrorText, sticky: true });
+      }
+      // TODO: only for input errors?
+      return of(new ApiError(response.error, response.ok, response.status, response.statusText));
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Unknown error', detail: response.error.toString(), sticky: true });
+      return of(new ApiError([{ field: 'all', message: 'Unknown error' }], false));
+    }
+  }
 
   /**
    * Авторизация
@@ -528,46 +579,45 @@ export class ApiService {
   /**
    * Псевдо получение типов контента
    */
-  getTypeContent(): Observable<any> {
-    return new Observable((observer) => {
-      const typeContent = [
-        { id: 1, title: 'Text' },
-        { id: 2, title: 'Audio' },
-        { id: 3, title: 'Video' }
-      ];
-      observer.next(typeContent);
-    });
+  getContentTypes(): Observable<SimpleListItem[]> {
+    return of([
+      { value: "1", title: 'Text' },
+      { value: "2", title: 'Audio' },
+      { value: "3", title: 'Video' }
+    ]);
   }
 
   /**
    * Псевдо получение объемов текста
    */
-  getVolumeContent(): Observable<any> {
-    return new Observable((observer) => {
-      const volumeContent = [
-        { id: '0,500', title: '0 - 500 characters' },
-        { id: '501,1500', title: '501 - 1500 characters' },
-        { id: '1501,5000', title: '1501 - 5000 characters' },
-        { id: '5000,unlimited', title: '> 5000 characters' }
-      ];
-      observer.next(volumeContent);
-    });
+  getContentLengthVariants(): Observable<SimpleListItem[]> {
+    return of([
+      { value: { gt: '0', lt: '500' }, title: 'Small (0-500)' },
+      { value: { gt: '501', lt: '2500' }, title: 'Medium (501-2500)' },
+      { value: { gt: '2501', lt: '5000' }, title: 'Big (2501-5000)' },
+      { value: { gt: '5000' }, title: 'Very big (>5000)' }
+    ]);
   }
 
   /**
    * Псевдо получение сложности текста
    */
-  getComplicationContent(): Observable<any> {
-    return new Observable((observer) => {
-      const complicationContent = [
-        { id: 'N1', title: 'JLPT N1' },
-        { id: 'N2', title: 'JLPT N2' },
-        { id: 'N3', title: 'JLPT N3' },
-        { id: 'N4', title: 'JLPT N4' },
-        { id: 'N5', title: 'JLPT N5' }
-      ];
-      observer.next(complicationContent);
-    });
+  getContentLevels(): Observable<SimpleListItem[]> {
+    return of([
+      { value: '1', title: 'JLPT N1' },
+      { value: '2', title: 'JLPT N2' },
+      { value: '3', title: 'JLPT N3' },
+      { value: '4', title: 'JLPT N4' },
+      { value: '5', title: 'JLPT N5' }
+    ]);
+  }
+
+  contentList(params: ParamsInterface) {
+    return this.apiRequest<ListResponse<Content>>('GET', 'contents', { params }, true);
+  }
+
+  contentById(id: number): Observable<any> {
+    return this.apiRequest<Content>('GET', `contents/${id}`);
   }
 
   /**
@@ -596,23 +646,6 @@ export class ApiService {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.post(this.apiHost + '/contents/create', data, { headers }).subscribe((res) => {
-        observer.next(res);
-      }, (error) => {
-        observer.next(this.getApiError(error));
-      }
-      );
-    });
-  }
-
-  /**
-   * Получаем определённый материал
-   *
-   * @param id
-   */
-  getMaterialById(id: number): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.getHeadersWithToken();
-      this.http.get(this.apiHost + `/contents/${id}`, { headers }).subscribe((res) => {
         observer.next(res);
       }, (error) => {
         observer.next(this.getApiError(error));
@@ -668,25 +701,8 @@ export class ApiService {
     });
   }
 
-  /**
-   * Получаем список слов и канзи и пользовательского словаря
-   */
-  getUserDictionary(data: any): Observable<any> {
-    return new Observable((observer) => {
-      let query = '';
-      if (data !== '') {
-        query = '?' + data;
-      }
-      query += '&expand=dictionaryWord';
-
-      const headers = this.getHeadersWithToken();
-      this.http.get(this.apiHost + '/dictionaries/index' + query, { headers }).subscribe((res) => {
-        observer.next(res);
-      }, (error) => {
-        observer.next(this.getApiError(error));
-      }
-      );
-    });
+  getUserDictionary(params: ParamsInterface) {
+    return this.apiRequest<ListResponse<UserDictionary>>('GET', 'dictionaries/index', { params: params });
   }
 
   /**
@@ -734,7 +750,7 @@ export class ApiService {
   /**
    * Изменяем слова из пользовательского словаря
    */
-  updateUserDictionary(data: Dictionary): Observable<any> {
+  updateUserDictionary(data: UserDictionary): Observable<any> {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch(this.apiHost + '/dictionaries/' + data.id, data, { headers }).subscribe((res) => {

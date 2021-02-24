@@ -8,11 +8,9 @@ import { DictionaryRoutingModule } from '@app/dictionary/dictionary-routing.modu
 import { SharedModule } from '@app/shared/shared.module';
 import { DictionaryComponent } from '@app/dictionary/dictionary.component';
 
-import { ListWordsComponent } from './list-words/list-words.component';
-
 
 @NgModule({
-  declarations: [DictionaryComponent, ListWordsComponent],
+  declarations: [DictionaryComponent],
   imports: [FormsModule, ReactiveFormsModule, TranslateModule, CommonModule, DictionaryRoutingModule,
     SharedModule]
 })

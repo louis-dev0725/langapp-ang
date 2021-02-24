@@ -4,13 +4,17 @@ namespace app\controllers;
 
 
 use app\components\Helpers;
+use app\models\UserDictionarySearch;
 use app\models\DictionaryWord;
 use app\models\Mnemonics;
 use app\models\UserDictionary;
 use Yii;
+use yii\data\ActiveDataFilter;
 use yii\data\ActiveDataProvider;
 use yii\db\ArrayExpression;
 use yii\db\Expression;
+use yii\rest\IndexAction;
+use yii\web\ForbiddenHttpException;
 
 class DictionaryController extends ActiveController
 {
@@ -22,37 +26,59 @@ class DictionaryController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
-        unset($actions['index'], $actions['create']);
+
+        $actions['index']['dataFilter'] = [
+            'class' => ActiveDataFilter::class,
+            'searchModel' => UserDictionarySearch::class,
+        ];
+        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+
+        unset($actions['create']);
         return $actions;
     }
 
     /**
-     * @return ActiveDataProvider
+     * @param IndexAction $action
+     * @param mixed $filter
+     * @return object|ActiveDataProvider
+     * @throws \yii\base\InvalidConfigException
+     * @throws ForbiddenHttpException
      */
-    public function actionIndex()
+    public function prepareDataProvider($action, $filter)
     {
-        $filter = Yii::$app->request->queryParams;
-
-        $query = UserDictionary::find()->joinWith('dictionaryWord')
-            ->where(['user_dictionary.user_id' => (int)$filter['user_id']]);
-
-        if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
-            if (strcasecmp('kanji', $filter['type']) == 0) {
-                $type = DictionaryWord::TYPE_JAPANESE_KANJI;
-            } else {
-                $type = DictionaryWord::TYPE_JAPANESE_WORD;
-            }
-
-            $query->andWhere(['user_dictionary.type' => (int)$type]);
+        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        if (empty($requestParams)) {
+            $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
 
-        return new ActiveDataProvider([
+        $query = UserDictionary::find();
+        if (!empty($filter)) {
+            $query->andWhere($filter);
+        }
+
+        $userId = Yii::$app->user->id;
+        $query->andWhere(['user_dictionary.user_id' => $userId]);
+
+
+        if (isset($requestParams['expand']) && is_string($requestParams['expand'])) {
+            $expand = preg_split('/\s*,\s*/', $requestParams['expand'], -1, PREG_SPLIT_NO_EMPTY);
+        } else {
+            $expand = [];
+        }
+        if (in_array('dictionaryWord', $expand)) {
+            $query->with('dictionaryWord');
+        }
+
+        return Yii::createObject([
+            'class' => ActiveDataProvider::class,
             'query' => $query,
+            'pagination' => [
+                'params' => $requestParams,
+            ],
             'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC
-                ],
-            ]
+                'params' => $requestParams,
+                'defaultOrder' => ['id' => SORT_DESC],
+            ],
         ]);
     }
 
@@ -129,7 +155,7 @@ class DictionaryController extends ActiveController
                             $kanjiInDb->type = DictionaryWord::TYPE_JAPANESE_KANJI;
                             $kanjiInDb->dictionary_word_id = $dictionaryWord->id;
                             $kanjiInDb->original_word = $kanjiValue;
-                            $kanjiInDb->translate_word = null;
+                            $kanjiInDb->translate_word = $dictionaryWord->getMeaningForLangList(['en']); // TODO: use lang list for user
                             $kanjiInDb->date = date('Y-m-d');
                             $kanjiInDb->context = null;
                             $kanjiInDb->url = null;

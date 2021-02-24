@@ -5,64 +5,81 @@ namespace app\controllers;
 use app\components\Helpers;
 use app\models\Category;
 use app\models\Content;
+use app\models\ContentSearch;
+use app\models\Transaction;
 use Yii;
+use yii\data\ActiveDataFilter;
 use yii\data\ActiveDataProvider;
+use yii\rest\IndexAction;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
-class ContentController extends ActiveController {
+class ContentController extends ActiveController
+{
     public $modelClass = Content::class;
 
     /**
      * @return array
      */
-    public function actions() {
+    public function actions()
+    {
         $actions = parent::actions();
-        unset($actions['index'], $actions['create'], $actions['view'], $actions['update'], $actions['delete']);
+
+        $actions['index']['dataFilter'] = [
+            'class' => ActiveDataFilter::class,
+            'searchModel' => ContentSearch::class,
+        ];
+        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+
+        unset($actions['create'], $actions['view'], $actions['update'], $actions['delete']);
         return $actions;
     }
 
     /**
-     * @return ActiveDataProvider
-     * @throws NotFoundHttpException
+     * @param IndexAction $action
+     * @param mixed $filter
+     * @return object|ActiveDataProvider
+     * @throws \yii\base\InvalidConfigException
+     * @throws ForbiddenHttpException
      */
-    public function actionIndex() {
-        $filter = Yii::$app->request->queryParams;
+    public function prepareDataProvider($action, $filter)
+    {
+        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        if (empty($requestParams)) {
+            $requestParams = Yii::$app->getRequest()->getQueryParams();
+        }
 
-        $query = Content::find()->andWhere(['deleted' => 0]);
+        $query = Content::find();
+        if (!empty($filter)) {
+            $query->andWhere($filter);
+        }
 
         if (!Helpers::isAdmin()) {
-            $query->andWhere(['status' => 1]);
+            // Force filter by status
+            $query->andWhere(['content.status' => 1]);
+            $query->andWhere(['content.deleted' => 0]);
         }
 
-        if (array_key_exists('title', $filter) && $filter['title'] != 'undefined' && $filter['title'] != '') {
-            $query->andWhere(['like', 'title', urldecode($filter['title'])]);
-        }
+//        if (isset($requestParams['expand']) && is_string($requestParams['expand'])) {
+//            $expand = preg_split('/\s*,\s*/', $requestParams['expand'], -1, PREG_SPLIT_NO_EMPTY);
+//        }
+//        else {
+//            $expand = [];
+//        }
+//        if (in_array('user', $expand)) {
+//            $query->with('user');
+//        }
 
-        if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
-            $query->andWhere(['type' => (int)$filter['type']]);
-        }
-
-        if (array_key_exists('complication', $filter) && $filter['complication'] != 'undefined' &&
-            $filter['complication'] != '') {
-            $query->andWhere(['level' => $filter['complication']]);
-        }
-
-        if (array_key_exists('volume', $filter) && $filter['volume'] != 'undefined' && $filter['volume'] != '') {
-            $arrV = explode(',', $filter['volume']);
-            if ($arrV[1] != 'unlimited') {
-                $query->andWhere(['between', 'length', (int)$arrV[0], (int)$arrV[1]]);
-            } else {
-                $query->andWhere(['>=', 'length', (int)$arrV[0]]);
-            }
-        }
-
-        return new ActiveDataProvider([
+        return Yii::createObject([
+            'class' => ActiveDataProvider::class,
             'query' => $query,
+            'pagination' => [
+                'params' => $requestParams,
+            ],
             'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC
-                ],
-            ]
+                'params' => $requestParams,
+                'defaultOrder' => ['rank' => SORT_ASC],
+            ],
         ]);
     }
 
@@ -70,7 +87,8 @@ class ContentController extends ActiveController {
      * @return array
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $content = new Content();
         $content->load(Yii::$app->getRequest()->getBodyParams(), '');
         if ($content->validate()) {
@@ -95,7 +113,12 @@ class ContentController extends ActiveController {
      *
      * @return array|\yii\db\ActiveRecord|null
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
+        return Content::find()->with('categories')->where(['id' => $id])->one();
+    }
+
+    public function actionImage($id) {
         return Content::find()->with('categories')->where(['id' => $id])->one();
     }
 
@@ -105,7 +128,8 @@ class ContentController extends ActiveController {
      * @return array
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $content = Content::find()->with('categories')->where(['id' => $id])->one();
         $old_category = [];
         foreach ($content->categories as $category) {
@@ -142,7 +166,8 @@ class ContentController extends ActiveController {
      *
      * @return array
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $content = Content::find()->where(['id' => $id])->one();
         $content['deleted'] = 1;
 

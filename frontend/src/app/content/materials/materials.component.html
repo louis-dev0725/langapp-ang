@@ -1,35 +1,27 @@
 <div class="container">
-  <div class="card" *ngIf="isLoaded">
+  <div class="card">
     <h4 translate>Materials</h4>
     <div class="filter p-d-flex p-flex-column p-flex-md-row p-jc-md-start p-mb-2">
-      <!--<form [formGroup]="filterForm" class="form-filter">
+      <form [formGroup]="filterForm">
+        <!--<form [formGroup]="filterForm" class="form-filter">
         <input pInputText formControlName="keywords" placeholder="{{'Search to keywords' | translate}}">
 
         <div class="filter-button">
           <button pButton (click)="onSubmitSearch()" label="{{'Search' | translate}}"></button>
         </div>
-      </form>-->
+      -->
 
-      <p-dropdown [options]="complications" optionLabel="title" placeholder="{{ 'JLPT Level' | translate }}" [showClear]="true" (onChange)="onChangeComplication($event)" [style]="{width: '150px'}" class="p-mr-md-2"></p-dropdown>
+        <p-dropdown formControlName="level" [options]="levels$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'JLPT Level' | translate }}" [showClear]="true" [style]="{width: '150px'}" class="p-mr-md-2"></p-dropdown>
 
-      <p-dropdown [options]="types" optionLabel="title" placeholder="{{ 'Content Type' | translate }}" [showClear]="true" (onChange)="onChangeType($event)" [style]="{width: '170px'}" class="p-mr-md-2"></p-dropdown>
+        <p-dropdown formControlName="type" [options]="types$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Content Type' | translate }}" [showClear]="true" [style]="{width: '170px'}" class="p-mr-md-2"></p-dropdown>
 
-      <p-dropdown [options]="volumes" optionLabel="title" placeholder="{{ 'Amount of text' | translate }}" [showClear]="true" (onChange)="onChangeVolumes($event)" [style]="{width: '200px'}" class="p-mr-md-2"></p-dropdown>
+        <p-dropdown formControlName="length" [options]="lengthVariants$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Text length' | translate }}" [showClear]="true" [style]="{width: '200px'}" class="p-mr-md-2"></p-dropdown>
 
 
-      <p-toggleButton onLabel="Hide studied" offLabel="Show studied" [style]="{'width': '10rem'}"></p-toggleButton>
+        <p-toggleButton onLabel="Hide studied" offLabel="Show studied" [style]="{'width': '10rem'}"></p-toggleButton>
+      </form>
     </div>
-
-    <app-list-materials *ngIf="isLoadedData" [arrayData]="daraSource" (deleteM)="deleteMaterial($event)" (dataChanged)="changePageTable($event)"></app-list-materials>
-
-    <mat-card *ngIf="!isLoadedData" style="display:flex;justify-content:center;align-items:center">
-      <mat-progress-spinner color="primary" mode="indeterminate">
-      </mat-progress-spinner>
-    </mat-card>
   </div>
 
-  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
-    <mat-progress-spinner color="primary" mode="indeterminate">
-    </mat-progress-spinner>
-  </mat-card>
+  <app-list-materials *ngIf="contentList$ | async as contentList" [list]="contentList" (deleteM)="deleteMaterial($event)" (dataChanged)="changePageTable($event)"></app-list-materials>
 </div>

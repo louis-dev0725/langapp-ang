@@ -26,6 +26,16 @@ $fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, A
   border-bottom-left-radius: 0;
 }
 
+.ui-toast-detail {
+  white-space: pre-line;
+}
+
+a.p-button:hover {
+    background: $buttonHoverBg;
+    color: $buttonTextHoverColor;
+    border-color: $buttonHoverBorderColor;
+}
+
 /*
 $color-blue-link: #039be5;
 $color-red-danger: #f44336;

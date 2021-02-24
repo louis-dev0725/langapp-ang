@@ -26,6 +26,23 @@ class DictionaryWord extends ActiveRecord {
         return '{{%dictionary_word}}';
     }
 
+    public function getMeaningForLangList($langList) {
+        $currentLangPos = PHP_INT_MAX;
+        $currentValue = '';
+        if (isset($this->data['meanings'])) {
+            foreach ($this->data['meanings'] as $meaning) {
+                if (isset($meaning['lang']) && ($pos = array_search($meaning['lang'], $langList)) !== false && $pos < $currentLangPos) {
+                    $currentValue = $meaning['value'];
+                    if ($pos === 0) {
+                        return $currentValue;
+                    }
+                }
+            }
+        }
+
+        return $currentValue;
+    }
+
     /**
      * {@inheritdoc}
      */

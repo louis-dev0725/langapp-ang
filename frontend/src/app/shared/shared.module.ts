@@ -26,67 +26,56 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BadgeModule } from 'primeng/badge';
 import { SlideMenuModule } from 'primeng/slidemenu';
+import { PaginatorModule } from 'primeng/paginator';
+import { ChipModule } from 'primeng/chip';
+import { ToastModule } from 'primeng/toast';
+import { TagModule } from 'primeng/tag';
+import { TableModule } from 'primeng/table';
+
+let sharedModules = [
+  // primeng
+  InputTextModule,
+  InputTextareaModule,
+  ButtonModule,
+  MessagesModule,
+  MessageModule,
+  DropdownModule,
+  ToggleButtonModule,
+  ProgressSpinnerModule,
+  BadgeModule,
+  SlideMenuModule,
+  PaginatorModule,
+  ChipModule,
+  ToastModule,
+  TagModule,
+  TableModule,
+
+  // material
+  MatIconModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatButtonModule,
+  MatCardModule,
+  MatSelectModule,
+  MatProgressSpinnerModule,
+  MatCheckboxModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatRadioModule
+];
 
 @NgModule({
   declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe],
   imports: [
     CommonModule,
-
-    // primeng
-    InputTextModule,
-    InputTextareaModule,
-    ButtonModule,
-    MessagesModule,
-    MessageModule,
-    DropdownModule,
-    ToggleButtonModule,
-    ProgressSpinnerModule,
-    BadgeModule,
-    SlideMenuModule,
-
-    // material
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatCheckboxModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatRadioModule
+    ...sharedModules
   ],
   exports: [
     FormatDatePipe,
     FormatNumbersPipe,
     RoundToPipe,
     FormatCurrencyPipe,
-
-    // primeng
-    InputTextModule,
-    InputTextareaModule,
-    ButtonModule,
-    MessagesModule,
-    MessageModule,
-    DropdownModule,
-    ToggleButtonModule,
-    ProgressSpinnerModule,
-    BadgeModule,
-    SlideMenuModule,
-
-    // material
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatCheckboxModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatRadioModule
+    ...sharedModules
   ]
 })
 export class SharedModule { }

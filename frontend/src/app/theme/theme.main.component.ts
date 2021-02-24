@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, NgZone, Renderer2 } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
-import { onRandomFromRange } from '@app/helpers/randomFromRange';
+import { randomFromRange } from '@app/shared/helpers';
 import { Observable } from 'rxjs';
 import * as fromStore from '@app/store';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
@@ -299,6 +299,6 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
       if (isLoggedIn) {
         this.api.meRequest().pipe(untilDestroyed(this)).subscribe();
       }
-    }, onRandomFromRange(500, 600));
+    }, randomFromRange(500, 600));
   }
 }

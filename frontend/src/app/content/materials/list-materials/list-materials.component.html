@@ -1,48 +1,50 @@
 <div class="container">
-  <div *ngIf="arrayData.items?.length !== 0">
-    <table mat-table [dataSource]="arrayData.items">
-      <ng-container matColumnDef="title">
-        <td mat-cell *matCellDef="let element" class="table-title">{{element.title}}</td>
-      </ng-container>
+  <div *ngIf="list.items?.length > 0">
+    <div class="p-grid">
+      <div *ngFor="let item of list.items" class="p-col-6">
+        <div class="card p-d-flex">
+          <div style="background-image: url({{item.imageUrl}});" class="image p-shadow-1"></div>
+          <div class="p-ml-3" class="right p-ml-3 p-d-flex p-flex-column p-jc-between">
+            <div>
+              <a class="title p-mb-2" [routerLink]="['/content/view', item.id]" lang="ja">{{item.title}}</a>
+            </div>
+            <!--<div>
+          <p-tag *ngFor="let tag of item.tagsJson" [value]="tag" styleClass="p-mr-2 p-mb-2"></p-tag>
+        </div>-->
+            <div>
+              <div class="p-mb-2">
+                <p-tag *ngIf="item.dataJson?.youtubeVideo?.channel?.title" [value]="item.dataJson.youtubeVideo.channel.title" class="p-mr-2"></p-tag>
+              </div>
+              <div class="p-d-flex p-jc-between">
+                <div>
+                  <p-chip *ngIf="item.level > 0" [label]="'JLPT N' + item.level" class="p-mr-2"></p-chip>
+                  <p-chip *ngIf="item.dataJson?.youtubeVideo?.wilsonScore" [label]="this.showRating(item)" class="p-mr-2"></p-chip>
+                </div>
+                <div>
+                  <a pButton label="Open" [routerLink]="['/content/view', item.id]"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <ng-container matColumnDef="level">
-        <td mat-cell *matCellDef="let element" class="table-column">{{element.level}}</td>
-      </ng-container>
 
-      <ng-container matColumnDef="length">
-        <td mat-cell *matCellDef="let element" class="table-column">{{element.length}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="button">
-        <td mat-cell *matCellDef="let element" class="table-button">
-          <!--<a [href]="element.sourceLink" target="_blank" mat-flat-button>
-            {{ 'More' | translate }}
-          </a>-->
-          <a [routerLink]="['/content/view', element.id]" mat-flat-button>
-            {{ 'More' | translate }}
-          </a>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="admin_column" *ngIf="user.isAdmin">
-        <td mat-cell *matCellDef="let element" class="table-button">
-          <a [routerLink]="['/content/edit', element.id]" mat-flat-button>
-            {{ 'Edit' | translate }}
-          </a>
-          <button (click)="deleteElement(element.id)" mat-flat-button>
-            {{ 'Delete' | translate }}
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <mat-paginator [pageSize]="arrayData._meta.perPage" [showFirstLastButtons]="true"
-      [length]="arrayData._meta.totalCount" [pageIndex]="arrayData._meta.currentPage - 1" (page)="handlePage($event)">
-    </mat-paginator>
+    <div class="card p-mt-4 p-p-0">
+      <div class="p-grid p-align-center">
+        <div class="p-col-2">
+        </div>
+        <div class="p-col-8">
+          <p-paginator [rows]="list._meta.perPage" [totalRecords]="list._meta.totalCount" [first]="list._meta.perPage * (list._meta.currentPage - 1)" (onPageChange)="handlePage($event)"></p-paginator>
+        </div>
+        <div class="p-col-2 p-as-center p-text-right p-pr-5">
+          Total {{list._meta.totalCount}} materials
+        </div>
+      </div>
+    </div>
   </div>
-  <div *ngIf="arrayData.items?.length === 0">
-    <h1 translate>No material</h1>
+  <div *ngIf="!list.items || list.items?.length === 0">
+    <h5 translate>No content was found, try to change filters</h5>
   </div>
 </div>

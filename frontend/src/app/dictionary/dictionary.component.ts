@@ -1,16 +1,17 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { DictionaryArray } from '@app/interfaces/common.interface';
+import { ListResponse, User, UserDictionary } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
 import { TranslatingService } from '@app/services/translating.service';
-import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
-import { ListWordsComponent } from '@app/dictionary/list-words/list-words.component';
+import { allParams, Dictionary, toQueryParams } from '@app/shared/helpers';
+import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { FilterMetadata, LazyLoadEvent } from 'primeng/api';
 
 @UntilDestroy()
 @Component({
@@ -19,111 +20,113 @@ import { ListWordsComponent } from '@app/dictionary/list-words/list-words.compon
   styleUrls: ['./dictionary.component.scss']
 })
 export class DictionaryComponent implements OnInit, OnDestroy {
-  daraSource: DictionaryArray;
-  typeFilter = '';
-  word = false;
-  kanji = false;
-  allSelect = false;
-  indeterminate = false;
-
-  @ViewChild(ListWordsComponent)
-  private listComponent: ListWordsComponent;
+  filterForm: FormGroup;
+  list: ListResponse<UserDictionary>;
+  loading: boolean;
+  wordTypes: Dictionary<string>;
+  lastFilters: Dictionary<FilterMetadata> = {};
+  currentPage = 1;
+  defaultPerPage = 50;
+  currentPerPage = this.defaultPerPage;
 
   constructor(private api: ApiService, private formBuilder: FormBuilder,
-              private router: Router, private translatingService: TranslatingService, private snackBar: MatSnackBar,
-              private session: SessionService) { }
-
-  @Input()
-  set isLoaded(val: boolean) {
-    this._isLoaded = val;
-  }
-
-  get isLoaded(): boolean {
-    return this._isLoaded;
-  }
-
-  @Input()
-  set isLoadedData(val: boolean) {
-    this._isLoadedData = val;
-  }
-
-  get isLoadedData(): boolean {
-    return this._isLoadedData;
-  }
-
-  private _isLoaded = false;
-  private _isLoadedData = false;
+    private route: ActivatedRoute,
+    private router: Router,
+    private translatingService: TranslatingService,
+    private session: SessionService) { }
 
   ngOnInit() {
-    const data = 'user_id=' + this.session.user.id;
-    this.api.getUserDictionary(data).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.daraSource = res;
-      } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
-      }
+    this.loading = true;
 
-      this._isLoaded = true;
-      this._isLoadedData = true;
+    this.wordTypes = {
+      1: 'Word',
+      2: 'Kanji',
+    };
+    this.filterForm = this.formBuilder.group({
+
+    });
+
+    allParams(this.route).pipe(untilDestroyed(this)).subscribe(params => {
+      this.currentPage = params['page'] !== undefined ? Number(params['page']) : 1;
+      this.currentPerPage = params['per-page'] !== undefined ? Number(params['per-page']) : this.defaultPerPage;
+      if (params['filter']) {
+        this.filterForm.patchValue(params['filter']);
+      }
+      this.updateList();
+    });
+
+    this.filterForm.valueChanges.pipe(untilDestroyed(this)).subscribe((e) => this.onFormUpdated(e));
+  }
+
+  updateList() {
+    this.loading = true;
+    this.api.getUserDictionary(this.getQueryParams(true)).pipe(untilDestroyed(this)).subscribe(res => {
+      this.list = res;
+      this.loading = false;
     });
   }
 
-  onFilter(typeFilter: string) {
-    this._isLoadedData = false;
-    this.typeFilter = typeFilter;
-
-    let data = 'user_id=' + this.session.user.id;
-    if (this.typeFilter === 'kanji') {
-      if (!this.kanji) {
-        this.word = false;
-        this.kanji = true;
-        data += '&type=' + this.typeFilter;
-      } else {
-        this.kanji = false;
-      }
-    } else {
-      if (!this.word) {
-        this.kanji = false;
-        this.word = true;
-        data += '&type=' + this.typeFilter;
-      } else {
-        this.word = false;
-      }
+  showReadings(readings: { type: string, value: string }[], type: string, title: string) {
+    let result = readings.filter(r => r.type == type).map(r => r.value).join(', ');
+    if (result.length > 0) {
+      result = title + result;
     }
+    return result;
+  }
 
-    this.api.getUserDictionary(data).pipe(untilDestroyed(this)).subscribe((res) => {
-      if (!(res instanceof ApiError)) {
-        this.daraSource = res;
-      } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
-      }
+  updateUrl() {
+    this.router.navigate([], { queryParams: this.getQueryParams() });
+  }
 
-      this._isLoadedData = true;
-    });
+  onFormUpdated(newValues: any) {
+    this.updateUrl();
   }
 
   changePageTable(data) {
-    this._isLoadedData = false;
-
-    const href = this.daraSource._links.self.href.split('?')[1].split('page')[0]
-      + '&page=' + (+(data.pageIndex) + 1) + '&per-page=' + data.pageSize;
-
-    this.api.getUserDictionary(href).pipe(untilDestroyed(this)).subscribe((res) => {
-      if (!(res instanceof ApiError)) {
-        this.daraSource = res;
-      } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
-      }
-
-      this._isLoadedData = true;
-    });
-
-    this.daraSource.items.forEach((elem) => {
-      elem.checked = false;
-    });
+    this.currentPerPage = data.rows;
+    this.currentPage = Number(data.page) + 1;
+    //this.updateUrl();
+    this.updateList();
   }
 
-  allSelectedToggle(event) {
+  getQueryParams(forRequest = false) {
+    let params = toQueryParams(this.filterForm.value, 'filter');
+    if (forRequest || this.currentPage != 1) {
+      params['page'] = String(this.currentPage);
+    }
+    if (forRequest || this.currentPerPage != this.defaultPerPage) {
+      params['per-page'] = String(this.currentPerPage);
+    }
+    if (forRequest) {
+      params['expand'] = 'dictionaryWord';
+    }
+    for (let [field, filter] of Object.entries(this.lastFilters)) {
+      if (filter.value) {
+        let key = 'filter[' + field + ']';
+        if (filter.matchMode == 'startsWith') {
+          params[key + '[like]'] = filter.value + '%';
+        }
+        else if (filter.matchMode == 'contains') {
+          params[key + '[like]'] = filter.value;
+        }
+        else {
+          params[key] = filter.value;
+        }
+      }
+    }
+    console.log('params', params, 'this.lastFilters', this.lastFilters);
+    return params;
+  }
+
+  lazyLoad(event: LazyLoadEvent) {
+    console.log('lazy', event);
+    this.lastFilters = event.filters;
+    this.currentPerPage = event.rows ? event.rows : this.defaultPerPage;
+    this.currentPage = event.rows ? Math.floor(event.first / event.rows) + 1 : 1;
+    this.updateUrl();
+  }
+
+  /*allSelectedToggle(event) {
     if (event.checked) {
       this.listComponent.allSelectList(true);
       this.allSelect = true;
@@ -163,7 +166,7 @@ export class DictionaryComponent implements OnInit, OnDestroy {
       this._isLoadedData = true;
 
       if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.translatingService.translates['confirm'].dictionaries.deleted, null, {duration: 3000});
+        this.snackBar.open(this.translatingService.translates['confirm'].dictionaries.deleted, null, { duration: 3000 });
 
         ids.forEach((id) => {
           const elem = this.daraSource.items.findIndex(item => item.id === id);
@@ -171,7 +174,7 @@ export class DictionaryComponent implements OnInit, OnDestroy {
         });
         this.listComponent.ids = [];
       } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
+        this.snackBar.open(String(res.error), null, { duration: 3000 });
       }
     });
   }
@@ -183,16 +186,16 @@ export class DictionaryComponent implements OnInit, OnDestroy {
       this._isLoadedData = true;
 
       if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.translatingService.translates['confirm'].dictionaty.deleted, null, {duration: 3000});
+        this.snackBar.open(this.translatingService.translates['confirm'].dictionaty.deleted, null, { duration: 3000 });
         const elem = this.daraSource.items.findIndex(item => item.id === event);
         this.daraSource.items.splice(elem, 1);
 
         this.listComponent.ids = [];
       } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
+        this.snackBar.open(String(res.error), null, { duration: 3000 });
       }
     });
-  }
+  }*/
 
-  ngOnDestroy () {}
+  ngOnDestroy() { }
 }

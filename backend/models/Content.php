@@ -25,7 +25,6 @@ use yii\db\ActiveRecord;
  * @property Category[] $categories
  */
 class Content extends ActiveRecord {
-
     public $category = [];
 
     /**
@@ -35,19 +34,34 @@ class Content extends ActiveRecord {
         return '{{%content}}';
     }
 
+    public function getImageUrl() {
+        if (isset($this->dataJson['imageUrl'])) {
+            return $this->dataJson['imageUrl'];
+        }
+        elseif (isset($this->dataJson['youtubeVideo']['videoId'])) {
+            return 'http://i3.ytimg.com/vi/' . $this->dataJson['youtubeVideo']['videoId'] . '/hqdefault.jpg';
+        }
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields = array_merge($fields, ['imageUrl']);
+
+        return $fields;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules () {
         return [
-            [['title', 'type', 'text', 'length', 'level'], 'required'],
-            [['type'], 'default', 'value' => 1],
-            [['sourceLink'], 'default', 'value' => null],
-            [['status', 'length', 'deleted'], 'default', 'value' => 0],
-            [['type', 'status', 'length', 'deleted'], 'integer'],
-            [['text'], 'string'],
-            [['title', 'sourceLink', 'level'], 'string', 'max' => 255],
-            ['category', 'safe']
+            [['title', 'type', 'text', 'length'], 'required'],
+            [['type', 'status', 'length', 'level', 'deleted'], 'default', 'value' => null],
+            [['type', 'status', 'length', 'level', 'deleted'], 'integer'],
+            [['text', 'cleanText'], 'string'],
+            [['tagsJson', 'dataJson'], 'safe'],
+            [['title', 'sourceLink', 'format'], 'string', 'max' => 255],
         ];
     }
 
@@ -58,13 +72,17 @@ class Content extends ActiveRecord {
         return [
             'id' => 'ID',
             'title' => 'Title',
-            'type' => 'Type Content',
+            'type' => 'Type',
             'sourceLink' => 'Source Link',
             'text' => 'Text',
             'status' => 'Status',
-            'length' => 'Count Symbol',
-            'level' => 'Level Jlpt',
+            'length' => 'Length',
+            'level' => 'Level',
             'deleted' => 'Deleted',
+            'tagsJson' => 'Tags Json',
+            'dataJson' => 'Data Json',
+            'format' => 'Format',
+            'cleanText' => 'Clean Text',
         ];
     }
 

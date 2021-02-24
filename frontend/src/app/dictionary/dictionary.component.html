@@ -1,39 +1,55 @@
 <div class="container">
-  <div class="card" *ngIf="isLoaded">
-    <h1 translate>Dictionary</h1>
-    <div class="filter-dictionary">
-      <mat-checkbox class="all-select-checkbox" [(ngModel)]="allSelect" [(indeterminate)]="indeterminate"
-                    (change)="allSelectedToggle($event)"></mat-checkbox>
-      <button mat-flat-button class="filter-select-button" (click)="allSelectedClick()" color="primary"
-              *ngIf="!indeterminate && !allSelect">
-        {{ 'All selected' | translate }}
-      </button>
-      <button mat-flat-button class="filter-delete-button" (click)="onDeleteSelected()" color="primary"
-              *ngIf="indeterminate || allSelect">
-        {{ 'Delete selected' | translate }}
-      </button>
+  <div class="card">
+    <h4 translate>My Dictionary</h4>
 
-      <div class="dictionary-button-filter">
-        <button mat-flat-button class="filter-button" (click)="onFilter('word')" color="primary">
-          {{ 'Word' | translate }}
-        </button>
-        <button mat-flat-button class="filter-button" (click)="onFilter('kanji')" color="primary">
-          {{ 'Kanji' | translate }}
-        </button>
-      </div>
+    <!--<div *ngIf="list.items?.length > 0">
     </div>
+    <div *ngIf="!list.items || list.items?.length === 0">
+      <h5 translate>Your dictionary is empty. <a [routerLink]="['/content']">Explore content</a> and try adding some words.</h5>
+    </div>-->
 
-    <app-list-words *ngIf="isLoadedData" [arrayData]="daraSource" (interTrue)="indeterminateTrue($event)"
-                    (dataChanged)="changePageTable($event)" (deleteD)="deleteDictionary($event)"></app-list-words>
-
-    <mat-card *ngIf="!isLoadedData" style="display:flex;justify-content:center;align-items:center">
-      <mat-progress-spinner color="primary" mode="indeterminate">
-      </mat-progress-spinner>
-    </mat-card>
+    <p-table [value]="list?.items" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [paginator]="true" [rows]="list?._meta?.perPage" [totalRecords]="list?._meta?.totalCount" [loading]="loading" styleClass="p-datatable-striped">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 10%; max-width: 6rem;">Type</th>
+          <th style="width: 20%; max-width: 20rem;">Word</th>
+          <th style="width: 20%; max-width: 20rem;">Reading</th>
+          <th>Translation</th>
+        </tr>
+        <tr>
+          <th>
+              <p-columnFilter type="text" field="type" [showMenu]="false" matchMode="equals">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-dropdown [ngModel]="value" [options]="wordTypes | keyvalue" optionLabel="value" placeholder="Any" optionValue="key" (onChange)="filter($event.value)" placeholder="Any" [showClear]="true"></p-dropdown>
+              </ng-template>
+              </p-columnFilter>
+          </th>
+          <th>
+              <p-columnFilter type="text" field="original_word" [showMenu]="false" matchMode="contains"></p-columnFilter>
+          </th>
+          <th>
+            
+          </th>
+          <th>
+              <p-columnFilter type="text" field="translate_word" [showMenu]="false" matchMode="contains"></p-columnFilter>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{ wordTypes[item.type] ? wordTypes[item.type] : '' }}</td>
+          <td>{{item.original_word}}</td>
+          <td>
+            <span *ngIf="item.type === 1">
+              {{ item?.dictionaryWord?.data?.readings[0]?.kana }}
+            </span>
+            <span *ngIf="item.type === 2">
+              <div>{{ showReadings(item?.dictionaryWord?.data?.readings, 'on', 'On: ') }}</div>
+              <div>{{ showReadings(item?.dictionaryWord?.data?.readings, 'kun', 'Kun: ') }}</div>
+            </span>
+          </td>
+          <td>{{item.translate_word}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
-
-  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center">
-    <mat-progress-spinner color="primary" mode="indeterminate">
-    </mat-progress-spinner>
-  </mat-card>
-</div>

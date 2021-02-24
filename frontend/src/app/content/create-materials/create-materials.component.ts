@@ -37,7 +37,7 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
   private _isLoaded = false;
 
   ngOnInit() {
-    this.api.getTypeContent().pipe(untilDestroyed(this)).subscribe(res => {
+    this.api.getContentTypes().pipe(untilDestroyed(this)).subscribe(res => {
       this.types = res;
     });
 

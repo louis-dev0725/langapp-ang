@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { DictionaryArray } from '@app/interfaces/common.interface';
+import { ListResponse, User } from '@app/interfaces/common.interface';
 
 
 @Component({
@@ -11,7 +11,7 @@ import { DictionaryArray } from '@app/interfaces/common.interface';
 })
 export class ListWordsComponent implements OnInit {
 
-  @Input() arrayData: DictionaryArray;
+  @Input() arrayData: ListResponse<User>;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @Output() dataChanged: EventEmitter<any> = new EventEmitter<any>();
   @Output() deleteD: EventEmitter<any> = new EventEmitter<any>();
@@ -24,7 +24,7 @@ export class ListWordsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.arrayData.items.forEach((item) => {
+    /*this.arrayData.items.forEach((item) => {
       item.word_on = '';
       item.word_kun = '';
       item.word_translate = '';
@@ -60,7 +60,7 @@ export class ListWordsComponent implements OnInit {
       }
 
       this.dictionaryListArray.push(item);
-    });
+    });*/
   }
 
   onToggle(event) {
@@ -76,7 +76,7 @@ export class ListWordsComponent implements OnInit {
   }
 
   allSelectList(list) {
-    if (list) {
+    /*if (list) {
       this.arrayData.items.forEach((item) => {
         item.checked = true;
         this.ids.push(item.id);
@@ -88,7 +88,7 @@ export class ListWordsComponent implements OnInit {
       this.ids = [];
     }
 
-    this.ids = this.ids.filter(this.onlyUnique);
+    this.ids = this.ids.filter(this.onlyUnique);*/
   }
 
   handlePage(event) {

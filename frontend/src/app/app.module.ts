@@ -20,6 +20,7 @@ import { HttpInterceptorService } from '@app/http/http-interceptor';
 import { ThemeModule } from '@app/theme/theme.module';
 import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
+import { MessageService } from 'primeng/api';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -51,7 +52,7 @@ import { EffectsModule } from '@ngrx/effects';
       }
     }),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([]), 
+    EffectsModule.forRoot([]),
     EntityDataModule.forRoot(entityConfig),
     environment.development ? StoreDevtoolsModule.instrument() : [],
     BrowserAnimationsModule,
@@ -79,7 +80,8 @@ import { EffectsModule } from '@ngrx/effects';
     {
       provide: DefaultDataServiceConfig,
       useValue: dataServiceConfig,
-    }
+    },
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

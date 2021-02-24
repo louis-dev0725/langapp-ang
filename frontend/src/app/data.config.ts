@@ -17,16 +17,16 @@ export const entityConfig: EntityDataModuleConfig = {
 export const dataServiceConfig: DefaultDataServiceConfig = {
   root: '/api',
   timeout: 15000,
-  getDelay: 300,
-  saveDelay: 300,
+  //getDelay: 300,
+  //saveDelay: 300,
   entityHttpResourceUrls: {
     Content: {
       entityResourceUrl: '/api/contents/',
-      collectionResourceUrl: '/api/contents/',
+      collectionResourceUrl: '/api/contents',
     },
     User: {
       entityResourceUrl: '/api/users/',
-      collectionResourceUrl: '/api/users/',
+      collectionResourceUrl: '/api/users',
     },
   },
 };

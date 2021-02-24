@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ContentsArray, User } from '@app/interfaces/common.interface';
+import { Content, ContentsArray, ListResponse, User } from '@app/interfaces/common.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { SessionService } from '@app/services/session.service';
 
@@ -10,8 +10,8 @@ import { SessionService } from '@app/services/session.service';
 })
 export class ListMaterialsComponent implements OnInit {
 
-  @Input() arrayData: ContentsArray;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @Input() list: ListResponse<Content>;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @Output() dataChanged: EventEmitter<any> = new EventEmitter<any>();
   @Output() deleteM: EventEmitter<any> = new EventEmitter<any>();
 
@@ -20,6 +20,10 @@ export class ListMaterialsComponent implements OnInit {
 
 
   constructor(public session: SessionService) { }
+
+  showRating(item: Content) {
+    return item.dataJson?.youtubeVideo?.viewCount + ' views' + (item.dataJson?.youtubeVideo?.wilsonScore ? (', ' + Math.floor(item.dataJson?.youtubeVideo?.wilsonScore * 100) + '% liked') : '');
+  }
 
   ngOnInit() {
     this.user = this.session.user;

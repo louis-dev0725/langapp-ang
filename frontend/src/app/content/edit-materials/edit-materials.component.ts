@@ -42,7 +42,7 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.material_id = this.route.snapshot.paramMap.get('id');
-    combineLatest([this.api.getMaterialById(this.material_id), this.api.getTypeContent(),
+    combineLatest([this.api.contentById(this.material_id), this.api.getContentTypes(),
       this.api.getCategories()]).pipe(untilDestroyed(this)).subscribe(([material, type, category]) => {
 
       this.types = type;
