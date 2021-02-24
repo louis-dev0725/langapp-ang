@@ -515,10 +515,30 @@ export function distributeFuriganaInflected(expression: string, reading: string,
 
 const simpleJapaneseRegex = /[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]|[\u4E00-\u9FAF]/g;
 
-export function isStringContainsJapanese(string: string): boolean {
-    return simpleJapaneseRegex.test(string);
+export function isStringContainsJapanese(text: string): boolean {
+    return simpleJapaneseRegex.test(text);
 }
 
-export function removeJapaneseChars(string: string): string {
-    return string.replace(simpleJapaneseRegex, '');
+export function removeJapaneseChars(text: string): string {
+    return text.replace(simpleJapaneseRegex, '');
+}
+
+const kanjiRegexp = /[\u4E00-\u9FFF]/g;
+export function extractKanji(text: string) {
+    return [...text.matchAll(kanjiRegexp)].map(m => m[0]);
+}
+
+const hiraganaRegexp = /[\u3040-\u309F]/g;
+export function extractHiragana(text: string) {
+    return [...text.matchAll(hiraganaRegexp)].map(m => m[0]);
+}
+
+const katakanaRegexp = /[\u30A0-\u30FF]/g;
+export function extractKatakana(text: string) {
+    return [...text.matchAll(katakanaRegexp)].map(m => m[0]);
+}
+
+const kanaRegexp = /[\u3040-\u309F\u30A0-\u30FF]/g;
+export function extractKana(text: string) {
+    return [...text.matchAll(kanaRegexp)].map(m => m[0]);
 }

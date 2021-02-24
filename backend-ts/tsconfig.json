@@ -12,5 +12,8 @@
     "baseUrl": "./",
     "incremental": true,
     "allowJs": true,
+    "lib": [
+      "ESNext"
+    ]
   }
 }

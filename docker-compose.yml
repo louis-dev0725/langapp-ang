@@ -81,6 +81,13 @@ services:
     restart: always
     ports:
       - "${LISTEN_HOST:-127.0.0.1}:${ADMINER_PORT:-5002}:8080"
+  
+  arena:
+    image: mixmaxhq/arena
+    ports:
+      - "${LISTEN_HOST:-127.0.0.1}:${ARENA_PORT:-5003}:4567"
+    volumes:
+      - ./docker/arena/index.json:/opt/arena/index.json
 
 volumes:
   db-data:

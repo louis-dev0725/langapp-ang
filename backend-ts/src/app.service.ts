@@ -1,7 +1,9 @@
 import { Logger, Injectable, Dependencies } from '@nestjs/common';
 import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AnalyzeJapaneseService } from './analyze.japanese.service';
 import { DictionaryType, DictionaryWord } from './entities/DictionaryWord';
+import { DictionaryWordRepository } from './entities/DictionaryWordRepository';
 import { JapaneseWord } from './entities/JapaneseWord';
 import { JapaneseWordData, Reading } from './entities/JapaneseWordData';
 import { FormDetection } from './form.detection';
@@ -15,23 +17,10 @@ export class AppService {
   private readonly logger = new Logger(AppService.name, true);
 
   constructor(
-    @InjectRepository(DictionaryWord)
-    private dictionaryWordRepository: Repository<DictionaryWord>,
-    private formDetection: FormDetection,
+    private dictionaryWordRepository: DictionaryWordRepository,
     private jumanppClient: JumanppClient,
+    private analyzeJapanese: AnalyzeJapaneseService
   ) {
-  }
-
-  async callJuman(request: AnalysisRequest): Promise<JumanSentence> {
-    // promisify doesn't work in that case https://github.com/grpc/grpc-node/issues/323
-    return new Promise((resolve, reject) => {
-      this.jumanppClient.juman(request, (error, response) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(response);
-      })
-    });
   }
 
   async processText(originalText: string, clickedOffsetOriginal: number, requestedLanguages: string[], exactMatch: boolean = false): Promise<any> {
@@ -50,19 +39,9 @@ export class AppService {
       });
     }
     else {
-      let text = originalText.replace(/\s/g, ' ');
       this.logger.log('Start');
-
-      this.logger.log('Send grpc request');
-      let request = new AnalysisRequest();
-      request.setSentence(text);
-
-      let resultTmp = await this.callJuman(request);
-      this.logger.log('Got response from grpc');
-
-      this.logger.log('Response to object');
-      let mecabResult = (resultTmp).toObject();
-      let morphemesList = mecabResult.morphemesList;
+      let morphemesList = await this.analyzeJapanese.analyzeViaJuman(originalText);
+      this.logger.log('Got response from juman');
 
       this.logger.log('Lookahead');
       allVariants = this.lookahead(morphemesList, clickedOffsetOriginal);
@@ -76,7 +55,7 @@ export class AppService {
 
     this.logger.log('Query words in DB');
     this.logger.log(queries);
-    let wordsFromDb = <JapaneseWord[]>await this.dictionaryWordRepository.createQueryBuilder("words").where("query && ARRAY[:...queries]", { queries }).getMany();
+    let wordsFromDb = <JapaneseWord[]>await this.dictionaryWordRepository.findByExactQueries(DictionaryType.JapaneseWords, queries);
     this.logger.log('Done, found ' + wordsFromDb.length + ' words.');
 
     let resultWords: JapaneseResultItem[] = [];
@@ -253,6 +232,8 @@ export class AppService {
         continue;
       }
 
+      console.log(currentOffset, current);
+
       let currentPos = current.stringPos.pos;
       let isPartical = currentPos == "助詞";
       let isSuffix = currentPos == "接尾辞";
@@ -310,7 +291,7 @@ export class AppService {
           offsetEnd,
         };
 
-        for (let baseformValue of this.getBaseforms(current)) {
+        for (let baseformValue of this.analyzeJapanese.getBaseforms(current)) {
           variants.push({
             value: currentVariant.value + baseformValue,
             reading: currentVariant.reading + current.reading,
@@ -331,7 +312,7 @@ export class AppService {
         offsetStart: currentOffset,
         offsetEnd: currentOffsetEnd,
       });
-      for (let baseformValue of this.getBaseforms(current)) {
+      for (let baseformValue of this.analyzeJapanese.getBaseforms(current)) {
         variants.push({
           value: baseformValue,
           reading: current.reading,
@@ -362,35 +343,6 @@ export class AppService {
     allVariants = allVariants.filter(v => v.value.length <= 10 && v.offsetStart <= clickedOffset && v.offsetEnd > clickedOffset);
 
     return allVariants;
-  }
-
-  getBaseforms(current: JumanMorpheme.AsObject): string[] {
-    let baseforms: string[] = [];
-    if (current.baseform) {
-      if (current.baseform.length > 1 && current.baseform.substr(-1) == 'だ') {
-        baseforms.push(current.baseform.substr(0, current.baseform.length - 1));
-        if (current.stringPos.conjType == 'デアル列タ形') {
-          baseforms.push(current.baseform.substr(0, current.baseform.length - 1) + 'である');
-        }
-      }
-      else if (current.baseform.length > 2 && current.baseform.substr(-2) == 'する') {
-        baseforms.push(current.baseform.substr(0, current.baseform.length - 2));
-      }
-      else if (current.surface != current.baseform) {
-        baseforms.push(current.baseform);
-      }
-    }
-
-    for (let feature of current.featuresList) {
-      if (['代表表記', '可能動詞'].indexOf(feature.key) !== -1 && feature.value) {
-        let value = /^([^/]*)/.exec(feature.value)[0]; // for example take "書く" from "書く/かく"
-        if (baseforms.indexOf(value) == -1 && value != current.surface) {
-          baseforms.push(value);
-        }
-      }
-    }
-
-    return baseforms;
   }
 }
 

@@ -1,0 +1,10 @@
+{
+    "queues": [
+      {
+        "name": "backgroundTasks",
+        "port": 6379,
+        "host": "redis",
+        "hostId": "bull-redis"
+      }
+    ]
+  }

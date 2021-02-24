@@ -4,7 +4,7 @@ import { Queue } from 'bull';
 @Injectable()
 export class QueueService {
     constructor(
-        @InjectQueue('backgroundTasks') private queue: Queue
+        @InjectQueue('backgroundTasks') public queue: Queue
     ) {
     }
 

@@ -3,11 +3,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Job } from 'bull';
 import { Repository } from 'typeorm';
-import { Content } from './entities/Content';
-import { Cue, parseWebVTT, WebVTT } from './webvtt';
+import { Content } from '../entities/Content';
+import { Cue, parseWebVTT, WebVTT } from '../webvtt';
 import { groupBy, values } from 'lodash';
-import { median } from './utils';
-import { removeJapaneseChars } from './japanese.utils';
+import { median } from '../utils';
+import { removeJapaneseChars } from '../japanese.utils';
+import { AnalyzeJapaneseService } from '../analyze.japanese.service';
 
 @Injectable()
 @Processor('backgroundTasks')
@@ -16,7 +17,8 @@ export class QueueProcessor {
 
   constructor(
     @InjectRepository(Content)
-    private contentRepository: Repository<Content>
+    private contentRepository: Repository<Content>,
+    private analyzeJapanese: AnalyzeJapaneseService
   ) {
   }
 
@@ -55,27 +57,8 @@ export class QueueProcessor {
         }
 
         if (lang == 'ja') {
-          if (item.dataJson.subtitlesPaceMedian && item.dataJson.subtitlesPaceOverall) {
-            if (item.dataJson.subtitlesPaceMedian > 900) {
-              throw new UnpublishedReason('Subtitles median pace is too high (possible due to duplicate lines in subtitles).');
-            }
-            if (item.dataJson.subtitlesPaceOverall > 2000) {
-              throw new UnpublishedReason('Subtitles overall pace is too high (possible due to duplicate lines in subtitles).');
-            }
-            if (item.dataJson.subtitlesPaceMedian < 50) { // TODO: change to 30 after adding filter using STT
-              throw new UnpublishedReason('Subtitles median pace is too low (possible video is not fully subtitled).');
-            }
-            if (item.dataJson.subtitlesPaceOverall < 50) {
-              throw new UnpublishedReason('Subtitles overall pace is too low (possible video is not fully subtitled).');
-            }
-          }
-          let nonJapaneseChars = removeJapaneseChars(item.cleanText);
-          if ((nonJapaneseChars.length / item.cleanText.length) > 0.8) {
-            throw new UnpublishedReason('Subtitles not in Japanese.');
-          }
-          if ((nonJapaneseChars.length / item.cleanText.length) > 0.45) {
-            throw new UnpublishedReason('More than 45% of subtitles not in Japanese.');
-          }
+          await this.analyzeJapanese.fillLevelForContent(item);
+          this.filterJapaneseSubtitles(item);
         }
 
         if (item.dataJson?.youtubeVideo?.viewCount) {
@@ -89,9 +72,18 @@ export class QueueProcessor {
       }
       else {
         item.cleanText = item.text;
+
+        if (lang == 'ja') {
+          await this.analyzeJapanese.fillLevelForContent(item);
+        }
       }
 
-      item.countSymbol = item.cleanText.length;
+      item.dataJson = item.dataJson;
+      item.length = item.cleanText.length;
+      item.status = 1;
+
+      delete item.dataJson.errorInternal;
+      delete item.dataJson.unpublishedReason;
     } catch (e) {
       if (e instanceof UnpublishedReason) {
         item.status = -1;
@@ -106,6 +98,30 @@ export class QueueProcessor {
     await this.contentRepository.save(item);
 
     return {};
+  }
+
+  filterJapaneseSubtitles(item: Content) {
+    if (item.dataJson.subtitlesPaceMedian !== undefined && item.dataJson.subtitlesPaceOverall !== undefined) {
+      if (item.dataJson.subtitlesPaceMedian > 900) {
+        throw new UnpublishedReason('Subtitles median pace is too high (possible due to duplicate lines in subtitles).');
+      }
+      if (item.dataJson.subtitlesPaceOverall > 2000) {
+        throw new UnpublishedReason('Subtitles overall pace is too high (possible due to duplicate lines in subtitles).');
+      }
+      if (item.dataJson.subtitlesPaceMedian < 50) { // TODO: change to 30 after adding filter using STT
+        throw new UnpublishedReason('Subtitles median pace is too low (possible video is not fully subtitled).');
+      }
+      if (item.dataJson.subtitlesPaceOverall < 50) {
+        throw new UnpublishedReason('Subtitles overall pace is too low (possible video is not fully subtitled).');
+      }
+    }
+    let nonJapaneseChars = removeJapaneseChars(item.cleanText);
+    if ((nonJapaneseChars.length / item.cleanText.length) > 0.8) {
+      throw new UnpublishedReason('Subtitles not in Japanese.');
+    }
+    if ((nonJapaneseChars.length / item.cleanText.length) > 0.45) {
+      throw new UnpublishedReason('More than 45% of subtitles not in Japanese.');
+    }
   }
 
   cleanTextForSubtitlesPace(text: string, lang: string) {

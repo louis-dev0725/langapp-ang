@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,8 +11,12 @@ import { QueueService } from './queue.service';
 import { ConsoleModule } from 'nestjs-console';
 import { ConsoleController } from './console.controller';
 import { Content } from './entities/Content';
-import { QueueProcessor } from './queue.processor';
+import { AnalyzeJapaneseService } from './analyze.japanese.service';
+import { TestService } from './test.service';
+import { DictionaryWordRepository } from './entities/DictionaryWordRepository';
+import { BackgroundModule } from './background/background.module';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -25,7 +29,7 @@ import { QueueProcessor } from './queue.processor';
       entities: [DictionaryWord, Content],
       autoLoadEntities: false
     }),
-    TypeOrmModule.forFeature([DictionaryWord, Content]),
+    TypeOrmModule.forFeature([DictionaryWord, DictionaryWordRepository, Content]),
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST || 'redis',
@@ -35,7 +39,8 @@ import { QueueProcessor } from './queue.processor';
     BullModule.registerQueue({
       name: 'backgroundTasks',
     }),
-    ConsoleModule
+    ConsoleModule,
+    BackgroundModule,
   ],
   controllers: [AppController],
   providers: [
@@ -47,10 +52,12 @@ import { QueueProcessor } from './queue.processor';
       useValue: new JumanppJumandicClient('localhost:51231', grpcCredentials.createInsecure()),
     },
     ConsoleController,
-    QueueProcessor,
+    AnalyzeJapaneseService,
+    TestService,
   ],
   exports: [
-    ConsoleController
+    ConsoleController,
+    AnalyzeJapaneseService,
   ],
 })
 export class AppModule { }
