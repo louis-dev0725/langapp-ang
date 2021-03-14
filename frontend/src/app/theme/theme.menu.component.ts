@@ -122,7 +122,7 @@ export class ThemeMenuComponent implements OnInit {
             routerLink: ['/settings/profile'],
             visible: this.isLoggedIn,
           },
-          {
+          /*{
             label: 'Affiliate program',
             visible: this.isLoggedIn,
             routerLink: ['/partners'],
@@ -140,7 +140,7 @@ export class ThemeMenuComponent implements OnInit {
                 routerLink: ['/partners/transactions']
               }
             ]
-          },
+          },*/
           {
             label: 'Sign up',
             routerLink: ['/auth/signup'],
