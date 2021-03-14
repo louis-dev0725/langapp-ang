@@ -6,13 +6,12 @@
     <p>{{ "Our E-mail" | translate }}: <a href="mailto:support@example.org">support@example.org</a></p>
     <form #frmVar="ngForm" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid">
-        <div class="p-field">
+        <div class="p-field g-field">
           <label for="name">{{'Name' | translate}}</label>
           <input id="name" formControlName="name" pInputText type="text" />
           <small class="p-invalid" *ngIf="checkError('name')">{{getError('name')}}</small>
-          <p-message *ngIf="checkError('name')" severity="error" text="{{getError('name')}}"></p-message>
         </div>
-        <div class="p-field">
+        <div class="p-field g-field">
           <label for="email">{{'Email' | translate}}</label>
           <input id="email" formControlName="email" pInputText type="text" />
           <small class="p-invalid" *ngIf="checkError('email')">{{getError('email')}}</small>
@@ -22,7 +21,7 @@
           <input id="telephone" pInputText type="text" [class.p-invalid]="checkError('telephone')" />
           <small class="p-invalid" *ngIf="checkError('telephone')">{{getError('telephone')}}</small>
         </div>-->
-        <div class="p-field">
+        <div class="p-field g-field-big">
           <label for="body">{{'Message' | translate}}</label>
           <textarea id="body" formControlName="body" pInputTextarea autoResize="autoResize" [class.p-invalid]="checkError('body')" [rows]="5" [cols]="30"></textarea>
           <small class="p-invalid" *ngIf="checkError('body')">{{getError('body')}}</small>
