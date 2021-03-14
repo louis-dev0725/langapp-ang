@@ -189,8 +189,9 @@ class DictionaryController extends ActiveController
     {
         $filter = Yii::$app->request->queryParams;
 
+        $userId = Yii::$app->user->id;
         $query = UserDictionary::find()->joinWith('dictionaryWord')
-            ->where(['user_dictionary.user_id' => (int)$filter['user_id'], 'user_dictionary.type' => DictionaryWord::TYPE_JAPANESE_WORD])
+            ->where(['user_dictionary.user_id' => $userId, 'user_dictionary.type' => DictionaryWord::TYPE_JAPANESE_WORD])
             ->andWhere(['or like', 'user_dictionary.original_word', explode(',', $filter['word'])])->all();
 
         $query1 = Mnemonics::find()->joinWith('mnemonicsUsers')
@@ -210,8 +211,9 @@ class DictionaryController extends ActiveController
     {
         $filter = Yii::$app->request->queryParams;
 
+        $userId = Yii::$app->user->id;
         $query = UserDictionary::find()->joinWith(['dictionaryWord', 'mnemonic'])
-            ->where(['user_dictionary.user_id' => (int)$filter['user_id']])
+            ->where(['user_dictionary.user_id' => $userId])
             ->andWhere(new Expression("user_dictionary.workout_progress_card->>'due' <= '" . time() . "'"));
 
         if (array_key_exists('type', $filter) && $filter['type'] != 'undefined' && $filter['type'] != '') {
@@ -225,6 +227,34 @@ class DictionaryController extends ActiveController
         }
 
         $query->orderBy(new Expression("user_dictionary.workout_progress_card->>'due' ASC"));
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+    }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function actionComboStudy()
+    {
+        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        if (empty($requestParams)) {
+            $requestParams = Yii::$app->getRequest()->getQueryParams();
+        }
+
+        $userId = Yii::$app->user->id;
+        $query = UserDictionary::find()->joinWith(['dictionaryWord', 'mnemonic'])
+            ->where(['user_dictionary.user_id' => $userId])
+            ->andWhere(new Expression("user_dictionary.workout_progress_card->>'due' <= '" . time() . "'"));
+
+        if (isset($requestParams['filter']['type'])) {
+            $query->andWhere(['user_dictionary.type' => $requestParams['filter']['type']]);
+        }
+
+        $query->orderBy(new Expression("user_dictionary.workout_progress_card->>'due' ASC"));
+        $query->limit = 10;
 
         return new ActiveDataProvider([
             'query' => $query,

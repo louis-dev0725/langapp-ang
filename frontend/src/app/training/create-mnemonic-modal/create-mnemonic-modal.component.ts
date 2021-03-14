@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Dictionary } from '@app/interfaces/common.interface';
+import { UserDictionary } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
 import { ApiService } from '@app/services/api.service';
 import { TranslatingService } from '@app/services/translating.service';
@@ -17,7 +17,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 })
 export class CreateMnemonicModalComponent implements OnInit, OnDestroy {
 
-  @Input() elem: Dictionary;
+  @Input() elem: UserDictionary;
   @Input() status_add: boolean;
   @Output() closeModalCreate: EventEmitter<any> = new EventEmitter<any>();
   @Output() createMnemonic: EventEmitter<any> = new EventEmitter<any>();

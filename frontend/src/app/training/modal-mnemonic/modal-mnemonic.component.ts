@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslatingService } from '@app/services/translating.service';
 
-import { Dictionary, Mnemonic } from '@app/interfaces/common.interface';
+import { UserDictionary, Mnemonic } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
 import { ApiService } from '@app/services/api.service';
 
@@ -16,7 +16,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 })
 export class ModalMnemonicComponent implements OnInit, OnDestroy {
 
-  @Input() elem: Dictionary;
+  @Input() elem: UserDictionary;
   @Input() status: boolean;
   @Output() closeModal: EventEmitter<any> = new EventEmitter<any>();
   @Output() enterChangeMnemonic: EventEmitter<any> = new EventEmitter<any>();

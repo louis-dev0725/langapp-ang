@@ -15,65 +15,50 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @UntilDestroy()
 @Component({
   selector: 'app-cards-word-kanji',
-  templateUrl: './cards-word-kanji.component.html',
-  styleUrls: ['./cards-word-kanji.component.scss']
+  templateUrl: './combo-study.component.html',
+  styleUrls: ['./combo-study.component.scss']
 })
-export class CardsWordKanjiComponent implements OnInit, OnDestroy {
-
+export class ComboStudyComponent implements OnInit, OnDestroy {
   cardsArray: UserDictionary[] = null;
   cards: UserDictionary = null;
+  loading = false;
+
   checkYourself = false;
   arrIndex = 0;
   endTraining = false;
   endTrainingText = null;
   user_id = 0;
   openModal = false;
-  // @ts-ignore
-  domain = window.rocket.apiHost;
+  baseUrl: string;
 
-  @Input()
-  set isLoaded(val: boolean) {
-    this._isLoaded = val;
-  }
-
-  get isLoaded(): boolean {
-    return this._isLoaded;
-  }
-
-  private _isLoaded = false;
   @ViewChild(ModalMnemonicComponent) mmc: ModalMnemonicComponent;
 
-  constructor(private srsService: SrsService, private api: ApiService, private snackBar: MatSnackBar,
-              private session: SessionService, private translatingService: TranslatingService) { }
+  constructor(private srsService: SrsService,
+    private api: ApiService,
+    private snackBar: MatSnackBar,
+    private session: SessionService,
+    private translatingService: TranslatingService) {
+    this.baseUrl = api.apiHost;
+  }
 
   ngOnInit() {
-    this.user_id = this.session.user.id;
-    const data = 'user_id=' + this.user_id;
-    this.api.getAllUserDictionary(data).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.cardsArray = res.items;
+    this.loadList();
+  }
 
-        if (this.cardsArray.length > 0) {
-          this.getOtherInfoElement(this.cardsArray);
-        } else {
-          this.cards = null;
-          this.endTraining = true;
-          this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_all;
-
-          this._isLoaded = true;
-        }
-      } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
-        this._isLoaded = true;
-      }
-    });
+  loadList() {
+    this.loading = true;
+    this.api.getComboStudy({}).pipe(untilDestroyed(this)).subscribe(res => {
+      this.loading = false;
+      this.cardsArray = res?.items ?? [];
+      this.getOtherInfoElement(this.cardsArray); // TODO: change
+    })
   }
 
   getOtherInfoElement(elements) {
     let words = null;
     let mnemonic = null;
     elements.forEach((element) => {
-      if (element.type === 1) {
+      if (element.type === 2) {
         if (words === null) {
           words = element.original_word;
         } else {
@@ -92,10 +77,10 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
       if (!(res instanceof ApiError)) {
         this.editCardElem(this.cardsArray, res);
       } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
+        this.snackBar.open(String(res.error), null, { duration: 3000 });
       }
 
-      this._isLoaded = true;
+      this.loading = false;
     });
   }
 
@@ -121,7 +106,7 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
         });
       }
 
-      if (element.type === 1) {
+      if (element.type === 2) {
         element.word_on = '';
         element.word_kun = '';
         element.word_translate = '';
@@ -133,45 +118,33 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
               element.words.push(word);
             }
           });
+          console.log(element.words);
         }
 
-        if (element.dictionaryWord.sourceData.readings.ja_on) {
-          if (element.dictionaryWord.sourceData.readings.ja_on.length > 0) {
-            element.word_on += element.dictionaryWord.sourceData.readings.ja_on.join(', ');
-          }
-        }
+        element.word_on = this.showReadings(element?.dictionaryWord?.data?.readings, 'on', '');
+        element.word_kun = this.showReadings(element?.dictionaryWord?.data?.readings, 'kun', '');
 
-        if (element.dictionaryWord.sourceData.readings.ja_kun) {
-          if (element.dictionaryWord.sourceData.readings.ja_kun.length > 0) {
-            element.word_kun += element.dictionaryWord.sourceData.readings.ja_kun.join(', ');
-          }
-        }
-
-        const meanArr = Object.entries(element.dictionaryWord.sourceData.meanings);
-        if (meanArr.length > 0) {
-          meanArr.forEach((mean) => {
-            mean.forEach((lang, l) => {
-              if (l === 1) {
-                // @ts-ignore
-                element.word_translate += lang.join(', ') + ', ';
-                if (l === mean.length - 1) {
-                  // @ts-ignore
-                  element.word_translate += lang.join(', ');
-                }
-              }
-            });
-          });
+        if (element?.dictionaryWord?.data?.meanings) {
+          element.word_translate = element?.dictionaryWord?.data?.meanings.map(m => m.value).join(', ');
         }
       }
     });
     this.cards = elements[0];
   }
 
-  ngOnDestroy() {}
+  showReadings(readings: { type: string, value: string }[], type: string, title: string) {
+    let result = readings.filter(r => r.type == type).map(r => r.value).join(', ');
+    if (result.length > 0) {
+      result = title + result;
+    }
+    return result;
+  }
+
+  ngOnDestroy() { }
 
   checkButton(action: any) {
     if (action !== 'checkYourself') {
-      this._isLoaded = false;
+      this.loading = true;
 
       let card: Card = {
         consecutiveCorrectAnswers: 0,
@@ -195,12 +168,12 @@ export class CardsWordKanjiComponent implements OnInit, OnDestroy {
 
       this.api.updateUserDictionary(this.cards).pipe(untilDestroyed(this)).subscribe(res => {
         if (!(res instanceof ApiError)) {
-          this.snackBar.open(this.translatingService.translates['confirm'].user_dictionary.saved, null, {duration: 3000});
+          this.snackBar.open(this.translatingService.translates['confirm'].user_dictionary.saved, null, { duration: 3000 });
         } else {
-          this.snackBar.open(String(res.error), null, {duration: 3000});
+          this.snackBar.open(String(res.error), null, { duration: 3000 });
         }
 
-        this._isLoaded = true;
+        this.loading = false;
       });
 
       if (this.arrIndex + 1 < this.cardsArray.length) {

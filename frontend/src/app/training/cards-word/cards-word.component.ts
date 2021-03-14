@@ -6,7 +6,7 @@ import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
 import { TranslatingService } from '@app/services/translating.service';
-import { Card, Dictionary } from '@app/interfaces/common.interface';
+import { Card, UserDictionary } from '@app/interfaces/common.interface';
 
 import { ModalMnemonicComponent } from '@app/training/modal-mnemonic/modal-mnemonic.component';
 
@@ -20,8 +20,8 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 })
 export class CardsWordComponent implements OnInit, OnDestroy {
 
-  cardsArray: Dictionary[] = null;
-  cards: Dictionary = null;
+  cardsArray: UserDictionary[] = null;
+  cards: UserDictionary = null;
   checkYourself = false;
   arrIndex = 0;
   endTraining = false;

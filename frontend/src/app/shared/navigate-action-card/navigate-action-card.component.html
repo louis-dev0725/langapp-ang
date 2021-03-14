@@ -1,20 +1,12 @@
-<div class="block_center" *ngIf="!openCard">
-  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton('checkYourself')">
-    {{ 'CheckYourself' | translate }}
-  </button>
-</div>
+<div class="p-d-flex p-jc-center">
+  <ng-container *ngIf="!openCard">
+    <p-button (click)="onCheckButton('checkYourself')" [label]="'Show answer' | translate"></p-button>
+  </ng-container>
 
-<div class="block_center" *ngIf="openCard">
-  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton(1)">
-    {{ 'NotRemember' | translate }}
-  </button>
-  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton(2)">
-    {{ 'RememberBadly' | translate }}
-  </button>
-  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton(3)">
-    {{ 'Remember' | translate }}
-  </button>
-  <button mat-flat-button class="filter-delete-button" color="primary" (click)="onCheckButton(4)">
-    {{ 'Easy' | translate }}
-  </button>
+  <ng-container *ngIf="openCard">
+    <p-button (click)="onCheckButton(1)" styleClass="p-button-secondary p-mr-2" [label]="'Again' | translate"></p-button>
+    <p-button (click)="onCheckButton(2)" styleClass="p-button-secondary p-mr-2" [label]="'Hard' | translate"></p-button>
+    <p-button (click)="onCheckButton(3)" styleClass="p-button-success p-mr-2" [label]="'Good' | translate"></p-button>
+    <p-button (click)="onCheckButton(4)" styleClass="p-button-secondary" [label]="'Easy' | translate"></p-button>
+  </ng-container>
 </div>

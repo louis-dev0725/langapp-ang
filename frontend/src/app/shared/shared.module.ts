@@ -31,6 +31,8 @@ import { ChipModule } from 'primeng/chip';
 import { ToastModule } from 'primeng/toast';
 import { TagModule } from 'primeng/tag';
 import { TableModule } from 'primeng/table';
+import { DividerModule } from 'primeng/divider';
+import { CheckboxModule } from 'primeng/checkbox';
 
 let sharedModules = [
   // primeng
@@ -49,6 +51,8 @@ let sharedModules = [
   ToastModule,
   TagModule,
   TableModule,
+  DividerModule,
+  CheckboxModule,
 
   // material
   MatIconModule,

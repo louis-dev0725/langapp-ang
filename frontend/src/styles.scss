@@ -36,6 +36,14 @@ a.p-button:hover {
     border-color: $buttonHoverBorderColor;
 }
 
+.g-field {
+  max-width: 400px;
+}
+
+.g-field-big {
+  max-width: 600px;
+}
+
 /*
 $color-blue-link: #039be5;
 $color-red-danger: #f44336;

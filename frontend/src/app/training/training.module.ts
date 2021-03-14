@@ -15,12 +15,30 @@ import { CardsWordComponent } from './cards-word/cards-word.component';
 import { WordTranslateComponent } from './word-translate/word-translate.component';
 import { ModalMnemonicComponent } from './modal-mnemonic/modal-mnemonic.component';
 import { CreateMnemonicModalComponent } from './create-mnemonic-modal/create-mnemonic-modal.component';
+import { ComboStudyComponent } from './combo-study/combo-study.component';
+import { IndexComponent } from './index/index.component';
 
 
 @NgModule({
-  declarations: [TrainingComponent, CardsWordKanjiComponent, CardsKanjiComponent, CardsWordComponent,
-    WordTranslateComponent, NavigateActionCardComponent, ModalMnemonicComponent, CreateMnemonicModalComponent],
-  imports: [FormsModule, ReactiveFormsModule, TranslateModule, CommonModule, TrainingRoutingModule,
-    SharedModule]
+  declarations: [
+    TrainingComponent,
+    CardsWordKanjiComponent,
+    CardsKanjiComponent,
+    CardsWordComponent,
+    WordTranslateComponent,
+    NavigateActionCardComponent,
+    ModalMnemonicComponent,
+    CreateMnemonicModalComponent,
+    ComboStudyComponent,
+    IndexComponent,
+  ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    CommonModule,
+    TrainingRoutingModule,
+    SharedModule
+  ]
 })
 export class TrainingModule { }

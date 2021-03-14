@@ -705,6 +705,11 @@ export class ApiService {
     return this.apiRequest<ListResponse<UserDictionary>>('GET', 'dictionaries/index', { params: params });
   }
 
+  getComboStudy(params: ParamsInterface) {
+    params['expand'] = 'dictionaryWord,mnemonic';
+    return this.apiRequest<ListResponse<UserDictionary>>('GET', 'dictionaries/combo-study', { params: params });
+  }
+
   /**
    * Получаем список слов и канзи и пользовательского словаря без пагинации
    */
