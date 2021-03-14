@@ -1,7 +1,7 @@
 <div class="container">
   <div class="card">
     <h1 translate>Settings</h1>
-    <p class="note">{{'Your id' | translate}}: {{user?.id}}</p>
+    <p class="note">{{'Your ID' | translate}}: {{user?.id}}</p>
 
     <ng-container *ngIf="errors.length > 0">
       <mat-card *ngFor="let err of errors" class="err-alert">
@@ -14,106 +14,72 @@
         <input type="hidden" formControlName="id">
         <input type="hidden" formControlName="language">
 
-        <mat-form-field class="form-item">
-          <input matInput required formControlName="name" placeholder="{{'Name' | translate}}">
-          <mat-error *ngIf="checkError('name')">{{getError('name')}}</mat-error>
-        </mat-form-field>
 
-        <mat-form-field class="form-item">
-          <input matInput formControlName="company" placeholder="{{'Company' | translate }}">
-        </mat-form-field>
+        <div class="p-fluid">
+          <div class="p-field g-field">
+            <label for="name">{{'Name' | translate}}</label>
+            <input id="name" formControlName="name" pInputText type="text" />
+            <small class="p-invalid" *ngIf="checkError('name')">{{getError('name')}}</small>
+          </div>
 
-        <mat-form-field class="form-item">
-          <input matInput formControlName="site" placeholder="{{'Site' | translate}}">
-        </mat-form-field>
+          <div class="p-field g-field">
+            <label for="email">{{'Email' | translate}}</label>
+            <input id="email" formControlName="email" pInputText type="text" />
+            <small class="p-invalid" *ngIf="checkError('email')">{{getError('email')}}</small>
+          </div>
 
-        <mat-form-field class="form-item">
-          <input matInput formControlName="telephone" placeholder="{{'Phone' | translate}}">
-        </mat-form-field>
+          <div class="p-field g-field">
+            <label for="timezone">{{'Timezone' | translate}}</label>
+            <p-dropdown formControlName="timezone" inputId="state" [options]="timeZones" placeholder="Select" [group]="true" [filter]="true"></p-dropdown>
+            <small class="p-invalid" *ngIf="checkError('timezone')">{{getError('timezone')}}</small>
+          </div>
 
-        <mat-form-field class="form-item">
-          <input matInput required formControlName="email" placeholder="{{'Email' | translate}}">
-          <mat-error *ngIf="checkError('email')">{{getError('email')}}</mat-error>
-        </mat-form-field>
+          <div class="p-field g-field">
+            <label for="main_language">{{'Native (main) language' | translate}}</label>
+            <p-dropdown formControlName="main_language" inputId="state" [options]="languages" placeholder="Select" optionLabel="title" optionValue="id" [filter]="true"></p-dropdown>
+            <small class="p-invalid" *ngIf="checkError('main_language')">{{getError('main_language')}}</small>
+          </div>
 
-        <div class="form-item">
-          <mat-checkbox formControlName="isServicePaused">{{'Is service paused' | translate}}</mat-checkbox>
+          <div class="p-field g-field">
+            <label for="language1">{{'Language 1' | translate}}</label>
+            <p-dropdown formControlName="language1" inputId="state" [options]="languages" placeholder="Select" optionLabel="title" optionValue="id" [filter]="true"></p-dropdown>
+            <small class="p-invalid" *ngIf="checkError('language1')">{{getError('language1')}}</small>
+          </div>
+
+          <div class="p-field g-field" *ngIf="addLanguage2">
+            <label for="language2">{{'Language 2' | translate}}</label>
+            <p-dropdown formControlName="language2" inputId="state" [options]="languages" placeholder="Select" optionLabel="title" optionValue="id" [filter]="true"></p-dropdown>
+            <small class="p-invalid" *ngIf="checkError('language2')">{{getError('language2')}}</small>
+          </div>
+
+          <div class="p-field g-field" *ngIf="addLanguage3">
+            <label for="language3">{{'Language 3' | translate}}</label>
+            <p-dropdown formControlName="language3" inputId="state" [options]="languages" placeholder="Select" optionLabel="title" optionValue="id" [filter]="true"></p-dropdown>
+            <small class="p-invalid" *ngIf="checkError('language3')">{{getError('language3')}}</small>
+          </div>
+
+          <div class="form-item">
+            <p-checkbox (change)="onPasswordFlagChange()" [label]="'Change password' | translate"></p-checkbox>
+          </div>
+  
+          <div [ngClass]="{'hidden': !isChangePassword, 'foldable': isChangePassword}">
+            <ng-container *ngIf="isChangePassword">
+              <div class="p-field g-field">
+                <label for="password">{{'Email' | translate}}</label>
+                <input id="password" formControlName="password" pInputText type="text" />
+                <small class="p-invalid" *ngIf="checkError('password')">{{getError('password')}}</small>
+              </div>
+              <div class="p-field g-field">
+                <label for="passrepeat">{{'Email' | translate}}</label>
+                <input id="passrepeat" formControlName="passrepeat" pInputText type="text" />
+                <small class="p-invalid" *ngIf="checkError('passrepeat')">{{getError('passrepeat')}}</small>
+              </div>
+            </ng-container>
+          </div>
         </div>
 
-        <mat-form-field class="form-item">
-          <input matInput formControlName="wmr" placeholder="{{'WMR wallet' | translate}}">
-        </mat-form-field>
-
-        <mat-form-field class="form-item">
-          <mat-label translate>Timezone</mat-label>
-          <mat-select formControlName="timezone">
-            <mat-optgroup *ngFor="let tzgroup of timeZones" [label]="tzgroup.group">
-              <mat-option *ngFor="let zone of tzgroup.zones" [value]="zone.value">{{zone.value}}</mat-option>
-            </mat-optgroup>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="form-item">
-            <mat-label>{{ 'Main language' | translate }}</mat-label>
-            <mat-select required formControlName="main_language">
-              <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
-            </mat-select>
-          <mat-error *ngIf="checkError('main_language')">{{getError('main_language')}}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="form-item">
-            <mat-label>{{ 'Language1' | translate }}</mat-label>
-            <mat-select formControlName="language1" (selectionChange)="visibleLanguage2()">
-              <mat-option [value]="null">{{ 'Null value' | translate }}</mat-option>
-              <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
-            </mat-select>
-          <mat-error *ngIf="checkError('language1')">{{getError('language1')}}</mat-error>
-        </mat-form-field>
-
-        <ng-container *ngIf="addLanguage2">
-          <mat-form-field class="form-item">
-            <mat-label>{{ 'Language2' | translate }}</mat-label>
-            <mat-select formControlName="language2" (selectionChange)="visibleLanguage3()">
-              <mat-option [value]="null">{{ 'Null value' | translate }}</mat-option>
-              <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </ng-container>
-
-        <ng-container *ngIf="addLanguage3">
-          <mat-form-field class="form-item">
-            <mat-label>{{ 'Language3' | translate }}</mat-label>
-            <mat-select formControlName="language3">
-              <mat-option [value]="null">{{ 'Null value' | translate }}</mat-option>
-              <mat-option *ngFor="let language of languages" [value]="language.id">{{ language.title }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </ng-container>
-
-        <div class="form-item">
-          <mat-checkbox
-            (change)="onPasswordFlagChange()">{{'Is need to password change' | translate}}
-          </mat-checkbox>
-        </div>
-
-        <div [ngClass]="{'hidden': !isChangePassword, 'foldable': isChangePassword}">
-          <ng-container *ngIf="isChangePassword">
-            <mat-form-field class="form-item">
-              <input matInput required formControlName="password" placeholder="{{'Password' | translate}}">
-              <mat-error *ngIf="checkError('password')">{{ getError('password') }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="form-item">
-              <input matInput required formControlName="passrepeat" placeholder="{{'Repeat password' | translate}}">
-              <mat-error *ngIf="checkError('passrepeat')">{{getError('passrepeat')}}</mat-error>
-            </mat-form-field>
-          </ng-container>
-        </div>
-
-        <div class="form-item">
-          <button (click)="onSubmit(settingsForm.value)" mat-flat-button [disabled]="!settingsForm.valid" color="primary">
-            {{'Save' | translate}}
-          </button>
+        <div class="p-mt-3">
+          <button (click)="onSubmit(settingsForm.value)" color="primary" [disabled]="!settingsForm.valid" pButton label="{{'Save' | translate}}"></button>
         </div>
       </form>
     </div>

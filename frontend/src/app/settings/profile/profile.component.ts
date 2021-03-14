@@ -35,34 +35,42 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar, private session: SessionService) {}
+    private snackBar: MatSnackBar, private session: SessionService) { }
 
   ngOnInit() {
     combineLatest([this.api.meRequest(), this.api.getAllLanguage()]).pipe(untilDestroyed(this))
       .subscribe(([form, languages]) => {
-      this.user = form;
+        this.user = form;
 
-      this.settingsForm.patchValue({
-        id: form.id,
-        name: form.name,
-        email: form.email,
-        company: form.company,
-        site: form.site,
-        telephone: form.telephone,
-        wmr: form.wmr,
-        timezone: form.timezone,
-        language: form.language,
-        main_language: form.main_language !== null ? form.homeLanguage.id : null,
-        language1: form.language1 !== null ?  form.languageOne.id : null,
-        language2: form.language2 !== null ?  form.languageTwo.id : null,
-        language3: form.language3 !== null ?  form.languageThree.id : null
+        this.settingsForm.patchValue({
+          id: form.id,
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          site: form.site,
+          telephone: form.telephone,
+          wmr: form.wmr,
+          timezone: form.timezone,
+          language: form.language,
+          main_language: form.main_language !== null ? form.homeLanguage.id : null,
+          language1: form.language1 !== null ? form.languageOne.id : null,
+          language2: form.language2 !== null ? form.languageTwo.id : null,
+          language3: form.language3 !== null ? form.languageThree.id : null
+        });
+
+        this.languages = languages.items;
       });
 
-      this.languages = languages.items;
-    });
-
     this.api.getTimeZones().pipe(untilDestroyed(this)).subscribe((res: any) => {
-      this.timeZones = res;
+      this.timeZones = res.map(t => ({
+        label: t.group,
+        value: t.group,
+        disabled: true,
+        items: t.zones.map(z => ({
+          label: z.value,
+          value: z.value,
+        }))
+      }));
     });
 
     this.settingsForm = this.formBuilder.group({
@@ -83,7 +91,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   checkError(fieldName: string) {
     return !this.settingsForm.get(fieldName).valid;
