@@ -1,8 +1,8 @@
 <div class="container">
-    <div *ngIf="content$ | async as content; else loading">
+    <div *ngIf="content$ | async as content; else loadingSpinner">
         <div class="p-grid">
             <div class="p-col-8">
-                <div class="card" style="height: 80vh;">
+                <div class="card left-video">
                     <app-videojs *ngIf="videoOptions$ | async as videoOptions" [options]="videoOptions"></app-videojs>
                 </div>
             </div>
@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<ng-template #loading>
+<ng-template #loadingSpinner>
     <div class="p-d-flex p-jc-center">
         <p-progressSpinner></p-progressSpinner>
     </div>
