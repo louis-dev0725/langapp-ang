@@ -14,15 +14,17 @@
     "build:chrome": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=chrome webpack",
     "build:firefox": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=firefox webpack",
     "build:opera": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=opera webpack",
-    "build": "yarn run build:chrome && yarn run build:firefox && yarn run build:opera",
+    "build:for-site": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=for-site webpack",
+    "build": "npm run build:chrome && npm run build:firefox && npm run build:opera",
     "lint": "eslint . --ext .ts,.tsx",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "tsc": "tsc"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "emoji-log": "^1.0.2",
-    "webextension-polyfill-ts": "^0.22.0",
-    "i18next": "^19.8.4"
+    "i18next": "^19.8.4",
+    "webextension-polyfill-ts": "^0.22.0"
   },
   "devDependencies": {
     "@abhijithvijayan/eslint-config": "2.5.6",

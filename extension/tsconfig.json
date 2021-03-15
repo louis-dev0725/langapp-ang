@@ -22,7 +22,7 @@
 		"strictBindCallApply": true,*/
 		"strictPropertyInitialization": false,
 		"noImplicitThis": true,
-		/*"alwaysStrict": true,*/
+		"alwaysStrict": true,
 		"forceConsistentCasingInFileNames": true,
 	},
 	"include": [

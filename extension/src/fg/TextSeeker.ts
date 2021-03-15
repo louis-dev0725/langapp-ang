@@ -259,14 +259,14 @@ export class TextSeeker {
             } else {
                 // Character should be added to the content
                 if (newlines > 0) {
-                    if (content.length > 0) {
-                        const useNewlineCount = Math.min(remainder, newlines);
-                        content = '\n'.repeat(useNewlineCount) + content;
-                        remainder -= useNewlineCount;
-                        newlines -= useNewlineCount;
-                    } else {
-                        newlines = 0;
-                    }
+                    //if (content.length > 0) {
+                    const useNewlineCount = Math.min(remainder, newlines);
+                    content = '\n'.repeat(useNewlineCount) + content;
+                    remainder -= useNewlineCount;
+                    newlines -= useNewlineCount;
+                    //} else {
+                    //    newlines = 0;
+                    //}
                     lineHasContent = false;
                     lineHasWhitespace = false;
                     if (remainder <= 0) {

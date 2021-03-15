@@ -1,7 +1,7 @@
 import * as templates from '../templates';
 import { t, i18n } from '../i18n';
 import { JapaneseResultItem, JapaneseWordData, Meaning, ProcessTextResponse } from '../interfaces/ProcessTextResponse';
-import { apiCall, state } from './common';
+import { state } from './common';
 import { AddToDictionaryRequest } from '../interfaces/AddToDictionaryRequest';
 import { ProcessTextRequest } from '../interfaces/ProcessTextRequest';
 import { showSnackbar } from './Snackbar';
@@ -133,7 +133,7 @@ export class Modal {
             contextOffset: this.currentProcessTextRequest.offset,
             contextUrl: this.currentProcessTextRequest.url,
         };
-        let response = <AddToDictionaryResponse>await apiCall('POST', 'dictionaries', request);
+        let response = <AddToDictionaryResponse>await state.apiCall('POST', 'dictionaries', request);
         showSnackbar(response.success ? t('added_to_user_dictionary') : t('error_while_adding_to_user_dictionary'));
         this.hide();
     }

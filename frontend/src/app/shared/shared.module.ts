@@ -33,6 +33,7 @@ import { TagModule } from 'primeng/tag';
 import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
+import { OnclickTranslationDirective } from './onclick-translation.directive';
 
 let sharedModules = [
   // primeng
@@ -69,7 +70,13 @@ let sharedModules = [
 ];
 
 @NgModule({
-  declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe],
+  declarations: [
+    FormatDatePipe,
+    FormatNumbersPipe,
+    RoundToPipe,
+    FormatCurrencyPipe,
+    OnclickTranslationDirective
+  ],
   imports: [
     CommonModule,
     ...sharedModules
@@ -79,6 +86,7 @@ let sharedModules = [
     FormatNumbersPipe,
     RoundToPipe,
     FormatCurrencyPipe,
+    OnclickTranslationDirective,
     ...sharedModules
   ]
 })

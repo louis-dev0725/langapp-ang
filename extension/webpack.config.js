@@ -3,31 +3,32 @@ const webpack = require('webpack');
 const FilemanagerPlugin = require('filemanager-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ExtensionReloader = require('webpack-extension-reloader');
 const WextManifestWebpackPlugin = require('wext-manifest-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-const sourcePath = path.join(__dirname, 'src');
-const destPath = path.join(__dirname, 'extension');
-const nodeEnv = process.env.NODE_ENV || 'development';
 const targetBrowser = process.env.TARGET_BROWSER;
+const isForSite = targetBrowser == 'for-site';
+const sourcePath = path.join(__dirname, 'src');
+const destPath = path.join(__dirname, isForSite ? 'build-for-site' : 'extension');
+const nodeEnv = process.env.NODE_ENV || 'development';
 
 const extensionReloaderPlugin =
   nodeEnv === 'development'
     ? new ExtensionReloader({
-        port: 9090,
-        reloadPage: true,
-        entries: {
-          // TODO: reload manifest on update
-          contentScript: 'contentScript',
-          background: 'background',
-          extensionPage: ['popup', 'options'],
-        },
-      })
+      port: 9090,
+      reloadPage: true,
+      entries: {
+        // TODO: reload manifest on update
+        contentScript: 'contentScript',
+        background: 'background',
+        extensionPage: ['popup', 'options'],
+      },
+    })
     : () => {
-        this.apply = () => {};
-      };
+      this.apply = () => { };
+    };
 
 const getExtensionFileType = (browser) => {
   if (browser === 'opera') {
@@ -53,15 +54,18 @@ module.exports = {
 
   mode: nodeEnv,
 
-  entry: {
-    manifest: path.join(sourcePath, 'manifest.json'),
-    backgroundPage: path.join(sourcePath, 'bg', 'backgroundPage.ts'),
-    contentScript: path.join(sourcePath, 'fg', 'contentScript.ts'),
-  },
+  entry: isForSite ? {
+    common: path.join(sourcePath, 'fg', 'common.ts'),
+  } : {
+      manifest: path.join(sourcePath, 'manifest.json'),
+      backgroundPage: path.join(sourcePath, 'bg', 'backgroundPage.ts'),
+      contentScript: path.join(sourcePath, 'fg', 'contentScript.ts'),
+    },
 
   output: {
-    path: path.join(destPath, targetBrowser),
-    filename: 'js/[name].bundle.js',
+    path: isForSite ? destPath : path.join(destPath, targetBrowser),
+    filename: isForSite ? '[name].js' : 'js/[name].bundle.js',
+    libraryTarget: isForSite ? 'commonjs2' : '',
   },
 
   resolve: {
@@ -96,7 +100,10 @@ module.exports = {
         use: [
           {
             loader: "ejs-compiled-loader",
-            options: {}
+            options: {
+              strict: true,
+              _with: false,
+            }
           }
         ]
       },
@@ -107,7 +114,7 @@ module.exports = {
     // Plugin to not generate js bundle for manifest entry
     new WextManifestWebpackPlugin(),
     // Generate sourcemaps
-    new webpack.SourceMapDevToolPlugin({filename: false}),
+    isForSite ? null : new webpack.SourceMapDevToolPlugin({ filename: false }),
     new ForkTsCheckerWebpackPlugin(),
     // environmental variables
     new webpack.EnvironmentPlugin(['NODE_ENV', 'TARGET_BROWSER']),
@@ -124,15 +131,15 @@ module.exports = {
       verbose: true,
     }),
     // copy static assets
-    new CopyWebpackPlugin({
-      patterns: [{from: 'src/assets', to: 'assets'}],
+    isForSite ? null : new CopyWebpackPlugin({
+      patterns: [{ from: 'src/assets', to: 'assets' }],
     }),
     // plugin to enable browser reloading in development mode
     extensionReloaderPlugin,
-  ],
+  ].filter(i => i),
 
   optimization: {
-    minimize: true,
+    minimize: isForSite ? false : true,
     minimizer: [
       new TerserPlugin({
         parallel: true,
@@ -144,14 +151,14 @@ module.exports = {
         extractComments: false,
       }),
       new FilemanagerPlugin({
-        events: {
+        events: isForSite ? {} : {
           onEnd: {
             archive: [
               {
                 format: 'zip',
                 source: path.join(destPath, targetBrowser),
                 destination: `${path.join(destPath, targetBrowser)}.${getExtensionFileType(targetBrowser)}`,
-                options: {zlib: {level: 6}},
+                options: { zlib: { level: 6 } },
               },
             ],
           },

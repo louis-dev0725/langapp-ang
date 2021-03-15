@@ -2,7 +2,7 @@
 <!--<div id="modal-translate-header" style="display: flex; flex-flow: row nowrap; width: 100%; justify-content: space-between;">
 </div>-->
 <div id="modal-translate-body" class="response" style="box-sizing: border-box; display: flex; flex-flow: column nowrap; width: 100%;" lang="ja-JP">
-    <% for (let word of response.words) { %>
+    <% for (let word of locals.response.words) { %>
         <div class="word-variant" data-word="<%= JSON.stringify(word) %>">
             <% for (let [i, reading] of word.readings.entries()) { %>
                 <div class="reading-variant<%= reading.common ? ' reading-variant-common' : ' reading-variant-uncommon' %><%= reading.current ? ' reading-variant-current' : '' %><%= reading.currentMain ? ' reading-variant-current-main' : '' %>">
