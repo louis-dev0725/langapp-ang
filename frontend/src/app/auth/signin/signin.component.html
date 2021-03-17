@@ -1,42 +1,47 @@
 <div class="container">
-  <div class="card" *ngIf="isLoaded">
+  <div class="card" *ngIf="isLoaded; else loadingSpinner">
     <h1 translate>Sign in</h1>
     <p class="note" translate>signin.note</p>
 
     <ng-container *ngIf="errors.length > 0">
-      <mat-card *ngFor="let err of errors"
-        class="err-alert">
-        <mat-card-content>{{err.message}}</mat-card-content>
-      </mat-card>
+      <p-messages severity="error">
+        <ng-template pTemplate>
+          <div *ngFor="let err of errors">
+            {{err.message}}
+          </div>
+        </ng-template>
+      </p-messages>
     </ng-container>
 
-    <div class="container">
-      <form [formGroup]="signinForm" (ngSubmit)="onSubmit(signinForm.value)">
-        <mat-form-field class="form-item">
-          <mat-label translate>Email</mat-label>
-          <input matInput required formControlName="email" placeholder="{{'Email' | translate}}">
-          <mat-error *ngIf="checkError('email')">{{ getErrors('email')}}</mat-error>
-        </mat-form-field>
 
-        <mat-form-field class="form-item">
-          <mat-label translate>Password</mat-label>
-          <input matInput type="password" formControlName="password" required placeholder="{{'Password' | translate}}">
-          <mat-error *ngIf="checkError('password')">{{ getErrors('password')}}</mat-error>
-        </mat-form-field>
-
-        <div class="form-item">
-          <a routerLink="/auth/restore" class="form-item-link" translate>Forgot password?</a>
+    <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+      <div class="p-fluid">
+        <div class="p-field g-field">
+          <label for="email">{{'Email' | translate}}</label>
+          <input id="email" formControlName="email" pInputText type="text" />
+          <small class="p-invalid" *ngIf="checkError('email')">{{getErrors('email')}}</small>
         </div>
 
-        <div class="form-item">
-          <button mat-flat-button color="primary" type="submit" [disabled]="!signinForm.valid">{{'Sign in' | translate}}
-          </button>
+        <div class="p-field g-field">
+          <label for="password">{{'Password' | translate}}</label>
+          <input id="password" formControlName="password" pInputText type="password" />
+          <small class="p-invalid" *ngIf="checkError('password')">{{getErrors('password')}}</small>
         </div>
-      </form>
-    </div>
+      </div>
+
+      <div class="p-mb-3">
+        <a routerLink="/auth/restore" translate>Forgot password?</a>
+      </div>
+
+      <div>
+        <button (click)="onSubmit()" color="primary" [disabled]="!signinForm.valid" pButton label="{{'Sign in' | translate}}"></button>
+      </div>
+    </form>
   </div>
 
-  <mat-card *ngIf="!isLoaded" style="display:flex;justify-content:center;align-items:center;">
-    <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
-  </mat-card>
+  <ng-template #loadingSpinner>
+    <div class="p-d-flex p-jc-center">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  </ng-template>
 </div>

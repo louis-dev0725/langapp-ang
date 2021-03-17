@@ -110,7 +110,7 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
         label: 'Logout',
         visible: this.isLoggedIn,
         command: event => {
-          this.appTheme.logout();
+          this.appTheme.logout(event.originalEvent);
         }
       },
     ];

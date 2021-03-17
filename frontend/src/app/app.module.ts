@@ -20,7 +20,7 @@ import { HttpInterceptorService } from '@app/http/http-interceptor';
 import { ThemeModule } from '@app/theme/theme.module';
 import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -81,7 +81,8 @@ import { EffectsModule } from '@ngrx/effects';
       provide: DefaultDataServiceConfig,
       useValue: dataServiceConfig,
     },
-    MessageService
+    MessageService,
+    ConfirmationService,
   ],
   bootstrap: [AppComponent]
 })

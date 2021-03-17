@@ -4,82 +4,42 @@
     <p></p>
 
     <ng-container *ngIf="errors.length > 0">
-      <mat-card *ngFor="let err of errors"
-                class="err-alert">
-        <mat-card-content>{{err.message}}</mat-card-content>
-      </mat-card>
+      <p-messages severity="error">
+        <ng-template pTemplate>
+          <div *ngFor="let err of errors">
+            {{err.message}}
+          </div>
+        </ng-template>
+      </p-messages>
     </ng-container>
 
-    <div class="container">
-      <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
-        <input type="hidden" formControlName="timezone">
-        <input type="hidden" formControlName="language">
-        <input *ngIf="getInvatedId()" type="hidden" formControlName="invitedByUserId">
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <input type="hidden" formControlName="timezone">
+      <input type="hidden" formControlName="language">
+      <input *ngIf="getInvitedId()" type="hidden" formControlName="invitedByUserId">
 
-        <mat-form-field class="form-item">
-          <input
-            matInput
-            required
-            formControlName="name"
-            placeholder="{{'Name' | translate}}">
-          <mat-error *ngIf="checkError('name')">{{ getErrors('name') }}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="form-item">
-          <input
-            matInput
-            formControlName="company"
-            placeholder="{{'Company' | translate}}">
-          <mat-error></mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="form-item">
-          <input
-            matInput
-            formControlName="telephone"
-            placeholder="{{'Phone' | translate}}">
-          <mat-error></mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="form-item">
-          <input
-            matInput
-            required
-            formControlName="email"
-            type="email"
-            placeholder="{{'Email' | translate}}">
-          <mat-error *ngIf="checkError('email')">{{ getErrors('email') }}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="form-item">
-          <input
-            matInput
-            required
-            formControlName="password"
-            type="password"
-            placeholder="{{'Password' | translate}}">
-          <mat-error *ngIf="checkError('password')">{{ getErrors('password') }}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="form-item">
-          <input
-            matInput
-            required
-            formControlName="passrepeat"
-            type="password"
-            placeholder="{{'Repeat password' | translate}}">
-          <mat-error *ngIf="checkError('passrepeat')">{{getErrors('passrepeat')}}</mat-error>
-        </mat-form-field>
-
-        <div class="form-item">
-          <button
-            mat-flat-button
-            color="primary"
-            [disabled]="!signupForm.valid">{{'Sign up' | translate}}
-          </button>
+      <div class="p-fluid">
+        <div class="p-field g-field">
+          <label for="email">{{'Email' | translate}}</label>
+          <input id="email" formControlName="email" pInputText type="text" />
+          <small class="p-invalid" *ngIf="checkError('email')">{{getErrors('email')}}</small>
         </div>
 
-      </form>
-    </div>
+        <div class="p-field g-field">
+          <label for="password">{{'Password' | translate}}</label>
+          <input id="password" formControlName="password" pInputText type="password" />
+          <small class="p-invalid" *ngIf="checkError('password')">{{getErrors('password')}}</small>
+        </div>
+        <div class="p-field g-field">
+          <label for="passrepeat">{{'Repeat password' | translate}}</label>
+          <input id="passrepeat" formControlName="passrepeat" pInputText type="passrepeat" />
+          <small class="p-invalid" *ngIf="checkError('passrepeat')">{{getErrors('passrepeat')}}</small>
+        </div>
+      </div>
+
+      <div>
+        <button (click)="onSubmit()" color="primary" [disabled]="!signupForm.valid" pButton label="{{'Sign up' | translate}}"></button>
+      </div>
+    </form>
   </div>
 </div>

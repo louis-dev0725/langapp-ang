@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { AppComponent } from '@app/app.component';
 import { MenuService } from '@app/theme/theme.menu.service';
-import { PrimeNGConfig } from 'primeng/api';
+import { ConfirmationService, PrimeNGConfig } from 'primeng/api';
 import { UserService } from '@app/services/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
@@ -73,7 +73,8 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     private eventService: EventService,
     private primengConfig: PrimeNGConfig,
     private confirmDialog: MatDialog,
-    public app: AppComponent) {
+    public app: AppComponent,
+    private confirmationService: ConfirmationService) {
     this.setUpSubscriptions();
   }
 
@@ -136,28 +137,24 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     return this.sessionService.openedAdmin;
   }
 
-  logout() {
+  logout(event : MouseEvent) {
     if (!this.isOpenedAdmin) {
-      const dialogModel = new ConfirmDialogModel(
-        this.translateService.instant('Logout confirm title'),
-        this.translateService.instant('Logout confirm msg')
-      );
-
-      const dialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
-        maxWidth: '400px',
-        data: dialogModel
-      });
-
-      dialogRef.afterClosed().pipe(untilDestroyed(this)).subscribe(result => {
-        if (result) {
+      this.confirmationService.confirm({
+        target: event.target,
+        message: this.translateService.instant('Logout confirm title'),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
           this.api.logout();
+          this.router.navigate(['auth/signin']);
+          window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
+        },
+        reject: () => {
         }
       });
     } else {
       this.api.logout();
+      window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
     }
-
-    window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
   }
 
   onMenuButtonClick(event) {

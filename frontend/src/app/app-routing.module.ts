@@ -49,7 +49,7 @@ const routes: Routes = [{
 const rootRoutes: Routes = [
   {
     path: '',
-    redirectTo: '/payment',
+    redirectTo: '/content/materials',
     pathMatch: 'full'
   },
   {

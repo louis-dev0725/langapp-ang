@@ -33,6 +33,7 @@ import { TagModule } from 'primeng/tag';
 import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { OnclickTranslationDirective } from './onclick-translation.directive';
 
 let sharedModules = [
@@ -54,6 +55,7 @@ let sharedModules = [
   TableModule,
   DividerModule,
   CheckboxModule,
+  ConfirmPopupModule,
 
   // material
   MatIconModule,

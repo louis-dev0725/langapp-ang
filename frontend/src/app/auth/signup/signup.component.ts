@@ -23,7 +23,7 @@ export class SignupComponent implements OnInit {
       {
         timezone: [this.getTimezone() || ''],
         language: [this.getLanguage() || ''],
-        invitedByUserId: [this.getInvatedId() || ''],
+        invitedByUserId: [this.getInvitedId() || ''],
         name: ['', { validators: [Validators.required], updateOn: 'change' }],
         company: [''],
         telephone: [''],
@@ -44,15 +44,15 @@ export class SignupComponent implements OnInit {
     return window.navigator.language.slice(0, 2).toLowerCase();
   }
 
-  getInvatedId(): string | boolean {
+  getInvitedId(): string | boolean {
     const val = localStorage.getItem('invitedByUserId');
     return val ? val : false;
   }
 
-  onSubmit(value: any) {
+  onSubmit() {
     this.errors = [];
     const data = {
-      ...value,
+      ...this.signupForm.value,
       invitedByUserId: localStorage.getItem('invitedByUserId')
     };
     this.api.signUp(data).subscribe(res => {
@@ -73,6 +73,7 @@ export class SignupComponent implements OnInit {
   }
 
   checkError(fieldName: string) {
-    return !!this.signupForm.get(fieldName).errors;
+    let field = this.signupForm.get(fieldName);
+    return (field.touched || field.dirty) && !field.valid;
   }
 }

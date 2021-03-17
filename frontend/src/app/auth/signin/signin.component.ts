@@ -15,35 +15,27 @@ export class SigninComponent implements OnInit {
   constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder,
     private router: Router) {}
 
-  @Input()
-  set isLoaded(val: boolean) {
-    this._isLoaded = val;
-  }
-
-  get isLoaded(): boolean {
-    return this._isLoaded;
-  }
   signinForm: FormGroup;
   errors: FieldError[] = [];
 
-  private _isLoaded = true;
+  isLoaded = true;
 
   ngOnInit() {
     this.signinForm = this.formBuilder.group({
-      email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
+      email: ['', { validators: [Validators.required, Validators.email], updateOn: 'blur' }],
       password: ['', { validators: [Validators.required], updateOn: 'change' }]
     });
   }
 
-  onSubmit(value: any) {
+  onSubmit() {
     this.errors = [];
     this.isLoaded = false;
-    this.api.login(value).subscribe(res => {
+    this.api.login(this.signinForm.value).subscribe(res => {
       if (res instanceof ApiError) {
         this.errors = res.error;
         this.isLoaded = true;
       } else {
-        this.router.navigate(['/payment']);
+        this.router.navigate(['/']);
 
         window.postMessage({ type: 'LoginSuccess', text: 'Login'}, '*');
       }
@@ -57,6 +49,7 @@ export class SigninComponent implements OnInit {
   }
 
   checkError(fieldName: string) {
-    return !!this.signinForm.get(fieldName).errors;
+    let field = this.signinForm.get(fieldName);
+    return (field.touched || field.dirty) && !field.valid;
   }
 }
