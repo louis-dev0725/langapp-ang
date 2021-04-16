@@ -4697,11 +4697,14 @@ function showForRange(_x) {
 
 function _showForRange() {
   _showForRange = common_asyncToGenerator( /*#__PURE__*/regenerator_default.a.mark(function _callee(range) {
+    var _state$user$languages;
+
     var exactMatch,
         prevLength,
         context,
         seekPrev,
         seekNext,
+        langauges,
         request,
         firstSymbolRange,
         response,
@@ -4735,21 +4738,22 @@ function _showForRange() {
           return _context.abrupt("return");
 
         case 5:
+          langauges = (_state$user$languages = state.user.languages) !== null && _state$user$languages !== void 0 ? _state$user$languages : ['en'];
           request = {
             text: context,
             url: range.startContainer.ownerDocument.location.href,
             offset: prevLength,
-            languages: ['rus', 'eng'],
+            languages: langauges,
             exactMatch: exactMatch
           };
           firstSymbolRange = new Range();
           firstSymbolRange.setStart(range.startContainer, range.startOffset);
           state.modal.showText(i18n_t('loading'));
           state.modal.updatePosition(firstSymbolRange);
-          _context.next = 12;
+          _context.next = 13;
           return state.apiCall('POST', 'processText', request);
 
-        case 12:
+        case 13:
           response = _context.sent;
 
           if (!response.success) {
@@ -4774,7 +4778,7 @@ function _showForRange() {
             state.modal.updatePosition(newSelectionRange);
           }
 
-        case 22:
+        case 23:
         case "end":
           return _context.stop();
       }
