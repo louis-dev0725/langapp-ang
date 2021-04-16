@@ -1,6 +1,6 @@
 import { Logger, Injectable, Dependencies } from '@nestjs/common';
 import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, Repository } from 'typeorm';
 import { AnalyzeJapaneseService } from './analyze.japanese.service';
 import { DictionaryType, DictionaryWord } from './entities/DictionaryWord';
 import { DictionaryWordRepository } from './entities/DictionaryWordRepository';
@@ -26,6 +26,10 @@ export class AppService {
   async processText(originalText: string, clickedOffsetOriginal: number, requestedLanguages: string[], exactMatch: boolean = false): Promise<any> {
     let toReturn: ProcessTextResponse = new ProcessTextResponse();
     let allVariants: Variant[] = [];
+
+    // TODO: rebuild dictionary with 2 letter lang codes
+    requestedLanguages = requestedLanguages.map(l => l == 'en' ? 'eng' : (l == 'ru' ? 'ru' : l));
+    requestedLanguages = ['eng'];
 
     if (exactMatch) {
       let text = originalText.replace(/\s/g, '');
@@ -76,6 +80,11 @@ export class AppService {
 
     toReturn.success = resultWords.length > 0;
     toReturn.words = resultWords;
+
+    let hasMeaningsInRequestedLanguages = toReturn.words.filter(w => w.meanings.filter(m => requestedLanguages.indexOf(m.lang) !== -1).length > 0).length > 0;
+    if (!hasMeaningsInRequestedLanguages) {
+      requestedLanguages.push('eng');
+    }
 
     for (let word of toReturn.words) {
       /*

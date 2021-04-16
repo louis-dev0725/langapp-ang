@@ -35,6 +35,7 @@ import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { OnclickTranslationDirective } from './onclick-translation.directive';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 let sharedModules = [
   // primeng
@@ -56,6 +57,7 @@ let sharedModules = [
   DividerModule,
   CheckboxModule,
   ConfirmPopupModule,
+  MultiSelectModule,
 
   // material
   MatIconModule,

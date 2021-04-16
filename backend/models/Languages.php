@@ -7,10 +7,9 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "{{%languages}}".
- *
  * @property int $id
  * @property string $title
+ * @property string $code
  */
 class Languages extends ActiveRecord {
 

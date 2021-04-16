@@ -35,27 +35,9 @@
           </div>
 
           <div class="p-field g-field">
-            <label for="main_language">{{'Native (main) language' | translate}}</label>
-            <p-dropdown formControlName="main_language" inputId="state" [options]="languages" placeholder="Select" optionLabel="title" optionValue="id" [filter]="true"></p-dropdown>
-            <small class="p-invalid" *ngIf="checkError('main_language')">{{getError('main_language')}}</small>
-          </div>
-
-          <div class="p-field g-field">
-            <label for="language1">{{'Language 1' | translate}}</label>
-            <p-dropdown formControlName="language1" inputId="state" [options]="languages" placeholder="Select" optionLabel="title" optionValue="id" [filter]="true"></p-dropdown>
-            <small class="p-invalid" *ngIf="checkError('language1')">{{getError('language1')}}</small>
-          </div>
-
-          <div class="p-field g-field" *ngIf="addLanguage2">
-            <label for="language2">{{'Language 2' | translate}}</label>
-            <p-dropdown formControlName="language2" inputId="state" [options]="languages" placeholder="Select" optionLabel="title" optionValue="id" [filter]="true"></p-dropdown>
-            <small class="p-invalid" *ngIf="checkError('language2')">{{getError('language2')}}</small>
-          </div>
-
-          <div class="p-field g-field" *ngIf="addLanguage3">
-            <label for="language3">{{'Language 3' | translate}}</label>
-            <p-dropdown formControlName="language3" inputId="state" [options]="languages" placeholder="Select" optionLabel="title" optionValue="id" [filter]="true"></p-dropdown>
-            <small class="p-invalid" *ngIf="checkError('language3')">{{getError('language3')}}</small>
+            <label for="languages">{{'Languages' | translate}}</label>
+            <p-multiSelect formControlName="languages" [options]="languages" display="chip" [placeholder]="languagesPlaceholder" [showToggleAll]="false"></p-multiSelect>
+            <small class="p-invalid" *ngIf="checkError('languages')">{{getError('languages')}}</small>
           </div>
 
           <div class="form-item">

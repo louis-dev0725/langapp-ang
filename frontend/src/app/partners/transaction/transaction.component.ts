@@ -18,7 +18,7 @@ export class TransactionComponent implements OnInit, OnDestroy {
   @ViewChild(PaymentsTableComponent, { static: true }) paymentTable: PaymentsTableComponent;
 
   get parnterBalance(): number {
-    return this.session.user.balancePartner;
+    return Number(this.session.user.balancePartner);
   }
 
   constructor(public session: SessionService, private api: ApiService) {}

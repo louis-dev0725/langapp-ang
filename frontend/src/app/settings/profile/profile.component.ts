@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomValidator } from '@app/services/custom-validator';
@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionService } from '@app/services/session.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 @UntilDestroy()
 @Component({
@@ -19,6 +20,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   isChangePassword = false;
   timeZones: any[] = [];
   user;
+  languagesPlaceholder = '';
 
   languages = [];
 
@@ -34,31 +36,48 @@ export class ProfileComponent implements OnInit, OnDestroy {
     return this.user.isServicePaused !== undefined ? this.user.isServicePaused : false;
   }
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar, private session: SessionService) { }
+  constructor(private api: ApiService,
+    private customValidator: CustomValidator,
+    private formBuilder: FormBuilder,
+    private session: SessionService,
+    private changeDetector: ChangeDetectorRef,
+    private messageService: MessageService) { }
 
   ngOnInit() {
+    this.settingsForm = this.formBuilder.group({
+      id: [''],
+      name: ['', { validators: [Validators.required], updateOn: 'change' }],
+      email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
+      //company: [''],
+      //site: [''],
+      telephone: [''],
+      //isServicePaused: [''],
+      wmr: [''],
+      timezone: [''],
+      language: [''],
+      languages: [[], { validators: [Validators.required], updateOn: 'change' }],
+    });
+
     combineLatest([this.api.meRequest(), this.api.getAllLanguage()]).pipe(untilDestroyed(this))
-      .subscribe(([form, languages]) => {
-        this.user = form;
-
+      .subscribe(([user, languages]) => {
+        this.user = user;
+        this.languages = languages.items.map(l => ({
+          label: l.title,
+          value: l.code,
+        }));
         this.settingsForm.patchValue({
-          id: form.id,
-          name: form.name,
-          email: form.email,
-          company: form.company,
-          site: form.site,
-          telephone: form.telephone,
-          wmr: form.wmr,
-          timezone: form.timezone,
-          language: form.language,
-          main_language: form.main_language !== null ? form.homeLanguage.id : null,
-          language1: form.language1 !== null ? form.languageOne.id : null,
-          language2: form.language2 !== null ? form.languageTwo.id : null,
-          language3: form.language3 !== null ? form.languageThree.id : null
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          //company: form.company,
+          //site: form.site,
+          telephone: user.telephone,
+          wmr: user.wmr,
+          timezone: user.timezone,
+          language: user.language,
+          languages: user.languages,
         });
-
-        this.languages = languages.items;
+        this.languagesPlaceholder = 'Select'; // Workaround for issue https://github.com/primefaces/primeng/issues/9673
       });
 
     this.api.getTimeZones().pipe(untilDestroyed(this)).subscribe((res: any) => {
@@ -71,23 +90,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
           value: z.value,
         }))
       }));
-    });
-
-    this.settingsForm = this.formBuilder.group({
-      id: [''],
-      name: ['', { validators: [Validators.required], updateOn: 'change' }],
-      email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
-      company: [''],
-      site: [''],
-      telephone: [''],
-      isServicePaused: [''],
-      wmr: [''],
-      timezone: [''],
-      language: [''],
-      main_language: [null, { validators: [Validators.required], updateOn: 'change' }],
-      language1: [null],
-      language2: [null],
-      language3: [null],
     });
   }
 
@@ -155,7 +157,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this._errors = result.error;
       } else {
         this.session.user = result;
-        this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null, { duration: 3000 });
+      this.messageService.add({ severity: 'success', summary: this.customValidator.messagesMap['snackbar.settings-edit-success'], detail: this.customValidator.messagesMap['snackbar.settings-edit-success'] });
       }
     });
   }

@@ -12,13 +12,7 @@ export default interface User {
     isPartner: number;
     isServicePaused: number;
     language: string;
-    language1?: number;
-    language2?: any;
-    language3?: any;
-    languageOne?: HomeLanguage;
-    languageThree?: any;
-    languageTwo?: any;
-    main_language?: any;
+    languages: string[];
     name: string;
     notifications: any[];
     paidUntilDateTime: string;

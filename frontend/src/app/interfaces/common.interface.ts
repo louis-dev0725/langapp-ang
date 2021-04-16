@@ -1,37 +1,40 @@
 export interface User {
-  id?: number;
+  id: number;
   name: string;
   company: string;
   site: string;
   telephone: string;
   email: string;
-  balance: number;
-  balancePartner: number;
-  registerIp?: string;
-  lastLoginIp?: string;
-  addedDateTime?: string;
-  comment?: any;
-  isServicePaused?: boolean;
-  invitedByUserId?: any;
-  isPartner?: any;
-  enablePartnerPayments?: any;
-  wmr?: string;
+  balance: string;
+  balancePartner: string;
+  registerIp: string;
+  lastLoginIp: string;
+  addedDateTime: string;
+  comment: any;
+  isServicePaused: number;
+  invitedByUserId: any;
+  isPartner: any;
+  enablePartnerPayments: any;
+  wmr: string;
   timezone: string;
   language: string;
-  main_language: any;
-  language1: any;
-  language2?: any;
-  language3?: any;
-  homeLanguage?: Language;
-  languageOne?: Language;
-  languageTwo?: Language;
-  languageThree?: Language;
+  languages: string[];
   accessToken?: string;
   isLoggedIn: boolean;
   isAdmin: boolean;
-  currency?: any;
-  config?: any;
+  currency: any;
+  config: any;
   extensionSettings: any;
+  notifications: UserNotification[];
+  paidUntilDateTime: string;
+  partnerPercent: string;
+}
+
+export interface UserNotification {
+  id: string;
+  color: string;
+  title: string;
+  text: string;
 }
 
 export interface ListResponse<T> {

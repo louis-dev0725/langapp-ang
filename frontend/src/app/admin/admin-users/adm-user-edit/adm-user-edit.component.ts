@@ -240,7 +240,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     if (!this.user) {
       return false;
     }
-    return this.user.isServicePaused !== undefined ? this.user.isServicePaused : false;
+    return this.user.isServicePaused !== undefined ? !!this.user.isServicePaused : false;
   }
 
   checkError(fieldName: string) {

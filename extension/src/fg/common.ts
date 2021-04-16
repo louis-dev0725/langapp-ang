@@ -37,11 +37,13 @@ export async function showForRange(range: Range, exactMatch: boolean = false) {
     return;
   }
 
+  let langauges = state.user.languages ?? ['en'];
+
   let request: ProcessTextRequest = {
     text: context,
     url: range.startContainer.ownerDocument.location.href,
     offset: prevLength,
-    languages: ['rus', 'eng'],
+    languages: langauges,
     exactMatch: exactMatch
   };
 

@@ -285,7 +285,7 @@ export class ApiService {
   private getMeRequest(observer, token = null, isCurrentUser = true) {
     const headers = this.getHeadersWithToken(token);
 
-    this.http.get<User>(this.apiHost + '/users/me?expand=homeLanguage,languageOne,languageTwo,languageThree',
+    this.http.get<User>(this.apiHost + '/users/me',
       { headers }).subscribe(
         (userRes: any) => {
           this.store.dispatch(new LoadAuthorizedSuccess(userRes));

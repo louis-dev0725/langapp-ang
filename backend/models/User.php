@@ -6,6 +6,9 @@ namespace app\models;
 
 use Yii;
 
+/**
+ * @property string[] $languages
+ */
 class User extends \app\base\models\User
 {
 
@@ -33,9 +36,9 @@ class User extends \app\base\models\User
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_REGISTER] = [...$scenarios[self::SCENARIO_PROFILE], 'main_language', 'language1', 'language2', 'language3'];
-        $scenarios[self::SCENARIO_PROFILE] = [...$scenarios[self::SCENARIO_PROFILE], 'main_language', 'language1', 'language2', 'language3', 'extensionSettings'];
-        $scenarios[self::SCENARIO_ADMIN] = [...$scenarios[self::SCENARIO_PROFILE], 'main_language', 'language1', 'language2', 'language3', 'extensionSettings'];
+        $scenarios[self::SCENARIO_REGISTER] = [...$scenarios[self::SCENARIO_PROFILE], 'languages'];
+        $scenarios[self::SCENARIO_PROFILE] = [...$scenarios[self::SCENARIO_PROFILE], 'languages', 'extensionSettings'];
+        $scenarios[self::SCENARIO_ADMIN] = [...$scenarios[self::SCENARIO_PROFILE], 'languages', 'extensionSettings'];
 
         return $scenarios;
     }
@@ -48,10 +51,10 @@ class User extends \app\base\models\User
         $fields = parent::fields();
 
         if ($this->scenario == static::SCENARIO_PROFILE) {
-            $fields = array_merge($fields, ['main_language', 'language1', 'language2', 'language3', 'extensionSettings']);
+            $fields = array_merge($fields, ['languages', 'extensionSettings']);
         }
         if ($this->scenario == static::SCENARIO_ADMIN) {
-            $fields = array_merge($fields, ['main_language', 'language1', 'language2', 'language3', 'extensionSettings']);
+            $fields = array_merge($fields, ['languages', 'extensionSettings']);
         }
 
         return $fields;
@@ -64,7 +67,8 @@ class User extends \app\base\models\User
     {
         $rules = parent::rules();
 
-        $rules[] = [['main_language', 'language1', 'language2', 'language3'], 'default', 'value' => null];
+        //$rules[] = ['languages', 'in', 'range' => ];
+        $rules[] = ['languages', 'each', 'rule' => ['string']];
         $rules[] = ['extensionSettings', 'safe'];
 
         return $rules;
@@ -75,32 +79,9 @@ class User extends \app\base\models\User
         $labels = parent::attributeLabels();
 
         $labels = array_merge($labels, [
-            'main_language' => Yii::t('app', 'Main language'),
-            'language1' => Yii::t('app', 'Language 1'),
-            'language2' => Yii::t('app', 'Language 2'),
-            'language3' => Yii::t('app', 'Language 3'),
+            'languages' => Yii::t('app', 'Languages'),
         ]);
 
         return $labels;
-    }
-
-    public function getHomeLanguage()
-    {
-        return $this->hasOne(Languages::class, ['id' => 'main_language']);
-    }
-
-    public function getLanguageOne()
-    {
-        return $this->hasOne(Languages::class, ['id' => 'language1']);
-    }
-
-    public function getLanguageTwo()
-    {
-        return $this->hasOne(Languages::class, ['id' => 'language2']);
-    }
-
-    public function getLanguageThree()
-    {
-        return $this->hasOne(Languages::class, ['id' => 'language3']);
     }
 }

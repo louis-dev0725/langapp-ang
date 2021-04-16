@@ -13,7 +13,7 @@ class UserController extends \app\base\controllers\UserController
     public function actionMe()
     {
         $userId = Yii::$app->user->id;
-        $model = User::find()->with('homeLanguage', 'languageOne', 'languageTwo', 'languageThree')->where(['id' => $userId])->one();
+        $model = User::find()->where(['id' => $userId])->one();
         if ($model == null) {
             throw new NotFoundHttpException('User not found');
         }
