@@ -154,7 +154,7 @@ export class AnalyzeJapaneseService {
             levelSource = 'wordsStats';
         }
         else {
-            level = -1;
+            level = -2;
         }
 
         return { level, wordsStats, kanjiStats, otherStats, levelSource };
