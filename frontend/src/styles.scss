@@ -44,6 +44,15 @@ a.p-button:hover {
   max-width: 600px;
 }
 
+.layout-topbar-light .layout-topbar .layout-topbar-wrapper .layout-topbar-left {
+  display: block;
+  padding: 7px 14px 5px;
+}
+
+.layout-topbar-light .layout-topbar .layout-topbar-wrapper .layout-topbar-left .layout-topbar-logo > img {
+  height: 40px;
+}
+
 /*
 $color-blue-link: #039be5;
 $color-red-danger: #f44336;
