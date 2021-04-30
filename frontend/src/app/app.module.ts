@@ -18,7 +18,7 @@ import { SessionService } from '@app/services/session.service';
 import { CustomValidator } from '@app/services/custom-validator';
 import { HttpInterceptorService } from '@app/http/http-interceptor';
 import { ThemeModule } from '@app/theme/theme.module';
-import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
@@ -60,6 +60,10 @@ import { EffectsModule } from '@ngrx/effects';
     ConfirmDialogModule,
   ],
   providers: [
+    {
+      provide: APP_BASE_HREF,
+      useValue: '/app'
+    },
     ApiService,
     CanactivateAdmin,
     CanactivateLogged,
@@ -75,7 +79,7 @@ import { EffectsModule } from '@ngrx/effects';
     },
     {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy
+      useClass: PathLocationStrategy
     },
     {
       provide: DefaultDataServiceConfig,

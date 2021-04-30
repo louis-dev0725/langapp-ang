@@ -26,6 +26,7 @@
             },
             "aot": true,
             "outputPath": "dist/langapp",
+            "baseHref": "/app/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -69,6 +70,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
+            "servePath": "/app/",
             "browserTarget": "langapp:build"
           },
           "configurations": {
