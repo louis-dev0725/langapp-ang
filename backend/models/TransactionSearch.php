@@ -1,10 +1,24 @@
 <?php
 
-
 namespace app\models;
 
+use yii\base\Model;
 
-class TransactionSearch extends \app\base\models\TransactionSearch
+class TransactionSearch extends Transaction
 {
+    public function rules()
+    {
+        return [
+            [['id', 'userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'integer'],
+            [['money'], 'number'],
+            [['comment', 'addedDateTime', 'dataJson'], 'safe'],
+            [['name'], 'string']
+        ];
+    }
 
+    public function scenarios()
+    {
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
+    }
 }
