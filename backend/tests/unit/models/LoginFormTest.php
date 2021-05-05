@@ -47,5 +47,4 @@ class LoginFormTest extends \Codeception\Test\Unit
         expect_not(\Yii::$app->user->isGuest);
         expect($this->model->errors)->hasntKey('password');
     }
-
 }

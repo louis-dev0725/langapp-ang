@@ -1,8 +1,6 @@
 <?php
 
-
 namespace app\models;
-
 
 use app\components\Helpers;
 use app\components\Notifications;
@@ -58,13 +56,12 @@ use yii\web\UserEvent;
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-
-    const SCENARIO_INDEX = 'index';
-    const SCENARIO_PROFILE = 'profile';
-    const SCENARIO_ADMIN = 'admin';
-    const SCENARIO_LOGIN = 'login';
-    const SCENARIO_REGISTER = 'register';
-    const SCENARIO_INVITED_USER = 'invited_user';
+    public const SCENARIO_INDEX = 'index';
+    public const SCENARIO_PROFILE = 'profile';
+    public const SCENARIO_ADMIN = 'admin';
+    public const SCENARIO_LOGIN = 'login';
+    public const SCENARIO_REGISTER = 'register';
+    public const SCENARIO_INVITED_USER = 'invited_user';
 
     protected $_password;
 

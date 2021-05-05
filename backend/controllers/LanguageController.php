@@ -2,20 +2,20 @@
 
 namespace app\controllers;
 
-
 use app\models\Languages;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
-class LanguageController extends ActiveController {
-
+class LanguageController extends ActiveController
+{
     public $modelClass = Languages::class;
 
     /**
      * @return ActiveDataProvider
      * @throws NotFoundHttpException
      */
-    public function actionAll() {
+    public function actionAll()
+    {
         $dataProvider = new ActiveDataProvider([
             'query' => Languages::find(),
             'pagination' => false,
@@ -27,5 +27,4 @@ class LanguageController extends ActiveController {
 
         return $dataProvider;
     }
-
 }

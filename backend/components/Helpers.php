@@ -1,8 +1,6 @@
 <?php
 
-
 namespace app\components;
-
 
 class Helpers
 {

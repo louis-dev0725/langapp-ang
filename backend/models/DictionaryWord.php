@@ -14,19 +14,21 @@ use yii\db\ArrayExpression;
  * @property ArrayExpression $query
  * @property array $data
  */
-class DictionaryWord extends ActiveRecord {
-
-    const TYPE_JAPANESE_WORD = 1;
-    const TYPE_JAPANESE_KANJI = 2;
+class DictionaryWord extends ActiveRecord
+{
+    public const TYPE_JAPANESE_WORD = 1;
+    public const TYPE_JAPANESE_KANJI = 2;
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return '{{%dictionary_word}}';
     }
 
-    public function getMeaningForLangList($langList) {
+    public function getMeaningForLangList($langList)
+    {
         $currentLangPos = PHP_INT_MAX;
         $currentValue = '';
         if (isset($this->data['meanings'])) {
@@ -46,14 +48,16 @@ class DictionaryWord extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [];
     }
 }

@@ -7,34 +7,64 @@ use yii\db\Schema;
 /**
  * Handles adding main_language to table `{{%users}}`.
  */
-class m200330_094319_add_main_language_column_to_users_table extends Migration {
-
+class m200330_094319_add_main_language_column_to_users_table extends Migration
+{
     /**
      * {@inheritdoc}
      */
-    public function safeUp () {
+    public function safeUp()
+    {
         $this->addColumn('{{%users}}', 'main_language', Schema::TYPE_INTEGER . ' NULL');
         $this->addColumn('{{%users}}', 'language1', Schema::TYPE_INTEGER . ' NULL');
         $this->addColumn('{{%users}}', 'language2', Schema::TYPE_INTEGER . ' NULL');
         $this->addColumn('{{%users}}', 'language3', Schema::TYPE_INTEGER . ' NULL');
 
-        $this->addForeignKey('{{%fk-users-main_language}}', '{{%users}}',
-            'main_language', '{{%languages}}', 'id', 'SET NULL', 'NO ACTION');
+        $this->addForeignKey(
+            '{{%fk-users-main_language}}',
+            '{{%users}}',
+            'main_language',
+            '{{%languages}}',
+            'id',
+            'SET NULL',
+            'NO ACTION'
+        );
 
-        $this->addForeignKey('{{%fk-users-language1}}', '{{%users}}',
-            'language1', '{{%languages}}', 'id', 'SET NULL', 'NO ACTION');
+        $this->addForeignKey(
+            '{{%fk-users-language1}}',
+            '{{%users}}',
+            'language1',
+            '{{%languages}}',
+            'id',
+            'SET NULL',
+            'NO ACTION'
+        );
 
-        $this->addForeignKey('{{%fk-users-language2}}', '{{%users}}',
-            'language2', '{{%languages}}', 'id', 'SET NULL', 'NO ACTION');
+        $this->addForeignKey(
+            '{{%fk-users-language2}}',
+            '{{%users}}',
+            'language2',
+            '{{%languages}}',
+            'id',
+            'SET NULL',
+            'NO ACTION'
+        );
 
-        $this->addForeignKey('{{%fk-users-language3}}', '{{%users}}',
-            'language3', '{{%languages}}', 'id', 'SET NULL', 'NO ACTION');
+        $this->addForeignKey(
+            '{{%fk-users-language3}}',
+            '{{%users}}',
+            'language3',
+            '{{%languages}}',
+            'id',
+            'SET NULL',
+            'NO ACTION'
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function safeDown () {
+    public function safeDown()
+    {
         $this->dropForeignKey('{{%fk-users-language3}}', '{{%users}}');
         $this->dropForeignKey('{{%fk-users-language2}}', '{{%users}}');
         $this->dropForeignKey('{{%fk-users-language1}}', '{{%users}}');

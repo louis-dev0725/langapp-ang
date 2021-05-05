@@ -22,21 +22,23 @@ use yii\db\ActiveRecord;
  * @property MnemonicsUsers[] $mnemonicsUsers
  * @property User[] $users
  */
-class Mnemonics extends ActiveRecord {
-
+class Mnemonics extends ActiveRecord
+{
     public $image;
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return '{{%mnemonics}}';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             [
                 'class' => TimestampBehavior::class,
@@ -51,7 +53,8 @@ class Mnemonics extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['user_id', 'word'], 'required'],
             [['text', 'images'], 'default', 'value' => null],
@@ -68,7 +71,8 @@ class Mnemonics extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
@@ -84,7 +88,8 @@ class Mnemonics extends ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
@@ -93,7 +98,8 @@ class Mnemonics extends ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getMnemonicsUsers() {
+    public function getMnemonicsUsers()
+    {
         return $this->hasMany(MnemonicsUsers::class, ['mnemonics_id' => 'id']);
     }
 
@@ -103,7 +109,8 @@ class Mnemonics extends ActiveRecord {
      * @return \yii\db\ActiveQuery
      * @throws \yii\base\InvalidConfigException
      */
-    public function getUsers() {
+    public function getUsers()
+    {
         return $this->hasMany(User::class, ['id' => 'users_id'])
             ->viaTable('{{%mnemonics_users}}', ['mnemonics_id' => 'id']);
     }

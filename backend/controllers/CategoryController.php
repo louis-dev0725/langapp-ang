@@ -2,15 +2,16 @@
 
 namespace app\controllers;
 
-
 use app\models\Category;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
-class CategoryController extends ActiveController {
+class CategoryController extends ActiveController
+{
     public $modelClass = Category::class;
 
-    public function actions() {
+    public function actions()
+    {
         $actions = parent::actions();
         unset($actions['index']);
         return $actions;
@@ -19,7 +20,8 @@ class CategoryController extends ActiveController {
     /**
      * @return ActiveDataProvider
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         return new ActiveDataProvider([
             'query' => Category::find(),
             'pagination' => false,
@@ -29,7 +31,8 @@ class CategoryController extends ActiveController {
     /**
      * @return ActiveDataProvider
      */
-    public function actionAll() {
+    public function actionAll()
+    {
         return new ActiveDataProvider([
             'query' => Category::find()->with('parentCategory'),
             'sort' => [
@@ -39,5 +42,4 @@ class CategoryController extends ActiveController {
             ]
         ]);
     }
-
 }

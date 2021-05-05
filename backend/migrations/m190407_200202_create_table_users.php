@@ -2,9 +2,10 @@
 
 use yii\db\Migration;
 
-class m190407_200202_create_table_users extends Migration {
-
-    public function up() {
+class m190407_200202_create_table_users extends Migration
+{
+    public function up()
+    {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE=InnoDB';
@@ -42,7 +43,8 @@ class m190407_200202_create_table_users extends Migration {
         $this->createIndex('users_invitedByUserId_idx', '{{%users}}', 'invitedByUserId');
     }
 
-    public function down() {
+    public function down()
+    {
         $this->dropIndex('users_invitedByUserId_idx', '{{%users}}');
 
         $this->dropTable('{{%users}}');

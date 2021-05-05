@@ -32,10 +32,11 @@ use yii\db\ActiveRecord;
  */
 class Transaction extends \yii\db\ActiveRecord
 {
-    const SCENARIO_ADMIN = 'admin';
-    const SCENARIO_USER = 'user';
+    public const SCENARIO_ADMIN = 'admin';
+    public const SCENARIO_USER = 'user';
 
-    private static function isSaveMethod() {
+    private static function isSaveMethod()
+    {
         return in_array(Yii::$app->request->method, ['PUT', 'PATCH']);
     }
 
@@ -128,7 +129,8 @@ class Transaction extends \yii\db\ActiveRecord
         }
     }
 
-    public function calculateToBaseCurrency() {
+    public function calculateToBaseCurrency()
+    {
         $this->moneyBaseCurrency = CurrencyConverter::convert($this->money, Helpers::dateToUnix($this->addedDateTime), $this->currency, User::getBaseCurrency());
     }
 

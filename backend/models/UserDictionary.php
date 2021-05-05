@@ -27,19 +27,21 @@ use yii\db\ActiveRecord;
  * @property User $user
  * @property Mnemonics $mnemonic
  */
-class UserDictionary extends ActiveRecord {
-
+class UserDictionary extends ActiveRecord
+{
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return '{{%user_dictionary}}';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['user_id', 'dictionary_word_id', 'original_word', 'date'], 'required'],
             [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training', 'mnemonic_id'], 'default',
@@ -60,7 +62,8 @@ class UserDictionary extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
@@ -82,21 +85,24 @@ class UserDictionary extends ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDictionaryWord() {
+    public function getDictionaryWord()
+    {
         return $this->hasOne(DictionaryWord::class, ['id' => 'dictionary_word_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMnemonic() {
+    public function getMnemonic()
+    {
         return $this->hasOne(Mnemonics::class, ['id' => 'mnemonic_id']);
     }
 }

@@ -15,18 +15,21 @@ use yii\db\ActiveRecord;
  * @property Mnemonics $mnemonics
  * @property User $users
  */
-class MnemonicsUsers extends ActiveRecord {
+class MnemonicsUsers extends ActiveRecord
+{
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return '{{%mnemonics_users}}';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['mnemonics_id', 'users_id'], 'required'],
             [['mnemonics_id', 'users_id', 'rating'], 'default', 'value' => null],
@@ -42,7 +45,8 @@ class MnemonicsUsers extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'mnemonics_id' => 'Mnemonics ID',
             'users_id' => 'Users ID',
@@ -55,7 +59,8 @@ class MnemonicsUsers extends ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getMnemonics() {
+    public function getMnemonics()
+    {
         return $this->hasOne(Mnemonics::class, ['id' => 'mnemonics_id']);
     }
 
@@ -64,7 +69,8 @@ class MnemonicsUsers extends ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUsers() {
+    public function getUsers()
+    {
         return $this->hasOne(User::class, ['id' => 'users_id']);
     }
 }

@@ -1,5 +1,6 @@
 <?php
-use \yii\helpers\Html;
+use yii\helpers\Html;
+
 /** @var $model \app\models\ContactForm */
 ?>
 <strong>ID:</strong> <?= Html::encode(Yii::$app->user->id); ?><br>

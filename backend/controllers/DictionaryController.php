@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-
 use app\components\Helpers;
 use app\models\UserDictionarySearch;
 use app\models\DictionaryWord;

@@ -15,18 +15,21 @@ use yii\db\ActiveRecord;
  *
  * @property User $user
  */
-class SettingPlugin extends ActiveRecord {
+class SettingPlugin extends ActiveRecord
+{
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return '{{%setting_plugin}}';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['user_id', 'extensionShowTranslate', 'extensionSubtitleTranslate'], 'required'],
             [['user_id'], 'default', 'value' => null],
@@ -41,7 +44,8 @@ class SettingPlugin extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
@@ -55,7 +59,8 @@ class SettingPlugin extends ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser() {
+    public function getUser()
+    {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

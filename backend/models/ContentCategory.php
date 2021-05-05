@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -15,19 +14,21 @@ use yii\db\ActiveRecord;
  * @property Category $category
  * @property Content $content
  */
-class ContentCategory extends ActiveRecord {
-
+class ContentCategory extends ActiveRecord
+{
     /**
      * {@inheritdoc}
      */
-    public static function tableName () {
+    public static function tableName()
+    {
         return '{{%content_category}}';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules () {
+    public function rules()
+    {
         return [
             [['content_id', 'category_id'], 'required'], [['content_id', 'category_id'], 'default', 'value' => null],
             [['content_id', 'category_id'], 'integer'],
@@ -44,7 +45,8 @@ class ContentCategory extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels () {
+    public function attributeLabels()
+    {
         return [
             'content_id' => 'Content ID',
             'category_id' => 'Category ID',
@@ -54,14 +56,16 @@ class ContentCategory extends ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory () {
+    public function getCategory()
+    {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getContent () {
+    public function getContent()
+    {
         return $this->hasOne(Content::class, ['id' => 'content_id']);
     }
 }

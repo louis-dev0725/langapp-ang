@@ -7,12 +7,13 @@ use yii\db\Schema;
 /**
  * Handles the creation of table `{{%content}}`.
  */
-class m200323_113116_create_content_table extends Migration {
-
+class m200323_113116_create_content_table extends Migration
+{
     /**
      * {@inheritdoc}
      */
-    public function safeUp () {
+    public function safeUp()
+    {
         $this->createTable('{{%content}}', [
             'id' => $this->primaryKey(),
             'title' => Schema::TYPE_STRING . ' NOT NULL',
@@ -29,7 +30,8 @@ class m200323_113116_create_content_table extends Migration {
     /**
      * {@inheritdoc}
      */
-    public function safeDown () {
+    public function safeDown()
+    {
         $this->dropTable('{{%content}}');
     }
 }

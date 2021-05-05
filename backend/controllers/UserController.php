@@ -107,7 +107,6 @@ class UserController extends ActiveController
                 if (in_array($field, $likeFields)) {
                     unset($filter[$field]);
                     $query->andWhere(['like', $field, $value]);
-
                 }
             }
             $query->andWhere($filter);
@@ -153,8 +152,7 @@ class UserController extends ActiveController
             }
             if ($model->contact(Yii::$app->params['adminEmail'])) {
                 return ['done' => true];
-            }
-            else {
+            } else {
                 $model->addError('email', 'Не удалось отправить сообщение. Пожалуйста, свяжитесь с нами по E-mail: ' . Yii::$app->params['adminEmail']);
             }
         }
@@ -297,7 +295,8 @@ class UserController extends ActiveController
         return ['done' => true];
     }
 
-    public function actionCloseNotification() {
+    public function actionCloseNotification()
+    {
         $userId = Yii::$app->user->id;
         $model = User::findOne($userId);
         if ($model == null) {

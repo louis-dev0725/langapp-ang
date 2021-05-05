@@ -7,12 +7,13 @@ use yii\db\Schema;
 /**
  * Handles the creation of table `{{%category}}`.
  */
-class m200323_112836_create_category_table extends Migration {
-
+class m200323_112836_create_category_table extends Migration
+{
     /**
      * {@inheritdoc}
      */
-    public function safeUp () {
+    public function safeUp()
+    {
         $this->createTable('{{%category}}', [
             'id' => Schema::TYPE_PK,
             'title' => Schema::TYPE_STRING . ' NOT NULL',
@@ -23,7 +24,8 @@ class m200323_112836_create_category_table extends Migration {
     /**
      * {@inheritdoc}
      */
-    public function safeDown () {
+    public function safeDown()
+    {
         $this->dropTable('{{%category}}');
     }
 }

@@ -7,12 +7,13 @@ use yii\db\Schema;
 /**
  * Handles the creation of table `{{%languages}}`.
  */
-class m200330_084319_create_languages_table extends Migration {
-
+class m200330_084319_create_languages_table extends Migration
+{
     /**
      * {@inheritdoc}
      */
-    public function safeUp () {
+    public function safeUp()
+    {
         $this->createTable('{{%languages}}', [
             'id' => Schema::TYPE_PK,
             'title' => Schema::TYPE_STRING . ' NOT NULL',
@@ -27,7 +28,8 @@ class m200330_084319_create_languages_table extends Migration {
     /**
      * {@inheritdoc}
      */
-    public function safeDown () {
+    public function safeDown()
+    {
         $this->dropTable('{{%languages}}');
     }
 }

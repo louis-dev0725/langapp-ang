@@ -118,7 +118,8 @@ class ContentController extends ActiveController
         return Content::find()->with('categories')->where(['id' => $id])->one();
     }
 
-    public function actionImage($id) {
+    public function actionImage($id)
+    {
         return Content::find()->with('categories')->where(['id' => $id])->one();
     }
 

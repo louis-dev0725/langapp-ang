@@ -33,7 +33,7 @@ class m210317_085010_alter_table_languages extends Migration
                 $toInsert[] = ['code' => $code, 'code3' => $item['639-2'], 'title' => $title, 'titleEnglish' => $item['name'], 'titleNative' => $titleNative];
             }
         }
-        usort($toInsert, function($a, $b) {
+        usort($toInsert, function ($a, $b) {
             return $a['title'] <=> $b['title'];
         });
         Yii::$app->db->createCommand()->batchInsert('{{%languages}}', array_combine(array_keys($toInsert[0]), array_keys($toInsert[0])), $toInsert)->execute();

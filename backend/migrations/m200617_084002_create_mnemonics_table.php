@@ -6,11 +6,13 @@ use yii\db\Schema;
 /**
  * Handles the creation of table `{{%mnemonics}}`.
  */
-class m200617_084002_create_mnemonics_table extends Migration {
+class m200617_084002_create_mnemonics_table extends Migration
+{
     /**
      * {@inheritdoc}
      */
-    public function safeUp() {
+    public function safeUp()
+    {
         $this->createTable('{{%mnemonics}}', [
             'id' => $this->primaryKey(),
             'addedDateTime' => Schema::TYPE_INTEGER . ' NOT NULL',
@@ -22,14 +24,22 @@ class m200617_084002_create_mnemonics_table extends Migration {
             'rating' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
         ]);
 
-        $this->addForeignKey('mnemonics_users_fk', '{{%mnemonics}}', 'user_id', '{{%users}}',
-            'id', 'CASCADE', 'NO ACTION');
+        $this->addForeignKey(
+            'mnemonics_users_fk',
+            '{{%mnemonics}}',
+            'user_id',
+            '{{%users}}',
+            'id',
+            'CASCADE',
+            'NO ACTION'
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function safeDown() {
+    public function safeDown()
+    {
         $this->dropForeignKey('mnemonics_users_fk', '{{%mnemonics}}');
 
         $this->dropTable('{{%mnemonics}}');

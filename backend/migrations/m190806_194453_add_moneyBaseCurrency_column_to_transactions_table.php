@@ -12,7 +12,7 @@ class m190806_194453_add_moneyBaseCurrency_column_to_transactions_table extends 
      */
     public function safeUp()
     {
-        $this->addColumn('{{%transactions}}', 'moneyBaseCurrency',  $this->money()->notNull()->defaultValue('0'));
+        $this->addColumn('{{%transactions}}', 'moneyBaseCurrency', $this->money()->notNull()->defaultValue('0'));
     }
 
     /**

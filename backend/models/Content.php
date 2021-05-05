@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -24,21 +23,23 @@ use yii\db\ActiveRecord;
  * @property ContentCategory[] $contentCategories
  * @property Category[] $categories
  */
-class Content extends ActiveRecord {
+class Content extends ActiveRecord
+{
     public $category = [];
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName () {
+    public static function tableName()
+    {
         return '{{%content}}';
     }
 
-    public function getImageUrl() {
+    public function getImageUrl()
+    {
         if (isset($this->dataJson['imageUrl'])) {
             return $this->dataJson['imageUrl'];
-        }
-        elseif (isset($this->dataJson['youtubeVideo']['videoId'])) {
+        } elseif (isset($this->dataJson['youtubeVideo']['videoId'])) {
             return 'http://i3.ytimg.com/vi/' . $this->dataJson['youtubeVideo']['videoId'] . '/hqdefault.jpg';
         }
     }
@@ -54,7 +55,8 @@ class Content extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function rules () {
+    public function rules()
+    {
         return [
             [['title', 'type', 'text', 'length'], 'required'],
             [['type', 'status', 'length', 'level', 'deleted'], 'default', 'value' => null],
@@ -68,7 +70,8 @@ class Content extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels () {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'title' => 'Title',
@@ -89,7 +92,8 @@ class Content extends ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getContentCategories () {
+    public function getContentCategories()
+    {
         return $this->hasMany(ContentCategory::class, ['content_id' => 'id']);
     }
 
@@ -97,7 +101,8 @@ class Content extends ActiveRecord {
      * @return \yii\db\ActiveQuery
      * @throws \yii\base\InvalidConfigException
      */
-    public function getCategories () {
+    public function getCategories()
+    {
         return $this->hasMany(Category::class, ['id' => 'category_id'])
             ->viaTable('{{%content_category}}', ['content_id' => 'id']);
     }

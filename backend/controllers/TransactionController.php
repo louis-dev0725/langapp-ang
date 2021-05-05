@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-
 use app\components\Helpers;
 use app\models\Transaction;
 use app\models\TransactionSearch;
@@ -129,9 +128,9 @@ class TransactionController extends ActiveController
             if (in_array($fieldName, $replaceTransKeys)) {
                 if ($fieldName === 'addedDateTime') {
                     $condition = ['"transactions"."addedDateTime"::DATE' => $filterItem[$fieldName]];
-                } else if ($fieldName === 'name') {
+                } elseif ($fieldName === 'name') {
                     $condition = ['like', '"users"."name"', $filterItem[$fieldName]];
-                } else if ($fieldName === 'comment') {
+                } elseif ($fieldName === 'comment') {
                     $condition = ['like', '"transactions"."comment"', $filterItem[$fieldName]];
                 } else {
                     $condition = ['"transactions"."' . $fieldName . '"' => $filterItem[$fieldName]];
@@ -141,12 +140,13 @@ class TransactionController extends ActiveController
         };
 
         if ($isComplex) {
-            foreach ($filter as $idx => $value)
+            foreach ($filter as $idx => $value) {
                 if ($idx > 0) {
                     reset($value);
                     $fieldName = key($value);
                     $wrapTableName($fieldName, $value);
                 }
+            }
         } else {
             reset($filter);
             $fieldName = key($filter);

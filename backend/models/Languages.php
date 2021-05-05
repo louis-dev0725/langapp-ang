@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -11,19 +10,21 @@ use yii\db\ActiveRecord;
  * @property string $title
  * @property string $code
  */
-class Languages extends ActiveRecord {
-
+class Languages extends ActiveRecord
+{
     /**
      * {@inheritdoc}
      */
-    public static function tableName () {
+    public static function tableName()
+    {
         return '{{%languages}}';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules () {
+    public function rules()
+    {
         return [
             [['title', 'code'], 'required'],
             [['title', 'code'], 'string', 'max' => 255],
@@ -33,7 +34,8 @@ class Languages extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels () {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'title' => 'Title',

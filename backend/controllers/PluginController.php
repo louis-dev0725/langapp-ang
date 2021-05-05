@@ -2,17 +2,18 @@
 
 namespace app\controllers;
 
-
 use app\models\SettingPlugin;
 use Yii;
 
-class PluginController extends ActiveController {
+class PluginController extends ActiveController
+{
     public $modelClass = SettingPlugin::class;
 
     /**
      * @return array
      */
-    public function actions() {
+    public function actions()
+    {
         $actions = parent::actions();
         unset($actions['view'], $actions['update']);
         return $actions;
@@ -23,7 +24,8 @@ class PluginController extends ActiveController {
      *
      * @return array|\yii\db\ActiveRecord|null
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return SettingPlugin::find()->joinWith('user.homeLanguage')->where(['user_id' => $id])->asArray()->one();
     }
 
@@ -33,7 +35,8 @@ class PluginController extends ActiveController {
      * @return array
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $updateSetting = SettingPlugin::find()->where(['user_id' => $id])->one();
 
         if ($updateSetting != '') {

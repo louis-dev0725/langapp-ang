@@ -9,11 +9,13 @@ use yii\db\Migration;
  * - `{{%mnemonics}}`
  * - `{{%users}}`
  */
-class m200617_090944_create_junction_table_for_mnemonics_and_users_tables extends Migration {
+class m200617_090944_create_junction_table_for_mnemonics_and_users_tables extends Migration
+{
     /**
      * {@inheritdoc}
      */
-    public function safeUp() {
+    public function safeUp()
+    {
         $this->createTable('{{%mnemonics_users}}', [
             'mnemonics_id' => $this->integer(),
             'users_id' => $this->integer(),
@@ -59,7 +61,8 @@ class m200617_090944_create_junction_table_for_mnemonics_and_users_tables extend
     /**
      * {@inheritdoc}
      */
-    public function safeDown() {
+    public function safeDown()
+    {
         // drops foreign key for table `{{%mnemonics}}`
         $this->dropForeignKey(
             '{{%fk-mnemonics_users-mnemonics_id}}',

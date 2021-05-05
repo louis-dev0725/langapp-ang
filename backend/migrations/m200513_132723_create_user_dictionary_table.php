@@ -7,12 +7,13 @@ use yii\db\Schema;
 /**
  * Handles the creation of table `{{%user_dictionary}}`.
  */
-class m200513_132723_create_user_dictionary_table extends Migration {
-
+class m200513_132723_create_user_dictionary_table extends Migration
+{
     /**
      * {@inheritdoc}
      */
-    public function safeUp () {
+    public function safeUp()
+    {
         $this->createTable('{{%user_dictionary}}', [
             'id' => Schema::TYPE_PK,
             'user_id' => Schema::TYPE_INTEGER . ' NOT NULL',
@@ -29,11 +30,25 @@ class m200513_132723_create_user_dictionary_table extends Migration {
             'workout_progress_word_translate' => Schema::TYPE_JSON . " NOT NULL DEFAULT '[]'"
         ]);
 
-        $this->addForeignKey('user_dictionary_users_fk', '{{%user_dictionary}}', 'user_id',
-            '{{%users}}', 'id', 'CASCADE', 'NO ACTION');
+        $this->addForeignKey(
+            'user_dictionary_users_fk',
+            '{{%user_dictionary}}',
+            'user_id',
+            '{{%users}}',
+            'id',
+            'CASCADE',
+            'NO ACTION'
+        );
 
-        $this->addForeignKey('user_dictionary_dictionary_word_fk', '{{%user_dictionary}}',
-            'dictionary_word_id', '{{%dictionary_word}}', 'id', 'CASCADE', 'NO ACTION');
+        $this->addForeignKey(
+            'user_dictionary_dictionary_word_fk',
+            '{{%user_dictionary}}',
+            'dictionary_word_id',
+            '{{%dictionary_word}}',
+            'id',
+            'CASCADE',
+            'NO ACTION'
+        );
 
         $this->createIndex('user_dictionary_pgroonga_index', '{{%user_dictionary}}', 'original_word');
     }
@@ -41,7 +56,8 @@ class m200513_132723_create_user_dictionary_table extends Migration {
     /**
      * {@inheritdoc}
      */
-    public function safeDown () {
+    public function safeDown()
+    {
         $this->dropIndex('user_dictionary_pgroonga_index', '{{%user_dictionary}}');
         $this->dropForeignKey('user_dictionary_dictionary_word_fk', '{{%user_dictionary}}');
         $this->dropForeignKey('user_dictionary_users_fk', '{{%user_dictionary}}');

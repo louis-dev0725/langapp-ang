@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-
 use app\models\DictionaryWord;
 use meCab\meCab;
 use Yii;
@@ -166,7 +165,8 @@ class TranslateController extends ActiveController
     }
 }
 
-class ResultWord {
+class ResultWord
+{
     public $offset;
     public $word;
 }

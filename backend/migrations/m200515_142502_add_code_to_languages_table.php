@@ -6,11 +6,13 @@ use yii\db\Schema;
 /**
  * Class m200515_142502_add_code_to_languages_table
  */
-class m200515_142502_add_code_to_languages_table extends Migration {
+class m200515_142502_add_code_to_languages_table extends Migration
+{
     /**
      * {@inheritdoc}
      */
-    public function safeUp() {
+    public function safeUp()
+    {
         $this->addColumn('{{%languages}}', 'code', Schema::TYPE_STRING . ' NULL');
 
 
@@ -33,8 +35,8 @@ class m200515_142502_add_code_to_languages_table extends Migration {
     /**
      * {@inheritdoc}
      */
-    public function safeDown() {
+    public function safeDown()
+    {
         $this->dropColumn('{{%languages}}', 'code');
     }
-
 }

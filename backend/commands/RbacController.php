@@ -1,8 +1,6 @@
 <?php
 
-
 namespace app\commands;
-
 
 use app\models\User;
 use yii\console\Controller;
@@ -30,15 +28,15 @@ class RbacController extends Controller
         echo $this->ansiFormat('rbac/init is deprecated. To add roles just run ./yii migrate-data', Console::FG_RED);
     }
 
-    public function actionCreateUser($email, $password) {
+    public function actionCreateUser($email, $password)
+    {
         $user = new User();
         $user->scenario = User::SCENARIO_ADMIN;
         $user->email = $email;
         $user->password = $password;
         if ($user->save()) {
             echo $this->ansiFormat('User was successfully created.', Console::FG_GREEN);
-        }
-        else {
+        } else {
             echo $this->ansiFormat('User was not created. Probably it\'s already exists.', Console::FG_RED);
         }
     }
