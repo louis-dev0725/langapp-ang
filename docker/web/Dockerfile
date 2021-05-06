@@ -88,7 +88,8 @@ RUN cd /app/backend-ts/ && npm run build
 COPY ./frontend/package.json ./frontend/package-lock.json /app/frontend/
 RUN cd /app/frontend/ && npm ci
 COPY ./frontend/ /app/frontend/
-RUN cd /app/frontend/ && npm run build # TODO: build-prod
+COPY ./extension/ /app/extension/
+RUN cd /app/frontend/ && npm run build:prod
 
 #FROM dev as prod
 COPY ./docker/web/nginx/vhost.conf /opt/docker/etc/nginx/vhost.conf
