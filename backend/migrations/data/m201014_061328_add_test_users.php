@@ -13,19 +13,37 @@ class m201014_061328_add_test_users extends Migration
         $loadTestData = isset($_SERVER['LOAD_TEST_DATA']) && $_SERVER['LOAD_TEST_DATA'] == '1';
 
         if ($loadTestData) {
-            $user = new User();
-            $user->scenario = User::SCENARIO_ADMIN;
-            $user->email = 'admin@example.org';
-            $user->password = 'adminpassword';
-            $user->save();
-            $adminRole = Yii::$app->authManager->getRole('admin');
-            Yii::$app->authManager->assign($adminRole, $user->id);
+            $testAdminEmail = 'admin@example.org';
+            $user = User::findByEmail($testAdminEmail);
+            if ($user == null) {
+                $user = new User();
+                $user->scenario = User::SCENARIO_ADMIN;
+                $user->email = $testAdminEmail;
+                $user->password = 'adminpassword';
+                if ($user->save()) {
+                    echo 'Created test admin user #' . $user->id . "\n";
+                } else {
+                    echo 'Error: Unable to create test admin user with email ' . $testAdminEmail . '. Errors: ' . json_encode($user->errors, JSON_UNESCAPED_UNICODE) . "\n";
+                }
+            } else {
+                echo 'Use existing test admin user #' . $user->id . "\n";
+            }
+            if (!empty($user->id)) {
+                $adminRole = Yii::$app->authManager->getRole('admin');
+                Yii::$app->authManager->assign($adminRole, $user->id);
+            }
 
+            $testUserEmail = 'admin@example.org';
             $user = new User();
             $user->scenario = User::SCENARIO_ADMIN;
-            $user->email = 'user@example.org';
+            $user->email = $testUserEmail;
             $user->password = 'userpassword';
             $user->save();
+            if ($user->save()) {
+                echo 'Created test non-admin user #' . $user->id . "\n";
+            } else {
+                echo 'Error: Unable to create test non-admin user with email ' . $testUserEmail . '. Errors: ' . json_encode($user->errors, JSON_UNESCAPED_UNICODE) . "\n";
+            }
         }
     }
 
