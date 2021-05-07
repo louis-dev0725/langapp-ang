@@ -42,13 +42,13 @@ return [
         '/tests',
     ],
 
+    /*
     // 'php' output format is for saving messages to php files.
     'format' => 'php',
     // Root directory containing message translations.
     'messagePath' => __DIR__,
     // boolean, whether the message file should be overwritten with the merged messages
     'overwrite' => true,
-    /*
     // File header used in generated messages files
     'phpFileHeader' => '',
     // PHPDoc used for array of messages with generated messages files
@@ -73,14 +73,13 @@ return [
     // 'messageTable' => '{{%message}}',
     */
 
-    /*
     // 'po' output format is for saving messages to gettext po files.
     'format' => 'po',
     // Root directory containing message translations.
-    'messagePath' => __DIR__ . DIRECTORY_SEPARATOR . 'messages',
+    //'messagePath' => __DIR__ . DIRECTORY_SEPARATOR . 'messages',
+    'messagePath' => __DIR__,
     // Name of the file that will be used for translations.
     'catalog' => 'messages',
     // boolean, whether the message file should be overwritten with the merged messages
     'overwrite' => true,
-    */
 ];

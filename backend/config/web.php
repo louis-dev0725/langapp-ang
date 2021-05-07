@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$isApiRequest = strpos($_SERVER['REQUEST_URI'], '/api') !== false;
 
 $config = [
     'id' => 'basic',
@@ -35,12 +36,11 @@ $config = [
             'loginUrl' => null,
         ],
         'errorHandler' => [
-            //'errorAction' => 'site/error',
-            'errorAction' => null,
+            'errorAction' => $isApiRequest ? null : 'site/error',
         ],
         'response' => [
             'class' => \yii\web\Response::class,
-            'format' => \yii\web\Response::FORMAT_JSON,
+            'format' => $isApiRequest ? \yii\web\Response::FORMAT_JSON : \yii\web\Response::FORMAT_HTML,
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -90,6 +90,7 @@ $config = [
                 ],
                 'api/pay/start' => 'pay/start',
                 'api/pay/result' => 'pay/result',
+                '<lang:ru|en|>' => 'site/index',
             ],
         ],
         'authManager' => [
@@ -98,6 +99,14 @@ $config = [
         'jwt' => [
             'class' => 'sizeg\jwt\Jwt',
             'key' => '*F)J@NcRfUjXn2r5u8x/A?D(G+KaPdSgVkYp3s6v9y$B&E)H@McQeThWmZq4t7w!z%C*F-JaNdRgUjXn2r5u8x/A?D(G+KbPeShVmYp3s6v9y$B&E)H@McQfTjWnZr4t',
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\GettextMessageSource',
+                    'basePath' => '@app/messages',
+                ],
+            ],
         ],
     ],
     'params' => $params,
