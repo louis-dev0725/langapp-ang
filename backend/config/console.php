@@ -42,6 +42,9 @@ $config = [
             'migrationPath' => '@app/migrations/data',
             'migrationTable' => '{{%migration_data}}'
         ],
+        'message' => [
+            'class' => 'app\controllers\MessageController',
+        ],
     ],
     'params' => $params,
     /*
