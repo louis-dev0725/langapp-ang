@@ -72,6 +72,8 @@ WORKDIR /app/
 
 FROM dev as prod
 
+USER www-data:www-data
+
 #FROM dev as prod-backend
 COPY ./backend/composer.json ./backend/composer.lock /app/backend/
 RUN cd /app/backend/ && composer install --prefer-dist --no-scripts --no-dev --no-autoloader && rm -rf /root/.composer
