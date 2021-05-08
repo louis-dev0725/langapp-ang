@@ -74,7 +74,7 @@ return [
     */
 
     // 'po' output format is for saving messages to gettext po files.
-    'format' => 'po',
+    'format' => 'pot',
     // Root directory containing message translations.
     //'messagePath' => __DIR__ . DIRECTORY_SEPARATOR . 'messages',
     'messagePath' => __DIR__,

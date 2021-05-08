@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $languages \app\models\Languages[] */
 
 use yii\helpers\Html;
 
@@ -192,15 +193,19 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                 <div class="t228__centerside t228__centerside_hidden t228__menualign_right">
                     <div class="t228__centercontainer">
                         <ul class="t228__list ">
-                            <li class="t228__list_item"><a class="t-menu__link-item" href="/app" data-menu-submenu-hook="" style="color:#000000;font-weight:400;" data-menu-item-number="1">Login</a>
+                            <li class="t228__list_item"><a class="t-menu__link-item" href="/app" data-menu-submenu-hook="" style="color:#000000;font-weight:400;" data-menu-item-number="1"><?= Yii::t('app', 'Login'); ?></a>
                             </li>
                             <li class="t228__list_item"><a class="t-menu__link-item" href="" data-menu-submenu-hook="link_sub2_312580131" style="color:#000000;font-weight:400;" data-menu-item-number="2"><?= Html::encode(ucfirst($currentLanguage)); ?></a>
                                 <div class="t-menusub" data-submenu-hook="link_sub2_312580131" data-submenu-margin="15px" data-add-submenu-arrow="on">
                                     <div class="t-menusub__menu">
                                         <div class="t-menusub__content">
                                             <ul class="t-menusub__list">
-                                                <li class="t-menusub__list-item t-name t-name_xs"><a class="t-menusub__link-item t-name t-name_xs" style="" href="/en" data-menu-item-number="2">English</a></li>
-                                                <li class="t-menusub__list-item t-name t-name_xs"><a class="t-menusub__link-item t-name t-name_xs" style="" href="/ru" data-menu-item-number="2">Russian (Русский)</a></li>
+                                                <?php
+                                                foreach ($languages as $language) {
+                                                    $isCurrentLanguage = $currentLanguage == $language->code;
+                                                    echo '<li class="t-menusub__list-item t-name t-name_xs"><a class="t-menusub__link-item t-name t-name_xs' . ($isCurrentLanguage ? ' t-active' : '') . '" href="/' . Html::encode($language->code) . '" data-menu-item-number="2">' . Html::encode($language->title) . '</a></li>';
+                                                }
+                                                ?>
                                             </ul>
                                         </div>
                                     </div>
@@ -385,7 +390,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
 
                     <div class="t451m__menu">
                         <ul class="t451m__list">
-                            <li class="t451m__list_item"><a class="t-menu__link-item" href="/app" data-menu-submenu-hook="" style="color:#ffffff;font-size:21px;" data-menu-item-number="1">Login</a>
+                            <li class="t451m__list_item"><a class="t-menu__link-item" href="/app" data-menu-submenu-hook="" style="color:#ffffff;font-size:21px;" data-menu-item-number="1"><?= Yii::t('app', 'Login'); ?></a>
                             </li>
                             <li class="t451m__list_item"><a class="t-menu__link-item t451__link-item_submenu" href="" data-menu-submenu-hook="link_sub2_312585660" style="color:#ffffff;font-size:21px;" data-menu-item-number="2">Language (English)</a>
                                 <div class="t-menusub" data-submenu-hook="link_sub2_312585660" data-submenu-margin="15px" data-add-submenu-arrow="on">
@@ -551,15 +556,15 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                                         <div class="step1-1__points">
                                             <div class="step1-1__points__item">
                                                 <img src="/assets/video_icon.svg" alt="">
-                                                <span class="step1-1__points__item-title">100 000+ videos</span>
+                                                <span class="step1-1__points__item-title"><?= Yii::t("app", "100 000+ videos"); ?></span>
                                             </div>
                                             <div class="step1-1__points__item">
                                                 <img src="/assets/subtitles_icon.svg" alt="">
-                                                <span class="step1-1__points__item-title">All with Japanese subtitles</span>
+                                                <span class="step1-1__points__item-title"><?= Yii::t("app", "All with Japanese subtitles"); ?></span>
                                             </div>
                                             <div class="step1-1__points__item">
                                                 <img style="margin-left: 5px; margin-right: -5px;" src="/assets/checklist_icon.svg" alt="">
-                                                <span class="step1-1__points__item-title">For any level or topic</span>
+                                                <span class="step1-1__points__item-title"><?= Yii::t("app", "For any level or topic"); ?></span>
                                             </div>
                                         </div>
                                     </div>
@@ -622,7 +627,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
 
                         .step1-1 {
                             display: flex;
-                            padding-bottom: 118px;
+                            padding-bottom: 70px;
                             justify-content: space-between;
                         }
 
@@ -685,11 +690,11 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                         }
 
                         .step1-2__content-item {
-                            padding-bottom: 128px;
+                            padding-bottom: 70px;
                         }
 
                         .step1-2__content-item:last-child {
-                            padding-bottom: 80px;
+                            padding-bottom: 70px;
                         }
 
                         @media (max-width:980px) {
@@ -906,7 +911,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                             padding-bottom: 15px;
                         }
 
-                        .step2__block-padding {
+                        .step2__wrapper .step2__block-padding {
                             padding-bottom: 70px;
                         }
 
@@ -1050,7 +1055,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                             padding-bottom: 20px;
                         }
 
-                        .step3__block-padding {
+                        .step3__wrapper .step3__block-padding, .step3__wrapper p.step3__block-padding:last-child {
                             padding-bottom: 70px;
                         }
 
@@ -1204,7 +1209,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                                 <input type="text" name="EMAIL" class="t186__input t-input js-tilda-rule " value="" placeholder="E-mail" data-tilda-rule="email" style="color:#000000; border:1px solid #7a7a7a;  border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;">
                             </div>
                             <div class="t186__blockbutton">
-                                <button type="submit" class="t-submit" style="color:#ffffff;background-color:#e8253d;border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);">Continue</button>
+                                <button type="submit" class="t-submit" style="color:#ffffff;background-color:#e8253d;border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);"><?= Yii::t("app", "Continue"); ?></button>
                             </div>
                         </div>
                     </div>
@@ -1288,9 +1293,10 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                     <div class="t389__col t389__col_center t-align_center">
                         <div class="t389__centercontainer">
                             <ul class="t389__list">
-                                <li class="t389__list_item t-name t-name_xs"><a class="t389__typo" style="color: #ffffff;" href="#" data-menu-item-number="1">Login</a></li>
-                                <li class="t389__list_item t-name t-name_xs"><a class="t389__typo" style="color: #ffffff;" href="#" data-menu-item-number="2">Terms of Use</a></li>
-                                <li class="t389__list_item t-name t-name_xs"><a class="t389__typo" style="color: #ffffff;" href="" data-menu-item-number="3">Privacy policy</a></li>
+                                <li class="t389__list_item t-name t-name_xs"><a class="t389__typo" style="color: #ffffff;" href="/app" data-menu-item-number="1"><?= Yii::t('app', 'Login'); ?></a></li>
+                                <li class="t389__list_item t-name t-name_xs"><a class="t389__typo" target="_blank" style="color: #ffffff;" href="/docs/terms-of-use.pdf" data-menu-item-number="2"><?= Yii::t('app', 'Terms of Use'); ?></a></li>
+                                <li class="t389__list_item t-name t-name_xs"><a class="t389__typo" target="_blank" style="color: #ffffff;" href="/docs/privacy-policy.pdf" data-menu-item-number="3"><?= Yii::t('app', 'Privacy policy'); ?></a></li>
+                                <li class="t389__list_item t-name t-name_xs"><a class="t389__typo" target="_blank" style="color: #ffffff;" href="/docs/tokutei.pdf" data-menu-item-number="3">特定商取引に関する法律に基づく表記</a></li>
 
                             </ul>
                         </div>
@@ -1303,7 +1309,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                     <div class="t389__col">
                         <div class="t389__scroll t-align_right">
                             <a class="t389__typo t-name t-name_xs t389_scrolltop" style="color: #ffffff;" href="javascript:t389_scrollToTop();">
-                                Back to top
+                                <?= Yii::t('app', 'Back to top'); ?>
                                 <span class="t389__icon">
                 <svg width="5" height="17" viewBox="0 0 6 20">
                     <path fill="#ffffff" d="M5.78 3.85L3.12.28c-.14-.14-.3-.14-.43 0L.03 3.85c-.14.13-.08.27.13.27h1.72V20h2.06V4.12h1.72c.15 0 .22-.07.19-.17a.26.26 0 00-.07-.1z" fill-rule="evenodd" />

@@ -1,0 +1,344 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: messages\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "app"
+msgid "Name"
+msgstr ""
+
+msgctxt "app"
+msgid "E-mail"
+msgstr ""
+
+msgctxt "app"
+msgid "Telephone"
+msgstr ""
+
+msgctxt "app"
+msgid "Topic"
+msgstr ""
+
+msgctxt "app"
+msgid "Body"
+msgstr ""
+
+msgctxt "app"
+msgid "Wrong link to reset the password."
+msgstr ""
+
+msgctxt "app"
+msgid "New password"
+msgstr ""
+
+msgctxt "app"
+msgid "User with such email was not found."
+msgstr ""
+
+msgctxt "app"
+msgid "Incorrect E-mail or password."
+msgstr ""
+
+msgctxt "app"
+msgid "ID"
+msgstr ""
+
+msgctxt "app"
+msgid "User ID"
+msgstr ""
+
+msgctxt "app"
+msgid "Company"
+msgstr ""
+
+msgctxt "app"
+msgid "Site"
+msgstr ""
+
+msgctxt "app"
+msgid "Password"
+msgstr ""
+
+msgctxt "app"
+msgid "Balance"
+msgstr ""
+
+msgctxt "app"
+msgid "Partner Balance"
+msgstr ""
+
+msgctxt "app"
+msgid "Paid Until Date Time"
+msgstr ""
+
+msgctxt "app"
+msgid "Register Ip"
+msgstr ""
+
+msgctxt "app"
+msgid "Last Login Ip"
+msgstr ""
+
+msgctxt "app"
+msgid "Added"
+msgstr ""
+
+msgctxt "app"
+msgid "Updated Date Time"
+msgstr ""
+
+msgctxt "app"
+msgid "Comment"
+msgstr ""
+
+msgctxt "app"
+msgid "Restore Password Key"
+msgstr ""
+
+msgctxt "app"
+msgid "Restore Password Until Date"
+msgstr ""
+
+msgctxt "app"
+msgid "Password Changed Date Time"
+msgstr ""
+
+msgctxt "app"
+msgid "Is Service Paused"
+msgstr ""
+
+msgctxt "app"
+msgid "Invited By User ID"
+msgstr ""
+
+msgctxt "app"
+msgid "Is Partner"
+msgstr ""
+
+msgctxt "app"
+msgid "Enable Partner Payments"
+msgstr ""
+
+msgctxt "app"
+msgid "Froze \"Enable Partner Payments\""
+msgstr ""
+
+msgctxt "app"
+msgid "Partner Percent"
+msgstr ""
+
+msgctxt "app"
+msgid "Partner Earned"
+msgstr ""
+
+msgctxt "app"
+msgid "WMR"
+msgstr ""
+
+msgctxt "app"
+msgid "Data Json"
+msgstr ""
+
+msgctxt "app"
+msgid "Timezone"
+msgstr ""
+
+msgctxt "app"
+msgid "Is Admin"
+msgstr ""
+
+msgctxt "app"
+msgid "Languages"
+msgstr ""
+
+msgctxt "app"
+msgid "Balance change"
+msgstr ""
+
+msgctxt "app"
+msgid "Is Common"
+msgstr ""
+
+msgctxt "app"
+msgid "Partner"
+msgstr ""
+
+msgctxt "app"
+msgid "Is real money"
+msgstr ""
+
+msgctxt "app"
+msgid "From invited User ID"
+msgstr ""
+
+msgctxt "app"
+msgid "Parent transaction ID"
+msgstr ""
+
+msgctxt "app"
+msgid "How to Learn Japanese Efficiently?"
+msgstr ""
+
+msgctxt "app"
+msgid "3 simple, but important steps"
+msgstr ""
+
+msgctxt "app"
+msgid "Login"
+msgstr ""
+
+msgctxt "app"
+msgid "<span>Step 1:</span>  Select content that interests you"
+msgstr ""
+
+msgctxt "app"
+msgid "You choose what to study"
+msgstr ""
+
+msgctxt "app"
+msgid "In our collection there are over 100 000 videos with Japanese subtitles, books, articles and other content from the Japanese Internet. Pick something that interests you and have fun learning Japanese!"
+msgstr ""
+
+msgctxt "app"
+msgid "Travel? Anime? Games? Technologies? Inspiring talks? No matter what your interest or skill level, we have you covered."
+msgstr ""
+
+msgctxt "app"
+msgid "100 000+ videos"
+msgstr ""
+
+msgctxt "app"
+msgid "All with Japanese subtitles"
+msgstr ""
+
+msgctxt "app"
+msgid "For any level or topic"
+msgstr ""
+
+msgctxt "app"
+msgid "Authentic Japanese from real life"
+msgstr ""
+
+msgctxt "app"
+msgid "Learn how Japanese actually speak, not the texts written specifically for the textbook."
+msgstr ""
+
+msgctxt "app"
+msgid "For your Japanese level"
+msgstr ""
+
+msgctxt "app"
+msgid "Our collection has materials for every Japanese level. A suitable level is important for learning a language: there should be new words in the text, but not too many."
+msgstr ""
+
+msgctxt "app"
+msgid "With our service you will find materials for your level of Japanese."
+msgstr ""
+
+msgctxt "app"
+msgid "<span>Step 2:</span> Add new words"
+msgstr ""
+
+msgctxt "app"
+msgid "Just click to look up a word"
+msgstr ""
+
+msgctxt "app"
+msgid "Click on any word to instantly see a definition, reading and other information."
+msgstr ""
+
+msgctxt "app"
+msgid "This works even if you are watching a video, all videos in our collection come with Japanese subtitles."
+msgstr ""
+
+msgctxt "app"
+msgid "Quickly add words to your list"
+msgstr ""
+
+msgctxt "app"
+msgid "Click on the definition to add the word to your list."
+msgstr ""
+
+msgctxt "app"
+msgid "On any website"
+msgstr ""
+
+msgctxt "app"
+msgid "You can look up words on any website. Just install our browser extension."
+msgstr ""
+
+msgctxt "app"
+msgid "You are not limited to our content collection, use any site on the Internet to immerse yourself in Japanese."
+msgstr ""
+
+msgctxt "app"
+msgid "<span>Step 3:</span> Study added words"
+msgstr ""
+
+msgctxt "app"
+msgid "Study words"
+msgstr ""
+
+msgctxt "app"
+msgid "Use our learning engine to memorize new words you've added from content. Using it is like playing a game while you're memorizing new words."
+msgstr ""
+
+msgctxt "app"
+msgid "Effective way to remember"
+msgstr ""
+
+msgctxt "app"
+msgid "Built-in spaced repetition system (SRS) takes into account the complexity of words and calculates optimal training schedule."
+msgstr ""
+
+msgctxt "app"
+msgid "Kanji: the Smart Way"
+msgstr ""
+
+msgctxt "app"
+msgid "We did everything to make the process of learning kanji as easy as possible. Every time you study a new word, you'll first study any unknown kanji used in that word."
+msgstr ""
+
+msgctxt "app"
+msgid "When you study kanji, mnemonics, example words, and other hints are shown to help you memorize kanji."
+msgstr ""
+
+msgctxt "app"
+msgid "Let's try!"
+msgstr ""
+
+msgctxt "app"
+msgid "Enter your E-mail to continue"
+msgstr ""
+
+msgctxt "app"
+msgid "Continue"
+msgstr ""
+
+msgctxt "app"
+msgid "Terms of Use"
+msgstr ""
+
+msgctxt "app"
+msgid "Privacy policy"
+msgstr ""
+
+msgctxt "app"
+msgid "Back to top"
+msgstr ""
+
+msgctxt "app"
+msgid "Return to the front page"
+msgstr ""
+
+msgctxt "app"
+msgid "Your balance is lower than 300."
+msgstr ""
+

@@ -9,6 +9,9 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $title
  * @property string $code
+ * @property string $code3
+ * @property string $titleNative
+ * @property string $titleEnglish
  */
 class Languages extends ActiveRecord
 {
