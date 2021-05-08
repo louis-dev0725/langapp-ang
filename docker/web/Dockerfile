@@ -72,13 +72,12 @@ WORKDIR /app/
 
 FROM dev as prod
 
-USER www-data:www-data
-
 #FROM dev as prod-backend
 COPY ./backend/composer.json ./backend/composer.lock /app/backend/
 RUN cd /app/backend/ && composer install --prefer-dist --no-scripts --no-dev --no-autoloader && rm -rf /root/.composer
 COPY ./backend /app/backend
 RUN cd /app/backend/ && composer dump-autoload --no-scripts --no-dev --optimize
+RUN chown www-data:www-data /app/backend/runtime/ -R; chown www-data:www-data /app/backend/web/assets/ -R
 
 #FROM dev as prod-backend-ts
 COPY ./backend-ts/package.json ./backend-ts/package-lock.json /app/backend-ts/
