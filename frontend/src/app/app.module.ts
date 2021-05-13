@@ -34,10 +34,7 @@ import { reducers } from '@app/store/reducers';
 import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { WebpackTranslateLoader } from './WebpackTranslateLoader';
-import { EntityDataModule } from '@ngrx/data';
-import { dataServiceConfig, entityConfig } from './data.config';
-import { DefaultDataServiceConfig } from '@ngrx/data';
-import { EffectsModule } from '@ngrx/effects';
+import { CookieModule } from 'ngx-cookie';
 
 @NgModule({
   declarations: [AppComponent],
@@ -52,12 +49,11 @@ import { EffectsModule } from '@ngrx/effects';
       }
     }),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([]),
-    EntityDataModule.forRoot(entityConfig),
     environment.development ? StoreDevtoolsModule.instrument() : [],
     BrowserAnimationsModule,
     ThemeModule,
     ConfirmDialogModule,
+    CookieModule.forRoot(),
   ],
   providers: [
     {
@@ -70,7 +66,7 @@ import { EffectsModule } from '@ngrx/effects';
     CanactivateNologged,
     CustomValidator,
     { provide: MatPaginatorIntl, useClass: CustomPaginatorTranslator },
-    { provide: LOCALE_ID, useFactory: () => SessionService.getLocale() },
+    { provide: LOCALE_ID, useValue: 'en-US' },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 3000 } },
     {
       provide: HTTP_INTERCEPTORS,
@@ -80,10 +76,6 @@ import { EffectsModule } from '@ngrx/effects';
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
-    },
-    {
-      provide: DefaultDataServiceConfig,
-      useValue: dataServiceConfig,
     },
     MessageService,
     ConfirmationService,
