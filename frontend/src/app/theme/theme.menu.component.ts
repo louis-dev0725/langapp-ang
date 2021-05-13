@@ -53,7 +53,7 @@ export class ThemeMenuComponent implements OnInit {
     this.model = this.getModel();
     this.user = this.session.user;
 
-    this.session.changingUser.pipe(untilDestroyed(this)).subscribe(user => {
+    this.session.user$.pipe(untilDestroyed(this)).subscribe(user => {
       this.model = [...this.getModel()];
       this.user = user;
       this.cd.detectChanges();

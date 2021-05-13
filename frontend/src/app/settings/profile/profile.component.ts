@@ -156,8 +156,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (result instanceof ApiError) {
         this._errors = result.error;
       } else {
-        this.session.user = result;
-      this.messageService.add({ severity: 'success', summary: this.customValidator.messagesMap['snackbar.settings-edit-success'], detail: this.customValidator.messagesMap['snackbar.settings-edit-success'] });
+        this.messageService.add({ severity: 'success', summary: this.customValidator.messagesMap['snackbar.settings-edit-success'], detail: this.customValidator.messagesMap['snackbar.settings-edit-success'] });
       }
     });
   }

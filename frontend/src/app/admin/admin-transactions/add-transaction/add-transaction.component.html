@@ -17,7 +17,7 @@
             required
             type="number"
             formControlName="money"
-            [value]="transactionForm.get('money').value | formatNumbers: session.lang"
+            [value]="transactionForm.get('money').value | formatNumbers: session.language"
             placeholder="{{'Amount' | translate}}">
           <mat-error *ngIf="checkError('money')">{{getError('money')}}</mat-error>
         </mat-form-field>

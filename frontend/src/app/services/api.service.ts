@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Category, Content, UserDictionary, ListResponse, Materials, Mnemonic, SettingPlugin, User } from '@app/interfaces/common.interface';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,7 @@ import {
   LoadAuthorizedSuccess
 } from '@app/store/index';
 import { environment } from '../../environments/environment'
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 
 type ParamsInterface = HttpParams | {
@@ -145,7 +145,7 @@ export class ApiService {
     return new Observable((observer) => {
       return this.http.post<User>(this.apiHost + '/users', params).subscribe(
         res => {
-          this.session.user = res;
+          this.session.user$.next(res);
           this.store.dispatch(new AuthorizedUpdateTokenAction(this.session.user.accessToken));
           this.getMeRequest(observer);
         },
@@ -155,6 +155,14 @@ export class ApiService {
         }
       );
     });
+  }
+
+  changeUserLanguage(newLanguage: string) {
+    this.session._changeLanguage(newLanguage);
+    if (this.session.user !== null) {
+      this.session.user.language = newLanguage;
+      this.updateUser({ id: this.session.user.id, language: newLanguage }).subscribe(() => { });
+    }
   }
 
   /**
@@ -259,24 +267,8 @@ export class ApiService {
     });
   }
 
-  /**
-   * Save user model/profile changes
-   * method: PATCH
-   * url: /users/update/
-   * @var value
-   */
-  updateUser(value: Partial<User>): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.getHeadersWithToken();
-      this.http.patch<User>(this.apiHost + '/users/' + value.id, value, { headers }).subscribe(
-        res => {
-          observer.next(res);
-        },
-        error => {
-          observer.next(this.getApiError(error));
-        }
-      );
-    });
+  updateUser(value: Partial<User>): Observable<User> {
+    return this.apiRequest<User>('PATCH', 'users/' + value.id, { body: value }).pipe(tap((user) => { this.session.user$.next(user); }));
   }
 
   /**
@@ -289,7 +281,7 @@ export class ApiService {
       { headers }).subscribe(
         (userRes: any) => {
           this.store.dispatch(new LoadAuthorizedSuccess(userRes));
-          this.session.user = userRes;
+          this.session.user$.next(userRes);
           observer.next(userRes);
         },
         error => {
@@ -813,7 +805,7 @@ export class ApiService {
    * Получаем язык приложения
    */
   private getSimpleLanguageHeader(): HttpHeaders {
-    const lang = this.session.lang;
+    const lang = this.session.language;
     return new HttpHeaders().append('Accept-Language', lang);
   }
 

@@ -16,7 +16,7 @@
 
       <ng-container matColumnDef="partnerEarned">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Earned' | translate}}</th>
-        <td mat-cell *matCellDef="let row">{{row.partnerEarned | formatCurrency : session.lang}}</td>
+        <td mat-cell *matCellDef="let row">{{row.partnerEarned | formatCurrency : session.language}}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columnNames"></tr>

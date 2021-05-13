@@ -2,41 +2,80 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { User } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import * as fromStore from '@app/store/index';
-import { LogOutAction, AuthorizedUpdateTokenAction, AuthorizedSaveAdminAction, LogOutAsUserAction,
-  AuthorizedUpdateUserAction } from '@app/store/index';
+import {
+  LogOutAction, AuthorizedUpdateTokenAction, AuthorizedSaveAdminAction, LogOutAsUserAction,
+  AuthorizedUpdateUserAction
+} from '@app/store/index';
 
 import { Store } from '@ngrx/store';
-
+import { TranslateService } from '@ngx-translate/core';
+import { EventService } from '@app/event.service';
+import { CookieService } from 'ngx-cookie';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
+  private defaultLanguage = 'en';
+  private _language: string;
 
-  private static locales = { ru: 'ru', en: 'en' };
+  public user$ = new ReplaySubject<User>();
+  private _user: User;
 
-  public changingUser = new EventEmitter();
-
-  get lang(): string {
-    return SessionService.getLang();
+  constructor(private router: Router,
+    private store: Store<fromStore.State>,
+    private translateService: TranslateService,
+    private eventService: EventService,
+    private cookieService: CookieService) {
+    this.init();
   }
 
-  set lang(value: string) {
-    if (value) {
-      localStorage.setItem('lang', value);
+  init() {
+    this.user$.subscribe((user) => {
+      if (!this._user || this._user.language != user.language || this._language != user.language) {
+        this._changeLanguage(user.language);
+      }
+
+      this._user = user;
+      localStorage.setItem('user', JSON.stringify(user));
+    });
+
+    if (!this._user) {
+      let userFromLS = localStorage.getItem('user');
+      if (userFromLS) {
+        let user = JSON.parse(userFromLS);
+        if (user) {
+          this.user$.next(user);
+        }
+      }
+    }
+
+    if (!this._language) {
+      let lang = this.cookieService.get('lang');
+      this._language = lang ?? this.defaultLanguage;
     }
   }
 
-  get locale(): string {
-    return SessionService.getLocale();
+  /**
+   * This method is used internally. Use changeUserLanguage in ApiService instead of using this method.
+   * @param newLanguage
+   */
+  _changeLanguage(newLanguage: string) {
+    let expires = new Date();
+    expires.setDate(expires.getDate() + 365 * 10);
+    this.cookieService.put('language', newLanguage, { path: '/', expires: expires });
+    this.translateService.use(newLanguage);
+    this.eventService.emitChangeEvent({ type: 'language-change' });
   }
 
-  private _user: User;
+  get language(): string {
+    return this._language;
+  }
 
   get isAdmin(): boolean {
     return this.user ? this.user.isAdmin : false;
   }
-
 
   private _transaction: any;
   get transaction(): any {
@@ -62,37 +101,6 @@ export class SessionService {
     return this._user;
   }
 
-  set user(value: User) {
-    if (value) {
-      localStorage.setItem('user', JSON.stringify(value));
-      this.changingUser.emit(value);
-    }
-    this._user = value;
-  }
-
-  static getLang(): string {
-    let lang = localStorage.getItem('lang');
-    if (!lang) {
-      lang = 'en';
-    }
-    return lang;
-  }
-
-  static getLocale() {
-    return SessionService.locales[SessionService.getLang()] ? SessionService.locales[SessionService.getLang()] : SessionService.getLang();
-  }
-
-  constructor(private router: Router,  private store: Store<fromStore.State>) {}
-
-  changeUserLanguage(language: string) {
-    if (language !== '') {
-      const userAttr = JSON.parse(localStorage.getItem('user'));
-      userAttr.language = language;
-      localStorage.setItem('user', JSON.stringify(userAttr));
-      this._user = userAttr;
-    }
-  }
-
   logout() {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
@@ -110,25 +118,20 @@ export class SessionService {
   }
 
   reloadAdmin() {
-    this.user = JSON.parse(localStorage.getItem('savedAdmin'));
-    if (this.user) {
-      this.store.dispatch(new AuthorizedUpdateTokenAction(this.user.accessToken));
+    let savedAdminUser = JSON.parse(localStorage.getItem('savedAdmin'));
+    if (savedAdminUser) {
+      this.store.dispatch(new AuthorizedUpdateTokenAction(savedAdminUser.accessToken));
       this.store.dispatch(new LogOutAsUserAction(this.user));
       localStorage.removeItem('savedAdmin');
-    } else {
-      const lang = localStorage.getItem('lang');
-      this.store.dispatch(new LogOutAction());
-      localStorage.clear();
-      localStorage.setItem('lang', lang);
+      this.user$.next(savedAdminUser);
     }
-    this.changingUser.emit(this.user);
   }
 
   openAsUser(user: User) {
     this.saveAdmin();
-    this.user = user;
+    this.user$.next(user);
     this.store.dispatch(new AuthorizedUpdateTokenAction(this.user.accessToken));
-    this.store.dispatch(new AuthorizedUpdateUserAction(this.user));
+    this.store.dispatch(new AuthorizedUpdateUserAction(user));
     this.router.navigateByUrl('/');
   }
 }

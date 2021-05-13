@@ -2,7 +2,7 @@
   <div class="card">
     <h1 translate>Partnership program</h1>
 
-    <ng-container *ngIf="session.lang === 'ru'">
+    <ng-container *ngIf="session.language === 'ru'">
       <p>Вознаграждение партнера составляет 30% от платежей привлеченного клиента. Выплаты производятся на WMR
         кошелек.<br>
         Указать номер WMR кошелька можно в <a routerLink="/users/settings">настройках</a>. Полные правила партнерской
@@ -11,7 +11,7 @@
       <p>Если у вас есть вопросы или предложения – <a href="/users/contact">напишите нам</a>.
     </ng-container>
 
-    <ng-container *ngIf="session.lang === 'en'">
+    <ng-container *ngIf="session.language === 'en'">
       <p>Partner remuneration is 30% of the payments of the attracted client. Payments are made to the WMR wallet.<br>
         Specify the WMR wallet number in the <a routerLink="/users/settings">settings</a>. The full rules of the affiliate program -
         <a target="_blank" href="/docs/pravila.pdf">click here</a>.
@@ -20,7 +20,7 @@
       If you have any questions or suggestions - write to us.
     </ng-container>
 
-    <p class="notation">{{'On your affiliate account' | translate}} {{user.balancePartner | formatCurrency: session.lang }}.</p>
+    <p class="notation">{{'On your affiliate account' | translate}} {{user.balancePartner | formatCurrency: session.language }}.</p>
 
   </div>
 </div>

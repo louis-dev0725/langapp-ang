@@ -11,10 +11,8 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { AppComponent } from '@app/app.component';
 import { MenuService } from '@app/theme/theme.menu.service';
 import { ConfirmationService, PrimeNGConfig } from 'primeng/api';
-import { UserService } from '@app/services/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
-import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @UntilDestroy()
@@ -68,7 +66,6 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     private sessionService: SessionService,
     public renderer: Renderer2,
     private menuService: MenuService,
-    private userService: UserService,
     private translateService: TranslateService,
     private eventService: EventService,
     private primengConfig: PrimeNGConfig,
@@ -122,15 +119,8 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     });
   }
 
-  setLanguage(lang: any) {
-    localStorage.setItem('lang', lang);
-    this.translateService.use(lang);
-    this.eventService.emitChangeEvent({ type: 'language-change' });
-    if (this.sessionService.user !== null) {
-      this.sessionService.changeUserLanguage(lang);
-      const user = this.sessionService.user;
-      this.api.updateUser({ id: user.id, language: user.language }).pipe(untilDestroyed(this)).subscribe(() => { });
-    }
+  setLanguage(lang: string) {
+    this.api.changeUserLanguage(lang);
   }
 
   get isOpenedAdmin(): boolean {

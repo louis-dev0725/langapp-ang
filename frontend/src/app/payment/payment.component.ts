@@ -96,7 +96,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.api.meRequest()
     .pipe(untilDestroyed(this))
     .subscribe((res) => {
-      this.session.changingUser.emit(res);
+      this.session.user$.next(res);
     });
   }
 }

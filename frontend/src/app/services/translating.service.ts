@@ -24,6 +24,6 @@ export class TranslatingService {
   }
 
   get translates() {
-    return this._translates[this.sessionService.lang];
+    return this._translates[this.sessionService.language];
   }
 }

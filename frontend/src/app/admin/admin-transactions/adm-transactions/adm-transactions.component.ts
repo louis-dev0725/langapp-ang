@@ -181,7 +181,7 @@ export class AdmTransactionsComponent implements OnInit, OnDestroy {
   }
 
   translatePage() {
-    this.adapter.setLocale(this.session.lang);
+    this.adapter.setLocale(this.session.language);
 
     this.translate.get(Object.keys(this.translatedKeys))
     .pipe(untilDestroyed(this))

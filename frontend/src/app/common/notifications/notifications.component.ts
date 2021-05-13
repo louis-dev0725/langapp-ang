@@ -25,7 +25,7 @@ export class NotificationsComponent implements OnInit, OnChanges, OnDestroy {
     this.user = this.sessionService.user;
     this.messages = this.user && this.user['notifications'] ? this._mapMessages(this.user['notifications']) : [];
 
-    this.sessionService.changingUser
+    this.sessionService.user$
     .pipe(untilDestroyed(this))
     .subscribe(user => {
       this.user = user;
@@ -49,7 +49,7 @@ export class NotificationsComponent implements OnInit, OnChanges, OnDestroy {
     .pipe(untilDestroyed(this))
     .subscribe(() => {
       this.user['notifications'] = this.user['notifications'].filter(el => el.id !== msg.id);
-      this.sessionService.changingUser.emit(this.user);
+      this.sessionService.user$.next(this.user);
     });
   }
 

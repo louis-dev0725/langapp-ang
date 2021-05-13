@@ -9,7 +9,7 @@ export class CustomPaginatorTranslator extends MatPaginatorIntl {
 
   constructor(private translateService: TranslateService, private sessionService: SessionService) {
     super();
-    this.translateService.getTranslation(this.sessionService.lang).subscribe(res => {
+    this.translateService.getTranslation(this.sessionService.language).subscribe(res => {
       this.setTranslates(res['paginator']);
     });
 
