@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Category, Content, UserDictionary, ListResponse, Materials, Mnemonic, SettingPlugin, User } from '@app/interfaces/common.interface';
+import { Category, Content, UserDictionary, ListResponse, Mnemonic, SettingPlugin, User } from '@app/interfaces/common.interface';
 import { Observable, of } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
@@ -608,7 +608,7 @@ export class ApiService {
     return this.apiRequest<ListResponse<Content>>('GET', 'contents', { params }, true);
   }
 
-  contentById(id: number): Observable<any> {
+  contentById(id: number): Observable<Content> {
     return this.apiRequest<Content>('GET', `contents/${id}`);
   }
 
@@ -634,7 +634,7 @@ export class ApiService {
   /**
    * Создаём материал
    */
-  createMaterials(data: Materials): Observable<any> {
+  createMaterials(data: Content): Observable<any> {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.post(this.apiHost + '/contents/create', data, { headers }).subscribe((res) => {
@@ -649,7 +649,7 @@ export class ApiService {
   /**
    * Изменяем материал
    */
-  updateMaterials(data: Materials): Observable<any> {
+  updateMaterials(data: Content): Observable<any> {
     return new Observable((observer) => {
       const headers = this.getHeadersWithToken();
       this.http.patch(this.apiHost + '/contents/' + data.id, data, { headers }).subscribe((res) => {

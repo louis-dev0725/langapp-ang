@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Materials } from '@app/interfaces/common.interface';
+import { Content } from '@app/interfaces/common.interface';
 import { ApiError } from '@app/services/api-error';
 import { combineLatest } from 'rxjs';
 
@@ -18,7 +18,7 @@ import { combineLatest } from 'rxjs';
   styleUrls: ['./edit-materials.component.scss']
 })
 export class EditMaterialsComponent implements OnInit, OnDestroy {
-  material: Materials;
+  material: Content;
   errors: any[] = [];
   materialForm: FormGroup;
   material_id;
@@ -43,7 +43,7 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.material_id = this.route.snapshot.paramMap.get('id');
     combineLatest([this.api.contentById(this.material_id), this.api.getContentTypes(),
-      this.api.getCategories()]).pipe(untilDestroyed(this)).subscribe(([material, type, category]) => {
+    this.api.getCategories()]).pipe(untilDestroyed(this)).subscribe(([material, type, category]) => {
 
       this.types = type;
       if (!(category instanceof ApiError)) {
@@ -106,7 +106,7 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
     };
     this.api.updateMaterials(materials).pipe(untilDestroyed(this)).subscribe(res => {
       if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.translatingService.translates['confirm'].materials.updated, null, {duration: 3000});
+        this.snackBar.open(this.translatingService.translates['confirm'].materials.updated, null, { duration: 3000 });
         setTimeout(() => {
           this.router.navigate(['/content/materials']);
         }, 3100);
@@ -118,5 +118,5 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 }

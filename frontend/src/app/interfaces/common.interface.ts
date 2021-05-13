@@ -92,19 +92,6 @@ export interface Transaction {
   fromInvitedUserId?: number;
 }
 
-export interface Materials {
-  id?: number;
-  title: string;
-  type: number;
-  sourceLink: string;
-  text: string;
-  status: number;
-  length: number;
-  level: string;
-  deleted: number;
-  category?: any;
-}
-
 export interface Category {
   id?: number;
   title: string;
