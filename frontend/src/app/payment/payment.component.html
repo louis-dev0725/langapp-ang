@@ -1,39 +1,42 @@
 <div class="container">
   <div class="card">
-    <h1 translate>Account replenishment</h1>
-    <form [formGroup]="paymentForm">
-      <mat-form-field class="form-item">
-        <input
-          matInput
-          required
-          class="no-spinners"
-          formControlName="amount"
-          type="number"
-          placeholder="{{'Amount' | translate}}">
-        <mat-error *ngIf="!paymentForm.valid">{{ getError() }}</mat-error>
-      </mat-form-field>
+    <h4 translate>Billing settings</h4>
+    <div *ngIf="enableBalanceTopup">
+      <form [formGroup]="paymentForm">
 
-      <div class="form-item">
-        <button
-          mat-flat-button
-          color="primary"
-          [disabled]="!paymentForm.valid"
-          (click)="onPayment()">{{'Pay' | translate}}</button>
-      </div>
+        <div class="p-fluid">
+          <div class="p-field g-field">
+            <label for="amount">{{'Amount' | translate}}</label>
+            <input id="amount" formControlName="amount" pInputText type="text" placeholder="{{'Amount' | translate}}" />
+          </div>
+        </div>
 
-    </form>
+        <p-message *ngIf="!paymentForm.valid" severity="error" [text]="getError()"></p-message>
+
+        <div class="p-mt-3">
+          <button pButton color="primary" [disabled]="!paymentForm.valid" (click)="onPayment()" label="{{'Pay' | translate}}"></button>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="enableSquare">
+      <h5>{{ 'Add new card' | translate }}</h5>
+      <app-square-form (updateListEvent)="receiveUpdatedPaymentMethods($event)"></app-square-form>
+    </div>
+    <div *ngIf="showPaymentMethods && paymentMethods && paymentMethods.length > 0" class="g-field">
+      <h5 class="p-mt-3">{{ 'Your payment methods' | translate }}</h5>
+      <p-toolbar *ngFor="let method of paymentMethods" styleClass="p-mt-3">
+        <div class="p-toolbar-group-left">
+          {{ method.title }}
+        </div>
+
+        <div class="p-toolbar-group-right">
+          <button pButton (click)="deletePaymentMethod(method.id)" label="{{'Delete' | translate}}" icon="pi pi-trash" class="p-button-danger"></button>
+        </div>
+      </p-toolbar>
+    </div>
   </div>
-</div>
-<div class="container">
   <div class="card">
-  <h1 translate>Transactions history</h1>
-    <app-payments-table
-      [pageSize]="50"
-      [isShowComment]="true"
-      [moneyTitle]="'Amount' | translate"
-      [rows]="rows"
-      [isPaginator]="true"></app-payments-table>
+    <h4 translate>Transactions history</h4>
+    <app-payments-table [pageSize]="50" [isShowComment]="true" [moneyTitle]="'Amount' | translate" [rows]="rows" [isPaginator]="true"></app-payments-table>
   </div>
 </div>
-
-

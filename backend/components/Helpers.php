@@ -2,6 +2,9 @@
 
 namespace app\components;
 
+use app\models\User;
+use Yii;
+
 class Helpers
 {
     public static function dateToSql($unixTime)
@@ -31,5 +34,14 @@ class Helpers
         $money = str_replace(',0', '', $money);
 
         return $money;
+    }
+
+    /**
+     * @return User
+     */
+    public static function user() {
+        /** @var User $user */
+        $user = Yii::$app->user->identity;
+        return $user;
     }
 }

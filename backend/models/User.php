@@ -52,6 +52,7 @@ use yii\web\UserEvent;
  * @property User $invitedByUser
  * @property User[] $invitedUsers
  * @property Transaction[] $transactions
+ * @property PaymentMethod[] $paymentMethods
  * @property Invoice[] $invoices
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
@@ -478,6 +479,22 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getTransactions()
     {
         return $this->hasMany(\app\models\Transaction::class, ['userId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPaymentMethods()
+    {
+        return $this->getAllPaymentMethods()->where(['isDeleted' => false]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAllPaymentMethods()
+    {
+        return $this->hasMany(\app\models\PaymentMethod::class, ['userId' => 'id'])->orderBy(['id' => SORT_DESC]);
     }
 
     /**

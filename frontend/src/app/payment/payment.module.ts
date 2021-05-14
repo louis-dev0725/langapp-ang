@@ -7,9 +7,10 @@ import { PaymentRoutingModule } from '@app/payment/payment-routing.module';
 import { PaymentComponent } from '@app/payment/payment.component';
 import { SuccessComponent } from '@app/payment/success/success.component';
 import { PaymentsTableModule } from '@app/common/payments-table/payments-table.module';
+import { SquareFormComponent } from './square-form/square-form.component';
 
 @NgModule({
-  declarations: [PaymentComponent, SuccessComponent],
+  declarations: [PaymentComponent, SuccessComponent, SquareFormComponent],
   imports: [
     FormsModule,
     ReactiveFormsModule,

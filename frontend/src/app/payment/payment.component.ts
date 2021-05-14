@@ -7,6 +7,9 @@ import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UserPaymentMethod } from '@app/interfaces/common.interface';
+import { MessageService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 @UntilDestroy()
 @Component({
@@ -17,9 +20,15 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 export class PaymentComponent implements OnInit, OnDestroy {
   private minVal = 100;
 
+  enableBalanceTopup = false;
+  showPaymentMethods = true;
+  enableSquare = true;
+
   paymentForm: FormGroup;
 
   rows: any;
+
+  paymentMethods: UserPaymentMethod[];
 
   @ViewChild(PaymentsTableComponent, { static: true }) paymentsTable: PaymentsTableComponent;
 
@@ -28,45 +37,64 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private customValidator: CustomValidator,
     private router: Router,
     private serializer: UrlSerializer,
-    private session: SessionService
-  ) {}
+    private session: SessionService,
+    private messageService: MessageService,
+    private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
     this.paymentsTable.isLoaded = false;
 
     this.paymentsTable.tableEvents
-    .pipe(untilDestroyed(this))
-    .subscribe((res: any) => {
-      this.paymentsTable.isLoaded = false;
-      this.paymentsTable.rows = [];
-      if (res.type === 'page') {
-        this.getRows(res.data.pageIndex);
-      }
-      if (res.type === 'sort') {
-        this.getRows(0, res.data);
-      }
-    });
+      .pipe(untilDestroyed(this))
+      .subscribe((res: any) => {
+        this.paymentsTable.isLoaded = false;
+        this.paymentsTable.rows = [];
+        if (res.type === 'page') {
+          this.getRows(res.data.pageIndex);
+        }
+        if (res.type === 'sort') {
+          this.getRows(0, res.data);
+        }
+      });
 
     this.paymentForm = new FormGroup({
       amount: new FormControl('', { validators: [Validators.required, Validators.min(100)], updateOn: 'change' })
     });
 
     this.getRows();
+
+    this.refreshPaymentMethods();
   }
 
-  ngOnDestroy(): void {}
+  refreshPaymentMethods() {
+    this.api.getUserPaymentMethods().subscribe((r) => { this.paymentMethods = r });
+  }
+
+  receiveUpdatedPaymentMethods(updatedList: UserPaymentMethod[]) {
+    this.paymentMethods = updatedList;
+  }
+
+  deletePaymentMethod(id: number) {
+    this.api.deletePaymentMethod(id).subscribe((r) => {
+      this.paymentMethods = r;
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: this.translateService.instant('Payment method was deleted') });
+    });
+  }
+
+  ngOnDestroy(): void { }
 
   getRows(page = 0, sort = {}) {
     this.api.getUserTransactionsList(page, sort)
-    .pipe(untilDestroyed(this))
+      .pipe(untilDestroyed(this))
       .subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.rows = res.items;
-        this.paymentsTable.isLoaded = true;
-        this.paymentsTable.paginator.length = res._meta.totalCount;
-        this.paymentsTable.paginator.pageIndex = res._meta.currentPage - 1;
-      }
-    });
+        if (!(res instanceof ApiError)) {
+          this.rows = res.items;
+          this.paymentsTable.isLoaded = true;
+          this.paymentsTable.paginator.length = res._meta.totalCount;
+          this.paymentsTable.paginator.pageIndex = res._meta.currentPage - 1;
+        }
+      });
   }
 
   getError() {
@@ -94,9 +122,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   updateUser() {
     this.api.meRequest()
-    .pipe(untilDestroyed(this))
-    .subscribe((res) => {
-      this.session.user$.next(res);
-    });
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        this.session.user$.next(res);
+      });
   }
 }

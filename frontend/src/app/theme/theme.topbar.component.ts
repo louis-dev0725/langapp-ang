@@ -31,7 +31,9 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
     public api: ApiService,
     private store: Store<fromStore.State>,
     private cd: ChangeDetectorRef,
-    public app: AppComponent) { }
+    public app: AppComponent) {
+    this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => this.isLoggedIn = authState);
+  }
 
   ngOnInit() {
     this.model = this.getModel();
@@ -42,10 +44,10 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
       this.user = user;
       this.cd.detectChanges();
     });
-    this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => this.isLoggedIn = authState);
   }
 
   public getModel(): MenuItem[] {
+    console.log(this.isLoggedIn);
     return [
       {
         label: 'Language',

@@ -1,5 +1,6 @@
 $gutter: 1rem; //for primeflex grid system
-$fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol";
 
 @import "../node_modules/primeng/resources/primeng.css";
 @import "../node_modules/primeflex/primeflex.scss";
@@ -15,14 +16,28 @@ $fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, A
   outline: 0 none;
 }
 
-.layout-topbar-light .layout-topbar .layout-topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > .topbar-submenu > .p-slidemenu {
+.layout-topbar-light
+  .layout-topbar
+  .layout-topbar-wrapper
+  .layout-topbar-right
+  .layout-topbar-actions
+  > li
+  > .topbar-submenu
+  > .p-slidemenu {
   position: absolute;
   top: 46px !important;
   right: 0px;
   left: auto !important;
 }
 
-.menu-wrapper .layout-menu-container .layout-menu .layout-root-menuitem li > ul > li.active-menuitem.layout-root-menuitem > a.active-menuitem-routerlink {
+.menu-wrapper
+  .layout-menu-container
+  .layout-menu
+  .layout-root-menuitem
+  li
+  > ul
+  > li.active-menuitem.layout-root-menuitem
+  > a.active-menuitem-routerlink {
   border-bottom-left-radius: 0;
 }
 
@@ -31,9 +46,9 @@ $fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, A
 }
 
 a.p-button:hover {
-    background: $buttonHoverBg;
-    color: $buttonTextHoverColor;
-    border-color: $buttonHoverBorderColor;
+  background: $buttonHoverBg;
+  color: $buttonTextHoverColor;
+  border-color: $buttonHoverBorderColor;
 }
 
 .g-field {
@@ -51,6 +66,22 @@ a.p-button:hover {
 
 .layout-topbar-light .layout-topbar .layout-topbar-wrapper .layout-topbar-left .layout-topbar-logo > img {
   height: 40px;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-detail {
+  overflow-wrap: anywhere;
+}
+
+.square-card-container {
+  max-width: 550px;
+  min-width: 300px;
+  min-height: 90px;
+}
+
+@media screen and (max-width: 500px) {
+  .square-card-container {
+    min-height: 140px;
+  }
 }
 
 /*

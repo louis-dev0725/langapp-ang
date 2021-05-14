@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Category, Content, UserDictionary, ListResponse, Mnemonic, SettingPlugin, User } from '@app/interfaces/common.interface';
-import { Observable, of } from 'rxjs';
+import { Category, Content, UserDictionary, ListResponse, Mnemonic, SettingPlugin, User, UserPaymentMethod, AddCardSquareRequest } from '@app/interfaces/common.interface';
+import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { Store } from '@ngrx/store';
 import * as fromStore from '@app/store/index';
-import {
-  LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction,
-  LoadAuthorizedSuccess
-} from '@app/store/index';
+import { LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateTokenAction, LoadAuthorizedSuccess } from '@app/store/index';
 import { environment } from '../../environments/environment'
 import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
@@ -57,27 +54,38 @@ export class ApiService {
     private store: Store<fromStore.State>,
     private messageService: MessageService) { }
 
-  apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, displayValidationErrors = false) {
+  apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, catchValidationErrors = false) {
     return <Observable<T>>this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(
-      catchError((r) => this.handleError(r, displayValidationErrors))
+      catchError((r) => this.handleError(r, catchValidationErrors))
     );
   }
 
-  private handleError(response: HttpErrorResponse, displayValidationErrors = false) {
+  private handleError(response: HttpErrorResponse, catchValidationErrors = false) {
+    console.log(response);
     if (response.error instanceof ErrorEvent) {
-      this.messageService.add({ severity: 'error', summary: 'Error: Unable to connect to server', detail: response.error.message, sticky: true });
-      return of(new ApiError([{ field: 'all', message: 'Unable to connect to server. Error: ' + response.error.message }], false));
+      this.messageService.add({ severity: 'error', summary: 'Error: Unable to connect to server', detail: response.error.message, sticky: true, closable: true });
+      //return of(new ApiError([{ field: 'all', message: 'Unable to connect to server. Error: ' + response.error.message }], false));
     } else if (response.error) {
-      if (displayValidationErrors) {
-        let fieldsErrorText = response.error?.[0]?.message ? response.error.map(e => e.message).join("\n") : '';
-        this.messageService.add({ severity: 'error', summary: 'Server error', detail: response.statusText + "\n" + fieldsErrorText, sticky: true });
+      if (response.error?.[0]) {
+        if (catchValidationErrors) {
+          let fieldsErrorText = response.error?.[0]?.message ? response.error.map(e => e.message).join("\n") : '';
+          this.messageService.add({ severity: 'error', summary: 'Server error', detail: response.statusText + "\n" + fieldsErrorText, sticky: true, closable: true });
+        }
+        return of(new ApiError(response.error, response.ok, response.status, response.statusText));
       }
-      // TODO: only for input errors?
-      return of(new ApiError(response.error, response.ok, response.status, response.statusText));
+      else if (response.error.message) {
+        this.messageService.add({ severity: 'error', summary: 'Server error: ' + response.error.message, detail: response.message, sticky: true, closable: true });
+      }
+      else if (response.message) {
+        this.messageService.add({ severity: 'error', summary: 'Server error', detail: response.message, sticky: true, closable: true });
+      }
+      //return of(new ApiError(response.error, response.ok, response.status, response.statusText));
     } else {
-      this.messageService.add({ severity: 'error', summary: 'Unknown error', detail: response.error.toString(), sticky: true });
-      return of(new ApiError([{ field: 'all', message: 'Unknown error' }], false));
+      this.messageService.add({ severity: 'error', summary: 'Unknown error', detail: response.error.toString(), sticky: true, closable: true });
+      //return of(new ApiError([{ field: 'all', message: 'Unknown error' }], false));
     }
+
+    return throwError(response);
   }
 
   /**
@@ -906,5 +914,21 @@ export class ApiService {
       }
       );
     });
+  }
+
+  getUserPaymentMethods() {
+    return this.apiRequest<UserPaymentMethod[]>('GET', `users/my-payment-methods`);
+  }
+
+  addCardSquare(body: AddCardSquareRequest) {
+    return this.apiRequest<UserPaymentMethod[]>('POST', `users/add-card-square`, { body: body }, true);
+  }
+
+  deletePaymentMethod(id: number) {
+    return this.apiRequest<UserPaymentMethod[]>('POST', `users/delete-payment-method`, {
+      body: {
+        id,
+      }
+    }, true);
   }
 }

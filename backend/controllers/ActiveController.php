@@ -23,7 +23,7 @@ class ActiveController extends \yii\rest\ActiveController
             unset($behaviors['contentNegotiator']['formats']['application/xml']);
         }
 
-        $behaviors['contentNegotiator']['languages'] = ['ru-RU', 'en-US'];
+        $behaviors['contentNegotiator']['languages'] = ['ru', 'en'];
 
         // add CORS filter (for development)
         if (YII_ENV_DEV || Yii::$app->params['enableDevCors']) {

@@ -7,12 +7,20 @@ use app\components\Notifications;
 use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\PasswordResetForm;
+use app\models\PaymentMethod;
 use app\models\RequestPasswordResetForm;
 use app\models\Transaction;
 use app\models\User;
 use app\models\UserSearch;
+use Square\Environment;
+use Square\Models\CreateCustomerCardRequest;
+use Square\Models\CreateCustomerCardResponse;
+use Square\Models\CreateCustomerRequest;
+use Square\Models\CreateCustomerResponse;
+use Square\SquareClient;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\rest\IndexAction;
 use yii\web\BadRequestHttpException;
@@ -57,7 +65,7 @@ class UserController extends ActiveController
                 ],
                 [
                     'allow' => true,
-                    'actions' => ['me', 'update', 'invited-users', 'close-notification'],
+                    'actions' => ['me', 'update', 'invited-users', 'close-notification', 'my-payment-methods', 'add-card-square', 'delete-payment-method'],
                     'roles' => ['@'],
                 ],
                 [
@@ -293,6 +301,100 @@ class UserController extends ActiveController
         $model->checkInvitedUsers();
 
         return ['done' => true];
+    }
+
+    public function actionMyPaymentMethods() {
+        return Helpers::user()->paymentMethods;
+    }
+
+    public function actionAddCardSquare()
+    {
+        $params = Yii::$app->request->bodyParams;
+        if (!isset($params['nonce'])) {
+            throw new BadRequestHttpException('"nonce" is required.');
+        }
+
+        $user = Helpers::user();
+        $userData = $user->dataJson;
+
+        $squareParams = Yii::$app->params['square'];
+        $env = $squareParams['env'] ?? 'sandbox';
+        $square = new SquareClient([
+            'accessToken' => $squareParams[$env]['accessToken'],
+            'environment' => $squareParams[$env]['accessToken'] == 'production' ? Environment::PRODUCTION : Environment::SANDBOX,
+        ]);
+
+        $customerId = $userData['paymentCustomerIds']['square'] ?? null;
+        if ($customerId == null) {
+            foreach ($user->paymentMethods as $paymentMethod) {
+                if ($paymentMethod->type == PaymentMethod::TYPE_SQUARE && isset($paymentMethod->data['customerId'])) {
+                    $customerId = $paymentMethod->data['customerId'];
+                }
+            }
+        }
+        if ($customerId == null) {
+            $request = new CreateCustomerRequest();
+            $request->setEmailAddress($user->email);
+            $request->setReferenceId($user->id);
+            $response = $square->getCustomersApi()->createCustomer($request);
+            $response->getResult();
+            if ($response->isError()) {
+                throw new \Exception('Unable to create Square customer. Response: ' . json_encode($response->getBody()));
+            }
+            /** @var CreateCustomerResponse $result */
+            $result = $response->getResult();
+            if ($result->getErrors() != null && count($result->getErrors()) > 0) {
+                throw new \Exception('Unable to create Square customer. Errors: ' . json_encode($result->getErrors()));
+            }
+            $userData['paymentCustomerIds']['square'] = $result->getCustomer()->getId();
+            $user->dataJson = $userData;
+            $user->save(false, ['dataJson']);
+        }
+
+        $request = new CreateCustomerCardRequest($params['nonce']);
+        if (isset($params['verificationToken'])) {
+            $request->setVerificationToken($params['verificationToken']);
+        }
+        $response = $square->getCustomersApi()->createCustomerCard($userData['paymentCustomerIds']['square'], $request);
+        if ($response->isError()) {
+            throw new \Exception('Unable to add card to Square customer. Response: ' . json_encode($response->getBody()));
+        }
+        /** @var CreateCustomerCardResponse $result */
+        $result = $response->getResult();
+        if ($result->getErrors() != null && count($result->getErrors()) > 0) {
+            throw new \Exception('Unable to add card to Square customer. Errors: ' . json_encode($result->getErrors()));
+        }
+        $paymentMethod = new PaymentMethod();
+        $paymentMethod->userId = $user->id;
+        $paymentMethod->type = PaymentMethod::TYPE_SQUARE;
+        $card = $result->getCard();
+        $paymentMethod->data = $card->jsonSerialize();
+        $paymentMethod->addedDateTime = Helpers::dateToSql(time());
+        $paymentMethod->title = $card->getCardBrand() . ' *' . $card->getLast4() . ' ' . $card->getExpMonth() . '/' . $card->getExpYear();
+        $paymentMethod->save(false);
+
+        // Use this instead of $user->paymentMethods to get a fresh list
+        return $user->getPaymentMethods()->all();
+    }
+
+    public function actionDeletePaymentMethod() {
+        $params = Yii::$app->request->bodyParams;
+        if (!isset($params['id'])) {
+            throw new BadRequestHttpException('"id" is required.');
+        }
+
+        $user = Helpers::user();
+        /** @var PaymentMethod $paymentMethod */
+        $paymentMethod = PaymentMethod::find()->where(['id' => $params['id']])->one();
+        if ($paymentMethod != null && $paymentMethod->userId == $user->id && $paymentMethod->isDeleted == false) {
+            $paymentMethod->isDeleted = true;
+            $paymentMethod->save(false);
+
+            return $user->paymentMethods;
+        }
+        else {
+            throw new BadRequestHttpException('Invalid payment method id.');
+        }
     }
 
     public function actionCloseNotification()

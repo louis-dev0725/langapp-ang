@@ -31,7 +31,8 @@
     "ext-mbstring": "*",
     "gregwar/image": "^2.0",
     "yiisoft/yii2-gii": "~2.1.0",
-    "yiisoft/yii2-debug": "~2.1.0"
+    "yiisoft/yii2-debug": "~2.1.0",
+    "square/square": "10.0.0.20210421"
   },
   "require-dev": {
     "bizley/migration": "3.2"

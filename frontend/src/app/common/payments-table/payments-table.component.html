@@ -25,20 +25,14 @@
     <tr mat-row *matRowDef="let row; columns: columns;"></tr>
   </table>
 
-  <mat-paginator
-    [pageSize]="pageSize"
-    (page)="onPage($event)"
-    *ngIf="isPaginator">
+  <mat-paginator [pageSize]="pageSize" (page)="onPage($event)" *ngIf="isPaginator">
   </mat-paginator>
 </div>
-<mat-card *ngIf="!isLoaded"
-          style="display: flex; justify-content: center; align-items: center">
-  <mat-progress-spinner
-    color="primary"
-    mode="indeterminate">
+<mat-card *ngIf="!isLoaded" style="display: flex; justify-content: center; align-items: center">
+  <mat-progress-spinner color="primary" mode="indeterminate">
   </mat-progress-spinner>
 </mat-card>
 
 <div class="container" *ngIf="isEmptyTable && isLoaded">
-  <h3 translate>No records found</h3>
+  <h5 translate>No records found</h5>
 </div>

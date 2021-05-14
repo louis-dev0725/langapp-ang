@@ -278,3 +278,15 @@ export interface Card {
   easeFactor: number;
   consecutiveCorrectAnswers: number;
 }
+
+export interface UserPaymentMethod {
+  id: number;
+  userId: number;
+  type: string;
+  title: string;
+}
+
+export interface AddCardSquareRequest {
+  nonce: string;
+  verificationToken?: string;
+}
