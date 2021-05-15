@@ -47,7 +47,6 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
   }
 
   public getModel(): MenuItem[] {
-    console.log(this.isLoggedIn);
     return [
       {
         label: 'Language',
