@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Category, Content, UserDictionary, ListResponse, Mnemonic, SettingPlugin, User, UserPaymentMethod, AddCardSquareRequest } from '@app/interfaces/common.interface';
 import { Observable, of, throwError } from 'rxjs';
@@ -10,6 +10,7 @@ import { LoadAccount, LoadAccountFail, LoadAccountSuccess, AuthorizedUpdateToken
 import { environment } from '../../environments/environment'
 import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
+import { APP_BASE_HREF } from '@angular/common';
 
 type ParamsInterface = HttpParams | {
   [param: string]: string | string[];
@@ -52,7 +53,8 @@ export class ApiService {
     private http: HttpClient,
     private session: SessionService,
     private store: Store<fromStore.State>,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    @Inject(APP_BASE_HREF) private baseHref: string) { }
 
   apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, catchValidationErrors = false) {
     return <Observable<T>>this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(
@@ -185,7 +187,7 @@ export class ApiService {
    * Получаем часовые пояса
    */
   getTimeZones() {
-    return this.http.get('/assets/timezones.json');
+    return this.http.get(this.baseHref + '/assets/timezones.json');
   }
 
   /**
