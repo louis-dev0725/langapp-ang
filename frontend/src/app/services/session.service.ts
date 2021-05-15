@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { User } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import * as fromStore from '@app/store/index';
@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
 import { CookieService } from 'ngx-cookie';
 import { ReplaySubject } from 'rxjs';
+import { isPlatformServer } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,8 @@ export class SessionService {
     private store: Store<fromStore.State>,
     private translateService: TranslateService,
     private eventService: EventService,
-    private cookieService: CookieService) {
+    private cookieService: CookieService,
+    @Inject(PLATFORM_ID) private platformId: any) {
     this.init();
   }
 
@@ -133,5 +135,18 @@ export class SessionService {
     this.store.dispatch(new AuthorizedUpdateTokenAction(this.user.accessToken));
     this.store.dispatch(new AuthorizedUpdateUserAction(user));
     this.router.navigateByUrl('/');
+  }
+
+  checkInvitedByUrlParams() {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+    let urlParams = new URLSearchParams(window.location.search);
+    let value = urlParams.get('rr');
+    if (value) {
+      let expires = new Date();
+      expires.setDate(expires.getDate() + 180);
+      this.cookieService.put('invitedByUserId', value, { path: '/', expires: expires });
+    }
   }
 }

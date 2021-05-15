@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AppComponent } from '@app/app.component';
@@ -59,6 +59,13 @@ import { CookieModule } from 'ngx-cookie';
     {
       provide: APP_BASE_HREF,
       useValue: '/app'
+    },
+    SessionService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (ss: SessionService) => () => ss.checkInvitedByUrlParams(),
+      deps: [SessionService],
+      multi: true
     },
     ApiService,
     CanactivateAdmin,
