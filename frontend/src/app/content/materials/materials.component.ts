@@ -1,18 +1,16 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ApiService, SimpleListItem } from '@app/services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomValidator } from '@app/services/custom-validator';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
-import { Content, ContentsArray, ListResponse } from '@app/interfaces/common.interface';
+import { Content, ListResponse } from '@app/interfaces/common.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatingService } from '@app/services/translating.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { map, switchMap } from 'rxjs/operators';
-import { allParams, Dictionary, queryParamsToObject, toQueryParams, toQueryString } from '@app/shared/helpers';
-import * as equal from 'fast-deep-equal';
-import { HttpParams } from '@angular/common/http';
+import { switchMap } from 'rxjs/operators';
+import { allParams, toQueryParams } from '@app/shared/helpers';
 
 @UntilDestroy()
 @Component({
