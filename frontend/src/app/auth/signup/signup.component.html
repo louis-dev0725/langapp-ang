@@ -1,7 +1,7 @@
 <div class="container">
   <div class="card">
-    <h1 translate>Sign up</h1>
-    <p></p>
+    <h4 translate>Let's try!</h4>
+    <p>To continue please enter your name and choose password.</p>
 
     <ng-container *ngIf="errors.length > 0">
       <p-messages severity="error">
@@ -14,31 +14,45 @@
     </ng-container>
 
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-      <input type="hidden" formControlName="timezone">
-      <input type="hidden" formControlName="language">
-      <input *ngIf="getInvitedId()" type="hidden" formControlName="invitedByUserId">
 
       <div class="p-fluid">
         <div class="p-field g-field">
+          <label for="name">{{'Name' | translate}}</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-user"></i>
+            <input id="name" formControlName="name" pInputText type="text" />
+          </span>
+          <small class="p-invalid" *ngIf="checkError('name')">{{getErrors('name')}}</small>
+        </div>
+
+        <div class="p-field g-field">
           <label for="email">{{'Email' | translate}}</label>
-          <input id="email" formControlName="email" pInputText type="text" />
+          <span class="p-input-icon-left">
+            <i class="pi pi-envelope"></i>
+            <input id="email" formControlName="email" pInputText type="text" />
+          </span>
           <small class="p-invalid" *ngIf="checkError('email')">{{getErrors('email')}}</small>
         </div>
 
         <div class="p-field g-field">
-          <label for="password">{{'Password' | translate}}</label>
-          <input id="password" formControlName="password" pInputText type="password" />
+          <label for="password">{{'Choose Password' | translate}}</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-lock" style="z-index: 1;"></i>
+            <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true" [inputStyle]="{'padding-left': '2rem'}"></p-password>
+          </span>
           <small class="p-invalid" *ngIf="checkError('password')">{{getErrors('password')}}</small>
         </div>
-        <div class="p-field g-field">
-          <label for="passrepeat">{{'Repeat password' | translate}}</label>
-          <input id="passrepeat" formControlName="passrepeat" pInputText type="passrepeat" />
-          <small class="p-invalid" *ngIf="checkError('passrepeat')">{{getErrors('passrepeat')}}</small>
-        </div>
+        <ng-container *ngIf="!quickSignup">
+          <div class="p-field g-field">
+            <label for="passrepeat">{{'Repeat password' | translate}}</label>
+            <input id="passrepeat" formControlName="passrepeat" pInputText type="passrepeat" />
+            <small class="p-invalid" *ngIf="checkError('passrepeat')">{{getErrors('passrepeat')}}</small>
+          </div>
+        </ng-container>
       </div>
 
       <div>
-        <button (click)="onSubmit()" color="primary" [disabled]="!signupForm.valid" pButton label="{{'Sign up' | translate}}"></button>
+        <button (click)="onSubmit()" color="primary" [disabled]="!signupForm.valid" pButton label="{{'Continue' | translate}}"></button>
       </div>
     </form>
   </div>

@@ -37,6 +37,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { OnclickTranslationDirective } from './onclick-translation.directive';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ToolbarModule } from 'primeng/toolbar';
+import { PasswordModule } from 'primeng/password';
 
 let sharedModules = [
   // primeng
@@ -60,6 +61,7 @@ let sharedModules = [
   ConfirmPopupModule,
   MultiSelectModule,
   ToolbarModule,
+  PasswordModule,
 
   // material
   MatIconModule,

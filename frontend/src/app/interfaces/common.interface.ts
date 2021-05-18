@@ -10,11 +10,11 @@ export interface User {
   registerIp: string;
   lastLoginIp: string;
   addedDateTime: string;
-  comment: any;
+  comment: string;
   isServicePaused: number;
-  invitedByUserId: any;
-  isPartner: any;
-  enablePartnerPayments: any;
+  invitedByUserId: number;
+  isPartner: number;
+  enablePartnerPayments: number;
   wmr: string;
   timezone: string;
   language: string;
@@ -22,12 +22,13 @@ export interface User {
   accessToken?: string;
   isLoggedIn: boolean;
   isAdmin: boolean;
-  currency: any;
+  currency: string;
   config: any;
   extensionSettings: any;
   notifications: UserNotification[];
   paidUntilDateTime: string;
   partnerPercent: string;
+  isPaid: boolean;
 }
 
 export interface UserNotification {

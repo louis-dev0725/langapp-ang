@@ -1,4 +1,4 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
@@ -33,7 +33,7 @@ export class CustomValidator {
    * the password and repeat-password is equaled or not
    * @param ctrl
    */
-  static confirmPasswordCheck(ctrl: AbstractControl) {
+  static confirmPasswordCheck(ctrl: AbstractControl): ValidationErrors | null {
     const password = ctrl.get('password').value;
     const passrepeat = ctrl.get('passrepeat').value;
     if (password !== passrepeat) {

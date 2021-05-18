@@ -5,8 +5,13 @@ import { ApiService } from '@app/services/api.service';
 import * as jstz from 'jstz';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie';
+import { SessionService } from '@app/services/session.service';
+import { allParams } from '@app/shared/helpers';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -15,24 +20,42 @@ import { Router } from '@angular/router';
 export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   errors: any[] = [];
+  quickSignup = true;
 
-  constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder, private router: Router) {}
+  constructor(
+    private api: ApiService,
+    private custValidator: CustomValidator,
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cookieService: CookieService,
+    private sessionService: SessionService
+  ) { }
 
   ngOnInit() {
     this.signupForm = this.formBuilder.group(
       {
-        timezone: [this.getTimezone() || ''],
-        language: [this.getLanguage() || ''],
-        invitedByUserId: [this.getInvitedId() || ''],
+        //timezone: [this.getTimezone() || ''],
+        //language: [this.getLanguage() || ''],
+        //invitedByUserId: [this.getInvitedByUserId() || ''],
         name: ['', { validators: [Validators.required], updateOn: 'change' }],
-        company: [''],
-        telephone: [''],
+        //company: [''],
+        //telephone: [''],
         email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
         password: ['', { validators: [Validators.required], updateOn: 'change' }],
-        passrepeat: ['', { validators: [Validators.required], updateOn: 'change' }]
+        passrepeat: ['', { validators: this.quickSignup ? [] : [Validators.required], updateOn: 'change' }]
       },
-      { validator: CustomValidator.confirmPasswordCheck }
+      {
+        validators: this.quickSignup ? [] : [
+          CustomValidator.confirmPasswordCheck
+        ]
+      }
     );
+    this.route.queryParams.pipe(untilDestroyed(this)).subscribe((params) => {
+      if (params['email']) {
+        this.signupForm.get('email').setValue(params['email'])
+      }
+    });
   }
 
   getTimezone() {
@@ -41,19 +64,21 @@ export class SignupComponent implements OnInit {
   }
 
   getLanguage() {
-    return window.navigator.language.slice(0, 2).toLowerCase();
+    return this.sessionService.language;
   }
 
-  getInvitedId(): string | boolean {
-    const val = localStorage.getItem('invitedByUserId');
-    return val ? val : false;
+  getInvitedByUserId(): number {
+    const val = parseInt(this.cookieService.get('invitedByUserId'));
+    return val;
   }
 
   onSubmit() {
     this.errors = [];
     const data = {
       ...this.signupForm.value,
-      invitedByUserId: localStorage.getItem('invitedByUserId')
+      invitedByUserId: this.getInvitedByUserId(),
+      language: this.getLanguage(),
+      timezone: this.getTimezone(),
     };
     this.api.signUp(data).subscribe(res => {
       if (res instanceof ApiError) {
@@ -61,7 +86,7 @@ export class SignupComponent implements OnInit {
       } else {
         this.router.navigate(['/payment']);
 
-        window.postMessage({ type: 'LoginSuccess', text: 'Login'}, '*');
+        window.postMessage({ type: 'LoginSuccess', text: 'Login' }, '*');
       }
     });
   }
