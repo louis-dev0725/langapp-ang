@@ -315,7 +315,11 @@ msgid "Let's try!"
 msgstr ""
 
 msgctxt "app"
-msgid "Enter your E-mail to continue"
+msgid "Enter your email to continue"
+msgstr ""
+
+msgctxt "app"
+msgid "Email"
 msgstr ""
 
 msgctxt "app"

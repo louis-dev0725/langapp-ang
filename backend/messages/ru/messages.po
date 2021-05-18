@@ -371,8 +371,12 @@ msgid "Let's try!"
 msgstr "Попробуйте!"
 
 msgctxt "app"
-msgid "Enter your E-mail to continue"
+msgid "Enter your email to continue"
 msgstr "Введите свой E-mail для продолжения"
+
+msgctxt "app"
+msgid "Email"
+msgstr ""
 
 msgctxt "app"
 msgid "Continue"
