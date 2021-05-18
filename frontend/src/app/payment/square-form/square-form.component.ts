@@ -27,12 +27,12 @@ export class SquareFormComponent implements OnInit {
   cardPaymentMethod: any;
   buttonEnabled = true;
 
-  @ViewChild('cardContainer', { static: true }) public cardContainer: ElementRef;
+  @ViewChild('cardContainer', { static: true }) cardContainer: ElementRef;
   @Output() updatedListEvent = new EventEmitter<UserPaymentMethod[]>();
 
   constructor(
-    @Inject(PLATFORM_ID) public platformId: any,
-    public api: ApiService) { }
+    @Inject(PLATFORM_ID) private platformId: any,
+    private api: ApiService) { }
 
   ngOnInit(): void {
     this.scriptUrl = environment.square.env == 'sandbox' ? 'https://sandbox.web.squarecdn.com/v1/square.js' : 'https://web.squarecdn.com/v1/square.js';

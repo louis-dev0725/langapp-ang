@@ -35,7 +35,7 @@
       </p-toolbar>
     </div>
   </div>
-  <div class="card">
+  <div class="card" *ngIf="rows && rows.length > 0">
     <h4 translate>Transactions history</h4>
     <app-payments-table [pageSize]="50" [isShowComment]="true" [moneyTitle]="'Amount' | translate" [rows]="rows" [isPaginator]="true"></app-payments-table>
   </div>

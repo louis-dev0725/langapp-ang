@@ -43,20 +43,22 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.paymentsTable.isLoaded = false;
+    if (this.paymentsTable) {
+      this.paymentsTable.isLoaded = false;
 
-    this.paymentsTable.tableEvents
-      .pipe(untilDestroyed(this))
-      .subscribe((res: any) => {
-        this.paymentsTable.isLoaded = false;
-        this.paymentsTable.rows = [];
-        if (res.type === 'page') {
-          this.getRows(res.data.pageIndex);
-        }
-        if (res.type === 'sort') {
-          this.getRows(0, res.data);
-        }
-      });
+      this.paymentsTable.tableEvents
+        .pipe(untilDestroyed(this))
+        .subscribe((res: any) => {
+          this.paymentsTable.isLoaded = false;
+          this.paymentsTable.rows = [];
+          if (res.type === 'page') {
+            this.getRows(res.data.pageIndex);
+          }
+          if (res.type === 'sort') {
+            this.getRows(0, res.data);
+          }
+        });
+    }
 
     this.paymentForm = new FormGroup({
       amount: new FormControl('', { validators: [Validators.required, Validators.min(100)], updateOn: 'change' })
@@ -90,9 +92,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         if (!(res instanceof ApiError)) {
           this.rows = res.items;
-          this.paymentsTable.isLoaded = true;
-          this.paymentsTable.paginator.length = res._meta.totalCount;
-          this.paymentsTable.paginator.pageIndex = res._meta.currentPage - 1;
+          if (this.paymentsTable) {
+            this.paymentsTable.isLoaded = true;
+            this.paymentsTable.paginator.length = res._meta.totalCount;
+            this.paymentsTable.paginator.pageIndex = res._meta.currentPage - 1;
+          }
         }
       });
   }
