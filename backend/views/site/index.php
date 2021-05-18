@@ -1177,7 +1177,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
         <div class="t225">
             <div class="t-container t-align_center">
                 <div class="t-col t-col_10 t-prefix_1">
-                    <div class="t225__title t-title t-title_md" field="title" style=""><?= Yii::t("app", "Let's try!"); ?></div>      <div class="t225__descr t-descr t-descr_xxl" field="descr" style=""><?= Yii::t("app", "Enter your E-mail to continue"); ?></div>    </div>
+                    <div class="t225__title t-title t-title_md" field="title" style=""><?= Yii::t("app", "Let's try!"); ?></div>      <div class="t225__descr t-descr t-descr_xxl" field="descr" style=""><?= Yii::t("app", "Enter your email to continue"); ?></div>    </div>
             </div>
         </div>
     </div>
@@ -1186,7 +1186,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
     <div id="rec312580144" class="r t-rec t-rec_pt_90 t-rec_pb_180" style="padding-top:90px;padding-bottom:180px; " data-animationappear="off" data-record-type="210">
         <!-- T186 -->
         <div class="t186">
-            <form id="form312580144" name="form312580144" role="form" action="" method="POST" data-formactiontype="0" data-inputbox=".t186__blockinput" class="js-form-proccess " data-tilda-captchakey="">  		  			<!-- NO SELECTED SERVICES -->
+            <form id="form312580144" name="form312580144" role="form" action="http://localhost/app/auth/signup" method="GET" data-inputbox=".t186__blockinput">  		  			<!-- NO SELECTED SERVICES -->
 
                 <div class="t-container">
                     <div class="t-col t-col_8 t-prefix_2">
@@ -1206,7 +1206,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                         </div>
                         <div class="t186__wrapper">
                             <div class="t186__blockinput">
-                                <input type="text" name="EMAIL" class="t186__input t-input js-tilda-rule " value="" placeholder="E-mail" data-tilda-rule="email" style="color:#000000; border:1px solid #7a7a7a;  border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;">
+                                <input type="text" name="email" class="t186__input t-input js-tilda-rule " value="" placeholder="<?= Yii::t("app", "Email"); ?>" data-tilda-rule="email" style="color:#000000; border:1px solid #7a7a7a;  border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;">
                             </div>
                             <div class="t186__blockbutton">
                                 <button type="submit" class="t-submit" style="color:#ffffff;background-color:#e8253d;border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);"><?= Yii::t("app", "Continue"); ?></button>
