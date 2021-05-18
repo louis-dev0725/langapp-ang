@@ -1186,7 +1186,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
     <div id="rec312580144" class="r t-rec t-rec_pt_90 t-rec_pb_180" style="padding-top:90px;padding-bottom:180px; " data-animationappear="off" data-record-type="210">
         <!-- T186 -->
         <div class="t186">
-            <form id="form312580144" name="form312580144" role="form" action="http://localhost/app/auth/signup" method="GET" data-inputbox=".t186__blockinput">  		  			<!-- NO SELECTED SERVICES -->
+            <form id="form312580144" name="form312580144" role="form" action="/app/auth/signup" method="GET" data-inputbox=".t186__blockinput">  		  			<!-- NO SELECTED SERVICES -->
 
                 <div class="t-container">
                     <div class="t-col t-col_8 t-prefix_2">
