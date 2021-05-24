@@ -5,7 +5,10 @@ cd ..
 
 set -x
 
+chmod +x run/*.sh && chmod +x run/bin/* && chmod +x backend/yii
+
 docker-compose up --build -d # Запуск docker контейнеров
+docker-compose exec -w /app/ web bash -c "chmod +x /app/run/*.sh && chmod +x /app/run/bin/* && chmod +x /app/backend/yii"
 docker-compose exec -w /app/backend web composer install # composer install 
 docker-compose exec -w /app/backend web ./yii migrate/up --interactive 0 # Миграции
 docker-compose exec -w /app/backend -e LOAD_TEST_DATA=$LOAD_TEST_DATA web ./yii migrate-data/up --interactive 0 # Миграции для данных (словарь и т.д.)

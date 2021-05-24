@@ -26,9 +26,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", inline: 'curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
   config.vm.provision "shell", inline: 'chmod +x /usr/local/bin/docker-compose'
-
-  config.vm.provision "shell", inline: 'chmod +x /langapp/run/bin/unison'
-  config.vm.provision "shell", inline: 'chmod +x /langapp/run/bin/unison-fsmonitor'
+  config.vm.provision "file", source: "./run", destination: "/tmp/langapp-run"
+  config.vm.provision "shell", inline: 'mkdir -p /langapp && mv /tmp/langapp-run /langapp/run'
+  config.vm.provision "shell", inline: 'chmod +x /langapp/run/*.sh && chmod +x /langapp/run/bin/*'
   config.vm.provision "shell", inline: 'echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p'
   
   config.vm.network :forwarded_port, guest: ENV["SYNC_PORT"] || 5000, host: ENV["SYNC_PORT"] || 5000, host_ip: "127.0.0.1" # Port for unison sync
@@ -37,4 +37,5 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: ENV["POSTGRES_PORT"] || 5432, host: ENV["POSTGRES_PORT"] || 5432, host_ip: "127.0.0.1"
   config.vm.network :forwarded_port, guest: ENV["PGADMIN_PORT"] || 5001, host: ENV["PGADMIN_PORT"] || 5001, host_ip: "127.0.0.1"
   config.vm.network :forwarded_port, guest: ENV["ADMINER_PORT"] || 5002, host: ENV["ADMINER_PORT"] || 5002, host_ip: "127.0.0.1"
+  config.vm.network :forwarded_port, guest: ENV["ARENA_PORT"] || 5003, host: ENV["ARENA_PORT"] || 5003, host_ip: "127.0.0.1"
 end

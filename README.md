@@ -32,7 +32,7 @@
 1. [Установите Vagrant](https://www.vagrantup.com/downloads) и [Virtualbox](https://www.virtualbox.org/wiki/Downloads) если ещё не установлены.
 2. Запустите `run-vagrant/start-dev.cmd` (через Проводник, PowerShell или Windows Terminal)
 3. Дождитесь сообщения `ℹ ｢wdm｣: Compiled successfully.`
-4. Откройте в браузере http://localhost/
+4. Откройте в браузере http://localhost/app/
 
 Вы можете подключится к терминалу в контейнере web запустив `run-vagrant/terminal-webcmd`.\
 Вы можете подключится к терминалу внутри виртуальной машины запустив `run-vagrant/terminal-vagrant.cmd`.
@@ -50,7 +50,7 @@
 6. (внутри WSL) `cd langapp`
 7. (внутри WSL) `./run/start-dev.sh`
 8. Дождитесь сообщения `ℹ ｢wdm｣: Compiled successfully.`
-9. Откройте в браузере http://localhost/
+9. Откройте в браузере http://localhost/app/
 
 Для редактирования кода, который находится внутри WSL можно использовать [расширение для VS Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) или сделать симлинк.
 
@@ -62,14 +62,14 @@
 2. `git clone git@gitlab.com:mangoproject/langapp.git`
 3. `./run/start-dev.sh`
 4. Дождитесь сообщения `ℹ ｢wdm｣: Compiled successfully.`
-5. Откройте в браузере http://localhost/
+5. Откройте в браузере http://localhost/app/
 
 # Запуск
 
 1. Запустите `wsl` в PowerShell/Terminal в Windows или откройте терминал в Linux или macOS. Если вы используете Vagrant, то используйте инструкцию из раздела "Windows (Vagrant)".
 2. Запустите `./run/start-dev.sh`
 3. Дождитесь сообщения `ℹ ｢wdm｣: Compiled successfully.`
-4. Откройте в браузере http://localhost/
+4. Откройте в браузере http://localhost/app/
 
 Если у вас занят какой-то из портов, который используется при запуске (например 80, 443, 5432), то вы можете поменять его в `run/dev.env`.\
 Если вы меняете HTTP_PORT (по умолчанию 80), то его также необходимо поменять в `frontend/src/index.html`.
