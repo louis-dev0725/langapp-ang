@@ -988,7 +988,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                                         <h3 class="title"><?= Yii::t("app", "Study words"); ?></h3>
                                         <div class="step3__line-image-mobile"><img src="/assets/word.png" alt=""></div>
                                         <p class="txt step3__block-padding"><?= Yii::t("app", "Use our learning engine to memorize new words you've added from content. Using it is like playing a game while you're memorizing new words."); ?></p>
-                                        <h3 class="title"><?= Yii::t("app", "Effective way to remember"); ?></h3>
+                                        <h3 class="title"><?= Yii::t("app", "Efficient way to remember"); ?></h3>
                                         <p class="txt step3__block-padding"><?= Yii::t("app", "Built-in spaced repetition system (SRS) takes into account the complexity of words and calculates optimal training schedule."); ?></p>
                                     </div>
                                     <div class="step3__line-image"><img src="/assets/word.png" alt=""></div>

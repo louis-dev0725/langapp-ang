@@ -291,7 +291,7 @@ msgid "Use our learning engine to memorize new words you've added from content. 
 msgstr ""
 
 msgctxt "app"
-msgid "Effective way to remember"
+msgid "Efficient way to remember"
 msgstr ""
 
 msgctxt "app"

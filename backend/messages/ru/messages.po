@@ -333,7 +333,7 @@ msgstr ""
 "слова."
 
 msgctxt "app"
-msgid "Effective way to remember"
+msgid "Efficient way to remember"
 msgstr "Эффективный способ запоминания"
 
 msgctxt "app"
