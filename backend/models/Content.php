@@ -2,8 +2,9 @@
 
 namespace app\models;
 
-use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\helpers\BaseJson;
 
 /**
  * This is the model class for table "{{%content}}".
@@ -22,6 +23,7 @@ use yii\db\ActiveRecord;
  *
  * @property ContentCategory[] $contentCategories
  * @property Category[] $categories
+ * @property Content[] $recommendedVideos
  */
 class Content extends ActiveRecord
 {
@@ -90,6 +92,14 @@ class Content extends ActiveRecord
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function extraFields(): array
+    {
+        return array_merge(parent::extraFields(), ['recommendedVideos']);
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getContentCategories()
@@ -105,5 +115,47 @@ class Content extends ActiveRecord
     {
         return $this->hasMany(Category::class, ['id' => 'category_id'])
             ->viaTable('{{%content_category}}', ['content_id' => 'id']);
+    }
+
+    /**
+     * @return array|self[]
+     */
+    public function getRecommendedVideos(): array
+    {
+        $defaultConditions = [
+            'and',
+            ['level' => $this->level],
+            ['!=', 'id', $this->id],
+        ];
+        $orderByExpression = new Expression('random()');
+
+        return self::find()->select('*')
+            ->from(
+                [
+                    'u' => self::find()
+                        ->where([
+                            ...$defaultConditions,
+                            [
+                                '@>',
+                                'dataJson',
+                                BaseJson::encode([
+                                    'youtubeVideo' => [
+                                        'channel' => [
+                                            'id' => $this->dataJson['youtubeVideo']['channel']['id'],
+                                        ],
+                                    ],
+                                ]),
+                            ],
+                        ])
+                        ->limit(20)
+                        ->orderBy($orderByExpression)
+                        ->union(self::find()
+                            ->from('"content" tablesample system(1)')
+                            ->where($defaultConditions)
+                            ->limit(10)
+                            ->orderBy($orderByExpression), true),
+                ])
+            ->limit(20)
+            ->all();
     }
 }
