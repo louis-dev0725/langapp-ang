@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\BaseJson;
@@ -24,6 +26,7 @@ use yii\helpers\BaseJson;
  * @property ContentCategory[] $contentCategories
  * @property Category[] $categories
  * @property Content[] $recommendedVideos
+ * @property ContentAttribute $contentAttribute
  */
 class Content extends ActiveRecord
 {
@@ -52,6 +55,11 @@ class Content extends ActiveRecord
         $fields = array_merge($fields, ['imageUrl']);
 
         return $fields;
+    }
+
+    public function extraFields()
+    {
+        return array_merge(parent::extraFields(), ['contentAttribute', 'recommendedVideos']);
     }
 
     /**
@@ -92,14 +100,6 @@ class Content extends ActiveRecord
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function extraFields(): array
-    {
-        return array_merge(parent::extraFields(), ['recommendedVideos']);
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getContentCategories()
@@ -115,6 +115,12 @@ class Content extends ActiveRecord
     {
         return $this->hasMany(Category::class, ['id' => 'category_id'])
             ->viaTable('{{%content_category}}', ['content_id' => 'id']);
+    }
+
+    public function getContentAttribute(): ActiveQuery
+    {
+        return $this->hasOne(ContentAttribute::class, ['contentId' => 'id'])
+            ->onCondition(['content_attribute.userId' => Yii::$app->user->id]);
     }
 
     /**

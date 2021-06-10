@@ -28,6 +28,10 @@ class ContentController extends ActiveController
         $actions['index']['dataFilter'] = [
             'class' => ActiveDataFilter::class,
             'searchModel' => ContentSearch::class,
+            'attributeMap' => [
+                'isStudied' => '{{content_attribute}}.[[isStudied]]',
+                'isHidden' => '{{content_attribute}}.[[isHidden]]',
+            ],
         ];
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
 
@@ -51,7 +55,8 @@ class ContentController extends ActiveController
 
         $query = Content::find();
         if (!empty($filter)) {
-            $query->andWhere($filter);
+            $query->andWhere($filter)
+                ->joinWith('contentAttribute');
         }
 
         if (!Helpers::isAdmin()) {
