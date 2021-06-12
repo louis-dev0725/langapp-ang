@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\behaviors\PaidOnlyBehavior;
 use app\components\Helpers;
 use app\models\UserDictionarySearch;
 use app\models\DictionaryWord;
@@ -18,6 +19,16 @@ use yii\web\ForbiddenHttpException;
 class DictionaryController extends ActiveController
 {
     public $modelClass = UserDictionary::class;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function behaviors(): array
+    {
+        return array_merge(parent::behaviors(), [
+            'paid' => PaidOnlyBehavior::class,
+        ]);
+    }
 
     /**
      * @return array

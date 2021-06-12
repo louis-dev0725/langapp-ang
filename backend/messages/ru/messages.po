@@ -401,3 +401,7 @@ msgstr "Вернуться на главную страницу"
 msgctxt "app"
 msgid "Your balance is lower than 300."
 msgstr ""
+
+msgctxt "app"
+msgid "Payment required to continue using the service."
+msgstr "Для продолжения использования сервиса требуется оплата."

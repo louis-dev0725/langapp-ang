@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\behaviors\PaidOnlyBehavior;
 use app\components\Helpers;
 use app\models\Category;
 use app\models\Content;
@@ -16,6 +17,16 @@ use yii\helpers\Json;
 class ContentController extends ActiveController
 {
     public $modelClass = Content::class;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function behaviors(): array
+    {
+        return array_merge(parent::behaviors(), [
+            'paid' => PaidOnlyBehavior::class,
+        ]);
+    }
 
     /**
      * @return array
