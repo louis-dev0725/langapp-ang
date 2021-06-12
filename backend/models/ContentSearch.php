@@ -8,6 +8,7 @@ class ContentSearch extends Content
 {
     public $isStudied;
     public $isHidden;
+    public $categoryId;
 
     /**
      * {@inheritDoc}
@@ -28,7 +29,7 @@ class ContentSearch extends Content
     public function rules(): array
     {
         return [
-            [['type', 'status', 'length', 'level', 'deleted'], 'integer'],
+            [['type', 'status', 'length', 'level', 'deleted', 'categoryId'], 'integer'],
             [['text', 'cleanText'], 'string'],
             [['tagsJson'], 'safe'],
             [['title', 'sourceLink', 'format'], 'string', 'max' => 255],

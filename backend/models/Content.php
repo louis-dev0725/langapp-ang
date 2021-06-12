@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\helpers\BaseJson;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "{{%content}}".
@@ -57,9 +57,16 @@ class Content extends ActiveRecord
         return $fields;
     }
 
-    public function extraFields()
+    /**
+     * {@inheritDoc}
+     */
+    public function extraFields(): array
     {
-        return array_merge(parent::extraFields(), ['contentAttribute', 'recommendedVideos']);
+        return array_merge(parent::extraFields(), [
+            'contentAttribute',
+            'recommendedVideos',
+            'categories',
+        ]);
     }
 
     /**
@@ -144,7 +151,7 @@ class Content extends ActiveRecord
                             [
                                 '@>',
                                 'dataJson',
-                                BaseJson::encode([
+                                Json::encode([
                                     'youtubeVideo' => [
                                         'channel' => [
                                             'id' => $this->dataJson['youtubeVideo']['channel']['id'],
