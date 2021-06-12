@@ -6,13 +6,12 @@ use app\components\Helpers;
 use app\models\Category;
 use app\models\Content;
 use app\models\ContentSearch;
-use app\models\Transaction;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\base\Model;
 use yii\data\ActiveDataFilter;
 use yii\data\ActiveDataProvider;
-use yii\rest\IndexAction;
-use yii\web\ForbiddenHttpException;
-use yii\web\NotFoundHttpException;
+use yii\helpers\Json;
 
 class ContentController extends ActiveController
 {
@@ -21,32 +20,18 @@ class ContentController extends ActiveController
     /**
      * @return array
      */
-    public function actions()
+    public function actions(): array
     {
         $actions = parent::actions();
-
-        $actions['index']['dataFilter'] = [
-            'class' => ActiveDataFilter::class,
-            'searchModel' => ContentSearch::class,
-            'attributeMap' => [
-                'isStudied' => '{{content_attribute}}.[[isStudied]]',
-                'isHidden' => '{{content_attribute}}.[[isHidden]]',
-            ],
-        ];
-        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-
-        unset($actions['create'], $actions['view'], $actions['update'], $actions['delete']);
+        unset($actions['index'], $actions['create'], $actions['view'], $actions['update'], $actions['delete']);
         return $actions;
     }
 
     /**
-     * @param IndexAction $action
-     * @param mixed $filter
-     * @return object|ActiveDataProvider
-     * @throws \yii\base\InvalidConfigException
-     * @throws ForbiddenHttpException
+     * @return ActiveDataProvider|Model
+     * @throws InvalidConfigException
      */
-    public function prepareDataProvider($action, $filter)
+    public function actionIndex()
     {
         $requestParams = Yii::$app->getRequest()->getBodyParams();
         if (empty($requestParams)) {
@@ -54,9 +39,67 @@ class ContentController extends ActiveController
         }
 
         $query = Content::find();
+
+        // Custom filter by channelId here.
+        if (isset($requestParams['filter']['youtubeChannelId'])) {
+            $query->andWhere([
+                '@>',
+                'dataJson',
+                Json::encode([
+                    'youtubeVideo' => [
+                        'channel' => [
+                            'id' => (string) $requestParams['filter']['youtubeChannelId'],
+                        ],
+                    ],
+                ]),
+            ]);
+            unset($requestParams['filter']['youtubeChannelId']);
+        }
+
+        $dataFilter = new ActiveDataFilter([
+            'searchModel' => ContentSearch::class,
+            'attributeMap' => [
+                'isStudied' => '{{content_attribute}}.[[isStudied]]',
+                'isHidden' => '{{content_attribute}}.[[isHidden]]',
+                'categoryId' => '{{content_category}}.[[category_id]]',
+            ],
+        ]);
+
+        $filter = null;
+        if ($dataFilter->load($requestParams)) {
+            $filter = $dataFilter->build();
+            if ($filter === false) {
+                return $dataFilter;
+            }
+        }
+
         if (!empty($filter)) {
-            $query->andWhere($filter)
-                ->joinWith('contentAttribute');
+            $query->andWhere($filter);
+        }
+
+        $alreadyJoined = [];
+        /** @var ContentSearch $searchModel */
+        $searchModel = $dataFilter->searchModel;
+        if (isset($searchModel->categoryId)) {
+            $query->joinWith('categories');
+            $alreadyJoined['categories'] = null;
+        }
+
+        if (isset($searchModel->isStudied) || isset($searchModel->isHidden)) {
+            $query->joinWith('contentAttribute');
+            $alreadyJoined['categories'] = null;
+        }
+
+        if (isset($requestParams['expand']) && is_string($requestParams['expand'])) {
+            $expand = preg_split('/\s*,\s*/', $requestParams['expand'], -1, PREG_SPLIT_NO_EMPTY);
+        } else {
+            $expand = [];
+        }
+
+        foreach ($expand as $relationName) {
+            if (!isset($alreadyJoined[$relationName])) {
+                $query->with($relationName);
+            }
         }
 
         if (!Helpers::isAdmin()) {
@@ -65,18 +108,7 @@ class ContentController extends ActiveController
             $query->andWhere(['content.deleted' => 0]);
         }
 
-//        if (isset($requestParams['expand']) && is_string($requestParams['expand'])) {
-//            $expand = preg_split('/\s*,\s*/', $requestParams['expand'], -1, PREG_SPLIT_NO_EMPTY);
-//        }
-//        else {
-//            $expand = [];
-//        }
-//        if (in_array('user', $expand)) {
-//            $query->with('user');
-//        }
-
-        return Yii::createObject([
-            'class' => ActiveDataProvider::class,
+        return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'params' => $requestParams,
@@ -90,7 +122,7 @@ class ContentController extends ActiveController
 
     /**
      * @return array
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function actionCreate()
     {
@@ -132,7 +164,7 @@ class ContentController extends ActiveController
      * @param $id
      *
      * @return array
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function actionUpdate($id)
     {
