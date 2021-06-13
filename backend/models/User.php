@@ -7,6 +7,7 @@ use app\components\Notifications;
 use Lcobucci\JWT\Token;
 use sizeg\jwt\Jwt;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;
@@ -54,6 +55,7 @@ use yii\web\UserEvent;
  * @property Transaction[] $transactions
  * @property PaymentMethod[] $paymentMethods
  * @property Invoice[] $invoices
+ * @property bool $isPaid
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -203,9 +205,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function fields()
     {
         if ($this->scenario == static::SCENARIO_INVITED_USER) {
-            return ['id', 'name', 'partnerEarned'];
+            return ['id', 'name', 'partnerEarned', 'isPaid'];
         } elseif ($this->scenario == static::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications', 'currency', 'config', 'languages', 'extensionSettings'];
+            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications', 'currency', 'config', 'languages', 'extensionSettings', 'isPaid'];
         } elseif ($this->scenario == static::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
             $fields['paidUntilDateTime'] = [Helpers::class, 'formatDateField'];
@@ -214,6 +216,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             $fields['isAdmin'] = 'isAdmin';
             $fields['accessToken'] = 'token';
             $fields['extensionSettings'] = 'extensionSettings';
+            $fields['isPaid'] = 'isPaid';
             unset($fields['passwordHash']);
 
             return $fields;
@@ -540,5 +543,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             $this->dataJson = $dataJson;
             return true;
         }
+    }
+
+    /**
+     * Is service paid.
+     * @return bool
+     */
+    public function getIsPaid(): bool
+    {
+        return Helpers::dateToUnix($this->paidUntilDateTime) > time();
     }
 }

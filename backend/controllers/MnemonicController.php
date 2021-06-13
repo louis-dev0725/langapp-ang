@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\behaviors\PaidOnlyBehavior;
 use app\exceptions\FileException;
 use app\models\Mnemonics;
 use app\models\MnemonicsUsers;
@@ -17,6 +18,16 @@ class MnemonicController extends ActiveController
     use UploadFilesTrait;
 
     public $modelClass = Mnemonics::class;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function behaviors(): array
+    {
+        return array_merge(parent::behaviors(), [
+            'paid' => PaidOnlyBehavior::class,
+        ]);
+    }
 
     /**
      * @return array
