@@ -24,7 +24,21 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
+                    'logFile' => '@runtime/logs/console.log',
+                    'levels' => ['error', 'warning', 'info'],
+                ],
+                [
+                    'class' => 'codemix\streamlog\Target',
+                    'url' => 'php://stdout',
+                    'levels' => ['info'],
+                    'logVars' => [],
+                    'except' => ['yii\db\*'],
+                ],
+                [
+                    'class' => 'codemix\streamlog\Target',
+                    'url' => 'php://stderr',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
                 ],
             ],
         ],
