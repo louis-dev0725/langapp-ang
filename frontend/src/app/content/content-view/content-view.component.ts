@@ -4,7 +4,7 @@ import { Content } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
 import { ContentService } from '@app/services/content.service';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { VideoJsPlayerOptions } from 'video.js';
 
 @Component({
@@ -26,7 +26,8 @@ export class ContentViewComponent implements OnInit {
       switchMap(params => {
         let id = params.get('id');
         return this.api.contentById(Number(id));
-      })
+      }),
+      shareReplay(1)
     );
     this.cleanTextHtml$ = this.content$.pipe(map(p => {
       return this.escapeHtml(p.cleanText).replace(/^(.*?)$/gm, "<p>$1</p>\n");
