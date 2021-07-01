@@ -25,6 +25,8 @@ use yii\db\ActiveRecord;
  * @property int $invoiceId
  * @property string $currency
  * @property string $moneyBaseCurrency
+ * @property int $paymentMethodId
+ * @property int $status
  *
  * @property User $user
  * @property User $parentTransaction
@@ -34,6 +36,9 @@ class Transaction extends \yii\db\ActiveRecord
 {
     public const SCENARIO_ADMIN = 'admin';
     public const SCENARIO_USER = 'user';
+    public const STATUS_ERROR = 0;
+    public const STATUS_SUCCESS = 1;
+    public const STATUS_PROCESS = 2;
 
     private static function isSaveMethod()
     {
@@ -214,7 +219,8 @@ class Transaction extends \yii\db\ActiveRecord
             [['userId', 'money'], 'required'],
             //[['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'default', 'value' => null],
             [['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'default', 'value' => 0],
-            [['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'integer'],
+            [['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId', 'paymentMethodId'],
+                'integer'],
             [['money'], 'number'],
             [['addedDateTime', 'dataJson'], 'safe'],
             [['comment'], 'string'],
