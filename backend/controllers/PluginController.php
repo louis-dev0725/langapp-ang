@@ -16,6 +16,7 @@ class PluginController extends ActiveController
     {
         $actions = parent::actions();
         unset($actions['view'], $actions['update']);
+
         return $actions;
     }
 

@@ -14,7 +14,7 @@ class SiteController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ]
+            ],
         ];
     }
 
@@ -40,6 +40,7 @@ class SiteController extends Controller
         }
 
         $this->layout = false;
+
         return $this->render('index', [
             'languages' => $languages,
         ]);

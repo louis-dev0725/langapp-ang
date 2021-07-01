@@ -10,7 +10,6 @@ use yii\console\Controller;
 
 /**
  * Class PaymentController
- * @package app\commands
  */
 class PaymentController extends Controller
 {

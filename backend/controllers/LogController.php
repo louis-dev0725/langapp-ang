@@ -17,6 +17,7 @@ class LogController extends ActiveController
     {
         $actions = parent::actions();
         unset($actions['create']);
+
         return $actions;
     }
 
@@ -33,7 +34,7 @@ class LogController extends ActiveController
                     'allow' => true,
                     'actions' => $availableToEveryone,
                     //'roles' => ['?'],
-                ]
+                ],
             ],
         ];
 

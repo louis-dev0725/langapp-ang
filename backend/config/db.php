@@ -14,7 +14,7 @@ $db = [
 ];
 
 if (file_exists(__DIR__ . '/db-local.php')) {
-    include(__DIR__ . '/db-local.php');
+    include __DIR__ . '/db-local.php';
 }
 
 return $db;

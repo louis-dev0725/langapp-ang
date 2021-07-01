@@ -78,7 +78,7 @@ class Transaction extends \yii\db\ActiveRecord
         return;
 
         $currentTime = time();
-        $userId = (int)$user->id;
+        $userId = (int) $user->id;
 
         // Находим последнюю транзакцию
         $lastTransaction = Transaction::find()->where(['userId' => $userId, 'isCommon' => 1, 'isPartner' => 0])->orderBy(['addedDateTime' => SORT_DESC])->limit(1)->one();
@@ -149,6 +149,7 @@ class Transaction extends \yii\db\ActiveRecord
         if ($this->isNewRecord || $this->isAttributeChanged('money') || $this->isAttributeChanged('currency')) {
             $this->calculateToBaseCurrency();
         }
+
         return $return;
     }
 
@@ -161,12 +162,12 @@ class Transaction extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
     }
 
-
     public function fields()
     {
         if (Helpers::isAdmin() && (!static::isSaveMethod())) {
             $parentFields = parent::fields();
             $parentFields['addedDateTime'] = [Helpers::class, 'formatDateField'];
+
             return $parentFields;
         } else {
             return ['id', 'userId', 'money', 'comment', 'addedDateTime' => [Helpers::class, 'formatDateField'], 'isPartner', 'fromInvitedUserId'];
@@ -181,9 +182,10 @@ class Transaction extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $adminFields = ['id', 'userId', 'money', 'isCommon', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId', 'parentTransactionId', 'invoiceId', 'dataJson'];
+
         return [
             static::SCENARIO_USER => ['id', 'userId', 'money', 'comment', 'addedDateTime', 'isPartner', 'fromInvitedUserId'],
-            static::SCENARIO_ADMIN => $adminFields
+            static::SCENARIO_ADMIN => $adminFields,
         ];
     }
 
@@ -220,13 +222,12 @@ class Transaction extends \yii\db\ActiveRecord
             //[['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'default', 'value' => null],
             [['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'default', 'value' => 0],
             [['userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId', 'paymentMethodId'],
-                'integer'],
+                'integer', ],
             [['money'], 'number'],
             [['addedDateTime', 'dataJson'], 'safe'],
             [['comment'], 'string'],
         ];
     }
-
 
     /**
      * {@inheritdoc}

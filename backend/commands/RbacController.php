@@ -12,9 +12,9 @@ class RbacController extends Controller
 {
     /** @var \yii\rbac\ManagerInterface */
     protected $am;
-    /** @var null|User $user */
+    /** @var User|null */
     protected $user;
-    /** @var null|Role $role */
+    /** @var Role|null */
     protected $role;
 
     public function init()
@@ -62,6 +62,7 @@ class RbacController extends Controller
         foreach ($am->getRolesByUser($this->user->id) as $userRole) {
             if ($userRole->name == $this->role->name) {
                 echo $this->ansiFormat('User already has role ' . $this->role->name, Console::FG_PURPLE);
+
                 return ExitCode::UNSPECIFIED_ERROR;
             }
         }
@@ -80,6 +81,7 @@ class RbacController extends Controller
         $this->promptParams();
         $this->am->revoke($this->role, $this->user->id);
         echo $this->ansiFormat('Role was successfully deleted', Console::FG_GREEN);
+
         return ExitCode::OK;
     }
 
@@ -90,10 +92,12 @@ class RbacController extends Controller
                 'required' => true, 'validator' => function ($input, &$error) {
                     if (($this->user = User::findByEmail($input)) === null) {
                         $error = $this->ansiFormat('User with such E-mail was not found', Console::FG_RED);
+
                         return false;
                     }
+
                     return true;
-                }
+                },
             ]);
         }
 
@@ -107,10 +111,12 @@ class RbacController extends Controller
                         }, $this->am->getRoles());
                         $error = $this->ansiFormat('Such role doesn\'t exists.', Console::FG_RED)
                             . $this->ansiFormat('Available roles: ' . implode(', ', $roles), Console::FG_YELLOW);
+
                         return false;
                     }
+
                     return true;
-                }
+                },
             ]);
         }
     }

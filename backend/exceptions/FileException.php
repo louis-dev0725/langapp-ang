@@ -7,13 +7,13 @@ use Throwable;
 
 class FileException extends Exception
 {
-    public const FIELD_IS_NOT_UPLOAD_FILE_OBJECT_CODE    = 1000;
+    public const FIELD_IS_NOT_UPLOAD_FILE_OBJECT_CODE = 1000;
     public const FIELD_IS_NOT_UPLOAD_FILE_OBJECT_MESSAGE = 'Field %s is not yii\web\UploadedFile object';
 
-    public const DIRECTORY_WAS_NOT_CREATED_CODE    = 1100;
+    public const DIRECTORY_WAS_NOT_CREATED_CODE = 1100;
     public const DIRECTORY_WAS_NOT_CREATED_MESSAGE = 'Directory "%s" was not created';
 
-    public const UPLOAD_ERROR_CODE    = 1200;
+    public const UPLOAD_ERROR_CODE = 1200;
     public const UPLOAD_ERROR_MESSAGE = 'Upload error';
 
     public static function fieldIsNotUploadFileObject(string $field, Throwable $previous = null): self

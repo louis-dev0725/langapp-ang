@@ -1,6 +1,5 @@
 <?php
 
-
 use yii\db\Migration;
 use yii\db\Schema;
 

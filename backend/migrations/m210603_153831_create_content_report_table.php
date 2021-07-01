@@ -22,12 +22,33 @@ class m210603_153831_create_content_report_table extends Migration
             'isProcessed' => $this->boolean()->notNull()->defaultValue(false),
         ]);
 
-        $this->addForeignKey('fk-content_report-contentId-content-id', 'content_report', 'contentId', 'content', 'id',
-            'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk-content_report-userId-user-id', 'content_report', 'userId', 'users', 'id', 'CASCADE',
-            'CASCADE');
-        $this->addForeignKey('fk-content_report-moderatorId-user-id', 'content_report', 'moderatorId', 'users', 'id',
-            'CASCADE', 'CASCADE');
+        $this->addForeignKey(
+            'fk-content_report-contentId-content-id',
+            'content_report',
+            'contentId',
+            'content',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'fk-content_report-userId-user-id',
+            'content_report',
+            'userId',
+            'users',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'fk-content_report-moderatorId-user-id',
+            'content_report',
+            'moderatorId',
+            'users',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
 
     /**

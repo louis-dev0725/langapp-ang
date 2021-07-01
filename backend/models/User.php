@@ -164,10 +164,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             Transaction::recalculateCommonForUser($this);
         }
 
-        $balance = (float) Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "userId" = :userId AND "isPartner" = 0 AND "status" = :status;',
-            [':userId' => $this->id, ':status' => Transaction::STATUS_SUCCESS])->queryScalar();
-        $balancePartner = (float) Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "userId" = :userId AND "isPartner" = 1 AND "status" = :status;',
-            [':userId' => $this->id, ':status' => Transaction::STATUS_SUCCESS])->queryScalar();
+        $balance = (float) Yii::$app->db->createCommand(
+            'SELECT SUM(money) FROM transactions WHERE "userId" = :userId AND "isPartner" = 0 AND "status" = :status;',
+            [':userId' => $this->id, ':status' => Transaction::STATUS_SUCCESS]
+        )->queryScalar();
+        $balancePartner = (float) Yii::$app->db->createCommand(
+            'SELECT SUM(money) FROM transactions WHERE "userId" = :userId AND "isPartner" = 1 AND "status" = :status;',
+            [':userId' => $this->id, ':status' => Transaction::STATUS_SUCCESS]
+        )->queryScalar();
 
         if ($balance != $this->balance || $balancePartner != $this->balancePartner) {
             $this->balance = $balance;
@@ -180,8 +184,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function updatePartnerEarned()
     {
-        $partnerEarned = Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "fromInvitedUserId" = :fromInvitedUserId AND "userId" = :userId AND "isPartner" = 1;',
-            [':fromInvitedUserId' => $this->id, ':userId' => $this->invitedByUserId])->queryScalar();
+        $partnerEarned = Yii::$app->db->createCommand(
+            'SELECT SUM(money) FROM transactions WHERE "fromInvitedUserId" = :fromInvitedUserId AND "userId" = :userId AND "isPartner" = 1;',
+            [':fromInvitedUserId' => $this->id, ':userId' => $this->invitedByUserId]
+        )->queryScalar();
 
         $this->partnerEarned = $partnerEarned;
 
@@ -485,8 +491,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      * Finds an identity by the given ID.
      * @param string|int $id the ID to be looked for
      * @return IdentityInterface the identity object that matches the given ID.
-     * Null should be returned if such an identity cannot be found
-     * or the identity is not in an active state (disabled, deleted, etc.)
+     *                           Null should be returned if such an identity cannot be found
+     *                           or the identity is not in an active state (disabled, deleted, etc.)
      */
     public static function findIdentity($id)
     {
@@ -497,16 +503,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      * Finds an identity by the given token.
      * @param mixed $tokenString the token to be looked for
      * @param mixed $type the type of the token. The value of this parameter depends on the implementation.
-     * For example, [[\yii\filters\auth\HttpBearerAuth]] will set this parameter to be `yii\filters\auth\HttpBearerAuth`.
+     *                    For example, [[\yii\filters\auth\HttpBearerAuth]] will set this parameter to be `yii\filters\auth\HttpBearerAuth`.
      * @return IdentityInterface the identity object that matches the given token.
-     * Null should be returned if such an identity cannot be found
-     * or the identity is not in an active state (disabled, deleted, etc.)
+     *                           Null should be returned if such an identity cannot be found
+     *                           or the identity is not in an active state (disabled, deleted, etc.)
      */
     public static function findIdentityByAccessToken($tokenString, $type = null)
     {
         /** @var Token $token */
         $token = Yii::$app->jwt->loadToken($tokenString);
-        if (null === $token) {
+        if ($token === null) {
             return null;
         }
         $userId = $token->getClaim('uid');
@@ -637,6 +643,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getIsAdmin()
     {
         $roles = array_keys(\Yii::$app->authManager->getRolesByUser($this->id));
+
         return in_array('admin', $roles);
     }
 
@@ -654,11 +661,13 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         if (!is_array($value)) {
             $this->addError('extensionSettings', 'extentionSettings should be an array.');
+
             return false;
         } else {
             $dataJson = $this->dataJson;
             $dataJson['extensionSettings'] = $value;
             $this->dataJson = $dataJson;
+
             return true;
         }
     }
@@ -719,9 +728,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                 } catch (Throwable $e) {
                     throw $e;
                 }
+
                 return true;
             }
         }
+
         return false;
     }
 

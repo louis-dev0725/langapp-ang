@@ -39,9 +39,11 @@ class Helpers
     /**
      * @return User
      */
-    public static function user() {
+    public static function user()
+    {
         /** @var User $user */
         $user = Yii::$app->user->identity;
+
         return $user;
     }
 }

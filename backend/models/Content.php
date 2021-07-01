@@ -167,7 +167,8 @@ class Content extends ActiveRecord
                             ->where($defaultConditions)
                             ->limit(10)
                             ->orderBy($orderByExpression), true),
-                ])
+                ]
+            )
             ->limit(20)
             ->all();
     }

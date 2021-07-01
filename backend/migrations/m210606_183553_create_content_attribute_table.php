@@ -20,14 +20,31 @@ class m210606_183553_create_content_attribute_table extends Migration
             'isHidden' => $this->boolean()->notNull()->defaultValue(false),
         ]);
 
-        $this->addForeignKey('fk-content_attribute-contentId-content-id', 'content_attribute', 'contentId', 'content',
+        $this->addForeignKey(
+            'fk-content_attribute-contentId-content-id',
+            'content_attribute',
+            'contentId',
+            'content',
             'id',
-            'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk-content_attribute-userId-users-id', 'content_attribute', 'userId', 'users', 'id',
-            'CASCADE', 'CASCADE');
+            'CASCADE',
+            'CASCADE'
+        );
+        $this->addForeignKey(
+            'fk-content_attribute-userId-users-id',
+            'content_attribute',
+            'userId',
+            'users',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
 
-        $this->createIndex('content_attribute-contentId-userId-uidx', 'content_attribute', ['contentId', 'userId'],
-            true);
+        $this->createIndex(
+            'content_attribute-contentId-userId-uidx',
+            'content_attribute',
+            ['contentId', 'userId'],
+            true
+        );
     }
 
     /**

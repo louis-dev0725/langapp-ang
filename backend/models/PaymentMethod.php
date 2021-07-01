@@ -30,7 +30,7 @@ use yii\web\ServerErrorHttpException;
  */
 class PaymentMethod extends \yii\db\ActiveRecord
 {
-    const TYPE_SQUARE = 'square';
+    public const TYPE_SQUARE = 'square';
 
     /**
      * {@inheritdoc}
@@ -121,8 +121,11 @@ class PaymentMethod extends \yii\db\ActiveRecord
         // Set currency to be the JPY always.
         $money->setCurrency(Currency::JPY);
 
-        $paymentRequest = new CreatePaymentRequest($this->data['id'],
-            Yii::$app->security->generateRandomString(16), $money);
+        $paymentRequest = new CreatePaymentRequest(
+            $this->data['id'],
+            Yii::$app->security->generateRandomString(16),
+            $money
+        );
         $paymentRequest->setCustomerId($this->data['customerId']);
 
         try {
@@ -153,6 +156,7 @@ class PaymentMethod extends \yii\db\ActiveRecord
         }
 
         $transaction->save(false);
+
         return $transaction;
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 if (file_exists(__DIR__ . '/index-local.php')) {
-    include(__DIR__ . '/index-local.php');
+    include __DIR__ . '/index-local.php';
 }
 
 // you can use index-local.php to change it

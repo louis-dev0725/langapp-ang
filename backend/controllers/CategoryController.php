@@ -14,6 +14,7 @@ class CategoryController extends ActiveController
     {
         $actions = parent::actions();
         unset($actions['index']);
+
         return $actions;
     }
 
@@ -37,9 +38,9 @@ class CategoryController extends ActiveController
             'query' => Category::find()->with('parentCategory'),
             'sort' => [
                 'defaultOrder' => [
-                    'id' => SORT_DESC
+                    'id' => SORT_DESC,
                 ],
-            ]
+            ],
         ]);
     }
 }

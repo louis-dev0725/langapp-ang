@@ -13,7 +13,7 @@ $config = [
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
     'components' => [
@@ -55,7 +55,7 @@ $config = [
         'migrate-data' => [
             'class' => 'yii\console\controllers\MigrateController',
             'migrationPath' => '@app/migrations/data',
-            'migrationTable' => '{{%migration_data}}'
+            'migrationTable' => '{{%migration_data}}',
         ],
         'message' => [
             'class' => 'app\controllers\MessageController',

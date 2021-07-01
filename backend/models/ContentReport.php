@@ -22,8 +22,6 @@ use yii\db\ActiveRecord;
  * @property Content $content
  * @property User $user
  * @property User $moderator
- *
- * @package app\models
  */
 class ContentReport extends ActiveRecord
 {

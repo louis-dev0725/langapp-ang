@@ -35,10 +35,8 @@ class MnemonicsUsers extends ActiveRecord
             [['mnemonics_id', 'users_id', 'rating'], 'default', 'value' => null],
             [['mnemonics_id', 'users_id', 'rating'], 'string'],
             [['mnemonics_id', 'users_id'], 'unique', 'targetAttribute' => ['mnemonics_id', 'users_id']],
-            [['mnemonics_id'], 'exist', 'skipOnError' => true, 'targetClass' => Mnemonics::class,
-                'targetAttribute' => ['mnemonics_id' => 'id']],
-            [['users_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class,
-                'targetAttribute' => ['users_id' => 'id']],
+            [['mnemonics_id'], 'exist', 'skipOnError' => true, 'targetClass' => Mnemonics::class, 'targetAttribute' => ['mnemonics_id' => 'id']],
+            [['users_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['users_id' => 'id']],
         ];
     }
 

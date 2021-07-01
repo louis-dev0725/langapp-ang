@@ -19,8 +19,6 @@ use yii\db\ActiveRecord;
  * [[Extra properties]]
  * @property Content $content
  * @property User $user
- *
- * @package app\models
  */
 class ContentAttribute extends ActiveRecord
 {

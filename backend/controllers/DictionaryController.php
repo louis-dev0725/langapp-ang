@@ -44,6 +44,7 @@ class DictionaryController extends ActiveController
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
 
         unset($actions['create']);
+
         return $actions;
     }
 
@@ -68,7 +69,6 @@ class DictionaryController extends ActiveController
 
         $userId = Yii::$app->user->id;
         $query->andWhere(['user_dictionary.user_id' => $userId]);
-
 
         if (isset($requestParams['expand']) && is_string($requestParams['expand'])) {
             $expand = preg_split('/\s*,\s*/', $requestParams['expand'], -1, PREG_SPLIT_NO_EMPTY);
@@ -106,7 +106,7 @@ class DictionaryController extends ActiveController
 
         if ($word == null) {
             $workout_progress_card = [
-                "due" => time()
+                "due" => time(),
             ];
 
             $word = new UserDictionary();
@@ -129,6 +129,7 @@ class DictionaryController extends ActiveController
         $word->save();
         if ($word->hasErrors()) {
             $transaction->rollBack();
+
             return [
                 'success' => false,
                 'text' => 'Error while adding word to your dictionary.',
@@ -157,7 +158,7 @@ class DictionaryController extends ActiveController
 
                         if ($dictionaryWord != null) {
                             $workout_progress_card = [
-                                "due" => time()
+                                "due" => time(),
                             ];
 
                             $kanjiInDb = new UserDictionary();
@@ -176,6 +177,7 @@ class DictionaryController extends ActiveController
                             $kanjiInDb->save(false);
                             if ($kanjiInDb->hasErrors()) {
                                 $transaction->rollBack();
+
                                 return [
                                     'success' => false,
                                     'text' => 'Error while adding kanji from the word to your dictionary.',
@@ -189,9 +191,10 @@ class DictionaryController extends ActiveController
         }
 
         $transaction->commit();
+
         return [
             'success' => true,
-            'text' => 'Added to your dictionary.'
+            'text' => 'Added to your dictionary.',
         ];
     }
 
@@ -210,7 +213,7 @@ class DictionaryController extends ActiveController
 
         return [
             'words' => $query,
-            'mnemonics' => $query1
+            'mnemonics' => $query1,
         ];
     }
 
@@ -233,14 +236,14 @@ class DictionaryController extends ActiveController
                 $type = DictionaryWord::TYPE_JAPANESE_WORD;
             }
 
-            $query->andWhere(['user_dictionary.type' => (int)$type]);
+            $query->andWhere(['user_dictionary.type' => (int) $type]);
         }
 
         $query->orderBy(new Expression("user_dictionary.workout_progress_card->>'due' ASC"));
 
         return new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false
+            'pagination' => false,
         ]);
     }
 
@@ -268,7 +271,7 @@ class DictionaryController extends ActiveController
 
         return new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false
+            'pagination' => false,
         ]);
     }
 

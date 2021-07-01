@@ -37,7 +37,7 @@ class SettingPlugin extends ActiveRecord
             [['extensionSubtitleTranslate'], 'boolean'],
             [['extensionShowTranslate'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class,
-                'targetAttribute' => ['user_id' => 'id']],
+                'targetAttribute' => ['user_id' => 'id'], ],
         ];
     }
 

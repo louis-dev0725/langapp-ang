@@ -23,7 +23,7 @@ $params = [
 ];
 
 if (file_exists(__DIR__ . '/params-local.php')) {
-    include(__DIR__ . '/params-local.php');
+    include __DIR__ . '/params-local.php';
 }
 
 return $params;

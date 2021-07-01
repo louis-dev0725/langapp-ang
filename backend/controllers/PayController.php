@@ -20,6 +20,7 @@ class PayController extends Controller
         if ($this->action->id == 'finish' || $this->action->id == 'result') {
             $this->enableCsrfValidation = false;
         }
+
         return true;
     }
 

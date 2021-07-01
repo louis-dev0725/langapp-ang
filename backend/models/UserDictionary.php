@@ -45,17 +45,17 @@ class UserDictionary extends ActiveRecord
         return [
             [['user_id', 'dictionary_word_id', 'original_word', 'date'], 'required'],
             [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training', 'mnemonic_id'], 'default',
-                'value' => null],
+                'value' => null, ],
             [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training'], 'integer'],
             [['date', 'workout_progress_card', 'workout_progress_word_translate'], 'safe'],
             [['context'], 'string'],
             [['original_word', 'translate_word', 'url'], 'string', 'max' => 255],
             [['dictionary_word_id'], 'exist', 'skipOnError' => true, 'targetClass' => DictionaryWord::class,
-                'targetAttribute' => ['dictionary_word_id' => 'id']],
+                'targetAttribute' => ['dictionary_word_id' => 'id'], ],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class,
-                'targetAttribute' => ['user_id' => 'id']],
+                'targetAttribute' => ['user_id' => 'id'], ],
             [['mnemonic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Mnemonics::class,
-                'targetAttribute' => ['mnemonic_id' => 'id']],
+                'targetAttribute' => ['mnemonic_id' => 'id'], ],
         ];
     }
 

@@ -73,7 +73,7 @@ class UserController extends ActiveController
                     'actions' => ['index', 'delete', 'view', 'check-invited-users'],
                     'roles' => ['admin'],
                 ],
-            ]
+            ],
         ];
 
         return $behaviors;
@@ -221,6 +221,7 @@ class UserController extends ActiveController
             $model->user->lastLoginIp = Yii::$app->request->getUserIP();
             $model->user->save(false, ['lastLoginIp']);
             $token = $model->user->generateAccessToken();
+
             return ['accessToken' => $token];
         }
 
@@ -233,6 +234,7 @@ class UserController extends ActiveController
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
         if ($model->validate()) {
             $sent = $model->sendEmail();
+
             return ['done' => true, 'successfullySent' => $sent];
         }
 
@@ -246,6 +248,7 @@ class UserController extends ActiveController
         if ($model->validate()) {
             $model->resetPassword();
             $token = $model->user->generateAccessToken();
+
             return ['done' => true, 'accessToken' => $token];
         }
 
@@ -303,7 +306,8 @@ class UserController extends ActiveController
         return ['done' => true];
     }
 
-    public function actionMyPaymentMethods() {
+    public function actionMyPaymentMethods()
+    {
         return Helpers::user()->paymentMethods;
     }
 
@@ -379,7 +383,8 @@ class UserController extends ActiveController
         return $user->getPaymentMethods()->all();
     }
 
-    public function actionDeletePaymentMethod() {
+    public function actionDeletePaymentMethod()
+    {
         $params = Yii::$app->request->bodyParams;
         if (!isset($params['id'])) {
             throw new BadRequestHttpException('"id" is required.');
@@ -393,8 +398,7 @@ class UserController extends ActiveController
             $paymentMethod->save(false);
 
             return $user->paymentMethods;
-        }
-        else {
+        } else {
             throw new BadRequestHttpException('Invalid payment method id.');
         }
     }

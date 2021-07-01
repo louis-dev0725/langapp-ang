@@ -41,6 +41,7 @@ class ContentSearch extends Content
                     if ($value == false) {
                         return [false, null];
                     }
+
                     return $value;
                 },
             ],

@@ -61,8 +61,7 @@ class Mnemonics extends ActiveRecord
             [['rating'], 'default', 'value' => 0],
             [['user_id', 'rating'], 'integer'],
             [['word', 'text', 'images'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class,
-                'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
 
             [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ];
@@ -79,7 +78,7 @@ class Mnemonics extends ActiveRecord
             'word' => 'Word',
             'text' => 'Text',
             'images' => 'Images',
-            'rating' => 'Rating'
+            'rating' => 'Rating',
         ];
     }
 

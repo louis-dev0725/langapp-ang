@@ -27,6 +27,7 @@ class Notifications
     {
         $notifications = new \app\components\Notifications($user);
         $notifications->process();
+
         return $notifications->list;
     }
 

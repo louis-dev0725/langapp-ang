@@ -12,7 +12,7 @@ class TransactionSearch extends Transaction
             [['id', 'userId', 'isCommon', 'isPartner', 'isRealMoney', 'fromInvitedUserId', 'parentTransactionId'], 'integer'],
             [['money'], 'number'],
             [['comment', 'addedDateTime', 'dataJson'], 'safe'],
-            [['name'], 'string']
+            [['name'], 'string'],
         ];
     }
 

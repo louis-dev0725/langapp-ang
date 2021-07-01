@@ -10,7 +10,6 @@ use yii\web\ForbiddenHttpException;
 
 /**
  * Class ContentReportController
- * @package app\controllers
  */
 class ContentReportController extends ActiveController
 {
@@ -40,6 +39,7 @@ class ContentReportController extends ActiveController
                 ],
             ],
         ];
+
         return $behaviors;
     }
 }

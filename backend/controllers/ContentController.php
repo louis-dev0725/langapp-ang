@@ -35,6 +35,7 @@ class ContentController extends ActiveController
     {
         $actions = parent::actions();
         unset($actions['index'], $actions['create'], $actions['view'], $actions['update'], $actions['delete']);
+
         return $actions;
     }
 

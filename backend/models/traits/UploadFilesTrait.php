@@ -28,15 +28,15 @@ trait UploadFilesTrait
 
         /** @var UploadedFile $uploadModel */
         $uploadModel = $model->$field;
-        $nameImage = time().'.'.$uploadModel->extension;
-        $path = 'upload/'.$pathToFile.'/'.$nameImage;
+        $nameImage = time() . '.' . $uploadModel->extension;
+        $path = 'upload/' . $pathToFile . '/' . $nameImage;
         try {
             Image::open($uploadModel->tempName)->save($path);
         } catch (Exception $exception) {
             throw FileException::uploadError();
         }
 
-        return '/'.$path;
+        return '/' . $path;
     }
 
     /**
@@ -49,26 +49,26 @@ trait UploadFilesTrait
      */
     public function preview(string $imagePath, int $width = 0, int $height = 0, bool $crop = false): void
     {
-        if ('/' === $imagePath[0]) {
+        if ($imagePath[0] === '/') {
             $imagePath = substr($imagePath, 1);
         }
 
         $image = Image::open($imagePath);
 
         $explodedPath = explode('/', $imagePath);
-        $filename = $explodedPath[count($explodedPath)-1];
+        $filename = $explodedPath[count($explodedPath) - 1];
         $extension = $image->guessType();
 
         if ($width !== 0 || $height !== 0) {
             $widthNullable = $width > 0 ? $width : null;
             $heightNullable = $height > 0 ? $height : null;
-            $rescale = null === $widthNullable || null === $heightNullable;
+            $rescale = $widthNullable === null || $heightNullable === null;
             $image = $image->resize($widthNullable, $heightNullable, 'transparent', false, $rescale, $crop);
         }
 
         header("Content-type: image/$extension");
         header("Cache-Control: no-store, no-cache");
-        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
         $image->save('php://output');
         exit();
     }
@@ -84,7 +84,7 @@ trait UploadFilesTrait
             throw FileException::directoryWasNotCreated('upload');
         }
 
-        $path = 'upload/'.$pathToFile;
+        $path = 'upload/' . $pathToFile;
         if (!file_exists($path) && !mkdir($path, 0755) && !is_dir($path)) {
             throw FileException::directoryWasNotCreated($path);
         }

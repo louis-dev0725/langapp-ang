@@ -1,6 +1,5 @@
 <?php
 
-
 use yii\db\Migration;
 use yii\db\Schema;
 
@@ -27,7 +26,7 @@ class m200513_132723_create_user_dictionary_table extends Migration
             'success_training' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
             'number_training' => Schema::TYPE_INTEGER . ' NOT NULL DEFAULT 0',
             'workout_progress_card' => Schema::TYPE_JSON . " NOT NULL DEFAULT '[]'",
-            'workout_progress_word_translate' => Schema::TYPE_JSON . " NOT NULL DEFAULT '[]'"
+            'workout_progress_word_translate' => Schema::TYPE_JSON . " NOT NULL DEFAULT '[]'",
         ]);
 
         $this->addForeignKey(

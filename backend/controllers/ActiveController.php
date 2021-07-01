@@ -30,7 +30,7 @@ class ActiveController extends \yii\rest\ActiveController
             $withCorsFilter = [
                 [
                     'class' => Cors::class,
-                ]
+                ],
             ];
         } else {
             $withCorsFilter = [];

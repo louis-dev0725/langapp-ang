@@ -11,7 +11,6 @@ use yii\web\ServerErrorHttpException;
 
 /**
  * Class ContentAttributeController
- * @package app\controllers
  */
 class ContentAttributeController extends ActiveController
 {
@@ -28,6 +27,7 @@ class ContentAttributeController extends ActiveController
         unset($actions['index'], $actions['create'], $actions['update']);
         $actions['view']['findModel'] = [$this, 'findModel'];
         $actions['delete']['findModel'] = [$this, 'findModel'];
+
         return $actions;
     }
 

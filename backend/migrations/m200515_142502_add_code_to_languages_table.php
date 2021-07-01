@@ -15,7 +15,6 @@ class m200515_142502_add_code_to_languages_table extends Migration
     {
         $this->addColumn('{{%languages}}', 'code', Schema::TYPE_STRING . ' NULL');
 
-
         $command = Yii::$app->db->createCommand('UPDATE languages SET code=:code WHERE title LIKE :title');
 
         $command->bindValues([':code' => 'ru', 'title' => '%Русский%'])->queryOne();

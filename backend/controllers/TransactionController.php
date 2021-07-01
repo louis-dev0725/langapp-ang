@@ -50,7 +50,7 @@ class TransactionController extends ActiveController
                     'actions' => ['create', 'update', 'delete'],
                     'roles' => ['admin'],
                 ],
-            ]
+            ],
         ];
 
         return $behaviors;

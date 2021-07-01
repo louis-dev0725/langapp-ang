@@ -1,0 +1,28 @@
+<?php
+$config = new PhpCsFixer\Config();
+return $config->setRules([
+        '@PSR12' => true,
+        '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'concat_space' => ['spacing' => 'one'],
+        'method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
+        'echo_tag_syntax' => ['format' => 'short'],
+        'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        'phpdoc_summary' => false,
+        'phpdoc_align' => ['align' => 'left'],
+        'fully_qualified_strict_types' => false,
+        'phpdoc_to_comment' => false,
+        'single_quote' => false,
+        'phpdoc_no_alias_tag' => false,
+        'no_superfluous_phpdoc_tags' => false,
+        'semicolon_after_instruction' => false,
+        'phpdoc_separation' => false,
+        'increment_style' => ['style' => 'post'],
+        'phpdoc_annotation_without_dot' => false,
+        'phpdoc_scalar' => false,
+        'no_unused_imports' => false,
+        'phpdoc_tag_type' => false,
+        'ordered_imports' => false,
+        'phpdoc_indent' => false,
+        //'method_argument_space' => ['on_multiline' => 'ensure_single_line'],
+    ]);

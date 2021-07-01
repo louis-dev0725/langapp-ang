@@ -13,8 +13,15 @@ class m210610_184541_add_paymentMethodId_column_to_transactions extends Migratio
     public function safeUp()
     {
         $this->addColumn('transactions', 'paymentMethodId', $this->integer()->notNull()->defaultValue(0));
-        $this->addForeignKey('fk-transactions-paymentMethodId-payment_methods-id', 'transactions', 'paymentMethodId',
-            'payment_methods', 'id', 'CASCADE', 'NO ACTION');
+        $this->addForeignKey(
+            'fk-transactions-paymentMethodId-payment_methods-id',
+            'transactions',
+            'paymentMethodId',
+            'payment_methods',
+            'id',
+            'CASCADE',
+            'NO ACTION'
+        );
         $this->addColumn('transactions', 'status', $this->integer()->notNull()->defaultValue(1));
     }
 

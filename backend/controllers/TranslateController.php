@@ -18,6 +18,7 @@ class TranslateController extends ActiveController
     {
         $actions = parent::actions();
         unset($actions['create']);
+
         return $actions;
     }
 
@@ -72,6 +73,7 @@ class TranslateController extends ActiveController
             } elseif (mb_strlen($search) == 1 && preg_match('/^[ぁ-んァ-ン]$/u', $search)) {
                 return false;
             }
+
             return true;
         });
 
@@ -95,6 +97,7 @@ class TranslateController extends ActiveController
                                 return true;
                             }
                         }
+
                         return false;
                     });
                     Yii::endProfile('Filter for word ' . $currentWord);
@@ -102,15 +105,15 @@ class TranslateController extends ActiveController
                     Yii::beginProfile('Process word ' . $currentWord);
                     $current_arr = explode('_', $key);
 
-                    $minWordLength = $requestedOffset - (int)$current_arr[0] + 1;
+                    $minWordLength = $requestedOffset - (int) $current_arr[0] + 1;
                     foreach ($currentSearchResults as $wordFromDict) {
                         foreach ($wordFromDict->query as $query) {
                             if (mb_strlen($query) >= $minWordLength &&
-                                (in_array($query, $toSearch, true) || strcasecmp(mb_substr($cleanedText, (int)$current_arr[0], mb_strlen($query)), $query) == 0)) {
+                                (in_array($query, $toSearch, true) || strcasecmp(mb_substr($cleanedText, (int) $current_arr[0], mb_strlen($query)), $query) == 0)) {
                                 $word_offset_arr[$a]['word'] = $query;
                                 $word_offset_arr[$a]['kana'] = $wordFromDict->sourceData['kana'][0]['text'];
-                                $word_offset_arr[$a]['s_offset'] = (int)$current_arr[0] + $countSpaces;
-                                $word_offset_arr[$a]['e_offset'] = (int)$current_arr[0] + mb_strlen($query) + $countSpaces;
+                                $word_offset_arr[$a]['s_offset'] = (int) $current_arr[0] + $countSpaces;
+                                $word_offset_arr[$a]['e_offset'] = (int) $current_arr[0] + mb_strlen($query) + $countSpaces;
                                 $res[] = $wordFromDict;
                                 $a++;
                                 break;
@@ -129,6 +132,7 @@ class TranslateController extends ActiveController
                 if ($aa == $bb) {
                     return 0;
                 }
+
                 return ($aa < $bb) ? 1 : -1;
             });
             Yii::endProfile('usort');

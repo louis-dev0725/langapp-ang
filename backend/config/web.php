@@ -53,14 +53,14 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning', 'info']
+                    'levels' => ['error', 'warning', 'info'],
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
                     'exportInterval' => 1,
                     'categories' => ['log_extension'],
                     'logFile' => '@runtime/logs/extension.log',
-                    'logVars' => []
+                    'logVars' => [],
                 ],
             ],
         ],
@@ -73,7 +73,7 @@ $config = [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['user', 'transaction', 'category', 'content', 'language', 'translate',
-                        'plugin', 'dictionary', 'mnemonic', 'log', 'content-report', 'content-attribute'],
+                        'plugin', 'dictionary', 'mnemonic', 'log', 'content-report', 'content-attribute', ],
                     'prefix' => 'api',
                     'patterns' => [
                         'PUT,PATCH {id}' => 'update',
@@ -113,8 +113,6 @@ $config = [
     'params' => $params,
 ];
 
-
-
 if (YII_ENV_DEV) {
     $config['components']['assetManager']['baseUrl'] = '@web/yii-assets';
     $config['components']['assetManager']['basePath'] = '@webroot/yii-assets';
@@ -133,7 +131,7 @@ if (YII_ENV_DEV) {
 }
 
 if (file_exists(__DIR__ . '/web-local.php')) {
-    include(__DIR__ . '/web-local.php');
+    include __DIR__ . '/web-local.php';
 }
 
 return $config;
