@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /app/backend || exit
+php yii payment/subscription-fee --interactive=0

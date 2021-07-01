@@ -45,6 +45,7 @@ services:
       - node-modules:${NODE_MODULES_MOUNT:-/app/frontend/node_modules}
       - node-modules-backend:${NODE_MODULES_BACKEND_MOUNT:-/app/backend-ts/node_modules}
       - npm-cache:/root/.npm
+      - ./docker/web/etc/cron.hourly:/etc/cron.hourly
     environment:
       PHP_DISPLAY_ERRORS: "1"
       PHP_DEBUGGER: "xdebug"
@@ -54,6 +55,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       REDIS_HOST: ${REDIS_HOST:-redis}
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG:-serverName=_}
     # Can be activated when docker-compose will support "host-gateway" value
     # Currently:
     # on Windows and macOS host.docker.internal added automatically by Docker Desktop

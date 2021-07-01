@@ -346,7 +346,9 @@ class UserController extends ActiveController
             if ($result->getErrors() != null && count($result->getErrors()) > 0) {
                 throw new \Exception('Unable to create Square customer. Errors: ' . json_encode($result->getErrors()));
             }
-            $userData['paymentCustomerIds']['square'] = $result->getCustomer()->getId();
+
+            $customerId = $result->getCustomer()->getId();
+            $userData['paymentCustomerIds']['square'] = $customerId;
             $user->dataJson = $userData;
             $user->save(false, ['dataJson']);
         }
@@ -368,7 +370,7 @@ class UserController extends ActiveController
         $paymentMethod->userId = $user->id;
         $paymentMethod->type = PaymentMethod::TYPE_SQUARE;
         $card = $result->getCard();
-        $paymentMethod->data = $card->jsonSerialize();
+        $paymentMethod->data = array_merge($card->jsonSerialize(), ['customerId' => $customerId]);
         $paymentMethod->addedDateTime = Helpers::dateToSql(time());
         $paymentMethod->title = $card->getCardBrand() . ' *' . $card->getLast4() . ' ' . $card->getExpMonth() . '/' . $card->getExpYear();
         $paymentMethod->save(false);

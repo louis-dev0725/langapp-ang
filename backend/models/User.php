@@ -6,12 +6,15 @@ use app\components\Helpers;
 use app\components\Notifications;
 use Lcobucci\JWT\Token;
 use sizeg\jwt\Jwt;
+use Throwable;
 use Yii;
-use yii\base\InvalidConfigException;
+use yii\base\BaseObject;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
+use yii\db\StaleObjectException;
 use yii\helpers\Url;
 use yii\web\IdentityInterface;
+use yii\web\ServerErrorHttpException;
 use yii\web\UserEvent;
 
 /**
@@ -101,7 +104,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $this->generateResetPasswordToken();
 
         // TODO: link should point to frontend
-        $url = Yii::$app->params['baseUrl'] . Url::to(['users/restore-password', 'id' => $this->id, 'code' => $this->resetPasswordToken]);
+        $url = Yii::$app->params['baseUrl'] . Url::to([
+                'users/restore-password',
+                'id' => $this->id,
+                'code' => $this->resetPasswordToken,
+            ]);
 
         return $url;
     }
@@ -145,7 +152,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             return false;
         }
 
-        $timestamp = (int)substr($token, $pos + 1);
+        $timestamp = (int) substr($token, $pos + 1);
         $expire = 60 * 60 * 24;
 
         return $timestamp + $expire >= time();
@@ -157,8 +164,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             Transaction::recalculateCommonForUser($this);
         }
 
-        $balance = (float)Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "userId" = :userId AND "isPartner" = 0;', [':userId' => $this->id])->queryScalar();
-        $balancePartner = (float)Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "userId" = :userId AND "isPartner" = 1;', [':userId' => $this->id])->queryScalar();
+        $balance = (float) Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "userId" = :userId AND "isPartner" = 0 AND "status" = :status;',
+            [':userId' => $this->id, ':status' => Transaction::STATUS_SUCCESS])->queryScalar();
+        $balancePartner = (float) Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "userId" = :userId AND "isPartner" = 1 AND "status" = :status;',
+            [':userId' => $this->id, ':status' => Transaction::STATUS_SUCCESS])->queryScalar();
 
         if ($balance != $this->balance || $balancePartner != $this->balancePartner) {
             $this->balance = $balance;
@@ -166,26 +175,75 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
             $this->save(false, ['balance', 'balancePartner']);
         }
-
         //$this->notifyLowBalance();
     }
 
     public function updatePartnerEarned()
     {
-        $partnerEarned = Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "fromInvitedUserId" = :fromInvitedUserId AND "userId" = :userId AND "isPartner" = 1;', [':fromInvitedUserId' => $this->id, ':userId' => $this->invitedByUserId])->queryScalar();
+        $partnerEarned = Yii::$app->db->createCommand('SELECT SUM(money) FROM transactions WHERE "fromInvitedUserId" = :fromInvitedUserId AND "userId" = :userId AND "isPartner" = 1;',
+            [':fromInvitedUserId' => $this->id, ':userId' => $this->invitedByUserId])->queryScalar();
 
         $this->partnerEarned = $partnerEarned;
 
-        $this->save(false, array('partnerEarned'));
+        $this->save(false, ['partnerEarned']);
     }
 
     public function scenarios()
     {
         return [
             static::SCENARIO_LOGIN => ['email', 'password'],
-            static::SCENARIO_REGISTER => ['name', 'company', 'site', 'telephone', 'email', 'password', 'timezone', 'invitedByUserId', 'timezone', 'language', 'currency', 'languages'],
-            static::SCENARIO_PROFILE => ['name', 'company', 'site', 'telephone', 'email', 'password', 'isServicePaused', 'wmr', 'timezone', 'language', 'isAdmin', 'languages', 'extensionSettings'],
-            static::SCENARIO_ADMIN => ['name', 'company', 'site', 'telephone', 'email', 'password', 'comment', 'isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'accessToken', 'currency', 'languages', 'extensionSettings'],
+            static::SCENARIO_REGISTER => [
+                'name',
+                'company',
+                'site',
+                'telephone',
+                'email',
+                'password',
+                'timezone',
+                'invitedByUserId',
+                'timezone',
+                'language',
+                'currency',
+                'languages',
+            ],
+            static::SCENARIO_PROFILE => [
+                'name',
+                'company',
+                'site',
+                'telephone',
+                'email',
+                'password',
+                'isServicePaused',
+                'wmr',
+                'timezone',
+                'language',
+                'isAdmin',
+                'languages',
+                'extensionSettings',
+            ],
+            static::SCENARIO_ADMIN => [
+                'name',
+                'company',
+                'site',
+                'telephone',
+                'email',
+                'password',
+                'comment',
+                'isServicePaused',
+                'invitedByUserId',
+                'isPartner',
+                'enablePartnerPayments',
+                'frozeEnablePartnerPayments',
+                'partnerPercent',
+                'wmr',
+                'timezone',
+                'language',
+                'isAdmin',
+                'accessToken',
+                'currency',
+                'languages',
+                'extensionSettings',
+            ],
         ];
     }
 
@@ -207,7 +265,30 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         if ($this->scenario == static::SCENARIO_INVITED_USER) {
             return ['id', 'name', 'partnerEarned', 'isPaid'];
         } elseif ($this->scenario == static::SCENARIO_PROFILE) {
-            return ['id', 'name', 'company', 'site', 'telephone', 'email', 'balance', 'balancePartner', 'paidUntilDateTime' => [Helpers::class, 'formatDateField'], 'isServicePaused', 'isPartner', 'partnerPercent', 'wmr', 'timezone', 'language', 'isAdmin', 'notifications', 'currency', 'config', 'languages', 'extensionSettings', 'isPaid'];
+            return [
+                'id',
+                'name',
+                'company',
+                'site',
+                'telephone',
+                'email',
+                'balance',
+                'balancePartner',
+                'paidUntilDateTime' => [Helpers::class, 'formatDateField'],
+                'isServicePaused',
+                'isPartner',
+                'partnerPercent',
+                'wmr',
+                'timezone',
+                'language',
+                'isAdmin',
+                'notifications',
+                'currency',
+                'config',
+                'languages',
+                'extensionSettings',
+                'isPaid',
+            ];
         } elseif ($this->scenario == static::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
             $fields['paidUntilDateTime'] = [Helpers::class, 'formatDateField'];
@@ -258,7 +339,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'JPY' => '円',
             'KRW' => '₩',
             //'CNY' => '元'
-            'CNY' => '¥'
+            'CNY' => '¥',
         ];
     }
 
@@ -280,13 +361,50 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ['email', 'unique'],
             ['password', 'filter', 'filter' => 'trim'],
             [['balance', 'balancePartner', 'partnerPercent', 'partnerEarned'], 'number'],
-            [['isAdmin', 'paidUntilDateTime', 'addedDateTime', 'updatedDateTime', 'restorePasswordUntilDate', 'passwordChangedDateTime', 'dataJson'], 'safe'],
+            [
+                [
+                    'isAdmin',
+                    'paidUntilDateTime',
+                    'addedDateTime',
+                    'updatedDateTime',
+                    'restorePasswordUntilDate',
+                    'passwordChangedDateTime',
+                    'dataJson',
+                ],
+                'safe',
+            ],
             [['comment'], 'string'],
-            [['isServicePaused', 'invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments'], 'default', 'value' => 0],
+            [
+                [
+                    'isServicePaused',
+                    'invitedByUserId',
+                    'isPartner',
+                    'enablePartnerPayments',
+                    'frozeEnablePartnerPayments',
+                ],
+                'default',
+                'value' => 0,
+            ],
             [['isPartner'], 'default', 'value' => 1],
             [['isServicePaused'], 'boolean'],
             [['invitedByUserId', 'isPartner', 'enablePartnerPayments', 'frozeEnablePartnerPayments'], 'integer'],
-            [['name', 'company', 'site', 'telephone', 'email', 'password', 'registerIp', 'lastLoginIp', 'restorePasswordKey', 'wmr', 'timezone'], 'string', 'max' => 255],
+            [
+                [
+                    'name',
+                    'company',
+                    'site',
+                    'telephone',
+                    'email',
+                    'password',
+                    'registerIp',
+                    'lastLoginIp',
+                    'restorePasswordKey',
+                    'wmr',
+                    'timezone',
+                ],
+                'string',
+                'max' => 255,
+            ],
             ['currency', 'default', 'value' => $this->getDefaultCurrency()],
             ['currency', 'in', 'range' => array_keys(User::getAvailableCurrencyList())],
             //['languages', 'in', 'range' => ],
@@ -419,7 +537,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->sign($signer, $jwt->key)
             ->getToken();
 
-        return (string)$token;
+        return (string) $token;
     }
 
     /**
@@ -552,5 +670,113 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getIsPaid(): bool
     {
         return Helpers::dateToUnix($this->paidUntilDateTime) > time();
+    }
+
+    /**
+     * If the service is paid for more than one day, true is returns.
+     * If this user has faulty transactions in last 24 hours, true is returns.
+     * If this user has pending transactions, true is returns.
+     * If debiting funds is success, true is returns, otherwise false.
+     * @return bool
+     * @throws ServerErrorHttpException|StaleObjectException|Throwable
+     */
+    public function paySubscriptionIfNecessary(): bool
+    {
+        $timeNow = time();
+        $oneDayUnix = 3600 * 24;
+
+        // Is the service paid for more than one day?
+        if (Helpers::dateToUnix($this->paidUntilDateTime) > $timeNow + $oneDayUnix) {
+            return true;
+        }
+
+        // Has user pending transactions?
+        $hasPendingTransactions = Transaction::find()->where([
+            'and',
+            ['userId' => $this->id],
+            ['status' => Transaction::STATUS_PROCESS],
+        ])->exists();
+        if ($hasPendingTransactions) {
+            return true;
+        }
+
+        // Iterating over all user's payment methods and trying to debit funds.
+        foreach ($this->paymentMethods as $paymentMethod) {
+            // Continue the loop if $paymentMethod isn't active or has faulty transactions in last 24 hours.
+            if (!$paymentMethod->isActive || $paymentMethod->hasFaultyTransactionsInLast24h()) {
+                continue;
+            }
+
+            // Debit funds and receive transaction with details.
+            $transaction = $paymentMethod->debitFunds($this->getSubscriptionPaymentAmount());
+
+            // If transaction status is success, then prolong the subscription and return true.
+            if ($transaction->status === Transaction::STATUS_SUCCESS) {
+                try {
+                    if ($this->renewSubscription($paymentMethod->id) === false) {
+                        throw new ServerErrorHttpException("Failed to renew the subscription for user $this->id");
+                    }
+                } catch (Throwable $e) {
+                    throw $e;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Renews the user subscription for n days.
+     * @param int $paymentMethodId
+     * @param int $days number of days.
+     * @return bool
+     * @throws ServerErrorHttpException
+     * @throws StaleObjectException
+     * @throws Throwable
+     */
+    private function renewSubscription(int $paymentMethodId, int $days = 30): bool
+    {
+        $timeNow = time();
+        $newPaidUntilDateTime = Helpers::dateToSql($timeNow + 3600 * 24 * $days);
+
+        $transaction = new Transaction([
+            'money' => -$this->getSubscriptionPaymentAmount(),
+            'userId' => $this->id,
+            'paymentMethodId' => $paymentMethodId,
+            'status' => Transaction::STATUS_PROCESS,
+            'isRealMoney' => 1,
+            'addedDateTime' => Helpers::dateToSql($timeNow),
+            'scenario' => Transaction::SCENARIO_USER,
+            'dataJson' => [
+                'renewDays' => 30,
+                'paidUntilDateTimeBefore' => $this->paidUntilDateTime,
+                'paidUntilDataTimeAfter' => $newPaidUntilDateTime,
+            ],
+        ]);
+        if (!$transaction->save(false)) {
+            throw new ServerErrorHttpException("Failed to save the transaction for unknown reason.");
+        }
+
+        $this->paidUntilDateTime = $newPaidUntilDateTime;
+        $transaction->status = $this->update(false, ['paidUntilDateTime'])
+            ? Transaction::STATUS_SUCCESS
+            : Transaction::STATUS_ERROR;
+
+        if (!$transaction->update(false, ['status'])) {
+            throw new ServerErrorHttpException("Failed to update a transaction status for unknown reason.");
+        }
+
+        Yii::info('Renewed subscription. Transaction: ' . json_encode($transaction->attributes, JSON_THROW_ON_ERROR));
+
+        return $transaction->status === Transaction::STATUS_SUCCESS;
+    }
+
+    /**
+     * Returns the amount to pay the subscription.
+     * @return float
+     */
+    private function getSubscriptionPaymentAmount(): float
+    {
+        return 2000;
     }
 }
