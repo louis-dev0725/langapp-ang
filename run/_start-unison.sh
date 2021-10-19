@@ -1,7 +1,6 @@
 #!/bin/bash
-cd "$(dirname "$0")"
-cd ..
+cd /app
 
 set -x
 
-./run/bin/unison -socket 5000 -ignore "Path backend-ts/dist/*" -ignore "Path */node_modules/*" -ignore "Path backend/runtime/*"
+runuser -l application -c '/opt/run/bin/unison -socket 5000'

@@ -33,7 +33,7 @@ class m201014_061328_add_test_users extends Migration
                 Yii::$app->authManager->assign($adminRole, $user->id);
             }
 
-            $testUserEmail = 'admin@example.org';
+            $testUserEmail = 'user@example.org';
             $user = new User();
             $user->scenario = User::SCENARIO_ADMIN;
             $user->email = $testUserEmail;

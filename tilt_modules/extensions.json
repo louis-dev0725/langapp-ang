@@ -1,0 +1,9 @@
+{
+  "Extensions": [
+    {
+      "Name": "dotenv",
+      "ExtensionRegistry": "https://github.com/tilt-dev/tilt-extensions",
+      "TimeFetched": "2021-10-18T15:13:55.7563303+09:00"
+    }
+  ]
+}

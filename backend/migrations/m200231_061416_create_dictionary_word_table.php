@@ -4,7 +4,7 @@ use yii\db\Migration;
 use yii\db\Schema;
 
 /**
- * Class m200231_061416_enable_pgroonga
+ * Class m200231_061416_create_dictionary_word_table
  */
 class m200231_061416_create_dictionary_word_table extends Migration
 {

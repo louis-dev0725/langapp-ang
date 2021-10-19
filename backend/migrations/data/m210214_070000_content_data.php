@@ -9,7 +9,7 @@ class m210214_070000_content_data extends Migration
      */
     public function up()
     {
-        $this->truncateTable('content');
+        $this->execute('truncate table content cascade;');
 
         preg_match('/host=(.*?)(;|$)/', $this->db->dsn, $matches);
         $host = $matches[1];

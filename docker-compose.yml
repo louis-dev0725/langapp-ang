@@ -24,6 +24,7 @@ services:
       - "${LISTEN_HOST:-127.0.0.1}:${POSTGRES_PORT:-5432}:5432"
 
   web:
+    image: langapp-web
     build:
       context: ./
       dockerfile: ./docker/web/Dockerfile
@@ -33,19 +34,22 @@ services:
     ports:
       - "${LISTEN_HOST:-127.0.0.1}:${HTTP_PORT:-80}:80"
       - "${LISTEN_HOST:-127.0.0.1}:${HTTPS_PORT:-443}:80"
+      - "${LISTEN_HOST:-127.0.0.1}:${UNISON_PORT:-5000}:5000"
     volumes:
       - composer-cache:/root/.composer/cache:delegated
-      - ./:/app:delegated
-      - ./docker/web/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf
-      - ./docker/web/nginx/vhost-dev.conf:/opt/docker/etc/nginx/vhost-dev.conf
-      - ./docker/web/php/php.ini:/opt/docker/etc/php/php.ini
-      - ./docker/web/supervisord/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf
-      - ./docker/web/supervisord/juman.conf:/opt/docker/etc/supervisor.d/juman.conf
-      - ./docker/web/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh
+#      - ./:/app:delegated
+      - app-web:/app
+      - ./docker/web/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf:ro
+      - ./docker/web/nginx/vhost-dev.conf:/opt/docker/etc/nginx/vhost-dev.conf:ro
+      - ./docker/web/php/php.ini:/opt/docker/etc/php/php.ini:ro
+      - ./docker/web/supervisord/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf:ro
+      - ./docker/web/supervisord/juman.conf:/opt/docker/etc/supervisor.d/juman.conf:ro
+      - ./docker/web/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh:ro
       - node-modules:${NODE_MODULES_MOUNT:-/app/frontend/node_modules}
       - node-modules-backend:${NODE_MODULES_BACKEND_MOUNT:-/app/backend-ts/node_modules}
+      - node-modules-extension:${NODE_MODULES_EXTENSION_MOUNT:-/app/extension/node_modules}
       - npm-cache:/root/.npm
-      - ./docker/web/etc/cron.hourly:/etc/cron.hourly
+      - ./docker/web/etc/cron.hourly:/etc/cron.hourly:ro
     environment:
       PHP_DISPLAY_ERRORS: "1"
       PHP_DEBUGGER: "xdebug"
@@ -90,12 +94,41 @@ services:
       - "${LISTEN_HOST:-127.0.0.1}:${ARENA_PORT:-5003}:4567"
     volumes:
       - ./docker/arena/index.json:/opt/arena/index.json
+  
+  # es:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./docker/es/Dockerfile
+  #   environment:
+  #     - node.name=es
+  #     - cluster.name=es-docker-cluster
+  #     - discovery.type=single-node
+  #     - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - es-data-1:/usr/share/elasticsearch/data
+  #   ports:
+  #     - "${LISTEN_HOST:-127.0.0.1}:${ELASTICSEARCH_PORT:-9200}:9200"
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:7.14.0
+  #   environment:
+  #     #SERVER_NAME: kibana
+  #     ELASTICSEARCH_HOSTS: '["http://es:9200"]'
+  #   ports:
+  #     - "${LISTEN_HOST:-127.0.0.1}:${KIBANA_PORT:-5004}:5601"
 
 volumes:
+  app-web:
   db-data:
   pgadmin:
   composer-cache:
   npm-cache:
   node-modules:
   node-modules-backend:
+  node-modules-extension:
   redis-data:
+  es-data-1:
