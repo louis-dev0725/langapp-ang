@@ -1,6 +1,6 @@
 $gutter: 1rem; //for primeflex grid system
-$fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
-  "Segoe UI Emoji", "Segoe UI Symbol";
+$fontSize: 14px;
+$fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
 @import "../node_modules/primeng/resources/primeng.css";
 @import "../node_modules/primeflex/primeflex.scss";
@@ -16,28 +16,18 @@ $fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, A
   outline: 0 none;
 }
 
-.layout-topbar-light
-  .layout-topbar
-  .layout-topbar-wrapper
-  .layout-topbar-right
-  .layout-topbar-actions
-  > li
-  > .topbar-submenu
-  > .p-slidemenu {
+.p-toast-icon-close {
+  flex-shrink: 0;
+}
+
+.layout-topbar-light .layout-topbar .layout-topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > .topbar-submenu > .p-slidemenu {
   position: absolute;
   top: 46px !important;
   right: 0px;
   left: auto !important;
 }
 
-.menu-wrapper
-  .layout-menu-container
-  .layout-menu
-  .layout-root-menuitem
-  li
-  > ul
-  > li.active-menuitem.layout-root-menuitem
-  > a.active-menuitem-routerlink {
+.menu-wrapper .layout-menu-container .layout-menu .layout-root-menuitem li > ul > li.active-menuitem.layout-root-menuitem > a.active-menuitem-routerlink {
   border-bottom-left-radius: 0;
 }
 

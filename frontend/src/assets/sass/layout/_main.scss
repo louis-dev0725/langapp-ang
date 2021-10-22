@@ -2,24 +2,25 @@ html {
     height: 100%;
     font-size: $fontSize;
 }
- 
+
 body {
-    font-family: 'Open Sans';
+    //font-family: 'Open Sans';
+    font-family: $fontFamily;
     font-size: $fontSize;
     color: $textColor;
     -webkit-font-smoothing: antialiased;
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     height: 100%;
 
     &.main-body {
         background: $bodyBgColor;
     }
-    
+
     a {
         color: $primaryColor;
         text-decoration: none;
-        
+
         &:hover {
             color: lighten($primaryColor, 5%);
         }
@@ -40,7 +41,7 @@ body {
 }
 
 .layout-wrapper {
-    .layout-main {        
+    .layout-main {
         padding-top: 56px;
         @include flex();
         @include flex-direction-column();
@@ -66,7 +67,7 @@ body {
 
 @media (max-width: 992px) {
     .layout-wrapper {
-        .layout-main {        
+        .layout-main {
             padding-top: 104px;
         }
     }
