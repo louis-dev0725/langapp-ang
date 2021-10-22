@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CanactivateAdmin } from '@app/guards/canactivate-admin';
 import { CanactivateNologged } from '@app/guards/canactivate-nologged';
 import { CanactivateLogged } from '@app/guards/canactivate-logged';
-import { ThemeMainComponent } from '@app/theme/theme.main.component.ts';
+import { ThemeMainComponent } from '@app/theme/theme.main.component';
 
 const routes: Routes = [{
   path: 'admin',
