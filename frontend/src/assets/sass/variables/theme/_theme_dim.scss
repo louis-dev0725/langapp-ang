@@ -94,6 +94,12 @@ $inputOverlayHeaderBg:$inputListHeaderBg !default;
 $inputOverlayBorder:1px solid $shade600 !default;
 $inputOverlayShadow:0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12) !default;
 
+//password
+$passwordMeterBg:$shade600 !default;
+$passwordWeakBg:#F48FB1 !default;
+$passwordMediumBg:#FFE082 !default;
+$passwordStrongBg:#C5E1A5 !default;
+
 //button
 $buttonPadding:.5rem 1rem !default;
 $buttonIconOnlyWidth:2.357rem !default;
@@ -315,6 +321,7 @@ $inputSwitchSliderOnHoverBg:$primaryDarkColor !default;
 $inputSwitchHandleOnBg:$shade000 !default;
 
 //panel
+$panelHeaderBorderColor:$shade600 !default;
 $panelHeaderBorder:1px solid $shade600 !default;
 $panelHeaderBg:$shade800 !default;
 $panelHeaderTextColor:$shade000 !default;
@@ -326,6 +333,7 @@ $panelHeaderHoverBg:$hoverBg !default;
 $panelHeaderHoverBorderColor:$shade600 !default;
 $panelHeaderTextHoverColor:$shade000 !default;
 
+$panelContentBorderColor: $shade600 !default;
 $panelContentBorder:1px solid $shade600 !default;
 $panelContentBg:$shade800 !default;
 $panelContentTextColor:$shade000 !default;
@@ -502,6 +510,7 @@ $pickListBreakpoint:960px !default;
 
 //schedule
 $fullCalendarEventBg:$primaryDarkColor !default;
+$fullCalendarEventBorderColor: $primaryDarkColor !default;
 $fullCalendarEventBorder:1px solid $primaryDarkColor !default;
 $fullCalendarEventTextColor:$primaryTextColor !default;
 
@@ -758,6 +767,29 @@ $skeletonAnimationBg:rgba(255,255,255,.04);
 //splitter
 $splitterGutterBg:rgba(255,255,255,.03);
 $splitterGutterHandleBg:$shade600;
+
+//speeddial
+$speedDialButtonWidth: 4rem !default;
+$speedDialButtonHeight: 4rem !default;
+$speedDialButtonIconFontSize: 1.3rem !default;
+$speedDialActionWidth: 3rem !default;
+$speedDialActionHeight: 3rem !default;
+$speedDialActionBg: $shade000 !default;
+$speedDialActionHoverBg: $shade100 !default;
+$speedDialActionTextColor: $shade900 !default;
+$speedDialActionTextHoverColor: $shade900 !default;
+
+//dock
+$dockActionWidth: 4rem !default;
+$dockActionHeight: 4rem !default;
+$dockItemPadding: .5rem !default;
+$dockCurrentItemMargin: 1.5rem !default;
+$dockFirstItemsMargin: 1.3rem !default;
+$dockSecondItemsMargin: 0.9rem !default;
+$dockBg: rgba(255,255,255,.1) !default;
+$dockBorder: 1px solid rgba(255,255,255,0.2) !default;
+$dockPadding: .5rem .5rem !default;
+$dockBorderRadius: .5rem !default;
 
 :root {
     --surface-a:#{$shade800};
