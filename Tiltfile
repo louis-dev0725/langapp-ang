@@ -54,7 +54,8 @@ local_resource('web-frontend',
   serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -T web /app/run/_web-start-frontend.sh',
   allow_parallel = True,
   resource_deps = ['web', 'web-initial-sync'],
-  labels = ['1-web']
+  labels = ['1-web'],
+  readiness_probe = probe(http_get = http_get_action(80, host = 'localhost', path ='/app'))
 )
 
 local_resource('web-backend-php',
@@ -70,5 +71,5 @@ local_resource('web-backend-ts',
   allow_parallel = True,
   resource_deps = ['web', 'web-initial-sync'],
   labels = ['1-web'],
-  readiness_probe = probe(http_get = http_get_action(80, host = 'localhost', path ='/api/probe'))
+  readiness_probe = probe(http_get = http_get_action(80, host = 'localhost', path ='/api/probeBackendTs'))
 )

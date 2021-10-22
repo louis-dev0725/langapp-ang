@@ -46,6 +46,12 @@ export class AppController {
     return await this.testService.run();
   }
 
+  @Get("probeBackendTs")
+  @HttpCode(200)
+  async probe() {
+    return true;
+  }
+
   @Post("processText")
   @HttpCode(200)
   async processText(@Body() params: ProcessTextBody): Promise<any> {
