@@ -69,6 +69,9 @@ export class SessionService {
     this.cookieService.put('language', newLanguage, { path: '/', expires: expires });
     this.translateService.use(newLanguage);
     this.eventService.emitChangeEvent({ type: 'language-change' });
+    if (this.user !== null && this._user !== null) {
+      this._user.language = newLanguage;
+    }
   }
 
   get language(): string {

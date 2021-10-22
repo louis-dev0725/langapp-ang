@@ -170,7 +170,6 @@ export class ApiService {
   changeUserLanguage(newLanguage: string) {
     this.session._changeLanguage(newLanguage);
     if (this.session.user !== null) {
-      this.session.user.language = newLanguage;
       this.updateUser({ id: this.session.user.id, language: newLanguage }).subscribe(() => { });
     }
   }
