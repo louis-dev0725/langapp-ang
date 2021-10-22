@@ -13,7 +13,7 @@
 
     <ng-container matColumnDef="money">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{moneyTitle}}</th>
-      <td mat-cell *matCellDef="let row">{{row.money | formatCurrency : session.language}}</td>
+      <td mat-cell *matCellDef="let row">{{row.money | currency : session?.user?.currency}}</td>
     </ng-container>
 
     <ng-container matColumnDef="comment" *ngIf="isShowComment">

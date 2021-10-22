@@ -291,3 +291,8 @@ export interface AddCardSquareRequest {
   nonce: string;
   verificationToken?: string;
 }
+
+export interface ProlongSubscriptionResult {
+  status: boolean;
+  message: string;
+}

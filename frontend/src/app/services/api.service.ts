@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Category, Content, UserDictionary, ListResponse, Mnemonic, SettingPlugin, User, UserPaymentMethod, AddCardSquareRequest } from '@app/interfaces/common.interface';
+import { Category, Content, UserDictionary, ListResponse, Mnemonic, SettingPlugin, User, UserPaymentMethod, AddCardSquareRequest, ProlongSubscriptionResult } from '@app/interfaces/common.interface';
 import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
@@ -931,5 +931,9 @@ export class ApiService {
         id,
       }
     }, true);
+  }
+
+  prolongSubscription() {
+    return this.apiRequest<ProlongSubscriptionResult>('POST', `users/prolong-subscription`, {}, true);
   }
 }

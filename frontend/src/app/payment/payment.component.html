@@ -1,5 +1,20 @@
 <div class="container">
   <div class="card">
+    <h4>Subscription status</h4>
+    <p *ngIf="user.isPaid" [translate]="'ActiveSubscriptionUntil'" [translateParams]="{until: user.paidUntilDateTime | formatDate: session.language}"></p>
+    <p *ngIf="!user.isPaid && user.paidUntilDateTime != '2000-01-01 00:00:00'" [translate]="'EndedSubscriptionUntil'" [translateParams]="{until: user.paidUntilDateTime | formatDate: session.language}"></p>
+    <p *ngIf="!user.isPaid" [translate]="'FirstSubscription'"></p>
+
+    <p-messages severity="error" *ngIf="paymentMethods && paymentMethods.length > 0 && !user.isPaid">
+      <ng-template pTemplate>
+        <div>
+          <h4 translate>Failed payment</h4>
+          <p translate>Failed to prolong subscription. Please check your payment methods and try again.</p>
+          <button pButton color="primary" (click)="prolongSubscription()" label="{{'Try again' | translate}}"></button>
+        </div>
+      </ng-template>
+    </p-messages>
+
     <h4 translate>Billing settings</h4>
     <div *ngIf="enableBalanceTopup">
       <form [formGroup]="paymentForm">
@@ -20,7 +35,7 @@
     </div>
     <div *ngIf="enableSquare">
       <h5>{{ 'Add new card' | translate }}</h5>
-      <app-square-form (updateListEvent)="receiveUpdatedPaymentMethods($event)"></app-square-form>
+      <app-square-form (updatedListEvent)="receiveUpdatedPaymentMethods($event)"></app-square-form>
     </div>
     <div *ngIf="showPaymentMethods && paymentMethods && paymentMethods.length > 0" class="g-field">
       <h5 class="p-mt-3">{{ 'Your payment methods' | translate }}</h5>

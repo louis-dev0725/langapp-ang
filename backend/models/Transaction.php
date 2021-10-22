@@ -136,7 +136,12 @@ class Transaction extends \yii\db\ActiveRecord
 
     public function calculateToBaseCurrency()
     {
-        $this->moneyBaseCurrency = CurrencyConverter::convert($this->money, Helpers::dateToUnix($this->addedDateTime), $this->currency, User::getBaseCurrency());
+        $this->moneyBaseCurrency = $this->moneyToCurrency(User::getBaseCurrency());
+    }
+
+    public function moneyToCurrency($newCurrency)
+    {
+        return CurrencyConverter::convert($this->money, Helpers::dateToUnix($this->addedDateTime), $this->currency, $newCurrency);
     }
 
     public function beforeSave($insert)

@@ -84,21 +84,24 @@ class PaymentMethod extends \yii\db\ActiveRecord
 
     /**
      * @param float $amount
+     * @param string $currency
      * @return Transaction
      * @throws ServerErrorHttpException
      * @throws JsonException
      * @throws Exception
      */
-    public function debitFunds(float $amount): Transaction
+    public function debitFunds(float $amount, string $currency): Transaction
     {
         $transaction = new Transaction([
             'money' => $amount,
+            'currency' => $currency,
             'userId' => $this->userId,
             'status' => Transaction::STATUS_PROCESS,
             'isRealMoney' => 1,
             'addedDateTime' => Helpers::dateToSql(time()),
             'paymentMethodId' => $this->id,
             'scenario' => Transaction::SCENARIO_USER,
+            'comment' => 'Top up (' . $this->title . ')',
         ]);
 
         if (!$transaction->save()) {
@@ -107,52 +110,56 @@ class PaymentMethod extends \yii\db\ActiveRecord
 
         Yii::info('Trying to debit funds. Transaction: ' . json_encode($transaction->attributes, JSON_THROW_ON_ERROR));
 
-        $squareParams = Yii::$app->params['square'];
-        $env = $squareParams['env'] ?? 'sandbox';
-        $squareClient = new SquareClient([
-            'accessToken' => $squareParams[$env]['accessToken'],
-            'environment' => $squareParams[$env]['accessToken'] === 'production'
-                ? Environment::PRODUCTION : Environment::SANDBOX,
-        ]);
+        if ($this->type == self::TYPE_SQUARE) {
+            $squareParams = Yii::$app->params['square'];
+            $env = $squareParams['env'] ?? 'sandbox';
+            $squareClient = new SquareClient([
+                'accessToken' => $squareParams[$env]['accessToken'],
+                'environment' => $squareParams[$env]['accessToken'] === 'production' ? Environment::PRODUCTION : Environment::SANDBOX,
+            ]);
 
-        $money = new Money();
-        // Set amount of money to be always a positive value.
-        $money->setAmount(abs($amount));
-        // Set currency to be the JPY always.
-        $money->setCurrency(Currency::JPY);
+            $money = new Money();
+            // Set amount of money to be always a positive value.
+            $money->setAmount(abs($transaction->moneyToCurrency('JPY')));
+            // Set currency to be the JPY always.
+            $money->setCurrency(Currency::JPY);
 
-        $paymentRequest = new CreatePaymentRequest(
-            $this->data['id'],
-            Yii::$app->security->generateRandomString(16),
-            $money
-        );
-        $paymentRequest->setCustomerId($this->data['customerId']);
+            $paymentRequest = new CreatePaymentRequest(
+                $this->data['id'],
+                Yii::$app->security->generateRandomString(16),
+                $money
+            );
+            $paymentRequest->setCustomerId($this->data['customerId']);
 
-        try {
-            $response = $squareClient->getPaymentsApi()->createPayment($paymentRequest);
-            if ($response->isError()) {
-                throw new Exception("Payment is unsuccessful. Error from Square: {$response->getBody()}");
+            try {
+                $response = $squareClient->getPaymentsApi()->createPayment($paymentRequest);
+                if ($response->isError()) {
+                    throw new Exception("Payment is unsuccessful. Error from Square: {$response->getBody()}");
+                }
+
+                /** @var CreatePaymentResponse $result */
+                $result = $response->getResult();
+                $payment = $result->getPayment();
+                if ($payment === null) {
+                    throw new Exception("Payment is null. Response from Square: {$response->getBody()}");
+                }
+
+                $paymentStatus = $payment->getStatus();
+                if ($paymentStatus === null) {
+                    throw new Exception("Payment status is null. Response from Square: {$response->getBody()}");
+                }
+
+                if ($paymentStatus === 'COMPLETED') {
+                    $transaction->status = Transaction::STATUS_SUCCESS;
+                }
+            } catch (Throwable $e) {
+                Yii::info("Transaction error: {$e->getMessage()}");
+                $transaction->status = Transaction::STATUS_ERROR;
+                $transaction->dataJson = array_merge($transaction->dataJson, ['error' => $e->getMessage()]);
             }
-
-            /** @var CreatePaymentResponse $result */
-            $result = $response->getResult();
-            $payment = $result->getPayment();
-            if ($payment === null) {
-                throw new Exception("Payment is null. Response from Square: {$response->getBody()}");
-            }
-
-            $paymentStatus = $payment->getStatus();
-            if ($paymentStatus === null) {
-                throw new Exception("Payment status is null. Response from Square: {$response->getBody()}");
-            }
-
-            if ($paymentStatus === 'COMPLETED') {
-                $transaction->status = Transaction::STATUS_SUCCESS;
-            }
-        } catch (Throwable $e) {
-            Yii::info("Transaction error: {$e->getMessage()}");
+        } else {
             $transaction->status = Transaction::STATUS_ERROR;
-            $transaction->dataJson = array_merge($transaction->dataJson, ['error' => $e->getMessage()]);
+            $transaction->dataJson = array_merge($transaction->dataJson, ['error' => 'Unknown payment method.']);
         }
 
         $transaction->save(false);

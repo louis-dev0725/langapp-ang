@@ -250,5 +250,8 @@
 	"EmptyOneField": "At least one field must be filled",
 	"MnemonicText": "Text Mnemonics",
 	"Select": "Select",
-	"ErrorMnemonicSize": "The size of the mnemonics should not exceed 10mb"
+	"ErrorMnemonicSize": "The size of the mnemonics should not exceed 10mb",
+	"ActiveSubscriptionUntil": "You have active subscription. Next charge will be at {{until}}.",
+	"EndedSubscriptionUntil": "Your subscription has ended. It was active until {{until}}.",
+	"FirstSubscription": "Please add an payment method to activate subscription."
 }

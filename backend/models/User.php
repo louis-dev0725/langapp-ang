@@ -73,7 +73,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public static function getBaseCurrency()
     {
-        return 'RUB';
+        return 'JPY';
     }
 
     /**
@@ -682,21 +682,19 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
-     * If the service is paid for more than one day, true is returns.
-     * If this user has faulty transactions in last 24 hours, true is returns.
-     * If this user has pending transactions, true is returns.
-     * If debiting funds is success, true is returns, otherwise false.
-     * @return bool
+     * Try to charge subscription (if necessary) using one of available payment methods added by user
+     * Returns ['status' => boolean, 'message' => string]
+     * @return array
      * @throws ServerErrorHttpException|StaleObjectException|Throwable
      */
-    public function paySubscriptionIfNecessary(): bool
+    public function paySubscriptionIfNecessary(): array
     {
         $timeNow = time();
         $oneDayUnix = 3600 * 24;
 
         // Is the service paid for more than one day?
         if (Helpers::dateToUnix($this->paidUntilDateTime) > $timeNow + $oneDayUnix) {
-            return true;
+            return ['status' => true, 'message' => Yii::t('app','Your subscription is already renewed')];
         }
 
         // Has user pending transactions?
@@ -706,34 +704,48 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ['status' => Transaction::STATUS_PROCESS],
         ])->exists();
         if ($hasPendingTransactions) {
-            return true;
+            return ['status' => false, Yii::t('app', "We're currently processing transaction to renew your subscription. Please try again later.")];
         }
 
-        // Iterating over all user's payment methods and trying to debit funds.
-        foreach ($this->paymentMethods as $paymentMethod) {
-            // Continue the loop if $paymentMethod isn't active or has faulty transactions in last 24 hours.
-            if (!$paymentMethod->isActive || $paymentMethod->hasFaultyTransactionsInLast24h()) {
-                continue;
-            }
+        [$amount, $currency] = $this->getSubscriptionPaymentAmount();
 
-            // Debit funds and receive transaction with details.
-            $transaction = $paymentMethod->debitFunds($this->getSubscriptionPaymentAmount());
-
-            // If transaction status is success, then prolong the subscription and return true.
-            if ($transaction->status === Transaction::STATUS_SUCCESS) {
-                try {
-                    if ($this->renewSubscription($paymentMethod->id) === false) {
-                        throw new ServerErrorHttpException("Failed to renew the subscription for user $this->id");
-                    }
-                } catch (Throwable $e) {
-                    throw $e;
+        if ($this->currency != $currency) {
+            throw new \RuntimeException('user currency != returned from getSubscriptionPaymentAmount()');
+        }
+        if ($this->balance < $amount - 0.01) {
+            // Iterating over all user's payment methods and trying to debit funds.
+            foreach ($this->paymentMethods as $paymentMethod) {
+                // Continue the loop if $paymentMethod isn't active or has faulty transactions in last 24 hours.
+                if (!$paymentMethod->isActive || $paymentMethod->hasFaultyTransactionsInLast24h()) {
+                    continue;
                 }
 
-                return true;
+                // Debit funds and receive transaction with details.
+                $transaction = $paymentMethod->debitFunds($amount, $currency);
+
+                // If transaction status is success, then prolong the subscription and return true.
+                if ($transaction->status === Transaction::STATUS_SUCCESS) {
+                    try {
+                        if ($this->renewSubscription($paymentMethod->id) === false) {
+                            throw new ServerErrorHttpException("Failed to renew the subscription for user $this->id");
+                        }
+                    } catch (Throwable $e) {
+                        throw $e;
+                    }
+
+                    return ['status' => true, Yii::t('app', 'Your subscription was successfully renewed.')];
+                }
             }
         }
+        else {
+            if ($this->renewSubscription(0) === false) {
+                throw new ServerErrorHttpException("Failed to renew the subscription for user $this->id");
+            }
 
-        return false;
+            return ['status' => true, Yii::t('app', 'Your subscription was successfully renewed.')];
+        }
+
+        return ['status' => true, Yii::t('app', 'Unable to renew subscription. Please try again using other card or payment method.')];
     }
 
     /**
@@ -750,8 +762,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $timeNow = time();
         $newPaidUntilDateTime = Helpers::dateToSql($timeNow + 3600 * 24 * $days);
 
+        [$amount, $currency] = $this->getSubscriptionPaymentAmount();
         $transaction = new Transaction([
-            'money' => -$this->getSubscriptionPaymentAmount(),
+            'money' => -$amount,
+            'currency' => $currency,
             'userId' => $this->id,
             'paymentMethodId' => $paymentMethodId,
             'status' => Transaction::STATUS_PROCESS,
@@ -759,10 +773,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'addedDateTime' => Helpers::dateToSql($timeNow),
             'scenario' => Transaction::SCENARIO_USER,
             'dataJson' => [
-                'renewDays' => 30,
+                'renewDays' => $days,
                 'paidUntilDateTimeBefore' => $this->paidUntilDateTime,
                 'paidUntilDataTimeAfter' => $newPaidUntilDateTime,
             ],
+            'comment' => 'Renewal of subscription.',
         ]);
         if (!$transaction->save(false)) {
             throw new ServerErrorHttpException("Failed to save the transaction for unknown reason.");
@@ -784,10 +799,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     /**
      * Returns the amount to pay the subscription.
-     * @return float
+     * @return array
      */
-    private function getSubscriptionPaymentAmount(): float
+    private function getSubscriptionPaymentAmount(): array
     {
-        return 2000;
+        return [2000, 'JPY'];
     }
 }

@@ -21,7 +21,7 @@ export class SessionService {
   private defaultLanguage = 'en';
   private _language: string;
 
-  public user$ = new ReplaySubject<User>();
+  public user$ = new ReplaySubject<User>(1);
   private _user: User;
 
   constructor(private router: Router,

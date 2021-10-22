@@ -3,6 +3,8 @@ import { Component, ElementRef, EventEmitter, Inject, OnInit, Output, PLATFORM_I
 import { ListResponse, UserPaymentMethod } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { TranslateService } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 import { environment } from '../../../environments/environment';
 
 enum LoadingStatus {
@@ -24,6 +26,7 @@ export class SquareFormComponent implements OnInit {
   applicationId = '';
   locationId = '';
 
+  squarePayments: any;
   cardPaymentMethod: any;
   buttonEnabled = true;
 
@@ -32,7 +35,9 @@ export class SquareFormComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
-    private api: ApiService) { }
+    private api: ApiService,
+    private messageService: MessageService,
+    private translateService: TranslateService) { }
 
   ngOnInit(): void {
     this.scriptUrl = environment.square.env == 'sandbox' ? 'https://sandbox.web.squarecdn.com/v1/square.js' : 'https://web.squarecdn.com/v1/square.js';
@@ -73,11 +78,17 @@ export class SquareFormComponent implements OnInit {
   }
 
   async onApiLoaded() {
-    let payments: any;
     //@ts-ignore
-    payments = window.Square.payments(this.applicationId, this.locationId);
+    this.squarePayments = window.Square.payments(this.applicationId, this.locationId);
+    this.reinitCardPaymentMethod();
+  }
 
-    this.cardPaymentMethod = await payments.card();
+  async reinitCardPaymentMethod() {
+    if (this.cardPaymentMethod != null) {
+      await this.cardPaymentMethod.destroy();
+    }
+
+    this.cardPaymentMethod = await this.squarePayments.card();
     await this.cardPaymentMethod.attach(this.cardContainer.nativeElement);
   }
 
@@ -89,10 +100,7 @@ export class SquareFormComponent implements OnInit {
       // disable the submit button as we await tokenization and make a payment request.
       this.buttonEnabled = false;
       const token = await this.tokenize(paymentMethod);
-      const paymentResults = await this.createPayment(token);
-      //displayPaymentResults('SUCCESS');
-
-      console.debug('Payment Success', paymentResults);
+      await this.createPayment(token);
       this.buttonEnabled = true;
     } catch (e) {
       this.buttonEnabled = true;
@@ -120,6 +128,8 @@ export class SquareFormComponent implements OnInit {
   async createPayment(token: string) {
     this.api.addCardSquare({ nonce: token }).pipe(untilDestroyed(this)).subscribe((res) => {
       this.updatedListEvent.emit(res);
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: this.translateService.instant('Payment method was successfully added') });
+      this.reinitCardPaymentMethod();
     });
   }
 }

@@ -7,7 +7,7 @@ import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { UserPaymentMethod } from '@app/interfaces/common.interface';
+import { User, UserPaymentMethod } from '@app/interfaces/common.interface';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -28,6 +28,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   rows: any;
 
+  user: User;
+
   paymentMethods: UserPaymentMethod[];
 
   @ViewChild(PaymentsTableComponent, { static: true }) paymentsTable: PaymentsTableComponent;
@@ -43,6 +45,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.session.user$.subscribe(u => this.user = u);
+
     if (this.paymentsTable) {
       this.paymentsTable.isLoaded = false;
 
@@ -75,6 +79,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   receiveUpdatedPaymentMethods(updatedList: UserPaymentMethod[]) {
     this.paymentMethods = updatedList;
+  }
+
+  prolongSubscription() {
+    this.api.prolongSubscription().subscribe((r) => {
+      this.messageService.add({ severity: r.status ? 'success' : 'error', summary: r.status ? 'Success' : 'Error', detail: r.message });
+    });
   }
 
   deletePaymentMethod(id: number) {

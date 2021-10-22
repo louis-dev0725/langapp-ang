@@ -31,8 +31,8 @@ class PaymentController extends Controller
 
         foreach ($users as $user) {
             try {
-                $result = $user->paySubscriptionIfNecessary() ? 'true' : 'false';
-                Yii::info("Subscription fee payment result for $user->id: $result");
+                $result = $user->paySubscriptionIfNecessary();
+                Yii::info("Subscription fee payment result for $user->id: " . json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
             } catch (Throwable $e) {
                 Yii::error("Failed to pay subscription fee for user $user->id: {$e->__toString()}");
             }

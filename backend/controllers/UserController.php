@@ -65,7 +65,7 @@ class UserController extends ActiveController
                 ],
                 [
                     'allow' => true,
-                    'actions' => ['me', 'update', 'invited-users', 'close-notification', 'my-payment-methods', 'add-card-square', 'delete-payment-method'],
+                    'actions' => ['me', 'update', 'invited-users', 'close-notification', 'my-payment-methods', 'add-card-square', 'delete-payment-method', 'prolong-subscription'],
                     'roles' => ['@'],
                 ],
                 [
@@ -90,6 +90,7 @@ class UserController extends ActiveController
         $verbs['invited-users'] = ['GET'];
         $verbs['contact'] = ['POST'];
         $verbs['close-notification'] = ['POST'];
+        $verbs['prolong-subscription'] = ['POST'];
 
         return $verbs;
     }
@@ -309,6 +310,11 @@ class UserController extends ActiveController
     public function actionMyPaymentMethods()
     {
         return Helpers::user()->paymentMethods;
+    }
+
+    public function actionProlongSubscription() {
+        $user = Helpers::user();
+        return $user->paySubscriptionIfNecessary();
     }
 
     public function actionAddCardSquare()
