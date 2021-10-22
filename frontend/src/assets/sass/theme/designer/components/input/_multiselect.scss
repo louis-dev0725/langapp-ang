@@ -23,7 +23,7 @@
 
     &.p-multiselect-chip {
         .p-multiselect-token {
-            padding: nth($inputPadding, 1)/2 nth($inputPadding, 2);
+            padding: nth($inputPadding, 1)*0.5 nth($inputPadding, 2);
             margin-right: $inlineSpacing;
             background: $highlightBg;
             color: $highlightTextColor;
@@ -48,7 +48,7 @@
     .p-multiselect {
         &.p-multiselect-chip {
             .p-multiselect-label {
-                padding: nth($inputPadding, 1)/2 nth($inputPadding, 2);
+                padding: nth($inputPadding, 1)*0.5 nth($inputPadding, 2);
             }
         }
     }

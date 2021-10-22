@@ -23,7 +23,7 @@
 
     &.p-treeselect-chip {
         .p-treeselect-token {
-            padding: nth($inputPadding, 1)/2 nth($inputPadding, 2);
+            padding: nth($inputPadding, 1)*0.5 nth($inputPadding, 2);
             margin-right: $inlineSpacing;
             background: $chipBg;
             color: $chipTextColor;
@@ -48,7 +48,7 @@
     .p-treeselect {
         &.p-treeselect-chip {
             .p-treeselect-label {
-                padding: nth($inputPadding, 1)/2 nth($inputPadding, 2);
+                padding: nth($inputPadding, 1)*0.5 nth($inputPadding, 2);
             }
         }
     }

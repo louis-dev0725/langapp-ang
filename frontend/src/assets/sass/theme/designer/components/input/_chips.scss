@@ -1,6 +1,6 @@
 .p-chips {
     .p-chips-multiple-container {
-        padding: nth($inputPadding, 1)/2 nth($inputPadding, 2);
+        padding: nth($inputPadding, 1)*0.5 nth($inputPadding, 2);
 
         &:not(.p-disabled):hover {
             border-color: $inputHoverBorderColor;
@@ -11,7 +11,7 @@
         }
 
         .p-chips-token {
-            padding: nth($inputPadding, 1)/2 nth($inputPadding, 2);
+            padding: nth($inputPadding, 1)*0.5 nth($inputPadding, 2);
             margin-right: $inlineSpacing;
             background: $highlightBg;
             color: $highlightTextColor;
@@ -23,7 +23,7 @@
         }
 
         .p-chips-input-token {
-            padding: nth($inputPadding, 1)/2 0;
+            padding: nth($inputPadding, 1)*0.5 0;
                 
             input {
                 font-family: $fontFamily;

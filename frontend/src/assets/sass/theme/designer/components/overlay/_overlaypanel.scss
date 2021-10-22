@@ -17,8 +17,8 @@
         transition: $actionIconTransition;
         border-radius: $actionIconBorderRadius;
         position: absolute;
-        top: -1 * $actionIconWidth / 2;
-        right: -1 * $actionIconWidth / 2;
+        top: -1 * $actionIconWidth * 0.5;
+        right: -1 * $actionIconWidth * 0.5;
 
         &:enabled:hover {
             background: $buttonHoverBg;

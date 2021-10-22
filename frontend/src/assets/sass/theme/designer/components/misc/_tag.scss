@@ -27,7 +27,7 @@
     }
 
     .p-tag-icon {
-        margin-right: $inlineSpacing / 2;
+        margin-right: $inlineSpacing * 0.5;
         font-size: $badgeFontSize;
     }
 }

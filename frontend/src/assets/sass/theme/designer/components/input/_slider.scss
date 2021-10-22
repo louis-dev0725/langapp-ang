@@ -7,8 +7,8 @@
         height: $sliderHorizontalHeight;
 
         .p-slider-handle {
-            margin-top: (-1 * $sliderHandleHeight / 2);
-            margin-left: (-1 * $sliderHandleWidth / 2);
+            margin-top: (-1 * $sliderHandleHeight * 0.5);
+            margin-left: (-1 * $sliderHandleWidth * 0.5);
         }
     }
 
@@ -16,8 +16,8 @@
         width: $sliderVerticalWidth;
 
         .p-slider-handle {
-            margin-left: (-1 * $sliderHandleWidth / 2);
-            margin-bottom: (-1 * $sliderHandleHeight / 2);
+            margin-left: (-1 * $sliderHandleWidth * 0.5);
+            margin-bottom: (-1 * $sliderHandleHeight * 0.5);
         }
     }
 

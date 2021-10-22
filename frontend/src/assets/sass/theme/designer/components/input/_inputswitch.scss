@@ -12,7 +12,7 @@
             width: $inputSwitchHandleWidth;
             height: $inputSwitchHandleHeight;
             left: $inputSwitchSliderPadding;
-            margin-top: -1 * $inputSwitchHandleHeight / 2;
+            margin-top: -1 * $inputSwitchHandleHeight * 0.5;
             border-radius: $inputSwitchHandleBorderRadius;
             transition-duration: $transitionDuration;
         }

@@ -49,7 +49,7 @@
             left: 0;
             display: block;
             position: absolute;
-            margin-top: -1 * ($stepsItemNumberHeight / 2);
+            margin-top: -1 * ($stepsItemNumberHeight * 0.5);
         }
     }
 }
