@@ -47,7 +47,9 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
   }
 
   public getModel(): MenuItem[] {
-    return [
+    let model: MenuItem[] = [];
+
+    model.push(
       {
         label: 'Language',
         items: [
@@ -64,24 +66,27 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
             }
           }
         ]
-      },
-      {
+      });
+
+    if (this.isLoggedIn) {
+      model.push({
         label: 'Payment',
         routerLink: ['/payment'],
-        visible: this.isLoggedIn,
-      },
-      {
+      });
+      model.push({
         label: 'Settings',
         routerLink: ['/settings/profile'],
-        visible: this.isLoggedIn,
-      },
-      {
-        label: 'Support',
-        routerLink: ['/contacts']
-      },
-      {
+      });
+    }
+
+    model.push({
+      label: 'Support',
+      routerLink: ['/contacts']
+    });
+
+    if (this.isLoggedIn) {
+      model.push({
         label: 'Affiliate program',
-        visible: this.isLoggedIn,
         items: [
           {
             label: 'About',
@@ -96,25 +101,27 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
             routerLink: ['/partners/transactions']
           }
         ]
-      },
-      {
-        label: 'Sign up',
-        routerLink: ['/auth/signup'],
-        visible: !this.isLoggedIn,
-      },
-      {
-        label: 'Sign in',
-        routerLink: ['/auth/signin'],
-        visible: !this.isLoggedIn,
-      },
-      {
+      });
+
+      model.push({
         label: 'Logout',
-        visible: this.isLoggedIn,
         command: event => {
           this.appTheme.logout(event.originalEvent);
         }
-      },
-    ];
+      });
+    }
+    else {
+      model.push({
+        label: 'Sign up',
+        routerLink: ['/auth/signup'],
+      });
+      model.push({
+        label: 'Sign in',
+        routerLink: ['/auth/signin'],
+      });
+    }
+
+    return model;
   }
 
   ngOnDestroy() { }
