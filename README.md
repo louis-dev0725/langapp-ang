@@ -4,14 +4,17 @@
 - [Установка и запуск](#установка-и-запуск)
   - [Подготовка](#подготовка)
   - [Запуск](#запуск)
-- [Информация о Tilt](#информация-о-tilt)
 - [Ссылки и пароли](#ссылки-и-пароли)
   - [Само приложение](#само-приложение)
+    - [Тестовый администратор](#тестовый-администратор)
+    - [Тестовый пользователь](#тестовый-пользователь)
+  - [Документация к API](#документация-к-api)
   - [PostgreSQL](#postgresql)
     - [Доступ к PostgreSQL:](#доступ-к-postgresql)
   - [Бэкенд на PHP (Yii2)](#бэкенд-на-php-yii2)
     - [Yii Debugger](#yii-debugger)
     - [xdebug](#xdebug)
+- [Информация о Tilt](#информация-о-tilt)
 - [Полезные команды](#полезные-команды)
 - [Полезные скрипты](#полезные-скрипты)
 
@@ -56,27 +59,24 @@ tilt down
 Если у вас занят какой-то из портов, который используется при запуске (например 80, 443, 5432), то вы можете поменять его в `run/dev.env`.\
 Если вы меняете HTTP_PORT (по умолчанию 80), то его также необходимо поменять в `frontend/src/index.html`.
 
-# Информация о Tilt
-Для каждого ресурса можно посмотреть логи, а также перезапустить его.
-
-Ресурсы в Tilt:\
-**web** - контейнер web (из docker-composer)\
-**web-initial-sync** - синхронизация файлов с контейнером (при запуске, далее этим занимается сам Tilt)\
-**web-frontend** - `ng serve` для Angular (внутри контейнера web)\
-**web-backend-php** - выполняет `composer install` и миграции для бэкенда на PHP (Yii2, папка `backend/`) (только первый раз при запуске, далее Tilt выполняет `composer install` если composer.json изменился и показывает результат в `web`)\
-**web-backend-ts** - выполняет `nest start --watch` для бэкенда на TypeScript (nestjs)\
-**db** - контейнер с PostgreSQL (из docker-composer)\
-**redis** - контейнер с Redis (из docker-composer)\
-**adminer**, **arena**, **pgadmin** - контейнеры с adminer, arena, pgadmin (из docker-composer)\
-**(Tiltfile)** - Конфигурация Tilt
-
 # Ссылки и пароли
 ## Само приложение
 http://localhost/app
 
+### Тестовый администратор
+Логин: admin@example.org\
+Пароль: adminpassword
+
+### Тестовый пользователь
+Логин: user@example.org\
+Пароль: userpassword
+
+## Документация к API
+В Swagger UI: http://localhost:5005
+
 ## PostgreSQL
-pgAdmin4 доступен по адресу http://localhost:5001/\
-adminer доступен по адресу http://localhost:5002/?pgsql=db&username=postgres&db=postgres&ns=public
+<!--pgAdmin4 доступен по адресу http://localhost:5001/\
+adminer доступен по адресу http://localhost:5002/?pgsql=db&username=postgres&db=postgres&ns=public-->
 
 ### Доступ к PostgreSQL:
 Хост: 127.0.0.1\
@@ -93,6 +93,25 @@ Yii Debugger доступен по адресу http://localhost/debug
 Для активации и использования xdebug рекомендуем установить расширение https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc
 
 Также активировать xdebug можно вручную с помощью GET параметра XDEBUG_SESSION_START, например /api/?XDEBUG_SESSION_START=1 и деактивировать с помощью GET параметра XDEBUG_SESSION_STOP, например /api/?XDEBUG_SESSION_STOP=1 подробнее https://xdebug.org/docs/remote#browser_session
+
+
+# Информация о Tilt
+Для каждого ресурса можно посмотреть логи, а также перезапустить его.
+
+Ресурсы в Tilt:\
+**web** - контейнер web (из docker-composer)\
+**web-initial-sync** - синхронизация файлов с контейнером (при запуске, далее этим занимается сам Tilt)\
+**web-frontend** - `ng serve` для Angular (внутри контейнера web)\
+**web-backend-php** - выполняет `composer install` и миграции для бэкенда на PHP (Yii2, папка `backend/`) (только первый раз при запуске, далее Tilt выполняет `composer install` если composer.json изменился и показывает результат в `web`)\
+**web-backend-ts** - выполняет `nest start --watch` для бэкенда на TypeScript (nestjs)\
+**db** - контейнер с PostgreSQL (из docker-composer)\
+**redis** - контейнер с Redis (из docker-composer)\
+**swagger** - контейнер с Swagger UI (документация к API) (из docker-composer)\
+**arena** - контейнер с arena (из docker-composer)\
+**(Tiltfile)** - Конфигурация Tilt
+<!--**adminer**, **arena**, **pgadmin** - контейнеры с adminer, arena, pgadmin (из docker-composer)\-->
+
+`node_modules` внутри контейнера расположены на отдельной volume и не синхронизируются с хостом, поэтому после запуска `npm install` на хосте нужно нажать "Обновить" рядом с `web-frontend` (или `web-backend-ts`) в Tilt, либо вручную запустить `npm install` в нужной папке (это сделано для производительности и избежания проблем с нативными модулями)
 
 # Полезные команды
 
