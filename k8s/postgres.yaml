@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: langapp
+  name: postgres-pod-config
+data: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: langapp
+  name: postgres-pod-secrets
+data: {}
+---
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  namespace: langapp
+  name: acid-langapp-cluster
+spec:
+  teamId: "acid"
+  #  dockerImage: ghcr.io/dador/spilo:2.1-p1-pgroonga-2
+  volume:
+    size: 1000Gi
+  numberOfInstances: 1
+  users:
+    langapp:
+      - LOGIN
+      - CREATEDB
+  databases:
+    langapp: langapp
+  postgresql:
+    version: "13"
+    parameters:
+      checkpoint_completion_target: "0.9"
+      checkpoint_timeout: 15min
+      effective_cache_size: 8GB
+      effective_io_concurrency: "100"
+      maintenance_work_mem: 520MB
+      max_parallel_workers: "12"
+      max_parallel_workers_per_gather: "6"
+      max_wal_size: 10GB
+      max_worker_processes: "12"
+      min_wal_size: 5GB
+      shared_buffers: 2048MB
+      synchronous_commit: "off"
+      work_mem: 256MB
+      logging_collector: "off"
+      log_destination: "stderr"
+      #extwlist.extensions: "btree_gin,btree_gist,citext,hstore,intarray,ltree,pgcrypto,pgq,pg_trgm,postgres_fdw,tablefunc,uuid-ossp,hypopg,timescaledb,pg_partman,pgroonga"
+      fsync: "off" # Use only for data load!
+  resources:
+    limits:
+      cpu: 32000m
+      memory: 32000Mi
+    requests:
+      cpu: 1000m
+      memory: 1024Mi
+  patroni:
+    pg_hba:
+      - local   all             all                                   trust
+      - host all             +zalandos    127.0.0.1/32       pam
+      - host    all             all                127.0.0.1/32       md5
+      - host all             +zalandos    ::1/128            pam
+      - host    all             all                ::1/128            md5
+      - local   replication     standby                    trust
+      - host replication     standby all                md5
+      - host all             +zalandos    all                pam
+      - host all             all                all                md5
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - r9
