@@ -11112,7 +11112,8 @@ paths:
                     cleanText: null
                     rank: null
                     imageUrl: "http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg"
-                    categories: []
+                    categories:
+                      [{ "id": 1, "title": "Entertainment", "parent_id": 0 }]
                     contentAttribute:
                       id: 1
                       contentId: 6
@@ -12920,6 +12921,17 @@ paths:
                     type: array
                     items:
                       type: object
+                      required:
+                        - id
+                        - title
+                        - parent_id
+                      properties:
+                        id:
+                          type: number
+                        title:
+                          type: string
+                        parent_id:
+                          type: number
                   contentAttribute:
                     type: object
                     required:

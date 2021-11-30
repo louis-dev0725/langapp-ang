@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m210204_070000_dictionary_word_data extends Migration
+class m211130_070000_content_data extends Migration
 {
     /**
      * {@inheritdoc}
@@ -11,7 +11,7 @@ class m210204_070000_dictionary_word_data extends Migration
     {
         $loadTestData = isset($_SERVER['LOAD_TEST_DATA']) && $_SERVER['LOAD_TEST_DATA'] == '1';
         if ($loadTestData) {
-            $this->truncateTable('dictionary_word');
+            $this->execute('truncate table content cascade;');
 
             preg_match('/host=(.*?)(;|$)/', $this->db->dsn, $matches);
             $host = $matches[1];
@@ -19,7 +19,7 @@ class m210204_070000_dictionary_word_data extends Migration
             $dbname = $matches[1];
 
             $testDataUrl = isset($_SERVER['TEST_DATA_URL']) ? $_SERVER['TEST_DATA_URL'] : 'http://langapp.lb7.ru/internal-8f348g47f39/';
-            $url = $testDataUrl . 'dictionary_word.pgdata';
+            $url = $testDataUrl . 'content_dev.pgdata';
 
             $command = 'curl ' . escapeshellarg($url) . ' | ' . 'PGPASSWORD=' . escapeshellarg($this->db->password) . ' pg_restore --host=' . escapeshellarg($host) . ' --username=' . escapeshellarg($this->db->username) . ' --dbname=' . escapeshellarg($dbname) . ' --verbose --single-transaction';
             Yii::debug('Execute command ' . $command);
@@ -36,6 +36,6 @@ class m210204_070000_dictionary_word_data extends Migration
      */
     public function safeDown()
     {
-        $this->truncateTable('dictionary_word');
+        $this->truncateTable('content');
     }
 }
