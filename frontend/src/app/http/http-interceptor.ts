@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { EventsService } from '@app/services/events.service';
+import { environment } from '../../environments/environment'
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     let newRequest = request;
     let loading = true;
 
-    if (request.url.startsWith('/') || request.url.startsWith(window.location.origin)) {
+    if (request.url.startsWith('/') || request.url.startsWith(window.location.origin) || request.url.startsWith(environment.apiUrl)) {
       newRequest = request.clone({
         setHeaders: {
           'Accept-Language': localStorage.getItem('lang'),
