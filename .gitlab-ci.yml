@@ -1,38 +1,20 @@
-image: alpine:latest
+stages:
+  - build
 
 variables:
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  # Do not use postgres from Auto Devops as we need postgres with pgroonga
-  POSTGRES_ENABLED: "false"
-  #POSTGRES_DB: $CI_ENVIRONMENT_SLUG
-  POSTGRES_DB: postgres
-  POSTGRES_HOST_AUTH_METHOD: trust
-
-  DOCKERFILE_PATH: "docker/web/Dockerfile"
-
-  TEST_DISABLED: 1
-  CODE_QUALITY_DISABLED: 1
-  PERFORMANCE_DISABLED: 1
-  LOAD_PERFORMANCE_DISABLED: 1
-  SAST_DISABLED: 1
-  SECRET_DETECTION_DISABLED: 1
-  DEPENDENCY_SCANNING_DISABLED: 1
-  CONTAINER_SCANNING_DISABLED: 1
-  DAST_DISABLED: 1
-  CODE_INTELLIGENCE_DISABLED: 1
-  REVIEW_DISABLED: 1 # disable auto review & deploy
-  CI_KUBERNETES_ACTIVE: '' # disable auto review & deploy
-
-  LOAD_TEST_DATA: 1
-  #CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
-  FF_GITLAB_REGISTRY_HELPER_IMAGE: 'true'
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
 
 services:
-  - name: groonga/pgroonga:latest-alpine-12-slim
-    alias: db
+  - docker:19.03.12-dind
 
-include:
-  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Auto-DevOps.gitlab-ci.yml
-  - template: Auto-DevOps.gitlab-ci.yml
-  - local: .gitlab/ci/Build.yml
+before_script:
+  - docker info
+
+build-job:
+  image:
+    name: gcr.io/k8s-skaffold/skaffold:v1.35.0
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - skaffold build
