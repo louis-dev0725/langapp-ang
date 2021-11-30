@@ -12,7 +12,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "analyze": "webpack-bundle-analyzer dist/langapp/stats-es5.json",
-    "translate-extract": "./node_modules/.bin/ngx-translate-extract -i ./src -o ./src/assets/i18n/*.json --format namespaced-json --marker _ --clean --sort"
+    "translate-extract": "./node_modules/.bin/ngx-translate-extract -i ./src -o ./src/assets/i18n/*.json --format namespaced-json --marker _ --clean --sort",
+    "postinstall": "ngcc --properties es2015 browser module main"
   },
   "private": true,
   "dependencies": {

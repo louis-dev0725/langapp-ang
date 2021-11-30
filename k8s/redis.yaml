@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  ports:
+    - port: 6379
+      targetPort: 6379
+  selector:
+    app: langapp-redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: langapp-redis
+  labels:
+    app: langapp-redis
+spec:
+  selector:
+    matchLabels:
+      app: langapp-redis
+  template:
+    metadata:
+      labels:
+        app: langapp-redis
+    spec:
+      containers:
+        - name: langapp-web
+          image: redis:6-alpine
+          ports:
+            - name: redis
+              containerPort: 6379
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "1024Mi"
+              cpu: "2000m"

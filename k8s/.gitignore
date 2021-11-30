@@ -1,0 +1,3 @@
+ingress-patch.yaml
+namespace-patch.yaml
+docker-config.json

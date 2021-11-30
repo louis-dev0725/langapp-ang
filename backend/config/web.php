@@ -89,6 +89,7 @@ $config = [
                         '<action:[\w-]+>' => '<action>',
                     ],
                 ],
+                '/robots.txt' => 'site/robots-txt',
                 'api/pay/start' => 'pay/start',
                 'api/pay/result' => 'pay/result',
                 '<lang:ru|en|>' => 'site/index',
@@ -109,14 +110,15 @@ $config = [
                 ],
             ],
         ],
+        'assetManager' => [
+            'baseUrl' => '@web/yii-assets',
+            'basePath' => '@webroot/yii-assets',
+        ],
     ],
     'params' => $params,
 ];
 
 if (YII_ENV_DEV) {
-    $config['components']['assetManager']['baseUrl'] = '@web/yii-assets';
-    $config['components']['assetManager']['basePath'] = '@webroot/yii-assets';
-
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',

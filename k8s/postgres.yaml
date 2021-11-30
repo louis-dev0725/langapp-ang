@@ -1,25 +1,22 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: langapp
   name: postgres-pod-config
 data: {}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  namespace: langapp
   name: postgres-pod-secrets
 data: {}
 ---
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
-  namespace: langapp
   name: acid-langapp-cluster
 spec:
   teamId: "acid"
-  #  dockerImage: ghcr.io/dador/spilo:2.1-p1-pgroonga-2
+  dockerImage: ghcr.io/dador/spilo:2.1-p1-pgroonga-2
   volume:
     size: 1000Gi
   numberOfInstances: 1
@@ -47,8 +44,8 @@ spec:
       work_mem: 256MB
       logging_collector: "off"
       log_destination: "stderr"
-      #extwlist.extensions: "btree_gin,btree_gist,citext,hstore,intarray,ltree,pgcrypto,pgq,pg_trgm,postgres_fdw,tablefunc,uuid-ossp,hypopg,timescaledb,pg_partman,pgroonga"
-      fsync: "off" # Use only for data load!
+      extwlist.extensions: "btree_gin,btree_gist,citext,hstore,intarray,ltree,pgcrypto,pgq,pg_trgm,postgres_fdw,tablefunc,uuid-ossp,hypopg,timescaledb,pg_partman,pgroonga"
+      #fsync: "off" # Use only for data load!
   resources:
     limits:
       cpu: 32000m

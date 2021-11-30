@@ -1,7 +1,17 @@
 apiVersion: v1
+kind: Service
+metadata:
+  name: langapp-web
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: langapp-web
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: langapp
   name: langapp-uploads-pvc
 spec:
   accessModes:
@@ -13,41 +23,59 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: langapp
-  name: langapp
+  name: langapp-web
   labels:
-    app: langapp
+    app: langapp-web
 spec:
   selector:
     matchLabels:
-      app: langapp
+      app: langapp-web
   template:
     metadata:
       labels:
-        app: langapp
+        app: langapp-web
     spec:
       volumes:
         - name: langapp-uploads-pv
           persistentVolumeClaim:
             claimName: langapp-uploads-pvc
+        - name: config
+          secret:
+            secretName: langapp-config
       containers:
-        - name: langapp
-          image: langapp-image
+        - name: langapp-web
+          image: registry.gitlab.com/mangoproject/langapp/langapp-web
           ports:
             - name: http
               containerPort: 80
           env:
+            - name: POSTGRES_HOST
+              value: acid-langapp-cluster
             - name: PGHOST
               value: acid-langapp-cluster
+            - name: POSTGRES_DB
+              value: langapp
             - name: PGDATABASE
               value: langapp
+            - name: POSTGRES_PORT
+              value: "5432"
             - name: PGPORT
               value: "5432"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: langapp.acid-langapp-cluster.credentials.postgresql.acid.zalan.do
+                  key: username
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   name: langapp.acid-langapp-cluster.credentials.postgresql.acid.zalan.do
                   key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: langapp.acid-langapp-cluster.credentials.postgresql.acid.zalan.do
+                  key: password
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
@@ -56,6 +84,15 @@ spec:
           volumeMounts:
             - mountPath: /app/backend/web/uploads
               name: langapp-uploads-pv
+            - name: "config"
+              mountPath: "/app/backend/web/index-local.php"
+              subPath: "index-local.php"
+            - name: "config"
+              mountPath: "/app/backend/config/params-local.php"
+              subPath: "params-local.php"
+            - name: "config"
+              mountPath: "/app/backend/config/web-local.php"
+              subPath: "web-local.php"
           resources:
             requests:
               memory: "512Mi"
@@ -63,3 +100,86 @@ spec:
             limits:
               memory: "8192Mi"
               cpu: "32000m"
+      initContainers:
+        # - name: langapp-web-wait-for-db-migrations
+        - name: langapp-web-db-migrations
+          image: registry.gitlab.com/mangoproject/langapp/langapp-web
+          env:
+            - name: POSTGRES_HOST
+              value: acid-langapp-cluster
+            - name: PGHOST
+              value: acid-langapp-cluster
+            - name: POSTGRES_DB
+              value: langapp
+            - name: PGDATABASE
+              value: langapp
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: PGPORT
+              value: "5432"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: langapp.acid-langapp-cluster.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: langapp.acid-langapp-cluster.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: langapp.acid-langapp-cluster.credentials.postgresql.acid.zalan.do
+                  key: password
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: langapp.acid-langapp-cluster.credentials.postgresql.acid.zalan.do
+                  key: password
+          volumeMounts:
+            - mountPath: /app/backend/web/uploads
+              name: langapp-uploads-pv
+            - name: "config"
+              mountPath: "/app/backend/web/index-local.php"
+              subPath: "index-local.php"
+            - name: "config"
+              mountPath: "/app/backend/config/params-local.php"
+              subPath: "params-local.php"
+            - name: "config"
+              mountPath: "/app/backend/config/web-local.php"
+              subPath: "web-local.php"
+          command:
+            - /app/backend/yii
+            - migrate/up
+            - --interactive
+            - "0"
+            # - /bin/bash
+            # - -c
+            # - '/app/backend/yii migrate/new | grep --quiet "system is up-to-date"'
+      imagePullSecrets:
+        - name: gitlab-langapp
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: langapp-web-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  rules:
+    - host: langapp.metal1.jonexit.ru
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: langapp-web
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - langapp.metal1.jonexit.ru
+      secretName: langapp-tls-cert

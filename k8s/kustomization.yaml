@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+  - redis.yaml
+  - postgres.yaml
+  - namespace.yaml
+secretGenerator:
+  - name: langapp-config
+    files:
+      - "index-local.php=../backend/web/index-local.php"
+      - "params-local.php=../backend/config/params-local.php"
+      - "web-local.php=../backend/config/web-local.php"
+  - name: gitlab-langapp
+    type: "kubernetes.io/dockerconfigjson"
+    files:
+      - ".dockerconfigjson=./docker-config.json"
+generatorOptions:
+  disableNameSuffixHash: true
+patchesJson6902:
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: Ingress
+      name: langapp-web-ingress
+    path: ingress-patch.yaml
+  - target:
+      version: v1
+      kind: Namespace
+      name: langapp
+    path: namespace-patch.yaml

@@ -46,6 +46,20 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionRobotsTxt() {
+        $response = Yii::$app->response;
+        $response->format = yii\web\Response::FORMAT_RAW;
+        $response->headers->set('Content-Type', 'text/plain;charset=UTF-8');
+
+        if (isset($_SERVER['IS_PROD']) && $_SERVER['IS_PROD'] == '1') {
+            return 'User-agent: *
+Disallow: ';
+        } else {
+            return 'User-agent: *
+Disallow: /';
+        }
+    }
+
     public function actionError()
     {
         return $this->render('error');

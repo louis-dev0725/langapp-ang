@@ -6,7 +6,8 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
-    --filename=composer.phar \
+    --filename=composer \
+    --version=2.1.12 \
     --install-dir=/usr/local/bin && \
     composer clear-cache
 
@@ -40,7 +41,7 @@ RUN set -x \
     && rm -R /tmp/mecab-ipadic-[0-9]*
 
 # Install postgres client, iputils, screen
-RUN (apt-get update || true) && apt-get install -y postgresql-client iproute2 iputils-ping screen --no-install-recommends && apt-get clean
+RUN (apt-get update || true) && apt-get install -y lsb-release && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) && (apt-get update || true) && apt-get install -y postgresql-client-13 iproute2 iputils-ping screen --no-install-recommends && apt-get clean all
 
 # Install node (see https://github.com/nodejs/docker-node/blob/master/12/buster/Dockerfile)
 ENV NODE_VERSION 12.19.0
@@ -72,29 +73,42 @@ COPY ./run/ /opt/run/
 WORKDIR /app/
 
 
-FROM dev as prod
+#FROM dev as prod
 
-#FROM dev as prod-backend
+FROM dev as prod-backend
 COPY ./backend/composer.json ./backend/composer.lock /app/backend/
 RUN cd /app/backend/ && composer install --prefer-dist --no-scripts --no-dev --no-autoloader && rm -rf /root/.composer
 COPY ./backend /app/backend
 RUN cd /app/backend/ && composer dump-autoload --no-scripts --no-dev --optimize
-RUN chown www-data:www-data /app/backend/runtime/ -R; chown www-data:www-data /app/backend/web/assets/ -R
+RUN mkdir /app/backend/runtime; mkdir /app/backend/web/yii-assets; chown application:application /app/backend/runtime/ -R; chown application:application /app/backend/web/assets/ -R; chown application:application /app/backend/web/yii-assets/ -R
 
-#FROM dev as prod-backend-ts
+FROM prod-backend as prod-backend-cleaned
+RUN rm -R /app/backend/vendor
+
+FROM dev as prod-backend-ts
 COPY ./backend-ts/package.json ./backend-ts/package-lock.json /app/backend-ts/
 RUN cd /app/backend-ts/ && npm ci
 COPY ./backend-ts/ /app/backend-ts/
 RUN cd /app/backend-ts/ && npm run build
+# Copy to separate dir to be able to copy it separately (used for better cache)
+#RUN mv /app/backend-ts/node_modules /app/to-copy-backend-ts-node_modules
 
-#FROM dev as prod-frontend
+FROM prod-backend-ts as prod-backend-ts-cleaned
+RUN rm -R /app/backend-ts/node_modules
+
+FROM dev as prod-frontend
 COPY ./frontend/package.json ./frontend/package-lock.json /app/frontend/
 RUN cd /app/frontend/ && npm ci
 COPY ./frontend/ /app/frontend/
 COPY ./extension/ /app/extension/
 RUN cd /app/frontend/ && npm run build:prod
+# Copy to separate dir to be able to copy it separately (used for better cache)
+#RUN mv /app/frontend/node_modules /app/to-copy-frontend-node_modules
 
-#FROM dev as prod
+FROM prod-frontend as prod-frontend-cleaned
+RUN rm -R /app/frontend/node_modules
+
+FROM dev as prod
 COPY ./docker/web/nginx/vhost.conf /opt/docker/etc/nginx/vhost.conf
 COPY ./docker/web/nginx/vhost-prod.conf /opt/docker/etc/nginx/vhost-prod.conf
 COPY ./docker/web/php/php.ini /opt/docker/etc/php/php.ini
@@ -104,6 +118,15 @@ COPY ./docker/web/supervisord/backendts.conf /opt/docker/etc/supervisor.d/backen
 COPY ./docker/web/entrypoint.sh /opt/docker/bin/entrypoint.d/app.sh
 COPY ./docker /app/docker
 COPY ./run /app/run
-#COPY --from=prod-backend /app/backend /app/backend
-#COPY --from=prod-backend-ts /app/backend-ts /app/backend-ts
-#COPY --from=prod-frontend /app/frontend /app/frontend
+
+# Copy only vendor/node_modules from separate dirs (used for better cache)
+# COPY --from=prod-backend /app/to-copy-backend-vendor /app/backend/vendor
+# COPY --from=prod-backend-ts /app/to-copy-backend-ts-node_modules /app/backend-ts/node_modules
+# COPY --from=prod-frontend /app/to-copy-frontend-node_modules /app/frontend/node_modules
+COPY --from=prod-backend-ts /app/backend-ts/node_modules /app/backend-ts/node_modules
+COPY --from=prod-frontend /app/frontend/node_modules /app/frontend/node_modules
+COPY --from=prod-backend /app/backend/vendor /app/backend/vendor
+
+COPY --from=prod-backend-cleaned /app/backend /app/backend
+COPY --from=prod-backend-ts-cleaned /app/backend-ts /app/backend-ts
+COPY --from=prod-frontend-cleaned /app/frontend /app/frontend

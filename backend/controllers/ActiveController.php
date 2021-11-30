@@ -25,16 +25,20 @@ class ActiveController extends \yii\rest\ActiveController
 
         $behaviors['contentNegotiator']['languages'] = ['ru', 'en'];
 
-        // add CORS filter (for development)
-        if (YII_ENV_DEV || Yii::$app->params['enableDevCors']) {
-            $withCorsFilter = [
-                [
-                    'class' => Cors::class,
+        // add CORS filter: any (*) for development, localhost for prod
+        $withCorsFilter = [
+            [
+                'class' => Cors::class,
+                'cors' => [
+                    'Origin' => (YII_ENV_DEV || Yii::$app->params['enableDevCors']) ? ['*'] : ['http://localhost', 'https://localhost'],
+                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                    'Access-Control-Request-Headers' => ['*'],
+                    'Access-Control-Allow-Credentials' => null,
+                    'Access-Control-Max-Age' => 86400,
+                    'Access-Control-Expose-Headers' => [],
                 ],
-            ];
-        } else {
-            $withCorsFilter = [];
-        }
+            ],
+        ];
 
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::class,
