@@ -17,9 +17,11 @@ class m201014_061328_add_test_users extends Migration
             $user = User::findByEmail($testAdminEmail);
             if ($user == null) {
                 $user = new User();
+                $user->name = 'Admin';
                 $user->scenario = User::SCENARIO_ADMIN;
                 $user->email = $testAdminEmail;
                 $user->password = 'adminpassword';
+                $user->paidUntilDateTime = '2030-01-01 00:00:00';
                 if ($user->save()) {
                     echo 'Created test admin user #' . $user->id . "\n";
                 } else {
@@ -35,9 +37,11 @@ class m201014_061328_add_test_users extends Migration
 
             $testUserEmail = 'user@example.org';
             $user = new User();
+            $user->name = 'User';
             $user->scenario = User::SCENARIO_ADMIN;
             $user->email = $testUserEmail;
             $user->password = 'userpassword';
+            $user->paidUntilDateTime = '2030-01-01 00:00:00';
             $user->save();
             if ($user->save()) {
                 echo 'Created test non-admin user #' . $user->id . "\n";
