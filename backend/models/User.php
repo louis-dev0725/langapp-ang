@@ -339,19 +339,20 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public static function getAvailableCurrencyList()
     {
         return [
-            'RUB' => '₽',
-            'USD' => '$',
-            'EUR' => '€',
-            'JPY' => '円',
-            'KRW' => '₩',
-            //'CNY' => '元'
-            'CNY' => '¥',
+            //'RUB' => '₽',
+            //'USD' => '$',
+            //'EUR' => '€',
+            ////'JPY' => '円',
+            'JPY' => '¥',
+            //'KRW' => '₩',
+            ////'CNY' => '元'
+            //'CNY' => '¥',
         ];
     }
 
     public function getDefaultCurrency()
     {
-        return 'RUB';
+        return 'JPY';
     }
 
     /**
