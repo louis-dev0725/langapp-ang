@@ -13,7 +13,7 @@ export const initialState: AuthorizedState = {
   loaded: true,
   loading: false,
   token: localStorage.getItem('token'),
-  admin: localStorage.getItem('savedAdmin') ? JSON.parse(localStorage.getItem('savedAdmin')) : null
+  admin: localStorage.getItem('savedAdmin') ? JSON.parse(localStorage.getItem('savedAdmin')) : null,
 };
 
 export function reducer(state: AuthorizedState = initialState, action: fromAuthorized.AuthorizedAction): AuthorizedState {
@@ -21,7 +21,7 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
     case fromAuthorized.LOAD_AUTHORIZED: {
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     }
 
@@ -29,7 +29,7 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
       return {
         ...state,
         loading: false,
-        loaded: false
+        loaded: false,
       };
     }
 
@@ -39,7 +39,7 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
         ...state,
         data: action.payload,
         loading: false,
-        loaded: true
+        loaded: true,
       };
     }
 
@@ -49,7 +49,7 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
         ...state,
         loading: false,
         loaded: true,
-        admin: action.payload
+        admin: action.payload,
       };
     }
 
@@ -60,7 +60,7 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
         data: action.payload,
         loading: false,
         loaded: true,
-        admin: null
+        admin: null,
       };
     }
     case fromAuthorized.AUTHORIZED_UPDATE_USER: {
@@ -69,7 +69,7 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
         ...state,
         loading: false,
         loaded: true,
-        data: action.payload
+        data: action.payload,
       };
     }
 
@@ -79,7 +79,7 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
         ...state,
         loading: false,
         loaded: true,
-        token: action.payload
+        token: action.payload,
       };
     }
 
@@ -89,8 +89,8 @@ export function reducer(state: AuthorizedState = initialState, action: fromAutho
         data: null,
         loading: false,
         loaded: true,
-        token: '',
-        admin: null
+        token: null,
+        admin: null,
       };
     }
   }
