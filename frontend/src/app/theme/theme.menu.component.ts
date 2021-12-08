@@ -1,15 +1,8 @@
-import { Component, Input, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { ThemeMainComponent } from '@app/theme/theme.main.component';
 import { SessionService } from '@app/services/session.service';
-import { TranslatingService } from '@app/services/translating.service';
-import { EventService } from '@app/event.service';
 import { APP_NAME } from '@app/config/config';
-import { ConfirmDialogComponent, ConfirmDialogModel } from '@app/common/confirm-dialog/confirm-dialog.component';
 import { ApiService } from '@app/services/api.service';
 import * as fromStore from '@app/store';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
@@ -27,10 +20,9 @@ import { AppComponent } from '@app/app.component';
 @UntilDestroy()
 @Component({
   selector: 'app-menu',
-  templateUrl: './theme.menu.component.html'
+  templateUrl: './theme.menu.component.html',
 })
 export class ThemeMenuComponent implements OnInit {
-
   model: MenuItem[];
 
   public appName = APP_NAME;
@@ -39,25 +31,20 @@ export class ThemeMenuComponent implements OnInit {
 
   private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
 
-  constructor(public app: AppComponent,
+  constructor(
+    public app: AppComponent,
     public appTheme: ThemeMainComponent,
     public api: ApiService,
     public session: SessionService,
     private cd: ChangeDetectorRef,
     private translate: TranslateService,
-    private store: Store<fromStore.State>) {
-    this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => this.isLoggedIn = authState);
-  }
+    private store: Store<fromStore.State>
+  ) {}
 
   ngOnInit() {
-    this.model = this.getModel();
+    this.subscribeToIsLoggedIn();
     this.user = this.session.user;
-
-    this.session.user$.pipe(untilDestroyed(this)).subscribe(user => {
-      this.model = [...this.getModel()];
-      this.user = user;
-      this.cd.detectChanges();
-    });
+    this.subscribeToUser();
   }
 
   get isOpenedAdmin(): boolean {
@@ -72,7 +59,7 @@ export class ThemeMenuComponent implements OnInit {
     return item.id ?? item.label;
   }
 
-  public getModel() : MenuItem[] {
+  public getModel(): MenuItem[] {
     return [
       {
         label: 'Admin',
@@ -80,17 +67,17 @@ export class ThemeMenuComponent implements OnInit {
         items: [
           {
             label: 'Clients',
-            routerLink: ['/admin/users']
+            routerLink: ['/admin/users'],
           },
           {
             label: 'Transactions',
-            routerLink: ['/admin/transactions']
+            routerLink: ['/admin/transactions'],
           },
           {
             label: 'Content categories',
-            routerLink: ['/category']
+            routerLink: ['/category'],
           },
-        ]
+        ],
       },
       {
         label: 'Learning',
@@ -102,7 +89,7 @@ export class ThemeMenuComponent implements OnInit {
           },
           {
             label: 'Explore content',
-            routerLink: ['/content/materials']
+            routerLink: ['/content/materials'],
           },
           /*{
             label: 'Create material',
@@ -112,7 +99,7 @@ export class ThemeMenuComponent implements OnInit {
             label: 'My word list',
             routerLink: ['/dictionary'],
           },
-        ]
+        ],
       },
       {
         label: 'Account',
@@ -144,12 +131,12 @@ export class ThemeMenuComponent implements OnInit {
           {
             label: 'Sign up',
             routerLink: ['/auth/signup'],
-            visible: !this.isLoggedIn
+            visible: !this.isLoggedIn,
           },
           {
             label: 'Sign in',
             routerLink: ['/auth/signin'],
-            visible: !this.isLoggedIn
+            visible: !this.isLoggedIn,
           },
           /*{
             label: 'Logout',
@@ -160,10 +147,26 @@ export class ThemeMenuComponent implements OnInit {
           }*/
           {
             label: 'Support',
-            routerLink: ['/contacts']
+            routerLink: ['/contacts'],
           },
         ],
-      }
+      },
     ];
+  }
+
+  private subscribeToIsLoggedIn(): void {
+    this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => {
+      this.isLoggedIn = authState;
+      this.model = this.getModel();
+      this.cd.markForCheck();
+    });
+  }
+
+  private subscribeToUser(): void {
+    this.session.user$.pipe(untilDestroyed(this)).subscribe((user) => {
+      this.model = [...this.getModel()];
+      this.user = user;
+      this.cd.detectChanges();
+    });
   }
 }
