@@ -30,7 +30,7 @@ class PaidOnlyBehavior extends Behavior
         /** @var User $user */
         $user = Yii::$app->user->identity;
         if (!$user->isPaid) {
-            throw new HttpException(402, Yii::t('app', 'Payment required to continue using the service.'));
+            throw new HttpException(402, Yii::t('app', 'Please check your payment details.'));
         }
     }
 }
