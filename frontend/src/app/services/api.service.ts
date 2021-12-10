@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment'
 import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { APP_BASE_HREF } from '@angular/common';
+import {Router} from "@angular/router";
 
 type ParamsInterface = HttpParams | {
   [param: string]: string | string[];
@@ -54,7 +55,8 @@ export class ApiService {
     private session: SessionService,
     private store: Store<fromStore.State>,
     private messageService: MessageService,
-    @Inject(APP_BASE_HREF) private baseHref: string) { }
+    @Inject(APP_BASE_HREF) private baseHref: string,
+    private router: Router,) { }
 
   apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, catchValidationErrors = false) {
     return <Observable<T>>this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(
@@ -76,6 +78,11 @@ export class ApiService {
         return of(new ApiError(response.error, response.ok, response.status, response.statusText));
       }
       else if (response.error.message) {
+        if (response.error.status === 402) {
+          this.router.navigate(['payment']);
+          this.messageService.add({ severity: 'error', summary: 'Please check your payment details', detail: 'Payment required to continue using the service.', sticky: true, closable: true });
+          return throwError(response);
+        }
         this.messageService.add({ severity: 'error', summary: 'Server error: ' + response.error.message, detail: response.message, sticky: true, closable: true });
       }
       else if (response.message) {
