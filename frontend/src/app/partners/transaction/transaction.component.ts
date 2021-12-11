@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
 import { ApiError } from '@app/services/api-error';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import {UserService} from "@app/services/user.service";
 
 @UntilDestroy()
 @Component({
@@ -14,16 +15,17 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 export class TransactionComponent implements OnInit, OnDestroy {
 
   rows: any;
+  partnerBalance: number;
 
   @ViewChild(PaymentsTableComponent, { static: true }) paymentTable: PaymentsTableComponent;
 
-  get parnterBalance(): number {
-    return Number(this.session.user.balancePartner);
-  }
-
-  constructor(public session: SessionService, private api: ApiService) {}
+  constructor(public session: SessionService, private api: ApiService, private userService: UserService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
+      this.partnerBalance = Number(user?.balancePartner);
+      this.cd.detectChanges();
+    });
     this.getTransactions();
 
     this.paymentTable.tableEvents

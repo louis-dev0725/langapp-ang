@@ -1,11 +1,11 @@
 <div class="container">
   <div class="card">
     <h4>Subscription status</h4>
-    <p *ngIf="user.isPaid" [translate]="'ActiveSubscriptionUntil'" [translateParams]="{until: user.paidUntilDateTime | formatDate: session.language}"></p>
-    <p *ngIf="!user.isPaid && user.paidUntilDateTime != '2000-01-01 00:00:00'" [translate]="'EndedSubscriptionUntil'" [translateParams]="{until: user.paidUntilDateTime | formatDate: session.language}"></p>
-    <p *ngIf="!user.isPaid" [translate]="'FirstSubscription'"></p>
+    <p *ngIf="user?.isPaid" [translate]="'ActiveSubscriptionUntil'" [translateParams]="{until: user?.paidUntilDateTime | formatDate: session.language}"></p>
+    <p *ngIf="!user?.isPaid && user?.paidUntilDateTime != '2000-01-01 00:00:00'" [translate]="'EndedSubscriptionUntil'" [translateParams]="{until: user?.paidUntilDateTime | formatDate: session.language}"></p>
+    <p *ngIf="!user?.isPaid" [translate]="'FirstSubscription'"></p>
 
-    <p-messages severity="error" *ngIf="paymentMethods && paymentMethods.length > 0 && !user.isPaid">
+    <p-messages severity="error" *ngIf="paymentMethods && paymentMethods.length > 0 && !user?.isPaid">
       <ng-template pTemplate>
         <div>
           <h4 translate>Failed payment</h4>

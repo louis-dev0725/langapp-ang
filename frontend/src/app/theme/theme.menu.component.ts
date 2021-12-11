@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { AppComponent } from '@app/app.component';
+import { UserService } from '@app/services/user.service';
 
 @UntilDestroy()
 @Component({
@@ -36,6 +37,7 @@ export class ThemeMenuComponent implements OnInit {
     public appTheme: ThemeMainComponent,
     public api: ApiService,
     public session: SessionService,
+    private userService: UserService,
     private cd: ChangeDetectorRef,
     private translate: TranslateService,
     private store: Store<fromStore.State>
@@ -43,7 +45,6 @@ export class ThemeMenuComponent implements OnInit {
 
   ngOnInit() {
     this.subscribeToIsLoggedIn();
-    this.user = this.session.user;
     this.subscribeToUser();
   }
 
@@ -163,7 +164,7 @@ export class ThemeMenuComponent implements OnInit {
   }
 
   private subscribeToUser(): void {
-    this.session.user$.pipe(untilDestroyed(this)).subscribe((user) => {
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
       this.model = [...this.getModel()];
       this.user = user;
       this.cd.detectChanges();

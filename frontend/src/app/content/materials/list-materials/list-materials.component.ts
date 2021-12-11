@@ -1,15 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Content, ContentsArray, ListResponse, User } from '@app/interfaces/common.interface';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Content, ListResponse, User } from '@app/interfaces/common.interface';
 import { MatPaginator } from '@angular/material/paginator';
-import { SessionService } from '@app/services/session.service';
+import { UserService } from '@app/services/user.service';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-list-materials',
   templateUrl: './list-materials.component.html',
-  styleUrls: ['./list-materials.component.scss']
+  styleUrls: ['./list-materials.component.scss'],
 })
-export class ListMaterialsComponent implements OnInit {
-
+export class ListMaterialsComponent implements OnInit, OnDestroy {
   @Input() list: ListResponse<Content>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @Output() dataChanged: EventEmitter<any> = new EventEmitter<any>();
@@ -18,18 +19,24 @@ export class ListMaterialsComponent implements OnInit {
   user: User;
   displayedColumns: string[] = ['title', 'level', 'length', 'button'];
 
-
-  constructor(public session: SessionService) { }
+  constructor(public userService: UserService, private cd: ChangeDetectorRef) {}
 
   showRating(item: Content) {
-    return item.dataJson?.youtubeVideo?.viewCount + ' views' + (item.dataJson?.youtubeVideo?.wilsonScore ? (', ' + Math.floor(item.dataJson?.youtubeVideo?.wilsonScore * 100) + '% liked') : '');
+    return (
+      item.dataJson?.youtubeVideo?.viewCount +
+      ' views' +
+      (item.dataJson?.youtubeVideo?.wilsonScore ? ', ' + Math.floor(item.dataJson?.youtubeVideo?.wilsonScore * 100) + '% liked' : '')
+    );
   }
 
   ngOnInit() {
-    this.user = this.session.user;
-    if (this.user.isAdmin) {
-      this.displayedColumns.push('admin_column');
-    }
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
+      this.user = user;
+      if (this.user?.isAdmin) {
+        this.displayedColumns.push('admin_column');
+      }
+      this.cd.markForCheck();
+    });
   }
 
   handlePage(event) {
@@ -39,4 +46,6 @@ export class ListMaterialsComponent implements OnInit {
   deleteElement(id) {
     this.deleteM.emit(id);
   }
+
+  ngOnDestroy() {}
 }
