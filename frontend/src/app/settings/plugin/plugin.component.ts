@@ -1,35 +1,38 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ApiError } from '@app/services/api-error';
-import { SessionService } from '@app/services/session.service';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiService } from '@app/services/api.service';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { User } from '@app/interfaces/common.interface';
+import { UserService } from '@app/services/user.service';
 
 @UntilDestroy()
 @Component({
   selector: 'app-plugin',
   templateUrl: './plugin.component.html',
-  styleUrls: ['./plugin.component.scss']
+  styleUrls: ['./plugin.component.scss'],
 })
 export class PluginComponent implements OnInit, OnDestroy {
-
   settingsPluginForm: FormGroup;
   user;
-  translation_options: string[] = [
-    'DoubleClick', 'DoubleClickCtrl', 'DoubleClickShift', 'DoubleClickAlt'
-  ];
+  translation_options: string[] = ['DoubleClick', 'DoubleClickCtrl', 'DoubleClickShift', 'DoubleClickAlt'];
   formValue = {
     clickModifier: null,
     processSubtitles: true,
   };
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private customValidator: CustomValidator,
-    private snackBar: MatSnackBar, private session: SessionService) { }
+  constructor(
+    private api: ApiService,
+    private formBuilder: FormBuilder,
+    private customValidator: CustomValidator,
+    private snackBar: MatSnackBar,
+    private userService: UserService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   private _isLoaded = false;
 
@@ -43,36 +46,45 @@ export class PluginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.user = this.session.user;
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
+      this.user = user;
+      this.cd.markForCheck();
+    });
 
     this.settingsPluginForm = new FormGroup({
       clickModifier: new FormControl('DoubleClick', [Validators.required]),
       processSubtitles: new FormControl(true, [Validators.required]),
     });
 
-    this.api.meRequest().pipe(untilDestroyed(this)).subscribe((user : User) => {
-      this.user = user;
-      this.settingsPluginForm.patchValue({
-        clickModifier: (user.extensionSettings.clickModifier !== undefined ? user.extensionSettings.clickModifier : 'DoubleClick'),
-        processSubtitles: (user.extensionSettings.processSubtitles !== undefined ? user.extensionSettings.processSubtitles : true)
-      });
+    this.api
+      .meRequest()
+      .pipe(untilDestroyed(this))
+      .subscribe((user: User) => {
+        this.user = user;
+        this.settingsPluginForm.patchValue({
+          clickModifier: user.extensionSettings.clickModifier !== undefined ? user.extensionSettings.clickModifier : 'DoubleClick',
+          processSubtitles: user.extensionSettings.processSubtitles !== undefined ? user.extensionSettings.processSubtitles : true,
+        });
 
-      this._isLoaded = true;
-    });
+        this._isLoaded = true;
+      });
   }
 
   onSubmit() {
     this._isLoaded = false;
 
-    this.api.updateUser({ id: this.user.id, extensionSettings: this.settingsPluginForm.value }).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null, { duration: 3000 });
-        window.postMessage({ type: 'saveSettingExtension', text: 'ExtensionSettingPlugin_' + this.user.id }, '*');
-      }
+    this.api
+      .updateUser({ id: this.user.id, extensionSettings: this.settingsPluginForm.value })
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null, { duration: 3000 });
+          window.postMessage({ type: 'saveSettingExtension', text: 'ExtensionSettingPlugin_' + this.user.id }, '*');
+        }
 
-      this._isLoaded = true;
-    });
+        this._isLoaded = true;
+      });
   }
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 }

@@ -1,20 +1,23 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '@app/interfaces/common.interface';
 import { ReCaptcha2Component } from 'ngx-captcha';
 import { CustomValidator } from '@app/services/custom-validator';
-import { SessionService } from '@app/services/session.service';
 import { TranslatingService } from '@app/services/translating.service';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UserService } from '@app/services/user.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss']
+  styleUrls: ['./contact.component.scss'],
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
   contactForm: FormGroup;
+  user: User;
 
   get isErrors() {
     return !this.contactForm.valid;
@@ -22,10 +25,6 @@ export class ContactComponent implements OnInit {
 
   get language(): string {
     return localStorage.getItem('lang');
-  }
-
-  get user(): User {
-    return this.session.user;
   }
 
   @ViewChild('frmVar', { static: true }) form;
@@ -38,7 +37,8 @@ export class ContactComponent implements OnInit {
     private formBuilder: FormBuilder,
     private ref: ChangeDetectorRef,
     private snackBar: MatSnackBar,
-    private session: SessionService
+    private userService: UserService,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -47,26 +47,29 @@ export class ContactComponent implements OnInit {
       email: ['', { validators: [Validators.required, Validators.email], updateOn: 'change' }],
       telephone: [''],
       body: ['', { validators: [Validators.required], updateOn: 'change' }],
-      recaptcha: ['', Validators.required]
+      recaptcha: ['', Validators.required],
     });
-
-    if (this.user) {
-      this.contactForm.patchValue({
-        ...this.user
-      });
-    }
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
+      this.user = user;
+      if (user) {
+        this.contactForm.patchValue({
+          ...user,
+        });
+      }
+      this.cd.detectChanges();
+    });
   }
 
   onSubmit() {
     this.api.sendMessage(this.contactForm.value).subscribe(
-      res => {
+      (res) => {
         this.snackBar.open(this.translatingService.translates['Messages sent'], null, { duration: 3000 });
         this.form.resetForm();
         this.contactForm.get('name').setValue(this.user.name);
         this.contactForm.get('email').setValue(this.user.email);
         this.contactForm.get('telephone').setValue(this.user.telephone);
       },
-      err => {
+      (err) => {
         this.contactForm.reset(this.contactForm.value);
       }
     );
@@ -91,4 +94,6 @@ export class ContactComponent implements OnInit {
   reloadCaptcha() {
     this.recaptcha.reloadCaptcha();
   }
+
+  ngOnDestroy() {}
 }

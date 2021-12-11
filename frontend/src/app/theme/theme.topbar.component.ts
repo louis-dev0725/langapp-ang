@@ -9,11 +9,12 @@ import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selecto
 import { Store } from '@ngrx/store';
 import { AppComponent } from '@app/app.component';
 import { MenuItem } from 'primeng/api';
+import { UserService } from '@app/services/user.service';
 
 @UntilDestroy()
 @Component({
   selector: 'app-topbar',
-  templateUrl: './theme.topbar.component.html'
+  templateUrl: './theme.topbar.component.html',
 })
 export class ThemeTopbarComponent implements OnInit, OnDestroy {
   public user;
@@ -26,20 +27,22 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
     return this.session.openedAdmin;
   }
 
-  constructor(public appTheme: ThemeMainComponent,
+  constructor(
+    public appTheme: ThemeMainComponent,
     public session: SessionService,
+    private userService: UserService,
     public api: ApiService,
     private store: Store<fromStore.State>,
     private cd: ChangeDetectorRef,
-    public app: AppComponent) {
-    this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => this.isLoggedIn = authState);
+    public app: AppComponent
+  ) {
+    this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => (this.isLoggedIn = authState));
   }
 
   ngOnInit() {
     this.model = this.getModel();
-    this.user = this.session.user;
 
-    this.session.user$.pipe(untilDestroyed(this)).subscribe(user => {
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
       this.model = [...this.getModel()];
       this.user = user;
       this.cd.detectChanges();
@@ -49,24 +52,23 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
   public getModel(): MenuItem[] {
     let model: MenuItem[] = [];
 
-    model.push(
-      {
-        label: 'Language',
-        items: [
-          {
-            label: 'Русский',
-            command: event => {
-              this.appTheme.setLanguage('ru');
-            }
+    model.push({
+      label: 'Language',
+      items: [
+        {
+          label: 'Русский',
+          command: (event) => {
+            this.appTheme.setLanguage('ru');
           },
-          {
-            label: 'English',
-            command: event => {
-              this.appTheme.setLanguage('en');
-            }
-          }
-        ]
-      });
+        },
+        {
+          label: 'English',
+          command: (event) => {
+            this.appTheme.setLanguage('en');
+          },
+        },
+      ],
+    });
 
     if (this.isLoggedIn) {
       model.push({
@@ -81,7 +83,7 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
 
     model.push({
       label: 'Support',
-      routerLink: ['/contacts']
+      routerLink: ['/contacts'],
     });
 
     if (this.isLoggedIn) {
@@ -90,27 +92,26 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
         items: [
           {
             label: 'About',
-            routerLink: ['/partners/about']
+            routerLink: ['/partners/about'],
           },
           {
             label: 'Clients',
-            routerLink: ['/partners/clients']
+            routerLink: ['/partners/clients'],
           },
           {
             label: 'Transactions',
-            routerLink: ['/partners/transactions']
-          }
-        ]
+            routerLink: ['/partners/transactions'],
+          },
+        ],
       });
 
       model.push({
         label: 'Logout',
-        command: event => {
+        command: (event) => {
           this.appTheme.logout(event.originalEvent);
-        }
+        },
       });
-    }
-    else {
+    } else {
       model.push({
         label: 'Sign up',
         routerLink: ['/auth/signup'],
@@ -124,5 +125,5 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
     return model;
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 }

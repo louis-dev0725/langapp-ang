@@ -1,9 +1,8 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { SrsService } from '@app/services/srs.service';
 import { ApiService } from '@app/services/api.service';
-import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
 import { TranslatingService } from '@app/services/translating.service';
 import { Card, UserDictionary } from '@app/interfaces/common.interface';
@@ -11,22 +10,22 @@ import { Card, UserDictionary } from '@app/interfaces/common.interface';
 import { ModalMnemonicComponent } from '@app/training/modal-mnemonic/modal-mnemonic.component';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UserService } from '@app/services/user.service';
 
 @UntilDestroy()
 @Component({
   selector: 'app-cards-word',
   templateUrl: './cards-word.component.html',
-  styleUrls: ['./cards-word.component.scss']
+  styleUrls: ['./cards-word.component.scss'],
 })
 export class CardsWordComponent implements OnInit, OnDestroy {
-
   cardsArray: UserDictionary[] = null;
   cards: UserDictionary = null;
   checkYourself = false;
   arrIndex = 0;
   endTraining = false;
   endTrainingText = null;
-  user_id = 0;
+  userId = 0;
   openModal = false;
   // @ts-ignore
   domain = window.rocket.apiHost;
@@ -43,30 +42,42 @@ export class CardsWordComponent implements OnInit, OnDestroy {
   private _isLoaded = false;
   @ViewChild(ModalMnemonicComponent) mmc: ModalMnemonicComponent;
 
-  constructor(private srsService: SrsService, private api: ApiService, private snackBar: MatSnackBar,
-              private session: SessionService, private translatingService: TranslatingService) { }
+  constructor(
+    private srsService: SrsService,
+    private api: ApiService,
+    private snackBar: MatSnackBar,
+    private userService: UserService,
+    private translatingService: TranslatingService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    this.user_id = this.session.user.id;
-    const data = 'user_id=' + this.user_id + '&type=word';
-    this.api.getAllUserDictionary(data).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.cardsArray = res.items;
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
+      this.userId = user?.id;
+      this.cd.detectChanges();
+    });
+    const data = 'user_id=' + this.userId + '&type=word';
+    this.api
+      .getAllUserDictionary(data)
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.cardsArray = res.items;
 
-        if (this.cardsArray.length > 0) {
-          this.getOtherInfoElement(this.cardsArray);
+          if (this.cardsArray.length > 0) {
+            this.getOtherInfoElement(this.cardsArray);
+          } else {
+            this.cards = null;
+            this.endTraining = true;
+            this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_all;
+
+            this._isLoaded = true;
+          }
         } else {
-          this.cards = null;
-          this.endTraining = true;
-          this.endTrainingText = this.translatingService.translates['confirm'].user_dictionary.finish_all;
-
+          this.snackBar.open(String(res.error), null, { duration: 3000 });
           this._isLoaded = true;
         }
-      } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
-        this._isLoaded = true;
-      }
-    });
+      });
   }
 
   getOtherInfoElement(elements) {
@@ -79,16 +90,19 @@ export class CardsWordComponent implements OnInit, OnDestroy {
       }
     });
 
-    const query = 'user_id=' + this.user_id + '&mnemonic=' + mnemonic;
-    this.api.getMnemonics(query).pipe(untilDestroyed(this)).subscribe((res) => {
-      if (!(res instanceof ApiError)) {
-        this.editCardElem(this.cardsArray, res);
-      } else {
-        this.snackBar.open(String(res.error), null, {duration: 3000});
-      }
+    const query = 'user_id=' + this.userId + '&mnemonic=' + mnemonic;
+    this.api
+      .getMnemonics(query)
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.editCardElem(this.cardsArray, res);
+        } else {
+          this.snackBar.open(String(res.error), null, { duration: 3000 });
+        }
 
-      this._isLoaded = true;
-    });
+        this._isLoaded = true;
+      });
   }
 
   editCardElem(elements, result) {
@@ -103,7 +117,7 @@ export class CardsWordComponent implements OnInit, OnDestroy {
               element.mnemonic_id = mnemonic.id;
             }
 
-            const idx_rating = mnemonic.mnemonicsUsers.findIndex(item => item.users_id === this.user_id);
+            const idx_rating = mnemonic.mnemonicsUsers.findIndex((item) => item.users_id === this.userId);
             mnemonic.user_rating = null;
             if (idx_rating !== -1) {
               mnemonic.user_rating = mnemonic.mnemonicsUsers[idx_rating].rating;
@@ -129,7 +143,7 @@ export class CardsWordComponent implements OnInit, OnDestroy {
         easeFactor: 0,
         interval: 0,
         reviews: [],
-        status: 0
+        status: 0,
       };
 
       if (this.cards.workout_progress_card.hasOwnProperty('consecutiveCorrectAnswers')) {
@@ -143,15 +157,18 @@ export class CardsWordComponent implements OnInit, OnDestroy {
 
       this.cards.workout_progress_card = this.srsService.processAnswer(card, action);
 
-      this.api.updateUserDictionary(this.cards).pipe(untilDestroyed(this)).subscribe(res => {
-        if (!(res instanceof ApiError)) {
-          this.snackBar.open(this.translatingService.translates['confirm'].user_dictionary.saved, null, {duration: 3000});
-        } else {
-          this.snackBar.open(String(res.error), null, {duration: 3000});
-        }
+      this.api
+        .updateUserDictionary(this.cards)
+        .pipe(untilDestroyed(this))
+        .subscribe((res) => {
+          if (!(res instanceof ApiError)) {
+            this.snackBar.open(this.translatingService.translates['confirm'].user_dictionary.saved, null, { duration: 3000 });
+          } else {
+            this.snackBar.open(String(res.error), null, { duration: 3000 });
+          }
 
-        this._isLoaded = true;
-      });
+          this._isLoaded = true;
+        });
 
       if (this.arrIndex + 1 < this.cardsArray.length) {
         this.arrIndex++;
@@ -172,7 +189,7 @@ export class CardsWordComponent implements OnInit, OnDestroy {
   }
 
   onEnterMnemonic(id: number) {
-    const mnemonicIndex = this.cards.mnemonic_all.findIndex(item => item.id === id);
+    const mnemonicIndex = this.cards.mnemonic_all.findIndex((item) => item.id === id);
     const mnemonic = this.cards.mnemonic_all[mnemonicIndex];
 
     this.cards.mnemonic = mnemonic;

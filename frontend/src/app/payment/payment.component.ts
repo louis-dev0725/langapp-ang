@@ -10,12 +10,13 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { User, UserPaymentMethod } from '@app/interfaces/common.interface';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from '@app/services/user.service';
 
 @UntilDestroy()
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.scss']
+  styleUrls: ['./payment.component.scss'],
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   private minVal = 100;
@@ -40,32 +41,31 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private router: Router,
     private serializer: UrlSerializer,
     private session: SessionService,
+    private userService: UserService,
     private messageService: MessageService,
     private translateService: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.session.user$.subscribe(u => this.user = u);
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((u) => (this.user = u));
 
     if (this.paymentsTable) {
       this.paymentsTable.isLoaded = false;
 
-      this.paymentsTable.tableEvents
-        .pipe(untilDestroyed(this))
-        .subscribe((res: any) => {
-          this.paymentsTable.isLoaded = false;
-          this.paymentsTable.rows = [];
-          if (res.type === 'page') {
-            this.getRows(res.data.pageIndex);
-          }
-          if (res.type === 'sort') {
-            this.getRows(0, res.data);
-          }
-        });
+      this.paymentsTable.tableEvents.pipe(untilDestroyed(this)).subscribe((res: any) => {
+        this.paymentsTable.isLoaded = false;
+        this.paymentsTable.rows = [];
+        if (res.type === 'page') {
+          this.getRows(res.data.pageIndex);
+        }
+        if (res.type === 'sort') {
+          this.getRows(0, res.data);
+        }
+      });
     }
 
     this.paymentForm = new FormGroup({
-      amount: new FormControl('', { validators: [Validators.required, Validators.min(100)], updateOn: 'change' })
+      amount: new FormControl('', { validators: [Validators.required, Validators.min(100)], updateOn: 'change' }),
     });
 
     this.getRows();
@@ -74,7 +74,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   refreshPaymentMethods() {
-    this.api.getUserPaymentMethods().subscribe((r) => { this.paymentMethods = r });
+    this.api.getUserPaymentMethods().subscribe((r) => {
+      this.paymentMethods = r;
+    });
   }
 
   receiveUpdatedPaymentMethods(updatedList: UserPaymentMethod[]) {
@@ -90,16 +92,21 @@ export class PaymentComponent implements OnInit, OnDestroy {
   deletePaymentMethod(id: number) {
     this.api.deletePaymentMethod(id).subscribe((r) => {
       this.paymentMethods = r;
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: this.translateService.instant('Payment method was deleted') });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: this.translateService.instant('Payment method was deleted'),
+      });
     });
   }
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   getRows(page = 0, sort = {}) {
-    this.api.getUserTransactionsList(page, sort)
+    this.api
+      .getUserTransactionsList(page, sort)
       .pipe(untilDestroyed(this))
-      .subscribe(res => {
+      .subscribe((res) => {
         if (!(res instanceof ApiError)) {
           this.rows = res.items;
           if (this.paymentsTable) {
@@ -117,13 +124,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   onPayment() {
-    const user = this.session.user;
+    const user = this.user;
     const urlTree = this.router.createUrlTree(['/pay/start'], {
       queryParams: {
-        email: user.email,
-        userId: user.id,
-        amount: this.paymentForm.get('amount').value
-      }
+        email: user?.email,
+        userId: user?.id,
+        amount: this.paymentForm.get('amount').value,
+      },
     });
     const childWindow = window.open(this.api.apiHost + this.serializer.serialize(urlTree), '_blank');
     const interval = setInterval(() => {
@@ -135,10 +142,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   updateUser() {
-    this.api.meRequest()
+    this.api
+      .meRequest()
       .pipe(untilDestroyed(this))
       .subscribe((res) => {
-        this.session.user$.next(res);
+        this.userService.user$.next(res);
       });
   }
 }

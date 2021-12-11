@@ -1,19 +1,21 @@
 import { Component, OnDestroy, OnInit, NgZone, Renderer2 } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import {NavigationStart, Router} from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
-import { randomFromRange } from '@app/shared/helpers';
 import { Observable } from 'rxjs';
 import * as fromStore from '@app/store';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
 import { Store } from '@ngrx/store';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 import { AppComponent } from '@app/app.component';
 import { MenuService } from '@app/theme/theme.menu.service';
 import { ConfirmationService, PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
 import { MatDialog } from '@angular/material/dialog';
+import {randomFromRange} from "@app/shared/helpers";
+import {UserService} from "@app/services/user.service";
+import {take} from "rxjs/operators";
 
 @UntilDestroy()
 @Component({
@@ -62,6 +64,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   constructor(public zone: NgZone,
     private store: Store<fromStore.State>,
     private router: Router,
+    private userService: UserService,
     private api: ApiService,
     private sessionService: SessionService,
     public renderer: Renderer2,
@@ -135,7 +138,6 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.api.logout();
-          this.router.navigate(['auth/signin']);
           window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
         },
         reject: () => {
@@ -270,21 +272,24 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     this.isLoggedIn$.subscribe(res => {
       this.isLoggedIn = res;
     });
-    this.setUpSubscriptions();
   }
 
   setUpSubscriptions() {
     this.router.events.subscribe(async event => {
       if (event instanceof NavigationStart) {
         if (this.isLoggedIn) {
-          this.api.meRequest().pipe(untilDestroyed(this)).subscribe();
+          this.userService.getMeRequest().pipe(take(1)).subscribe(user => {
+            this.userService.user$.next(user);
+          });
         }
       }
     });
     this.interval = setInterval(async () => {
       const isLoggedIn = await this.isLoggedIn$.toPromise();
       if (isLoggedIn) {
-        this.api.meRequest().pipe(untilDestroyed(this)).subscribe();
+        this.userService.getMeRequest().pipe(untilDestroyed(this)).subscribe(user => {
+          this.userService.user$.next(user);
+        });
       }
     }, randomFromRange(500, 600));
   }
