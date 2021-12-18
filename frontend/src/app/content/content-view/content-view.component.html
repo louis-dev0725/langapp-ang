@@ -1,17 +1,64 @@
 <div class="container">
-    <div *ngIf="content$ | async as content; else loadingSpinner">
+    <div *ngIf="content; else loadingSpinner">
         <div class="p-grid">
-            <div class="p-col-8">
+            <div class="p-col-12 p-md-8">
                 <div class="card left-video">
-                    <app-videojs *ngIf="videoOptions$ | async as videoOptions" [options]="videoOptions"></app-videojs>
+                    <app-videojs *ngIf=" videoOptions" [options]="videoOptions"></app-videojs>
                 </div>
             </div>
-            <div class="p-col-4">
-                <div class="card" onclickTranslation>
-                    <div [innerHTML]="cleanTextHtml$ | async"></div>
+            <div class="p-col-12 p-md-4 right-text-parent">
+                <div class="card right-text" onclickTranslation>
+                    <div [innerHTML]="cleanTextHtml"></div>
                 </div>
             </div>
         </div>
+    </div>
+    <div *ngIf="content">
+      <div class="p-grid">
+        <div class="p-col-12 p-md-8">
+          <div class="card content-info">
+            <h1 class="title">{{content?.title}}</h1>
+            <p class="translated-title">{{content?.titleTranslated}}</p>
+
+            <div class="buttons">
+              <button style="height: 45px" pButton type="button" icon="pi pi-check" label="{{'Mark as studied' | translate}}" *ngIf="!content?.contentAttribute?.isStudied; else studiedButton" (click)="setContentStudiedAttributes(content?.id)"></button>
+              <button style="height: 45px" pButton type="button" class="p-button-text" label="{{content?.contentAttribute?.isHidden ? 'Hidden from catalog' : 'Hide from catalog' | translate}}" icon="pi pi-eye-slash" (click)="setContentHiddenAttributes(content?.id)"></button>
+              <button style="height: 45px" pButton type="button" class="p-button-text" label="{{'Report' | translate}}" icon="pi pi-exclamation-triangle" (click)="onChangeReportModal(true)"></button>
+            </div>
+            <p-dialog [(visible)]="openModal" [modal]="true" [dismissableMask]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+              <ng-template pTemplate="header">
+                <p style="text-align: center" class="recommended-title">{{'Report' | translate}}</p>
+              </ng-template>
+              <textarea pInputTextarea placeholder="{{'Report reason...' | translate}}" [formControl]="reportReason"></textarea>
+              <ng-template pTemplate="footer">
+                <button style="height: 45px" label="{{'Send report' | translate}}" pButton type="button" class="p-button-text" icon="pi pi-send" (click)="sendReport()"></button>
+              </ng-template>
+            </p-dialog>
+            <p class="content"><span class="content content__header">{{'Channel' | translate}}: </span><a [routerLink]="'/content/materials'" [queryParams]="{'filter[youtubeChannelId]':content?.dataJson?.youtubeVideo?.channelId}">{{content?.dataJson?.youtubeVideo?.channel?.title}}</a></p>
+            <p class="content"><span class="content content__header">{{'Posted on' | translate}} </span>{{content?.dataJson?.youtubeVideo?.published}}</p>
+            <p class="content"><span class="content content__header">{{'Difficulty' | translate}}: </span><a [routerLink]="'/content/materials'" [queryParams]="{'filter[level]':content?.level}" class="content content__level">JLPT N{{content?.level}}</a></p>
+            <p class="content"><span class="content content__header">{{'Category' | translate}}: </span><a [routerLink]="'/content/materials'" [queryParams]="{'filter[categoryId]':category?.id}" *ngFor="let category of content?.categories">{{category?.title}}</a></p>
+            <p class="content"><span class="content content__header">{{'Tags' | translate}}:</span></p>
+            <div>
+              <a [routerLink]="'/content/materials'" [queryParams]="{'filter[tags]':tag}" style="display: inline-block" class="p-mr-2 p-mb-2" *ngFor="let tag of content.tagsJson">
+                <p-chip [label]="tag"></p-chip>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="p-col-12 p-md-4">
+          <div class="card content-info content-info__recommended">
+            <p class="recommended-title">{{'Recommended videos' | translate}}</p>
+            <a [routerLink]="'/content/view/' + recommended?.id" class="recommended-item" *ngFor="let recommended of content?.recommendedVideos">
+              <div style="background-image: url({{recommended.imageUrl}});" class="recommended-item__image"></div>
+              <div class="recommended-item__info">
+                <p style="font-size: 14px">{{recommended?.title}}</p>
+                <p class="content"><span class="content content__level">JLPT N{{recommended?.level}}</span></p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
 
@@ -19,4 +66,8 @@
     <div class="p-d-flex p-jc-center">
         <p-progressSpinner></p-progressSpinner>
     </div>
+</ng-template>
+
+<ng-template #studiedButton>
+  <button style="height: 45px" pButton class="p-button-outlined p-button-secondary" type="button" label="{{'Marked as studied' | translate}}" (click)="setContentStudiedAttributes(content?.id)"></button>
 </ng-template>

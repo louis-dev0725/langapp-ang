@@ -26,7 +26,7 @@ export class VideojsComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
       this.player = null;
     }
     let targetEl = <HTMLElement>this.target.nativeElement;
-    targetEl.insertAdjacentHTML('beforebegin', '<video class="video-js vjs-theme-forest vjs-fill" controls playsinline preload="none"></video>');
+    targetEl.insertAdjacentHTML('beforebegin', '<video class="video-js vjs-theme-forest vjs-fill vjs-fluid" controls playsinline preload="none"></video>');
     let videoEl = targetEl.parentNode.querySelector('video');
     this.player = videojs(videoEl, this.options, function onPlayerReady() {
       (window as any).player = this;

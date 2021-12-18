@@ -13,6 +13,8 @@ import { ListMaterialsComponent } from '@app/content/materials/list-materials/li
 import { EditMaterialsComponent } from '@app/content/edit-materials/edit-materials.component';
 import { ContentViewComponent } from './content-view/content-view.component';
 import { VideojsComponent } from './videojs/videojs.component';
+import { ReportModalComponent } from './report-modal/report-modal.component';
+import {DialogModule} from "primeng/dialog";
 
 const routes: Routes = [
    {
@@ -60,13 +62,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, EditMaterialsComponent, ListMaterialsComponent, ContentViewComponent, VideojsComponent],
+  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, EditMaterialsComponent, ListMaterialsComponent, ContentViewComponent, VideojsComponent, ReportModalComponent],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
     TranslateModule.forChild(),
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    DialogModule,
   ]
 })
 export class ContentModule {}
