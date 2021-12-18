@@ -121,7 +121,7 @@ export interface CategoryArray {
   };
 }
 
-export interface Content {
+export interface ParentContent {
   id?: number;
   title: string;
   type: number;
@@ -136,6 +136,13 @@ export interface Content {
   format: string;
   cleanText?: any;
   imageUrl?: string;
+  titleTranslated: string;
+}
+
+export interface Content extends ParentContent {
+  recommendedVideos: ParentContent[];
+  categories: Category[];
+  contentAttribute: ContentAttributeResponse;
 }
 
 export interface DataJson {
@@ -154,6 +161,7 @@ export interface YoutubeVideo {
   dislikeCount: number;
   averageRating: number;
   subtitleLanguages: string[];
+  category: string;
 }
 
 export interface Channel {
@@ -295,4 +303,26 @@ export interface AddCardSquareRequest {
 export interface ProlongSubscriptionResult {
   status: boolean;
   message: string;
+}
+
+export interface ContentStudiedAttributeRequest {
+  isStudied: boolean;
+}
+
+export interface ContentHiddenAttributeRequest {
+  isHidden: boolean;
+}
+
+export interface ContentAttributeResponse {
+  id: number;
+  contentId: number;
+  userId: number;
+  isStudied: boolean;
+  isHidden: boolean;
+}
+
+export interface Category {
+  id?: number;
+  title: string;
+  parent_id: number;
 }

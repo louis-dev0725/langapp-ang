@@ -1,15 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import {
-  AddCardSquareRequest,
   Category,
   Content,
+  UserDictionary,
   ListResponse,
   Mnemonic,
-  ProlongSubscriptionResult,
+  SettingPlugin,
   User,
-  UserDictionary,
   UserPaymentMethod,
+  AddCardSquareRequest,
+  ProlongSubscriptionResult,
+  ContentAttributeResponse, ContentStudiedAttributeRequest, ContentHiddenAttributeRequest
 } from '@app/interfaces/common.interface';
 import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
@@ -49,6 +51,18 @@ interface OptionsInterface {
 export interface SimpleListItem {
   title: string;
   value: any;
+}
+
+export interface ReportRequest {
+  contentId: number;
+  userText: string;
+}
+
+export interface ReportResponse {
+  id: number;
+  userId: number;
+  contentId: number;
+  userText: string;
 }
 
 @Injectable({
@@ -663,7 +677,11 @@ export class ApiService {
   }
 
   contentById(id: number): Observable<Content> {
-    return this.apiRequest<Content>('GET', `contents/${id}`);
+    return this.apiRequest<Content>('GET', `contents/${id}`, {
+      params: {
+        expand: 'recommendedVideos,categories,contentAttribute',
+      }
+    });
   }
 
   /**
@@ -1002,4 +1020,17 @@ export class ApiService {
   prolongSubscription() {
     return this.apiRequest<ProlongSubscriptionResult>('POST', `users/prolong-subscription`, {}, true);
   }
+
+  setContentStudiedAttribute(contentId: number, body: ContentStudiedAttributeRequest) {
+    return this.apiRequest<ContentAttributeResponse>('PATCH', `content-attributes/${contentId}`, {body});
+  }
+
+  setContentHiddenAttribute(contentId: number, body: ContentHiddenAttributeRequest) {
+    return this.apiRequest<ContentAttributeResponse>('PATCH', `content-attributes/${contentId}`, {body});
+  }
+
+  sendReport(body: ReportRequest): Observable<ReportResponse> {
+    return this.apiRequest<ReportResponse>('POST', 'content-reports', {body});
+  }
+
 }
