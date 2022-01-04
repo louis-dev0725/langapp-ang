@@ -1,0 +1,797 @@
+{
+    "cards": {
+        "wordInfo_3236529": {
+            "cardType": "wordInfo",
+            "wordId": 3236529,
+            "frequencyRank": 88.91368807159939,
+            "value": "便利",
+            "furiganaHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "exampleSentences": [
+                {
+                    "sentenceId": 94375,
+                    "value": "我が家は便利なところにある。",
+                    "furiganaHtml": "<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class=\"word-highlight\">便利</span><rt></rt>なところにある。<rt></rt></ruby>",
+                    "translationHtml": "Our house is <span class=\"word-highlight\">conveniently</span> located.",
+                    "audioUrls": [
+                        "/assets/test-audio.mp3?sentence-94375"
+                    ]
+                },
+                {
+                    "sentenceId": 94376,
+                    "value": "携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。",
+                    "furiganaHtml": "<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class=\"word-highlight\">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>",
+                    "translationHtml": "Cell phones are <span class=\"word-highlight\">convenient</span>, but I want them to be used responsibly. More text for example.",
+                    "audioUrls": []
+                },
+                {
+                    "sentenceId": 94377,
+                    "value": "我が家は便利なところにある。",
+                    "furiganaHtml": "<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class=\"word-highlight\">便利</span><rt></rt>なところにある。 (3)<rt></rt></ruby>",
+                    "translationHtml": "Our house is <span class=\"word-highlight\">conveniently</span> located (3).",
+                    "audioUrls": [
+                        "/assets/test-audio.mp3?sentence-94377"
+                    ]
+                },
+                {
+                    "sentenceId": 94377,
+                    "value": "我が家は便利なところにある。",
+                    "furiganaHtml": "<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class=\"word-highlight\">便利</span><rt></rt>なところにある。 (4)<rt></rt></ruby>",
+                    "translationHtml": "Our house is <span class=\"word-highlight\">conveniently</span> located (4).",
+                    "audioUrls": [
+                        "/assets/test-audio.mp3?sentence-94377"
+                    ]
+                },
+                {
+                    "sentenceId": 94377,
+                    "value": "我が家は便利なところにある。",
+                    "furiganaHtml": "<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class=\"word-highlight\">便利</span><rt></rt>なところにある。 (5)<rt></rt></ruby>",
+                    "translationHtml": "Our house is <span class=\"word-highlight\">conveniently</span> located (5).",
+                    "audioUrls": [
+                        "/assets/test-audio.mp3?sentence-94377"
+                    ]
+                }
+            ],
+            "kanji": [
+                {
+                    "wordId": 3157554,
+                    "value": "便",
+                    "readings": [
+                        {
+                            "type": "on",
+                            "value": "ベン",
+                            "frequencyPercent": 55.3
+                        },
+                        {
+                            "type": "on",
+                            "value": "ビン",
+                            "frequencyPercent": 44.28
+                        },
+                        {
+                            "type": "kun",
+                            "value": "たよ.り",
+                            "frequencyPercent": 0.43
+                        }
+                    ],
+                    "meanings": [
+                        {
+                            "lang": "eng",
+                            "value": "convenience"
+                        },
+                        {
+                            "lang": "eng",
+                            "value": "facility"
+                        }
+                    ],
+                    "infoCard": "kanjiInfo_3157554"
+                },
+                {
+                    "wordId": 3157874,
+                    "value": "利",
+                    "readings": [
+                        {
+                            "type": "on",
+                            "value": "リ",
+                            "frequencyPercent": 99.69
+                        },
+                        {
+                            "type": "kun",
+                            "value": "き.く",
+                            "frequencyPercent": 0.31
+                        }
+                    ],
+                    "meanings": [
+                        {
+                            "lang": "eng",
+                            "value": "profit"
+                        },
+                        {
+                            "lang": "eng",
+                            "value": "advantage"
+                        }
+                    ],
+                    "infoCard": "kanjiInfo_3157874"
+                }
+            ],
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            }
+        },
+        "kanjiInfo_3157554": {
+            "cardType": "kanjiInfo",
+            "wordId": 3157554,
+            "frequencyRank": 78.41368807159939,
+            "value": "使",
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenience"
+                },
+                {
+                    "lang": "eng",
+                    "value": "facility"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?kanji-3157554"
+            },
+            "kunReadings": [
+                {
+                    "type": "kun",
+                    "value": "たよ.り",
+                    "frequencyPercent": 0.43,
+                    "exampleWords": [
+                        {
+                            "furiganaHtml": "<ruby>使<rt>たよ</rt>り</ruby>",
+                            "meanings": [
+                                {
+                                    "lang": "eng",
+                                    "value": "news"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "tidings"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "information"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "correspondence"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "letter"
+                                }
+                            ],
+                            "exampleSentences": [
+                                {
+                                    "sentenceId": 93545,
+                                    "value": "便りがないのは良い知らせ。",
+                                    "furiganaHtml": "<ruby>便<rt>たよ</rt>りがないのは<rt></rt>良<rt>よ</rt>い<rt></rt>知<rt>し</rt>らせ。</ruby>",
+                                    "translationHtml": "No <span class=\"word-highlight\">news</span> is good news.",
+                                    "audioUrls": [
+                                        "/assets/test-audio.mp3?sentence-93545"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "furiganaHtml": "<ruby>便<rt>たより</rt>屋<rt>や</rt></ruby>",
+                            "meanings": [
+                                {
+                                    "lang": "eng",
+                                    "value": "man in charge of delivering letters and packages during the Edo period"
+                                }
+                            ],
+                            "exampleSentences": []
+                        }
+                    ]
+                }
+            ],
+            "onReadings": [
+                {
+                    "type": "on",
+                    "value": "ベン",
+                    "frequencyPercent": 55.3,
+                    "exampleWords": [
+                        {
+                            "furiganaHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
+                            "meanings": [
+                                {
+                                    "lang": "eng",
+                                    "value": "convenient"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "handy"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "useful"
+                                }
+                            ],
+                            "exampleSentences": [
+                                {
+                                    "sentenceId": 856254,
+                                    "value": "我が家は便利なところにある。",
+                                    "furiganaHtml": "<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class=\"word-highlight\">便利</span><rt></rt>なところにある。<rt></rt></ruby>",
+                                    "translationHtml": "Our house is <span class=\"word-highlight\">conveniently</span> located.",
+                                    "audioUrls": [
+                                        "/assets/test-audio.mp3?sentence-856254"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "furiganaHtml": "<ruby>便<rt>べん</rt>所<rt>じょ</rt></ruby>",
+                            "meanings": [
+                                {
+                                    "lang": "eng",
+                                    "value": "toilet"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "lavatory"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "water closet"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "restroom"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "bathroom"
+                                }
+                            ],
+                            "exampleSentences": [
+                                {
+                                    "sentenceId": 8017465,
+                                    "value": "生徒はこの便所を使ってはならない。",
+                                    "furiganaHtml": "<ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class=\"word-highlight\">便所</span>を使<rt>つか</rt>ってはならない。</ruby>",
+                                    "translationHtml": "Students must not use this <span class=\"word-highlight\">toilet</span>.",
+                                    "audioUrls": [
+                                        "/assets/test-audio.mp3?sentence-8017465"
+                                    ]
+                                },
+                                {
+                                    "sentenceId": 8017465,
+                                    "value": "生徒はこの便所を使ってはならない。",
+                                    "furiganaHtml": "<ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class=\"word-highlight\">便所</span>を使<rt>つか</rt>ってはならない。(2)</ruby>",
+                                    "translationHtml": "Students must not use this <span class=\"word-highlight\">toilet</span> (2).",
+                                    "audioUrls": [
+                                        "/assets/test-audio.mp3?sentence-8017465"
+                                    ]
+                                },
+                                {
+                                    "sentenceId": 8017465,
+                                    "value": "生徒はこの便所を使ってはならない。",
+                                    "furiganaHtml": "<ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class=\"word-highlight\">便所</span>を使<rt>つか</rt>ってはならない。(3)</ruby>",
+                                    "translationHtml": "Students must not use this <span class=\"word-highlight\">toilet</span> (3).",
+                                    "audioUrls": [
+                                        "/assets/test-audio.mp3?sentence-8017465"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "on",
+                    "value": "ビン",
+                    "frequencyPercent": 44.28,
+                    "exampleWords": [
+                        {
+                            "furiganaHtml": "<ruby>便<rt>びん</rt>箋<rt>せん</rt></ruby>",
+                            "meanings": [
+                                {
+                                    "lang": "eng",
+                                    "value": "writing paper"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "stationery"
+                                },
+                                {
+                                    "lang": "eng",
+                                    "value": "notepaper"
+                                }
+                            ],
+                            "exampleSentences": [
+                                {
+                                    "sentenceId": 8774629,
+                                    "value": "これらの作品の原画のサイズはほぼ便箋の大きさに相当します。",
+                                    "furiganaHtml": "<ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class=\"word-highlight\">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。</ruby>",
+                                    "translationHtml": "The original size of the works is roughly that of a sheet of <span class=\"word-highlight\">writing paper</span>.",
+                                    "audioUrls": [
+                                        "/assets/test-audio.mp3?sentence-8774629"
+                                    ]
+                                },
+                                {
+                                    "sentenceId": 8774629,
+                                    "value": "これらの作品の原画のサイズはほぼ便箋の大きさに相当します。",
+                                    "furiganaHtml": "<ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class=\"word-highlight\">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。(2)</ruby>",
+                                    "translationHtml": "The original size of the works is roughly that of a sheet of <span class=\"word-highlight\">writing paper</span> (2).",
+                                    "audioUrls": [
+                                        "/assets/test-audio.mp3?sentence-8774629"
+                                    ]
+                                },
+                                {
+                                    "sentenceId": 8774629,
+                                    "value": "これらの作品の原画のサイズはほぼ便箋の大きさに相当します。",
+                                    "furiganaHtml": "<ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class=\"word-highlight\">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。(3)</ruby>",
+                                    "translationHtml": "The original size of the works is roughly that of a sheet of <span class=\"word-highlight\">writing paper</span> (3).",
+                                    "audioUrls": [
+                                        "/assets/test-audio.mp3?sentence-8774629"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "selectFuriganaForOneKanji_3236529_1": {
+            "cardType": "selectFuriganaForOneKanji",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "select",
+                "questionHtml": "<ruby>便<rt>べん</rt>利<rt class=\"question-highlight\">？</rt></ruby>",
+                "answers": [
+                    {
+                        "contentHtml": "じょ"
+                    },
+                    {
+                        "contentHtml": "り",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "contentHtml": "らく"
+                    },
+                    {
+                        "contentHtml": "ら"
+                    },
+                    {
+                        "contentHtml": "る"
+                    }
+                ]
+            },
+            "furiganaHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            },
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ]
+        },
+        "selectFuriganaForWholeWord_3236529": {
+            "cardType": "selectFuriganaForWholeWord",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "select",
+                "questionHtml": "<ruby>便<rt class=\"question-highlight\">？</rt>利<rt class=\"question-highlight\">？</rt></ruby>",
+                "answers": [
+                    {
+                        "contentHtml": "べん じょ"
+                    },
+                    {
+                        "contentHtml": "べん　り",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "contentHtml": "あん らく"
+                    },
+                    {
+                        "contentHtml": "けん　り"
+                    },
+                    {
+                        "contentHtml": "しょう　り"
+                    }
+                ]
+            },
+            "furiganaHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            },
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ]
+        },
+        "typeFuriganaForWholeWord_3236529": {
+            "cardType": "typeFuriganaForWholeWord",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "type",
+                "buttons": [
+                    "ん",
+                    "べ",
+                    "り"
+                ],
+                "correctAnswers": [
+                    "べんり"
+                ]
+            },
+            "furiganaHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            }
+        },
+        "selectTranslationForWord_3236529": {
+            "cardType": "selectTranslationForWord",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "select",
+                "questionHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>利<rt>り</rt></ruby>",
+                "showAudio": true,
+                "answers": [
+                    {
+                        "contentHtml": "convenient, handy",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "contentHtml": "toilet"
+                    },
+                    {
+                        "contentHtml": "Japanese box lunch"
+                    },
+                    {
+                        "contentHtml": "stubborn"
+                    },
+                    {
+                        "contentHtml": "news"
+                    }
+                ]
+            },
+            "furiganaHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            },
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ]
+        },
+        "selectWordForTranslation_3236529": {
+            "cardType": "selectWordForTranslation",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "select",
+                "questionHtml": "convenient, handy",
+                "answers": [
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>所<rt>じょ</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>利<rt>り</rt></ruby>",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">安<rt>あん</rt>楽<rt>らく</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">権<rt>けん</rt>利<rt>り</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">勝<rt>しょう</rt>利<rt>り</rt></ruby>"
+                    }
+                ]
+            },
+            "furiganaHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>利<rt>り</rt></ruby>",
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            },
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ]
+        },
+        "selectWordForAudio_3236529": {
+            "cardType": "selectWordForAudio",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "select",
+                "showBigAudio": true,
+                "answers": [
+                    {
+                        "contentHtml": "便利",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "contentHtml": "便所"
+                    },
+                    {
+                        "contentHtml": "安楽"
+                    },
+                    {
+                        "contentHtml": "権利"
+                    },
+                    {
+                        "contentHtml": "勝利"
+                    }
+                ]
+            },
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            },
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ]
+        },
+        "selectWordForSentence_3236529": {
+            "cardType": "selectWordForSentence",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "select",
+                "questionHtml": "<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class=\"question-blank-box\"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>",
+                "sentence": {
+                    "sentenceId": 94376,
+                    "value": "携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。",
+                    "furiganaHtml": "<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class=\"word-highlight\">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>",
+                    "translationHtml": "Cell phones are <span class=\"word-highlight\">convenient</span>, but I want them to be used responsibly. More text for example.",
+                    "audioUrls": [
+                        "/assets/test-audio.mp3?sentence-94376"
+                    ]
+                },
+                "answers": [
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>所<rt>じょ</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>利<rt>り</rt></ruby>",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">安<rt>あん</rt>楽<rt>らく</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">権<rt>けん</rt>利<rt>り</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">勝<rt>しょう</rt>利<rt>り</rt></ruby>"
+                    }
+                ]
+            },
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            },
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ]
+        },
+        "selectAudioForWord_3236529": {
+            "cardType": "selectAudioForWord",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "selectAudio",
+                "questionHtml": "便利",
+                "answers": [
+                    {
+                        "audioUrls": [
+                            "/assets/test-audio.mp3?selectAudioForWord-1"
+                        ],
+                        "contentHtml": "<ruby>便<rt>べん</rt>所<rt>じょ</rt></ruby>"
+                    },
+                    {
+                        "audioUrls": [
+                            "/assets/test-audio.mp3?selectAudioForWord-2"
+                        ],
+                        "contentHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "audioUrls": [
+                            "/assets/test-audio.mp3?selectAudioForWord-3"
+                        ],
+                        "contentHtml": "<ruby>安<rt>あん</rt>楽<rt>らく</rt></ruby>"
+                    }
+                ]
+            },
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            },
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ]
+        }
+    },
+    "drills": [
+        {
+            "card": "wordInfo_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "kanjiInfo_3157554",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "selectFuriganaForOneKanji_3236529_1",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "selectFuriganaForWholeWord_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "typeFuriganaForWholeWord_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "selectTranslationForWord_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "selectWordForTranslation_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "selectWordForAudio_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "selectWordForSentence_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "selectAudioForWord_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        }
+    ]
+}

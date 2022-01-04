@@ -3,49 +3,111 @@
 namespace app\controllers;
 
 use Yii;
-use yii\filters\auth\HttpBearerAuth;
-use yii\filters\Cors;
-use yii\helpers\ArrayHelper;
-use yii\rest\Serializer;
+use yii\base\InvalidConfigException;
+use yii\base\Model;
+use yii\web\ForbiddenHttpException;
 
-class ActiveController extends \yii\rest\ActiveController
+/**
+ * Class ActiveController
+ * Copy of yii\rest\ActiveController so we can extend from our extended yii\rest\Controller
+ * @see yii\rest\ActiveController
+ * @package app\controllers
+ */
+class ActiveController extends Controller
 {
-    public $serializer = [
-        'class' => Serializer::class,
-        'collectionEnvelope' => 'items',
-    ];
+    /**
+     * @var string the model class name. This property must be set.
+     */
+    public $modelClass;
+    /**
+     * @var string the scenario used for updating a model.
+     * @see \yii\base\Model::scenarios()
+     */
+    public $updateScenario = Model::SCENARIO_DEFAULT;
+    /**
+     * @var string the scenario used for creating a model.
+     * @see \yii\base\Model::scenarios()
+     */
+    public $createScenario = Model::SCENARIO_DEFAULT;
 
-    public function behaviors()
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
     {
-        $behaviors = parent::behaviors();
-
-        if (isset($behaviors['contentNegotiator']['formats']['application/xml'])) {
-            unset($behaviors['contentNegotiator']['formats']['application/xml']);
+        parent::init();
+        if ($this->modelClass === null) {
+            throw new InvalidConfigException('The "modelClass" property must be set.');
         }
+    }
 
-        $behaviors['contentNegotiator']['languages'] = ['ru', 'en'];
-
-        // add CORS filter: any (*) for development, localhost for prod
-        $withCorsFilter = [
-            [
-                'class' => Cors::class,
-                'cors' => [
-                    'Origin' => (YII_ENV_DEV || Yii::$app->params['enableDevCors']) ? ['*'] : ['http://localhost', 'https://localhost'],
-                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-                    'Access-Control-Request-Headers' => ['*'],
-                    'Access-Control-Allow-Credentials' => null,
-                    'Access-Control-Max-Age' => 86400,
-                    'Access-Control-Expose-Headers' => [],
-                ],
+    /**
+     * {@inheritdoc}
+     */
+    public function actions()
+    {
+        return [
+            'index' => [
+                'class' => 'yii\rest\IndexAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+            ],
+            'view' => [
+                'class' => 'yii\rest\ViewAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+            ],
+            'create' => [
+                'class' => 'yii\rest\CreateAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+                'scenario' => $this->createScenario,
+            ],
+            'update' => [
+                'class' => 'yii\rest\UpdateAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+                'scenario' => $this->updateScenario,
+            ],
+            'delete' => [
+                'class' => 'yii\rest\DeleteAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+            ],
+            'options' => [
+                'class' => 'yii\rest\OptionsAction',
             ],
         ];
+    }
 
-        $behaviors['authenticator'] = [
-            'class' => HttpBearerAuth::class,
-            'except' => ['options'],
+    /**
+     * {@inheritdoc}
+     */
+    protected function verbs()
+    {
+        return [
+            'index' => ['GET', 'HEAD'],
+            'view' => ['GET', 'HEAD'],
+            'create' => ['POST'],
+            'update' => ['PUT', 'PATCH'],
+            'delete' => ['DELETE'],
         ];
+    }
 
-        // Add CORS before everything
-        return ArrayHelper::merge($withCorsFilter, $behaviors);
+    /**
+     * Checks the privilege of the current user.
+     *
+     * This method should be overridden to check whether the current user has the privilege
+     * to run the specified action against the specified data model.
+     * If the user does not have access, a [[ForbiddenHttpException]] should be thrown.
+     *
+     * @param string $action the ID of the action to be executed
+     * @param object $model the model to be accessed. If null, it means no specific model is being accessed.
+     * @param array $params additional parameters
+     * @throws ForbiddenHttpException if the user does not have access
+     */
+    public function checkAccess($action, $model = null, $params = [])
+    {
     }
 }

@@ -1,21 +1,21 @@
 openapi: 3.0.3
 info:
   title: LangApp API
-  version: "1.0"
+  version: '1.0'
 servers:
-  - url: "http://localhost/api"
+  - url: 'http://localhost/api'
 paths:
   /contents:
     get:
       summary: Content list
       tags: []
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                description: ""
+                description: ''
                 type: object
                 x-examples:
                   example-1:
@@ -23,7 +23,7 @@ paths:
                       - id: 6
                         title: イ・ジョンソク、演技に対する変わらない追求「本能的に演じたことがない…常に反省」  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00F_R4wFzE4"
+                        sourceLink: 'https://www.youtube.com/watch?v=00F_R4wFzE4'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -102,7 +102,7 @@ paths:
                             videoId: 00F_R4wFzE4
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2019-01-26"
+                            published: '2019-01-26'
                             viewCount: 25
                             wilsonScore: 0
                             dislikeCount: 0
@@ -113,11 +113,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg'
                       - id: 202
                         title: 全国ろうあ者体育大会テニス競技 稲辺技術委員からのメッセージ
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=04T6wmupJPA"
+                        sourceLink: 'https://www.youtube.com/watch?v=04T6wmupJPA'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -237,7 +237,7 @@ paths:
                             videoId: 04T6wmupJPA
                             channelId: UCEL-kFxU_6EnoEB4sj4DBTg
                             likeCount: 6
-                            published: "2020-06-21"
+                            published: '2020-06-21'
                             viewCount: 735
                             wilsonScore: 0.355755
                             dislikeCount: 2
@@ -247,11 +247,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/04T6wmupJPA/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/04T6wmupJPA/hqdefault.jpg'
                       - id: 32
                         title: 土屋アンナᐸ愛愛傘ᐳ氣志團 / STEP IN TO THE NEW WORLD!
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=01g4bCxNqm8"
+                        sourceLink: 'https://www.youtube.com/watch?v=01g4bCxNqm8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -461,7 +461,7 @@ paths:
                             videoId: 01g4bCxNqm8
                             channelId: UC1oPBUWifc0QOOY8DEKhLuQ
                             likeCount: 9
-                            published: "2019-03-19"
+                            published: '2019-03-19'
                             viewCount: 785
                             wilsonScore: 0.541154
                             dislikeCount: 1
@@ -471,11 +471,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/01g4bCxNqm8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/01g4bCxNqm8/hqdefault.jpg'
                       - id: 12
                         title: 【ASMR】琥珀糖食べるだけver〜初めての音フェチ撮影に戸惑いを隠せない〜
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00msiQ8dGmQ"
+                        sourceLink: 'https://www.youtube.com/watch?v=00msiQ8dGmQ'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -519,7 +519,7 @@ paths:
                             videoId: 00msiQ8dGmQ
                             channelId: UCr-QcqNToYablI-jU2VPVSw
                             likeCount: 2334
-                            published: "2018-06-11"
+                            published: '2018-06-11'
                             viewCount: 160612
                             wilsonScore: 0.923343
                             dislikeCount: 165
@@ -529,11 +529,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00msiQ8dGmQ/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00msiQ8dGmQ/hqdefault.jpg'
                       - id: 13
                         title: 世界でも紹介される日本一怖いサイトが怖すぎた
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00NwDvKnIOc"
+                        sourceLink: 'https://www.youtube.com/watch?v=00NwDvKnIOc'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -1195,7 +1195,7 @@ paths:
                             videoId: 00NwDvKnIOc
                             channelId: UCpOjLndjOqMoffA-fr8cbKA
                             likeCount: 12694
-                            published: "2016-12-28"
+                            published: '2016-12-28'
                             viewCount: 1696062
                             wilsonScore: 0.941471
                             dislikeCount: 732
@@ -1206,11 +1206,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00NwDvKnIOc/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00NwDvKnIOc/hqdefault.jpg'
                       - id: 14
                         title: コーヒー豆焙煎機カフェプロ101を長持ちさせる整備清掃メンテナンスを自分でやる方法
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00ShkbnYjSg"
+                        sourceLink: 'https://www.youtube.com/watch?v=00ShkbnYjSg'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -1499,7 +1499,7 @@ paths:
                             videoId: 00ShkbnYjSg
                             channelId: UCXzDMJq4qJ3rjd5gzXVY0fw
                             likeCount: 81
-                            published: "2019-04-26"
+                            published: '2019-04-26'
                             viewCount: 3598
                             wilsonScore: 0.94358
                             dislikeCount: 0
@@ -1510,11 +1510,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00ShkbnYjSg/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00ShkbnYjSg/hqdefault.jpg'
                       - id: 78
                         title: 体重１００キロのバケモノユーチューバー見つけたんだけど 【第２回売名選手権】
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=030LTOJHL4Y"
+                        sourceLink: 'https://www.youtube.com/watch?v=030LTOJHL4Y'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -1939,7 +1939,7 @@ paths:
                             videoId: 030LTOJHL4Y
                             channelId: UCvtK7490fPF0TacbsvQ2H3g
                             likeCount: 15576
-                            published: "2016-09-20"
+                            published: '2016-09-20'
                             viewCount: 2022448
                             wilsonScore: 0.928764
                             dislikeCount: 1124
@@ -1949,11 +1949,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/030LTOJHL4Y/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/030LTOJHL4Y/hqdefault.jpg'
                       - id: 110
                         title: 女の子が手を使わずにストッキング脱ぎ捨てた結果
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=03pc4SjvoDs"
+                        sourceLink: 'https://www.youtube.com/watch?v=03pc4SjvoDs'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -2135,7 +2135,7 @@ paths:
                             videoId: 03pc4SjvoDs
                             channelId: UCsjYrprh7HRgmE5k3IcQCnQ
                             likeCount: 7109
-                            published: "2018-02-16"
+                            published: '2018-02-16'
                             viewCount: 1335794
                             wilsonScore: 0.899346
                             dislikeCount: 737
@@ -2145,11 +2145,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/03pc4SjvoDs/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/03pc4SjvoDs/hqdefault.jpg'
                       - id: 117
                         title: ロング・ロード/藤井フミヤ/藤井尚之/F-BLOOD/01
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=03lxClxhC8g"
+                        sourceLink: 'https://www.youtube.com/watch?v=03lxClxhC8g'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -2175,7 +2175,7 @@ paths:
                             videoId: 03lxClxhC8g
                             channelId: UCv8sNOvHTJjAkh4N7tuE9Ow
                             likeCount: 0
-                            published: "2013-08-23"
+                            published: '2013-08-23'
                             viewCount: 3366
                             wilsonScore: 0
                             dislikeCount: 0
@@ -2185,11 +2185,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/03lxClxhC8g/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/03lxClxhC8g/hqdefault.jpg'
                       - id: 62
                         title: 【クラロワリーグ サイドショー】Lciop選手とLegend選手の素顔に迫る！（字幕）
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00jFq0T74b0"
+                        sourceLink: 'https://www.youtube.com/watch?v=00jFq0T74b0'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -2617,7 +2617,7 @@ paths:
                             videoId: 00jFq0T74b0
                             channelId: UCtECyE5fuzAqMi1zNLnttIg
                             likeCount: 124
-                            published: "2020-04-11"
+                            published: '2020-04-11'
                             viewCount: 10957
                             wilsonScore: 0.938075
                             dislikeCount: 2
@@ -2627,11 +2627,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00jFq0T74b0/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00jFq0T74b0/hqdefault.jpg'
                       - id: 66
                         title: 未来モビリティを実現するワイヤレス給電による充電～GaN HEMT が安全、大容量のワイヤレス給電を実現～【産総研公式】
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00CCZrAzw00"
+                        sourceLink: 'https://www.youtube.com/watch?v=00CCZrAzw00'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -2792,7 +2792,7 @@ paths:
                             videoId: 00CCZrAzw00
                             channelId: UC83ZV8oEMTrT9nzRyCoTE3w
                             likeCount: 17
-                            published: "2020-03-18"
+                            published: '2020-03-18'
                             viewCount: 826
                             wilsonScore: 0.70625
                             dislikeCount: 1
@@ -2803,11 +2803,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00CCZrAzw00/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00CCZrAzw00/hqdefault.jpg'
                       - id: 46
                         title: 市川動植物園　レッサーパンダ・ミーアキャット・モルモットなどの仲間たち　千葉県市川市
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=02Ch49d42YA"
+                        sourceLink: 'https://www.youtube.com/watch?v=02Ch49d42YA'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -3050,7 +3050,7 @@ paths:
                             videoId: 02Ch49d42YA
                             channelId: UC0GZyRr_oS1eP0hGAsta87A
                             likeCount: 6
-                            published: "2016-10-09"
+                            published: '2016-10-09'
                             viewCount: 1351
                             wilsonScore: 0.355755
                             dislikeCount: 2
@@ -3060,11 +3060,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/02Ch49d42YA/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/02Ch49d42YA/hqdefault.jpg'
                       - id: 5
                         title: ギターレッスン【TAB付：カノンロック解説】5/5
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00EyNuG0W1I"
+                        sourceLink: 'https://www.youtube.com/watch?v=00EyNuG0W1I'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -3406,7 +3406,7 @@ paths:
                             videoId: 00EyNuG0W1I
                             channelId: UC7OmNkV72VwRJ7ST7-PzZUw
                             likeCount: 59
-                            published: "2010-05-13"
+                            published: '2010-05-13'
                             viewCount: 65344
                             wilsonScore: 0.85621
                             dislikeCount: 3
@@ -3416,11 +3416,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00EyNuG0W1I/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00EyNuG0W1I/hqdefault.jpg'
                       - id: 427
                         title: 声(Acoustic Ver.) / Koe(Acoustic Ver.) / SCANDAL 2017 STORYTELLERS / 歌詞 lyrics furigana
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=08WgZFCGN8o"
+                        sourceLink: 'https://www.youtube.com/watch?v=08WgZFCGN8o'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -3570,7 +3570,7 @@ paths:
                             videoId: 08WgZFCGN8o
                             channelId: UC9beivn42Oss3TvLN-eIkCQ
                             likeCount: 221
-                            published: "2018-05-27"
+                            published: '2018-05-27'
                             viewCount: 10938
                             wilsonScore: 0.958152
                             dislikeCount: 3
@@ -3580,11 +3580,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/08WgZFCGN8o/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/08WgZFCGN8o/hqdefault.jpg'
                       - id: 245
                         title: Windows 10でディスプレイ設定を変更する方法
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=05PacFXIWZ0"
+                        sourceLink: 'https://www.youtube.com/watch?v=05PacFXIWZ0'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -3707,7 +3707,7 @@ paths:
                             videoId: 05PacFXIWZ0
                             channelId: UCBqkOh_DC-m5Z6MNu-rTZig
                             likeCount: 3
-                            published: "2018-05-21"
+                            published: '2018-05-21'
                             viewCount: 3134
                             wilsonScore: 0.118083
                             dislikeCount: 4
@@ -3718,11 +3718,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/05PacFXIWZ0/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/05PacFXIWZ0/hqdefault.jpg'
                       - id: 547
                         title: 楳図かずお
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0AvbwYWbhRM"
+                        sourceLink: 'https://www.youtube.com/watch?v=0AvbwYWbhRM'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -3910,7 +3910,7 @@ paths:
                             videoId: 0AvbwYWbhRM
                             channelId: UCHIorrF1B-aDmsvk3w1DPqw
                             likeCount: 177
-                            published: "2018-09-23"
+                            published: '2018-09-23'
                             viewCount: 14548
                             wilsonScore: 0.940741
                             dislikeCount: 4
@@ -3920,11 +3920,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0AvbwYWbhRM/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0AvbwYWbhRM/hqdefault.jpg'
                       - id: 330
                         title: セルフ編み部 久々のアフレコ
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=07fqXvbyMmc"
+                        sourceLink: 'https://www.youtube.com/watch?v=07fqXvbyMmc'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -4353,7 +4353,7 @@ paths:
                             videoId: 07fqXvbyMmc
                             channelId: UCy0oEyGoyzyztJikTML282Q
                             likeCount: 0
-                            published: "2019-03-12"
+                            published: '2019-03-12'
                             viewCount: 1534
                             wilsonScore: 0
                             dislikeCount: 0
@@ -4363,11 +4363,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/07fqXvbyMmc/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/07fqXvbyMmc/hqdefault.jpg'
                       - id: 466
                         title: 佐藤仁美さん、12.2キロ減量で 「菜々緒ちゃんとキャラかぶる」 スラリと美脚アピール
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0AEC_D2d6_Y"
+                        sourceLink: 'https://www.youtube.com/watch?v=0AEC_D2d6_Y'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -4488,7 +4488,7 @@ paths:
                             videoId: 0AEC_D2d6_Y
                             channelId: UC2udBeHxQMgWsQEhhQVZg8Q
                             likeCount: 0
-                            published: "2018-04-17"
+                            published: '2018-04-17'
                             viewCount: 13
                             wilsonScore: 0
                             dislikeCount: 0
@@ -4498,11 +4498,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0AEC_D2d6_Y/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0AEC_D2d6_Y/hqdefault.jpg'
                       - id: 467
                         title: 【宝山寺】商売繁盛！「おついたち」参拝でご利益お裾分け Hozanji temple Nara (奈良・生駒山)【Vlog#6】
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0AaoxmoVoIg"
+                        sourceLink: 'https://www.youtube.com/watch?v=0AaoxmoVoIg'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -4936,7 +4936,7 @@ paths:
                             videoId: 0AaoxmoVoIg
                             channelId: UCWYsVTxZ9Q-S4KL0mg6FgPA
                             likeCount: 79
-                            published: "2019-12-13"
+                            published: '2019-12-13'
                             viewCount: 872
                             wilsonScore: 0.942219
                             dislikeCount: 0
@@ -4946,11 +4946,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0AaoxmoVoIg/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0AaoxmoVoIg/hqdefault.jpg'
                       - id: 285
                         title: はじめしゃちょー2016年総集編
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=06MOFOlaRPk"
+                        sourceLink: 'https://www.youtube.com/watch?v=06MOFOlaRPk'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -5353,7 +5353,7 @@ paths:
                             videoId: 06MOFOlaRPk
                             channelId: UCgMPP6RRjktV7krOfyUewqw
                             likeCount: 57603
-                            published: "2016-12-30"
+                            published: '2016-12-30'
                             viewCount: 3278360
                             wilsonScore: 0.984447
                             dislikeCount: 850
@@ -5367,16 +5367,16 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/06MOFOlaRPk/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/06MOFOlaRPk/hqdefault.jpg'
                     _links:
                       self:
-                        href: "http://localhost/api/contents?page=1"
+                        href: 'http://localhost/api/contents?page=1'
                       first:
-                        href: "http://localhost/api/contents?page=1"
+                        href: 'http://localhost/api/contents?page=1'
                       last:
-                        href: "http://localhost/api/contents?page=500"
+                        href: 'http://localhost/api/contents?page=500'
                       next:
-                        href: "http://localhost/api/contents?page=2"
+                        href: 'http://localhost/api/contents?page=2'
                     _meta:
                       totalCount: 10000
                       pageCount: 500
@@ -5551,7 +5551,7 @@ paths:
                       - id: 6
                         title: イ・ジョンソク、演技に対する変わらない追求「本能的に演じたことがない…常に反省」  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00F_R4wFzE4"
+                        sourceLink: 'https://www.youtube.com/watch?v=00F_R4wFzE4'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -5630,7 +5630,7 @@ paths:
                             videoId: 00F_R4wFzE4
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2019-01-26"
+                            published: '2019-01-26'
                             viewCount: 25
                             wilsonScore: 0
                             dislikeCount: 0
@@ -5641,11 +5641,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg'
                       - id: 202
                         title: 全国ろうあ者体育大会テニス競技 稲辺技術委員からのメッセージ
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=04T6wmupJPA"
+                        sourceLink: 'https://www.youtube.com/watch?v=04T6wmupJPA'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -5765,7 +5765,7 @@ paths:
                             videoId: 04T6wmupJPA
                             channelId: UCEL-kFxU_6EnoEB4sj4DBTg
                             likeCount: 6
-                            published: "2020-06-21"
+                            published: '2020-06-21'
                             viewCount: 735
                             wilsonScore: 0.355755
                             dislikeCount: 2
@@ -5775,11 +5775,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/04T6wmupJPA/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/04T6wmupJPA/hqdefault.jpg'
                       - id: 32
                         title: 土屋アンナᐸ愛愛傘ᐳ氣志團 / STEP IN TO THE NEW WORLD!
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=01g4bCxNqm8"
+                        sourceLink: 'https://www.youtube.com/watch?v=01g4bCxNqm8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -5989,7 +5989,7 @@ paths:
                             videoId: 01g4bCxNqm8
                             channelId: UC1oPBUWifc0QOOY8DEKhLuQ
                             likeCount: 9
-                            published: "2019-03-19"
+                            published: '2019-03-19'
                             viewCount: 785
                             wilsonScore: 0.541154
                             dislikeCount: 1
@@ -5999,11 +5999,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/01g4bCxNqm8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/01g4bCxNqm8/hqdefault.jpg'
                       - id: 12
                         title: 【ASMR】琥珀糖食べるだけver〜初めての音フェチ撮影に戸惑いを隠せない〜
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00msiQ8dGmQ"
+                        sourceLink: 'https://www.youtube.com/watch?v=00msiQ8dGmQ'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -6047,7 +6047,7 @@ paths:
                             videoId: 00msiQ8dGmQ
                             channelId: UCr-QcqNToYablI-jU2VPVSw
                             likeCount: 2334
-                            published: "2018-06-11"
+                            published: '2018-06-11'
                             viewCount: 160612
                             wilsonScore: 0.923343
                             dislikeCount: 165
@@ -6057,11 +6057,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00msiQ8dGmQ/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00msiQ8dGmQ/hqdefault.jpg'
                       - id: 13
                         title: 世界でも紹介される日本一怖いサイトが怖すぎた
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00NwDvKnIOc"
+                        sourceLink: 'https://www.youtube.com/watch?v=00NwDvKnIOc'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -6723,7 +6723,7 @@ paths:
                             videoId: 00NwDvKnIOc
                             channelId: UCpOjLndjOqMoffA-fr8cbKA
                             likeCount: 12694
-                            published: "2016-12-28"
+                            published: '2016-12-28'
                             viewCount: 1696062
                             wilsonScore: 0.941471
                             dislikeCount: 732
@@ -6734,11 +6734,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00NwDvKnIOc/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00NwDvKnIOc/hqdefault.jpg'
                       - id: 14
                         title: コーヒー豆焙煎機カフェプロ101を長持ちさせる整備清掃メンテナンスを自分でやる方法
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00ShkbnYjSg"
+                        sourceLink: 'https://www.youtube.com/watch?v=00ShkbnYjSg'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -7027,7 +7027,7 @@ paths:
                             videoId: 00ShkbnYjSg
                             channelId: UCXzDMJq4qJ3rjd5gzXVY0fw
                             likeCount: 81
-                            published: "2019-04-26"
+                            published: '2019-04-26'
                             viewCount: 3598
                             wilsonScore: 0.94358
                             dislikeCount: 0
@@ -7038,11 +7038,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00ShkbnYjSg/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00ShkbnYjSg/hqdefault.jpg'
                       - id: 78
                         title: 体重１００キロのバケモノユーチューバー見つけたんだけど 【第２回売名選手権】
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=030LTOJHL4Y"
+                        sourceLink: 'https://www.youtube.com/watch?v=030LTOJHL4Y'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -7467,7 +7467,7 @@ paths:
                             videoId: 030LTOJHL4Y
                             channelId: UCvtK7490fPF0TacbsvQ2H3g
                             likeCount: 15576
-                            published: "2016-09-20"
+                            published: '2016-09-20'
                             viewCount: 2022448
                             wilsonScore: 0.928764
                             dislikeCount: 1124
@@ -7477,11 +7477,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/030LTOJHL4Y/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/030LTOJHL4Y/hqdefault.jpg'
                       - id: 110
                         title: 女の子が手を使わずにストッキング脱ぎ捨てた結果
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=03pc4SjvoDs"
+                        sourceLink: 'https://www.youtube.com/watch?v=03pc4SjvoDs'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -7663,7 +7663,7 @@ paths:
                             videoId: 03pc4SjvoDs
                             channelId: UCsjYrprh7HRgmE5k3IcQCnQ
                             likeCount: 7109
-                            published: "2018-02-16"
+                            published: '2018-02-16'
                             viewCount: 1335794
                             wilsonScore: 0.899346
                             dislikeCount: 737
@@ -7673,11 +7673,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/03pc4SjvoDs/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/03pc4SjvoDs/hqdefault.jpg'
                       - id: 117
                         title: ロング・ロード/藤井フミヤ/藤井尚之/F-BLOOD/01
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=03lxClxhC8g"
+                        sourceLink: 'https://www.youtube.com/watch?v=03lxClxhC8g'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -7703,7 +7703,7 @@ paths:
                             videoId: 03lxClxhC8g
                             channelId: UCv8sNOvHTJjAkh4N7tuE9Ow
                             likeCount: 0
-                            published: "2013-08-23"
+                            published: '2013-08-23'
                             viewCount: 3366
                             wilsonScore: 0
                             dislikeCount: 0
@@ -7713,11 +7713,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/03lxClxhC8g/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/03lxClxhC8g/hqdefault.jpg'
                       - id: 62
                         title: 【クラロワリーグ サイドショー】Lciop選手とLegend選手の素顔に迫る！（字幕）
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00jFq0T74b0"
+                        sourceLink: 'https://www.youtube.com/watch?v=00jFq0T74b0'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -8145,7 +8145,7 @@ paths:
                             videoId: 00jFq0T74b0
                             channelId: UCtECyE5fuzAqMi1zNLnttIg
                             likeCount: 124
-                            published: "2020-04-11"
+                            published: '2020-04-11'
                             viewCount: 10957
                             wilsonScore: 0.938075
                             dislikeCount: 2
@@ -8155,11 +8155,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00jFq0T74b0/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00jFq0T74b0/hqdefault.jpg'
                       - id: 66
                         title: 未来モビリティを実現するワイヤレス給電による充電～GaN HEMT が安全、大容量のワイヤレス給電を実現～【産総研公式】
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00CCZrAzw00"
+                        sourceLink: 'https://www.youtube.com/watch?v=00CCZrAzw00'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -8320,7 +8320,7 @@ paths:
                             videoId: 00CCZrAzw00
                             channelId: UC83ZV8oEMTrT9nzRyCoTE3w
                             likeCount: 17
-                            published: "2020-03-18"
+                            published: '2020-03-18'
                             viewCount: 826
                             wilsonScore: 0.70625
                             dislikeCount: 1
@@ -8331,11 +8331,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00CCZrAzw00/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00CCZrAzw00/hqdefault.jpg'
                       - id: 46
                         title: 市川動植物園　レッサーパンダ・ミーアキャット・モルモットなどの仲間たち　千葉県市川市
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=02Ch49d42YA"
+                        sourceLink: 'https://www.youtube.com/watch?v=02Ch49d42YA'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -8578,7 +8578,7 @@ paths:
                             videoId: 02Ch49d42YA
                             channelId: UC0GZyRr_oS1eP0hGAsta87A
                             likeCount: 6
-                            published: "2016-10-09"
+                            published: '2016-10-09'
                             viewCount: 1351
                             wilsonScore: 0.355755
                             dislikeCount: 2
@@ -8588,11 +8588,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/02Ch49d42YA/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/02Ch49d42YA/hqdefault.jpg'
                       - id: 5
                         title: ギターレッスン【TAB付：カノンロック解説】5/5
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00EyNuG0W1I"
+                        sourceLink: 'https://www.youtube.com/watch?v=00EyNuG0W1I'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -8934,7 +8934,7 @@ paths:
                             videoId: 00EyNuG0W1I
                             channelId: UC7OmNkV72VwRJ7ST7-PzZUw
                             likeCount: 59
-                            published: "2010-05-13"
+                            published: '2010-05-13'
                             viewCount: 65344
                             wilsonScore: 0.85621
                             dislikeCount: 3
@@ -8944,11 +8944,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00EyNuG0W1I/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00EyNuG0W1I/hqdefault.jpg'
                       - id: 427
                         title: 声(Acoustic Ver.) / Koe(Acoustic Ver.) / SCANDAL 2017 STORYTELLERS / 歌詞 lyrics furigana
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=08WgZFCGN8o"
+                        sourceLink: 'https://www.youtube.com/watch?v=08WgZFCGN8o'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -9098,7 +9098,7 @@ paths:
                             videoId: 08WgZFCGN8o
                             channelId: UC9beivn42Oss3TvLN-eIkCQ
                             likeCount: 221
-                            published: "2018-05-27"
+                            published: '2018-05-27'
                             viewCount: 10938
                             wilsonScore: 0.958152
                             dislikeCount: 3
@@ -9108,11 +9108,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/08WgZFCGN8o/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/08WgZFCGN8o/hqdefault.jpg'
                       - id: 245
                         title: Windows 10でディスプレイ設定を変更する方法
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=05PacFXIWZ0"
+                        sourceLink: 'https://www.youtube.com/watch?v=05PacFXIWZ0'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -9235,7 +9235,7 @@ paths:
                             videoId: 05PacFXIWZ0
                             channelId: UCBqkOh_DC-m5Z6MNu-rTZig
                             likeCount: 3
-                            published: "2018-05-21"
+                            published: '2018-05-21'
                             viewCount: 3134
                             wilsonScore: 0.118083
                             dislikeCount: 4
@@ -9246,11 +9246,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/05PacFXIWZ0/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/05PacFXIWZ0/hqdefault.jpg'
                       - id: 547
                         title: 楳図かずお
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0AvbwYWbhRM"
+                        sourceLink: 'https://www.youtube.com/watch?v=0AvbwYWbhRM'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -9438,7 +9438,7 @@ paths:
                             videoId: 0AvbwYWbhRM
                             channelId: UCHIorrF1B-aDmsvk3w1DPqw
                             likeCount: 177
-                            published: "2018-09-23"
+                            published: '2018-09-23'
                             viewCount: 14548
                             wilsonScore: 0.940741
                             dislikeCount: 4
@@ -9448,11 +9448,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0AvbwYWbhRM/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0AvbwYWbhRM/hqdefault.jpg'
                       - id: 330
                         title: セルフ編み部 久々のアフレコ
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=07fqXvbyMmc"
+                        sourceLink: 'https://www.youtube.com/watch?v=07fqXvbyMmc'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -9881,7 +9881,7 @@ paths:
                             videoId: 07fqXvbyMmc
                             channelId: UCy0oEyGoyzyztJikTML282Q
                             likeCount: 0
-                            published: "2019-03-12"
+                            published: '2019-03-12'
                             viewCount: 1534
                             wilsonScore: 0
                             dislikeCount: 0
@@ -9891,11 +9891,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/07fqXvbyMmc/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/07fqXvbyMmc/hqdefault.jpg'
                       - id: 466
                         title: 佐藤仁美さん、12.2キロ減量で 「菜々緒ちゃんとキャラかぶる」 スラリと美脚アピール
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0AEC_D2d6_Y"
+                        sourceLink: 'https://www.youtube.com/watch?v=0AEC_D2d6_Y'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -10016,7 +10016,7 @@ paths:
                             videoId: 0AEC_D2d6_Y
                             channelId: UC2udBeHxQMgWsQEhhQVZg8Q
                             likeCount: 0
-                            published: "2018-04-17"
+                            published: '2018-04-17'
                             viewCount: 13
                             wilsonScore: 0
                             dislikeCount: 0
@@ -10026,11 +10026,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0AEC_D2d6_Y/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0AEC_D2d6_Y/hqdefault.jpg'
                       - id: 467
                         title: 【宝山寺】商売繁盛！「おついたち」参拝でご利益お裾分け Hozanji temple Nara (奈良・生駒山)【Vlog#6】
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0AaoxmoVoIg"
+                        sourceLink: 'https://www.youtube.com/watch?v=0AaoxmoVoIg'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -10464,7 +10464,7 @@ paths:
                             videoId: 0AaoxmoVoIg
                             channelId: UCWYsVTxZ9Q-S4KL0mg6FgPA
                             likeCount: 79
-                            published: "2019-12-13"
+                            published: '2019-12-13'
                             viewCount: 872
                             wilsonScore: 0.942219
                             dislikeCount: 0
@@ -10474,11 +10474,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0AaoxmoVoIg/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0AaoxmoVoIg/hqdefault.jpg'
                       - id: 285
                         title: はじめしゃちょー2016年総集編
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=06MOFOlaRPk"
+                        sourceLink: 'https://www.youtube.com/watch?v=06MOFOlaRPk'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -10881,7 +10881,7 @@ paths:
                             videoId: 06MOFOlaRPk
                             channelId: UCgMPP6RRjktV7krOfyUewqw
                             likeCount: 57603
-                            published: "2016-12-30"
+                            published: '2016-12-30'
                             viewCount: 3278360
                             wilsonScore: 0.984447
                             dislikeCount: 850
@@ -10895,16 +10895,16 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/06MOFOlaRPk/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/06MOFOlaRPk/hqdefault.jpg'
                     _links:
                       self:
-                        href: "http://localhost/api/contents?page=1"
+                        href: 'http://localhost/api/contents?page=1'
                       first:
-                        href: "http://localhost/api/contents?page=1"
+                        href: 'http://localhost/api/contents?page=1'
                       last:
-                        href: "http://localhost/api/contents?page=500"
+                        href: 'http://localhost/api/contents?page=500'
                       next:
-                        href: "http://localhost/api/contents?page=2"
+                        href: 'http://localhost/api/contents?page=2'
                     _meta:
                       totalCount: 10000
                       pageCount: 500
@@ -10930,16 +10930,16 @@ paths:
               - 0
               - 1
           in: query
-          name: "filter[status]"
-          description: "Is published? `1` is published, `0` not published (available only for admins)"
+          name: 'filter[status]'
+          description: 'Is published? `1` is published, `0` not published (available only for admins)'
         - schema:
             type: number
             enum:
               - 0
               - 1
           in: query
-          name: "filter[deleted]"
-          description: "Is deleted? `0` not deleted, `1` deleted (available only for admins)"
+          name: 'filter[deleted]'
+          description: 'Is deleted? `0` not deleted, `1` deleted (available only for admins)'
         - schema:
             type: number
             enum:
@@ -10947,18 +10947,18 @@ paths:
               - 2
               - 3
           in: query
-          name: "filter[type]"
-          description: "Content type. `1` for text, `2` for audio, `3` for video."
+          name: 'filter[type]'
+          description: 'Content type. `1` for text, `2` for audio, `3` for video.'
         - schema:
             type: number
           in: query
-          name: "filter[length][gt]"
-          description: "Content length > [number] (letters)."
+          name: 'filter[length][gt]'
+          description: 'Content length > [number] (letters).'
         - schema:
             type: number
           in: query
-          name: "filter[length][lt]"
-          description: "Content length < [number] (letters)."
+          name: 'filter[length][lt]'
+          description: 'Content length < [number] (letters).'
         - schema:
             type: number
             enum:
@@ -10968,12 +10968,12 @@ paths:
               - 4
               - 5
           in: query
-          name: "filter[level]"
+          name: 'filter[level]'
           description: JLPT level
         - schema:
             type: number
           in: query
-          name: "filter[categoryId]"
+          name: 'filter[categoryId]'
           description: Category ID.
         - schema:
             type: number
@@ -10981,27 +10981,27 @@ paths:
               - 0
               - 1
           in: query
-          name: "filter[isStudied]"
+          name: 'filter[isStudied]'
           description: Is studied? (attribute only for current user)
         - schema:
             type: string
             enum:
-              - "0"
-              - "1"
+              - '0'
+              - '1'
           in: query
-          name: "filter[isHidden]"
+          name: 'filter[isHidden]'
           description: Is hidden? (attribute only for current user)
         - schema:
             type: string
           in: query
-          name: "filter[youtubeChannelId]"
+          name: 'filter[youtubeChannelId]'
           description: YouTube channel ID.
-      description: ""
-  "/contents/{id}":
+      description: ''
+  '/contents/{id}':
     parameters:
       - schema:
           type: string
-          example: "6"
+          example: '6'
         name: id
         in: path
         required: true
@@ -11009,19 +11009,19 @@ paths:
       summary: Get content by ID
       tags: []
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                description: ""
+                description: ''
                 type: object
                 x-examples:
                   example-1:
                     id: 6
                     title: イ・ジョンソク、演技に対する変わらない追求「本能的に演じたことがない…常に反省」  -Taka News
                     type: 3
-                    sourceLink: "https://www.youtube.com/watch?v=00F_R4wFzE4"
+                    sourceLink: 'https://www.youtube.com/watch?v=00F_R4wFzE4'
                     text: |
                       WEBVTT
                       Kind: captions
@@ -11100,7 +11100,7 @@ paths:
                         videoId: 00F_R4wFzE4
                         channelId: UCqVM4CycUM7aXH8ar9zo4Og
                         likeCount: 0
-                        published: "2019-01-26"
+                        published: '2019-01-26'
                         viewCount: 25
                         wilsonScore: 0
                         dislikeCount: 0
@@ -11111,9 +11111,11 @@ paths:
                     format: text
                     cleanText: null
                     rank: null
-                    imageUrl: "http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg"
+                    imageUrl: 'http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg'
                     categories:
-                      [{ "id": 1, "title": "Entertainment", "parent_id": 0 }]
+                      - id: 1
+                        title: Entertainment
+                        parent_id: 0
                     contentAttribute:
                       id: 1
                       contentId: 6
@@ -11124,7 +11126,7 @@ paths:
                       - id: 863
                         title: 中川家、あき竹城＆藤田弓子との新コント動画公開！
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0eLhup8lLG8"
+                        sourceLink: 'https://www.youtube.com/watch?v=0eLhup8lLG8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11194,7 +11196,7 @@ paths:
                             videoId: 0eLhup8lLG8
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-04-02"
+                            published: '2018-04-02'
                             viewCount: 115
                             wilsonScore: 0
                             dislikeCount: 0
@@ -11205,11 +11207,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0eLhup8lLG8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0eLhup8lLG8/hqdefault.jpg'
                       - id: 123177
                         title: 16歳の清純派女優・竹内愛紗、フレッシュな魅力を凝縮したカレンダー発売決定
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=ak8us-QH1SY"
+                        sourceLink: 'https://www.youtube.com/watch?v=ak8us-QH1SY'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11274,7 +11276,7 @@ paths:
                             videoId: ak8us-QH1SY
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2018-01-10"
+                            published: '2018-01-10'
                             viewCount: 90
                             wilsonScore: 0.0546208
                             dislikeCount: 0
@@ -11285,11 +11287,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/ak8us-QH1SY/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/ak8us-QH1SY/hqdefault.jpg'
                       - id: 122690
                         title: 阪神戦名実況アナから転身 教師になった清水次郎さんは今
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=fsF8RJPIGlg"
+                        sourceLink: 'https://www.youtube.com/watch?v=fsF8RJPIGlg'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11461,7 +11463,7 @@ paths:
                             videoId: fsF8RJPIGlg
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 4
-                            published: "2018-04-01"
+                            published: '2018-04-01'
                             viewCount: 892
                             wilsonScore: 0.174499
                             dislikeCount: 4
@@ -11472,11 +11474,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/fsF8RJPIGlg/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/fsF8RJPIGlg/hqdefault.jpg'
                       - id: 1073
                         title: CNBLUE カン・ミンヒョク、2ndデジタルシングル「On The Cheek」2/14（木）に発売決定  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0pWRbde49ls"
+                        sourceLink: 'https://www.youtube.com/watch?v=0pWRbde49ls'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11547,7 +11549,7 @@ paths:
                             videoId: 0pWRbde49ls
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 2
-                            published: "2019-01-17"
+                            published: '2019-01-17'
                             viewCount: 376
                             wilsonScore: 0.197867
                             dislikeCount: 0
@@ -11558,11 +11560,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0pWRbde49ls/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0pWRbde49ls/hqdefault.jpg'
                       - id: 120614
                         title: 【Kstyle7周年】 gugudanからお祝いメッセージが到着！サイン入りポラを2名様にプレゼント  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=qJvjogc1rvY"
+                        sourceLink: 'https://www.youtube.com/watch?v=qJvjogc1rvY'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11657,7 +11659,7 @@ paths:
                             videoId: qJvjogc1rvY
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2019-01-27"
+                            published: '2019-01-27'
                             viewCount: 32
                             wilsonScore: 0.0546208
                             dislikeCount: 0
@@ -11668,11 +11670,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/qJvjogc1rvY/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/qJvjogc1rvY/hqdefault.jpg'
                       - id: 122708
                         title: 映画『ダンガル きっとつよくなる』　ギータ＆バビータ姉妹が“父”を想う独占映像が解禁
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=JLrSgnf2RSM"
+                        sourceLink: 'https://www.youtube.com/watch?v=JLrSgnf2RSM'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11760,7 +11762,7 @@ paths:
                             videoId: JLrSgnf2RSM
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2018-04-04"
+                            published: '2018-04-04'
                             viewCount: 203
                             wilsonScore: 0.0266773
                             dislikeCount: 1
@@ -11771,11 +11773,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/JLrSgnf2RSM/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/JLrSgnf2RSM/hqdefault.jpg'
                       - id: 121662
                         title: “福岡一の美少女”今田美桜「花晴れ」効果でインスタフォロワー100万人突破！ 驚異の増加率
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=9zHA3RdvOJU"
+                        sourceLink: 'https://www.youtube.com/watch?v=9zHA3RdvOJU'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11846,7 +11848,7 @@ paths:
                             videoId: 9zHA3RdvOJU
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-06-21"
+                            published: '2018-06-21'
                             viewCount: 120
                             wilsonScore: 0
                             dislikeCount: 0
@@ -11856,11 +11858,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/9zHA3RdvOJU/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/9zHA3RdvOJU/hqdefault.jpg'
                       - id: 4
                         title: 西川史子、高橋ジョージに容赦ない指摘「(元妻と)向き合ってなかった」
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00DkUXTV2u8"
+                        sourceLink: 'https://www.youtube.com/watch?v=00DkUXTV2u8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11908,7 +11910,7 @@ paths:
                             videoId: 00DkUXTV2u8
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-03-11"
+                            published: '2018-03-11'
                             viewCount: 9
                             wilsonScore: 0
                             dislikeCount: 0
@@ -11919,11 +11921,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00DkUXTV2u8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00DkUXTV2u8/hqdefault.jpg'
                       - id: 122643
                         title: 岡田准一、『関ヶ原』殺陣で狙ったのは内もも! 鍛錬への見解も披露
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=NYygDVhYpN0"
+                        sourceLink: 'https://www.youtube.com/watch?v=NYygDVhYpN0'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -11977,7 +11979,7 @@ paths:
                             videoId: NYygDVhYpN0
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 4
-                            published: "2018-03-02"
+                            published: '2018-03-02'
                             viewCount: 1080
                             wilsonScore: 0.395773
                             dislikeCount: 0
@@ -11988,11 +11990,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/NYygDVhYpN0/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/NYygDVhYpN0/hqdefault.jpg'
                       - id: 572
                         title: “防弾少年団の弟”TOMORROW X TOGETHER、3人目のメンバーヒュニンカイを公開（動画あり）  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0Bk-Oic-izM"
+                        sourceLink: 'https://www.youtube.com/watch?v=0Bk-Oic-izM'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12043,7 +12045,7 @@ paths:
                             videoId: 0Bk-Oic-izM
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2019-01-15"
+                            published: '2019-01-15'
                             viewCount: 87
                             wilsonScore: 0
                             dislikeCount: 0
@@ -12054,11 +12056,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0Bk-Oic-izM/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0Bk-Oic-izM/hqdefault.jpg'
                       - id: 121624
                         title: シン・アヨンからMonday Kiz出身イム・ハンビョルまで…本日（12/22）3組のカップルが結婚！多くの人がお祝い  - TaKa News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=FGnY9rgil3k"
+                        sourceLink: 'https://www.youtube.com/watch?v=FGnY9rgil3k'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12123,7 +12125,7 @@ paths:
                             videoId: FGnY9rgil3k
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-12-21"
+                            published: '2018-12-21'
                             viewCount: 38
                             wilsonScore: 0
                             dislikeCount: 0
@@ -12134,11 +12136,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/FGnY9rgil3k/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/FGnY9rgil3k/hqdefault.jpg'
                       - id: 876
                         title: BIGBANGのV.I、雪の中で新年の挨拶…「横チャンネル」での新たな挑戦を予告  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0EMnaV8y5VY"
+                        sourceLink: 'https://www.youtube.com/watch?v=0EMnaV8y5VY'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12177,7 +12179,7 @@ paths:
                             videoId: 0EMnaV8y5VY
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2019-01-01"
+                            published: '2019-01-01'
                             viewCount: 68
                             wilsonScore: 0
                             dislikeCount: 0
@@ -12188,11 +12190,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0EMnaV8y5VY/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0EMnaV8y5VY/hqdefault.jpg'
                       - id: 741
                         title: Wanna Oneの活動を終え…ミンヒョンがNU'ESTに復帰「準備しているものがある、待っていて」  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0D2GYqf6ruo"
+                        sourceLink: 'https://www.youtube.com/watch?v=0D2GYqf6ruo'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12229,7 +12231,6 @@ paths:
                           効果を発揮するのか期待が高まっている
 
                           00:02:01.884 --> 00:02:05.097
-
                         status: 1
                         length: 806
                         level: -1
@@ -12248,7 +12249,7 @@ paths:
                             videoId: 0D2GYqf6ruo
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2019-01-31"
+                            published: '2019-01-31'
                             viewCount: 167
                             wilsonScore: 0.0546208
                             dislikeCount: 0
@@ -12259,11 +12260,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0D2GYqf6ruo/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0D2GYqf6ruo/hqdefault.jpg'
                       - id: 123217
                         title: フジ秋元優里アナ、離婚協議中の竹林W不倫疑惑で窮地！　言い逃れできない理由とは
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0rr5A8ojIfQ"
+                        sourceLink: 'https://www.youtube.com/watch?v=0rr5A8ojIfQ'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12343,7 +12344,7 @@ paths:
                             videoId: 0rr5A8ojIfQ
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-01-10"
+                            published: '2018-01-10'
                             viewCount: 21
                             wilsonScore: 0
                             dislikeCount: 0
@@ -12353,11 +12354,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0rr5A8ojIfQ/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0rr5A8ojIfQ/hqdefault.jpg'
                       - id: 123005
                         title: 松坂桃李、過去に“有名人の彼女”いた
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=ixMNK_1aqzc"
+                        sourceLink: 'https://www.youtube.com/watch?v=ixMNK_1aqzc'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12404,7 +12405,7 @@ paths:
                             videoId: ixMNK_1aqzc
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-01-26"
+                            published: '2018-01-26'
                             viewCount: 32
                             wilsonScore: 0
                             dislikeCount: 0
@@ -12414,11 +12415,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/ixMNK_1aqzc/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/ixMNK_1aqzc/hqdefault.jpg'
                       - id: 121841
                         title: ワッキー、女グセが悪い？インリンを口説く余裕もなさそうな、シビアな現状
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=QwWjV8ozSR8"
+                        sourceLink: 'https://www.youtube.com/watch?v=QwWjV8ozSR8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12494,7 +12495,7 @@ paths:
                             videoId: QwWjV8ozSR8
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-04-17"
+                            published: '2018-04-17'
                             viewCount: 7
                             wilsonScore: 0
                             dislikeCount: 0
@@ -12505,11 +12506,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/QwWjV8ozSR8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/QwWjV8ozSR8/hqdefault.jpg'
                       - id: 122910
                         title: 小倉優子“こりん星時代”の彼氏を語る
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=--poSDtYMqM"
+                        sourceLink: 'https://www.youtube.com/watch?v=--poSDtYMqM'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12562,10 +12563,10 @@ paths:
                               title: Thanh Huyen Food
                               videoCount: 4110
                               subscriberCount: 1480
-                            videoId: "--poSDtYMqM"
+                            videoId: '--poSDtYMqM'
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-02-01"
+                            published: '2018-02-01'
                             viewCount: 106
                             wilsonScore: 0
                             dislikeCount: 1
@@ -12576,11 +12577,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/--poSDtYMqM/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/--poSDtYMqM/hqdefault.jpg'
                       - id: 122859
                         title: 宮沢りえ再婚 V6森田剛との入籍は“4月初め”のスッパ抜き
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=gTKQ7gPojlE"
+                        sourceLink: 'https://www.youtube.com/watch?v=gTKQ7gPojlE'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12650,7 +12651,7 @@ paths:
                             videoId: gTKQ7gPojlE
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-02-07"
+                            published: '2018-02-07'
                             viewCount: 9
                             wilsonScore: 0
                             dislikeCount: 0
@@ -12661,11 +12662,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/gTKQ7gPojlE/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/gTKQ7gPojlE/hqdefault.jpg'
                       - id: 121380
                         title: Wanna One パク・ジフン、ソロステージで腹筋公開…ハッシュタグ「#parkjihoon」が世界中でトレンド入り  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=FN1GtN0zg2k"
+                        sourceLink: 'https://www.youtube.com/watch?v=FN1GtN0zg2k'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12724,7 +12725,7 @@ paths:
                             videoId: FN1GtN0zg2k
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 3
-                            published: "2019-01-26"
+                            published: '2019-01-26'
                             viewCount: 783
                             wilsonScore: 0.309988
                             dislikeCount: 0
@@ -12735,11 +12736,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/FN1GtN0zg2k/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/FN1GtN0zg2k/hqdefault.jpg'
                       - id: 122293
                         title: 還暦＆芸歴３５年の栗田貫一　ものまねタレントは「ドロボー」
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=QrbXRYvoyC8"
+                        sourceLink: 'https://www.youtube.com/watch?v=QrbXRYvoyC8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -12827,7 +12828,7 @@ paths:
                             videoId: QrbXRYvoyC8
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2018-03-25"
+                            published: '2018-03-25'
                             viewCount: 62
                             wilsonScore: 0.0546208
                             dislikeCount: 0
@@ -12838,7 +12839,7 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/QrbXRYvoyC8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/QrbXRYvoyC8/hqdefault.jpg'
                 properties:
                   id:
                     type: number
@@ -13078,7 +13079,7 @@ paths:
                     id: 6
                     title: イ・ジョンソク、演技に対する変わらない追求「本能的に演じたことがない…常に反省」  -Taka News
                     type: 3
-                    sourceLink: "https://www.youtube.com/watch?v=00F_R4wFzE4"
+                    sourceLink: 'https://www.youtube.com/watch?v=00F_R4wFzE4'
                     text: |
                       WEBVTT
                       Kind: captions
@@ -13157,7 +13158,7 @@ paths:
                         videoId: 00F_R4wFzE4
                         channelId: UCqVM4CycUM7aXH8ar9zo4Og
                         likeCount: 0
-                        published: "2019-01-26"
+                        published: '2019-01-26'
                         viewCount: 25
                         wilsonScore: 0
                         dislikeCount: 0
@@ -13168,7 +13169,7 @@ paths:
                     format: text
                     cleanText: null
                     rank: null
-                    imageUrl: "http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg"
+                    imageUrl: 'http://i3.ytimg.com/vi/00F_R4wFzE4/hqdefault.jpg'
                     categories: []
                     contentAttribute:
                       id: 1
@@ -13180,7 +13181,7 @@ paths:
                       - id: 863
                         title: 中川家、あき竹城＆藤田弓子との新コント動画公開！
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0eLhup8lLG8"
+                        sourceLink: 'https://www.youtube.com/watch?v=0eLhup8lLG8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -13250,7 +13251,7 @@ paths:
                             videoId: 0eLhup8lLG8
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-04-02"
+                            published: '2018-04-02'
                             viewCount: 115
                             wilsonScore: 0
                             dislikeCount: 0
@@ -13261,11 +13262,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0eLhup8lLG8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0eLhup8lLG8/hqdefault.jpg'
                       - id: 123177
                         title: 16歳の清純派女優・竹内愛紗、フレッシュな魅力を凝縮したカレンダー発売決定
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=ak8us-QH1SY"
+                        sourceLink: 'https://www.youtube.com/watch?v=ak8us-QH1SY'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -13330,7 +13331,7 @@ paths:
                             videoId: ak8us-QH1SY
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2018-01-10"
+                            published: '2018-01-10'
                             viewCount: 90
                             wilsonScore: 0.0546208
                             dislikeCount: 0
@@ -13341,11 +13342,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/ak8us-QH1SY/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/ak8us-QH1SY/hqdefault.jpg'
                       - id: 122690
                         title: 阪神戦名実況アナから転身 教師になった清水次郎さんは今
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=fsF8RJPIGlg"
+                        sourceLink: 'https://www.youtube.com/watch?v=fsF8RJPIGlg'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -13517,7 +13518,7 @@ paths:
                             videoId: fsF8RJPIGlg
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 4
-                            published: "2018-04-01"
+                            published: '2018-04-01'
                             viewCount: 892
                             wilsonScore: 0.174499
                             dislikeCount: 4
@@ -13528,11 +13529,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/fsF8RJPIGlg/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/fsF8RJPIGlg/hqdefault.jpg'
                       - id: 1073
                         title: CNBLUE カン・ミンヒョク、2ndデジタルシングル「On The Cheek」2/14（木）に発売決定  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0pWRbde49ls"
+                        sourceLink: 'https://www.youtube.com/watch?v=0pWRbde49ls'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -13603,7 +13604,7 @@ paths:
                             videoId: 0pWRbde49ls
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 2
-                            published: "2019-01-17"
+                            published: '2019-01-17'
                             viewCount: 376
                             wilsonScore: 0.197867
                             dislikeCount: 0
@@ -13614,11 +13615,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0pWRbde49ls/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0pWRbde49ls/hqdefault.jpg'
                       - id: 120614
                         title: 【Kstyle7周年】 gugudanからお祝いメッセージが到着！サイン入りポラを2名様にプレゼント  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=qJvjogc1rvY"
+                        sourceLink: 'https://www.youtube.com/watch?v=qJvjogc1rvY'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -13713,7 +13714,7 @@ paths:
                             videoId: qJvjogc1rvY
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2019-01-27"
+                            published: '2019-01-27'
                             viewCount: 32
                             wilsonScore: 0.0546208
                             dislikeCount: 0
@@ -13724,11 +13725,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/qJvjogc1rvY/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/qJvjogc1rvY/hqdefault.jpg'
                       - id: 122708
                         title: 映画『ダンガル きっとつよくなる』　ギータ＆バビータ姉妹が“父”を想う独占映像が解禁
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=JLrSgnf2RSM"
+                        sourceLink: 'https://www.youtube.com/watch?v=JLrSgnf2RSM'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -13816,7 +13817,7 @@ paths:
                             videoId: JLrSgnf2RSM
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2018-04-04"
+                            published: '2018-04-04'
                             viewCount: 203
                             wilsonScore: 0.0266773
                             dislikeCount: 1
@@ -13827,11 +13828,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/JLrSgnf2RSM/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/JLrSgnf2RSM/hqdefault.jpg'
                       - id: 121662
                         title: “福岡一の美少女”今田美桜「花晴れ」効果でインスタフォロワー100万人突破！ 驚異の増加率
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=9zHA3RdvOJU"
+                        sourceLink: 'https://www.youtube.com/watch?v=9zHA3RdvOJU'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -13902,7 +13903,7 @@ paths:
                             videoId: 9zHA3RdvOJU
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-06-21"
+                            published: '2018-06-21'
                             viewCount: 120
                             wilsonScore: 0
                             dislikeCount: 0
@@ -13912,11 +13913,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/9zHA3RdvOJU/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/9zHA3RdvOJU/hqdefault.jpg'
                       - id: 4
                         title: 西川史子、高橋ジョージに容赦ない指摘「(元妻と)向き合ってなかった」
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=00DkUXTV2u8"
+                        sourceLink: 'https://www.youtube.com/watch?v=00DkUXTV2u8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -13964,7 +13965,7 @@ paths:
                             videoId: 00DkUXTV2u8
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-03-11"
+                            published: '2018-03-11'
                             viewCount: 9
                             wilsonScore: 0
                             dislikeCount: 0
@@ -13975,11 +13976,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/00DkUXTV2u8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/00DkUXTV2u8/hqdefault.jpg'
                       - id: 122643
                         title: 岡田准一、『関ヶ原』殺陣で狙ったのは内もも! 鍛錬への見解も披露
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=NYygDVhYpN0"
+                        sourceLink: 'https://www.youtube.com/watch?v=NYygDVhYpN0'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14033,7 +14034,7 @@ paths:
                             videoId: NYygDVhYpN0
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 4
-                            published: "2018-03-02"
+                            published: '2018-03-02'
                             viewCount: 1080
                             wilsonScore: 0.395773
                             dislikeCount: 0
@@ -14044,11 +14045,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/NYygDVhYpN0/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/NYygDVhYpN0/hqdefault.jpg'
                       - id: 572
                         title: “防弾少年団の弟”TOMORROW X TOGETHER、3人目のメンバーヒュニンカイを公開（動画あり）  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0Bk-Oic-izM"
+                        sourceLink: 'https://www.youtube.com/watch?v=0Bk-Oic-izM'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14099,7 +14100,7 @@ paths:
                             videoId: 0Bk-Oic-izM
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2019-01-15"
+                            published: '2019-01-15'
                             viewCount: 87
                             wilsonScore: 0
                             dislikeCount: 0
@@ -14110,11 +14111,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0Bk-Oic-izM/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0Bk-Oic-izM/hqdefault.jpg'
                       - id: 121624
                         title: シン・アヨンからMonday Kiz出身イム・ハンビョルまで…本日（12/22）3組のカップルが結婚！多くの人がお祝い  - TaKa News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=FGnY9rgil3k"
+                        sourceLink: 'https://www.youtube.com/watch?v=FGnY9rgil3k'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14179,7 +14180,7 @@ paths:
                             videoId: FGnY9rgil3k
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-12-21"
+                            published: '2018-12-21'
                             viewCount: 38
                             wilsonScore: 0
                             dislikeCount: 0
@@ -14190,11 +14191,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/FGnY9rgil3k/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/FGnY9rgil3k/hqdefault.jpg'
                       - id: 876
                         title: BIGBANGのV.I、雪の中で新年の挨拶…「横チャンネル」での新たな挑戦を予告  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0EMnaV8y5VY"
+                        sourceLink: 'https://www.youtube.com/watch?v=0EMnaV8y5VY'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14233,7 +14234,7 @@ paths:
                             videoId: 0EMnaV8y5VY
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2019-01-01"
+                            published: '2019-01-01'
                             viewCount: 68
                             wilsonScore: 0
                             dislikeCount: 0
@@ -14244,11 +14245,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0EMnaV8y5VY/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0EMnaV8y5VY/hqdefault.jpg'
                       - id: 741
                         title: Wanna Oneの活動を終え…ミンヒョンがNU'ESTに復帰「準備しているものがある、待っていて」  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0D2GYqf6ruo"
+                        sourceLink: 'https://www.youtube.com/watch?v=0D2GYqf6ruo'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14285,7 +14286,6 @@ paths:
                           効果を発揮するのか期待が高まっている
 
                           00:02:01.884 --> 00:02:05.097
-
                         status: 1
                         length: 806
                         level: -1
@@ -14304,7 +14304,7 @@ paths:
                             videoId: 0D2GYqf6ruo
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2019-01-31"
+                            published: '2019-01-31'
                             viewCount: 167
                             wilsonScore: 0.0546208
                             dislikeCount: 0
@@ -14315,11 +14315,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0D2GYqf6ruo/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0D2GYqf6ruo/hqdefault.jpg'
                       - id: 123217
                         title: フジ秋元優里アナ、離婚協議中の竹林W不倫疑惑で窮地！　言い逃れできない理由とは
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=0rr5A8ojIfQ"
+                        sourceLink: 'https://www.youtube.com/watch?v=0rr5A8ojIfQ'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14399,7 +14399,7 @@ paths:
                             videoId: 0rr5A8ojIfQ
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-01-10"
+                            published: '2018-01-10'
                             viewCount: 21
                             wilsonScore: 0
                             dislikeCount: 0
@@ -14409,11 +14409,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/0rr5A8ojIfQ/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/0rr5A8ojIfQ/hqdefault.jpg'
                       - id: 123005
                         title: 松坂桃李、過去に“有名人の彼女”いた
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=ixMNK_1aqzc"
+                        sourceLink: 'https://www.youtube.com/watch?v=ixMNK_1aqzc'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14460,7 +14460,7 @@ paths:
                             videoId: ixMNK_1aqzc
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-01-26"
+                            published: '2018-01-26'
                             viewCount: 32
                             wilsonScore: 0
                             dislikeCount: 0
@@ -14470,11 +14470,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/ixMNK_1aqzc/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/ixMNK_1aqzc/hqdefault.jpg'
                       - id: 121841
                         title: ワッキー、女グセが悪い？インリンを口説く余裕もなさそうな、シビアな現状
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=QwWjV8ozSR8"
+                        sourceLink: 'https://www.youtube.com/watch?v=QwWjV8ozSR8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14550,7 +14550,7 @@ paths:
                             videoId: QwWjV8ozSR8
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-04-17"
+                            published: '2018-04-17'
                             viewCount: 7
                             wilsonScore: 0
                             dislikeCount: 0
@@ -14561,11 +14561,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/QwWjV8ozSR8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/QwWjV8ozSR8/hqdefault.jpg'
                       - id: 122910
                         title: 小倉優子“こりん星時代”の彼氏を語る
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=--poSDtYMqM"
+                        sourceLink: 'https://www.youtube.com/watch?v=--poSDtYMqM'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14618,10 +14618,10 @@ paths:
                               title: Thanh Huyen Food
                               videoCount: 4110
                               subscriberCount: 1480
-                            videoId: "--poSDtYMqM"
+                            videoId: '--poSDtYMqM'
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-02-01"
+                            published: '2018-02-01'
                             viewCount: 106
                             wilsonScore: 0
                             dislikeCount: 1
@@ -14632,11 +14632,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/--poSDtYMqM/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/--poSDtYMqM/hqdefault.jpg'
                       - id: 122859
                         title: 宮沢りえ再婚 V6森田剛との入籍は“4月初め”のスッパ抜き
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=gTKQ7gPojlE"
+                        sourceLink: 'https://www.youtube.com/watch?v=gTKQ7gPojlE'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14706,7 +14706,7 @@ paths:
                             videoId: gTKQ7gPojlE
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 0
-                            published: "2018-02-07"
+                            published: '2018-02-07'
                             viewCount: 9
                             wilsonScore: 0
                             dislikeCount: 0
@@ -14717,11 +14717,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/gTKQ7gPojlE/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/gTKQ7gPojlE/hqdefault.jpg'
                       - id: 121380
                         title: Wanna One パク・ジフン、ソロステージで腹筋公開…ハッシュタグ「#parkjihoon」が世界中でトレンド入り  -Taka News
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=FN1GtN0zg2k"
+                        sourceLink: 'https://www.youtube.com/watch?v=FN1GtN0zg2k'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14780,7 +14780,7 @@ paths:
                             videoId: FN1GtN0zg2k
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 3
-                            published: "2019-01-26"
+                            published: '2019-01-26'
                             viewCount: 783
                             wilsonScore: 0.309988
                             dislikeCount: 0
@@ -14791,11 +14791,11 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/FN1GtN0zg2k/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/FN1GtN0zg2k/hqdefault.jpg'
                       - id: 122293
                         title: 還暦＆芸歴３５年の栗田貫一　ものまねタレントは「ドロボー」
                         type: 3
-                        sourceLink: "https://www.youtube.com/watch?v=QrbXRYvoyC8"
+                        sourceLink: 'https://www.youtube.com/watch?v=QrbXRYvoyC8'
                         text: |
                           WEBVTT
                           Kind: captions
@@ -14883,7 +14883,7 @@ paths:
                             videoId: QrbXRYvoyC8
                             channelId: UCqVM4CycUM7aXH8ar9zo4Og
                             likeCount: 1
-                            published: "2018-03-25"
+                            published: '2018-03-25'
                             viewCount: 62
                             wilsonScore: 0.0546208
                             dislikeCount: 0
@@ -14894,7 +14894,7 @@ paths:
                         format: text
                         cleanText: null
                         rank: null
-                        imageUrl: "http://i3.ytimg.com/vi/QrbXRYvoyC8/hqdefault.jpg"
+                        imageUrl: 'http://i3.ytimg.com/vi/QrbXRYvoyC8/hqdefault.jpg'
       operationId: get-contents-id
       parameters:
         - schema:
@@ -14913,8 +14913,8 @@ paths:
           name: expand
           style: form
           explode: false
-          description: "Add related records such as `recommendedVideos`, `contentAttribute` and `categories`"
-  "/content-attributes/{contentId}":
+          description: 'Add related records such as `recommendedVideos`, `contentAttribute` and `categories`'
+  '/content-attributes/{contentId}':
     parameters:
       - schema:
           type: number
@@ -14927,12 +14927,12 @@ paths:
       summary: Add content attribute
       operationId: patch-content-attributes-contentId
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                description: ""
+                description: ''
                 type: object
                 properties:
                   id:
@@ -14977,7 +14977,7 @@ paths:
         content:
           application/json:
             schema:
-              description: ""
+              description: ''
               type: object
               x-examples:
                 example-1:
@@ -15002,12 +15002,12 @@ paths:
       summary: Report a content
       operationId: post-content-reports
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                description: ""
+                description: ''
                 type: object
                 properties:
                   contentId:
@@ -15034,7 +15034,7 @@ paths:
         content:
           application/json:
             schema:
-              description: ""
+              description: ''
               type: object
               x-examples:
                 example-1:
@@ -15060,12 +15060,12 @@ paths:
       summary: Get content reports (admin)
       operationId: get-content-reports
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                description: ""
+                description: ''
                 type: object
                 properties:
                   items:
@@ -15156,15 +15156,15 @@ paths:
                         userId: 5
                         userText: Video doesn't works
                         moderatorId: 0
-                        moderatorText: ""
+                        moderatorText: ''
                         isProcessed: false
                     _links:
                       self:
-                        href: "http://localhost/api/content-reports?page=1"
+                        href: 'http://localhost/api/content-reports?page=1'
                       first:
-                        href: "http://localhost/api/content-reports?page=1"
+                        href: 'http://localhost/api/content-reports?page=1'
                       last:
-                        href: "http://localhost/api/content-reports?page=1"
+                        href: 'http://localhost/api/content-reports?page=1'
                     _meta:
                       totalCount: 1
                       pageCount: 1
@@ -15179,26 +15179,1602 @@ paths:
                         userId: 5
                         userText: Video doesn't works
                         moderatorId: 0
-                        moderatorText: ""
+                        moderatorText: ''
                         isProcessed: false
                     _links:
                       self:
-                        href: "http://localhost/api/content-reports?page=1"
+                        href: 'http://localhost/api/content-reports?page=1'
                       first:
-                        href: "http://localhost/api/content-reports?page=1"
+                        href: 'http://localhost/api/content-reports?page=1'
                       last:
-                        href: "http://localhost/api/content-reports?page=1"
+                        href: 'http://localhost/api/content-reports?page=1'
                     _meta:
                       totalCount: 1
                       pageCount: 1
                       currentPage: 1
                       perPage: 20
+  /drills/list:
+    get:
+      summary: Get drills list
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    cards:
+                      wordInfo_3236529:
+                        cardType: wordInfo
+                        wordId: 3236529
+                        frequencyRank: 8.891368807159939
+                        value: 便利
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        exampleSentences:
+                          - sentenceId: 94375
+                            value: 我が家は便利なところにある。
+                            furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。<rt></rt></ruby>
+                            translationHtml: Our house is <span class="word-highlight">conveniently</span> located.
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94375
+                          - sentenceId: 94376
+                            value: 携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。
+                            furiganaHtml: <ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>
+                            translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.'
+                            audioUrls: []
+                          - sentenceId: 94377
+                            value: 我が家は便利なところにある。
+                            furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (3)<rt></rt></ruby>
+                            translationHtml: Our house is <span class="word-highlight">conveniently</span> located (3).
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94377
+                          - sentenceId: 94377
+                            value: 我が家は便利なところにある。
+                            furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (4)<rt></rt></ruby>
+                            translationHtml: Our house is <span class="word-highlight">conveniently</span> located (4).
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94377
+                          - sentenceId: 94377
+                            value: 我が家は便利なところにある。
+                            furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (5)<rt></rt></ruby>
+                            translationHtml: Our house is <span class="word-highlight">conveniently</span> located (5).
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94377
+                        kanji:
+                          - wordId: 3157554
+                            value: 便
+                            readings:
+                              - type: 'on'
+                                value: ベン
+                                frequencyPercent: 55.3
+                              - type: 'on'
+                                value: ビン
+                                frequencyPercent: 44.28
+                              - type: kun
+                                value: たよ.り
+                                frequencyPercent: 0.43
+                            meanings:
+                              - lang: eng
+                                value: convenience
+                              - lang: eng
+                                value: facility
+                            infoCard: kanjiInfo_3157554
+                          - wordId: 3157874
+                            value: 利
+                            readings:
+                              - type: 'on'
+                                value: リ
+                                frequencyPercent: 99.69
+                              - type: kun
+                                value: き.く
+                                frequencyPercent: 0.31
+                            meanings:
+                              - lang: eng
+                                value: profit
+                              - lang: eng
+                                value: advantage
+                            infoCard: kanjiInfo_3157874
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                      kanjiInfo_3157554:
+                        cardType: kanjiInfo
+                        wordId: 3157554
+                        value: 使
+                        meanings:
+                          - lang: eng
+                            value: convenience
+                          - lang: eng
+                            value: facility
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?kanji-3157554
+                        kunReadings:
+                          - type: kun
+                            value: たよ.り
+                            frequencyPercent: 0.43
+                            exampleWords:
+                              - furiganaHtml: <ruby>使<rt>たよ</rt>り</ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: news
+                                  - lang: eng
+                                    value: tidings
+                                  - lang: eng
+                                    value: information
+                                  - lang: eng
+                                    value: correspondence
+                                  - lang: eng
+                                    value: letter
+                                exampleSentences:
+                                  - sentenceId: 93545
+                                    value: 便りがないのは良い知らせ。
+                                    furiganaHtml: <ruby>便<rt>たよ</rt>りがないのは<rt></rt>良<rt>よ</rt>い<rt></rt>知<rt>し</rt>らせ。</ruby>
+                                    translationHtml: No <span class="word-highlight">news</span> is good news.
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-93545
+                              - furiganaHtml: <ruby>便<rt>たより</rt>屋<rt>や</rt></ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: man in charge of delivering letters and packages during the Edo period
+                                exampleSentences: []
+                        onReadings:
+                          - type: 'on'
+                            value: ベン
+                            frequencyPercent: 55.3
+                            exampleWords:
+                              - furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: convenient
+                                  - lang: eng
+                                    value: handy
+                                  - lang: eng
+                                    value: useful
+                                exampleSentences:
+                                  - sentenceId: 856254
+                                    value: 我が家は便利なところにある。
+                                    furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。<rt></rt></ruby>
+                                    translationHtml: Our house is <span class="word-highlight">conveniently</span> located.
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-856254
+                              - furiganaHtml: <ruby>便<rt>べん</rt>所<rt>じょ</rt></ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: toilet
+                                  - lang: eng
+                                    value: lavatory
+                                  - lang: eng
+                                    value: water closet
+                                  - lang: eng
+                                    value: restroom
+                                  - lang: eng
+                                    value: bathroom
+                                exampleSentences:
+                                  - sentenceId: 8017465
+                                    value: 生徒はこの便所を使ってはならない。
+                                    furiganaHtml: <ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class="word-highlight">便所</span>を使<rt>つか</rt>ってはならない。</ruby>
+                                    translationHtml: Students must not use this <span class="word-highlight">toilet</span>.
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8017465
+                                  - sentenceId: 8017465
+                                    value: 生徒はこの便所を使ってはならない。
+                                    furiganaHtml: <ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class="word-highlight">便所</span>を使<rt>つか</rt>ってはならない。(2)</ruby>
+                                    translationHtml: Students must not use this <span class="word-highlight">toilet</span> (2).
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8017465
+                                  - sentenceId: 8017465
+                                    value: 生徒はこの便所を使ってはならない。
+                                    furiganaHtml: <ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class="word-highlight">便所</span>を使<rt>つか</rt>ってはならない。(3)</ruby>
+                                    translationHtml: Students must not use this <span class="word-highlight">toilet</span> (3).
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8017465
+                          - type: 'on'
+                            value: ビン
+                            frequencyPercent: 44.28
+                            exampleWords:
+                              - furiganaHtml: <ruby>便<rt>びん</rt>箋<rt>せん</rt></ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: writing paper
+                                  - lang: eng
+                                    value: stationery
+                                  - lang: eng
+                                    value: notepaper
+                                exampleSentences:
+                                  - sentenceId: 8774629
+                                    value: これらの作品の原画のサイズはほぼ便箋の大きさに相当します。
+                                    furiganaHtml: <ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class="word-highlight">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。</ruby>
+                                    translationHtml: The original size of the works is roughly that of a sheet of <span class="word-highlight">writing paper</span>.
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8774629
+                                  - sentenceId: 8774629
+                                    value: これらの作品の原画のサイズはほぼ便箋の大きさに相当します。
+                                    furiganaHtml: <ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class="word-highlight">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。(2)</ruby>
+                                    translationHtml: The original size of the works is roughly that of a sheet of <span class="word-highlight">writing paper</span> (2).
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8774629
+                                  - sentenceId: 8774629
+                                    value: これらの作品の原画のサイズはほぼ便箋の大きさに相当します。
+                                    furiganaHtml: <ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class="word-highlight">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。(3)</ruby>
+                                    translationHtml: The original size of the works is roughly that of a sheet of <span class="word-highlight">writing paper</span> (3).
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8774629
+                      selectFuriganaForOneKanji_3236529_1:
+                        cardType: selectFuriganaForOneKanji
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: <ruby>便<rt>べん</rt>利<rt class="question-highlight">？</rt></ruby>
+                          answers:
+                            - contentHtml: じょ
+                            - contentHtml: り
+                              isCorrectAnswer: true
+                            - contentHtml: らく
+                            - contentHtml: ら
+                            - contentHtml: る
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectFuriganaForWholeWord_3236529:
+                        cardType: selectFuriganaForWholeWord
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: <ruby>便<rt class="question-highlight">？</rt>利<rt class="question-highlight">？</rt></ruby>
+                          answers:
+                            - contentHtml: べん じょ
+                            - contentHtml: べん　り
+                              isCorrectAnswer: true
+                            - contentHtml: あん らく
+                            - contentHtml: けん　り
+                            - contentHtml: しょう　り
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      typeFuriganaForWholeWord_3236529:
+                        cardType: typeFuriganaForWholeWord
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: type
+                          buttons:
+                            - ん
+                            - べ
+                            - り
+                          correctAnswers:
+                            - べんり
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                      selectTranslationForWord_3236529:
+                        cardType: selectTranslationForWord
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: <ruby class="gray-furigana">便<rt>べん</rt>利<rt>り</rt></ruby>
+                          showAudio: true
+                          answers:
+                            - contentHtml: 'convenient, handy'
+                              isCorrectAnswer: true
+                            - contentHtml: toilet
+                            - contentHtml: Japanese box lunch
+                            - contentHtml: stubborn
+                            - contentHtml: news
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectWordForTranslation_3236529:
+                        cardType: selectWordForTranslation
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: 'convenient, handy'
+                          answers:
+                            - contentHtml: <ruby class="gray-furigana">便<rt>べん</rt>所<rt>じょ</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">便<rt>べん</rt>利<rt>り</rt></ruby>
+                              isCorrectAnswer: true
+                            - contentHtml: <ruby class="gray-furigana">安<rt>あん</rt>楽<rt>らく</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">権<rt>けん</rt>利<rt>り</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">勝<rt>しょう</rt>利<rt>り</rt></ruby>
+                        furiganaHtml: <ruby class="gray-furigana">便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectWordForAudio_3236529:
+                        cardType: selectWordForAudio
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          showBigAudio: true
+                          answers:
+                            - contentHtml: 便利
+                              isCorrectAnswer: true
+                            - contentHtml: 便所
+                            - contentHtml: 安楽
+                            - contentHtml: 権利
+                            - contentHtml: 勝利
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectWordForSentence_3236529:
+                        cardType: selectWordForSentence
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: <ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class="question-blank-box"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>
+                          sentence:
+                            sentenceId: 94376
+                            value: 携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。
+                            furiganaHtml: <ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>
+                            translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.'
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94376
+                          answers:
+                            - contentHtml: <ruby class="gray-furigana">便<rt>べん</rt>所<rt>じょ</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">便<rt>べん</rt>利<rt>り</rt></ruby>
+                              isCorrectAnswer: true
+                            - contentHtml: <ruby class="gray-furigana">安<rt>あん</rt>楽<rt>らく</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">権<rt>けん</rt>利<rt>り</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">勝<rt>しょう</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectAudioForWord_3236529:
+                        cardType: selectAudioForWord
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: selectAudio
+                          questionHtml: 便利
+                          answers:
+                            - audioUrls:
+                                - /assets/test-audio.mp3?selectAudioForWord-1
+                              contentHtml: <ruby>便<rt>べん</rt>所<rt>じょ</rt></ruby>
+                            - audioUrls:
+                                - /assets/test-audio.mp3?selectAudioForWord-2
+                              contentHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                              isCorrectAnswer: true
+                            - audioUrls:
+                                - /assets/test-audio.mp3?selectAudioForWord-3
+                              contentHtml: <ruby>安<rt>あん</rt>楽<rt>らく</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                    drills:
+                      - card: wordInfo_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: kanjiInfo_3157554
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectFuriganaForOneKanji_3236529_1
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectFuriganaForWholeWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: typeFuriganaForWholeWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectTranslationForWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForTranslation_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForAudio_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForSentence_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectAudioForWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                properties:
+                  cards:
+                    type: object
+                    readOnly: true
+                  drills:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        card:
+                          type: string
+                          minLength: 1
+                        isFinished:
+                          type: boolean
+                        isAnsweredCorrectly:
+                          type: boolean
+                          nullable: true
+                        answerDuration:
+                          type: number
+                          nullable: true
+                      required:
+                        - card
+                        - isFinished
+                required:
+                  - cards
+                  - drills
+              examples:
+                example-1:
+                  value:
+                    cards:
+                      wordInfo_3236529:
+                        cardType: wordInfo
+                        wordId: 3236529
+                        frequencyRank: 8.891368807159939
+                        value: 便利
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        exampleSentences:
+                          - sentenceId: 94375
+                            value: 我が家は便利なところにある。
+                            furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。<rt></rt></ruby>
+                            translationHtml: Our house is <span class="word-highlight">conveniently</span> located.
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94375
+                          - sentenceId: 94376
+                            value: 携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。
+                            furiganaHtml: <ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>
+                            translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.'
+                            audioUrls: []
+                          - sentenceId: 94377
+                            value: 我が家は便利なところにある。
+                            furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (3)<rt></rt></ruby>
+                            translationHtml: Our house is <span class="word-highlight">conveniently</span> located (3).
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94377
+                          - sentenceId: 94377
+                            value: 我が家は便利なところにある。
+                            furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (4)<rt></rt></ruby>
+                            translationHtml: Our house is <span class="word-highlight">conveniently</span> located (4).
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94377
+                          - sentenceId: 94377
+                            value: 我が家は便利なところにある。
+                            furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (5)<rt></rt></ruby>
+                            translationHtml: Our house is <span class="word-highlight">conveniently</span> located (5).
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94377
+                        kanji:
+                          - wordId: 3157554
+                            value: 便
+                            readings:
+                              - type: 'on'
+                                value: ベン
+                                frequencyPercent: 55.3
+                              - type: 'on'
+                                value: ビン
+                                frequencyPercent: 44.28
+                              - type: kun
+                                value: たよ.り
+                                frequencyPercent: 0.43
+                            meanings:
+                              - lang: eng
+                                value: convenience
+                              - lang: eng
+                                value: facility
+                            infoCard: kanjiInfo_3157554
+                          - wordId: 3157874
+                            value: 利
+                            readings:
+                              - type: 'on'
+                                value: リ
+                                frequencyPercent: 99.69
+                              - type: kun
+                                value: き.く
+                                frequencyPercent: 0.31
+                            meanings:
+                              - lang: eng
+                                value: profit
+                              - lang: eng
+                                value: advantage
+                            infoCard: kanjiInfo_3157874
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                      kanjiInfo_3157554:
+                        cardType: kanjiInfo
+                        wordId: 3157554
+                        value: 使
+                        meanings:
+                          - lang: eng
+                            value: convenience
+                          - lang: eng
+                            value: facility
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?kanji-3157554
+                        kunReadings:
+                          - type: kun
+                            value: たよ.り
+                            frequencyPercent: 0.43
+                            exampleWords:
+                              - furiganaHtml: <ruby>使<rt>たよ</rt>り</ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: news
+                                  - lang: eng
+                                    value: tidings
+                                  - lang: eng
+                                    value: information
+                                  - lang: eng
+                                    value: correspondence
+                                  - lang: eng
+                                    value: letter
+                                exampleSentences:
+                                  - sentenceId: 93545
+                                    value: 便りがないのは良い知らせ。
+                                    furiganaHtml: <ruby>便<rt>たよ</rt>りがないのは<rt></rt>良<rt>よ</rt>い<rt></rt>知<rt>し</rt>らせ。</ruby>
+                                    translationHtml: No <span class="word-highlight">news</span> is good news.
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-93545
+                              - furiganaHtml: <ruby>便<rt>たより</rt>屋<rt>や</rt></ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: man in charge of delivering letters and packages during the Edo period
+                                exampleSentences: []
+                        onReadings:
+                          - type: 'on'
+                            value: ベン
+                            frequencyPercent: 55.3
+                            exampleWords:
+                              - furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: convenient
+                                  - lang: eng
+                                    value: handy
+                                  - lang: eng
+                                    value: useful
+                                exampleSentences:
+                                  - sentenceId: 856254
+                                    value: 我が家は便利なところにある。
+                                    furiganaHtml: <ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。<rt></rt></ruby>
+                                    translationHtml: Our house is <span class="word-highlight">conveniently</span> located.
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-856254
+                              - furiganaHtml: <ruby>便<rt>べん</rt>所<rt>じょ</rt></ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: toilet
+                                  - lang: eng
+                                    value: lavatory
+                                  - lang: eng
+                                    value: water closet
+                                  - lang: eng
+                                    value: restroom
+                                  - lang: eng
+                                    value: bathroom
+                                exampleSentences:
+                                  - sentenceId: 8017465
+                                    value: 生徒はこの便所を使ってはならない。
+                                    furiganaHtml: <ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class="word-highlight">便所</span>を使<rt>つか</rt>ってはならない。</ruby>
+                                    translationHtml: Students must not use this <span class="word-highlight">toilet</span>.
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8017465
+                                  - sentenceId: 8017465
+                                    value: 生徒はこの便所を使ってはならない。
+                                    furiganaHtml: <ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class="word-highlight">便所</span>を使<rt>つか</rt>ってはならない。(2)</ruby>
+                                    translationHtml: Students must not use this <span class="word-highlight">toilet</span> (2).
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8017465
+                                  - sentenceId: 8017465
+                                    value: 生徒はこの便所を使ってはならない。
+                                    furiganaHtml: <ruby>生<rt>せい</rt>徒<rt>と</rt>はこの<rt></rt><span class="word-highlight">便所</span>を使<rt>つか</rt>ってはならない。(3)</ruby>
+                                    translationHtml: Students must not use this <span class="word-highlight">toilet</span> (3).
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8017465
+                          - type: 'on'
+                            value: ビン
+                            frequencyPercent: 44.28
+                            exampleWords:
+                              - furiganaHtml: <ruby>便<rt>びん</rt>箋<rt>せん</rt></ruby>
+                                meanings:
+                                  - lang: eng
+                                    value: writing paper
+                                  - lang: eng
+                                    value: stationery
+                                  - lang: eng
+                                    value: notepaper
+                                exampleSentences:
+                                  - sentenceId: 8774629
+                                    value: これらの作品の原画のサイズはほぼ便箋の大きさに相当します。
+                                    furiganaHtml: <ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class="word-highlight">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。</ruby>
+                                    translationHtml: The original size of the works is roughly that of a sheet of <span class="word-highlight">writing paper</span>.
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8774629
+                                  - sentenceId: 8774629
+                                    value: これらの作品の原画のサイズはほぼ便箋の大きさに相当します。
+                                    furiganaHtml: <ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class="word-highlight">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。(2)</ruby>
+                                    translationHtml: The original size of the works is roughly that of a sheet of <span class="word-highlight">writing paper</span> (2).
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8774629
+                                  - sentenceId: 8774629
+                                    value: これらの作品の原画のサイズはほぼ便箋の大きさに相当します。
+                                    furiganaHtml: <ruby>これらの<rt></rt>作<rt>さく</rt>品<rt>ひん</rt>の<rt></rt>原<rt>げん</rt>画<rt>が</rt>のサイズはほぼ<rt></rt><span class="word-highlight">便箋</span>の<rt></rt>大<rt>おお</rt>きさに<rt></rt>相<rt>そう</rt>当<rt>とう</rt>します。(3)</ruby>
+                                    translationHtml: The original size of the works is roughly that of a sheet of <span class="word-highlight">writing paper</span> (3).
+                                    audioUrls:
+                                      - /assets/test-audio.mp3?sentence-8774629
+                      selectFuriganaForOneKanji_3236529_1:
+                        cardType: selectFuriganaForOneKanji
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: <ruby>便<rt>べん</rt>利<rt class="question-highlight">？</rt></ruby>
+                          answers:
+                            - contentHtml: じょ
+                            - contentHtml: り
+                              isCorrectAnswer: true
+                            - contentHtml: らく
+                            - contentHtml: ら
+                            - contentHtml: る
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectFuriganaForWholeWord_3236529:
+                        cardType: selectFuriganaForWholeWord
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: <ruby>便<rt class="question-highlight">？</rt>利<rt class="question-highlight">？</rt></ruby>
+                          answers:
+                            - contentHtml: べん じょ
+                            - contentHtml: べん　り
+                              isCorrectAnswer: true
+                            - contentHtml: あん らく
+                            - contentHtml: けん　り
+                            - contentHtml: しょう　り
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      typeFuriganaForWholeWord_3236529:
+                        cardType: typeFuriganaForWholeWord
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: type
+                          buttons:
+                            - ん
+                            - べ
+                            - り
+                          correctAnswers:
+                            - べんり
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                      selectTranslationForWord_3236529:
+                        cardType: selectTranslationForWord
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: <ruby class="gray-furigana">便<rt>べん</rt>利<rt>り</rt></ruby>
+                          showAudio: true
+                          answers:
+                            - contentHtml: 'convenient, handy'
+                              isCorrectAnswer: true
+                            - contentHtml: toilet
+                            - contentHtml: Japanese box lunch
+                            - contentHtml: stubborn
+                            - contentHtml: news
+                        furiganaHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectWordForTranslation_3236529:
+                        cardType: selectWordForTranslation
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: 'convenient, handy'
+                          answers:
+                            - contentHtml: <ruby class="gray-furigana">便<rt>べん</rt>所<rt>じょ</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">便<rt>べん</rt>利<rt>り</rt></ruby>
+                              isCorrectAnswer: true
+                            - contentHtml: <ruby class="gray-furigana">安<rt>あん</rt>楽<rt>らく</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">権<rt>けん</rt>利<rt>り</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">勝<rt>しょう</rt>利<rt>り</rt></ruby>
+                        furiganaHtml: <ruby class="gray-furigana">便<rt>べん</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectWordForAudio_3236529:
+                        cardType: selectWordForAudio
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          showBigAudio: true
+                          answers:
+                            - contentHtml: 便利
+                              isCorrectAnswer: true
+                            - contentHtml: 便所
+                            - contentHtml: 安楽
+                            - contentHtml: 権利
+                            - contentHtml: 勝利
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectWordForSentence_3236529:
+                        cardType: selectWordForSentence
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: select
+                          questionHtml: <ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class="question-blank-box"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>
+                          sentence:
+                            sentenceId: 94376
+                            value: 携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。
+                            furiganaHtml: <ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>
+                            translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.'
+                            audioUrls:
+                              - /assets/test-audio.mp3?sentence-94376
+                          answers:
+                            - contentHtml: <ruby class="gray-furigana">便<rt>べん</rt>所<rt>じょ</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">便<rt>べん</rt>利<rt>り</rt></ruby>
+                              isCorrectAnswer: true
+                            - contentHtml: <ruby class="gray-furigana">安<rt>あん</rt>楽<rt>らく</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">権<rt>けん</rt>利<rt>り</rt></ruby>
+                            - contentHtml: <ruby class="gray-furigana">勝<rt>しょう</rt>利<rt>り</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                      selectAudioForWord_3236529:
+                        cardType: selectAudioForWord
+                        wordId: 3236529
+                        infoCard: wordInfo_3236529
+                        question:
+                          type: selectAudio
+                          questionHtml: 便利
+                          answers:
+                            - audioUrls:
+                                - /assets/test-audio.mp3?selectAudioForWord-1
+                              contentHtml: <ruby>便<rt>べん</rt>所<rt>じょ</rt></ruby>
+                            - audioUrls:
+                                - /assets/test-audio.mp3?selectAudioForWord-2
+                              contentHtml: <ruby>便<rt>べん</rt>利<rt>り</rt></ruby>
+                              isCorrectAnswer: true
+                            - audioUrls:
+                                - /assets/test-audio.mp3?selectAudioForWord-3
+                              contentHtml: <ruby>安<rt>あん</rt>楽<rt>らく</rt></ruby>
+                        meanings:
+                          - lang: eng
+                            value: convenient
+                          - lang: eng
+                            value: handy
+                          - lang: eng
+                            value: useful
+                        mnemonic:
+                          imageUrl: /assets/test-image.png?word-3236529
+                        audioUrls:
+                          - /assets/test-audio.mp3?word-3236529
+                    drills:
+                      - card: wordInfo_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: kanjiInfo_3157554
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectFuriganaForOneKanji_3236529_1
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectFuriganaForWholeWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: typeFuriganaForWholeWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectTranslationForWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForTranslation_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForAudio_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForSentence_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectAudioForWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+      operationId: get-drills-list
+    parameters: []
+  /drills/report-progress:
+    post:
+      summary: Report drills progress
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                  - success
+                x-examples:
+                  example-1:
+                    success: true
+              examples:
+                example-1:
+                  value:
+                    success: true
+      operationId: post-drills-report-progress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  drills:
+                    - card: wordInfo_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: kanjiInfo_3157554
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForOneKanji_3236529_1
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: typeFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectTranslationForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForTranslation_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForAudio_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForSentence_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectAudioForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+              properties:
+                drills:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      card:
+                        type: string
+                        minLength: 1
+                      isFinished:
+                        type: boolean
+                      isAnsweredCorrectly:
+                        type: boolean
+                        nullable: true
+                      answerDuration:
+                        type: number
+                        nullable: true
+                    required:
+                      - card
+                      - isFinished
+              required:
+                - drills
+            examples:
+              example-1:
+                value:
+                  drills:
+                    - card: wordInfo_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: kanjiInfo_3157554
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForOneKanji_3236529_1
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: typeFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectTranslationForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForTranslation_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForAudio_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForSentence_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectAudioForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+        description: 'Hint: send "drills" from /driils/list as request body.'
+      description: ''
+    parameters: []
+  /drills/hide:
+    post:
+      summary: Hide drill
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                  - success
+                x-examples:
+                  example-1:
+                    success: true
+              examples:
+                example-1:
+                  value:
+                    success: true
+      operationId: post-drills-hide
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  drills:
+                    - card: wordInfo_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: kanjiInfo_3157554
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForOneKanji_3236529_1
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: typeFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectTranslationForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForTranslation_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForAudio_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForSentence_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectAudioForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+              properties:
+                cardToHide:
+                  type: string
+                mode:
+                  type: string
+                  enum:
+                    - onlyCurrentWord
+                    - allWithCurrentWord
+                    - disableCardType
+                drills:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      card:
+                        type: string
+                        minLength: 1
+                      isFinished:
+                        type: boolean
+                      isAnsweredCorrectly:
+                        type: boolean
+                        nullable: true
+                      answerDuration:
+                        type: number
+                        nullable: true
+                    required:
+                      - card
+                      - isFinished
+              required:
+                - cardToHide
+                - mode
+                - drills
+            examples:
+              example-1:
+                value:
+                  cardToHide: typeFuriganaForWholeWord_3236529
+                  mode: onlyCurrentWord
+                  drills:
+                    - card: wordInfo_3236529
+                      isFinished: true
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: kanjiInfo_3157554
+                      isFinished: true
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForOneKanji_3236529_1
+                      isFinished: true
+                      isAnsweredCorrectly: true
+                      answerDuration: null
+                    - card: selectFuriganaForWholeWord_3236529
+                      isFinished: true
+                      isAnsweredCorrectly: true
+                      answerDuration: null
+                    - card: typeFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectTranslationForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForTranslation_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForAudio_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForSentence_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectAudioForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+        description: 'Hint: send "drills" from /driils/list as request body.'
+      description: |-
+        Hide drill.
+        Method will return updated drills array.
+    parameters: []
+  /drills/settings:
+    patch:
+      summary: Update drills settings
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    settings:
+                      disabledCardTypes:
+                        - typeFuriganaForWholeWord
+                      autoPlayAudio: true
+                    drills:
+                      - card: wordInfo_3236529
+                        isFinished: true
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: kanjiInfo_3157554
+                        isFinished: true
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectFuriganaForOneKanji_3236529_1
+                        isFinished: true
+                        isAnsweredCorrectly: true
+                        answerDuration: null
+                      - card: selectFuriganaForWholeWord_3236529
+                        isFinished: true
+                        isAnsweredCorrectly: true
+                        answerDuration: null
+                      - card: selectTranslationForWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForTranslation_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForAudio_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForSentence_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectAudioForWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                properties:
+                  settings:
+                    type: object
+                    required:
+                      - disabledCardTypes
+                      - autoPlayAudio
+                    properties:
+                      disabledCardTypes:
+                        type: array
+                        items:
+                          type: string
+                      autoPlayAudio:
+                        type: boolean
+                  drills:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        card:
+                          type: string
+                          minLength: 1
+                        isFinished:
+                          type: boolean
+                        isAnsweredCorrectly:
+                          type: boolean
+                          nullable: true
+                        answerDuration:
+                          type: number
+                          nullable: true
+                      required:
+                        - card
+                        - isFinished
+                required:
+                  - settings
+                  - drills
+              examples:
+                example-1:
+                  value:
+                    settings:
+                      disabledCardTypes:
+                        - typeFuriganaForWholeWord
+                      autoPlayAudio: true
+                    drills:
+                      - card: wordInfo_3236529
+                        isFinished: true
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: kanjiInfo_3157554
+                        isFinished: true
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectFuriganaForOneKanji_3236529_1
+                        isFinished: true
+                        isAnsweredCorrectly: true
+                        answerDuration: null
+                      - card: selectFuriganaForWholeWord_3236529
+                        isFinished: true
+                        isAnsweredCorrectly: true
+                        answerDuration: null
+                      - card: selectTranslationForWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForTranslation_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForAudio_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectWordForSentence_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+                      - card: selectAudioForWord_3236529
+                        isFinished: false
+                        isAnsweredCorrectly: null
+                        answerDuration: null
+      operationId: patch-drills-settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  drills:
+                    - card: wordInfo_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: kanjiInfo_3157554
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForOneKanji_3236529_1
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: typeFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectTranslationForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForTranslation_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForAudio_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForSentence_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectAudioForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+              properties:
+                settings:
+                  type: object
+                  properties:
+                    disabledCardTypes:
+                      type: array
+                      items:
+                        type: string
+                    autoPlayAudio:
+                      type: boolean
+                drills:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      card:
+                        type: string
+                        minLength: 1
+                      isFinished:
+                        type: boolean
+                      isAnsweredCorrectly:
+                        type: boolean
+                        nullable: true
+                      answerDuration:
+                        type: number
+                        nullable: true
+                    required:
+                      - card
+                      - isFinished
+              required:
+                - settings
+            examples:
+              example-1:
+                value:
+                  settings:
+                    disabledCardTypes:
+                      - typeFuriganaForWholeWord
+                    autoPlayAudio: true
+                  drills:
+                    - card: wordInfo_3236529
+                      isFinished: true
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: kanjiInfo_3157554
+                      isFinished: true
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectFuriganaForOneKanji_3236529_1
+                      isFinished: true
+                      isAnsweredCorrectly: true
+                      answerDuration: null
+                    - card: selectFuriganaForWholeWord_3236529
+                      isFinished: true
+                      isAnsweredCorrectly: true
+                      answerDuration: null
+                    - card: typeFuriganaForWholeWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectTranslationForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForTranslation_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForAudio_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectWordForSentence_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+                    - card: selectAudioForWord_3236529
+                      isFinished: false
+                      isAnsweredCorrectly: null
+                      answerDuration: null
+        description: 'Hint: send "drills" from /driils/list as request body.'
+      description: 'If you also send "driils", method will return drills array updated according to new settings.'
+    parameters: []
+    get:
+      summary: Get drills settings
+      operationId: get-drills-settings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    settings:
+                      disabledCardTypes: []
+                      autoPlayAudio: true
+                properties:
+                  settings:
+                    type: object
+                    required:
+                      - disabledCardTypes
+                      - autoPlayAudio
+                    properties:
+                      disabledCardTypes:
+                        type: array
+                        items:
+                          type: string
+                      autoPlayAudio:
+                        type: boolean
+                required:
+                  - settings
+              examples:
+                example-1:
+                  value:
+                    settings:
+                      disabledCardTypes:
+                        - string
+                      autoPlayAudio: true
+      description: ''
 components:
   schemas: {}
   securitySchemes:
     Bearer Token:
       type: http
       scheme: bearer
-      description: ""
+      description: ''
 security:
   - Bearer Token: []
