@@ -25,6 +25,7 @@ class DrillController extends Controller
     {
         return [
             'list' => ['GET', 'HEAD'],
+            'card' => ['GET', 'HEAD'],
             'report-progress' => ['POST'],
             'hide' => ['POST'],
             'settings' => ['GET', 'PATCH'],
@@ -34,7 +35,18 @@ class DrillController extends Controller
     public function actionList()
     {
         // TODO: implementation
-        return json_decode(file_get_contents(__DIR__ . '/../data/drills-index-mock.json'));
+        return json_decode(file_get_contents(__DIR__ . '/../data/drills-index-mock.json'), true);
+    }
+
+    public function actionCard($id)
+    {
+        // TODO: implementation
+        $tmp = json_decode(file_get_contents(__DIR__ . '/../data/drills-index-mock.json'), true);
+        $result = $tmp['cards']['wordInfo_3236529'];
+        $result['cardId'] = $id;
+        $result['meanings'][0]['value'] = 'test card for ' . $id;
+
+        return $result;
     }
 
     public function actionReportProgress()
@@ -79,8 +91,8 @@ class DrillController extends Controller
         if ($mode === null) {
             throw new BadRequestHttpException('Missing required parameter: mode');
         }
-        if (!in_array($mode, ['onlyCurrentWord', 'allWithCurrentWord', 'disableCardType'])) {
-            throw new BadRequestHttpException('parameter mode should be one, allWithThisWord or disableQuestionType');
+        if (!in_array($mode, ['onlyCurrentQuestion', 'allWithCurrentWord', 'disableCardType', 'disableAudioQuestionsFor1Hour'])) {
+            throw new BadRequestHttpException('parameter mode should be one, allWithThisWord, disableQuestionType or disableAudioQuestionsFor1Hour');
         }
 
         $drills = array_values(array_filter($drills, function ($drill) use ($cardToHide) {
@@ -90,6 +102,7 @@ class DrillController extends Controller
         // TODO: remember hidden cards
         // TODO: filter cards when allWithCurrentWord or disableCardType is used
         // TODO: update settings when disableCardType is used
+        // TODO: implementation for disableAudioQuestionsFor1Hour
 
         return ['drills' => $drills];
     }

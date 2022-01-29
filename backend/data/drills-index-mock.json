@@ -20,6 +20,7 @@
                     "value": "useful"
                 }
             ],
+            "countExampleSentencesToShow": 3,
             "exampleSentences": [
                 {
                     "sentenceId": 94375,
@@ -158,6 +159,8 @@
                     "frequencyPercent": 0.43,
                     "exampleWords": [
                         {
+                            "wordId": 3266529,
+                            "infoCard": "wordInfo_3266529",
                             "furiganaHtml": "<ruby>使<rt>たよ</rt>り</ruby>",
                             "meanings": [
                                 {
@@ -181,6 +184,7 @@
                                     "value": "letter"
                                 }
                             ],
+                            "countExampleSentencesToShow": 3,
                             "exampleSentences": [
                                 {
                                     "sentenceId": 93545,
@@ -191,9 +195,14 @@
                                         "/assets/test-audio.mp3?sentence-93545"
                                     ]
                                 }
+                            ],
+                            "audioUrls": [
+                                "/assets/test-audio.mp3?word-3266529"
                             ]
                         },
                         {
+                            "wordId": 3266530,
+                            "infoCard": "wordInfo_3266530",
                             "furiganaHtml": "<ruby>便<rt>たより</rt>屋<rt>や</rt></ruby>",
                             "meanings": [
                                 {
@@ -201,7 +210,9 @@
                                     "value": "man in charge of delivering letters and packages during the Edo period"
                                 }
                             ],
-                            "exampleSentences": []
+                            "countExampleSentencesToShow": 3,
+                            "exampleSentences": [],
+                            "audioUrls": []
                         }
                     ]
                 }
@@ -213,6 +224,8 @@
                     "frequencyPercent": 55.3,
                     "exampleWords": [
                         {
+                            "wordId": 3266531,
+                            "infoCard": "wordInfo_3266531",
                             "furiganaHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
                             "meanings": [
                                 {
@@ -228,6 +241,7 @@
                                     "value": "useful"
                                 }
                             ],
+                            "countExampleSentencesToShow": 3,
                             "exampleSentences": [
                                 {
                                     "sentenceId": 856254,
@@ -238,9 +252,14 @@
                                         "/assets/test-audio.mp3?sentence-856254"
                                     ]
                                 }
+                            ],
+                            "audioUrls": [
+                                "/assets/test-audio.mp3?word-3266531"
                             ]
                         },
                         {
+                            "wordId": 3266532,
+                            "infoCard": "wordInfo_3266532",
                             "furiganaHtml": "<ruby>便<rt>べん</rt>所<rt>じょ</rt></ruby>",
                             "meanings": [
                                 {
@@ -264,6 +283,7 @@
                                     "value": "bathroom"
                                 }
                             ],
+                            "countExampleSentencesToShow": 3,
                             "exampleSentences": [
                                 {
                                     "sentenceId": 8017465,
@@ -292,6 +312,9 @@
                                         "/assets/test-audio.mp3?sentence-8017465"
                                     ]
                                 }
+                            ],
+                            "audioUrls": [
+                                "/assets/test-audio.mp3?word-3266532"
                             ]
                         }
                     ]
@@ -302,6 +325,8 @@
                     "frequencyPercent": 44.28,
                     "exampleWords": [
                         {
+                            "wordId": 3266533,
+                            "infoCard": "kanjiInfo_3266533",
                             "furiganaHtml": "<ruby>便<rt>びん</rt>箋<rt>せん</rt></ruby>",
                             "meanings": [
                                 {
@@ -317,6 +342,7 @@
                                     "value": "notepaper"
                                 }
                             ],
+                            "countExampleSentencesToShow": 3,
                             "exampleSentences": [
                                 {
                                     "sentenceId": 8774629,
@@ -345,6 +371,9 @@
                                         "/assets/test-audio.mp3?sentence-8774629"
                                     ]
                                 }
+                            ],
+                            "audioUrls": [
+                                "/assets/test-audio.mp3?word-3266533"
                             ]
                         }
                     ]
@@ -453,6 +482,7 @@
             "infoCard": "wordInfo_3236529",
             "question": {
                 "type": "type",
+                "questionHtml": "<ruby>便<rt class=\"question-highlight\">？</rt>利<rt class=\"question-highlight\">？</rt></ruby>",
                 "buttons": [
                     "ん",
                     "べ",
@@ -584,6 +614,7 @@
             "infoCard": "wordInfo_3236529",
             "question": {
                 "type": "select",
+                "isAudioQuestion": true,
                 "showBigAudio": true,
                 "answers": [
                     {
@@ -631,6 +662,7 @@
             "infoCard": "wordInfo_3236529",
             "question": {
                 "type": "select",
+                "isAudioQuestion": true,
                 "questionHtml": "<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class=\"question-blank-box\"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>",
                 "sentence": {
                     "sentenceId": 94376,
@@ -681,12 +713,70 @@
                 "/assets/test-audio.mp3?word-3236529"
             ]
         },
+        "selectWordForSentence_3236529_video": {
+            "cardType": "selectWordForSentence",
+            "wordId": 3236529,
+            "infoCard": "wordInfo_3236529",
+            "question": {
+                "type": "select",
+                "isAudioQuestion": true,
+                "questionHtml": "<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class=\"question-blank-box\"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>",
+                "sentence": {
+                    "sentenceId": 94376,
+                    "value": "携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。",
+                    "furiganaHtml": "<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class=\"word-highlight\">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>",
+                    "translationHtml": "Cell phones are <span class=\"word-highlight\">convenient</span>, but I want them to be used responsibly. More text for example.",
+                    "videoUrls": [
+                        "/assets/test-video.mp3?sentence-94376"
+                    ]
+                },
+                "answers": [
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>所<rt>じょ</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>利<rt>り</rt></ruby>",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">安<rt>あん</rt>楽<rt>らく</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">権<rt>けん</rt>利<rt>り</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby class=\"gray-furigana\">勝<rt>しょう</rt>利<rt>り</rt></ruby>"
+                    }
+                ]
+            },
+            "meanings": [
+                {
+                    "lang": "eng",
+                    "value": "convenient"
+                },
+                {
+                    "lang": "eng",
+                    "value": "handy"
+                },
+                {
+                    "lang": "eng",
+                    "value": "useful"
+                }
+            ],
+            "mnemonic": {
+                "imageUrl": "/assets/test-image.png?word-3236529"
+            },
+            "audioUrls": [
+                "/assets/test-audio.mp3?word-3236529"
+            ]
+        },
         "selectAudioForWord_3236529": {
             "cardType": "selectAudioForWord",
             "wordId": 3236529,
             "infoCard": "wordInfo_3236529",
             "question": {
                 "type": "selectAudio",
+                "isAudioQuestion": true,
                 "questionHtml": "便利",
                 "answers": [
                     {
@@ -710,6 +800,7 @@
                     }
                 ]
             },
+            "furiganaHtml": "<ruby class=\"gray-furigana\">便<rt>べん</rt>利<rt>り</rt></ruby>",
             "meanings": [
                 {
                     "lang": "eng",
@@ -783,6 +874,12 @@
         },
         {
             "card": "selectWordForSentence_3236529",
+            "isFinished": false,
+            "isAnsweredCorrectly": null,
+            "answerDuration": null
+        },
+        {
+            "card": "selectWordForSentence_3236529_video",
             "isFinished": false,
             "isAnsweredCorrectly": null,
             "answerDuration": null
