@@ -635,6 +635,7 @@
                     }
                 ]
             },
+            "furiganaHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
             "meanings": [
                 {
                     "lang": "eng",
