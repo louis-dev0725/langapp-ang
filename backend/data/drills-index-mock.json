@@ -386,7 +386,7 @@
             "infoCard": "wordInfo_3236529",
             "question": {
                 "type": "select",
-                "questionHtml": "<ruby>便<rt>べん</rt>利<rt class=\"question-highlight\">？</rt></ruby>",
+                "questionHtml": "<ruby>便<rt>べん</rt>利<rt class=\"question-highlight\">?</rt></ruby>",
                 "answers": [
                     {
                         "contentHtml": "じょ"
@@ -434,7 +434,7 @@
             "infoCard": "wordInfo_3236529",
             "question": {
                 "type": "select",
-                "questionHtml": "<ruby>便<rt class=\"question-highlight\">？</rt>利<rt class=\"question-highlight\">？</rt></ruby>",
+                "questionHtml": "<ruby>便<rt class=\"question-highlight\">?</rt>利<rt class=\"question-highlight\">?</rt></ruby>",
                 "answers": [
                     {
                         "contentHtml": "べん じょ"
@@ -482,7 +482,7 @@
             "infoCard": "wordInfo_3236529",
             "question": {
                 "type": "type",
-                "questionHtml": "<ruby>便<rt class=\"question-highlight\">？</rt>利<rt class=\"question-highlight\">？</rt></ruby>",
+                "questionHtml": "<ruby>便<rt class=\"question-highlight\">?</rt>利<rt class=\"question-highlight\">?</rt></ruby>",
                 "buttons": [
                     "ん",
                     "べ",
@@ -632,6 +632,24 @@
                     },
                     {
                         "contentHtml": "勝利"
+                    }
+                ],
+                "openAnswers": [
+                    {
+                        "contentHtml": "<ruby>便<rt>べん</rt>利<rt>り</rt></ruby>",
+                        "isCorrectAnswer": true
+                    },
+                    {
+                        "contentHtml": "<ruby>便<rt>べん</rt>所<rt>じょ</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby>安<rt>あん</rt>楽<rt>らく</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby>権<rt>けん</rt>利<rt>り</rt></ruby>"
+                    },
+                    {
+                        "contentHtml": "<ruby>勝<rt>しょう</rt>利<rt>り</rt></ruby>"
                     }
                 ]
             },
