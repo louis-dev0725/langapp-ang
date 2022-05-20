@@ -1,16 +1,132 @@
 <div class="container">
     <div *ngIf="content; else loadingSpinner">
-        <div class="p-grid">
-            <div class="p-col-12 p-md-8">
-                <div class="card left-video">
-                    <app-videojs *ngIf=" videoOptions" [options]="videoOptions"></app-videojs>
+        <div class="p-grid" id="subControls">
+            <div class="p-col-12 p-md-8" [style]="isFullScreen ? {padding: '0'} : {padding: '1rem'}">
+              <div class="card left-video no-margin">
+                <app-videojs *ngIf="videoOptions" [options]="videoOptions"></app-videojs>
+              </div>
+              <div class="active-subtitle" onclickTranslation [style]="currentSubtitleStyle">
+                <p *ngFor="let subtitle of selectedSubtitles">
+                  {{subtitle?.text}}
+                </p>
+              </div>
+              <div class="video-controls">
+                <div class="flex-layout flex-layout__fs">
+                  <button pButton title="{{'Repeat sentence' | translate}}" type="button" style="background: none; border: none; color: white" class="control" (click)="repeatSubtitle()">
+                    <ic-icon [icon]="icons.repeat" height="30" width="30"></ic-icon>
+                  </button>
+                  <!--                    <button pButton title="{{'Repeat sentence' | translate}}" type="button" icon="bi bi-arrow-repeat" iconPos="center" style="background: none; border: none; font-size: 20px" (click)="repeatSubtitle(!isRepeatingSubtitle)"></button>-->
+                  <button pButton title="{{'Full screen' | translate}}" type="button" style="background: none; border: none; color: white" class="control"  (click)="fullScreen()">
+                    <ic-icon [icon]="icons.fullscreen" height="30" width="30"></ic-icon>
+                  </button>
                 </div>
-            </div>
-            <div class="p-col-12 p-md-4 right-text-parent">
-                <div class="card right-text" onclickTranslation>
-                    <div [innerHTML]="cleanTextHtml"></div>
+                <div class="flex-layout flex-layout__fc">
+                  <button pButton title="{{'Previous' | translate}}" type="button" style="background: none; border: none; color: white; " class="control no-padding" (click)="previousSubtitle()">
+                    <ic-icon [icon]="icons.previous" height="30" width="30"></ic-icon>
+                  </button>
+                  <button pButton title="{{'Play' | translate}}" type="button" style="background: none; border: none; color: white" class="control" (click)="play()" *ngIf="!isVideoPlaying; else pauseButton">
+                    <ic-icon [icon]="icons.play" height="60" width="60" class="play"></ic-icon>
+                  </button>
+                  <button pButton title="{{'Next' | translate}}" type="button" style="background: none; border: none; color: white; " class="control no-padding" (click)="nextSubtitle()">
+                    <ic-icon [icon]="icons.next" height="30" width="30"></ic-icon>
+                  </button>
                 </div>
+                <div class="flex-layout flex-layout__fe">
+                  <button type="button" title="{{'Playback speed' | translate}}" pButton style="background: none; border: none; height: 40px" class="control" (click)="speedOverlay.toggle($event)">
+                    <svg width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="left-icon">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="currentColor"/>
+                      <path d="M7.60238 14.9992C7.45687 14.9286 9.96731 11.0216 9.88105 10.8499C9.79404 10.6782 7.13209 10.0522 7.00233 9.75051C6.87182 9.44885 12.258 4.91348 12.3997 5.00126C12.5408 5.08903 10.0528 9.0222 10.1203 9.15053C10.1886 9.2783 12.9165 9.9305 12.999 10.2499C13.0823 10.5694 7.74714 15.0697 7.60238 14.9992V14.9992Z" fill="currentColor"/>
+                    </svg>
+                    <span>x{{currentPlaySpeed}}</span>
+                  </button>
+                  <button #moreButton pButton title="{{'More' | translate}}" type="button" icon="pi pi-ellipsis-h" iconPos="center" class="control" style="background: none; border: none; font-size: 20px" (click)="openMoreOverlay(moreOverlay, $event, moreButton)"></button>
+                </div>
+              </div>
             </div>
+            <div class="p-col-12 p-md-4 right-text-parent" [style]="isFullScreen ? {padding: '0'} : {padding: '1rem'}">
+              <div class="card right-text no-padding" #subtitleList>
+                <div class="p-d-flex p-ai-center subtitle subtitle-item" id="sub{{i}}" *ngFor="let html of subtitles; let i=index" [ngClass]="{
+                    'subtitle-active': (selectedSubtitleIndexes?.indexOf(i) > -1)
+                    }">
+                  <div class="p-mr-2">
+                    <span style="color: #c7c7c7; cursor: pointer" (click)="selectSubtitle(html, i)">
+                      <svg class="play" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" style="vertical-align: -0.125em;" width="45px" height=45px preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"><g fill="currentColor"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/></g></svg>
+                    </span>
+                  </div>
+                  <div class="p-mr-2" style="margin-left: 10px">
+                    <div onclickTranslation>
+                      {{html?.text}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <p-overlayPanel #speedOverlay [style]="{'background-color': '#19191a', 'opacity': '0.9'}">
+            <div style="width: 200px">
+              <button *ngFor="let speed of speedList" style="width: 100%; padding: 10px 0 10px 0; text-align: left;" pButton type="button" label="x{{speed}}" class="p-button-text no-padding overlay-btn secondary-overlay-btn" [ngClass]="{
+                    'secondary-overlay-btn-active': speed === currentPlaySpeed
+                  }" (click)="setVideoSpeed(speed, speedOverlay)"></button>
+            </div>
+          </p-overlayPanel>
+          <p-overlayPanel #moreOverlay [style]="{'background-color': '#19191a', 'opacity': '0.9'}" [dismissable]="true">
+            <div style="width: 200px">
+              <ng-container *ngIf="isShowingMoreOverlayContent">
+                <div class="p-button-text no-padding more-btn more-btn-s overlay-btn">
+                  <svg *ngIf="!isRepeatingVideo.value; else repeatingVideoIcon" data-v-2d3fc79c="" xmlns="http://www.w3.org/2000/svg" class="left-icon" viewBox="0 0 24 24" role="img" width="24" height="24" focusable="false" aria-hidden="true" data-v-cfe1155e=""><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M3.61357 3.61343C3.64176 3.65099 3.67294 3.68701 3.7071 3.72118L20.5788 20.5929C20.8728 20.9846 20.8416 21.543 20.4853 21.8993C20.0948 22.2899 19.4616 22.2899 19.0711 21.8993L16.1716 18.9999H5.8C4.28882 18.9999 3.08848 17.7261 3.00467 16.1735L3 15.9999V12.9999H1.96568C1.60932 12.9999 1.43085 12.569 1.68284 12.317L3.71715 10.2827C3.87336 10.1265 4.12663 10.1265 4.28284 10.2827L6.31715 12.317C6.56914 12.569 6.39067 12.9999 6.03431 12.9999H5V15.9999C5 16.529 5.33381 16.9377 5.71205 16.9934L5.8 16.9999H14.1716L2.1005 4.92879C1.70998 4.53826 1.70998 3.9051 2.1005 3.51457C2.49103 3.12405 3.12419 3.12405 3.51472 3.51457L3.61357 3.61343ZM7.81421 4.99985L9.81421 6.99985H19.2L19.2879 7.00633C19.6662 7.06202 20 7.47072 20 7.99985V15.9999L19.9942 16.1197C19.965 16.4194 19.8279 16.6711 19.6419 16.8276L21.0577 18.2433C21.6383 17.6894 22 16.8828 22 15.9999V7.99985L21.9953 7.82624C21.9115 6.27359 20.7112 4.99985 19.2 4.99985H7.81421Z"></path></svg>
+                  <span>{{'Repeat video' | translate}}</span>
+                  <p-inputSwitch
+                    [formControl]="isRepeatingVideo"
+                    [style]="{'margin-left': '41px'}"
+                  >
+                  </p-inputSwitch>
+                </div>
+                <button pButton type="button" class="p-button-text no-padding more-btn more-btn-s overlay-btn" (click)="toggleFontSizeOverlay(false, true)">
+                  <svg data-v-2d3fc79c="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" width="24" height="24" focusable="false" aria-hidden="true" class="left-icon" data-v-cfe1155e=""><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M10.5,5l3.8,10l1.7-4.3h1.3l2.7,7.2h-1.3L18.1,16h-3l-0.2,0.6l0.6,1.5h-2.3L12,14.8H6.5l-1.2,3.3H3L8,5H10.5z M16.6,11.9L16.6,11.9l-1.2,3.1h2.3L16.6,11.9z M9.3,7.3L9.3,7.3l-2.1,5.7h4.2L9.3,7.3z"></path></svg>
+                  <span>{{'Font size' | translate}}</span>
+                  <svg class="right-icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                       viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;" xml:space="preserve">
+                      <g>
+                        <g id="keyboard-arrow-right">
+                        <polygon points="58.65,267.75 175.95,153 58.65,35.7 94.35,0 247.35,153 94.35,306 		" fill="currentColor"/>
+                        </g>
+                      </g>
+                    </svg>
+                </button>
+                <button pButton type="button" class="p-button-text no-padding more-btn more-btn-s overlay-btn" (click)="onChangeShortcutModal(true, moreOverlay)">
+                  <svg class="left-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M4,5A2,2 0 0,0 2,7V17A2,2 0 0,0 4,19H20A2,2 0 0,0 22,17V7A2,2 0 0,0 20,5H4M4,7H20V17H4V7M5,8V10H7V8H5M8,8V10H10V8H8M11,8V10H13V8H11M14,8V10H16V8H14M17,8V10H19V8H17M5,11V13H7V11H5M8,11V13H10V11H8M11,11V13H13V11H11M14,11V13H16V11H14M17,11V13H19V11H17M8,14V16H16V14H8Z" fill="currentColor"/></svg>
+                  <span>{{'Shortcuts' | translate}}</span>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="isShowingFontSizeOverlayContent">
+                <button style="width: 100%; padding: 10px 0 10px 0; text-align: left; color: white" pButton type="button" label="{{'Return' | translate}}" icon="pi pi-angle-left" class="p-button-text no-padding overlay-btn" (click)="toggleFontSizeOverlay(true, false)"></button>
+                <button *ngFor="let fontSize of subtitleStyles; let i=index" [ngClass]="{
+                    'secondary-overlay-btn-active': i === currentSubtitleStyleIndex
+                  }" style="width: 100%; padding: 10px 0 10px 20px; text-align: left;" pButton type="button" label="{{fontSize.label}}" class="p-button-text overlay-btn secondary-overlay-btn" (click)="selectSubtitleFontSize(i, moreOverlay)"></button>
+              </ng-container>
+            </div>
+          </p-overlayPanel>
+          <p-dialog [(visible)]="openShortcutsModal" [modal]="true" [dismissableMask]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+            <ng-template pTemplate="header">
+            </ng-template>
+            <ng-template pTemplate="content">
+              <p-table [value]="shortcuts" >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>{{'Shortcuts' | translate}}</th>
+                    <th>{{'Functions' | translate}}</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-shortcut>
+                  <tr [ngClass]="{
+                        'shortcut': shortcut.id === 2 || shortcut.id === 4
+                      }">
+                    <td>{{shortcut.shortcut | translate}}</td>
+                    <td>{{shortcut.action | translate}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </ng-template>
+          </p-dialog>
         </div>
     </div>
     <div *ngIf="content">
@@ -19,19 +135,18 @@
           <div class="card content-info">
             <h1 class="title">{{content?.title}}</h1>
             <p class="translated-title">{{content?.titleTranslated}}</p>
-
             <div class="buttons">
-              <button style="height: 45px" pButton type="button" icon="pi pi-check" label="{{'Mark as studied' | translate}}" *ngIf="!content?.contentAttribute?.isStudied; else studiedButton" (click)="setContentStudiedAttributes(content?.id)"></button>
-              <button style="height: 45px" pButton type="button" class="p-button-text" label="{{content?.contentAttribute?.isHidden ? 'Hidden from catalog' : 'Hide from catalog' | translate}}" icon="pi pi-eye-slash" (click)="setContentHiddenAttributes(content?.id)"></button>
-              <button style="height: 45px" pButton type="button" class="p-button-text" label="{{'Report' | translate}}" icon="pi pi-exclamation-triangle" (click)="onChangeReportModal(true)"></button>
+              <button class="btn-mid" pButton type="button" icon="pi pi-check" label="{{'Mark as studied' | translate}}" *ngIf="!content?.contentAttribute?.isStudied; else studiedButton" (click)="setContentStudiedAttributes(content?.id)"></button>
+              <button pButton type="button" class="p-button-text btn-mid" label="{{content?.contentAttribute?.isHidden ? 'Hidden from catalog' : 'Hide from catalog' | translate}}" icon="pi pi-eye-slash" (click)="setContentHiddenAttributes(content?.id)"></button>
+              <button pButton type="button" class="p-button-text btn-mid" label="{{'Report' | translate}}" icon="pi pi-exclamation-triangle" (click)="onChangeReportModal(true)"></button>
             </div>
-            <p-dialog [(visible)]="openModal" [modal]="true" [dismissableMask]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+            <p-dialog [(visible)]="openReportModal" [modal]="true" [dismissableMask]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
               <ng-template pTemplate="header">
                 <p style="text-align: center" class="recommended-title">{{'Report' | translate}}</p>
               </ng-template>
               <textarea pInputTextarea placeholder="{{'Report reason...' | translate}}" [formControl]="reportReason"></textarea>
               <ng-template pTemplate="footer">
-                <button style="height: 45px" label="{{'Send report' | translate}}" pButton type="button" class="p-button-text" icon="pi pi-send" (click)="sendReport()"></button>
+                <button label="{{'Send report' | translate}}" pButton type="button" class="p-button-text btn-mid" icon="pi pi-send" (click)="sendReport()"></button>
               </ng-template>
             </p-dialog>
             <p class="content"><span class="content content__header">{{'Channel' | translate}}: </span><a [routerLink]="'/content/materials'" [queryParams]="{'filter[youtubeChannelId]':content?.dataJson?.youtubeVideo?.channelId}">{{content?.dataJson?.youtubeVideo?.channel?.title}}</a></p>
@@ -47,7 +162,7 @@
           </div>
         </div>
         <div class="p-col-12 p-md-4">
-          <div class="card content-info content-info__recommended">
+          <div class="card">
             <p class="recommended-title">{{'Recommended videos' | translate}}</p>
             <a [routerLink]="'/content/view/' + recommended?.id" class="recommended-item" *ngFor="let recommended of content?.recommendedVideos">
               <div style="background-image: url({{recommended.imageUrl}});" class="recommended-item__image"></div>
@@ -69,5 +184,15 @@
 </ng-template>
 
 <ng-template #studiedButton>
-  <button style="height: 45px" pButton class="p-button-outlined p-button-secondary" type="button" label="{{'Marked as studied' | translate}}" (click)="setContentStudiedAttributes(content?.id)"></button>
+  <button pButton class="p-button-outlined p-button-secondary btn-mid" type="button" label="{{'Marked as studied' | translate}}" (click)="setContentStudiedAttributes(content?.id)"></button>
+</ng-template>
+
+<ng-template #pauseButton>
+  <button pButton title="{{'Pause' | translate}}" type="button" style="background: none; border: none; color: white" class="control" (click)="pause()">
+    <ic-icon [icon]="icons.pause" height="60" width="60" class="play"></ic-icon>
+  </button>
+</ng-template>
+
+<ng-template #repeatingVideoIcon>
+  <svg data-v-2d3fc79c="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" width="24" height="24" focusable="false" aria-hidden="true" class="left-icon" data-v-cfe1155e=""><path fill="currentColor" d="M19.2,5c1.5,0,2.7,1.3,2.8,2.8L22,8v8c0,1.6-1.1,2.9-2.6,3l-0.2,0H5.8c-1.5,0-2.7-1.3-2.8-2.8L3,16l0-3H2c-0.2,0-0.4-0.2-0.4-0.4c0-0.1,0-0.2,0.1-0.3l2-2c0.2-0.2,0.4-0.2,0.6,0l2,2c0.2,0.2,0.2,0.4,0,0.6C6.2,13,6.1,13,6,13H5l0,3c0,0.5,0.3,0.9,0.7,1l0.1,0h13.4c0.4,0,0.7-0.4,0.8-0.9l0-0.1V8c0-0.5-0.3-0.9-0.7-1l-0.1,0H5.8c-0.6,0-1-0.4-1-1s0.4-1,1-1H19.2z M10.5,9.5c0.1-0.2,0.3-0.3,0.5-0.2l0,0l4.2,2.3c0.3,0.2,0.3,0.6,0,0.8l0,0l-4.2,2.3c-0.1,0-0.1,0-0.2,0c-0.2,0-0.4-0.2-0.4-0.4l0,0V9.7C10.5,9.6,10.5,9.5,10.5,9.5z"></path></svg>
 </ng-template>

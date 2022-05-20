@@ -13,63 +13,78 @@ import { ListMaterialsComponent } from '@app/content/materials/list-materials/li
 import { EditMaterialsComponent } from '@app/content/edit-materials/edit-materials.component';
 import { ContentViewComponent } from './content-view/content-view.component';
 import { VideojsComponent } from './videojs/videojs.component';
-import { ReportModalComponent } from './report-modal/report-modal.component';
-import {DialogModule} from "primeng/dialog";
+import { DialogModule } from 'primeng/dialog';
+import { RippleModule } from 'primeng/ripple';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import {InputSwitchModule} from "primeng/inputswitch";
+import {IconModule} from "@visurel/iconify-angular";
 
 const routes: Routes = [
-   {
+  {
     path: '',
     component: ContentComponent,
     data: {
-      breadcrumb: 'Materials'
+      breadcrumb: 'Materials',
     },
     children: [
       {
         path: '',
         redirectTo: 'materials',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'create',
         component: CreateMaterialsComponent,
         data: {
-          breadcrumb: 'Create material'
+          breadcrumb: 'Create material',
         },
       },
       {
         path: 'edit/:id',
         component: EditMaterialsComponent,
         data: {
-          breadcrumb: 'Edit material'
+          breadcrumb: 'Edit material',
         },
       },
       {
         path: 'view/:id',
         component: ContentViewComponent,
         data: {
-          breadcrumb: 'View material'
+          breadcrumb: 'View material',
         },
       },
       {
         path: 'materials',
         component: MaterialsComponent,
         data: {
-          breadcrumb: ''
+          breadcrumb: '',
         },
       },
-    ]
-   }
+    ],
+  },
 ];
 
 @NgModule({
-  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, EditMaterialsComponent, ListMaterialsComponent, ContentViewComponent, VideojsComponent, ReportModalComponent],
-  imports: [
-    RouterModule.forChild(routes),
-    CommonModule,
-    TranslateModule.forChild(),
-    ReactiveFormsModule,
-    SharedModule,
-    DialogModule,
-  ]
+  declarations: [
+    ContentComponent,
+    MaterialsComponent,
+    CreateMaterialsComponent,
+    EditMaterialsComponent,
+    ListMaterialsComponent,
+    ContentViewComponent,
+    VideojsComponent,
+  ],
+    imports: [
+        RouterModule.forChild(routes),
+        CommonModule,
+        TranslateModule.forChild(),
+        ReactiveFormsModule,
+        SharedModule,
+        DialogModule,
+        RippleModule,
+        OverlayPanelModule,
+        InputSwitchModule,
+        IconModule,
+    ],
 })
 export class ContentModule {}
