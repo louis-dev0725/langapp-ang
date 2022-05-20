@@ -1,0 +1,11 @@
+<div class="p-col-12 p-md-10 p-md-offset-1 start-content">
+  <div class="card full-width flex-layout flex-layout__a-c flex-layout__j-c">
+    <div class="flex-layout flex-layout__col flex-layout__j-c start-text">
+      <p style="font-size: 24px; font-weight: 600" translate>{{endMessage?.finishContent?.title | translate}}</p>
+      <div style="word-wrap: break-word; font-size: 14px">
+        {{endMessage?.finishContent?.text | translate}}
+      </div>
+      <button style="text-align: center; width: 100%; margin-top: 20px; height: 35px; font-size: 14px" label="{{'Continue study' | translate}}" pButton (click)="goToTrainingStart()"></button>
+    </div>
+  </div>
+</div>

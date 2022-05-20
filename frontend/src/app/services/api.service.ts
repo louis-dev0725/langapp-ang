@@ -11,7 +11,14 @@ import {
   UserPaymentMethod,
   AddCardSquareRequest,
   ProlongSubscriptionResult,
-  ContentAttributeResponse, ContentStudiedAttributeRequest, ContentHiddenAttributeRequest
+  ContentAttributeResponse,
+  ContentStudiedAttributeRequest,
+  ContentHiddenAttributeRequest,
+  Training,
+  Drill,
+  TrainingEndMessage,
+  TrainingSetting,
+  Hidings,
 } from '@app/interfaces/common.interface';
 import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
@@ -24,7 +31,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { APP_BASE_HREF } from '@angular/common';
 import { UserService } from '@app/services/user.service';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 
 type ParamsInterface =
   | HttpParams
@@ -86,7 +93,7 @@ export class ApiService {
     private messageService: MessageService,
     @Inject(APP_BASE_HREF) private baseHref: string,
     private userService: UserService,
-    private router: Router,
+    private router: Router
   ) {}
 
   apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, catchValidationErrors = false) {
@@ -119,16 +126,26 @@ export class ApiService {
           });
         }
         return of(new ApiError(response.error, response.ok, response.status, response.statusText));
-      }
-      else if (response.error.message) {
+      } else if (response.error.message) {
         if (response.error.status === 402) {
           this.router.navigate(['payment']);
-          this.messageService.add({ severity: 'error', summary: 'Please check your payment details', detail: 'Payment required to continue using the service.', sticky: true, closable: true });
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Please check your payment details',
+            detail: 'Payment required to continue using the service.',
+            sticky: true,
+            closable: true,
+          });
           return throwError(response);
         }
-        this.messageService.add({ severity: 'error', summary: 'Server error: ' + response.error.message, detail: response.message, sticky: true, closable: true });
-      }
-      else if (response.message) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Server error: ' + response.error.message,
+          detail: response.message,
+          sticky: true,
+          closable: true,
+        });
+      } else if (response.message) {
         this.messageService.add({ severity: 'error', summary: 'Server error', detail: response.message, sticky: true, closable: true });
       }
       //return of(new ApiError(response.error, response.ok, response.status, response.statusText));
@@ -680,7 +697,7 @@ export class ApiService {
     return this.apiRequest<Content>('GET', `contents/${id}`, {
       params: {
         expand: 'recommendedVideos,categories,contentAttribute',
-      }
+      },
     });
   }
 
@@ -1022,15 +1039,36 @@ export class ApiService {
   }
 
   setContentStudiedAttribute(contentId: number, body: ContentStudiedAttributeRequest) {
-    return this.apiRequest<ContentAttributeResponse>('PATCH', `content-attributes/${contentId}`, {body});
+    return this.apiRequest<ContentAttributeResponse>('PATCH', `content-attributes/${contentId}`, { body });
   }
 
   setContentHiddenAttribute(contentId: number, body: ContentHiddenAttributeRequest) {
-    return this.apiRequest<ContentAttributeResponse>('PATCH', `content-attributes/${contentId}`, {body});
+    return this.apiRequest<ContentAttributeResponse>('PATCH', `content-attributes/${contentId}`, { body });
   }
 
   sendReport(body: ReportRequest): Observable<ReportResponse> {
-    return this.apiRequest<ReportResponse>('POST', 'content-reports', {body});
+    return this.apiRequest<ReportResponse>('POST', 'content-reports', { body });
   }
 
+  getTrainingCards(): Observable<Training> {
+    return this.apiRequest<Training>('GET', 'drills/list');
+  }
+
+  reportTrainingDrills(body: { drills: Drill[] }): Observable<TrainingEndMessage> {
+    return this.apiRequest<TrainingEndMessage>('POST', 'drills/report-progress', { body });
+  }
+
+  saveTrainingSetting(body: TrainingSetting): Observable<TrainingSetting> {
+    return this.apiRequest<TrainingSetting>('PATCH', 'drills/settings', { body });
+  }
+
+  saveTrainingHidings(body: Hidings): Observable<{ drills: Drill[] }> {
+    return this.apiRequest<{ drills: Drill[] }>('POST', 'drills/hide', { body });
+  }
+
+  getTrainingCardById(cardId: string): Observable<any> {
+    return this.apiRequest<any>('GET', 'drills/card', { params: {
+        id: cardId
+      } });
+  }
 }
