@@ -99,6 +99,106 @@ a.p-button:hover {
   }
 }
 
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.flex-layout {
+  display: flex;
+
+  &__row {
+    flex-direction: row;
+  }
+
+  &__col {
+    flex-direction: column;
+  }
+
+  &__a-c {
+    align-items: center;
+  }
+
+  &__a-s {
+    align-items: flex-start;
+  }
+
+  &__j-c {
+    justify-content: center;
+  }
+
+  &__j-s {
+    justify-content: flex-start;
+  }
+
+  &__j-e {
+    justify-content: flex-end;
+  }
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.text-black {
+  color: black;
+}
+
+.text-gray {
+  color: #a0b0c4;
+}
+
+.ellipsis-btn {
+  background: white;
+  border: 1px solid #5397d5;
+  color: #5397d5;
+}
+
+.question-highlight {
+  background-color: #2196f3;
+  color: white;
+}
+
+.word-highlight {
+  text-decoration: underline;
+  text-decoration-color: #8fcaf9;
+  text-decoration-thickness: 2px;
+}
+
+.question-blank-box {
+  padding: 0 20px;
+  background-color: #2196f3;
+  color: white;
+  font-size: 16px;
+  border-bottom: 2px solid #757575;
+}
+
+.question-blank-box:before {
+  content: "?";
+}
+
+.rt-gray {
+  color: #acacac;
+}
+
+.rt-furigana-font {
+  font-size: 18px;
+}
+
+.rt-furigana-font-large {
+  font-size: 20px;
+}
+
+.rt-furigana-font-small {
+  font-size: 16px;
+}
+
+.rt-furigana-font-tiny {
+  font-size: 13px;
+}
 /*
 $color-blue-link: #039be5;
 $color-red-danger: #f44336;

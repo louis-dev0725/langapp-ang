@@ -1,28 +1,17 @@
-<div class="container">
-    <div class="card">
-      <h4 translate>Study new words</h4>
-      <!--<div class="filter-dictionary">
-        <button mat-flat-button class="type-training" color="primary" [routerLink]="['/training/cards-word-kanji']"
-                routerLinkActive="active_button">
-          {{ 'CardsWordKanji' | translate }}
-        </button>
-  
-        <button mat-flat-button class="type-training" color="primary" [routerLink]="['/training/cards-word']"
-                routerLinkActive="active_button">
-          {{ 'CardsWord' | translate }}
-        </button>
-  
-        <button mat-flat-button class="type-training" color="primary" [routerLink]="['/training/cards-kanji']"
-                routerLinkActive="active_button">
-          {{ 'CardsKanji' | translate }}
-        </button>
-  
-        <button mat-flat-button class="type-training" color="primary" [routerLink]="['/training/word-translate']"
-                routerLinkActive="active_button">
-          {{ 'WordTranslate' | translate }}
-        </button>
+<div class="p-col-12 p-md-8 p-md-offset-2 start-content">
+  <div class="card full-width flex-layout flex-layout__a-c flex-layout__j-c">
+    <div class="flex-layout flex-layout__col flex-layout__j-c start-text">
+      <p style="font-size: 21px; font-weight: 600" translate>{{'Study new words' | translate}}</p>
+      <div style="word-wrap: break-word; font-size: 14px" translate>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Sed ut imperdiet tortor. Quisque molestie turpis vitae ante iaculis, a
+        convallis ante porta. Nullam a viverra elit, non interdum sem. Pellentesque
+        quis felis ullamcorper dolor sollicitudin lacinia. Aliquam ac lacinia diam,
+        at viverra urna. Duis eleifend, nunc quis pharetra laoreet, enim ipsum faucibus
+        dui, euismod efficitur metus ipsum in massa. Curabitur dictum, ante non lobortis
+        iaculis, leo mauris cursus nisi, non condimentum nunc ligula in sapien.
       </div>
-    </div>-->
-  
-    <p-button label="Start" [routerLink]="['/training/combo']"></p-button>
-  </div>  
+      <button class="full-width" style="text-align: center; margin-top: 20px; height: 35px; font-size: 14px" label="{{'Start study' | translate}}" pButton (click)="getTrainingCards()"></button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="p-col-12 p-md-10 p-md-offset-1 start-content">
+  <div class="card full-width">
+    <div class="p-grid full-width" style="margin: 0">
+      <div class="p-col-12 p-md-6">
+        <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s">
+          <div style="flex: 1">
+            <i class="pi pi-volume-up" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
+          </div>
+          <div style="flex: 9" class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s">
+            <p id="main-furigana" [innerHTML]="card?.furiganaHtml" class="text-black" style="font-size: 40px; margin-left: 10px;"></p>
+            <p-knob size="20" [(ngModel)]="card.frequencyRank" [showValue]="false" [valueColor]="'#73e38e'" [style]="{'margin-left': '10px'}"></p-knob>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-12 p-md-6 padding-m">
+        <div class="flex-layout flex-layout__row flex-layout__a-s flex-layout__j-s">
+          <img class="margin-m" width="105" height="105" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl">
+<!--          <button pButton style="background: none; padding: 0; border: none; margin-left: 10px" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18" [color]="'#5397d5'"></ic-icon></button>-->
+        </div>
+      </div>
+    </div>
+    <div class="p-grid full-width" style="margin-bottom: 0; padding: 12px 16px">
+      <div class="p-col-12 p-md-6 border-r">
+        <p style="text-align: center; color: #afafaf; font-size: 12px">{{'Meanings' | translate}}:</p>
+        <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s">
+          <div style="flex: 1"></div>
+          <div style="flex: 9">
+            <ul class="no-padding" style="list-style: none; margin-left: 10px">
+              <li *ngFor="let meaning of card?.meanings" class="text-black" style="margin-bottom: 10px; font-size: 14px">
+                {{meaning?.value}}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="flex-layout flex-layout__row flex-layout__j-c">
+          <hr class="full-width" style="border: 1px solid #f4f6f8;">
+        </div>
+        <ng-container *ngIf="card?.exampleSentences?.length">
+          <p style="text-align: center; color: #afafaf; font-size: 12px">{{'Examples' | translate}}:</p>
+          <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s" style="margin-top: 30px;" *ngFor="let example of card?.exampleSentences | slice: 0 : isFullExampleList ? card?.exampleSentences?.length : card?.countExampleSentencesToShow">
+            <div style="flex: 1">
+              <i *ngIf="example?.audioUrls?.length" class="pi pi-volume-up" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(example?.audioUrls[0])"></i>
+            </div>
+            <div style="flex: 9;" class="flex-layout flex-layout__col">
+              <p [innerHTML]="example?.furiganaHtml" class="text-black" style="margin-left: 10px; font-size: 18px"></p>
+              <p *ngIf="example?.translationHtml" class="text-black" [innerHTML]="example?.translationHtml" style="margin-left: 10px; font-size: 14px"></p>
+            </div>
+          </div>
+          <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-c" style="margin-top: 25px" *ngIf="!isFullExampleList">
+            <button pButton class="ellipsis-btn" style="width: 100%; height: 20px" icon="pi pi-ellipsis-h" iconPos="center" (click)="isFullExampleList = true"></button>
+          </div>
+        </ng-container>
+      </div>
+      <div class="p-col-12 p-md-6">
+        <p style="text-align: center; color: #afafaf; font-size: 12px">{{'Kanji in this word' | translate}}:</p>
+        <div class="flex-layout flex-layout__col" *ngFor="let kanji of card?.kanji; let i=index">
+          <div class="flex-layout flex-layout__row">
+            <div style="flex: 1"></div>
+            <div style="flex: 12;" class="flex-layout flex-layout__row">
+              <ng-container *ngFor="let kanjiReading of kanji?.readings; let y=index">
+                <div class="flex-layout flex-layout__col flex-layout__a-c" [ngClass]="{
+                'm-l': y !== 0
+              }" *ngIf="card.kanji[i].readings[y].frequencyPercent > 5">
+                  <p-knob size="20" [(ngModel)]="card.kanji[i].readings[y].frequencyPercent" [showValue]="false" [valueColor]="y === 0 ? '#73e38e' : '#a0b0c4'"></p-knob>
+                  <p [ngClass]="{
+                    'text-black': y === 0,
+                    'text-gray': y !== 0
+                  }" style="font-size: 14px">{{kanjiReading?.value}}</p>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="flex-layout">
+            <div style="flex: 1"></div>
+            <div style="flex: 9" class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s">
+              <p class="text-black" style="font-size: 31px; margin: 0">{{kanji?.value}}</p>
+              <ul style="list-style: none" class="p-l">
+                <li *ngFor="let kanjiMeaning of kanji?.meanings; let i=index" class="text-black" style="font-size: 16px">{{kanjiMeaning?.value}}<span *ngIf="kanji?.meanings?.length !== 1 && i !== kanji?.meanings?.length - 1">,</span></li>
+              </ul>
+            </div>
+            <div style="flex: 3" class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-c">
+              <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="center" (click)="goToKanjiInfo(kanji?.infoCard)"></button>
+            </div>
+          </div>
+          <div class="flex-layout flex-layout__row flex-layout__j-c" *ngIf="i !== kanji?.meanings?.length - 1">
+            <hr class="full-width" style="border: 1px solid #f4f6f8;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="full-width" style="margin: 0; padding: 12px 16px">
+      <div class="word-footer">
+        <div style="flex: 3" class="footer-text">
+          <p style="color: #a0b0c4; font-size: 14px">
+            {{'Explanation: take a look at the meanings and the usage of the word, then click "Continue."' | translate}}</p>
+        </div>
+        <div style="flex: 1" class="full-width flex-layout flex-layout__j-c">
+          <button pButton label="{{'Continue' | translate}}" class="full-width" style="height: 40px; font-size: 15px" (click)="goToNextCard()"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

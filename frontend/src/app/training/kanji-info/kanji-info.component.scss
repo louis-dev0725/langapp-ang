@@ -1,0 +1,62 @@
+.start-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+
+  .word-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-text {
+    margin-bottom:25px;
+  }
+
+  .border-r {
+    border-right: none;
+  }
+
+  .margin-m {
+    margin-left: 1rem;
+  }
+}
+
+@media screen and (min-width: 968px) {
+
+  .word-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .footer-text {
+    margin-bottom: 0;
+  }
+
+  .border-r {
+    border-right: 1px solid #f4f6f8;
+  }
+}
+
+.m-t {
+  margin-top: 35px;
+}
+
+.m-t-m {
+  margin-top: 10px;
+}
+
+.m-t-s {
+  margin-top: 15px;
+}
+
+.edit:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: none;
+}

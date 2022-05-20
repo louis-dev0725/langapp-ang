@@ -733,8 +733,8 @@
                 "/assets/test-audio.mp3?word-3236529"
             ]
         },
-        "selectWordForSentence_3236529_video": {
-            "cardType": "selectWordForSentence",
+        "selectWordForSentenceVideo_3236529": {
+            "cardType": "selectWordForSentenceVideo",
             "wordId": 3236529,
             "infoCard": "wordInfo_3236529",
             "question": {
@@ -900,7 +900,7 @@
             "answerDuration": null
         },
         {
-            "card": "selectWordForSentence_3236529_video",
+            "card": "selectWordForSentenceVideo_3236529",
             "isFinished": false,
             "isAnsweredCorrectly": null,
             "answerDuration": null
