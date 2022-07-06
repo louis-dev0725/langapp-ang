@@ -5,9 +5,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-  declarations: [ConfirmDialogComponent],
-  exports: [ConfirmDialogComponent],
-  imports: [MatButtonModule, MatDialogModule, TranslateModule],
-  entryComponents: [ConfirmDialogComponent]
+    declarations: [ConfirmDialogComponent],
+    exports: [ConfirmDialogComponent],
+    imports: [MatButtonModule, MatDialogModule, TranslateModule]
 })
 export class ConfirmDialogModule {}
