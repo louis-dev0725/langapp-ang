@@ -24,8 +24,8 @@ export class EndTrainingComponent implements OnInit {
   }
 
   goToTrainingStart() {
-    this.router.navigate(['training/index']);
     this.cardService.resetTraining();
+    this.cardService.loadCards();
   }
 
   getEndMessage() {

@@ -18,14 +18,6 @@ export class IndexComponent {
   constructor(private apiService: ApiService, private cardsService: CardsService, private router: Router) {}
 
   getTrainingCards() {
-    this.apiService
-      .getTrainingCards()
-      .pipe(untilDestroyed(this))
-      .subscribe((response) => {
-        this.cardsService.currentCardIndex = 0;
-        this.cardsService.setTrainingCards(response.cards);
-        this.cardsService.setTrainingDrills(response.drills);
-        this.cardsService.navigateToNextCard();
-      });
+    this.cardsService.loadCards();
   }
 }

@@ -19,7 +19,9 @@ export class EndingGuard implements CanActivate {
         if (message) {
           return true;
         }
-        return this.router.createUrlTree(['training/audio-for-word']);
+        console.log('Error: no ending message!');
+
+        return this.router.createUrlTree(['training/index']);
       })
     );
   }

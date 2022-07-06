@@ -43,16 +43,16 @@ export interface ListResponse<T> {
   _links: {
     self: {
       href: string;
-    },
+    };
     first?: {
       href: string;
-    },
+    };
     next?: {
       href: string;
-    },
+    };
     last?: {
       href: string;
-    }
+    };
   };
   _meta: {
     totalCount: number;
@@ -105,13 +105,13 @@ export interface CategoryArray {
   _links: {
     next?: {
       href: string;
-    },
+    };
     self: {
       href: string;
-    },
+    };
     last?: {
       href: string;
-    }
+    };
   };
   _meta: {
     totalCount: number;
@@ -176,13 +176,13 @@ export interface ContentsArray {
   _links: {
     self: {
       href: string;
-    },
+    };
     next?: {
       href: string;
-    },
+    };
     last?: {
       href: string;
-    }
+    };
   };
   _meta: {
     totalCount: number;
@@ -252,13 +252,13 @@ export interface DictionaryArray {
   _links: {
     next?: {
       href: string;
-    },
+    };
     self: {
       href: string;
-    },
+    };
     last?: {
       href: string;
-    }
+    };
   };
   _meta: {
     totalCount: number;
@@ -328,29 +328,20 @@ export interface Category {
 }
 
 export interface Training {
-  cards: TrainingCard;
+  cards: TrainingCards;
   drills: Drill[];
 }
 
-export interface TrainingCard {
-  wordInfo_3236529: WordInfo;
-  kanjiInfo_3157554: KanjiCardInfo;
-  selectFuriganaForOneKanji_3236529_1: TrainingQuestionCard;
-  selectFuriganaForWholeWord_3236529: TrainingQuestionCard;
-  typeFuriganaForWholeWord_3236529: TrainingQuestionCard;
-  selectTranslationForWord_3236529: TrainingQuestionCard;
-  selectWordForTranslation_3236529: TrainingQuestionCard;
-  selectWordForAudio_3236529: TrainingQuestionCard;
-  selectWordForSentence_3236529: TrainingQuestionCard;
-  selectWordForSentence_3236529_video: TrainingQuestionCard;
-  selectAudioForWord_3236529: TrainingQuestionCard;
+export interface TrainingCards {
+  [key: string]: WordInfo | KanjiCardInfo | TrainingQuestionCard;
 }
 
 export interface Drill {
   card: string;
   isFinished: boolean;
   isAnsweredCorrectly: boolean;
-  answerDuration: number;
+  answerStartTime: number;
+  answerEndTime: number;
 }
 
 export interface WordInfo {

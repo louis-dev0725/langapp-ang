@@ -1,18 +1,11 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { CardsService } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
-import {CardTypeRouteEnum} from "@app/training/enums/card-type-route.enum";
+import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 
 @UntilDestroy()
 @Component({
@@ -83,7 +76,7 @@ export class FuriganaOneKanjiComponent implements OnInit, AfterViewInit {
         this.answeredIndex = index;
         this.isAnsweredCorrectly = this.card.question?.answers[index - 1].isCorrectAnswer;
         this.playAudio(this.card?.audioUrls[0]);
-        this.updateDrills();
+        this.cardsService.answerCard(this.isAnsweredCorrectly);
       }
     } else {
       this.continueTraining();
@@ -95,26 +88,10 @@ export class FuriganaOneKanjiComponent implements OnInit, AfterViewInit {
     this.isAnswered = true;
     this.isAnsweredCorrectly = false;
     this.playAudio(this.card?.audioUrls[0]);
-    this.updateDrills();
-  }
-
-  updateDrills() {
-    this.drills[this.cardsService.currentCardIndex] = {
-      ...this.drills[this.cardsService.currentCardIndex],
-      answerDuration: Date.now() - this.startTime,
-      isAnsweredCorrectly: !!this.isAnsweredCorrectly,
-      isFinished: true,
-    };
-    this.cardsService.currentCardIndex += 1;
-    this.cardsService.setTrainingDrills(this.drills);
-    this.api.reportTrainingDrills({ drills: this.drills }).pipe(untilDestroyed(this)).subscribe();
+    this.cardsService.answerCard(this.isAnsweredCorrectly);
   }
 
   continueTraining() {
-    if (!this.isAnsweredCorrectly) {
-      this.cardsService.currentCardIndex = this.drills.findIndex(drill => drill.card.split('_')[0] === 'kanjiInfo');
-    }
-    // this.cardsService.navigateToNextCard(this.card.infoCard.split('_')[1]);
     this.cardsService.navigateToNextCard();
   }
 
@@ -124,10 +101,10 @@ export class FuriganaOneKanjiComponent implements OnInit, AfterViewInit {
   }
 
   getTrainingDetails() {
-    this.cardsService.currentCardIndex = this.cardsService.getTrainingDrillsValue().findIndex(card => card.card.split('_')[0] === 'selectFuriganaForOneKanji');
-    this.cardsService.getCurrentCard()
+    this.cardsService
+      .getCurrentCard()
       .pipe(untilDestroyed(this))
-      .subscribe(card => {
+      .subscribe((card) => {
         this.card = card;
         this.cardsService.setIsAudioCard(card?.question?.isAudioQuestion);
         this.cd.markForCheck();

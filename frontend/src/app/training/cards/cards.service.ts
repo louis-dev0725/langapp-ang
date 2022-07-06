@@ -1,59 +1,81 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  Drill,
-  KanjiCardInfo,
-  TrainingCard,
-  TrainingEndMessage,
-  TrainingQuestionCard,
-  WordInfo
-} from '@app/interfaces/common.interface';
-import {Router} from "@angular/router";
-import {CardTypeRouteEnum} from "@app/training/enums/card-type-route.enum";
+import { Drill, KanjiCardInfo, TrainingCards, TrainingEndMessage, TrainingQuestionCard, WordInfo } from '@app/interfaces/common.interface';
+import { Router } from '@angular/router';
+import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
+import { ApiService } from '@app/services/api.service';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Injectable({
   providedIn: 'root',
 })
 export class CardsService {
-
-  currentCardIndex = 0;
+  currentDrillIndex = 0;
   cardTypeRouteEnum = CardTypeRouteEnum;
 
-  private trainingCards$ = new BehaviorSubject<TrainingCard>(null);
-  private currentWord$ = new BehaviorSubject<string>(null);
-  private currentCard$ = new BehaviorSubject(null);
-  private currentCardType$ = new BehaviorSubject<string>(null);
-  private isAudioCard$ = new BehaviorSubject<boolean>(null);
-  private trainingDrills$ = new BehaviorSubject<Drill[]>(null);
-  private endingMessage$ = new BehaviorSubject<TrainingEndMessage>(null);
+  public cards$ = new BehaviorSubject<TrainingCards>(null);
+  public currentWord$ = new BehaviorSubject<string>(null);
+  public currentCard$ = new BehaviorSubject<WordInfo | KanjiCardInfo | TrainingQuestionCard>(null);
+  public currentCardType$ = new BehaviorSubject<string>(null);
+  public isAudioCard$ = new BehaviorSubject<boolean>(null);
+  public drills$ = new BehaviorSubject<Drill[]>(null);
+  public endingMessage$ = new BehaviorSubject<TrainingEndMessage>(null);
 
-  constructor(
-    private router: Router,
-  ) { }
+  constructor(private router: Router, private api: ApiService) {}
+
+  loadCards() {
+    this.api
+      .getTrainingCards()
+      .pipe(untilDestroyed(this))
+      .subscribe((response) => {
+        this.cards$.next(response.cards);
+        this.drills$.next(response.drills);
+        this.navigateToNextCard();
+      });
+  }
 
   navigateToNextCard() {
-    if (this.currentCardIndex < this.trainingDrills$.value.length) {
-      const drillCardType = this.trainingDrills$.value[this.currentCardIndex].card.split('_')[0];
-      this.currentCardType$.next(this.trainingDrills$.value[this.currentCardIndex].card);
-      let cardType: WordInfo | KanjiCardInfo | TrainingQuestionCard;
-      for (const card of Object.values(this.trainingCards$.value)) {
-        if (card.cardType === drillCardType) {
-          cardType = card;
-        }
-      }
-      if (cardType.cardType === 'wordInfo' || cardType.cardType === 'kanjiInfo') {
-        this.router.navigate(['training', this.cardTypeRouteEnum[drillCardType], cardType.wordId]);
+    this.currentDrillIndex = this.drills$.value.findIndex((d) => !d.isFinished);
+    console.log(this.currentDrillIndex);
+    if (this.currentDrillIndex != -1) {
+      const currentDrill = this.drills$.value[this.currentDrillIndex];
+      currentDrill.answerStartTime = Math.floor(Date.now());
+      const currentCard = this.cards$.value[currentDrill.card];
+      this.currentCardType$.next(currentCard.cardType);
+      this.currentCard$.next(currentCard);
+
+      if (currentCard.cardType === 'wordInfo' || currentCard.cardType === 'kanjiInfo') {
+        this.router.navigate(['training', this.cardTypeRouteEnum[currentCard.cardType], currentCard.wordId]);
       } else {
-        this.currentCard$.next(cardType);
-        this.router.navigate(['training', this.cardTypeRouteEnum[drillCardType]]);
+        this.router.navigate(['training', this.cardTypeRouteEnum[currentCard.cardType]]);
       }
     } else {
+      console.log('end of training');
       this.router.navigate(['training/end-of-training']);
     }
   }
 
-  setTrainingCards(cards: TrainingCard) {
-    this.trainingCards$.next(cards);
+  answerCard(isAnsweredCorrectly: boolean) {
+    let drills = [...this.drills$.value];
+    drills[this.currentDrillIndex] = {
+      ...drills[this.currentDrillIndex],
+      answerEndTime: Math.floor(Date.now() / 1000),
+      isAnsweredCorrectly: isAnsweredCorrectly,
+      isFinished: true,
+    };
+    this.drills$.next(drills);
+
+    this.api
+      .reportTrainingDrills({ drills: drills })
+      .pipe(untilDestroyed(this))
+      .subscribe((message) => {
+        this.endingMessage$.next(message);
+      });
+  }
+
+  setTrainingCards(cards: TrainingCards) {
+    this.cards$.next(cards);
   }
 
   setCurrentWord(word: string) {
@@ -73,15 +95,15 @@ export class CardsService {
   }
 
   setTrainingDrills(drills: Drill[]) {
-    this.trainingDrills$.next(drills);
+    this.drills$.next(drills);
   }
 
   setEndingMessage(message: TrainingEndMessage) {
     this.endingMessage$.next(message);
   }
 
-  getTrainingCards(): Observable<TrainingCard> {
-    return this.trainingCards$;
+  getTrainingCards(): Observable<TrainingCards> {
+    return this.cards$;
   }
 
   getCurrentWord(): Observable<string> {
@@ -101,11 +123,11 @@ export class CardsService {
   }
 
   getTrainingDrills(): Observable<Drill[]> {
-    return this.trainingDrills$;
+    return this.drills$;
   }
 
   getTrainingDrillsValue(): Drill[] {
-    return this.trainingDrills$.value;
+    return this.drills$.value;
   }
 
   getEndingMessage(): Observable<TrainingEndMessage> {

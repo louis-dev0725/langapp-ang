@@ -15,6 +15,11 @@ import { AnalyzeJapaneseService } from './analyze.japanese.service';
 import { TestService } from './test.service';
 import { DictionaryWordRepository } from './entities/DictionaryWordRepository';
 import { BackgroundModule } from './background/background.module';
+import { DrillsController } from './drills/drills.controller';
+import { AuthModule } from './auth/auth.module';
+import { User } from './entities/User';
+import { UserDictionary } from './entities/UserDictionary';
+import { UserDictionaryRepository } from './entities/UserDictionaryRepository';
 
 @Global()
 @Module({
@@ -26,10 +31,10 @@ import { BackgroundModule } from './background/background.module';
       username: process.env.POSTGRES_USER || 'postgres',
       password: process.env.POSTGRES_PASSWORD || 'postgres',
       database: process.env.POSTGRES_DB || 'postgres',
-      entities: [DictionaryWord, Content],
-      autoLoadEntities: false
+      entities: [DictionaryWord, Content, User, UserDictionary],
+      autoLoadEntities: false,
     }),
-    TypeOrmModule.forFeature([DictionaryWord, DictionaryWordRepository, Content]),
+    TypeOrmModule.forFeature([DictionaryWord, DictionaryWordRepository, Content, UserDictionary, UserDictionaryRepository]),
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST || 'redis',
@@ -41,8 +46,9 @@ import { BackgroundModule } from './background/background.module';
     }),
     ConsoleModule,
     BackgroundModule,
+    AuthModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, DrillsController],
   providers: [
     AppService,
     QueueService,
@@ -55,9 +61,6 @@ import { BackgroundModule } from './background/background.module';
     AnalyzeJapaneseService,
     TestService,
   ],
-  exports: [
-    ConsoleController,
-    AnalyzeJapaneseService,
-  ],
+  exports: [ConsoleController, AnalyzeJapaneseService],
 })
-export class AppModule { }
+export class AppModule {}

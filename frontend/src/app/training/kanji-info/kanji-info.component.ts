@@ -5,7 +5,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Drill, KanjiCardInfo } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
 import { Router } from '@angular/router';
-import {CardTypeRouteEnum} from "@app/training/enums/card-type-route.enum";
+import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 
 @UntilDestroy()
 @Component({
@@ -46,10 +46,10 @@ export class KanjiInfoComponent implements OnInit {
   }
 
   getTrainingDetails() {
-    this.cardsService.currentCardIndex = this.cardsService.getTrainingDrillsValue().findIndex(card => card.card.split('_')[0] === 'kanjiInfo');
-    this.cardsService.getCurrentCard()
+    this.cardsService
+      .getCurrentCard()
       .pipe(untilDestroyed(this))
-      .subscribe(card => {
+      .subscribe((card) => {
         this.card = card;
         this.cd.markForCheck();
       });
@@ -68,15 +68,7 @@ export class KanjiInfoComponent implements OnInit {
   }
 
   goToNextCard() {
-    this.drills[this.cardsService.currentCardIndex] = {
-      ...this.drills[this.cardsService.currentCardIndex],
-      answerDuration: Date.now() - this.startTime,
-      isAnsweredCorrectly: true,
-      isFinished: true,
-    };
-    this.cardsService.currentCardIndex += 1;
-    this.cardsService.setTrainingDrills(this.drills);
-    this.api.reportTrainingDrills({ drills: this.drills }).pipe(untilDestroyed(this)).subscribe();
+    this.cardsService.answerCard(null);
     this.cardsService.navigateToNextCard();
   }
 }

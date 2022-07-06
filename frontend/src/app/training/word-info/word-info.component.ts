@@ -1,11 +1,11 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {Drill, WordInfo} from '@app/interfaces/common.interface';
-import {CardsService} from '@app/training/cards/cards.service';
-import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Drill, WordInfo } from '@app/interfaces/common.interface';
+import { CardsService } from '@app/training/cards/cards.service';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import editIcon from '@iconify/icons-mdi/edit';
-import {ApiService} from '@app/services/api.service';
-import {Router} from '@angular/router';
-import {CardTypeRouteEnum} from "@app/training/enums/card-type-route.enum";
+import { ApiService } from '@app/services/api.service';
+import { Router } from '@angular/router';
+import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 
 @UntilDestroy()
 @Component({
@@ -57,10 +57,10 @@ export class WordInfoComponent implements OnInit, AfterViewInit {
   }
 
   getTrainingDetails() {
-    this.cardsService.currentCardIndex = this.cardsService.getTrainingDrillsValue().findIndex(card => card.card.split('_')[0] === 'wordInfo');
-    this.cardsService.getCurrentCard()
+    this.cardsService
+      .getCurrentCard()
       .pipe(untilDestroyed(this))
-      .subscribe(card => {
+      .subscribe((card) => {
         this.card = card;
         this.cd.markForCheck();
       });
@@ -74,15 +74,7 @@ export class WordInfoComponent implements OnInit, AfterViewInit {
   }
 
   goToNextCard() {
-    this.drills[this.cardsService.currentCardIndex] = {
-      ...this.drills[this.cardsService.currentCardIndex],
-      answerDuration: Date.now() - this.startTime,
-      isAnsweredCorrectly: true,
-      isFinished: true,
-    };
-    this.cardsService.currentCardIndex += 1;
-    this.cardsService.setTrainingDrills(this.drills);
-    this.api.reportTrainingDrills({ drills: this.drills }).pipe(untilDestroyed(this)).subscribe();
+    this.cardsService.answerCard(null);
     this.cardsService.navigateToNextCard();
   }
 }
