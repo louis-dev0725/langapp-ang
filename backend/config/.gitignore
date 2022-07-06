@@ -1,3 +1,4 @@
 web-local.php
 params-local.php
 db-local.php
+jwt-key-local.txt
