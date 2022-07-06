@@ -1,5 +1,5 @@
 <div class="layout-topbar">
-    <!--<div style="height: 300px; width: 1000px; z-index: 1000;">
+  <!--<div style="height: 300px; width: 1000px; z-index: 1000;">
         <a href="#" (click)="settingsMenu.toggle($event); $event.stopPropagation()">
             <span class="topbar-icon">
                 <i class="pi pi-cog"></i>
@@ -8,22 +8,22 @@
         <p-slideMenu #settingsMenu [model]="model" [popup]="true" [viewportHeight]="250"></p-slideMenu>
     </div>-->
 
-    <div class="layout-topbar-wrapper">
-        <div class="layout-topbar-left">
-            <div class="layout-topbar-logo" id="logolink" style="cursor: pointer; outline: none;" routerLink="/">
-                <!--<img id="app-logo" [src]="'assets/layout/images/logo-' + (app.topbarTheme === 'light' ? 'poseidon' : 'poseidon-dark') + '.png'" alt="poseidon-layout">-->
-                <!--<span style="font-size: 26px;">LangApp</span>-->
-                <img src="assets/images/logo.svg" alt="LangApp Japanese">
-            </div>
-        </div>
+  <div class="layout-topbar-wrapper">
+    <div class="layout-topbar-left">
+      <div class="layout-topbar-logo" id="logolink" style="cursor: pointer; outline: none" routerLink="/">
+        <!--<img id="app-logo" [src]="'assets/layout/images/logo-' + (app.topbarTheme === 'light' ? 'poseidon' : 'poseidon-dark') + '.png'" alt="poseidon-layout">-->
+        <!--<span style="font-size: 26px;">LangApp</span>-->
+        <img src="assets/images/logo.svg" alt="LangApp Japanese" />
+      </div>
+    </div>
 
-        <div class="layout-topbar-right">
-            <a class="menu-button" href="#" (click)="appTheme.onMenuButtonClick($event)">
-                <i class="pi pi-bars"></i>
-            </a>
+    <div class="layout-topbar-right">
+      <a class="menu-button" href="#" (click)="appTheme.onMenuButtonClick($event)">
+        <i class="pi pi-bars"></i>
+      </a>
 
-            <ul class="layout-topbar-actions">
-                <!--<li #settings class="topbar-item settings">
+      <ul class="layout-topbar-actions">
+        <!--<li #settings class="topbar-item settings">
                     <a href="#" (click)="settingsMenu.toggle($event); $event.stopPropagation()">
                         <span class="topbar-icon">
                             <i class="pi pi-cog"></i>
@@ -31,18 +31,19 @@
                     </a>
                     <p-slideMenu #settingsMenu [model]="model" [popup]="true" [viewportHeight]="250"></p-slideMenu>
                 </li>-->
-                <li #settings class="topbar-item settings" [ngClass]="{'active-topmenuitem':appTheme.activeTopbarItem === settings}">
-                    <a href="#" (click)="settingsMenu.toggle($event); $event.preventDefault();"><!-- appTheme.onTopbarItemClick($event,settings) -->
-                        <span class="topbar-icon">
-                            <i class="pi pi-cog"></i>
-                        </span>
-                    </a>
-                    <p-slideMenu #settingsMenu [model]="model" [popup]="true" [viewportHeight]="365" class="topbar-submenu"></p-slideMenu>
-                    <!--<div class="fadeInDown">
+        <li #settings class="topbar-item user-profile" [ngClass]="{ 'active-topmenuitem': appTheme.activeTopbarItem === settings }">
+          <a href="#" (click)="settingsMenu.toggle($event); $event.preventDefault()"
+            ><!-- appTheme.onTopbarItemClick($event,settings) -->
+            <span class="topbar-icon">
+              <i class="pi pi-cog"></i>
+            </span>
+          </a>
+          <p-slideMenu #settingsMenu [model]="model" [popup]="true" [viewportHeight]="365" class="topbar-submenu"></p-slideMenu>
+          <!--<div class="fadeInDown">
                         test
                     </div>-->
-                </li>
-            </ul>
-        </div>
+        </li>
+      </ul>
     </div>
+  </div>
 </div>
