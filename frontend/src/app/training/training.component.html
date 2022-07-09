@@ -1,48 +1,101 @@
 <div class="container">
-  <div class="p-grid">
-    <div class="p-col-12 p-md-10 p-md-offset-1" style="text-align: right">
-      <div class="start-actions" *ngIf="currentCardType">
-        <button pButton icon="pi pi-cog" iconPos="center" class="action-btn" style="color: #aebccd; background-color: white; border: none; height: 40px; width: 45px; font-size: 25px" (click)="openSettingsModal()"></button>
-        <button pButton icon="pi pi-eye-slash" iconPos="center" class="action-btn" style="color: #aebccd; background-color: white; border: none; height: 40px; width: 45px; font-size: 25px; margin-left: 10px" (click)="openHidingModal(true)"></button>
+  <div class="flex justify-center">
+    <div class="flex-initial w-full max-w-screen-lg">
+      <div class="flex justify-end pb-4">
+        <div class="start-actions" *ngIf="currentCardType">
+          <button
+            pButton
+            icon="pi pi-cog"
+            iconPos="center"
+            class="action-btn"
+            style="color: #aebccd; background-color: white; border: none; height: 40px; width: 45px; font-size: 25px"
+            (click)="openSettingsModal()"
+          ></button>
+          <button
+            pButton
+            icon="pi pi-eye-slash"
+            iconPos="center"
+            class="action-btn"
+            style="color: #aebccd; background-color: white; border: none; height: 40px; width: 45px; font-size: 25px; margin-left: 10px"
+            (click)="openHidingModal(true)"
+          ></button>
+        </div>
       </div>
+      <router-outlet></router-outlet>
     </div>
-    <router-outlet></router-outlet>
   </div>
 </div>
 
-<p-dialog [(visible)]="isOpenSettingsModal" [modal]="true" [dismissableMask]="true" [showHeader]="false" [breakpoints]="{'769px': '100vw'}" [style]="{width: '360px'}">
+<p-dialog
+  [(visible)]="isOpenSettingsModal"
+  [modal]="true"
+  [dismissableMask]="true"
+  [showHeader]="false"
+  [breakpoints]="{ '769px': '100vw' }"
+  [style]="{ width: '360px' }"
+>
   <ng-template pTemplate="content">
-    <p style="font-weight: 700; margin-top: 20px; font-size: 16px">{{'General' | translate}}</p>
-    <p-checkbox [(ngModel)]="autoPlayAudio" [binary]="true" label="{{'Auto play audio' | translate}}"></p-checkbox>
-    <p style="font-weight: 700; margin-top: 20px; font-size: 16px">{{'Active type of questions' | translate}}</p>
-    <div *ngFor="let cardType of cardTypes; let i=index" [ngClass]="{
-      'card-m-t': i !== 0
-    }">
-      <p-checkbox value="{{cardType?.value}}" label="{{cardType?.text | translate}}" [(ngModel)]="selectedCardTypes"></p-checkbox>
+    <p style="font-weight: 700; margin-top: 20px; font-size: 16px">{{ 'General' | translate }}</p>
+    <p-checkbox [(ngModel)]="autoPlayAudio" [binary]="true" label="{{ 'Auto play audio' | translate }}"></p-checkbox>
+    <p style="font-weight: 700; margin-top: 20px; font-size: 16px">{{ 'Active type of questions' | translate }}</p>
+    <div
+      *ngFor="let cardType of cardTypes; let i = index"
+      [ngClass]="{
+        'card-m-t': i !== 0
+      }"
+    >
+      <p-checkbox value="{{ cardType?.value }}" label="{{ cardType?.text | translate }}" [(ngModel)]="selectedCardTypes"></p-checkbox>
     </div>
     <div class="p-d-flex p-jc-center" *ngIf="isLoading">
-      <p-progressSpinner [style]="{width: '40px', height: '40px', 'margin-top': '20px'}"></p-progressSpinner>
+      <p-progressSpinner [style]="{ width: '40px', height: '40px', 'margin-top': '20px' }"></p-progressSpinner>
     </div>
-    <button pButton type="button" label="{{'Save' | translate}}" style="width: 100%; margin-top: 20px" (click)="saveSettings()"></button>
+    <button pButton type="button" label="{{ 'Save' | translate }}" style="width: 100%; margin-top: 20px" (click)="saveSettings()"></button>
   </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="isOpenHidingModal" header="Hide this question?" [modal]="true" [dismissableMask]="true" [breakpoints]="{'769px': '100vw'}" [style]="{width: '360px'}">
+<p-dialog
+  [(visible)]="isOpenHidingModal"
+  header="Hide this question?"
+  [modal]="true"
+  [dismissableMask]="true"
+  [breakpoints]="{ '769px': '100vw' }"
+  [style]="{ width: '360px' }"
+>
   <ng-template pTemplate="content">
-    <p>{{'You can hide this question if you do not like its content, you already know the word, or you think there is a mistake in the question.' | translate}}</p>
-    <ng-container *ngFor="let hidingReason of hidingReasons; let i=index">
-      <div *ngIf="hidingReason?.show" style="background-color: #eef4fb; padding: 5px 10px; border-radius: 3px" [ngClass]="{
-      'card-m-t': i !== 0
-    }">
-        <p-radioButton value="{{hidingReason?.value}}" label="{{hidingReason?.text | translate}}" [(ngModel)]="selectedHidingReason"></p-radioButton>
+    <p>
+      {{
+        'You can hide this question if you do not like its content, you already know the word, or you think there is a mistake in the question.'
+          | translate
+      }}
+    </p>
+    <ng-container *ngFor="let hidingReason of hidingReasons; let i = index">
+      <div
+        *ngIf="hidingReason?.show"
+        style="background-color: #eef4fb; padding: 5px 10px; border-radius: 3px"
+        [ngClass]="{
+          'card-m-t': i !== 0
+        }"
+      >
+        <p-radioButton
+          value="{{ hidingReason?.value }}"
+          label="{{ hidingReason?.text | translate }}"
+          [(ngModel)]="selectedHidingReason"
+        ></p-radioButton>
       </div>
     </ng-container>
     <div class="p-d-flex p-jc-center" *ngIf="isLoading">
-      <p-progressSpinner [style]="{width: '40px', height: '40px', 'margin-top': '20px'}"></p-progressSpinner>
+      <p-progressSpinner [style]="{ width: '40px', height: '40px', 'margin-top': '20px' }"></p-progressSpinner>
     </div>
     <div class="buttons-layout">
-      <button pButton type="button" label="{{'Continue' | translate}}" style="width: 90px" (click)="saveHidings()"></button>
-      <button pButton type="button" label="{{'Cancel' | translate}}" class="p-button-text" style="width: 90px" (click)="openHidingModal(false)"></button>
+      <button pButton type="button" label="{{ 'Continue' | translate }}" style="width: 90px" (click)="saveHidings()"></button>
+      <button
+        pButton
+        type="button"
+        label="{{ 'Cancel' | translate }}"
+        class="p-button-text"
+        style="width: 90px"
+        (click)="openHidingModal(false)"
+      ></button>
     </div>
   </ng-template>
 </p-dialog>

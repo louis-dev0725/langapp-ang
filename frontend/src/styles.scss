@@ -1,3 +1,7 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 $gutter: 1rem; //for primeflex grid system
 $fontSize: 14px;
 $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -61,16 +65,21 @@ $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
   }
 }
 
-
 @media (max-width: 992px) {
   .layout-topbar-light .layout-topbar .layout-topbar-wrapper .layout-topbar-right .layout-topbar-actions > .topbar-item.user-profile {
     top: 8px !important;
     right: 8px;
-}
+  }
 }
 
-#logolink {
-  text-align: center;
+@media (max-width: 992px) {
+  #logolink {
+    @apply flex justify-center;
+    text-align: center;
+  }
+  .layout-topbar-right {
+    height: 0 !important;
+  }
 }
 
 .menu-wrapper .layout-menu-container .layout-menu .layout-root-menuitem li > ul > li.active-menuitem.layout-root-menuitem > a.active-menuitem-routerlink {
