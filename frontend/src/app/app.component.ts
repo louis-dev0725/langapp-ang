@@ -7,7 +7,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
   public isProgressBarLoading = false;
@@ -26,8 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   inputStyle = 'outlined';
   ripple = false;
 
-  constructor(private translate: TranslateService,
-    private eventsService: EventsService) {
+  constructor(private translate: TranslateService, private eventsService: EventsService) {
     let langVal = localStorage.getItem('lang');
     if (!langVal) {
       langVal = window.navigator.language.slice(0, 2).toLowerCase();
@@ -36,7 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
       }
       localStorage.setItem('lang', langVal);
     }
-    this.translate.setDefaultLang(langVal);
+    this.translate.setDefaultLang('en');
+    this.translate.use(langVal);
   }
 
   ngOnInit() {
@@ -45,5 +45,5 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 }

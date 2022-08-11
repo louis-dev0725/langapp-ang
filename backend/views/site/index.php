@@ -1287,7 +1287,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                 <div class="t389__content">
                     <div class="t389__col t389__col_hiddenmobile">
                         <div class="t389__typo t389__copyright t-name t-name_xs" field="text" style="color: #ffffff;">
-                            © 2021 LangApp<br>
+                            © <?= date('Y'); ?> LangApp<br>
                         </div>
                     </div>
                     <div class="t389__col t389__col_center t-align_center">
@@ -1303,7 +1303,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
                     </div>
                     <div class="t389__col t389__col_mobile">
                         <div class="t389__typo t389__copyright t-name t-name_xs" field="text" style="color: #ffffff;">
-                            © 2021 LangApp<br>
+                            © <?= date('Y'); ?> LangApp<br>
                         </div>
                     </div>
                     <div class="t389__col">
