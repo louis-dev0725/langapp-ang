@@ -1,9 +1,10 @@
-apiVersion: skaffold/v2beta24
+apiVersion: skaffold/v2beta29
 kind: Config
 metadata:
   name: langapp
 build:
   local:
+    push: true
     useBuildkit: true
     concurrency: 5
   artifacts:
@@ -11,9 +12,23 @@ build:
       context: .
       docker:
         dockerfile: docker/web/Dockerfile
-        buildArgs:
-          BUILDKIT_INLINE_CACHE: "1"
-          DOCKER_BUILDKIT: "1"
+#        buildArgs:
+#          BUILDKIT_INLINE_CACHE: "1"
+#          DOCKER_BUILDKIT: "1"
+        cacheFrom:
+          - "registry.gitlab.com/mangoproject/langapp/langapp-web:buildcache"
+      # hooks:
+      #   before:
+      #     - command: ["docker", "buildx", "install"]
+      #     - command:
+      #         [
+      #           "docker",
+      #           "buildx",
+      #           "create",
+      #           "--driver",
+      #           "docker-container",
+      #           "--use",
+      #         ]
 deploy:
   kustomize:
     paths:

@@ -171,9 +171,11 @@ COPY ./run /app/run
 # COPY --from=prod-backend-ts /app/to-copy-backend-ts-node_modules /app/backend-ts/node_modules
 # COPY --from=prod-frontend /app/to-copy-frontend-node_modules /app/frontend/node_modules
 COPY --from=prod-backend-ts /app/backend-ts/node_modules /app/backend-ts/node_modules
-COPY --from=prod-frontend /app/frontend/node_modules /app/frontend/node_modules
+# COPY --from=prod-frontend /app/frontend/node_modules /app/frontend/node_modules
 COPY --from=prod-backend /app/backend/vendor /app/backend/vendor
 
 COPY --from=prod-backend-cleaned /app/backend /app/backend
 COPY --from=prod-backend-ts-cleaned /app/backend-ts /app/backend-ts
 COPY --from=prod-frontend-cleaned /app/frontend /app/frontend
+
+# TODO: Probably there is no need for node_modules in frontend, we can just use build

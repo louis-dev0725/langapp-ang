@@ -35,6 +35,14 @@ spec:
       labels:
         app: langapp-web
     spec:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - r9
       volumes:
         - name: langapp-uploads-pv
           persistentVolumeClaim:

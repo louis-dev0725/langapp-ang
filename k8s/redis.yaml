@@ -24,6 +24,14 @@ spec:
       labels:
         app: langapp-redis
     spec:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - r9
       containers:
         - name: langapp-web
           image: redis:6-alpine
