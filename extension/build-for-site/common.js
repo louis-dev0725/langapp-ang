@@ -873,7 +873,7 @@ function encode_char(c) {
 ;
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
-    ; __append("<div id=\"modalOuter\">\r\n    <a id=\"closeModal\"><span></span></a>\r\n    <div id=\"modalBody\">\r\n        \r\n    </div>\r\n</div>")
+    ; __append("<div id=\"modalOuter\">\n    <a id=\"closeModal\"><span></span></a>\n    <div id=\"modalBody\">\n        \n    </div>\n</div>")
   return __output;
 
 }
@@ -906,9 +906,9 @@ function encode_char(c) {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
     ;  if (locals.text) { 
-    ; __append("\r\n<h3>")
+    ; __append("\n<h3>")
     ; __append(escapeFn( locals.text ))
-    ; __append("</h3>\r\n")
+    ; __append("</h3>\n")
     ;  } 
   return __output;
 
@@ -942,37 +942,37 @@ function encode_char(c) {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
     ;  if (locals.response && locals.response.words) { 
-    ; __append("\r\n<!--<div id=\"modal-translate-header\" style=\"display: flex; flex-flow: row nowrap; width: 100%; justify-content: space-between;\">\r\n</div>-->\r\n<div id=\"modal-translate-body\" class=\"response\" style=\"box-sizing: border-box; display: flex; flex-flow: column nowrap; width: 100%;\" lang=\"ja-JP\">\r\n    ")
+    ; __append("\n<!--<div id=\"modal-translate-header\" style=\"display: flex; flex-flow: row nowrap; width: 100%; justify-content: space-between;\">\n</div>-->\n<div id=\"modal-translate-body\" class=\"response\" style=\"box-sizing: border-box; display: flex; flex-flow: column nowrap; width: 100%;\" lang=\"ja-JP\">\n    ")
     ;  for (let word of locals.response.words) { 
-    ; __append("\r\n        <div class=\"word-variant\" data-word=\"")
+    ; __append("\n        <div class=\"word-variant\" data-word=\"")
     ; __append(escapeFn( JSON.stringify(word) ))
-    ; __append("\">\r\n            ")
+    ; __append("\">\n            ")
     ;  for (let [i, reading] of word.readings.entries()) { 
-    ; __append("\r\n                <div class=\"reading-variant")
+    ; __append("\n                <div class=\"reading-variant")
     ; __append(escapeFn( reading.common ? ' reading-variant-common' : ' reading-variant-uncommon' ))
     ; __append(escapeFn( reading.current ? ' reading-variant-current' : '' ))
     ; __append(escapeFn( reading.currentMain ? ' reading-variant-current-main' : '' ))
-    ; __append("\">\r\n                    <ruby>\r\n                        ")
+    ; __append("\">\n                    <ruby>\n                        ")
     ;  for (let f of reading.furigana) { 
-    ; __append("\r\n                            ")
+    ; __append("\n                            ")
     ; __append(escapeFn( f.ruby ))
-    ; __append("\r\n                            <rt>")
+    ; __append("\n                            <rt>")
     ; __append(escapeFn( f.rt || '' ))
-    ; __append("</rt>\r\n                        ")
+    ; __append("</rt>\n                        ")
     ;  } 
-    ; __append("\r\n                    </ruby>\r\n                </div>\r\n            ")
+    ; __append("\n                    </ruby>\n                </div>\n            ")
     ;  } 
-    ; __append("\r\n            \r\n            <div class=\"meanings\">\r\n                ")
+    ; __append("\n            \n            <div class=\"meanings\">\n                ")
     ;  for (let translation of word.meanings) { 
-    ; __append("\r\n                <div class=\"meaning-variant\" data-meaning=\"")
+    ; __append("\n                <div class=\"meaning-variant\" data-meaning=\"")
     ; __append(escapeFn( JSON.stringify(translation) ))
     ; __append("\">")
     ; __append(escapeFn( translation.value ))
-    ; __append("</div>\r\n                ")
+    ; __append("</div>\n                ")
     ;  } 
-    ; __append("\r\n            </div>\r\n        </div>\r\n    ")
+    ; __append("\n            </div>\n        </div>\n    ")
     ;  } 
-    ; __append("\r\n</div>\r\n")
+    ; __append("\n</div>\n")
     ;  } 
   return __output;
 
@@ -1005,7 +1005,7 @@ function encode_char(c) {
 ;
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
-    ; __append("<style>\r\n    :host {\r\n        all: initial;\r\n        font-size: 16px;\r\n        font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n    }\r\n\r\n    #modalOuter {\r\n        position: absolute;\r\n        \r\n        /* Dynamically changes in JS */\r\n        width: 400px;\r\n        height: auto;\r\n        max-height: 60vh;\r\n        \r\n        overflow-y: auto;\r\n        display: flex;\r\n        flex-flow: column;\r\n        /*background: rgb(255, 255, 255);\r\n        border-radius: 10px;\r\n        padding: 10px;\r\n        border: 1px solid rgb(0, 0, 0);*/\r\n\r\n        background: #FDFEFF;\r\n        padding: 12px 16px;\r\n        box-sizing: border-box;\r\n        box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .12);\r\n        -moz-border-radius: 5px;\r\n        -webkit-border-radius: 5px;\r\n        border-radius: 5px;\r\n        z-index: 999999;\r\n    }\r\n\r\n    #closeModal {\r\n        cursor: pointer;\r\n        position: absolute;\r\n        right: 0;\r\n        top: 0;\r\n        border: none;\r\n        background: transparent;\r\n        padding: 8px 6px;\r\n        margin: 0px;\r\n        font-size: 20px;\r\n        font-weight: 700;\r\n        margin-left: auto;\r\n    }\r\n\r\n    #closeModal span {\r\n        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxzdHlsZT4uY2xzLTF7ZmlsbDpub25lO3N0cm9rZTojMDAwO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6MnB4O308L3N0eWxlPjwvZGVmcz48dGl0bGUvPjxnIGlkPSJjcm9zcyI+PGxpbmUgY2xhc3M9ImNscy0xIiB4MT0iNyIgeDI9IjI1IiB5MT0iNyIgeTI9IjI1Ii8+PGxpbmUgY2xhc3M9ImNscy0xIiB4MT0iNyIgeDI9IjI1IiB5MT0iMjUiIHkyPSI3Ii8+PC9nPjwvc3ZnPg==') no-repeat;\r\n        display: block;\r\n        width: 20px;\r\n        height: 20px;\r\n    }\r\n\r\n    #closeModal:hover {\r\n        opacity: 0.8;\r\n    }\r\n\r\n    .word-variant {\r\n        margin-bottom: 20px;\r\n    }\r\n\r\n    .reading-variant {\r\n        font-size: 28px;\r\n        display: none;\r\n    }\r\n\r\n    .reading-variant-uncommon {\r\n        opacity: 0.5;\r\n    }\r\n\r\n    .reading-variant-current-main {\r\n        display: block;\r\n    }\r\n\r\n    /*.reading-variant-current {\r\n        color: green;\r\n    }*/\r\n\r\n    .meanings {\r\n        margin-top: 12px;\r\n        padding: 0.25rem 0;\r\n        background: #FDFEFF;\r\n        color: #515C66;\r\n        border: 1px solid #E4E5E5;\r\n        border-radius: 5px;\r\n    }\r\n\r\n    .meaning-variant {\r\n        cursor: pointer;\r\n        margin: 0;\r\n        padding: 0.5rem 1rem;\r\n        border: 0 none;\r\n        color: #515C66;\r\n        transition: box-shadow 0.2s;\r\n        border-radius: 0;\r\n    }\r\n\r\n    .meaning-variant:hover {\r\n        color: #515C66;\r\n        background: rgba(232, 241, 248, 0.7);\r\n    }\r\n</style>")
+    ; __append("<style>\n    :host {\n        all: initial;\n        font-size: 16px;\n        font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    }\n\n    #modalOuter {\n        position: absolute;\n        \n        /* Dynamically changes in JS */\n        width: 400px;\n        height: auto;\n        max-height: 60vh;\n        \n        overflow-y: auto;\n        display: flex;\n        flex-flow: column;\n        /*background: rgb(255, 255, 255);\n        border-radius: 10px;\n        padding: 10px;\n        border: 1px solid rgb(0, 0, 0);*/\n\n        background: #FDFEFF;\n        padding: 12px 16px;\n        box-sizing: border-box;\n        box-shadow: 0 3px 3px -2px rgba(0, 0, 0, .2), 0 3px 4px 0 rgba(0, 0, 0, .14), 0 1px 8px 0 rgba(0, 0, 0, .12);\n        -moz-border-radius: 5px;\n        -webkit-border-radius: 5px;\n        border-radius: 5px;\n        z-index: 999999;\n    }\n\n    #closeModal {\n        cursor: pointer;\n        position: absolute;\n        right: 0;\n        top: 0;\n        border: none;\n        background: transparent;\n        padding: 8px 6px;\n        margin: 0px;\n        font-size: 20px;\n        font-weight: 700;\n        margin-left: auto;\n    }\n\n    #closeModal span {\n        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pjxzdmcgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxzdHlsZT4uY2xzLTF7ZmlsbDpub25lO3N0cm9rZTojMDAwO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6MnB4O308L3N0eWxlPjwvZGVmcz48dGl0bGUvPjxnIGlkPSJjcm9zcyI+PGxpbmUgY2xhc3M9ImNscy0xIiB4MT0iNyIgeDI9IjI1IiB5MT0iNyIgeTI9IjI1Ii8+PGxpbmUgY2xhc3M9ImNscy0xIiB4MT0iNyIgeDI9IjI1IiB5MT0iMjUiIHkyPSI3Ii8+PC9nPjwvc3ZnPg==') no-repeat;\n        display: block;\n        width: 20px;\n        height: 20px;\n    }\n\n    #closeModal:hover {\n        opacity: 0.8;\n    }\n\n    .word-variant {\n        margin-bottom: 20px;\n    }\n\n    .reading-variant {\n        font-size: 28px;\n        display: none;\n    }\n\n    .reading-variant-uncommon {\n        opacity: 0.5;\n    }\n\n    .reading-variant-current-main {\n        display: block;\n    }\n\n    /*.reading-variant-current {\n        color: green;\n    }*/\n\n    .meanings {\n        margin-top: 12px;\n        padding: 0.25rem 0;\n        background: #FDFEFF;\n        color: #515C66;\n        border: 1px solid #E4E5E5;\n        border-radius: 5px;\n    }\n\n    .meaning-variant {\n        cursor: pointer;\n        margin: 0;\n        padding: 0.5rem 1rem;\n        border: 0 none;\n        color: #515C66;\n        transition: box-shadow 0.2s;\n        border-radius: 0;\n    }\n\n    .meaning-variant:hover {\n        color: #515C66;\n        background: rgba(232, 241, 248, 0.7);\n    }\n</style>")
   return __output;
 
 }
@@ -1037,9 +1037,9 @@ function encode_char(c) {
 ;
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
-    ; __append("<div class=\"snackbar-container\">\r\n    ")
+    ; __append("<div class=\"snackbar-container\">\n    ")
     ; __append(escapeFn( locals.text ))
-    ; __append("\r\n</div>")
+    ; __append("\n</div>")
   return __output;
 
 }
@@ -1071,7 +1071,7 @@ function encode_char(c) {
 ;
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
-    ; __append("<style>\r\n    :host {\r\n        all: initial;\r\n    }\r\n\r\n    .snackbar-container {\r\n        transition: all 500ms ease;\r\n        transition-property: top, right, bottom, left, opacity;\r\n        font-family: Roboto, sans-serif;\r\n        font-size: 14px;\r\n        min-height: 14px;\r\n        background-color: #070b0e;\r\n        position: fixed;\r\n        display: flex;\r\n        justify-content: space-between;\r\n        align-items: center;\r\n        color: white;\r\n        line-height: 22px;\r\n        padding: 18px 24px;\r\n        bottom: -100px;\r\n        top: -100px;\r\n        opacity: 0;\r\n        z-index: 9999;\r\n    }\r\n\r\n    .snackbar-container .action {\r\n        background: inherit;\r\n        display: inline-block;\r\n        border: none;\r\n        font-size: inherit;\r\n        text-transform: uppercase;\r\n        color: #4caf50;\r\n        margin: 0 0 0 24px;\r\n        padding: 0;\r\n        min-width: min-content;\r\n        cursor: pointer;\r\n    }\r\n\r\n    @media (min-width: 640px) {\r\n        .snackbar-container {\r\n            min-width: 288px;\r\n            max-width: 568px;\r\n            display: inline-flex;\r\n            border-radius: 2px;\r\n            margin: 24px;\r\n        }\r\n    }\r\n\r\n    @media (max-width: 640px) {\r\n        .snackbar-container {\r\n            left: 0;\r\n            right: 0;\r\n            width: 100%;\r\n        }\r\n    }\r\n\r\n    .snackbar-pos.bottom-center {\r\n        top: auto !important;\r\n        bottom: 0;\r\n        left: 50%;\r\n        transform: translate(-50%, 0);\r\n    }\r\n\r\n    .snackbar-pos.bottom-left {\r\n        top: auto !important;\r\n        bottom: 0;\r\n        left: 0;\r\n    }\r\n\r\n    .snackbar-pos.bottom-right {\r\n        top: auto !important;\r\n        bottom: 0;\r\n        right: 0;\r\n    }\r\n\r\n    .snackbar-pos.top-left {\r\n        bottom: auto !important;\r\n        top: 0;\r\n        left: 0;\r\n    }\r\n\r\n    .snackbar-pos.top-center {\r\n        bottom: auto !important;\r\n        top: 0;\r\n        left: 50%;\r\n        transform: translate(-50%, 0);\r\n    }\r\n\r\n    .snackbar-pos.top-right {\r\n        bottom: auto !important;\r\n        top: 0;\r\n        right: 0;\r\n    }\r\n\r\n    @media (max-width: 640px) {\r\n        .snackbar-pos.bottom-center,\r\n        .snackbar-pos.top-center {\r\n            left: 0;\r\n            transform: none;\r\n        }\r\n    }\r\n</style>")
+    ; __append("<style>\n    :host {\n        all: initial;\n    }\n\n    .snackbar-container {\n        transition: all 500ms ease;\n        transition-property: top, right, bottom, left, opacity;\n        font-family: Roboto, sans-serif;\n        font-size: 14px;\n        min-height: 14px;\n        background-color: #070b0e;\n        position: fixed;\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n        color: white;\n        line-height: 22px;\n        padding: 18px 24px;\n        bottom: -100px;\n        top: -100px;\n        opacity: 0;\n        z-index: 9999;\n    }\n\n    .snackbar-container .action {\n        background: inherit;\n        display: inline-block;\n        border: none;\n        font-size: inherit;\n        text-transform: uppercase;\n        color: #4caf50;\n        margin: 0 0 0 24px;\n        padding: 0;\n        min-width: min-content;\n        cursor: pointer;\n    }\n\n    @media (min-width: 640px) {\n        .snackbar-container {\n            min-width: 288px;\n            max-width: 568px;\n            display: inline-flex;\n            border-radius: 2px;\n            margin: 24px;\n        }\n    }\n\n    @media (max-width: 640px) {\n        .snackbar-container {\n            left: 0;\n            right: 0;\n            width: 100%;\n        }\n    }\n\n    .snackbar-pos.bottom-center {\n        top: auto !important;\n        bottom: 0;\n        left: 50%;\n        transform: translate(-50%, 0);\n    }\n\n    .snackbar-pos.bottom-left {\n        top: auto !important;\n        bottom: 0;\n        left: 0;\n    }\n\n    .snackbar-pos.bottom-right {\n        top: auto !important;\n        bottom: 0;\n        right: 0;\n    }\n\n    .snackbar-pos.top-left {\n        bottom: auto !important;\n        top: 0;\n        left: 0;\n    }\n\n    .snackbar-pos.top-center {\n        bottom: auto !important;\n        top: 0;\n        left: 50%;\n        transform: translate(-50%, 0);\n    }\n\n    .snackbar-pos.top-right {\n        bottom: auto !important;\n        top: 0;\n        right: 0;\n    }\n\n    @media (max-width: 640px) {\n        .snackbar-pos.bottom-center,\n        .snackbar-pos.top-center {\n            left: 0;\n            transform: none;\n        }\n    }\n</style>")
   return __output;
 
 }
@@ -3687,22 +3687,22 @@ class Modal_Modal {
       return;
     }
 
-    this.shadowElement = document.createElement('div');
+    this.shadowElement = document.createElement("div");
     document.body.appendChild(this.shadowElement);
     this.shadowRoot = this.shadowElement.attachShadow({
-      mode: 'open'
+      mode: "open"
     });
     this.shadowRoot.innerHTML = modalStyles({}) + modal({});
-    this.modalOuter = this.shadowRoot.querySelector('#modalOuter');
-    this.modalBody = this.modalOuter.querySelector('#modalBody');
+    this.modalOuter = this.shadowRoot.querySelector("#modalOuter");
+    this.modalBody = this.modalOuter.querySelector("#modalBody");
 
     this.modalClickCallback = e => this.modalClick(e);
 
-    this.shadowRoot.addEventListener('click', this.modalClickCallback); //this.modalOuter.querySelector('#closeModal').addEventListener('click', e => this.hide());
+    this.shadowRoot.addEventListener("click", this.modalClickCallback); //this.modalOuter.querySelector('#closeModal').addEventListener('click', e => this.hide());
 
     this.bodyClickCallback = e => this.bodyClick(e);
 
-    document.body.addEventListener('click', this.bodyClickCallback);
+    document.body.addEventListener("click", this.bodyClickCallback);
   }
 
   updatePosition(range) {
@@ -3726,8 +3726,8 @@ class Modal_Modal {
       }
     }
 
-    this.modalOuter.style.left = modalX + rootNode.scrollLeft + 'px';
-    this.height = Math.max(200, Math.floor(windowHeight * 0.60), Math.min(Math.floor(windowHeight * 0.90), 400));
+    this.modalOuter.style.left = modalX + rootNode.scrollLeft + "px";
+    this.height = Math.max(200, Math.floor(windowHeight * 0.6), Math.min(Math.floor(windowHeight * 0.9), 400));
 
     if (modalY + this.height > windowHeight) {
       // If top part is bigger than bottom's part
@@ -3748,11 +3748,12 @@ class Modal_Modal {
       }
     }
 
-    this.modalOuter.style.top = modalY + rootNode.scrollTop + 'px';
-    this.modalOuter.style.width = this.width + 'px';
-    this.modalOuter.style.maxHeight = this.height + 'px';
-    this.modalOuter.style.height = topMode ? this.height + 'px' : 'auto';
-    this.modalOuter.style.display = 'flex';
+    this.modalOuter.style.top = modalY + rootNode.scrollTop + "px";
+    this.modalOuter.style.width = this.width + "px";
+    this.modalOuter.style.maxHeight = this.height + "px";
+    this.modalOuter.style.height = topMode ? this.height + "px" : "auto";
+    this.modalOuter.style.display = "flex";
+    document.dispatchEvent(new CustomEvent("langapp-modal-display"));
   }
 
   showRawHtml(content) {
@@ -3780,11 +3781,11 @@ class Modal_Modal {
     if (e.target instanceof HTMLElement) {
       let el = e.target;
 
-      if (el.closest('#closeModal')) {
+      if (el.closest("#closeModal")) {
         this.hide();
       }
 
-      let meaning = el.closest('.meaning-variant');
+      let meaning = el.closest(".meaning-variant");
 
       if (meaning) {
         this.clickOnMeaning(meaning);
@@ -3800,8 +3801,8 @@ class Modal_Modal {
       return regenerator_default.a.wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            wordEl = el.closest('.word-variant');
-            responseEl = el.closest('.response');
+            wordEl = el.closest(".word-variant");
+            responseEl = el.closest(".response");
 
             if (!(!wordEl || !responseEl)) {
               _context.next = 4;
@@ -3823,11 +3824,11 @@ class Modal_Modal {
               contextUrl: _this.currentProcessTextRequest.url
             };
             _context.next = 9;
-            return state.apiCall('POST', 'dictionaries', request);
+            return state.apiCall("POST", "dictionaries", request);
 
           case 9:
             response = _context.sent;
-            showSnackbar(response.success ? i18n_t('added_to_user_dictionary') : i18n_t('error_while_adding_to_user_dictionary'));
+            showSnackbar(response.success ? i18n_t("added_to_user_dictionary") : i18n_t("error_while_adding_to_user_dictionary"));
 
             _this.hide();
 
@@ -3849,17 +3850,18 @@ class Modal_Modal {
 
   hide() {
     if (this.modalBody) {
-      this.modalBody.innerHTML = '';
-      this.modalOuter.style.display = 'none';
+      this.modalBody.innerHTML = "";
+      this.modalOuter.style.display = "none";
+      document.dispatchEvent(new CustomEvent("langapp-modal-hide"));
     }
   }
 
   dispose() {
     document.body.removeChild(this.shadowElement);
     this.shadowElement = null;
-    this.shadowRoot.removeEventListener('click', this.modalClickCallback);
+    this.shadowRoot.removeEventListener("click", this.modalClickCallback);
     this.modalClickCallback = null;
-    document.removeEventListener('click', this.bodyClickCallback);
+    document.removeEventListener("click", this.bodyClickCallback);
     this.bodyClickCallback = null;
   }
 

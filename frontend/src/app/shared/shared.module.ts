@@ -74,28 +74,12 @@ let sharedModules = [
   MatCheckboxModule,
   MatTableModule,
   MatPaginatorModule,
-  MatRadioModule
+  MatRadioModule,
 ];
 
 @NgModule({
-  declarations: [
-    FormatDatePipe,
-    FormatNumbersPipe,
-    RoundToPipe,
-    FormatCurrencyPipe,
-    OnclickTranslationDirective
-  ],
-  imports: [
-    CommonModule,
-    ...sharedModules
-  ],
-  exports: [
-    FormatDatePipe,
-    FormatNumbersPipe,
-    RoundToPipe,
-    FormatCurrencyPipe,
-    OnclickTranslationDirective,
-    ...sharedModules
-  ]
+  declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective],
+  imports: [CommonModule, ...sharedModules],
+  exports: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, ...sharedModules],
 })
-export class SharedModule { }
+export class SharedModule {}

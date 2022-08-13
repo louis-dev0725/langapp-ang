@@ -1,4 +1,17 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import videojs, { VideoJsPlayerOptions } from 'video.js';
 import 'videojs-youtube';
 
@@ -6,19 +19,17 @@ import 'videojs-youtube';
   selector: 'app-videojs',
   templateUrl: './videojs.component.html',
   styleUrls: ['./videojs.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class VideojsComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @ViewChild('target', { static: true }) target: ElementRef;
   @Input() options: VideoJsPlayerOptions;
+  @Output() playerAvailable = new EventEmitter<boolean>();
   player: videojs.Player;
 
-  constructor(
-    private elementRef: ElementRef,
-  ) { }
+  constructor(private elementRef: ElementRef) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   initPlayer() {
     if (this.player) {
@@ -26,15 +37,20 @@ export class VideojsComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
       this.player = null;
     }
     let targetEl = <HTMLElement>this.target.nativeElement;
-    targetEl.insertAdjacentHTML('beforebegin', '<video class="video-js vjs-theme-forest vjs-fill vjs-fluid" controls playsinline preload="none"></video>');
+    targetEl.insertAdjacentHTML(
+      'beforebegin',
+      '<video class="video-js vjs-theme-forest vjs-fill vjs-fluid" controls playsinline preload="none"></video>'
+    );
     let videoEl = targetEl.parentNode.querySelector('video');
     this.player = videojs(videoEl, this.options, function onPlayerReady() {
       (window as any).player = this;
     });
+    this.player.ready(() => {
+      this.playerAvailable.emit(true);
+    });
   }
 
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.initPlayer();

@@ -16,6 +16,9 @@ $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 //@import "../node_modules/@fullcalendar/daygrid/main.min.css";
 //@import "../node_modules/@fullcalendar/timegrid/main.min.css";
 
+@import '~@vime/core/themes/default.css';
+@import '~@vime/core/themes/light.css';
+
 .layout-menu a {
   outline: 0 none;
 }

@@ -16,8 +16,8 @@ import { VideojsComponent } from './videojs/videojs.component';
 import { DialogModule } from 'primeng/dialog';
 import { RippleModule } from 'primeng/ripple';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-import {InputSwitchModule} from "primeng/inputswitch";
-import {IconModule} from "@visurel/iconify-angular";
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { IconModule } from '@visurel/iconify-angular';
 
 const routes: Routes = [
   {
@@ -74,17 +74,17 @@ const routes: Routes = [
     ContentViewComponent,
     VideojsComponent,
   ],
-    imports: [
-        RouterModule.forChild(routes),
-        CommonModule,
-        TranslateModule.forChild(),
-        ReactiveFormsModule,
-        SharedModule,
-        DialogModule,
-        RippleModule,
-        OverlayPanelModule,
-        InputSwitchModule,
-        IconModule,
-    ],
+  imports: [
+    RouterModule.forChild(routes),
+    CommonModule,
+    TranslateModule.forChild(),
+    ReactiveFormsModule,
+    SharedModule,
+    DialogModule,
+    RippleModule,
+    OverlayPanelModule,
+    InputSwitchModule,
+    IconModule,
+  ],
 })
 export class ContentModule {}

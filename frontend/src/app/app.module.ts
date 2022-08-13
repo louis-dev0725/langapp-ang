@@ -45,8 +45,8 @@ import { CookieModule } from 'ngx-cookie';
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useClass: WebpackTranslateLoader
-      }
+        useClass: WebpackTranslateLoader,
+      },
     }),
     StoreModule.forRoot(reducers),
     environment.development ? StoreDevtoolsModule.instrument() : [],
@@ -58,14 +58,14 @@ import { CookieModule } from 'ngx-cookie';
   providers: [
     {
       provide: APP_BASE_HREF,
-      useValue: '/app'
+      useValue: '/app',
     },
     SessionService,
     {
       provide: APP_INITIALIZER,
       useFactory: (ss: SessionService) => () => ss.checkInvitedByUrlParams(),
       deps: [SessionService],
-      multi: true
+      multi: true,
     },
     ApiService,
     CanactivateAdmin,
@@ -78,15 +78,15 @@ import { CookieModule } from 'ngx-cookie';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,
-      multi: true
+      multi: true,
     },
     {
       provide: LocationStrategy,
-      useClass: PathLocationStrategy
+      useClass: PathLocationStrategy,
     },
     MessageService,
     ConfirmationService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

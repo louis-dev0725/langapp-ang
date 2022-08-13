@@ -3,11 +3,11 @@
         <div class="p-grid" id="subControls">
             <div class="p-col-12 p-md-8" [style]="isFullScreen ? {padding: '0'} : {padding: '1rem'}">
               <div class="card left-video no-margin">
-                <app-videojs *ngIf="videoOptions" [options]="videoOptions"></app-videojs>
+                <app-videojs *ngIf="videoOptions" [options]="videoOptions" (playerAvailable)="playerAvailable()"></app-videojs>
               </div>
               <div class="active-subtitle" onclickTranslation [style]="currentSubtitleStyle">
                 <p *ngFor="let subtitle of selectedSubtitles">
-                  {{subtitle?.text}}
+                  <span (mouseover)='subtitleMouseover()' (mouseout)='subtitleMouseout()'>{{subtitle?.text}}</span>
                 </p>
               </div>
               <div class="video-controls">

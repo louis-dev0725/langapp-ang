@@ -1,8 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Content, ContentAttributeResponse } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
-import {distinctUntilChanged, switchMap} from 'rxjs/operators';
+import { distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { VideoJsPlayerOptions } from 'video.js';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormControl, Validators } from '@angular/forms';
@@ -15,6 +24,7 @@ import next from '@iconify/icons-mdi/next-title';
 import repeat from '@iconify/icons-mdi/repeat';
 import play from '@iconify/icons-mdi/play-circle-filled';
 import pause from '@iconify/icons-mdi/pause-circle-filled';
+import { sortBy } from 'lodash';
 
 interface Subtitle {
   startTime: number;
@@ -29,8 +39,8 @@ interface Subtitle {
   styleUrls: ['./content-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContentViewComponent implements OnInit {
-  @ViewChild(VideojsComponent, { static: false }) video: VideojsComponent;
+export class ContentViewComponent implements AfterViewInit {
+  @ViewChild(VideojsComponent) video: VideojsComponent;
   @ViewChild('subtitleList') subtitleList: ElementRef;
 
   content: Content;
@@ -45,7 +55,7 @@ export class ContentViewComponent implements OnInit {
   isShowingFontSizeOverlayContent = false;
   isListeningVideo = false;
   isFullScreen = false;
-  speedList = ['0.5', '0.75', '1.0', '1.5'];
+  speedList = ['0.5', '0.75', '0.8', '0.9', '1.0', '1.25', '1.5'];
   currentPlaySpeed: string;
   subtitleStyle = {
     height: '150px',
@@ -55,16 +65,20 @@ export class ContentViewComponent implements OnInit {
   };
   subtitleStyles = [
     {
+      label: '200%',
+      style: { 'font-size': '40px', ...this.subtitleStyle },
+    },
+    {
       label: '175%',
-      style: { 'font-size': '35px', ...this.subtitleStyle,},
+      style: { 'font-size': '35px', ...this.subtitleStyle },
     },
     {
       label: '150%',
-      style: { 'font-size': '30px', ...this.subtitleStyle,},
+      style: { 'font-size': '30px', ...this.subtitleStyle },
     },
     {
       label: '125%',
-      style: { 'font-size': '25px', ...this.subtitleStyle,},
+      style: { 'font-size': '25px', ...this.subtitleStyle },
     },
     {
       label: '100%',
@@ -73,7 +87,7 @@ export class ContentViewComponent implements OnInit {
     {
       label: '90%',
       style: { 'font-size': '18px', ...this.subtitleStyle },
-    }
+    },
   ];
   shortcuts = [
     {
@@ -112,6 +126,10 @@ export class ContentViewComponent implements OnInit {
     pause,
   };
 
+  isPausedOnSubtitlesHover = false;
+  isModalOpened = false;
+  isSubtitleHovered = false;
+
   @HostListener('document:keydown.space', ['$event'])
   handleSpaceShortcut(event: KeyboardEvent) {
     event.preventDefault();
@@ -140,6 +158,22 @@ export class ContentViewComponent implements OnInit {
     this.repeatSubtitle();
   }
 
+  @HostListener('document:langapp-modal-hide', ['$event'])
+  handleModalHide(event: CustomEvent) {
+    event.preventDefault();
+    console.log('langapp-modal-hide');
+    this.isModalOpened = false;
+    this.checkPauseOnHover();
+  }
+
+  @HostListener('document:langapp-modal-display', ['$event'])
+  handleModalDisplay(event: CustomEvent) {
+    event.preventDefault();
+    console.log('langapp-modal-display');
+    this.isModalOpened = true;
+    this.checkPauseOnHover();
+  }
+
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
@@ -147,7 +181,7 @@ export class ContentViewComponent implements OnInit {
     private messageService: MessageService
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.isRepeatingVideo.setValue(!!+localStorage.getItem('IS_REPEATING_VIDEO'));
     const styleIndex = +localStorage.getItem('CURRENT_SUBTITLE_STYLE');
     this.currentSubtitleStyle = this.subtitleStyles[styleIndex].style;
@@ -164,10 +198,8 @@ export class ContentViewComponent implements OnInit {
       .subscribe((content) => {
         this.resetVideoParameters();
         this.content = content;
-        this.videoOptions = this.setVideoOptions(content);
-        const parser = new WebVTTParser();
-        const parseResult = parser.parse(content.text);
-        this.subtitles = parseResult.cues;
+        this.videoOptions = this.getVideoOptions();
+        this.initSubtitles();
         this.cd.markForCheck();
       });
     this.subscribeToIsRepeatingVideo();
@@ -177,9 +209,122 @@ export class ContentViewComponent implements OnInit {
     });
   }
 
-  listenPlayer() {
-    this.video.player.ready(() => {
-      this.listenToCurrentTime();
+  playerAvailable() {
+    this.initPlayer();
+  }
+
+  initPlayer() {
+    this.video.player.on('play', () => {
+      this.isVideoPlaying = !this.video.player.paused();
+      this.cd.detectChanges();
+    });
+    this.video.player.on('pause', () => {
+      this.isVideoPlaying = !this.video.player.paused();
+      this.isPausedOnSubtitlesHover = false;
+      this.cd.detectChanges();
+    });
+
+    this.video.player.on('timeupdate', () => {
+      this.timeUpdate();
+    });
+  }
+
+  checkPauseOnHover(skipTimeout = false) {
+    if (this.isPausedOnSubtitlesHover) {
+      if (!this.isModalOpened && !this.isSubtitleHovered) {
+        this.isPausedOnSubtitlesHover = false;
+        this.video.player.play();
+      }
+    } else {
+      if (this.isModalOpened || this.isSubtitleHovered) {
+        if (skipTimeout) {
+          this.isPausedOnSubtitlesHover = true;
+          this.video.player.pause();
+        } else {
+          setTimeout(() => this.checkPauseOnHover(true), 150);
+        }
+      }
+    }
+  }
+
+  subtitleMouseover() {
+    this.isSubtitleHovered = true;
+    this.checkPauseOnHover();
+    console.log('subtitleMouseover');
+  }
+
+  subtitleMouseout() {
+    this.isSubtitleHovered = false;
+    this.checkPauseOnHover();
+    console.log('subtitleMouseout');
+  }
+
+  timeUpdate() {
+    const currentTime = this.video.player.currentTime();
+    // console.log('currentTime', currentTime);
+
+    if (this.video.player.ended()) {
+      this.videoEndedHandler();
+      if (this.isRepeatingVideo.value) {
+        this.play();
+      }
+      return;
+    }
+
+    let newSelectedSubtitles = [];
+    let newSelectedIndexes = [];
+    for (let [i, sub] of this.subtitles.entries()) {
+      if (currentTime >= sub.startTime && currentTime <= sub.endTime) {
+        newSelectedSubtitles.push(sub);
+        newSelectedIndexes.push(i);
+      }
+    }
+    if (newSelectedIndexes.length > 0 && newSelectedIndexes.join(',') != this.selectedSubtitleIndexes.join(',')) {
+      console.log(newSelectedSubtitles.map((s) => s.text));
+
+      if (newSelectedIndexes.length > 3) {
+        this.currentSubtitleStyle = this.subtitleStyles[4].style;
+      }
+
+      this.selectedSubtitles = newSelectedSubtitles;
+      this.selectedSubtitleIndexes = newSelectedIndexes;
+      this.cd.detectChanges();
+      this.scrollToSelectedSubtitle();
+    }
+  }
+
+  scrollToSelectedSubtitle() {
+    if (this.selectedSubtitleIndexes.length > 0) {
+      const subtitle = document.getElementById(`sub${this.selectedSubtitleIndexes[this.selectedSubtitleIndexes.length - 1]}`);
+      if (subtitle) {
+        this.scrollParentToChild(this.subtitleList.nativeElement, subtitle);
+      }
+    }
+  }
+
+  scrollParentToChild(parent: HTMLElement, child: HTMLElement) {
+    const parentRect = parent.getBoundingClientRect();
+    const prevChildRect = (child.previousElementSibling || child).getBoundingClientRect();
+    const nextChildRect = (child.nextElementSibling || child).getBoundingClientRect();
+    const isViewable = prevChildRect.top >= parentRect.top && nextChildRect.bottom <= parentRect.top + parent.clientHeight;
+
+    if (!isViewable) {
+      const scrollTop = prevChildRect.top - parentRect.top;
+      const scrollBot = nextChildRect.bottom - parentRect.bottom;
+      if (Math.abs(scrollTop) < Math.abs(scrollBot)) {
+        parent.scrollTop += scrollTop;
+      } else {
+        parent.scrollTop += scrollBot;
+      }
+    }
+  }
+
+  initSubtitles() {
+    const parser = new WebVTTParser();
+    const parseResult = parser.parse(this.content.text);
+    this.subtitles = sortBy(parseResult.cues, ['startTime']).filter((t) => {
+      t.text = t.text.replace(/<\/?[^>]+>/g, '').trim();
+      return t.text != '';
     });
   }
 
@@ -222,10 +367,6 @@ export class ContentViewComponent implements OnInit {
   }
 
   playSubtitle(startTime: number, isPaused: boolean = false) {
-    if (!this.isListeningVideo) {
-      this.isListeningVideo = true;
-      this.listenPlayer();
-    }
     this.video.player.currentTime(startTime);
     this.video.player.play();
     this.isVideoPlaying = true;
@@ -237,19 +378,11 @@ export class ContentViewComponent implements OnInit {
   }
 
   play() {
-    if (!this.isListeningVideo) {
-      this.isListeningVideo = true;
-      this.listenPlayer();
-    }
     this.video.player.play();
-    this.isVideoPlaying = true;
-    this.cd.markForCheck();
   }
 
   pause() {
     this.video.player.pause();
-    this.isVideoPlaying = false;
-    this.cd.markForCheck();
   }
 
   setVideoSpeed(speed: string, overlay: any) {
@@ -358,62 +491,21 @@ export class ContentViewComponent implements OnInit {
       });
   }
 
-  checkInView(element) {
-    const cTop = this.subtitleList.nativeElement.scrollTop;
-    const cBottom = cTop + this.subtitleList.nativeElement.clientHeight;
-    const eTop = element.offsetTop;
-    const eBottom = eTop + element.clientHeight;
-    return eTop >= cTop && eBottom <= cBottom;
-  }
-
-  listenToCurrentTime() {
-    this.video.player.on('timeupdate', () => {
-      this.isVideoPlaying = !this.video.player.paused();
-      this.cd.markForCheck();
-      const currentTime = this.video.player.currentTime();
-      if (this.video.player.ended()) {
-        this.videoEndedHandler();
-        if (this.isRepeatingVideo.value) {
-          this.play();
-        }
-        return;
-      }
-      this.selectedSubtitles = this.subtitles.filter((sub, index) => {
-        if (sub.startTime <= currentTime && sub.endTime >= currentTime) {
-          this.selectedSubtitleIndexes = [];
-          this.selectedSubtitleIndexes.push(index);
-          return sub;
-        }
-      });
-      const subtitle = document.getElementById(`sub${this.selectedSubtitleIndexes[this.selectedSubtitleIndexes.length - 1]}`);
-      if (!this.checkInView(subtitle)) {
-        this.subtitleList.nativeElement.scrollTop += 80;
-      }
-      this.cd.markForCheck();
-    });
-  }
-
   videoEndedHandler() {
     this.video.player.pause();
-    this.isVideoPlaying = false;
     this.selectedSubtitles = [];
     this.selectedSubtitleIndexes = [];
     this.cd.markForCheck();
   }
 
   subscribeToIsRepeatingVideo() {
-    this.isRepeatingVideo.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        untilDestroyed(this)
-      )
-      .subscribe(isRepeating => {
-        if (isRepeating) {
-          localStorage.setItem('IS_REPEATING_VIDEO', '1');
-        } else {
-          localStorage.setItem('IS_REPEATING_VIDEO', '0');
-        }
-      });
+    this.isRepeatingVideo.valueChanges.pipe(distinctUntilChanged(), untilDestroyed(this)).subscribe((isRepeating) => {
+      if (isRepeating) {
+        localStorage.setItem('IS_REPEATING_VIDEO', '1');
+      } else {
+        localStorage.setItem('IS_REPEATING_VIDEO', '0');
+      }
+    });
   }
 
   private handleContentAttributes(contentAttributes: ContentAttributeResponse) {
@@ -423,16 +515,15 @@ export class ContentViewComponent implements OnInit {
         ...contentAttributes,
       },
     };
-    this.cd.markForCheck();
   }
 
-  private setVideoOptions(content: Content): VideoJsPlayerOptions {
+  private getVideoOptions(): VideoJsPlayerOptions {
     return {
       techOrder: ['youtube'],
       sources: [
         {
           type: 'video/youtube',
-          src: content.sourceLink,
+          src: this.content.sourceLink,
         },
       ],
       autoplay: false,
