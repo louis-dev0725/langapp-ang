@@ -3,7 +3,7 @@
     <div class="p-grid full-width" style="margin: 0; padding: 12px 16px">
       <div class="p-col-12 p-md-6">
         <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-c full-width full-height" *ngIf="!isAnswered; else kanjiInfo">
-          <i class="pi pi-volume-up" style="color: #5397d5; font-size: 1.5rem" *ngIf="card?.question?.showAudio" (click)="playAudio(card?.audioUrls[0])"></i>
+          <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" *ngIf="card?.question?.showAudio" (click)="playAudio(card?.audioUrls[0])"></i>
           <p class="text-black" [innerHTML]="card?.question?.questionHtml" style="font-size: 40px; margin-left: 15px"></p>
         </div>
       </div>
@@ -45,7 +45,7 @@
   <div class="kanji-info">
     <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s">
       <div style="flex: 1">
-        <i class="pi pi-volume-up" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
+        <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
       </div>
       <div style="flex: 5">
         <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-m text-black"></p>

@@ -62,8 +62,8 @@ export class KanjiInfoComponent implements OnInit {
       });
   }
 
-  showMore(first: number, second: number, type: string, count: number) {
-    this.card[type][first].exampleWords[second].countExampleSentencesToShow = count;
+  showMore(first: number, second: number, type: string, countToAdd: number) {
+    this.card[type][first].exampleWords[second].countExampleSentencesToShow += countToAdd;
     this.cd.markForCheck();
   }
 

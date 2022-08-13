@@ -20,6 +20,8 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './entities/User';
 import { UserDictionary } from './entities/UserDictionary';
 import { UserDictionaryRepository } from './entities/UserDictionaryRepository';
+import { Sentence } from './entities/Sentence';
+import { SentenceRepository } from './entities/SentenceRepository';
 
 @Global()
 @Module({
@@ -31,10 +33,18 @@ import { UserDictionaryRepository } from './entities/UserDictionaryRepository';
       username: process.env.POSTGRES_USER || 'postgres',
       password: process.env.POSTGRES_PASSWORD || 'postgres',
       database: process.env.POSTGRES_DB || 'postgres',
-      entities: [DictionaryWord, Content, User, UserDictionary],
+      entities: [DictionaryWord, Content, User, UserDictionary, Sentence],
       autoLoadEntities: false,
     }),
-    TypeOrmModule.forFeature([DictionaryWord, DictionaryWordRepository, Content, UserDictionary, UserDictionaryRepository]),
+    TypeOrmModule.forFeature([
+      DictionaryWord,
+      DictionaryWordRepository,
+      Content,
+      UserDictionary,
+      UserDictionaryRepository,
+      Sentence,
+      SentenceRepository,
+    ]),
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST || 'redis',

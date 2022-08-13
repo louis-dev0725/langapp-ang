@@ -21,7 +21,6 @@ export class WordInfoComponent implements OnInit, AfterViewInit {
   card: WordInfo;
   drills: Drill[];
   startTime = Date.now();
-  isFullExampleList = false;
   cardTypeRouteEnum = CardTypeRouteEnum;
 
   icons = {
@@ -32,7 +31,6 @@ export class WordInfoComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
-    this.isFullExampleList = !(this.card?.exampleSentences?.length > this.card?.countExampleSentencesToShow);
   }
 
   ngAfterViewInit() {
@@ -71,6 +69,11 @@ export class WordInfoComponent implements OnInit, AfterViewInit {
         this.drills = drills;
         this.cd.markForCheck();
       });
+  }
+
+  showMore(countToAdd: number) {
+    this.card.countExampleSentencesToShow += countToAdd;
+    this.cd.markForCheck();
   }
 
   goToNextCard() {

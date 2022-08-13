@@ -3,78 +3,73 @@ import { DictionaryType } from 'src/entities/DictionaryWord';
 import { DictionaryWordRepository } from 'src/entities/DictionaryWordRepository';
 import { JapaneseKanji } from 'src/entities/JapaneseKanji';
 import { JapaneseWord } from 'src/entities/JapaneseWord';
-import { Furigana, Reading as JapaneseWordReading } from 'src/entities/JapaneseWordData';
-import { Reading as JapaneseKanjiReading } from 'src/entities/JapaneseKanjiData';
+import { ExampleSentence, Furigana, Meaning as JapaneseWordMeaning, Reading as JapaneseWordReading } from 'src/entities/JapaneseWordData';
+import { Meaning as JapaneseKanjiMeaning, Reading as JapaneseKanjiReading } from 'src/entities/JapaneseKanjiData';
 import { User } from 'src/entities/User';
 import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
 import { convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
 import { In } from 'typeorm';
-import { Drill, KanjiCardInfo, TrainingAnswer, TrainingCards, TrainingQuestionCard, WordInfo } from './drills.interfaces';
+import {
+  Drill,
+  KanjiCardInfo,
+  TrainingAnswer,
+  TrainingCards,
+  TrainingExampleSentence,
+  TrainingQuestionCard,
+  WordInfo,
+} from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
-import { sample, shuffle, uniq } from 'lodash';
+import { Dictionary, keyBy, sample, shuffle, uniq } from 'lodash';
+import { SentenceRepository } from 'src/entities/SentenceRepository';
+import { Sentence } from 'src/entities/Sentence';
 
 @Injectable()
 export class DrillsGenerator {
   user: User;
   userWords: UserDictionary[];
   words: JapaneseWord[];
-  exampleWords: JapaneseWord[];
+  static additionalWords: JapaneseWord[];
+
+  exampleWordsArray: JapaneseWord[];
+  exampleWords: Dictionary<JapaneseWord>;
   cards: TrainingCards = {};
   drills: Drill[] = [];
 
   userKanjis: UserDictionary[];
   kanjis: JapaneseKanji[];
+  exampleSentences: Dictionary<Sentence>;
 
-  constructor(private userDictionaryRepository: UserDictionaryRepository, private dictionaryWordRepository: DictionaryWordRepository) {}
+  constructor(
+    private userDictionaryRepository: UserDictionaryRepository,
+    private dictionaryWordRepository: DictionaryWordRepository,
+    private sentenceRepository: SentenceRepository,
+  ) {}
+
+  async loadAdditionalWords() {
+    if (!DrillsGenerator.additionalWords) {
+      DrillsGenerator.additionalWords = <JapaneseWord[]>(
+        await this.dictionaryWordRepository
+          .createQueryBuilder()
+          .where(`"type" = 1 and (data->>'frequencyRank')::float < 14 and (data->>'frequencyRank')::float > 13`)
+          .getMany()
+      );
+    }
+  }
 
   async getList(user: User) {
+    await this.loadAdditionalWords();
+
     this.user = user;
 
-    this.userWords = await this.userDictionaryRepository.find({
-      where: {
-        user_id: user.id,
-        type: DictionaryType.JapaneseWords,
-      },
-    });
+    await this.loadWords();
+
     if (this.userWords.length == 0) {
       return { cards: {}, drills: [] };
     }
 
-    this.words = <JapaneseWord[]>await this.dictionaryWordRepository.find({
-      where: {
-        id: In(this.userWords.map((w) => w.dictionary_word_id)),
-      },
-    });
-    if (this.words.length != this.userWords.length) {
-      console.log('Warning: this.words.length != this.userWords.length');
-    }
-
-    // TODO: add "usedKanji" to this.words dictionary (and/or user dictionary)
-    const extractedKanji = this.userWords.flatMap((w) => extractKanji(w.original_word));
-    this.userKanjis = await this.userDictionaryRepository.find({
-      where: {
-        user_id: user.id,
-        original_word: In(extractedKanji),
-        type: DictionaryType.JapaneseKanji,
-      },
-    });
-
-    this.kanjis = <JapaneseKanji[]>await this.dictionaryWordRepository.find({
-      where: {
-        id: In(this.userKanjis.map((w) => w.dictionary_word_id)),
-      },
-    });
-    if (this.kanjis.length != this.userKanjis.length) {
-      console.log('Warning: this.kanjis.length != this.userKanji.length');
-    }
-
-    let exampleWordIds = this.kanjis.map((k) => k.data.readings.map((r) => r.exampleWords.map((w) => w.wordId))).flat(2);
-    this.exampleWords = <JapaneseWord[]>await this.dictionaryWordRepository.find({
-      where: {
-        id: In(exampleWordIds),
-      },
-    });
+    await this.loadKanji();
+    await this.loadSentences();
 
     for (const userWord of this.userWords) {
       const currentWord = this.words.find((w) => w.id == userWord.dictionary_word_id);
@@ -125,6 +120,71 @@ export class DrillsGenerator {
     };
   }
 
+  private async loadKanji() {
+    // TODO: add "usedKanji" to this.words dictionary (and/or user dictionary)
+
+    const extractedKanji = this.userWords.flatMap((w) => extractKanji(w.original_word));
+    this.userKanjis = await this.userDictionaryRepository.find({
+      where: {
+        user_id: this.user.id,
+        original_word: In(extractedKanji),
+        type: DictionaryType.JapaneseKanji,
+      },
+    });
+
+    this.kanjis = <JapaneseKanji[]>await this.dictionaryWordRepository.find({
+      where: {
+        id: In(this.userKanjis.map((w) => w.dictionary_word_id)),
+      },
+    });
+    if (this.kanjis.length != this.userKanjis.length) {
+      console.log('Warning: this.kanjis.length != this.userKanji.length');
+    }
+
+    let exampleWordIds = this.kanjis.map((k) => k.data.readings.map((r) => r.exampleWords.map((w) => w.wordId))).flat(2);
+    this.exampleWordsArray = <JapaneseWord[]>await this.dictionaryWordRepository.findByIds(exampleWordIds);
+    this.exampleWords = keyBy(this.exampleWordsArray, (w) => w.id);
+  }
+
+  private async loadWords() {
+    this.userWords = await this.userDictionaryRepository.find({
+      where: {
+        user_id: this.user.id,
+        type: DictionaryType.JapaneseWords,
+      },
+    });
+
+    this.words = <JapaneseWord[]>await this.dictionaryWordRepository.find({
+      where: {
+        id: In(this.userWords.map((w) => w.dictionary_word_id)),
+      },
+    });
+    if (this.words.length != this.userWords.length) {
+      console.log('Warning: this.words.length != this.userWords.length');
+    }
+  }
+
+  private async loadSentences() {
+    let exampleSentencesIds = [];
+
+    for (let word of [...this.words, ...this.exampleWordsArray]) {
+      for (let meaning of word.data.meanings) {
+        if (meaning.exampleSentences) {
+          for (let ex of meaning.exampleSentences) {
+            exampleSentencesIds.push(ex.sentenceId);
+          }
+        }
+      }
+      if (word.data.exampleSentences) {
+        for (let ex of word.data.exampleSentences) {
+          exampleSentencesIds.push(ex.sentenceId);
+        }
+      }
+    }
+
+    this.exampleSentences = keyBy(await this.sentenceRepository.findByIds(exampleSentencesIds), (s) => s.id);
+  }
+
   addToCards(card: WordInfo | KanjiCardInfo | TrainingQuestionCard) {
     if (!this.cards[card.cardId]) {
       this.cards[card.cardId] = card;
@@ -161,9 +221,11 @@ export class DrillsGenerator {
     // TODO: rebuild dictionary with 2 letter lang codes
     let userLanguages = this.user.languages.flatMap((l) => (l == 'en' ? ['eng', 'en'] : l == 'ru' ? ['ru', 'rus'] : l));
 
+    // @ts-ignore
     let meanings = word.data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
     if (meanings.length == 0) {
       userLanguages.push('eng', 'en');
+      // @ts-ignore
       meanings = word.data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
     }
 
@@ -181,8 +243,9 @@ export class DrillsGenerator {
         frequencyPercent: reading.frequencyPercent,
         frequencyPmw: reading.frequencyPmw,
         exampleWords: reading.exampleWords.map((item) => {
-          let word = this.exampleWords.find((ew) => ew.id == item.wordId);
+          let word = this.exampleWords[item.wordId];
           if (!word) {
+            console.log(`Unable to find example word ${item.wordId} for kanji ${kanji.id}`);
             return null;
           }
           return {
@@ -193,15 +256,10 @@ export class DrillsGenerator {
             furiganaHtml: this.furiganaToHtml(word?.data?.readings?.[0]?.furigana),
             meanings: this.filterMeaningsForUser(word),
             countExampleSentencesToShow: 3,
-            exampleSentences: [
-              {
-                sentenceId: 93545,
-                value: '便りがないのは良い知らせ。',
-                furiganaHtml: '<ruby>便<rt>たよ</rt>りがないのは<rt></rt>良<rt>よ</rt>い<rt></rt>知<rt>し</rt>らせ。</ruby>',
-                translationHtml: 'No <span class="word-highlight">news</span> is good news.',
-                audioUrls: ['/assets/test-audio.mp3?sentence-93545'],
-              },
-            ],
+            exampleSentences: this.formatExampleSentences([
+              ...word.data.meanings.flatMap((m) => m?.exampleSentences || []),
+              ...(word.data.exampleSentences || []),
+            ]),
             audioUrls: ['/assets/test-audio.mp3?word-3266529'],
           };
         }),
@@ -283,6 +341,40 @@ export class DrillsGenerator {
     return convertKatakanaToHiragana(reading.value.replace(/\..*/, '').replace('-', '')); // For example replace "つよ.い" to "つよ" and
   }
 
+  formatExampleSentences(exampleSentences: ExampleSentence[]): TrainingExampleSentence[] {
+    return exampleSentences
+      .map((ex) => {
+        if (!ex) {
+          return null;
+        }
+        let sentence = this.exampleSentences[ex.sentenceId];
+        if (!sentence) {
+          console.log(`Unable to find sentence #${ex.sentenceId}`);
+          return null;
+        }
+        let translationHtml = null;
+        for (let lang of this.user.languages) {
+          translationHtml = sentence.translations[lang];
+          if (translationHtml) {
+            break;
+          }
+        }
+        if (!translationHtml && sentence.translations['en']) {
+          translationHtml = sentence.translations['en'];
+        }
+        if (sentence && translationHtml) {
+          return {
+            sentenceId: sentence.id,
+            value: sentence.text,
+            furiganaHtml: sentence.text, // TODO: furigana
+            translationHtml: translationHtml,
+            audioUrls: [], // TODO: audio
+          };
+        }
+      })
+      .filter((ex) => ex);
+  }
+
   generateSelectFuriganaForWholeWord(word: JapaneseWord, userWord: UserDictionary): TrainingQuestionCard & Record<string, any> {
     return {
       cardType: 'selectFuriganaForWholeWord',
@@ -328,23 +420,32 @@ export class DrillsGenerator {
     let correctAnswer = this.formatWordFuriganaForAnswerReading(wordFurigana);
     const answers: TrainingAnswer[] = [];
     answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true });
-    let shuffledList = shuffle(this.words);
-
-    // If word has okurigana then it should match
     let lastPosition = wordFurigana[wordFurigana.length - 1];
     let wordOkurigana = lastPosition && lastPosition.rt ? lastPosition.ruby : null;
 
-    for (let randomWord of shuffledList) {
-      let reading = randomWord.data.readings[0];
-      if (wordOkurigana == null || reading.furigana[reading.furigana.length - 1].ruby) {
-        let formattedAnswer = this.formatWordFuriganaForAnswerReading(reading.furigana);
-        if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-          answers.push({ contentHtml: formattedAnswer });
-        }
-      }
+    for (let words of [this.words, DrillsGenerator.additionalWords]) {
       if (answers.length == 5) {
         break;
       }
+      let shuffledList = shuffle(words);
+
+      // If word has okurigana then it should match
+      for (let randomWord of shuffledList) {
+        let reading = randomWord.data.readings[0];
+        if (wordOkurigana == null || reading.furigana[reading.furigana.length - 1].ruby) {
+          let formattedAnswer = this.formatWordFuriganaForAnswerReading(reading.furigana);
+          if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
+            answers.push({ contentHtml: formattedAnswer });
+          }
+        }
+        if (answers.length == 5) {
+          break;
+        }
+      }
+    }
+
+    if (answers.length < 5) {
+      console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
 
     // TODO: load additional words if needed
@@ -385,20 +486,29 @@ export class DrillsGenerator {
     const answers: TrainingAnswer[] = [];
     answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true });
 
-    let shuffledList = shuffle(this.words);
-
-    for (let randomWord of shuffledList) {
-      let formattedAnswer = this.filterMeaningsForUser(randomWord)
-        .map((v) => v.value)
-        .join(', ');
-
-      if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-        answers.push({ contentHtml: formattedAnswer });
-      }
-
+    for (let words of [this.words, DrillsGenerator.additionalWords]) {
       if (answers.length == 5) {
         break;
       }
+      let shuffledList = shuffle(words);
+
+      for (let randomWord of shuffledList) {
+        let formattedAnswer = this.filterMeaningsForUser(randomWord)
+          .map((v) => v.value)
+          .join(', ');
+
+        if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
+          answers.push({ contentHtml: formattedAnswer });
+        }
+
+        if (answers.length == 5) {
+          break;
+        }
+      }
+    }
+
+    if (answers.length < 5) {
+      console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
 
     // TODO: load additional words if needed
@@ -440,23 +550,32 @@ export class DrillsGenerator {
       closedAnswers.push({ contentHtml: closedCorrentAnswer, isCorrectAnswer: true });
     }
 
-    let shuffledList = shuffle(this.words);
-
-    // TODO: пропускать слова с одинаковыми/похожими значениями (если есть пересечение в значениях)
-
-    for (let randomWord of shuffledList) {
-      let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, forAudio ? null : 'gray-furigana');
-
-      if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-        answers.push({ contentHtml: formattedAnswer });
-        if (forAudio) {
-          closedAnswers.push({ contentHtml: this.formatWordFuriganaForAnswerKanji(randomWord.data.readings[0].furigana) });
-        }
-      }
-
+    for (let words of [this.words, DrillsGenerator.additionalWords]) {
       if (answers.length == 5) {
         break;
       }
+      let shuffledList = shuffle(words);
+
+      // TODO: пропускать слова с одинаковыми/похожими значениями (если есть пересечение в значениях)
+
+      for (let randomWord of shuffledList) {
+        let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, forAudio ? null : 'gray-furigana');
+
+        if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
+          answers.push({ contentHtml: formattedAnswer });
+          if (forAudio) {
+            closedAnswers.push({ contentHtml: this.formatWordFuriganaForAnswerKanji(randomWord.data.readings[0].furigana) });
+          }
+        }
+
+        if (answers.length == 5) {
+          break;
+        }
+      }
+    }
+
+    if (answers.length < 5) {
+      console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
 
     // TODO: load additional words if needed
@@ -589,22 +708,31 @@ export class DrillsGenerator {
     let correctAnswer = this.furiganaToHtml(word.data.readings[0].furigana, null, 'gray-furigana');
     answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'] });
 
-    let shuffledList = shuffle(this.words);
-
-    // TODO: real audio
-
-    // TODO: пропускать слова с одинаковыми/похожими значениями (если есть пересечение в значениях)
-
-    for (let randomWord of shuffledList) {
-      let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, 'gray-furigana');
-
-      if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-        answers.push({ contentHtml: formattedAnswer, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'] });
-      }
-
+    for (let words of [this.words, DrillsGenerator.additionalWords]) {
       if (answers.length == 5) {
         break;
       }
+      let shuffledList = shuffle(words);
+
+      // TODO: real audio
+
+      // TODO: пропускать слова с одинаковыми/похожими значениями (если есть пересечение в значениях)
+
+      for (let randomWord of shuffledList) {
+        let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, 'gray-furigana');
+
+        if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
+          answers.push({ contentHtml: formattedAnswer, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'] });
+        }
+
+        if (answers.length == 5) {
+          break;
+        }
+      }
+    }
+
+    if (answers.length < 5) {
+      console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
 
     // TODO: load additional words if needed
@@ -637,51 +765,11 @@ export class DrillsGenerator {
       value: word.data?.readings?.[0]?.kanji,
       furiganaHtml: this.furiganaToHtml(word.data?.readings?.[0]?.furigana),
       meanings: this.filterMeaningsForUser(word),
-      countExampleSentencesToShow: 3,
-      // TODO: example sentences
-      exampleSentences: [
-        {
-          sentenceId: 94375,
-          value: '我が家は便利なところにある。',
-          furiganaHtml:
-            '<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。<rt></rt></ruby>',
-          translationHtml: 'Our house is <span class="word-highlight">conveniently</span> located.',
-          audioUrls: ['/assets/test-audio.mp3?sentence-94375'],
-        },
-        {
-          sentenceId: 94376,
-          value: '携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。',
-          furiganaHtml:
-            '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
-          translationHtml:
-            'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.',
-          audioUrls: [],
-        },
-        {
-          sentenceId: 94377,
-          value: '我が家は便利なところにある。',
-          furiganaHtml:
-            '<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (3)<rt></rt></ruby>',
-          translationHtml: 'Our house is <span class="word-highlight">conveniently</span> located (3).',
-          audioUrls: ['/assets/test-audio.mp3?sentence-94377'],
-        },
-        {
-          sentenceId: 94377,
-          value: '我が家は便利なところにある。',
-          furiganaHtml:
-            '<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (4)<rt></rt></ruby>',
-          translationHtml: 'Our house is <span class="word-highlight">conveniently</span> located (4).',
-          audioUrls: ['/assets/test-audio.mp3?sentence-94377'],
-        },
-        {
-          sentenceId: 94377,
-          value: '我が家は便利なところにある。',
-          furiganaHtml:
-            '<ruby>我<rt>わ</rt>が<rt></rt>家<rt>や</rt>は<rt></rt><span class="word-highlight">便利</span><rt></rt>なところにある。 (5)<rt></rt></ruby>',
-          translationHtml: 'Our house is <span class="word-highlight">conveniently</span> located (5).',
-          audioUrls: ['/assets/test-audio.mp3?sentence-94377'],
-        },
-      ],
+      countExampleSentencesToShow: 3, // move to boolean inside exampleSentences?
+      exampleSentences: this.formatExampleSentences([
+        ...word.data.meanings.flatMap((m) => m.exampleSentences),
+        ...word.data.exampleSentences,
+      ]),
       kanji: this.kanjis.map((kanji) => ({
         wordId: kanji.id,
         value: kanji.query[0],

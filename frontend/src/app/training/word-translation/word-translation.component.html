@@ -10,7 +10,7 @@
         <div class="flex-layout flex-layout__col flex-layout__a-c flex-layout__j-c full-width">
           <div class="flex-layout flex-layout__row full-width" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
             <div style="flex: 1" class="flex-layout flex-layout__a-c flex-layout__j-c" *ngIf="isAnswered">
-              <i class="pi pi-volume-up" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])" *ngIf="i === 0"></i>
+              <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])" *ngIf="i === 0"></i>
             </div>
             <div style="flex: 1" class="flex-layout flex-layout__j-c" *ngIf="isWideScreen">
               <span style="font-size: 13px">{{i + 1}}</span>
@@ -48,7 +48,7 @@
   <div class="kanji-info">
     <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s">
       <div style="flex: 1">
-        <i class="pi pi-volume-up" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
+        <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
       </div>
       <div style="flex: 5">
         <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-m text-black"></p>
