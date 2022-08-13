@@ -5,7 +5,7 @@ import User from "../interfaces/User";
 import { Modal } from "./Modal";
 import { showSnackbar } from "./Snackbar";
 import { TextSeeker } from "./TextSeeker";
-export { caretRangeFromPoint } from './caretUtils';
+export { caretRangeFromPoint } from "./caretUtils";
 
 const japaneseRegex = /[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]|[\u4E00-\u9FAF]/;
 
@@ -22,12 +22,15 @@ export function isStringContainsJapanese(string: string): boolean {
 }
 
 export async function showForRange(range: Range, exactMatch: boolean = false) {
+  if (!range) {
+    return;
+  }
+
   let prevLength = 0;
   let context: string;
   if (exactMatch) {
     context = range.toString();
-  }
-  else {
+  } else {
     const seekPrev = new TextSeeker(range.startContainer, range.startOffset).seek(-100);
     const seekNext = new TextSeeker(range.startContainer, range.startOffset).seek(100);
     prevLength = seekPrev.content.length;
@@ -37,37 +40,36 @@ export async function showForRange(range: Range, exactMatch: boolean = false) {
     return;
   }
 
-  let langauges = state.user.languages ?? ['en'];
+  let langauges = state.user.languages ?? ["en"];
 
   let request: ProcessTextRequest = {
     text: context,
     url: range.startContainer.ownerDocument.location.href,
     offset: prevLength,
     languages: langauges,
-    exactMatch: exactMatch
+    exactMatch: exactMatch,
   };
 
   let firstSymbolRange = new Range();
   firstSymbolRange.setStart(range.startContainer, range.startOffset);
-  state.modal.showText(t('loading'));
+  state.modal.showText(t("loading"));
   state.modal.updatePosition(firstSymbolRange);
 
-  let response: ProcessTextResponse = <ProcessTextResponse>await state.apiCall('POST', 'processText', request);
+  let response: ProcessTextResponse = <ProcessTextResponse>await state.apiCall("POST", "processText", request);
   if (!response.success) {
-    showSnackbar(t('no_words_found'));
+    showSnackbar(t("no_words_found"));
     state.modal.hide();
-  }
-  else {
+  } else {
     state.modal.showTranslations(request, response);
   }
 
   let newSelectionRange = new Range();
   let newSelectionStart = response.offsetStart - prevLength;
-  let start = (new TextSeeker(range.startContainer, range.startOffset, true, false)).seek(newSelectionStart);
+  let start = new TextSeeker(range.startContainer, range.startOffset, true, false).seek(newSelectionStart);
   newSelectionRange.setStart(start.node, start.offset);
 
   let newSelectionEnd = response.offsetEnd - prevLength;
-  let end = (new TextSeeker(range.startContainer, range.startOffset, true, false)).seek(newSelectionEnd);
+  let end = new TextSeeker(range.startContainer, range.startOffset, true, false).seek(newSelectionEnd);
   newSelectionRange.setEnd(end.node, end.offset);
 
   if (newSelectionRange.toString().length > 0) {

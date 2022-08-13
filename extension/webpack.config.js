@@ -1,45 +1,47 @@
-const path = require('path');
-const webpack = require('webpack');
-const FilemanagerPlugin = require('filemanager-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ExtensionReloader = require('webpack-extension-reloader');
-const WextManifestWebpackPlugin = require('wext-manifest-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const path = require("path");
+const webpack = require("webpack");
+const FilemanagerPlugin = require("filemanager-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const ExtensionReloader = require("webpack-extension-reloader");
+const WextManifestWebpackPlugin = require("wext-manifest-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const targetBrowser = process.env.TARGET_BROWSER;
-const isForSite = targetBrowser == 'for-site';
-const sourcePath = path.join(__dirname, 'src');
-const destPath = path.join(__dirname, isForSite ? 'build-for-site' : 'extension');
-const nodeEnv = process.env.NODE_ENV || 'development';
+const isForSite = targetBrowser == "for-site";
+const sourcePath = path.join(__dirname, "src");
+const destPath = path.join(__dirname, isForSite ? "build-for-site" : "extension");
+const nodeEnv = process.env.NODE_ENV || "development";
+
+const WebpackObfuscator = require("webpack-obfuscator");
 
 const extensionReloaderPlugin =
-  nodeEnv === 'development'
+  nodeEnv === "development"
     ? new ExtensionReloader({
-      port: 9090,
-      reloadPage: true,
-      entries: {
-        // TODO: reload manifest on update
-        contentScript: 'contentScript',
-        background: 'background',
-        extensionPage: ['popup', 'options'],
-      },
-    })
+        port: 9090,
+        reloadPage: true,
+        entries: {
+          // TODO: reload manifest on update
+          contentScript: "contentScript",
+          background: "background",
+          extensionPage: ["popup", "options"],
+        },
+      })
     : () => {
-      this.apply = () => { };
-    };
+        this.apply = () => {};
+      };
 
 const getExtensionFileType = (browser) => {
-  if (browser === 'opera') {
-    return 'crx';
+  if (browser === "opera") {
+    return "crx";
   }
 
-  if (browser === 'firefox') {
-    return 'xpi';
+  if (browser === "firefox") {
+    return "xpi";
   }
 
-  return 'zip';
+  return "zip";
 };
 
 module.exports = {
@@ -54,36 +56,36 @@ module.exports = {
 
   mode: nodeEnv,
 
-  entry: isForSite ? {
-    common: path.join(sourcePath, 'fg', 'common.ts'),
-  } : {
-      manifest: path.join(sourcePath, 'manifest.json'),
-      backgroundPage: path.join(sourcePath, 'bg', 'backgroundPage.ts'),
-      contentScript: path.join(sourcePath, 'fg', 'contentScript.ts'),
-    },
+  entry: isForSite
+    ? {
+        common: path.join(sourcePath, "fg", "common.ts"),
+      }
+    : {
+        manifest: path.join(sourcePath, "manifest.json"),
+        backgroundPage: path.join(sourcePath, "bg", "backgroundPage.ts"),
+        contentScript: path.join(sourcePath, "fg", "contentScript.ts"),
+      },
 
   output: {
     path: isForSite ? destPath : path.join(destPath, targetBrowser),
-    filename: isForSite ? '[name].js' : 'js/[name].bundle.js',
-    libraryTarget: isForSite ? 'commonjs2' : '',
+    filename: isForSite ? "[name].js" : "js/[name].bundle.js",
+    libraryTarget: isForSite ? "commonjs2" : "",
   },
 
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json'],
+    extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {
-      'webextension-polyfill-ts': path.resolve(
-        path.join(__dirname, 'node_modules', 'webextension-polyfill-ts')
-      ),
+      "webextension-polyfill-ts": path.resolve(path.join(__dirname, "node_modules", "webextension-polyfill-ts")),
     },
   },
 
   module: {
     rules: [
       {
-        type: 'javascript/auto', // prevent webpack handling json with its own loaders,
+        type: "javascript/auto", // prevent webpack handling json with its own loaders,
         test: /manifest\.json$/,
         use: {
-          loader: 'wext-manifest-loader',
+          loader: "wext-manifest-loader",
           options: {
             usePackageJSONVersion: true, // set to false to not use package.json version for manifest
           },
@@ -91,8 +93,27 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
+        test: /(caretUtils|TextSeeker)\.ts$/,
+        use: [
+          {
+            loader: "babel-loader",
+          },
+          {
+            loader: WebpackObfuscator.loader,
+            options: {
+              renameGlobals: true,
+              simplify: true,
+              identifierNamesGenerator: "mangled-shuffled",
+              stringArrayThreshold: 1,
+              stringArrayEncoding: ["base64"],
+            },
+          },
+        ],
+        exclude: /node_modules/,
+      },
+      {
         test: /\.(js|ts)x?$/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         exclude: /node_modules/,
       },
       {
@@ -103,9 +124,9 @@ module.exports = {
             options: {
               strict: true,
               _with: false,
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
     ],
   },
@@ -117,26 +138,22 @@ module.exports = {
     isForSite ? null : new webpack.SourceMapDevToolPlugin({ filename: false }),
     new ForkTsCheckerWebpackPlugin(),
     // environmental variables
-    new webpack.EnvironmentPlugin(['NODE_ENV', 'TARGET_BROWSER']),
+    new webpack.EnvironmentPlugin(["NODE_ENV", "TARGET_BROWSER"]),
     // delete previous build files
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [
-        path.join(process.cwd(), `extension/${targetBrowser}`),
-        path.join(
-          process.cwd(),
-          `extension/${targetBrowser}.${getExtensionFileType(targetBrowser)}`
-        ),
-      ],
+      cleanOnceBeforeBuildPatterns: [path.join(process.cwd(), `extension/${targetBrowser}`), path.join(process.cwd(), `extension/${targetBrowser}.${getExtensionFileType(targetBrowser)}`)],
       cleanStaleWebpackAssets: false,
       verbose: true,
     }),
     // copy static assets
-    isForSite ? null : new CopyWebpackPlugin({
-      patterns: [{ from: 'src/assets', to: 'assets' }],
-    }),
+    isForSite
+      ? null
+      : new CopyWebpackPlugin({
+          patterns: [{ from: "src/assets", to: "assets" }],
+        }),
     // plugin to enable browser reloading in development mode
     extensionReloaderPlugin,
-  ].filter(i => i),
+  ].filter((i) => i),
 
   optimization: {
     minimize: isForSite ? false : true,
@@ -151,18 +168,20 @@ module.exports = {
         extractComments: false,
       }),
       new FilemanagerPlugin({
-        events: isForSite ? {} : {
-          onEnd: {
-            archive: [
-              {
-                format: 'zip',
-                source: path.join(destPath, targetBrowser),
-                destination: `${path.join(destPath, targetBrowser)}.${getExtensionFileType(targetBrowser)}`,
-                options: { zlib: { level: 6 } },
+        events: isForSite
+          ? {}
+          : {
+              onEnd: {
+                archive: [
+                  {
+                    format: "zip",
+                    source: path.join(destPath, targetBrowser),
+                    destination: `${path.join(destPath, targetBrowser)}.${getExtensionFileType(targetBrowser)}`,
+                    options: { zlib: { level: 6 } },
+                  },
+                ],
               },
-            ],
-          },
-        },
+            },
       }),
     ],
   },

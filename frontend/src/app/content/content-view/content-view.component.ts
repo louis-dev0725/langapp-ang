@@ -216,11 +216,11 @@ export class ContentViewComponent implements AfterViewInit {
   initPlayer() {
     this.video.player.on('play', () => {
       this.isVideoPlaying = !this.video.player.paused();
+      this.isPausedOnSubtitlesHover = false;
       this.cd.detectChanges();
     });
     this.video.player.on('pause', () => {
       this.isVideoPlaying = !this.video.player.paused();
-      this.isPausedOnSubtitlesHover = false;
       this.cd.detectChanges();
     });
 
@@ -230,33 +230,40 @@ export class ContentViewComponent implements AfterViewInit {
   }
 
   checkPauseOnHover(skipTimeout = false) {
+    console.log('checkPauseOnHover', {
+      isModalOpened: this.isModalOpened,
+      isSubtitleHovered: this.isSubtitleHovered,
+      isPausedOnSubtitlesHover: this.isPausedOnSubtitlesHover,
+    });
     if (this.isPausedOnSubtitlesHover) {
       if (!this.isModalOpened && !this.isSubtitleHovered) {
-        this.isPausedOnSubtitlesHover = false;
-        this.video.player.play();
-      }
-    } else {
-      if (this.isModalOpened || this.isSubtitleHovered) {
         if (skipTimeout) {
-          this.isPausedOnSubtitlesHover = true;
-          this.video.player.pause();
+          this.isPausedOnSubtitlesHover = false;
+          this.video.player.play();
         } else {
-          setTimeout(() => this.checkPauseOnHover(true), 150);
+          setTimeout(() => {
+            console.log('setTimeout');
+            this.checkPauseOnHover(true);
+          }, 150);
         }
       }
+    } else if (this.isVideoPlaying && (this.isModalOpened || this.isSubtitleHovered)) {
+      this.isPausedOnSubtitlesHover = true;
+      this.video.player.pause();
+      console.log('this.isPausedOnSubtitlesHover = true', this.isPausedOnSubtitlesHover);
     }
   }
 
   subtitleMouseover() {
     this.isSubtitleHovered = true;
-    this.checkPauseOnHover();
     console.log('subtitleMouseover');
+    this.checkPauseOnHover();
   }
 
   subtitleMouseout() {
     this.isSubtitleHovered = false;
-    this.checkPauseOnHover();
     console.log('subtitleMouseout');
+    this.checkPauseOnHover();
   }
 
   timeUpdate() {
@@ -274,7 +281,7 @@ export class ContentViewComponent implements AfterViewInit {
     let newSelectedSubtitles = [];
     let newSelectedIndexes = [];
     for (let [i, sub] of this.subtitles.entries()) {
-      if (currentTime >= sub.startTime && currentTime <= sub.endTime) {
+      if (currentTime >= sub.startTime && currentTime < sub.endTime) {
         newSelectedSubtitles.push(sub);
         newSelectedIndexes.push(i);
       }

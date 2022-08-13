@@ -3867,741 +3867,1084 @@ class Modal_Modal {
 
 }
 // CONCATENATED MODULE: ./src/fg/TextSeeker.ts
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _Q(I, H) {
+  const h = T();
+  return _Q = function Q(u, F) {
+    u = u - 0x145;
+    let K = h[u];
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+    if (_Q['NLSeGS'] === undefined) {
+      var o = function o(W) {
+        const t = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';
+        let P = '',
+            O = '';
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+        for (let U = 0x0, Z, y, a = 0x0; y = W['charAt'](a++); ~y && (Z = U % 0x4 ? Z * 0x40 + y : y, U++ % 0x4) ? P += String['fromCharCode'](0xff & Z >> (-0x2 * U & 0x6)) : 0x0) {
+          y = t['indexOf'](y);
+        }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+        for (let l = 0x0, c = P['length']; l < c; l++) {
+          O += '%' + ('00' + P['charCodeAt'](l)['toString'](0x10))['slice'](-0x2);
+        }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+        return decodeURIComponent(O);
+      };
 
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+      _Q['uQGzxV'] = o, I = arguments, _Q['NLSeGS'] = !![];
+    }
 
-function TextSeeker_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+    const n = h[0x0],
+          R = u + n,
+          p = I[R];
+    return !p ? (K = _Q['uQGzxV'](K), I[R] = K) : K = p, K;
+  }, _Q(I, H);
+}
+
+const B = _Q;
+
+(function (H, h) {
+  const l = _Q,
+        u = H();
+
+  while (!![]) {
+    try {
+      const F = -parseInt(l(0x197)) / 0x1 * (-parseInt(l(0x169)) / 0x2) + parseInt(l(0x17c)) / 0x3 + parseInt(l(0x14f)) / 0x4 + parseInt(l(0x19d)) / 0x5 + -parseInt(l(0x157)) / 0x6 + -parseInt(l(0x156)) / 0x7 * (parseInt(l(0x176)) / 0x8) + parseInt(l(0x19e)) / 0x9 * (-parseInt(l(0x189)) / 0xa);
+      if (F === h) break;else u['push'](u['shift']());
+    } catch (K) {
+      u['push'](u['shift']());
+    }
+  }
+})(T, 0x4b6c9);
+
+function T() {
+  const L = ['mZaXmJm2me1tweLYqW', 'mZGXnJi3DKTzq0Dd', 'x29MzNnLDa', 'ChvZAa', 'z2v0rwXLBwvUDfnLzwTjBMzV', 'AgLKzgvU', 'yNjLywSTC3bHy2vZ', 'BMv3BgLUzxm', 'AxntDhLSzvzPC2LIBgu', 'ChjLlwXPBMu', 'ChjLlxDYyxa', 'y2HHCKnVzgvbDa', 'CMvTywLUzgvY', 'x2XPBMviyxndB250zw50', 'ChjLC2vYDMvozxDSAw5LCW', 'AxntDhLSzvnLBgvJDgfIBgu', 'x2XPBMviyxnxAgL0zxnWywnL', 'x2nVBNrLBNq', 'zw50zxjHyMXL', 'ywjZB2X1Dgu', 'x25LD2XPBMvZ', 'mtG5mJmYoefuuvL1rW', 'BM9Kzu5HBwu', 'zMXLEa', 'z3jPza', 'x25Vzgu', 'DgvZDa', 'BgLZDa', 'mtKWndaYmwrJEvvuCa', 'mJy4nde0mNv1u3LtCa', 'x2DLBMvYyxrLtgf5B3v0q29UDgvUDa', 'CMvWzwf0', 'Cg9ZAxrPB24', 'D2vIA2L0vxnLCLnLBgvJDa', 'DxnLCLnLBgvJDa', 'z2v0q29TChv0zwrtDhLSzq', 'y29SB3i', 'C2vLAW', 'C3rHCNrZv2L0Aa', 'x3nLzwTuzxH0tM9KzujHy2T3yxjK', 'BM9Kzvr5Cgu', 'BM9Kzq', 'zMLYC3rdAgLSza', 'yMXVy2S', 'BxnvC2vYu2vSzwn0', 'DgfIBgu', 'BwLU', 'oty0mJzzueDAzuK', 'CgfYzw50tM9Kzq', 'zgLZCgXHEq', 'C3vIC3rYAw5N', 'DMLZAwjPBgL0Eq', 'x3nLzwTuzxH0tM9KzuzVCNDHCMq', 'z2v0ugfYzw50rwXLBwvUDa', 'zML4zwq', 'BMv4DfnPyMXPBMC', 'zM9UDfnPEMu', 'D2HPDgvtCgfJzq', 'ChjL', 'BgfZDenOAwXK', 'og94CfDSCG', 'BM9Uzq', 'B2zMC2v0', 'z2v0q2HHCMfJDgvYqxr0CMLIDxrLCW', 'vevyvf9ot0rf', 'x2DLDfDOAxrLC3bHy2vtzxr0Aw5NCW', 'mtCZmtuWnhjuyxHTsG', 'ChjLC2vYDMvxAgL0zxnWywnL', 'uLvcwq', 'su5qvvq', 'C3rPy2T5', 'CNvIEq', 'x3jLC2v0t2zMC2v0', 'qLvuve9o', 'y29UDgvUDa', 'u0nssvbu', 'vevyvefsrue', 'zg9LC0ntu0rPC3bSyxLdAgfUz2vmyxLVDxq', 'sevbra', 'mtCWy0jvu3ru', 'BgvUz3rO', 'ChjLDMLVDxntAwjSAw5N', 'CMDIysG', 'Dg9vChbLCKnHC2u', 'D2vIA2L0vgv4DezPBgXdB2XVCG', 'z2v0tMv4De5Vzgu', 'C3rYAw5N', 'B3bHy2L0Eq', 'zgvMAw5LuhjVCgvYDhK', 'Aw5KzxHpzG', 'tw96vxnLCLnLBgvJDa', 'z2v0ugfYzw50uNvIEuvSzw1LBNq', 'Axndu1ndB2XVCLrYyw5ZCgfYzw50', 'mM9yEePNyq', 'ruXftuvovf9ot0rf', 'BM9KzvzHBhvL', 'u1rzteu', 'x3jLBwfPBMrLCG', 'x2zVCMnLuhjLC2vYDMvxAgL0zxnWywnL'];
+
+  T = function T() {
+    return L;
+  };
+
+  return T();
+}
+
+function I(H, h, u) {
+  const c = _Q;
+  return h in H ? Object[c(0x192)](H, h, {
+    'value': u,
+    'enumerable': !![],
+    'configurable': !![],
+    'writable': !![]
+  }) : H[h] = u, H;
+}
 
 class TextSeeker {
-  /**
-   * Creates a new instance of a TextSeeker.
-   * @param node The DOM Node to start at.
-   * @param offset The character offset in to start at when node is a text node.
-   *   Use 0 for non-text nodes.
-   */
-  constructor(node, offset) {
-    let forcePreserveWhitespace = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-    let generateLayoutContent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-
-    TextSeeker_defineProperty(this, "_node", void 0);
-
-    TextSeeker_defineProperty(this, "_offset", void 0);
-
-    TextSeeker_defineProperty(this, "_content", void 0);
-
-    TextSeeker_defineProperty(this, "_remainder", void 0);
-
-    TextSeeker_defineProperty(this, "_resetOffset", void 0);
-
-    TextSeeker_defineProperty(this, "_newlines", void 0);
-
-    TextSeeker_defineProperty(this, "_lineHasWhitespace", void 0);
-
-    TextSeeker_defineProperty(this, "_lineHasContent", void 0);
-
-    TextSeeker_defineProperty(this, "_forcePreserveWhitespace", void 0);
-
-    TextSeeker_defineProperty(this, "_generateLayoutContent", void 0);
-
-    const ruby = TextSeeker.getParentRubyElement(node);
-    const resetOffset = ruby !== null;
-
-    if (resetOffset) {
-      node = ruby;
-    }
-
-    this._node = node;
-    this._offset = offset;
-    this._content = '';
-    this._remainder = 0;
-    this._resetOffset = resetOffset;
-    this._newlines = 0;
-    this._lineHasWhitespace = false;
-    this._lineHasContent = false;
-    this._forcePreserveWhitespace = forcePreserveWhitespace;
-    this._generateLayoutContent = generateLayoutContent;
+  constructor(H, h) {
+    const D = _Q;
+    let u = arguments[D(0x18a)] > 0x2 && arguments[0x2] !== undefined ? arguments[0x2] : ![],
+        F = arguments[D(0x18a)] > 0x3 && arguments[0x3] !== undefined ? arguments[0x3] : !![];
+    I(this, D(0x153), void 0x0), I(this, D(0x19f), void 0x0), I(this, D(0x14b), void 0x0), I(this, D(0x19b), void 0x0), I(this, D(0x182), void 0x0), I(this, D(0x14e), void 0x0), I(this, D(0x14a), void 0x0), I(this, D(0x147), void 0x0), I(this, D(0x19c), void 0x0), I(this, D(0x158), void 0x0);
+    const K = TextSeeker[D(0x195)](H),
+          o = K !== null;
+    o && (H = K), this[D(0x153)] = H, this[D(0x19f)] = h, this[D(0x14b)] = '', this[D(0x19b)] = 0x0, this[D(0x182)] = o, this[D(0x14e)] = 0x0, this[D(0x14a)] = ![], this[D(0x147)] = ![], this[D(0x19c)] = u, this[D(0x158)] = F;
   }
-  /**
-   * Gets the current node being scanned.
-   * @returns A DOM Node.
-   */
 
-
-  get node() {
-    return this._node;
+  get [B(0x163)]() {
+    const g = B;
+    return this[g(0x153)];
   }
-  /**
-   * Gets the current offset corresponding to the node being scanned.
-   * This value is only applicable for text nodes.
-   * @returns An integer.
-   */
 
-
-  get offset() {
-    return this._offset;
+  get [B(0x178)]() {
+    const f = B;
+    return this[f(0x19f)];
   }
-  /**
-   * Gets the remaining number of characters that weren't scanned in the last seek() call.
-   * This value is usually 0 unless the end of the document was reached.
-   * @returns An integer.
-   */
 
-
-  get remainder() {
-    return this._remainder;
+  get [B(0x146)]() {
+    const G = B;
+    return this[G(0x19b)];
   }
-  /**
-   * Gets the accumulated content string resulting from calls to seek().
-   * @returns A string.
-   */
 
-
-  get content() {
-    return this._content;
+  get [B(0x184)]() {
+    const M = B;
+    return this[M(0x14b)];
   }
-  /**
-   * Seeks a given length in the document and accumulates the text content.
-   * @param length A positive or negative integer corresponding to how many characters
-   *   should be added to content. Content is only added to the accumulation string,
-   *   never removed, so mixing seek calls with differently signed length values
-   *   may give unexpected results.
-   * @returns this
-   */
 
+  [B(0x15f)](H) {
+    const w = B,
+          h = H >= 0x0;
+    this[w(0x19b)] = h ? H : -H;
+    if (H === 0x0) return this;
+    const u = Node[w(0x17a)],
+          F = Node[w(0x198)],
+          K = this[w(0x158)];
+    let o = this[w(0x153)],
+        n = o,
+        R = this[w(0x182)],
+        p = 0x0;
 
-  seek(length) {
-    const forward = length >= 0;
-    this._remainder = forward ? length : -length;
+    while (o !== null) {
+      let U = ![];
+      const Z = o[w(0x162)];
 
-    if (length === 0) {
-      return this;
-    }
-
-    const TEXT_NODE = Node.TEXT_NODE;
-    const ELEMENT_NODE = Node.ELEMENT_NODE;
-    const generateLayoutContent = this._generateLayoutContent;
-    let node = this._node;
-    let lastNode = node;
-    let resetOffset = this._resetOffset;
-    let newlines = 0;
-
-    while (node !== null) {
-      let enterable = false;
-      const nodeType = node.nodeType;
-
-      if (nodeType === TEXT_NODE) {
-        lastNode = node;
-
-        if (!(forward ? this._seekTextNodeForward(node, resetOffset) : this._seekTextNodeBackward(node, resetOffset))) {
-          // Length reached
-          break;
-        }
-      } else if (nodeType === ELEMENT_NODE) {
-        lastNode = node;
-        this._offset = 0;
-
-        var _TextSeeker$getElemen = TextSeeker.getElementSeekInfo(node);
-
-        var _TextSeeker$getElemen2 = _slicedToArray(_TextSeeker$getElemen, 2);
-
-        enterable = _TextSeeker$getElemen2[0];
-        newlines = _TextSeeker$getElemen2[1];
-
-        if (newlines > this._newlines && generateLayoutContent) {
-          this._newlines = newlines;
-        }
-      }
-
-      const exitedNodes = [];
-      node = TextSeeker.getNextNode(node, forward, enterable, exitedNodes);
-
-      for (var _i2 = 0, _exitedNodes = exitedNodes; _i2 < _exitedNodes.length; _i2++) {
-        const exitedNode = _exitedNodes[_i2];
-
-        if (exitedNode.nodeType !== ELEMENT_NODE) {
-          continue;
-        }
-
-        newlines = TextSeeker.getElementSeekInfo(exitedNode)[1];
-
-        if (newlines > this._newlines && generateLayoutContent) {
-          this._newlines = newlines;
-        }
-      }
-
-      resetOffset = true;
-    }
-
-    this._node = lastNode;
-    this._resetOffset = resetOffset;
-    return this;
-  } // Private
-
-  /**
-   * Seeks forward in a text node.
-   * @param textNode The text node to use.
-   * @param resetOffset Whether or not the text offset should be reset.
-   * @returns true if scanning should continue, or false if the scan length has been reached.
-   */
-
-
-  _seekTextNodeForward(textNode, resetOffset) {
-    const nodeValue = textNode.nodeValue;
-    const nodeValueLength = nodeValue.length;
-
-    const _ref = this._forcePreserveWhitespace ? [true, true] : TextSeeker.getWhitespaceSettings(textNode),
-          _ref2 = _slicedToArray(_ref, 2),
-          preserveNewlines = _ref2[0],
-          preserveWhitespace = _ref2[1];
-
-    let lineHasWhitespace = this._lineHasWhitespace;
-    let lineHasContent = this._lineHasContent;
-    let content = this._content;
-    let offset = resetOffset ? 0 : this._offset;
-    let remainder = this._remainder;
-    let newlines = this._newlines;
-
-    while (offset < nodeValueLength) {
-      const char = nodeValue[offset];
-      const charAttributes = TextSeeker.getCharacterAttributes(char, preserveNewlines, preserveWhitespace);
-      ++offset;
-
-      if (charAttributes === 0) {
-        // Character should be ignored
-        continue;
-      } else if (charAttributes === 1) {
-        // Character is collapsable whitespace
-        lineHasWhitespace = true;
+      if (Z === u) {
+        n = o;
+        if (!(h ? this[w(0x16e)](o, R) : this[w(0x161)](o, R))) break;
       } else {
-        // Character should be added to the content
-        if (newlines > 0) {
-          if (content.length > 0) {
-            const useNewlineCount = Math.min(remainder, newlines);
-            content += '\n'.repeat(useNewlineCount);
-            remainder -= useNewlineCount;
-            newlines -= useNewlineCount;
-          } else {
-            newlines = 0;
-          }
-
-          lineHasContent = false;
-          lineHasWhitespace = false;
-
-          if (remainder <= 0) {
-            --offset; // Revert character offset
-
-            break;
-          }
+        if (Z === F) {
+          n = o, this[w(0x19f)] = 0x0;
+          var W = TextSeeker[w(0x1a1)](o);
+          U = W[w(0x14c)], p = W[w(0x1a4)], p > this[w(0x14e)] && K && (this[w(0x14e)] = p);
         }
+      }
 
-        lineHasContent = charAttributes === 2; // 3 = character is a newline
+      const y = [];
+      o = TextSeeker[w(0x18f)](o, h, U, y);
 
-        if (lineHasWhitespace) {
-          if (lineHasContent) {
-            content += ' ';
-            lineHasWhitespace = false;
+      for (var t = 0x0, P = y; t < P[w(0x18a)]; t++) {
+        const a = P[t];
+        if (a[w(0x162)] !== F) continue;
+        var O = TextSeeker[w(0x1a1)](a);
+        p = O[w(0x1a4)], p > this[w(0x14e)] && K && (this[w(0x14e)] = p);
+      }
 
-            if (--remainder <= 0) {
-              --offset; // Revert character offset
+      R = !![];
+    }
 
+    return this[w(0x153)] = n, this[w(0x182)] = R, this;
+  }
+
+  [B(0x16e)](H, h) {
+    const m = B,
+          u = H[m(0x199)],
+          F = u[m(0x18a)],
+          K = this[m(0x17b)](H),
+          o = K[m(0x148)],
+          n = K[m(0x17d)];
+    let R = this[m(0x14a)],
+        p = this[m(0x147)],
+        W = this[m(0x14b)],
+        t = h ? 0x0 : this[m(0x19f)],
+        P = this[m(0x19b)],
+        O = this[m(0x14e)];
+
+    while (t < F) {
+      const U = u[t],
+            Z = TextSeeker[m(0x179)](U, o, n);
+      ++t;
+      if (Z === 0x0) continue;else {
+        if (Z === 0x1) R = !![];else {
+          if (O > 0x0) {
+            if (W[m(0x18a)] > 0x0) {
+              const y = Math[m(0x168)](P, O);
+              W += '\x0a'[m(0x159)](y), P -= y, O -= y;
+            } else O = 0x0;
+
+            p = ![], R = ![];
+
+            if (P <= 0x0) {
+              --t;
               break;
             }
-          } else {
-            lineHasWhitespace = false;
           }
-        }
 
-        content += char;
+          p = Z === 0x2;
 
-        if (--remainder <= 0) {
-          break;
+          if (R) {
+            if (p) {
+              W += '\x20', R = ![];
+
+              if (--P <= 0x0) {
+                --t;
+                break;
+              }
+            } else R = ![];
+          }
+
+          W += U;
+          if (--P <= 0x0) break;
         }
       }
     }
 
-    this._lineHasWhitespace = lineHasWhitespace;
-    this._lineHasContent = lineHasContent;
-    this._content = content;
-    this._offset = offset;
-    this._remainder = remainder;
-    this._newlines = newlines;
-    return remainder > 0;
+    return this[m(0x14a)] = R, this[m(0x147)] = p, this[m(0x14b)] = W, this[m(0x19f)] = t, this[m(0x19b)] = P, this[m(0x14e)] = O, P > 0x0;
   }
-  /**
-   * Seeks backward in a text node.
-   * This function is nearly the same as _seekTextNodeForward, with the following differences:
-   * - Iteration condition is reversed to check if offset is greater than 0.
-   * - offset is reset to nodeValueLength instead of 0.
-   * - offset is decremented instead of incremented.
-   * - offset is decremented before getting the character.
-   * - offset is reverted by incrementing instead of decrementing.
-   * - content string is prepended instead of appended.
-   * @param textNode The text node to use.
-   * @param resetOffset Whether or not the text offset should be reset.
-   * @returns true if scanning should continue, or false if the scan length has been reached.
-   */
 
+  [B(0x161)](H, h) {
+    const q = B,
+          u = H[q(0x199)],
+          F = u[q(0x18a)],
+          K = this[q(0x17b)](H),
+          o = K[q(0x148)],
+          n = K[q(0x17d)];
+    let R = this[q(0x14a)],
+        p = this[q(0x147)],
+        W = this[q(0x14b)],
+        t = h ? F : this[q(0x19f)],
+        P = this[q(0x19b)],
+        O = this[q(0x14e)];
 
-  _seekTextNodeBackward(textNode, resetOffset) {
-    const nodeValue = textNode.nodeValue;
-    const nodeValueLength = nodeValue.length;
+    while (t > 0x0) {
+      --t;
+      const U = u[t],
+            Z = TextSeeker[q(0x179)](U, o, n);
+      if (Z === 0x0) continue;else {
+        if (Z === 0x1) R = !![];else {
+          if (O > 0x0) {
+            if (W[q(0x18a)] > 0x0) {
+              const y = Math[q(0x168)](P, O);
+              W = '\x0a'[q(0x159)](y) + W, P -= y, O -= y;
+            } else O = 0x0;
 
-    const _ref3 = this._forcePreserveWhitespace ? [true, true] : TextSeeker.getWhitespaceSettings(textNode),
-          _ref4 = _slicedToArray(_ref3, 2),
-          preserveNewlines = _ref4[0],
-          preserveWhitespace = _ref4[1];
+            p = ![], R = ![];
 
-    let lineHasWhitespace = this._lineHasWhitespace;
-    let lineHasContent = this._lineHasContent;
-    let content = this._content;
-    let offset = resetOffset ? nodeValueLength : this._offset;
-    let remainder = this._remainder;
-    let newlines = this._newlines;
-
-    while (offset > 0) {
-      --offset;
-      const char = nodeValue[offset];
-      const charAttributes = TextSeeker.getCharacterAttributes(char, preserveNewlines, preserveWhitespace);
-
-      if (charAttributes === 0) {
-        // Character should be ignored
-        continue;
-      } else if (charAttributes === 1) {
-        // Character is collapsable whitespace
-        lineHasWhitespace = true;
-      } else {
-        // Character should be added to the content
-        if (newlines > 0) {
-          //if (content.length > 0) {
-          const useNewlineCount = Math.min(remainder, newlines);
-          content = '\n'.repeat(useNewlineCount) + content;
-          remainder -= useNewlineCount;
-          newlines -= useNewlineCount; //} else {
-          //    newlines = 0;
-          //}
-
-          lineHasContent = false;
-          lineHasWhitespace = false;
-
-          if (remainder <= 0) {
-            ++offset; // Revert character offset
-
-            break;
-          }
-        }
-
-        lineHasContent = charAttributes === 2; // 3 = character is a newline
-
-        if (lineHasWhitespace) {
-          if (lineHasContent) {
-            content = ' ' + content;
-            lineHasWhitespace = false;
-
-            if (--remainder <= 0) {
-              ++offset; // Revert character offset
-
+            if (P <= 0x0) {
+              ++t;
               break;
             }
-          } else {
-            lineHasWhitespace = false;
           }
-        }
 
-        content = char + content;
+          p = Z === 0x2;
 
-        if (--remainder <= 0) {
-          break;
+          if (R) {
+            if (p) {
+              W = '\x20' + W, R = ![];
+
+              if (--P <= 0x0) {
+                ++t;
+                break;
+              }
+            } else R = ![];
+          }
+
+          W = U + W;
+          if (--P <= 0x0) break;
         }
       }
     }
 
-    this._lineHasWhitespace = lineHasWhitespace;
-    this._lineHasContent = lineHasContent;
-    this._content = content;
-    this._offset = offset;
-    this._remainder = remainder;
-    this._newlines = newlines;
-    return remainder > 0;
-  } // Static helpers
-
-  /**
-   * Gets the next node in the document for a specified scanning direction.
-   * @param node The current DOM Node.
-   * @param forward Whether to scan forward in the document or backward.
-   * @param visitChildren Whether the children of the current node should be visited.
-   * @param exitedNodes An array which stores nodes which were exited.
-   * @returns The next node in the document, or null if there is no next node.
-   */
-
-
-  static getNextNode(node, forward, visitChildren, exitedNodes) {
-    let next = visitChildren ? forward ? node.firstChild : node.lastChild : null;
-
-    if (next === null) {
-      while (true) {
-        exitedNodes.push(node);
-        next = forward ? node.nextSibling : node.previousSibling;
-
-        if (next !== null) {
-          break;
-        }
-
-        next = node.parentNode;
-
-        if (next === null) {
-          break;
-        }
-
-        node = next;
-      }
-    }
-
-    return next;
+    return this[q(0x14a)] = R, this[q(0x147)] = p, this[q(0x14b)] = W, this[q(0x19f)] = t, this[q(0x19b)] = P, this[q(0x14e)] = O, P > 0x0;
   }
-  /**
-   * Gets the parent element of a given Node.
-   * @param node The node to check.
-   * @returns The parent element if one exists, otherwise null.
-   */
 
+  [B(0x17b)](H) {
+    const S = B;
+    if (this[S(0x19c)]) return {
+      'preserveNewlines': !![],
+      'preserveWhitespace': !![]
+    };
+    const h = TextSeeker[S(0x16f)](H);
 
-  static getParentElement(node) {
-    while (node !== null && node.nodeType !== Node.ELEMENT_NODE) {
-      node = node.parentNode;
+    if (h !== null) {
+      const u = window[S(0x15d)](h);
+
+      switch (u[S(0x173)]) {
+        case S(0x174):
+        case S(0x1a7):
+        case S(0x1a3):
+          return {
+            'preserveNewlines': !![],
+            'preserveWhitespace': !![]
+          };
+
+        case S(0x1a6):
+          return {
+            'preserveNewlines': !![],
+            'preserveWhitespace': ![]
+          };
+      }
     }
 
-    return node;
+    return {
+      'preserveNewlines': ![],
+      'preserveWhitespace': ![]
+    };
   }
-  /**
-   * Gets the parent <ruby> element of a given node, if one exists. For efficiency purposes,
-   * this only checks the immediate parent elements and does not check all ancestors, so
-   * there are cases where the node may be in a ruby element but it is not returned.
-   * @param node The node to check.
-   * @returns A <ruby> node if the input node is contained in one, otherwise null.
-   */
 
+  static [B(0x18f)](H, h, u, F) {
+    const b = B;
+    let K = u ? h ? H[b(0x164)] : H[b(0x175)] : null;
+    if (K === null) while (!![]) {
+      F[b(0x1a0)](H), K = h ? H[b(0x171)] : H[b(0x18b)];
+      if (K !== null) break;
+      K = H[b(0x16a)];
+      if (K === null) break;
+      H = K;
+    }
+    return K;
+  }
 
-  static getParentRubyElement(node) {
-    node = TextSeeker.getParentElement(node);
+  static [B(0x16f)](H) {
+    const r = B;
 
-    if (node !== null && node.nodeName.toUpperCase() === 'RT') {
-      node = node.parentNode;
+    while (H !== null && H[r(0x162)] !== Node[r(0x198)]) {
+      H = H[r(0x16a)];
+    }
 
-      if (node !== null && node.nodeName.toUpperCase() === 'RUBY') {
-        return node;
-      }
+    return H;
+  }
+
+  static [B(0x195)](H) {
+    const i = B;
+    H = TextSeeker[i(0x16f)](H);
+
+    if (H !== null && H[i(0x150)][i(0x18d)]() === 'RT') {
+      H = H[i(0x16a)];
+      if (H !== null && H[i(0x150)][i(0x18d)]() === i(0x17e)) return H;
     }
 
     return null;
   }
-  /**
-   * @returns [enterable: boolean, newlines: integer]
-   *   The enterable value indicates whether the content of this node should be entered.
-   *   The newlines value corresponds to the number of newline characters that should be added.
-   *     1 newline corresponds to a simple new line in the layout.
-   *     2 newlines corresponds to a significant visual distinction since the previous content.
-   */
 
+  static [B(0x1a1)](H) {
+    const X = B;
+    let h = !![];
 
-  static getElementSeekInfo(element) {
-    let enterable = true;
-
-    switch (element.nodeName.toUpperCase()) {
-      case 'HEAD':
+    switch (H[X(0x150)][X(0x18d)]()) {
+      case X(0x188):
       case 'RT':
-      case 'SCRIPT':
-      case 'STYLE':
-        return [false, 0];
+      case X(0x185):
+      case X(0x19a):
+        return {
+          'enterable': ![],
+          'newlines': 0x0
+        };
 
       case 'BR':
-        return [false, 1];
+        return {
+          'enterable': ![],
+          'newlines': 0x1
+        };
 
-      case 'TEXTAREA':
-      case 'INPUT':
-      case 'BUTTON':
-        enterable = false;
+      case X(0x186):
+      case X(0x17f):
+      case X(0x183):
+        h = ![];
         break;
     }
 
-    const style = window.getComputedStyle(element);
-    const display = style.display;
-    const visible = display !== 'none' && TextSeeker.isStyleVisible(style);
-    let newlines = 0;
-
-    if (!visible) {
-      enterable = false;
-    } else {
-      switch (style.position) {
-        case 'absolute':
-        case 'fixed':
-        case 'sticky':
-          newlines = 2;
+    const u = window[X(0x15d)](H),
+          F = u[X(0x16b)],
+          K = F !== X(0x177) && TextSeeker[X(0x1a5)](u);
+    let o = 0x0;
+    if (!K) h = ![];else {
+      switch (u[X(0x15a)]) {
+        case X(0x14d):
+        case X(0x170):
+        case X(0x180):
+          o = 0x2;
           break;
       }
 
-      if (newlines === 0 && TextSeeker.doesCSSDisplayChangeLayout(display)) {
-        newlines = 1;
-      }
+      o === 0x0 && TextSeeker[X(0x187)](F) && (o = 0x1);
     }
-
-    return [enterable, newlines];
+    return {
+      'enterable': h,
+      'newlines': o
+    };
   }
-  /**
-   * Gets information about how whitespace characters are treated.
-   * @param textNode The Text node to check.
-   * @returns [preserveNewlines: boolean, preserveWhitespace: boolean]
-   *   The value of preserveNewlines indicates whether or not newline characters are treated as line breaks.
-   *   The value of preserveWhitespace indicates whether or not sequences of whitespace characters are collapsed.
-   */
 
+  static [B(0x179)](H, h, u) {
+    const A = B;
 
-  static getWhitespaceSettings(textNode) {
-    const element = TextSeeker.getParentElement(textNode);
-
-    if (element !== null) {
-      const style = window.getComputedStyle(element);
-
-      switch (style.whiteSpace) {
-        case 'pre':
-        case 'pre-wrap':
-        case 'break-spaces':
-          return [true, true];
-
-        case 'pre-line':
-          return [true, false];
-      }
-    }
-
-    return [false, false];
-  }
-  /**
-   * Gets attributes for the specified character.
-   * @param character A string containing a single character.
-   * @returns An integer representing the attributes of the character.
-   *   0: Character should be ignored.
-   *   1: Character is collapsable whitespace.
-   *   2: Character should be added to the content.
-   *   3: Character should be added to the content and is a newline.
-   */
-
-
-  static getCharacterAttributes(character, preserveNewlines, preserveWhitespace) {
-    switch (character.charCodeAt(0)) {
-      case 0x09: // Tab ('\t')
-
-      case 0x0c: // Form feed ('\f')
-
-      case 0x0d: // Carriage return ('\r')
-
+    switch (H[A(0x145)](0x0)) {
+      case 0x9:
+      case 0xc:
+      case 0xd:
       case 0x20:
-        // Space (' ')
-        return preserveWhitespace ? 2 : 1;
+        return u ? 0x2 : 0x1;
 
-      case 0x0a:
-        // Line feed ('\n')
-        return preserveNewlines ? 3 : 1;
+      case 0xa:
+        return h ? 0x3 : 0x1;
 
+      case 0x200b:
       case 0x200c:
-        // Zero-width non-joiner ('\u200c')
-        return 0;
+        return 0x0;
 
       default:
-        // Other
-        return 2;
+        return 0x2;
     }
   }
-  /**
-   * Checks whether a given style is visible or not.
-   * This function does not check style.display === 'none'.
-   * @param style An object implementing the CSSStyleDeclaration interface.
-   * @returns true if the style should result in an element being visible, otherwise false.
-   */
 
-
-  static isStyleVisible(style) {
-    return !(style.visibility === 'hidden' || parseFloat(style.opacity) <= 0 || parseFloat(style.fontSize) <= 0 || !TextSeeker.isStyleSelectable(style) && (TextSeeker.isCSSColorTransparent(style.color) || TextSeeker.isCSSColorTransparent(style.webkitTextFillColor)));
+  static [B(0x1a5)](H) {
+    const v = B;
+    return !(H[v(0x16d)] === v(0x1a2) || parseFloat(H[v(0x191)]) <= 0x0 || parseFloat(H[v(0x172)]) <= 0x0 || !TextSeeker[v(0x149)](H) && (TextSeeker[v(0x196)](H[v(0x15e)]) || TextSeeker[v(0x196)](H[v(0x18e)])));
   }
-  /**
-   * Checks whether a given style is selectable or not.
-   * @param style An object implementing the CSSStyleDeclaration interface.
-   * @returns true if the style is selectable, otherwise false.
-   */
 
-
-  static isStyleSelectable(style) {
-    return !(style.userSelect === 'none' || style.webkitUserSelect === 'none' || style.MozUserSelect === 'none' || style.msUserSelect === 'none');
+  static [B(0x149)](H) {
+    const C = B;
+    return !(H[C(0x15c)] === C(0x177) || H[C(0x15b)] === C(0x177) || H[C(0x194)] === C(0x177) || H[C(0x166)] === C(0x177));
   }
-  /**
-   * Checks whether a CSS color is transparent or not.
-   * @param cssColor A CSS color string, expected to be encoded in rgb(a) form.
-   * @returns true if the color is transparent, otherwise false.
-   */
 
-
-  static isCSSColorTransparent(cssColor) {
-    return typeof cssColor === 'string' && cssColor.startsWith('rgba(') && /,\s*0.?0*\)$/.test(cssColor);
+  static [B(0x196)](H) {
+    const Y = B;
+    return typeof H === Y(0x190) && H[Y(0x160)](Y(0x18c)) && /,\s*0.?0*\)$/[Y(0x154)](H);
   }
-  /**
-   * Checks whether a CSS display value will cause a layout change for text.
-   * @param cssDisplay A CSS string corresponding to the value of the display property.
-   * @returns true if the layout is changed by this value, otherwise false.
-   */
 
+  static [B(0x187)](H) {
+    const x = B;
+    let h = H[x(0x193)]('\x20');
+    h >= 0x0 && (H = H[x(0x16c)](0x0, h));
+    h = H[x(0x193)]('-');
+    h >= 0x0 && (H = H[x(0x16c)](0x0, h));
 
-  static doesCSSDisplayChangeLayout(cssDisplay) {
-    let pos = cssDisplay.indexOf(' ');
+    switch (H) {
+      case x(0x165):
+      case x(0x151):
+      case x(0x152):
+      case x(0x155):
+      case x(0x167):
+        return !![];
 
-    if (pos >= 0) {
-      // Truncate to <display-outside> part
-      cssDisplay = cssDisplay.substring(0, pos);
-    }
-
-    pos = cssDisplay.indexOf('-');
-
-    if (pos >= 0) {
-      // Truncate to first part of kebab-case value
-      cssDisplay = cssDisplay.substring(0, pos);
-    }
-
-    switch (cssDisplay) {
-      case 'block':
-      case 'flex':
-      case 'grid':
-      case 'list': // list-item
-
-      case 'table':
-        // table, table-*
-        return true;
-
-      case 'ruby':
-        // rubt-*
-        return pos >= 0;
+      case x(0x181):
+        return h >= 0x0;
 
       default:
-        return false;
+        return ![];
     }
   }
 
 }
 // CONCATENATED MODULE: ./src/fg/caretUtils.ts
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = caretUtils_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+(function (V, E) {
+  const TQ = caretUtils_Q,
+        J = V();
 
-function caretUtils_slicedToArray(arr, i) { return caretUtils_arrayWithHoles(arr) || caretUtils_iterableToArrayLimit(arr, i) || caretUtils_unsupportedIterableToArray(arr, i) || caretUtils_nonIterableRest(); }
+  while (!![]) {
+    try {
+      const j = parseInt(TQ(0x230)) / 0x1 * (-parseInt(TQ(0x1de)) / 0x2) + parseInt(TQ(0x219)) / 0x3 + -parseInt(TQ(0x1d3)) / 0x4 + -parseInt(TQ(0x1c0)) / 0x5 * (parseInt(TQ(0x227)) / 0x6) + parseInt(TQ(0x1ed)) / 0x7 * (-parseInt(TQ(0x22c)) / 0x8) + parseInt(TQ(0x1df)) / 0x9 + parseInt(TQ(0x1b9)) / 0xa;
+      if (j === E) break;else J['push'](J['shift']());
+    } catch (d) {
+      J['push'](J['shift']());
+    }
+  }
+})(caretUtils_T, 0x3859e);
 
-function caretUtils_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function caretUtils_I(V, E) {
+  const TI = caretUtils_Q;
+  var J;
 
-function caretUtils_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return caretUtils_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return caretUtils_arrayLikeToArray(o, minLen); }
+  if (typeof Symbol === TI(0x1ce) || V[Symbol[TI(0x1b1)]] == null) {
+    if (Array[TI(0x1ef)](V) || (J = u(V)) || E && V && typeof V[TI(0x1fb)] === TI(0x19a)) {
+      if (J) V = J;
 
-function caretUtils_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+      var j = 0x0,
+          d = function T0() {};
 
-function caretUtils_iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+      return {
+        's': d,
+        'n': function T1() {
+          const TH = TI;
+          if (j >= V[TH(0x1fb)]) return {
+            'done': !![]
+          };
+          return {
+            'done': ![],
+            'value': V[j++]
+          };
+        },
+        'e': function T2(T3) {
+          throw T3;
+        },
+        'f': d
+      };
+    }
 
-function caretUtils_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function caretRangeFromPoint(x, y) {
-  if (typeof document.caretRangeFromPoint === 'function') {
-    // Chrome, Edge
-    return document.caretRangeFromPoint(x, y);
+    throw new TypeError(TI(0x20e));
   }
 
-  if (typeof document.caretPositionFromPoint === 'function') {
-    // Firefox
-    return caretPositionFromPoint(x, y);
-  } // No support
+  var N = !![],
+      z = ![],
+      k;
+  return {
+    's': function T3() {
+      const Th = TI;
+      J = V[Symbol[Th(0x1b1)]]();
+    },
+    'n': function T4() {
+      const Tu = TI;
+      var T5 = J[Tu(0x20b)]();
+      return N = T5[Tu(0x1d1)], T5;
+    },
+    'e': function T5(T6) {
+      z = !![], k = T6;
+    },
+    'f': function T6() {
+      const TF = TI;
+
+      try {
+        if (!N && J[TF(0x1a8)] != null) J[TF(0x1a8)]();
+      } finally {
+        if (z) throw k;
+      }
+    }
+  };
+}
+
+function H(V, E) {
+  return o(V) || K(V, E) || u(V, E) || h();
+}
+
+function h() {
+  const TK = caretUtils_Q;
+  throw new TypeError(TK(0x1b0));
+}
+
+function u(V, E) {
+  const To = caretUtils_Q;
+  if (!V) return;
+  if (typeof V === To(0x21f)) return F(V, E);
+  var J = Object[To(0x215)][To(0x1dd)][To(0x1e8)](V)[To(0x1da)](0x8, -0x1);
+  if (J === To(0x1db) && V[To(0x1a3)]) J = V[To(0x1a3)][To(0x1c8)];
+  if (J === To(0x20d) || J === To(0x204)) return Array[To(0x1fd)](V);
+  if (J === To(0x22a) || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/[To(0x1d5)](J)) return F(V, E);
+}
+
+function F(V, E) {
+  const Tn = caretUtils_Q;
+  if (E == null || E > V[Tn(0x1fb)]) E = V[Tn(0x1fb)];
+
+  for (var J = 0x0, j = new Array(E); J < E; J++) j[J] = V[J];
+
+  return j;
+}
+
+function K(V, E) {
+  const TR = caretUtils_Q;
+  if (typeof Symbol === TR(0x1ce) || !(Symbol[TR(0x1b1)] in Object(V))) return;
+  var J = [],
+      j = !![],
+      d = ![],
+      e = undefined;
+
+  try {
+    for (var N = V[Symbol[TR(0x1b1)]](), s; !(j = (s = N[TR(0x20b)]())[TR(0x1d1)]); j = !![]) {
+      J[TR(0x1aa)](s[TR(0x1fc)]);
+      if (E && J[TR(0x1fb)] === E) break;
+    }
+  } catch (z) {
+    d = !![], e = z;
+  } finally {
+    try {
+      if (!j && N[TR(0x1a8)] != null) N[TR(0x1a8)]();
+    } finally {
+      if (d) throw e;
+    }
+  }
+
+  return J;
+}
+
+function o(V) {
+  const Tp = caretUtils_Q;
+  if (Array[Tp(0x1ef)](V)) return V;
+}
 
 
+const n = /rgba\s*\([^)]*,\s*0(?:\.0+)?\s*\)/;
+function caretRangeFromPoint(V, E, J) {
+  const TW = caretUtils_Q,
+        j = caretUtils_m(V, E, J);
+  let d = null,
+      e = null,
+      N = null;
+
+  if (j[TW(0x1fb)] > 0x0) {
+    const T2 = j[0x0];
+
+    switch (T2[TW(0x1cb)][TW(0x19e)]()) {
+      case TW(0x1d6):
+      case TW(0x1b3):
+      case TW(0x19b):
+        return null;
+
+      case TW(0x226):
+        if (T2[TW(0x1cf)] === TW(0x21c)) {
+          N = T2;
+          var s = w(T2, ![]),
+              z = H(s, 0x2);
+          d = z[0x0], e = z[0x1];
+        }
+
+        break;
+
+      case TW(0x1ac):
+        N = T2;
+        var k = w(T2, !![]),
+            T0 = H(k, 0x2);
+        d = T0[0x0], e = T0[0x1];
+        break;
+    }
+  }
+
+  const T1 = X(V, E, J ? j : []);
+  return T1 !== null ? (d !== null && (M(e[TW(0x1a4)], TW(0x1a5), TW(0x1d2)), M(d[TW(0x1a4)], TW(0x232), TW(0x209))), T1) : (e !== null && e[TW(0x1f9)][TW(0x1b5)](e), null);
+}
+
+function R(V, E, J, j, d, e, N) {
+  const Tt = caretUtils_Q;
+  V = V[Tt(0x229)]();
+  const s = V[Tt(0x234)](J, E),
+        z = V[Tt(0x1d9)](J * 0x2 - s, E, !![]),
+        k = V[Tt(0x21c)](),
+        T0 = k[Tt(0x1fb)],
+        T1 = T0 - z;
+  let T2 = s,
+      T3 = T1,
+      T4 = [];
+
+  for (; T2 > 0x0; --T2) {
+    const T5 = k[T2 - 0x1];
+    if (T5 === '\x0a' && j) break;
+
+    if (T4[Tt(0x1fb)] === 0x0) {
+      const T7 = d[Tt(0x19d)](T5);
+
+      if (typeof T7 !== Tt(0x1ce)) {
+        T7[0x0] && --T2;
+        break;
+      }
+    }
+
+    let T6 = e[Tt(0x19d)](T5);
+
+    if (typeof T6 !== Tt(0x1ce)) {
+      if (T4[Tt(0x1fb)] === 0x0) {
+        T6[0x1] && --T2;
+        break;
+      } else {
+        if (T4[0x0] === T5) {
+          T4[Tt(0x1d0)]();
+          continue;
+        }
+      }
+    }
+
+    T6 = N[Tt(0x19d)](T5), typeof T6 !== Tt(0x1ce) && T4[Tt(0x1f6)](T6[0x0]);
+  }
+
+  T4 = [];
+
+  for (; T3 < T0; ++T3) {
+    const T8 = k[T3];
+    if (T8 === '\x0a' && j) break;
+
+    if (T4[Tt(0x1fb)] === 0x0) {
+      const TT = d[Tt(0x19d)](T8);
+
+      if (typeof TT !== Tt(0x1ce)) {
+        TT[0x1] && ++T3;
+        break;
+      }
+    }
+
+    let T9 = N[Tt(0x19d)](T8);
+
+    if (typeof T9 !== Tt(0x1ce)) {
+      if (T4[Tt(0x1fb)] === 0x0) {
+        T9[0x1] && ++T3;
+        break;
+      } else {
+        if (T4[0x0] === T8) {
+          T4[Tt(0x1d0)]();
+          continue;
+        }
+      }
+    }
+
+    T9 = e[Tt(0x19d)](T8), typeof T9 !== Tt(0x1ce) && T4[Tt(0x1f6)](T9[0x0]);
+  }
+
+  for (; T2 < s && S(k[T2]); ++T2) {}
+
+  for (; T3 > T1 && S(k[T3 - 0x1]); --T3) {}
+
+  return {
+    'text': k[Tt(0x1e5)](T2, T3),
+    'offset': s - T2
+  };
+}
+
+function p(V, E, J) {
+  const TP = caretUtils_Q;
+  return V >= J[TP(0x1ee)] && V < J[TP(0x1e6)] && E >= J[TP(0x1ec)] && E < J[TP(0x1f5)];
+}
+
+function W(V, E, J) {
+  const TO = caretUtils_Q;
+  var j = caretUtils_I(J),
+      d;
+
+  try {
+    for (j['s'](); !(d = j['n']())[TO(0x1d1)];) {
+      const e = d[TO(0x1fc)];
+      if (p(V, E, e)) return !![];
+    }
+  } catch (N) {
+    j['e'](N);
+  } finally {
+    j['f']();
+  }
+
+  return ![];
+}
+
+function caretUtils_t(V, E, J) {
+  const TU = caretUtils_Q;
+
+  for (let j = 0x0; j < J[TU(0x1f2)]; ++j) {
+    const d = J[TU(0x20c)](j);
+    if (W(V, E, d[TU(0x1c9)]())) return !![];
+  }
+
+  return ![];
+}
+
+function caretUtils_T() {
+  const TE = ['y2fYzxrsyw5NzuzYB21qB2LUDa', 'z2v0', 'Dg9vChbLCKnHC2u', 'Bw96rNvSBfnJCMvLBKvSzw1LBNq', 'DxnLCLnLBgvJDa', 'Cg9ZAxrPB24', 'C2vLAW', 'y29UC3rYDwn0B3i', 'C3r5Bgu', 'EI1PBMrLEa', 'yMfJA2DYB3vUzenVBg9Y', 'zMLSDgvY', 'CMv0DxjU', 'z2v0uhjVCgvYDhLwywX1zq', 'ChvZAa', 'yNv0Dg9U', 'vevyvefsrue', 'AxndB250zw50rwrPDgfIBgu', 'C2HPzNrlzxK', 'ywX0', 'sw52ywXPzcbHDhrLBxb0ihrVigrLC3rYDwn0DxjLig5VBI1PDgvYywjSzsbPBNn0yw5Jzs4ksw4GB3jKzxiGDg8GyMuGAxrLCMfIBguSig5VBI1HCNjHEsbVyMPLy3rZig11C3qGAgf2zsbHifTtEw1IB2WUAxrLCMf0B3jDkcKGBwv0Ag9KlG', 'AxrLCMf0B3i', 'yxbWzw5Kq2HPBgq', 'qLvuve9o', 'DxnLCI1ZzwXLy3q', 'CMvTB3zLq2HPBgq', 'z2v0qM91BMrPBMDdBgLLBNrszwn0', 'ruXftuvovf9ot0rf', 'BMv4DfnPyMXPBMC', 'odq0nZKWA255qK53', 'C2v0uhjVCgvYDhK', 'BxngDwXSC2nYzwvUrwXLBwvUDa', 'C2HPzNq', 'D2vIA2L0rNvSBhnJCMvLBKvSzw1LBNq', 'C2nYB2XSvg9W', 'BM9Kzvr5Cgu', 'nxjzD0XIzG', 'C2vJB25Kyxj5', 'zNvSBhnJCMvLBKvSzw1LBNq', 'Dgv4DenVBNrLBNq', 'yxv0BW', 'zNvSBhnJCMvLBMnOyw5Nzq', 'zwXLBwvUDezYB21qB2LUDa', 'y3rYBeTLEq', 'BMfTzq', 'z2v0q2XPzw50uMvJDhm', 'C2v0u3rHCNq', 'BM9Kzu5HBwu', 'Aw5PDgLHBa', 'DMLZAwjSzq', 'Dw5KzwzPBMvK', 'DhLWzq', 'Cg9W', 'zg9Uzq', 'ltiXndC0odm2ndy', 'ntuZnJy0tMzUCLjr', 'zMLYzwzVEc1TB2jPBgu', 'DgvZDa', 'su1h', 'AgvPz2H0', 'yM9KEq', 'C2v0rw5Kt2zMC2v0', 'C2XPy2u', 't2jQzwn0', 'y3rYBa', 'Dg9tDhjPBMC', 'mNrywvnNqq', 'mJaXodG4mhnmEeLqAW', 'BM93CMfW', 'zMLYC3rdAgLSza', 'ChjPBwfYEq', 'zMLYzwzVEa', 'DMLZAwjPBgL0Eq', 'C3vIC3rYAw5N', 'CMLNAhq', 'C2nYB2XStgvMDa', 'y2fSBa', 'Bwf0y2HLCW', 'AgLKzgvU', 'y29UDgvUDa', 'Dg9W', 'mta1yxruuNr3', 'BgvMDa', 'AxnbCNjHEq', 'D2HPDguTC3bHy2u', 'zw5Kq29UDgfPBMvY', 'CMfUz2vdB3vUDa', 'yNv0Dg9UCW', 'Bw96zNvSBhnJCMvLBMnOyw5Nzq', 'yM90Dg9T', 'Dw5ZAgLMDa', 'BwfYz2LU', 'yxv4AwXPyxj5', 'CgfYzw50tM9Kzq', 'zw5KC1DPDgG', 'BgvUz3rO', 'DMfSDwu', 'zNjVBq', 'zw50CMLLCW', 'B3zLCMzSB3C', 'BM9Kzq', 'C2v0qxr0CMLIDxrL', 'CMvTB3zLqxr0CMLIDxrL', 'DhjPBq', 'u2v0', 'BwfJ', 'zwXLBwvUDhngCM9Tug9PBNq', 'z2v0qxr0CMLIDxrL', 'D2vIA2L0zNvSBhnJCMvLBMnOyw5Nzq', 'BM9Uzq', 'Aw5KzxHpzG', 'BMv4Da', 'z2v0uMfUz2vbDa', 'twfW', 'sw52ywXPzcbHDhrLBxb0ihrVigL0zxjHDguGBM9UlwL0zxjHyMXLigLUC3rHBMnLlGPjBIbVCMrLCIb0BYbIzsbPDgvYywjSzsWGBM9UlwfYCMf5ig9IAMvJDhmGBxvZDcbOyxzLigeGw1n5BwjVBc5PDgvYyxrVCL0OksbTzxrOB2qU', 'ywn0AxzLrwXLBwvUDa', 'ywX0s2v5', 'mJe0nZq4mZy0nG', 'C3rHCNrdB250ywLUzxi', 'ywrKrxzLBNrmAxn0zw5LCG', 'Bwv0yuTLEq', 'ChjVDg90ExbL', 'y3jLyxrLrwXLBwvUDa', 'C3rHCNrpzMzZzxq', 'BgLUzs1OzwLNAhq', 'mti2mZK0mKzYDNjxtq', 'AgfZ', 'B3bHy2L0Eq', 'Dgv4Da', 'zw5Kt2zMC2v0', 'ywXS', 'C3rYAw5N', 'z2v0q29TChv0zwrtDhLSzq', 'B2zMC2v0tM9Kzq', 'Aw1WB3j0yw50', 'D2LKDgG', 'yMfJA2DYB3vUzeLTywDL', 'C2v0', 'su5qvvq', 'odG0mdiYv3HNwfP6', 'Bw91C2u', 'y2XVBMu', 'qxjNDw1LBNrZ', 'y3jLyxrLuMfUz2u', 'mZyWmdHHEw9HAhm', 'vevyvf9ot0rf', 'zgL2', 'zg9JDw1LBNrfBgvTzw50', 'mtq2mdmXtwfWC1bn', 'tvngDwXSC2nYzwvUq2HHBMDL', 'Cg9PBNrLCI1LDMvUDhm', 'Bwv0yq', 'C2v0u3rHCNrpzMzZzxq', 'B2zMC2v0', 'zNvUy3rPB24', 'y2fYzxrqB3nPDgLVBKzYB21qB2LUDa', 'C2v0rw5K', 'ywjZB2X1Dgu', 'AgfZqxr0CMLIDxrL', 'C2L6zq', 'BNvTyMvY', 'u0vmrunu'];
+
+  caretUtils_T = function T() {
+    return TE;
+  };
+
+  return caretUtils_T();
+}
+
+function P(V, E) {
+  const TZ = caretUtils_Q,
+        J = V[TZ(0x1ab)];
+
+  switch (E) {
+    case TZ(0x1e2):
+      return J === 0x0;
+
+    case TZ(0x1c1):
+      return J === 0x2;
+
+    case TZ(0x1f8):
+      return J === 0x1;
+
+    default:
+      return ![];
+  }
+}
+
+function O(V) {
+  const Ty = caretUtils_Q,
+        E = [];
+  return V[Ty(0x210)] && E[Ty(0x1aa)](Ty(0x1af)), V[Ty(0x1c7)] && E[Ty(0x1aa)](Ty(0x1dc)), V[Ty(0x214)] && E[Ty(0x1aa)](Ty(0x233)), V[Ty(0x1ae)] && E[Ty(0x1aa)](Ty(0x1bc)), E;
+}
+
+function U(V) {
+  const E = O(V);
+  return G(V, E), E;
+}
+
+function Z(V) {
+  const E = [];
+  return G(V, E), E;
+}
+
+function y(V) {
+  const Ta = caretUtils_Q;
+  let E = arguments[Ta(0x1fb)] > 0x1 && arguments[0x1] !== undefined ? arguments[0x1] : null;
+  const J = document,
+        j = ![],
+        d = [Ta(0x1c5), Ta(0x231), Ta(0x1f4), Ta(0x208)];
+
+  for (var e = 0x0, N = d; e < N[Ta(0x1fb)]; e++) {
+    const s = N[e];
+    E === null ? J[Ta(0x213)](s, V, j) : E[Ta(0x213)](J, s, V, j);
+  }
+}
+
+function a() {
+  const Tl = caretUtils_Q;
+  return document[Tl(0x1c2)] || document[Tl(0x1bb)] || document[Tl(0x19f)] || document[Tl(0x1bd)] || null;
+}
+
+function l(V) {
+  const Tc = caretUtils_Q,
+        E = V[Tc(0x1f1)],
+        J = [];
+
+  for (let j = V[Tc(0x212)]; j !== null; j = caretUtils_c(j)) {
+    J[Tc(0x1aa)](j);
+    if (j === E) break;
+  }
+
+  return J;
+}
+
+function caretUtils_c(V) {
+  const TD = caretUtils_Q;
+  let E = V[TD(0x1e1)];
+  if (E === null) while (!![]) {
+    E = V[TD(0x1b8)];
+    if (E !== null) break;
+    E = V[TD(0x1f9)];
+    if (E === null) break;
+    V = E;
+  }
+  return E;
+}
+
+function D(V, E) {
+  const TB = caretUtils_Q,
+        J = Node[TB(0x1b7)];
+  var j = caretUtils_I(V),
+      d;
+
+  try {
+    for (j['s'](); !(d = j['n']())[TB(0x1d1)];) {
+      let e = d[TB(0x1fc)];
+
+      for (; e !== null; e = e[TB(0x1f9)]) {
+        if (e[TB(0x1bf)] !== J) continue;
+        if (e[TB(0x1e9)](E)) return !![];
+        break;
+      }
+    }
+  } catch (N) {
+    j['e'](N);
+  } finally {
+    j['f']();
+  }
+
+  return ![];
+}
+
+function caretUtils_B(V, E) {
+  const Tg = caretUtils_Q,
+        J = Node[Tg(0x1b7)];
+  var j = caretUtils_I(V),
+      d;
+
+  try {
+    for (j['s'](); !(d = j['n']())[Tg(0x1d1)];) {
+      let e = d[Tg(0x1fc)];
+
+      while (!![]) {
+        if (e === null) return ![];
+        if (e[Tg(0x1bf)] === J && e[Tg(0x1e9)](E)) break;
+        e = e[Tg(0x1f9)];
+      }
+    }
+  } catch (N) {
+    j['e'](N);
+  } finally {
+    j['f']();
+  }
+
+  return !![];
+}
+
+function g(V, E) {
+  const Tf = caretUtils_Q;
+  return !(E === Tf(0x1e3) || E === Tf(0x1d4)) || V === Tf(0x205);
+}
+
+function f() {
+  const TG = caretUtils_Q,
+        V = document[TG(0x20f)];
+  if (V === null) return ![];
+  const E = V[TG(0x1cb)][TG(0x19e)]();
+
+  switch (E) {
+    case TG(0x226):
+    case TG(0x1ac):
+    case TG(0x19b):
+      return !![];
+
+    default:
+      return V[TG(0x1ad)];
+  }
+}
+
+function G(V, E) {
+  const TM = caretUtils_Q;
+  let J = V[TM(0x1f3)];
+  if (typeof J === TM(0x19a) && J > 0x0) for (let j = 0x0; j < 0x6; ++j) {
+    const d = 0x1 << j;
+
+    if ((J & d) !== 0x0) {
+      E[TM(0x1aa)](TM(0x228) + j), J &= ~d;
+      if (J === 0x0) break;
+    }
+  }
+}
+
+function M(V, E, J) {
+  const Tw = caretUtils_Q;
+  V[Tw(0x1ba)](E, J, Tw(0x222));
+}
+
+function w(V, E) {
+  const Tm = caretUtils_Q,
+        J = document[Tm(0x1d8)];
+  if (J === null) return [null, null];
+  const j = window[Tm(0x220)](V),
+        d = V[Tm(0x1b6)](),
+        e = document[Tm(0x22f)][Tm(0x1b6)]();
+  let N = d[Tm(0x1ee)] - e[Tm(0x1ee)],
+      s = d[Tm(0x1ec)] - e[Tm(0x1ec)];
+  const z = document[Tm(0x216)](Tm(0x22e)),
+        k = z[Tm(0x1a4)];
+  M(k, Tm(0x21e), Tm(0x1cc)), M(k, Tm(0x1a1), Tm(0x197)), M(k, Tm(0x1ee), '0'), M(k, Tm(0x1ec), '0'), M(k, Tm(0x223), e[Tm(0x223)] + 'px'), M(k, Tm(0x1d7), e[Tm(0x1d7)] + 'px'), M(k, Tm(0x1ff), Tm(0x1ea)), M(k, Tm(0x21b), '0'), M(k, Tm(0x232), Tm(0x209)), M(k, Tm(0x1a5), Tm(0x211));
+  const T0 = document[Tm(0x216)](Tm(0x22e)),
+        T1 = T0[Tm(0x1a4)];
+  let T2 = V[Tm(0x1fc)];
+  T2[Tm(0x1fa)]('\x0a') && (T2 += '\x0a');
+  T0[Tm(0x1c3)] = T2;
+
+  for (let T4 = 0x0, T5 = j[Tm(0x1fb)]; T4 < T5; ++T4) {
+    const T6 = j[T4];
+    M(T1, T6, j[Tm(0x1a9)](T6));
+  }
+
+  M(T1, Tm(0x1a1), Tm(0x197)), M(T1, Tm(0x1ec), s + 'px'), M(T1, Tm(0x1ee), N + 'px'), M(T1, Tm(0x1f7), '0'), M(T1, Tm(0x232), Tm(0x1c4));
+  E ? j[Tm(0x1ff)] === Tm(0x1cd) && M(T1, Tm(0x1ff), Tm(0x1c4)) : (M(T1, Tm(0x1ff), Tm(0x1ea)), M(T1, Tm(0x1f0), Tm(0x1e0)), M(T1, Tm(0x218), j[Tm(0x1d7)]));
+  z[Tm(0x1b2)](T0), J[Tm(0x1b2)](z);
+  const T3 = T0[Tm(0x1b6)]();
+
+  if (T3[Tm(0x223)] !== d[Tm(0x223)] || T3[Tm(0x1d7)] !== d[Tm(0x1d7)]) {
+    const T7 = parseFloat(j[Tm(0x223)]) + (d[Tm(0x223)] - T3[Tm(0x223)]),
+          T8 = parseFloat(j[Tm(0x1d7)]) + (d[Tm(0x1d7)] - T3[Tm(0x1d7)]);
+    M(T1, Tm(0x223), T7 + 'px'), M(T1, Tm(0x1d7), T8 + 'px');
+  }
+
+  return (T3[Tm(0x1ee)] !== d[Tm(0x1ee)] || T3[Tm(0x1ec)] !== d[Tm(0x1ec)]) && (N += d[Tm(0x1ee)] - T3[Tm(0x1ee)], s += d[Tm(0x1ec)] - T3[Tm(0x1ec)], M(T1, Tm(0x1ee), N + 'px'), M(T1, Tm(0x1ec), s + 'px')), T0[Tm(0x1be)] = V[Tm(0x1be)], T0[Tm(0x1e7)] = V[Tm(0x1e7)], [T0, z];
+}
+
+function caretUtils_m(V, E, J) {
+  const Tq = caretUtils_Q;
+
+  if (J) {
+    const d = document[Tq(0x206)](V, E);
+    return d[Tq(0x1a7)]((N, s) => d[Tq(0x20a)](N) === s);
+  }
+
+  const j = document[Tq(0x1c6)](V, E);
+  return j !== null ? [j] : [];
+}
+
+function q(V, E, J) {
+  const TS = caretUtils_Q;
+  if (J[TS(0x212)][TS(0x1bf)] !== Node[TS(0x22d)]) return ![];
+  const j = J[TS(0x1f1)],
+        d = J[TS(0x21d)];
+
+  try {
+    const k = new TextSeeker(J[TS(0x1f1)], J[TS(0x21d)], !![], ![])[TS(0x1a2)](0x1),
+          T0 = k[TS(0x200)],
+          T1 = k[TS(0x235)],
+          T2 = k[TS(0x1eb)];
+    J[TS(0x196)](T0, T1);
+    if (!S(T2) && W(V, E, J[TS(0x1c9)]())) return !![];
+  } finally {
+    J[TS(0x196)](j, d);
+  }
+
+  const e = new TextSeeker(J[TS(0x212)], J[TS(0x217)], !![], ![])[TS(0x1a2)](-0x1),
+        N = e[TS(0x200)],
+        s = e[TS(0x235)],
+        z = e[TS(0x1eb)];
+  J[TS(0x1ca)](N, s);
+  if (!S(z) && W(V, E, J[TS(0x1c9)]())) return J[TS(0x196)](N, s), !![];
+  return ![];
+}
+
+function S(V) {
+  const Tb = caretUtils_Q;
+  return V[Tb(0x203)]()[Tb(0x1fb)] === 0x0;
+}
+
+function b(V, E) {
+  const Tr = caretUtils_Q;
+  if (typeof document[Tr(0x19c)] === Tr(0x236)) return document[Tr(0x19c)](V, E);
+  if (typeof document[Tr(0x237)] === Tr(0x236)) return caretUtils_r(V, E);
   return null;
 }
 
-function caretPositionFromPoint(x, y) {
-  const position = document.caretPositionFromPoint(x, y);
+function caretUtils_r(V, E) {
+  const Ti = caretUtils_Q,
+        J = document[Ti(0x237)](V, E);
+  if (J === null) return null;
+  const j = J[Ti(0x221)];
+  if (j === null) return null;
+  let d = 0x0;
+  const N = j[Ti(0x1bf)];
 
-  if (position === null) {
-    return null;
-  }
-
-  const node = position.offsetNode;
-
-  if (node === null) {
-    return null;
-  }
-
-  let offset = 0;
-  const nodeType = node.nodeType;
-
-  switch (nodeType) {
-    case Node.TEXT_NODE:
-      offset = position.offset;
+  switch (N) {
+    case Node[Ti(0x22d)]:
+      d = J[Ti(0x235)];
       break;
 
-    case Node.ELEMENT_NODE:
-      // Elements with user-select: all will return the element
-      // instead of a text point inside the element.
-      if (isElementUserSelectAll(node)) {
-        return caretPositionFromPointNormalizeStyles(x, y, node);
-      }
-
+    case Node[Ti(0x1b7)]:
+      if (L(j)) return caretUtils_i(V, E, j);
       break;
   }
 
   try {
-    const range = document.createRange();
-    range.setStart(node, offset);
-    range.setEnd(node, offset);
-    return range;
-  } catch (e) {
-    // Firefox throws new DOMException("The operation is insecure.")
-    // when trying to select a node from within a ShadowRoot.
+    const s = document[Ti(0x22b)]();
+    return s[Ti(0x1ca)](j, d), s[Ti(0x196)](j, d), s;
+  } catch (z) {
     return null;
   }
 }
 
-function caretPositionFromPointNormalizeStyles(x, y, nextElement) {
-  const previousStyles = new Map();
+function caretUtils_Q(I, H) {
+  const h = caretUtils_T();
+  return caretUtils_Q = function Q(u, F) {
+    u = u - 0x196;
+    let K = h[u];
+
+    if (caretUtils_Q['MyBGcS'] === undefined) {
+      var o = function o(W) {
+        const t = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';
+        let P = '',
+            O = '';
+
+        for (let U = 0x0, Z, y, a = 0x0; y = W['charAt'](a++); ~y && (Z = U % 0x4 ? Z * 0x40 + y : y, U++ % 0x4) ? P += String['fromCharCode'](0xff & Z >> (-0x2 * U & 0x6)) : 0x0) {
+          y = t['indexOf'](y);
+        }
+
+        for (let l = 0x0, c = P['length']; l < c; l++) {
+          O += '%' + ('00' + P['charCodeAt'](l)['toString'](0x10))['slice'](-0x2);
+        }
+
+        return decodeURIComponent(O);
+      };
+
+      caretUtils_Q['kcHKoq'] = o, I = arguments, caretUtils_Q['MyBGcS'] = !![];
+    }
+
+    const n = h[0x0],
+          R = u + n,
+          p = I[R];
+    return !p ? (K = caretUtils_Q['kcHKoq'](K), I[R] = K) : K = p, K;
+  }, caretUtils_Q(I, H);
+}
+
+function caretUtils_i(V, E, J) {
+  const TX = caretUtils_Q,
+        j = new Map();
 
   try {
-    while (true) {
-      recordPreviousStyle(previousStyles, nextElement);
-      nextElement.style.setProperty('user-select', 'text', 'important');
-      const position = document.caretPositionFromPoint(x, y);
+    while (!![]) {
+      v(j, J), J[TX(0x1a4)][TX(0x1ba)](TX(0x1b4), TX(0x21c), TX(0x222));
+      const d = document[TX(0x237)](V, E);
+      if (d === null) return null;
+      const N = d[TX(0x221)];
+      if (N === null) return null;
+      let s = 0x0;
+      const z = N[TX(0x1bf)];
 
-      if (position === null) {
-        return null;
-      }
-
-      const node = position.offsetNode;
-
-      if (node === null) {
-        return null;
-      }
-
-      let offset = 0;
-      const nodeType = node.nodeType;
-
-      switch (nodeType) {
-        case Node.TEXT_NODE:
-          offset = position.offset;
+      switch (z) {
+        case Node[TX(0x22d)]:
+          s = d[TX(0x235)];
           break;
 
-        case Node.ELEMENT_NODE:
-          // Elements with user-select: all will return the element
-          // instead of a text point inside the element.
-          if (isElementUserSelectAll(node)) {
-            if (previousStyles.has(node)) {
-              // Recursive
-              return null;
-            }
-
-            nextElement = node;
+        case Node[TX(0x1b7)]:
+          if (L(N)) {
+            if (j[TX(0x21a)](N)) return null;
+            J = N;
             continue;
           }
 
@@ -4609,58 +4952,96 @@ function caretPositionFromPointNormalizeStyles(x, y, nextElement) {
       }
 
       try {
-        const range = document.createRange();
-        range.setStart(node, offset);
-        range.setEnd(node, offset);
-        return range;
-      } catch (e) {
-        // Firefox throws new DOMException("The operation is insecure.")
-        // when trying to select a node from within a ShadowRoot.
+        const k = document[TX(0x22b)]();
+        return k[TX(0x1ca)](N, s), k[TX(0x196)](N, s), k;
+      } catch (T0) {
         return null;
       }
     }
   } finally {
-    revertStyles(previousStyles);
+    C(j);
   }
 }
 
-function recordPreviousStyle(previousStyles, element) {
-  if (previousStyles.has(element)) {
-    return;
-  }
-
-  const style = element.hasAttribute('style') ? element.getAttribute('style') : null;
-  previousStyles.set(element, style);
-}
-
-function isElementUserSelectAll(element) {
-  return getComputedStyle(element).userSelect === 'all';
-}
-
-function revertStyles(previousStyles) {
-  var _iterator = _createForOfIteratorHelper(previousStyles.entries()),
-      _step;
+function X(V, E, J) {
+  const TA = caretUtils_Q;
+  let j = null;
 
   try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      const _ref = _step.value;
+    let d = 0x0,
+        e = null;
 
-      var _ref2 = caretUtils_slicedToArray(_ref, 2);
+    while (!![]) {
+      const N = b(V, E);
+      if (N === null) return null;
+      const s = N[TA(0x212)];
 
-      const element = _ref2[0];
-      const style = _ref2[1];
-
-      if (style === null) {
-        element.removeAttribute('style');
-      } else {
-        element.setAttribute('style', style);
+      if (e !== s) {
+        if (q(V, E, N)) return N;
+        e = s;
       }
+
+      j === null && (j = new Map());
+      d = A(J, d, j);
+      if (d < 0x0) return null;
     }
-  } catch (err) {
-    _iterator.e(err);
   } finally {
-    _iterator.f();
+    j !== null && j[TA(0x199)] > 0x0 && C(j);
   }
+}
+
+function A(V, E, J) {
+  const Tv = caretUtils_Q;
+
+  while (!![]) {
+    if (E >= V[Tv(0x1fb)]) return -0x1;
+    const j = V[E++];
+    if (Y(j)) return v(J, j), j[Tv(0x1a4)][Tv(0x1ba)](Tv(0x232), Tv(0x209), Tv(0x222)), E;
+  }
+}
+
+function v(V, E) {
+  const TC = caretUtils_Q;
+  if (V[TC(0x21a)](E)) return;
+  const J = E[TC(0x198)](TC(0x1a4)) ? E[TC(0x207)](TC(0x1a4)) : null;
+  V[TC(0x225)](E, J);
+}
+
+function C(V) {
+  const TY = caretUtils_Q;
+  var E = caretUtils_I(V[TY(0x1fe)]()),
+      J;
+
+  try {
+    for (E['s'](); !(J = E['n']())[TY(0x1d1)];) {
+      const d = J[TY(0x1fc)];
+      var j = H(d, 0x2);
+      const e = j[0x0],
+            N = j[0x1];
+      N === null ? e[TY(0x202)](TY(0x1a4)) : e[TY(0x201)](TY(0x1a4), N);
+    }
+  } catch (s) {
+    E['e'](s);
+  } finally {
+    E['f']();
+  }
+}
+
+function Y(V) {
+  const Tx = caretUtils_Q;
+  if (V === document[Tx(0x1d8)] || V === document[Tx(0x22f)]) return ![];
+  const E = window[Tx(0x220)](V);
+  return parseFloat(E[Tx(0x21b)]) <= 0x0 || E[Tx(0x1e4)] === Tx(0x1ea) || E[Tx(0x224)] === Tx(0x209) && x(E[Tx(0x1a6)]);
+}
+
+function x(V) {
+  const TL = caretUtils_Q;
+  return n[TL(0x1d5)](V);
+}
+
+function L(V) {
+  const TV = caretUtils_Q;
+  return getComputedStyle(V)[TV(0x1a0)] === TV(0x21e);
 }
 // CONCATENATED MODULE: ./src/fg/common.ts
 
@@ -4721,6 +5102,15 @@ function _showForRange() {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           exactMatch = _args.length > 1 && _args[1] !== undefined ? _args[1] : false;
+
+          if (range) {
+            _context.next = 3;
+            break;
+          }
+
+          return _context.abrupt("return");
+
+        case 3:
           prevLength = 0;
 
           if (exactMatch) {
@@ -4733,14 +5123,14 @@ function _showForRange() {
           }
 
           if (isStringContainsJapanese(context)) {
-            _context.next = 5;
+            _context.next = 7;
             break;
           }
 
           return _context.abrupt("return");
 
-        case 5:
-          langauges = (_state$user$languages = state.user.languages) !== null && _state$user$languages !== void 0 ? _state$user$languages : ['en'];
+        case 7:
+          langauges = (_state$user$languages = state.user.languages) !== null && _state$user$languages !== void 0 ? _state$user$languages : ["en"];
           request = {
             text: context,
             url: range.startContainer.ownerDocument.location.href,
@@ -4750,16 +5140,16 @@ function _showForRange() {
           };
           firstSymbolRange = new Range();
           firstSymbolRange.setStart(range.startContainer, range.startOffset);
-          state.modal.showText(i18n_t('loading'));
+          state.modal.showText(i18n_t("loading"));
           state.modal.updatePosition(firstSymbolRange);
-          _context.next = 13;
-          return state.apiCall('POST', 'processText', request);
+          _context.next = 15;
+          return state.apiCall("POST", "processText", request);
 
-        case 13:
+        case 15:
           response = _context.sent;
 
           if (!response.success) {
-            showSnackbar(i18n_t('no_words_found'));
+            showSnackbar(i18n_t("no_words_found"));
             state.modal.hide();
           } else {
             state.modal.showTranslations(request, response);
@@ -4780,7 +5170,7 @@ function _showForRange() {
             state.modal.updatePosition(newSelectionRange);
           }
 
-        case 23:
+        case 25:
         case "end":
           return _context.stop();
       }
