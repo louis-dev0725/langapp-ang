@@ -1,9 +1,17 @@
 <?php
 
+namespace app\components;
+
+use Yii;
 use yii\db\Migration;
 
-class m210204_070000_dictionary_word_data extends Migration
+class DataMigration extends Migration
 {
+    /**
+     * @var string
+     */
+    public $tableName;
+
     /**
      * {@inheritdoc}
      */
@@ -11,18 +19,25 @@ class m210204_070000_dictionary_word_data extends Migration
     {
         $loadTestData = isset($_SERVER['LOAD_TEST_DATA']) && $_SERVER['LOAD_TEST_DATA'] == '1';
         if ($loadTestData) {
-            $this->truncateTable('dictionary_word');
+            $migrationSuffix = '%' . preg_replace('/^.*m\d{6,}_\d{6,}/', '', get_class($this));
 
+            // Delete old migrations
+            $this->execute('delete from migration_data where "version" like :suffix;', [':suffix' => $migrationSuffix]);
+
+            // Clean table
+            $this->execute('truncate table '.$this->db->quoteTableName($this->tableName).' cascade;');
+
+            // Load from remote dump
             preg_match('/host=(.*?)(;|$)/', $this->db->dsn, $matches);
             $host = $matches[1];
             preg_match('/dbname=(.*?)(;|$)/', $this->db->dsn, $matches);
             $dbname = $matches[1];
 
             $testDataUrl = isset($_SERVER['TEST_DATA_URL']) ? $_SERVER['TEST_DATA_URL'] : 'http://langapp.lb7.ru/internal-8f348g47f39/';
-            $url = $testDataUrl . 'dictionary_word.pgdata';
+            $url = $testDataUrl . $this->tableName . '.pgdata';
 
             $command = 'curl ' . escapeshellarg($url) . ' | ' . 'PGPASSWORD=' . escapeshellarg($this->db->password) . ' pg_restore --host=' . escapeshellarg($host) . ' --username=' . escapeshellarg($this->db->username) . ' --dbname=' . escapeshellarg($dbname) . ' --verbose --single-transaction';
-            Yii::debug('Execute command ' . $command);
+            echo 'Execute: ' . $command . "\n";
             exec($command, $result, $exitStatus);
 
             if ($exitStatus != 0) {
@@ -36,6 +51,6 @@ class m210204_070000_dictionary_word_data extends Migration
      */
     public function safeDown()
     {
-        $this->truncateTable('dictionary_word');
+        $this->truncateTable($this->tableName);
     }
 }
