@@ -2,8 +2,8 @@
   <div class="card full-width">
     <div class="p-grid full-width" style="margin: 0">
       <div class="p-col-12 p-md-6">
-        <div class="flex-layout flex-layout__col flex-layout__a-s flex-layout__j-s">
-          <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s">
+        <div class="flex flex-col items-start justify-start">
+          <div class="flex items-center justify-start">
             <p [innerHTML]="card?.value" class="text-black" style="font-size: 40px;"></p>
             <p-knob size="20" [(ngModel)]="card.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#73e38e'" [style]="{'margin-left': '10px'}"></p-knob>
           </div>
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="p-col-12 p-md-6" style="padding: 1rem 1rem 1rem 0">
-        <div class="flex-layout flex-layout__row flex-layout__a-s flex-layout__j-s">
+        <div class="flex items-start justify-start">
           <img width="105" height="105" class="margin-m" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl">
 <!--          <button pButton style="background: none; padding: 0; border: none; margin-left: 10px" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18" [color]="'#5397d5'"></ic-icon></button>-->
         </div>
@@ -23,47 +23,47 @@
       <div class="p-col-12 p-md-6 border-r">
         <p style="text-align: center; color: #afafaf; font-size: 12px">{{'Kun readings' | translate}}:</p>
         <ng-container *ngFor="let kunReading of card?.kunReadings; let i=index">
-          <div class="flex-layout flex-layout__row">
-            <div style="flex: 2" class="flex-layout flex-layout__a-c flex-layout__j-s">
+          <div class="flex">
+            <div style="flex: 2" class="flex items-center justify-start">
               <p-knob size="20" [(ngModel)]="card.kunReadings[i].frequencyPercent" [disabled]="true" [showValue]="false" [valueColor]="'#73e38e'"></p-knob>
             </div>
-            <div style="flex: 10" class="flex-layout flex-layout__a-c flex-layout__j-s">
+            <div style="flex: 10" class="flex items-center justify-start">
               <p [innerHTML]="kunReading?.value" class="text-black" style="font-size: 20px"></p>
             </div>
           </div>
           <ng-container *ngFor="let example of kunReading?.exampleWords; let y=index">
-            <div class="flex-layout flex-layout__row" [ngClass]="{
+            <div class="flex" [ngClass]="{
             'm-t': y === 0,
             'm-t-s': y !== 0
           }">
-              <div style="flex: 2" class="flex-layout flex-layout__a-c flex-layout__j-s">
+              <div style="flex: 2" class="flex items-center justify-start">
                 <i *ngIf="card?.kunReadings[i]?.exampleWords[y]?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.kunReadings[i]?.exampleWords[y]?.audioUrls[0])"></i>
               </div>
-              <div style="flex: 2" class="flex-layout flex-layout__a-c flex-layout__j-s">
+              <div style="flex: 2" class="flex items-center justify-start">
                 <p class="text-black" style="font-size: 18px" [innerHTML]="example?.furiganaHtml"></p>
               </div>
               <div style="flex: 6">
                 <p class="text-black" style="font-size: 14px">{{example?.meanings | join: ', '}}</p>
               </div>
-              <div style="flex: 2" class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-c">
+              <div style="flex: 2" class="flex items-center justify-center">
                 <button pButton class="ellipsis-btn" style="width: 43px; height: 24px" icon="pi pi-ellipsis-h" iconPos="center" (click)="goToWordInfo(card?.kunReadings[i]?.exampleWords[y]?.infoCard)"></button>
               </div>
             </div>
             <ng-container *ngIf="example?.exampleSentences?.length">
-              <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s" style="margin-top: 30px;" *ngFor="let sentence of example?.exampleSentences | slice: 0 : example?.countExampleSentencesToShow" class="example-sentence">
+              <div class="flex items-center justify-start" style="margin-top: 30px;" *ngFor="let sentence of example?.exampleSentences | slice: 0 : example?.countExampleSentencesToShow" class="example-sentence">
                 <div style="flex: 2">
                   <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(sentence?.audioUrls[0])"></i>
                 </div>
-                <div style="flex: 10" class="flex-layout flex-layout__col">
+                <div style="flex: 10" class="flex flex-col">
                   <p class="text-black" style="font-size: 18px" [innerHTML]="sentence?.furiganaHtml"></p>
                   <p class="text-black" style="font-size: 14px" *ngIf="sentence?.translationHtml" [innerHTML]="sentence?.translationHtml"></p>
                 </div>
               </div>
             </ng-container>
-            <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-c" style="margin-top: 30px" *ngIf="example?.exampleSentences?.length > example?.countExampleSentencesToShow">
+            <div class="flex items-center justify-center" style="margin-top: 30px" *ngIf="example?.exampleSentences?.length > example?.countExampleSentencesToShow">
               <button pButton class="ellipsis-btn" style="width: 100%; height: 20px" icon="pi pi-ellipsis-h" iconPos="center" (click)="showMore(i, y, 'kunReading', 5)"></button>
             </div>
-            <div class="flex-layout flex-layout__row flex-layout__j-c" style="margin-top: 15px" *ngIf="y !== kunReading?.exampleWords?.length - 1">
+            <div class="flex justify-center" style="margin-top: 15px" *ngIf="y !== kunReading?.exampleWords?.length - 1">
               <hr style="border: 1px solid #f4f6f8; width: 100%">
             </div>
           </ng-container>
@@ -72,51 +72,51 @@
       <div class="p-col-12 p-md-6">
         <p style="text-align: center; color: #afafaf; font-size: 12px">{{'On readings' | translate}}:</p>
         <ng-container *ngFor="let onReading of card?.onReadings; let i=index">
-          <div class="flex-layout" [ngClass]="{
+          <div class="flex" [ngClass]="{
           'm-t-m': i !== 0
         }">
-            <div style="flex: 1" class="flex-layout flex-layout__row">
-              <div style="flex: 2" class="flex-layout flex-layout__a-c flex-layout__j-s">
+            <div style="flex: 1" class="flex">
+              <div style="flex: 2" class="flex items-center justify-start">
                 <p-knob size="20" [(ngModel)]="card.onReadings[i].frequencyPercent" [disabled]="true" [showValue]="false" [valueColor]="'#73e38e'"></p-knob>
               </div>
-              <div style="flex: 10" class="flex-layout flex-layout__a-c flex-layout__j-s">
+              <div style="flex: 10" class="flex items-center justify-start">
                 <p class="text-black" [innerHTML]="onReading?.value" style="font-size: 20px"></p>
               </div>
             </div>
           </div>
           <ng-container *ngFor="let example of onReading?.exampleWords; let y=index">
-            <div class="flex-layout flex-layout__row flex-layout__a-c" [ngClass]="{
+            <div class="flex items-center" [ngClass]="{
             'm-t': y === 0,
             'm-t-s': y !== 0
           }">
-              <div style="flex: 2" class="flex-layout flex-layout__a-c flex-layout__j-s">
+              <div style="flex: 2" class="flex items-center justify-start">
                 <i *ngIf="card?.onReadings[i]?.exampleWords[y]?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.onReadings[i]?.exampleWords[y]?.audioUrls[0])"></i>
               </div>
-              <div style="flex: 2" class="flex-layout flex-layout__a-c flex-layout__j-s">
+              <div style="flex: 2" class="flex items-center justify-start">
                 <p class="text-black" style="font-size: 18px" [innerHTML]="example?.furiganaHtml"></p>
               </div>
               <div style="flex: 6">
                 <p class="text-black" style="font-size: 14px">{{example?.meanings | join: ', '}}</p>
               </div>
-              <div style="flex: 2" class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-c">
+              <div style="flex: 2" class="flex items-center justify-center">
                 <button pButton class="ellipsis-btn" style="width: 43px; height: 24px" icon="pi pi-ellipsis-h" iconPos="center" (click)="goToWordInfo(card?.onReadings[i]?.exampleWords[y]?.infoCard)"></button>
               </div>
             </div>
             <ng-container *ngIf="example?.exampleSentences?.length">
-              <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-s" style="margin-top: 30px;" *ngFor="let sentence of example?.exampleSentences | slice: 0 : example?.countExampleSentencesToShow" class="example-sentence">
-                <div style="flex: 2" class="flex-layout flex-layout__a-c flex-layout__j-s">
+              <div class="flex items-center justify-start" style="margin-top: 30px;" *ngFor="let sentence of example?.exampleSentences | slice: 0 : example?.countExampleSentencesToShow" class="example-sentence">
+                <div style="flex: 2" class="flex items-center justify-start">
                   <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(sentence?.audioUrls[0])"></i>
                 </div>
-                <div style="flex: 9" class="flex-layout flex-layout__col">
+                <div style="flex: 9" class="flex flex-col">
                   <p class="text-black" style="font-size: 18px" [innerHTML]="sentence?.furiganaHtml"></p>
                   <p class="text-black" style="font-size: 14px" *ngIf="sentence?.translationHtml" [innerHTML]="sentence?.translationHtml"></p>
                 </div>
               </div>
             </ng-container>
-            <div class="flex-layout flex-layout__row flex-layout__a-c flex-layout__j-c" style="margin-top: 30px"  *ngIf="example?.exampleSentences?.length > example?.countExampleSentencesToShow">
+            <div class="flex items-center justify-center" style="margin-top: 30px"  *ngIf="example?.exampleSentences?.length > example?.countExampleSentencesToShow">
               <button pButton class="ellipsis-btn" style="width: 100%; height: 20px" icon="pi pi-ellipsis-h" iconPos="center" (click)="showMore(i, y, 'onReadings', 5)"></button>
             </div>
-            <div class="flex-layout flex-layout__row flex-layout__j-c" style="margin-top: 15px" *ngIf="i !== card?.onReadings?.length - 1">
+            <div class="flex justify-center" style="margin-top: 15px" *ngIf="i !== card?.onReadings?.length - 1">
               <hr style="border: 1px solid #f4f6f8; width: 100%">
             </div>
           </ng-container>
@@ -129,7 +129,7 @@
       <div style="flex: 3" class="footer-text">
         <p style="color: #a0b0c4; font-size: 14px">{{'Explanation: take a look at the meanings and examples, then click "Continue".' | translate}}</p>
       </div>
-      <div style="flex: 1" class="full-width flex-layout flex-layout__j-c">
+      <div style="flex: 1" class="full-width flex justify-center">
         <button pButton label="{{'Continue' | translate}}" class="full-width" style="height: 40px; font-size: 15px" (click)="goToNextCard()"></button>
       </div>
     </div>

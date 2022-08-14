@@ -15,21 +15,6 @@
   height: 45px;
 }
 
-.flex-layout {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  &__fs {
-    justify-content: flex-start;
-  }
-  &__fc {
-    justify-content: center;
-  }
-  &__fe {
-    justify-content: flex-end;
-  }
-}
-
 .subtitle-item {
   padding: 15px;
   border-bottom: 2px solid #ebebeb;

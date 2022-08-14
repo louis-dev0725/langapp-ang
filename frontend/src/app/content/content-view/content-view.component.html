@@ -11,7 +11,7 @@
                 </p>
               </div>
               <div class="video-controls">
-                <div class="flex-layout flex-layout__fs">
+                <div class="flex justify-start">
                   <button pButton title="{{'Repeat sentence' | translate}}" type="button" style="background: none; border: none; color: white" class="control" (click)="repeatSubtitle()">
                     <ic-icon [icon]="icons.repeat" height="30" width="30"></ic-icon>
                   </button>
@@ -20,7 +20,7 @@
                     <ic-icon [icon]="icons.fullscreen" height="30" width="30"></ic-icon>
                   </button>
                 </div>
-                <div class="flex-layout flex-layout__fc">
+                <div class="flex justify-start">
                   <button pButton title="{{'Previous' | translate}}" type="button" style="background: none; border: none; color: white; " class="control no-padding" (click)="previousSubtitle()">
                     <ic-icon [icon]="icons.previous" height="30" width="30"></ic-icon>
                   </button>
@@ -31,7 +31,7 @@
                     <ic-icon [icon]="icons.next" height="30" width="30"></ic-icon>
                   </button>
                 </div>
-                <div class="flex-layout flex-layout__fe mr-4">
+                <div class="flex justify-end mr-4">
                   <button type="button" title="{{'Playback speed' | translate}}" pButton style="background: none; border: none; height: 40px" class="control" (click)="speedOverlay.toggle($event)">
                     <svg width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="left-icon">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20Z" fill="currentColor"/>
