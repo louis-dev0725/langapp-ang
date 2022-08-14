@@ -161,7 +161,6 @@ export class ContentViewComponent implements AfterViewInit {
   @HostListener('document:langapp-modal-hide', ['$event'])
   handleModalHide(event: CustomEvent) {
     event.preventDefault();
-    console.log('langapp-modal-hide');
     this.isModalOpened = false;
     this.checkPauseOnHover();
   }
@@ -169,7 +168,6 @@ export class ContentViewComponent implements AfterViewInit {
   @HostListener('document:langapp-modal-display', ['$event'])
   handleModalDisplay(event: CustomEvent) {
     event.preventDefault();
-    console.log('langapp-modal-display');
     this.isModalOpened = true;
     this.checkPauseOnHover();
   }
@@ -230,11 +228,6 @@ export class ContentViewComponent implements AfterViewInit {
   }
 
   checkPauseOnHover(skipTimeout = false) {
-    console.log('checkPauseOnHover', {
-      isModalOpened: this.isModalOpened,
-      isSubtitleHovered: this.isSubtitleHovered,
-      isPausedOnSubtitlesHover: this.isPausedOnSubtitlesHover,
-    });
     if (this.isPausedOnSubtitlesHover) {
       if (!this.isModalOpened && !this.isSubtitleHovered) {
         if (skipTimeout) {
@@ -242,7 +235,6 @@ export class ContentViewComponent implements AfterViewInit {
           this.video.player.play();
         } else {
           setTimeout(() => {
-            console.log('setTimeout');
             this.checkPauseOnHover(true);
           }, 150);
         }
@@ -250,19 +242,16 @@ export class ContentViewComponent implements AfterViewInit {
     } else if (this.isVideoPlaying && (this.isModalOpened || this.isSubtitleHovered)) {
       this.isPausedOnSubtitlesHover = true;
       this.video.player.pause();
-      console.log('this.isPausedOnSubtitlesHover = true', this.isPausedOnSubtitlesHover);
     }
   }
 
   subtitleMouseover() {
     this.isSubtitleHovered = true;
-    console.log('subtitleMouseover');
     this.checkPauseOnHover();
   }
 
   subtitleMouseout() {
     this.isSubtitleHovered = false;
-    console.log('subtitleMouseout');
     this.checkPauseOnHover();
   }
 
@@ -287,8 +276,6 @@ export class ContentViewComponent implements AfterViewInit {
       }
     }
     if (newSelectedIndexes.length > 0 && newSelectedIndexes.join(',') != this.selectedSubtitleIndexes.join(',')) {
-      console.log(newSelectedSubtitles.map((s) => s.text));
-
       if (newSelectedIndexes.length > 3) {
         this.currentSubtitleStyle = this.subtitleStyles[4].style;
       }
