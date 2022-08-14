@@ -18,7 +18,7 @@ import { SessionService } from '@app/services/session.service';
 import { CustomValidator } from '@app/services/custom-validator';
 import { HttpInterceptorService } from '@app/http/http-interceptor';
 import { ThemeModule } from '@app/theme/theme.module';
-import { APP_BASE_HREF, LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
+import { APP_BASE_HREF, LocationStrategy, PathLocationStrategy, PlatformLocation, registerLocaleData } from '@angular/common';
 import { ConfirmDialogModule } from '@app/common/confirm-dialog/confirm-dialog.module';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
@@ -35,6 +35,7 @@ import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { WebpackTranslateLoader } from './WebpackTranslateLoader';
 import { CookieModule } from 'ngx-cookie';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [AppComponent],
@@ -54,11 +55,13 @@ import { CookieModule } from 'ngx-cookie';
     ThemeModule,
     ConfirmDialogModule,
     CookieModule.forRoot(),
+    IonicModule.forRoot(),
   ],
   providers: [
     {
       provide: APP_BASE_HREF,
-      useValue: '/app',
+      useFactory: (pl: PlatformLocation) => pl.getBaseHrefFromDOM(),
+      deps: [PlatformLocation],
     },
     SessionService,
     {

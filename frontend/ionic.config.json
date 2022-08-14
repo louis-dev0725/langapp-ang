@@ -1,0 +1,12 @@
+{
+  "defaultProject": "langapp",
+  "projects": {
+    "langapp": {
+      "name": "langapp",
+      "integrations": {
+        "capacitor": {}
+      },
+      "type": "angular"
+    }
+  }
+}
