@@ -284,9 +284,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
   }
@@ -388,9 +386,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
   }
@@ -409,9 +405,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
     };
   }
 
@@ -471,9 +465,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
   }
@@ -531,9 +523,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
   }
@@ -611,9 +601,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
   }
@@ -643,9 +631,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
   }
@@ -674,9 +660,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
   }
@@ -695,9 +679,7 @@ export class DrillsGenerator {
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
   }
@@ -748,9 +730,7 @@ export class DrillsGenerator {
       frequencyRank: Math.max(100, kanji.data.frequencyRank * 100),
       value: kanji.query[0],
       meanings: this.filterMeaningsForUser(kanji),
-      mnemonic: {
-        imageUrl: '/assets/test-image.png?kanji-3157554',
-      },
+      mnemonic: null,
       kunReadings: this.filterReadingsByType(kanji, 'kun'),
       onReadings: this.filterReadingsByType(kanji, 'on'),
     };
@@ -781,10 +761,10 @@ export class DrillsGenerator {
       })),
       // TODO: audioUrls
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
-      // TODO: mnemonic
-      mnemonic: {
+      mnemonic: null,
+      /*mnemonic: {
         imageUrl: '/assets/test-image.png?word-3236529',
-      },
+      },*/
     };
   }
 }

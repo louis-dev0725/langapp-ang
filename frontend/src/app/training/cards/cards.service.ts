@@ -37,7 +37,6 @@ export class CardsService {
 
   navigateToNextCard() {
     this.currentDrillIndex = this.drills$.value.findIndex((d) => !d.isFinished);
-    console.log(this.currentDrillIndex);
     if (this.currentDrillIndex != -1) {
       const currentDrill = this.drills$.value[this.currentDrillIndex];
       currentDrill.answerStartTime = Math.floor(Date.now());
