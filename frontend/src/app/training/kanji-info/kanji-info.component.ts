@@ -19,7 +19,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 })
 export class KanjiInfoComponent implements OnInit {
   card: KanjiCardInfo;
-  drills: Drill[];
+  meaning: string;
   startTime = Date.now();
   cardTypeRouteEnum = CardTypeRouteEnum;
 
@@ -50,16 +50,14 @@ export class KanjiInfoComponent implements OnInit {
       .getCurrentCard()
       .pipe(untilDestroyed(this))
       .subscribe((card) => {
-        this.card = card;
+        this.setCard(card);
         this.cd.markForCheck();
       });
-    this.cardsService
-      .getTrainingDrills()
-      .pipe(untilDestroyed(this))
-      .subscribe((drills) => {
-        this.drills = drills;
-        this.cd.markForCheck();
-      });
+  }
+
+  setCard(card: KanjiCardInfo) {
+    this.card = card;
+    this.meaning = card.meanings.map((m) => m.value).join(', ');
   }
 
   showMore(first: number, second: number, type: string, countToAdd: number) {
