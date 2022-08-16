@@ -5,4 +5,4 @@ cd ..
 
 set -x
 
-docker-compose exec -e LOAD_TEST_DATA=$LOAD_TEST_DATA web bash
+docker-compose exec -e LOAD_TEST_DATA=$LOAD_TEST_DATA -e TEST_DATA_URL=$TEST_DATA_URL web bash
