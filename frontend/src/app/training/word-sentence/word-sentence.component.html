@@ -54,15 +54,15 @@
       <source [src]="card?.question?.sentence?.audioUrls[0]" type="audio/mpeg">
     </audio>
     <div class="flex flex-col items-center justify-start">
-      <p [innerHTML]="card?.question?.sentence?.furiganaHtml" style="font-size: 18px;" class="furigana-m text-black"></p>
-      <p [innerHTML]="card?.question?.sentence?.translationHtml" style="font-size: 14px;" class="furigana-m text-black"></p>
+      <p [innerHTML]="card?.question?.sentence?.furiganaHtml" style="font-size: 18px;" class="furigana-m furigana-font-tiny text-black"></p>
+      <p [innerHTML]="card?.question?.sentence?.translationHtml" style="font-size: 14px;" class="furigana-m furigana-font-tiny text-black"></p>
     </div>
     <div class="flex items-center justify-start" style="margin-top: 20px">
       <div style="flex: 1">
         <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
       </div>
       <div style="flex: 5">
-        <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-m text-black"></p>
+        <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-m furigana-font-tiny text-black"></p>
       </div>
     </div>
     <div class="flex items-center justify-start">

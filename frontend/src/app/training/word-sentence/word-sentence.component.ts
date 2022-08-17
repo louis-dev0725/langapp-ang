@@ -18,7 +18,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
     class: 'w-full',
   },
 })
-export class WordSentenceComponent implements OnInit, AfterViewInit {
+export class WordSentenceComponent implements OnInit {
   card: TrainingQuestionCard;
   currentCardType: string;
   drills: Drill[];
@@ -52,13 +52,6 @@ export class WordSentenceComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getTrainingDetails();
     this.playAudio(this.card?.audioUrls[0]);
-  }
-
-  ngAfterViewInit() {
-    const rts = document.getElementsByTagName('rt');
-    for (let i = 0; i < rts.length; i++) {
-      rts[i].classList.add('rt-furigana-font-tiny');
-    }
   }
 
   get isWideScreen() {

@@ -48,7 +48,7 @@
           <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
         </div>
         <div style="flex: 5">
-          <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-m text-black"></p>
+          <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-m furigana-font-small text-black"></p>
         </div>
       </div>
       <div class="flex items-center justify-start">
@@ -70,7 +70,7 @@
   </div>
   <div class="p-col-12 p-md-6">
     <div class="flex flex-col justify-center items-center">
-      <p class="text-black" [innerHTML]="card?.furiganaHtml" style="font-size: 40px"></p>
+      <p class="text-black furigana-font-small" [innerHTML]="card?.furiganaHtml" style="font-size: 40px"></p>
       <p style="font-size: 13px">{{'Your answer' | translate}}:</p>
       <p style="font-size: 34px;" [ngClass]="{
         'answer-color-correct': isAnsweredCorrectly,

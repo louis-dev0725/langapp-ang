@@ -17,7 +17,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
     class: 'w-full',
   },
 })
-export class TranslationWordComponent implements OnInit, AfterViewInit {
+export class TranslationWordComponent implements OnInit {
   card: TrainingQuestionCard;
   drills: Drill[];
   startTime = Date.now();
@@ -49,13 +49,6 @@ export class TranslationWordComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
-  }
-
-  ngAfterViewInit() {
-    const rts = document.getElementsByTagName('rt');
-    for (let i = 0; i < rts.length; i++) {
-      rts[i].classList.add('rt-gray', 'rt-furigana-font-large');
-    }
   }
 
   get isWideScreen() {

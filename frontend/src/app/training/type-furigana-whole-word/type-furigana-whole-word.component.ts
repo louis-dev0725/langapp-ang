@@ -17,7 +17,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
     class: 'w-full',
   },
 })
-export class TypeFuriganaWholeWordComponent implements OnInit, AfterViewInit {
+export class TypeFuriganaWholeWordComponent implements OnInit {
   card: TrainingQuestionCard;
   drills: Drill[];
   startTime = Date.now();
@@ -34,13 +34,6 @@ export class TypeFuriganaWholeWordComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
-  }
-
-  ngAfterViewInit() {
-    const rts = document.getElementsByTagName('rt');
-    for (let i = 0; i < rts.length; i++) {
-      rts[i].classList.add('rt-furigana-font-small');
-    }
   }
 
   forgotAnswer() {

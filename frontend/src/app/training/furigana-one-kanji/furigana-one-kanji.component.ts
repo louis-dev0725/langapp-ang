@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { CardsService } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
     class: 'w-full',
   },
 })
-export class FuriganaOneKanjiComponent implements OnInit, AfterViewInit {
+export class FuriganaOneKanjiComponent implements OnInit {
   card: TrainingQuestionCard;
   drills: Drill[];
   startTime = Date.now();
@@ -49,13 +49,6 @@ export class FuriganaOneKanjiComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
-  }
-
-  ngAfterViewInit() {
-    const rts = document.getElementsByTagName('rt');
-    for (let i = 0; i < rts.length; i++) {
-      rts[i].classList.add('rt-furigana-font-large');
-    }
   }
 
   get isWideScreen() {
