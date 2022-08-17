@@ -15,7 +15,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
   styleUrls: ['./word-sentence.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'full-width',
+    class: 'w-full',
   },
 })
 export class WordSentenceComponent implements OnInit, AfterViewInit {

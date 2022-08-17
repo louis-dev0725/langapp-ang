@@ -14,7 +14,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
   styleUrls: ['./type-furigana-whole-word.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'full-width',
+    class: 'w-full',
   },
 })
 export class TypeFuriganaWholeWordComponent implements OnInit, AfterViewInit {

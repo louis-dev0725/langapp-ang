@@ -15,7 +15,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
   styleUrls: ['./word-audio.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'full-width',
+    class: 'w-full',
   },
 })
 export class WordAudioComponent implements OnInit {

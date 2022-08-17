@@ -38,6 +38,7 @@ import { OnclickTranslationDirective } from './onclick-translation.directive';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ToolbarModule } from 'primeng/toolbar';
 import { PasswordModule } from 'primeng/password';
+import { TooltipModule } from 'primeng/tooltip';
 
 let sharedModules = [
   // primeng
@@ -62,6 +63,7 @@ let sharedModules = [
   MultiSelectModule,
   ToolbarModule,
   PasswordModule,
+  TooltipModule,
 
   // material
   MatIconModule,

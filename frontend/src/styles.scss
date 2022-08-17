@@ -1,7 +1,3 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
 $gutter: 1rem; //for primeflex grid system
 $fontSize: 14px;
 $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -15,6 +11,10 @@ $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 //@import "../node_modules/@fullcalendar/core/main.min.css";
 //@import "../node_modules/@fullcalendar/daygrid/main.min.css";
 //@import "../node_modules/@fullcalendar/timegrid/main.min.css";
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 .layout-menu a {
   outline: 0 none;
@@ -143,6 +143,14 @@ a.p-button:hover {
   }
 }
 
+ruby rt {
+  user-select: none;
+}
+
+ruby rt:hover {
+  user-select: auto;
+}
+
 @media screen and (max-width: 767px) {
   .layout-footer {
     flex-direction: column;
@@ -152,22 +160,6 @@ a.p-button:hover {
       margin-top: 12px;
     }
   }
-}
-
-.full-width {
-  width: 100%;
-}
-
-.full-height {
-  height: 100%;
-}
-
-.no-padding {
-  padding: 0;
-}
-
-.text-black {
-  color: black;
 }
 
 .text-gray {

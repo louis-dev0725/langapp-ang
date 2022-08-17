@@ -15,7 +15,7 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./word-sentence-video.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'full-width',
+    class: 'w-full',
   },
 })
 export class WordSentenceVideoComponent implements OnInit, AfterViewInit {

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./end-training.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'full-width',
+    class: 'w-full',
   },
 })
 export class EndTrainingComponent implements OnInit {

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./index.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'full-width',
+    class: 'w-full',
   },
 })
 export class IndexComponent {

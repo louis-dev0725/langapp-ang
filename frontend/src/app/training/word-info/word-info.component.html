@@ -1,6 +1,6 @@
 <div class="start-content">
-  <div class="card full-width">
-    <div class="p-grid full-width" style="margin: 0">
+  <div class="card w-full">
+    <div class="p-grid w-full" style="margin: 0">
       <div class="p-col-12 p-md-6">
         <div class="flex items-center justify-start">
           <div style="flex: 1">
@@ -19,13 +19,13 @@
         </div>
       </div>
     </div>
-    <div class="p-grid full-width" style="margin-bottom: 0; padding: 12px 16px">
+    <div class="p-grid w-full" style="margin-bottom: 0; padding: 12px 16px">
       <div class="p-col-12 p-md-6 border-r">
         <p style="text-align: center; color: #afafaf; font-size: 12px">{{'Meanings' | translate}}:</p>
         <div class="flex items-center justify-start">
           <div style="flex: 1"></div>
           <div style="flex: 9">
-            <ul class="no-padding" style="list-style: none; margin-left: 10px">
+            <ul class="p-0" style="list-style: none; margin-left: 10px">
               <li *ngFor="let meaning of card?.meanings" class="text-black" style="margin-bottom: 10px; font-size: 14px">
                 {{meaning?.value}}
               </li>
@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="flex justify-center">
-          <hr class="full-width" style="border: 1px solid #f4f6f8;">
+          <hr class="w-full" style="border: 1px solid #f4f6f8;">
         </div>
         <ng-container *ngIf="card?.exampleSentences?.length">
           <p style="text-align: center; color: #afafaf; font-size: 12px">{{'Examples:' | translate}}</p>
@@ -83,20 +83,20 @@
             </div>
           </div>
           <div class="flex justify-center" *ngIf="i !== kanji?.meanings?.length - 1">
-            <hr class="full-width" style="border: 1px solid #f4f6f8;">
+            <hr class="w-full" style="border: 1px solid #f4f6f8;">
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="card card-bottom-buttons full-width" style="margin: 0; padding: 12px 16px">
+  <div class="card card-bottom-buttons w-full" style="margin: 0; padding: 12px 16px">
     <div class="word-footer">
       <div style="flex: 3" class="footer-text">
         <p style="color: #a0b0c4; font-size: 14px">
           {{'Explanation: take a look at the meanings and the usage of the word, then click "Continue."' | translate}}</p>
       </div>
-      <div style="flex: 1" class="full-width flex justify-center">
-        <button pButton label="{{'Continue' | translate}}" class="full-width" style="height: 40px; font-size: 15px" (click)="goToNextCard()"></button>
+      <div style="flex: 1" class="w-full flex justify-center">
+        <button pButton label="{{'Continue' | translate}}" class="w-full" style="height: 40px; font-size: 15px" (click)="goToNextCard()"></button>
       </div>
     </div>
   </div>

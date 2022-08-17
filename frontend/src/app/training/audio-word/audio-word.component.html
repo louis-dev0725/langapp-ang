@@ -1,14 +1,14 @@
 <div class="start-content">
-  <div class="card full-width">
-    <div class="p-grid full-width" style="margin: 0; padding: 12px 16px">
+  <div class="card w-full">
+    <div class="p-grid w-full" style="margin: 0; padding: 12px 16px">
       <div class="p-col-12 p-md-6">
-        <div class="flex items-center justify-center full-width full-height" *ngIf="!isAnswered; else kanjiInfo">
+        <div class="flex items-center justify-center w-full h-full" *ngIf="!isAnswered; else kanjiInfo">
           <p class="text-black" [innerHTML]="card?.question?.questionHtml" style="font-size: 40px"></p>
         </div>
       </div>
       <div class="p-col-12 p-md-6">
-        <div class="flex flex-col items-center justify-center full-width">
-          <div class="flex full-width" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
+        <div class="flex flex-col items-center justify-center w-full">
+          <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
             <div style="flex: 1" class="flex items-center justify-center" *ngIf="isWideScreen">
               <span style="font-size: 13px">{{i + 1}}</span>
             </div>
@@ -25,7 +25,7 @@
               <p style="font-size: 25px;" class="text-black" [innerHTML]="answer?.contentHtml" *ngIf="isAnswered"></p>
             </div>
           </div>
-          <div class="flex full-width" style="margin-bottom: 15px">
+          <div class="flex w-full" style="margin-bottom: 15px">
             <div style="flex: 1" *ngIf="isWideScreen"></div>
             <div style="flex: 1"></div>
             <div style="flex: 4" class="flex items-center justify-center">
@@ -35,12 +35,12 @@
         </div>
       </div>
     </div>
-    <div class="full-width" style="margin: 0; padding: 12px 16px">
+    <div class="w-full" style="margin: 0; padding: 12px 16px">
       <div class="flex items-center justify-start">
         <button style="height: 35px; font-size: 15px" pButton type="button" label="{{'Disable questions with audio for 1 hour' | translate}}" class="ellipsis-btn" (click)="disableQuestion()"></button>
       </div>
     </div>
-    <div class="full-width" style="margin: 0; padding: 12px 16px">
+    <div class="w-full" style="margin: 0; padding: 12px 16px">
       <div class="flex items-center justify-start">
         <p style="color: #a0b0c4; font-size: 14px">{{isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: select word with this meaning.' | translate)}}</p>
       </div>

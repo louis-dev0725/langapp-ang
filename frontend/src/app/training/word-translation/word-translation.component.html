@@ -1,14 +1,14 @@
 <div class="start-content">
-  <div class="card full-width">
-    <div class="p-grid full-width" style="margin: 0; padding: 12px 16px">
+  <div class="card w-full">
+    <div class="p-grid w-full" style="margin: 0; padding: 12px 16px">
       <div class="p-col-12 p-md-6">
-        <div class="flex items-center justify-center full-width full-height" *ngIf="!isAnswered; else kanjiInfo">
+        <div class="flex items-center justify-center w-full h-full" *ngIf="!isAnswered; else kanjiInfo">
           <p class="text-black" [innerHTML]="card?.question?.questionHtml" style="font-size: 20px;"></p>
         </div>
       </div>
       <div class="p-col-12 p-md-6">
-        <div class="flex flex-col items-center justify-center full-width">
-          <div class="flex full-width" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
+        <div class="flex flex-col items-center justify-center w-full">
+          <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
             <div style="flex: 1" class="flex items-center justify-center" *ngIf="isAnswered">
               <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])" *ngIf="i === 0"></i>
             </div>
@@ -22,7 +22,7 @@
               <p class="text-black" [innerHTML]="answer?.contentHtml" style="font-size: 25px;"></p>
             </div>
           </div>
-          <div class="flex full-width" style="margin-bottom: 15px">
+          <div class="flex w-full" style="margin-bottom: 15px">
             <div style="flex: 1" *ngIf="isAnswered"></div>
             <div style="flex: 1" *ngIf="isWideScreen"></div>
             <div style="flex: 4;" class="flex items-center justify-center">
@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div class="full-width" style="margin: 0; padding: 12px 16px">
+    <div class="w-full" style="margin: 0; padding: 12px 16px">
       <div class="flex items-center justify-start">
         <p style="color: #a0b0c4; font-size: 14px">{{isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: select word with this meaning.' | translate)}}</p>
       </div>
