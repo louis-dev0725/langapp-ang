@@ -16,20 +16,13 @@ import { JumanMorpheme, JumanSentence, JumanStringPos } from './proto/juman_pb';
 export class AppService {
   private readonly logger = new Logger(AppService.name, true);
 
-  constructor(
-    private dictionaryWordRepository: DictionaryWordRepository,
-    private jumanppClient: JumanppClient,
-    private analyzeJapanese: AnalyzeJapaneseService
-  ) {
-  }
+  constructor(private dictionaryWordRepository: DictionaryWordRepository, private jumanppClient: JumanppClient, private analyzeJapanese: AnalyzeJapaneseService) {}
 
   async processText(originalText: string, clickedOffsetOriginal: number, requestedLanguages: string[], exactMatch: boolean = false): Promise<any> {
     let toReturn: ProcessTextResponse = new ProcessTextResponse();
     let allVariants: Variant[] = [];
 
-    // TODO: rebuild dictionary with 2 letter lang codes
-    requestedLanguages = requestedLanguages.map(l => l == 'en' ? 'eng' : (l == 'ru' ? 'ru' : l));
-    requestedLanguages = ['eng'];
+    // requestedLanguages = ['en'];
 
     if (exactMatch) {
       let text = originalText.replace(/\s/g, '');
@@ -41,8 +34,7 @@ export class AppService {
         reading: '',
         reasons: [],
       });
-    }
-    else {
+    } else {
       this.logger.log('Start');
       let morphemesList = await this.analyzeJapanese.analyzeViaJuman(originalText);
       this.logger.log('Got response from juman');
@@ -55,7 +47,7 @@ export class AppService {
       return { success: false };
     }
 
-    let queries = allVariants.map(v => v.value);
+    let queries = allVariants.map((v) => v.value);
 
     this.logger.log('Query words in DB');
     this.logger.log(queries);
@@ -64,24 +56,23 @@ export class AppService {
 
     let resultWords: JapaneseResultItem[] = [];
     for (let word of wordsFromDb) {
-      let variant = allVariants.find(v => word.query.indexOf(v.value) !== -1);
+      let variant = allVariants.find((v) => word.query.indexOf(v.value) !== -1);
       if (variant) {
         resultWords.push({
           id: word.id,
           type: word.type,
           ...word.data,
-          ...variant
+          ...variant,
         });
-      }
-      else {
-        this.logger.log('Strange. Result from DB "' + JSON.stringify(word.query) + " was not found in variants.");
+      } else {
+        this.logger.log('Strange. Result from DB "' + JSON.stringify(word.query) + ' was not found in variants.');
       }
     }
 
     toReturn.success = resultWords.length > 0;
     toReturn.words = resultWords;
 
-    let hasMeaningsInRequestedLanguages = toReturn.words.filter(w => w.meanings.filter(m => requestedLanguages.indexOf(m.lang) !== -1).length > 0).length > 0;
+    let hasMeaningsInRequestedLanguages = toReturn.words.filter((w) => w.meanings.filter((m) => requestedLanguages.indexOf(m.lang) !== -1).length > 0).length > 0;
     if (!hasMeaningsInRequestedLanguages) {
       requestedLanguages.push('eng');
     }
@@ -105,9 +96,11 @@ export class AppService {
       /*word.translations.sort((a, b) => {
         return languages.indexOf(a.lang) - languages.indexOf(b.lang);
       });*/
-      word.meanings = word.meanings.filter(m => requestedLanguages.indexOf(m.lang) !== -1).sort((a, b) => {
-        return requestedLanguages.indexOf(a.lang) - requestedLanguages.indexOf(b.lang);
-      })
+      word.meanings = word.meanings
+        .filter((m) => requestedLanguages.indexOf(m.lang) !== -1)
+        .sort((a, b) => {
+          return requestedLanguages.indexOf(a.lang) - requestedLanguages.indexOf(b.lang);
+        });
 
       /*word.readings = [];
       word.currentReadingIsCommon = false;
@@ -190,8 +183,8 @@ export class AppService {
 
     toReturn.words.sort((a, b) => {
       // Same partOfSpeech (currently checks only particles)
-      let aIsParticle = (a.reasons?.[0]?.pos == "助詞" && a.partOfSpeech.some(p => p.value == 'prt')) ? 1 : 0;
-      let bIsParticle = (b.reasons?.[0]?.pos == "助詞" && b.partOfSpeech.some(p => p.value == 'prt')) ? 1 : 0;
+      let aIsParticle = a.reasons?.[0]?.pos == '助詞' && a.partOfSpeech.some((p) => p.value == 'prt') ? 1 : 0;
+      let bIsParticle = b.reasons?.[0]?.pos == '助詞' && b.partOfSpeech.some((p) => p.value == 'prt') ? 1 : 0;
 
       let r = bIsParticle - aIsParticle;
       if (r != 0) {
@@ -244,10 +237,10 @@ export class AppService {
       console.log(currentOffset, current);
 
       let currentPos = current.stringPos.pos;
-      let isPartical = currentPos == "助詞";
-      let isSuffix = currentPos == "接尾辞";
-      let isVerb = currentPos == "動詞";
-      let isPunctuation = currentPos == "特殊";
+      let isPartical = currentPos == '助詞';
+      let isSuffix = currentPos == '接尾辞';
+      let isVerb = currentPos == '動詞';
+      let isPunctuation = currentPos == '特殊';
       if (!insideClickedWord) {
         insideClickedWord = currentOffset >= clickedOffset && currentOffset < nextOffset;
       }
@@ -255,8 +248,7 @@ export class AppService {
       if (isPunctuation) {
         if (currentOffset > clickedOffset) {
           break;
-        }
-        else {
+        } else {
           // Reset varinats on punctuation
           variants = [];
           allVariants = [];
@@ -268,7 +260,8 @@ export class AppService {
       }
 
       // When word is ended
-      if (!isSuffix) { // TODO: いる, ある, etc marked as verb not as suffix
+      if (!isSuffix) {
+        // TODO: いる, ある, etc marked as verb not as suffix
         wordStartOffset = currentOffset;
         //wordInfections = [];
         insideClickedWord = false;
@@ -349,7 +342,7 @@ export class AppService {
     }
 
     // Only phrases that were clicked, with length 10 or less
-    allVariants = allVariants.filter(v => v.value.length <= 10 && v.offsetStart <= clickedOffset && v.offsetEnd > clickedOffset);
+    allVariants = allVariants.filter((v) => v.value.length <= 10 && v.offsetStart <= clickedOffset && v.offsetEnd > clickedOffset);
 
     return allVariants;
   }
@@ -368,11 +361,12 @@ interface VariantsByValue {
   [key: string]: Variant;
 }
 
-type JapaneseResultItem = JapaneseWordData & Variant & {
-  id: number;
-  type: DictionaryType;
-  currentReadingIsCommon?: boolean;
-};
+type JapaneseResultItem = JapaneseWordData &
+  Variant & {
+    id: number;
+    type: DictionaryType;
+    currentReadingIsCommon?: boolean;
+  };
 
 class ProcessTextResponse {
   success: boolean;
