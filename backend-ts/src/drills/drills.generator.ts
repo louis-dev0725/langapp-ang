@@ -253,6 +253,7 @@ export class DrillsGenerator {
         value: reading.value,
         frequencyPercent: reading.frequencyPercent,
         frequencyPmw: reading.frequencyPmw,
+        countExampleWordsToShow: 3,
         exampleWords: reading.exampleWords.map((item) => {
           let word = this.exampleWords[item.wordId];
           if (!word) {
@@ -264,6 +265,7 @@ export class DrillsGenerator {
             frequencyRank: Math.min(100, Math.round(word.data?.frequencyRank * 10)),
             frequencyPmw: word.data.frequencyPmw,
             infoCard: `wordInfo_${item.wordId}`,
+            value: word?.data?.readings?.[0]?.kanji || word?.data?.readings?.[0]?.kana,
             furiganaHtml: this.furiganaToHtml(word?.data?.readings?.[0]?.furigana),
             meanings: this.filterMeaningsForUser(word),
             countExampleSentencesToShow: 1,

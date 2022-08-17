@@ -12,7 +12,7 @@ import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-word-sentence-video',
   templateUrl: './word-sentence-video.component.html',
-  styleUrls: ['./word-sentence-video.component.scss'],
+  styleUrls: ['./word-sentence-video.component.scss', '../drills-common-styles.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'w-full',

@@ -2,6 +2,8 @@ $gutter: 1rem; //for primeflex grid system
 $fontSize: 14px;
 $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
+@import "tailwindcss/base";
+
 @import "../node_modules/primeng/resources/primeng.css";
 @import "../node_modules/primeflex/primeflex.scss";
 @import "../node_modules/primeicons/primeicons.css";
@@ -12,7 +14,6 @@ $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 //@import "../node_modules/@fullcalendar/daygrid/main.min.css";
 //@import "../node_modules/@fullcalendar/timegrid/main.min.css";
 
-@import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 

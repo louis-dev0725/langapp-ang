@@ -1,3 +1,22 @@
+.start-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.answer-default {
+  background-color: #eef4fb;
+}
+
+.answer-correct {
+  background-color: #d2f6db;
+}
+
+.answer-incorrect {
+  background-color: #efe2e3;
+}
+
 @media screen and (max-width: 768px) {
   .kanji-info {
     display: flex;
@@ -18,11 +37,9 @@
   .furigana-m {
     margin-left: 10px;
   }
-
 }
 
 @media screen and (min-width: 968px) {
-
   .kanji-info {
     display: flex;
     flex-direction: column;
@@ -39,7 +56,6 @@
   .furigana-m {
     margin-left: 0;
   }
-
 }
 
 .edit:focus {

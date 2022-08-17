@@ -256,5 +256,7 @@
 	"FirstSubscription": "Please add an payment method to activate subscription.",
 	"frequency-rank-tooltip-kanji": "Usefulness: {{value}}%",
 	"frequency-rank-tooltip-word": "Usefulness: {{value}}%",
-	"frequency-percent-tooltip-reading": "This reading used in {{value}}% cases"
+	"frequency-percent-tooltip-reading": "This reading used in {{value}}% cases",
+	"more-example-words-for": "More examples for {{value}}",
+	"more-example-sentences-for": "More examples for {{value}}"
 }

@@ -11,7 +11,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 @Component({
   selector: 'app-furigana-whole-word',
   templateUrl: './furigana-whole-word.component.html',
-  styleUrls: ['./furigana-whole-word.component.scss'],
+  styleUrls: ['./furigana-whole-word.component.scss', '../drills-common-styles.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'w-full',

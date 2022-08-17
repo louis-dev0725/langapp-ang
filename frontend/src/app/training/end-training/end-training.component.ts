@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-end-training',
   templateUrl: './end-training.component.html',
-  styleUrls: ['./end-training.component.scss'],
+  styleUrls: ['./end-training.component.scss', '../drills-common-styles.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'w-full',

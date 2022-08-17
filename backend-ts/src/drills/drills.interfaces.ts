@@ -91,11 +91,13 @@ export interface TrainingKanjiReading {
   value: string;
   frequencyPercent: number;
   exampleWords: TrainingKanjiExampleWord[];
+  countExampleWordsToShow: number;
 }
 
 export interface TrainingKanjiExampleWord {
   wordId: number;
   infoCard: string;
+  value: string;
   furiganaHtml: string;
   meanings: TrainingMeaning[];
   countExampleSentencesToShow: number;

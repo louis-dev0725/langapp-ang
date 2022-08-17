@@ -11,7 +11,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 @Component({
   selector: 'app-translation-word',
   templateUrl: './translation-word.component.html',
-  styleUrls: ['./translation-word.component.scss'],
+  styleUrls: ['./translation-word.component.scss', '../drills-common-styles.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'w-full',

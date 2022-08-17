@@ -11,7 +11,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 @Component({
   selector: 'app-kanji-info',
   templateUrl: './kanji-info.component.html',
-  styleUrls: ['./kanji-info.component.scss'],
+  styleUrls: ['./kanji-info.component.scss', '../drills-common-styles.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'w-full',
@@ -62,6 +62,11 @@ export class KanjiInfoComponent implements OnInit {
 
   showMore(first: number, second: number, type: string, countToAdd: number) {
     this.card[type][first].exampleWords[second].countExampleSentencesToShow += countToAdd;
+    this.cd.markForCheck();
+  }
+
+  showMoreWords(first: number, type: string, countToAdd: number) {
+    this.card[type][first].countExampleWordsToShow += countToAdd;
     this.cd.markForCheck();
   }
 

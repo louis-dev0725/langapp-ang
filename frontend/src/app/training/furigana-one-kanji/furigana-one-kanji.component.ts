@@ -11,7 +11,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 @Component({
   selector: 'app-furigana-one-kanji',
   templateUrl: './furigana-one-kanji.component.html',
-  styleUrls: ['./furigana-one-kanji.component.scss'],
+  styleUrls: ['./furigana-one-kanji.component.scss', '../drills-common-styles.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'w-full',

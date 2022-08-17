@@ -12,7 +12,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 @Component({
   selector: 'app-audio-word',
   templateUrl: './audio-word.component.html',
-  styleUrls: ['./audio-word.component.scss'],
+  styleUrls: ['./audio-word.component.scss', '../drills-common-styles.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'w-full',
