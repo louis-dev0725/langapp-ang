@@ -3,7 +3,7 @@
     <div class="basis-full sm:basis-1/2 p-8 pb-0">
       <div class="flex flex-col items-start justify-start">
         <div class="flex items-center justify-start">
-          <div class="w-10 pr-4">
+          <div class="w-6 mr-4">
             <p-knob size="20" [(ngModel)]="card.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: card.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
           </div>
           <div [innerHTML]="card?.value" class="text-black text-[40px] mr-3"></div>
@@ -20,9 +20,10 @@
       </div>
     </div>
   </div>
+  
   <div class="flex flex-wrap sm:flex-nowrap">
-    <div class="basis-full sm:basis-1/2 p-8 pb-0 border-r border-neutral-100" *ngFor="let type of ['kunReadings', 'onReadings']">
-      <div class="text-center text-[12px]" style="color: #afafaf">{{ type == 'kunReadings' ? 'Kun readings' : ('On readings' | translate) }}:</div>
+    <div class="basis-full sm:basis-1/2 p-8 pb-0 border-r border-neutral-100 last:border-r-0" *ngFor="let type of ['kunReadings', 'onReadings']">
+      <div class="text-center text-[12px]" style="color: #afafaf">{{ type == 'kunReadings' ? 'Kun readings:' : ('On readings:' | translate) }}</div>
       <div *ngFor="let reading of card?.[type]; let i=index" class="pt-6">
         <div class="flex">
           <div class="w-14 mr-4 rounded-md p-2 text-center outline-0 select-none" [ngClass]="reading.frequencyPercent >= 90 ? 'bg-green-900 text-white' : reading.frequencyPercent >= 30 ? 'bg-green-800 text-white' : reading.frequencyPercent > 10 ? 'bg-green-700 text-white' : reading.frequencyPercent > 5 ? 'bg-green-600 text-white' : reading.frequencyPercent > 1 ? 'bg-green-200 text-neutral-400' : 'bg-green-100 text-neutral-400'" [pTooltip]="'frequency-percent-tooltip-reading' | translate: { value: reading.frequencyPercent }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus">{{ reading.frequencyPercent | number: '1.0-0' }}%</div>
@@ -51,8 +52,8 @@
               <div class="text-black text-[14px]">{{ example?.meanings | join: ', ' }}</div>
             </div>
             <ng-container *ngIf="example?.exampleSentences?.length">
-              <div class="grid grid-cols-[2.5rem auto] gap-y-1 items-center justify-start pt-6 example-sentence" *ngFor="let sentence of example?.exampleSentences | slice: 0:example?.countExampleSentencesToShow">
-                <div class="w-10 pr-4 flex items-center justify-start">
+              <div class="grid grid-cols-[2.5rem_auto] gap-y-1 items-center justify-start pt-6 example-sentence" *ngFor="let sentence of example?.exampleSentences | slice: 0:example?.countExampleSentencesToShow">
+                <div class="w-10 flex items-center justify-start">
                   <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(sentence?.audioUrls[0])"></i>
                 </div>
                 <div class="text-black text-[18px]" onclickTranslation [innerHTML]="sentence?.furiganaHtml"></div>
@@ -73,15 +74,15 @@
     </div>
   </div>
 </div>
-<div class="sticky bottom-0 sm:hidden w-full flex justify-center">
+<div class="sticky bottom-0 lg:hidden w-full flex justify-center">
   <button pButton label="{{ 'Continue' | translate }}" class="w-full" style="height: 40px; font-size: 15px" (click)="goToNextCard()"></button>
 </div>
-<div class="card mt-8 mb-8 sm:mb-0 w-full sm:sticky sm:bottom-0 bg-white border-t border-neutral-100">
+<div class="card mt-8 mb-8 lg:mb-0 w-full lg:sticky lg:bottom-0 bg-white border-t border-neutral-100">
   <div class="word-footer flex items-center">
     <div class="flex-grow-[8]">
       <p style="color: #a0b0c4; font-size: 14px">{{ 'Explanation: take a look at the meanings and examples, then click "Continue".' | translate }}</p>
     </div>
-    <div class="bottom-0 hidden sm:flex basis-80 w-full justify-center">
+    <div class="bottom-0 hidden lg:flex basis-80 w-full justify-center">
       <button pButton label="{{ 'Continue' | translate }}" class="w-full" style="height: 40px; font-size: 15px" (click)="goToNextCard()"></button>
     </div>
   </div>

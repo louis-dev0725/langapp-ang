@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 import editIcon from '@iconify/icons-mdi/edit';

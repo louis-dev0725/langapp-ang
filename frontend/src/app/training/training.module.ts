@@ -28,7 +28,7 @@ import { AudioWordComponent } from '@app/training/audio-word/audio-word.componen
 import { EndTrainingComponent } from '@app/training/end-training/end-training.component';
 import { DialogModule } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import {WordSentenceVideoComponent} from "@app/training/word-sentence-video/word-sentence-video.component";
+import { WordSentenceVideoComponent } from "@app/training/word-sentence-video/word-sentence-video.component";
 
 @NgModule({
   declarations: [

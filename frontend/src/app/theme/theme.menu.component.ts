@@ -12,7 +12,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TranslateService } from '@ngx-translate/core';
 
 import { MenuItem } from 'primeng/api';
-import { Observable } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { AppComponent } from '@app/app.component';
@@ -32,19 +32,11 @@ export class ThemeMenuComponent implements OnInit {
 
   private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
 
-  constructor(
-    public app: AppComponent,
-    public appTheme: ThemeMainComponent,
-    public api: ApiService,
-    public session: SessionService,
-    private userService: UserService,
-    private cd: ChangeDetectorRef,
-    private translate: TranslateService,
-    private store: Store<fromStore.State>
-  ) {}
+  constructor(public app: AppComponent, public appTheme: ThemeMainComponent, public api: ApiService, public session: SessionService, private userService: UserService, private cd: ChangeDetectorRef, private translate: TranslateService, private store: Store<fromStore.State>) {}
 
   ngOnInit() {
     this.subscribeToIsLoggedIn();
+    this.subscribeToWindowResize();
     this.subscribeToUser();
   }
 
@@ -60,8 +52,12 @@ export class ThemeMenuComponent implements OnInit {
     return item.id ?? item.label;
   }
 
+  isDesktop() {
+    return window.innerWidth >= 1024;
+  }
+
   public getModel(): MenuItem[] {
-    return [
+    let menuItems: MenuItem[] = [
       {
         label: 'Admin',
         visible: this.isAdmin && !this.isOpenedAdmin,
@@ -153,6 +149,31 @@ export class ThemeMenuComponent implements OnInit {
         ],
       },
     ];
+
+    if (!this.isDesktop()) {
+      menuItems.push({
+        label: 'Legal',
+        items: [
+          {
+            label: 'Terms of Use',
+            url: '/docs/terms-of-use.pdf',
+            target: '_blank',
+          },
+          {
+            label: 'Privacy policy',
+            url: '/docs/privacy-policy.pdf',
+            target: '_blank',
+          },
+          {
+            label: 'Tokushoho', // 特定商取引に関する法律に基づく表記
+            url: '/docs/tokutei.pdf',
+            target: '_blank',
+          },
+        ],
+      });
+    }
+
+    return menuItems;
   }
 
   private subscribeToIsLoggedIn(): void {
@@ -161,6 +182,15 @@ export class ThemeMenuComponent implements OnInit {
       this.model = this.getModel();
       this.cd.markForCheck();
     });
+  }
+
+  private subscribeToWindowResize() {
+    fromEvent(window, 'resize')
+      .pipe(untilDestroyed(this))
+      .subscribe((e) => {
+        this.model = this.getModel();
+        this.cd.markForCheck();
+      });
   }
 
   private subscribeToUser(): void {

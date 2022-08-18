@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
 import { CardsService } from '@app/training/cards/cards.service';

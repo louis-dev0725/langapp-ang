@@ -1,12 +1,11 @@
-<div class="start-content">
-  <div class="card w-full">
-    <div class="p-grid w-full" style="margin: 0; padding: 12px 16px">
-      <div class="p-col-12 p-md-6">
+  <div class="card w-full p-0">
+    <div class="flex flex-wrap sm:flex-nowrap">
+      <div class="basis-full sm:basis-1/2 p-8 pb-0">
         <div class="flex items-center justify-center w-full h-full" *ngIf="!isAnswered; else kanjiInfo">
           <p [innerHTML]="card?.question?.questionHtml" class="text-black" style="font-size: 40px"></p>
         </div>
       </div>
-      <div class="p-col-12 p-md-6">
+      <div class="basis-full sm:basis-1/2 p-8 pb-0">
         <div class="flex flex-col items-center justify-center w-full">
           <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
             <div style="flex: 1" class="flex justify-center" *ngIf="isWideScreen">
@@ -34,7 +33,6 @@
       </div>
     </div>
   </div>
-</div>
 
 <ng-template #continueButton>
   <button style="width: 100%; height: 35px; font-size: 15px" pButton type="button" label="{{'Continue' | translate}}" (click)="continueTraining()"></button>
@@ -42,20 +40,19 @@
 
 <ng-template #kanjiInfo>
   <div class="kanji-info">
-    <div class="flex items-center justify-start">
-      <div style="flex: 1">
+    <div class="grid grid-cols-[2.5rem_auto_2.5rem] gap-y-1 items-center justify-start">
+      <div>
         <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
       </div>
-      <div style="flex: 5">
+      <div>
         <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-m furigana-font-large text-black"></p>
       </div>
-    </div>
-    <div class="flex items-center justify-start">
-      <div style="flex: 1"></div>
-      <div class="kanji-meaning">
-        <p class="text-black" style="font-size: 20px">{{card?.meanings | join: ', '}}</p>
-        <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="center" (click)="goToInfoCard(card?.infoCard)"></button>
+      <div>
       </div>
+    </div>
+    <div class="pl-0 md:pl-10 text-center">
+      <div class="text-[20px] text-black pb-4">{{card?.meanings | join: ', '}}</div>
+      <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="center" (click)="goToInfoCard(card?.infoCard)"></button>
     </div>
     <div class="flex items-start justify-start" style="margin-top: 20px">
       <div style="flex: 1">

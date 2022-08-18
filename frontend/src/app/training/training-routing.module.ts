@@ -27,7 +27,7 @@ const trainingRoutes: Routes = [
     component: TrainingComponent,
     canActivate: [CanactivateLogged],
     data: {
-      breadcrumb: 'Study new words',
+      breadcrumb: { label: 'Study new words', skip: true },
     },
     children: [
       {
@@ -39,7 +39,7 @@ const trainingRoutes: Routes = [
         path: 'index',
         component: IndexComponent,
         data: {
-          breadcrumb: 'Start',
+          breadcrumb: { label: 'Start', skip: true },
         },
       },
       {
@@ -47,7 +47,7 @@ const trainingRoutes: Routes = [
         component: WordInfoComponent,
         canActivate: [WordInfoGuard],
         data: {
-          breadcrumb: 'Word Info',
+          breadcrumb: { label: 'Word Info', skip: true },
         },
       },
       {
@@ -55,7 +55,7 @@ const trainingRoutes: Routes = [
         component: KanjiInfoComponent,
         canActivate: [KanjiInfoGuard],
         data: {
-          breadcrumb: 'Kanji Info',
+          breadcrumb: { label: 'Kanji Info', skip: true },
         },
       },
       {
@@ -63,7 +63,7 @@ const trainingRoutes: Routes = [
         component: FuriganaOneKanjiComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Furigana for one kanji',
+          breadcrumb: { label: 'Furigana for one kanji', skip: true },
         },
       },
       {
@@ -71,7 +71,7 @@ const trainingRoutes: Routes = [
         component: FuriganaWholeWordComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Furigana for whole word',
+          breadcrumb: { label: 'Furigana for whole word', skip: true },
         },
       },
       {
@@ -79,7 +79,7 @@ const trainingRoutes: Routes = [
         component: TypeFuriganaWholeWordComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Type furigana for whole word',
+          breadcrumb: { label: 'Type furigana for whole word', skip: true },
         },
       },
       {
@@ -87,7 +87,7 @@ const trainingRoutes: Routes = [
         component: TranslationWordComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Translation for word',
+          breadcrumb: { label: 'Translation for word', skip: true },
         },
       },
       {
@@ -95,7 +95,7 @@ const trainingRoutes: Routes = [
         component: WordTranslationComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Word for translation',
+          breadcrumb: { label: 'Word for translation', skip: true },
         },
       },
       {
@@ -103,7 +103,7 @@ const trainingRoutes: Routes = [
         component: WordAudioComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Word for audio',
+          breadcrumb: { label: 'Word for audio', skip: true },
         },
       },
       {
@@ -111,7 +111,7 @@ const trainingRoutes: Routes = [
         component: WordSentenceComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Word for sentence',
+          breadcrumb: { label: 'Word for sentence', skip: true },
         },
       },
       {
@@ -119,7 +119,7 @@ const trainingRoutes: Routes = [
         component: WordSentenceVideoComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Word for sentence video',
+          breadcrumb: { label: 'Word for sentence video', skip: true },
         },
       },
       {
@@ -127,7 +127,7 @@ const trainingRoutes: Routes = [
         component: AudioWordComponent,
         canActivate: [TrainingGuard],
         data: {
-          breadcrumb: 'Audio for word',
+          breadcrumb: { label: 'Audio for word', skip: true },
         },
       },
       {
@@ -135,7 +135,7 @@ const trainingRoutes: Routes = [
         component: EndTrainingComponent,
         canActivate: [EndingGuard],
         data: {
-          breadcrumb: 'End of training',
+          breadcrumb: { label: 'End of training', skip: true },
         },
       },
     ],

@@ -17,7 +17,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
     class: 'w-full',
   },
 })
-export class WordInfoComponent implements OnInit, AfterViewInit {
+export class WordInfoComponent implements OnInit {
   card: WordInfo;
   drills: Drill[];
   startTime = Date.now();
@@ -31,15 +31,6 @@ export class WordInfoComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
-  }
-
-  ngAfterViewInit() {
-    const rt = document.getElementById('main-furigana');
-    for (let i = 0; i < rt?.children[0]?.children?.length; i++) {
-      if (rt?.children[0]?.children[i]?.nodeName === 'RT') {
-        rt?.children[0]?.children[i]?.classList.add('rt-furigana-font');
-      }
-    }
   }
 
   playAudio(source: string) {

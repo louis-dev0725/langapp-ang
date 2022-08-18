@@ -9,15 +9,7 @@ import { User } from 'src/entities/User';
 import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
 import { convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
 import { In } from 'typeorm';
-import {
-  Drill,
-  KanjiCardInfo,
-  TrainingAnswer,
-  TrainingCards,
-  TrainingExampleSentence,
-  TrainingQuestionCard,
-  WordInfo,
-} from './drills.interfaces';
+import { Drill, KanjiCardInfo, TrainingAnswer, TrainingCards, TrainingExampleSentence, TrainingQuestionCard, WordInfo } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
 import { Dictionary, keyBy, orderBy, sample, shuffle, uniq } from 'lodash';
@@ -40,20 +32,11 @@ export class DrillsGenerator {
   kanjis: JapaneseKanji[];
   exampleSentences: Dictionary<Sentence>;
 
-  constructor(
-    private userDictionaryRepository: UserDictionaryRepository,
-    private dictionaryWordRepository: DictionaryWordRepository,
-    private sentenceRepository: SentenceRepository,
-  ) {}
+  constructor(private userDictionaryRepository: UserDictionaryRepository, private dictionaryWordRepository: DictionaryWordRepository, private sentenceRepository: SentenceRepository) {}
 
   async loadAdditionalWords() {
     if (!DrillsGenerator.additionalWords) {
-      DrillsGenerator.additionalWords = <JapaneseWord[]>(
-        await this.dictionaryWordRepository
-          .createQueryBuilder()
-          .where(`"type" = 1 and (data->>'frequencyRank')::float < 14 and (data->>'frequencyRank')::float > 13`)
-          .getMany()
-      );
+      DrillsGenerator.additionalWords = <JapaneseWord[]>await this.dictionaryWordRepository.createQueryBuilder().where(`"type" = 1 and (data->>'frequencyRank')::float < 14 and (data->>'frequencyRank')::float > 13`).getMany();
     }
   }
 
@@ -78,15 +61,16 @@ export class DrillsGenerator {
         continue;
       }
       const currentExtractedKanji = extractKanji(userWord.original_word);
-      const currentUserKanjis = currentExtractedKanji.map((extractedKanji) =>
-        this.userKanjis.find((k) => k.original_word == extractedKanji),
-      );
+      const currentUserKanjis = currentExtractedKanji.map((extractedKanji) => this.userKanjis.find((k) => k.original_word == extractedKanji));
       if (uniq(currentExtractedKanji).length != currentUserKanjis.length) {
         console.log(`Skip user word #${userWord.id}: unable to find all kanji (currentExtractedKanji.length != currentUserKanjis.length)`);
         continue;
       }
       const currentKanjis = currentExtractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji)); // filter inside map to save sorting
       for (const [i, userKanji] of currentUserKanjis.entries()) {
+        // TODO: remove
+        this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
+
         const currentKanji = currentKanjis[i];
         if (!currentKanji) {
           console.log(`Skip user kanji ${userKanji.id}: no kanji in dictionary with such id`);
@@ -213,7 +197,7 @@ export class DrillsGenerator {
     return html;
   }
 
-  filterMeaningsForUser(word: JapaneseWord | JapaneseKanji) {
+  filterMeaningsForUser(word: JapaneseWord | JapaneseKanji, shortList = true) {
     let userLanguages = this.user.languages;
 
     let meanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
@@ -227,22 +211,21 @@ export class DrillsGenerator {
     });
 
     let probabilitySoFar = 0;
+    let countMeaningsToShow = meanings.length;
 
     for (let [i, meaning] of meanings.entries()) {
-      if (word.id == 81435) {
-        console.log(i, meaning);
-      }
       if (probabilitySoFar > 0.8 || (i > 3 && (!meaning.probabilityOverall || meaning.probabilityOverall < 0.2))) {
-        if (word.id == 81435) {
-          console.log(i, 'break');
-        }
-        meanings = meanings.slice(0, i);
+        countMeaningsToShow = i;
         break;
       }
       probabilitySoFar += meaning.probabilityOverall || 0;
     }
 
-    return meanings;
+    if (shortList) {
+      meanings = meanings.slice(0, countMeaningsToShow);
+    }
+
+    return { meanings, countMeaningsToShow };
   }
 
   filterReadingsByType(kanji: JapaneseKanji, type: 'kun' | 'on') {
@@ -267,24 +250,16 @@ export class DrillsGenerator {
             infoCard: `wordInfo_${item.wordId}`,
             value: word?.data?.readings?.[0]?.kanji || word?.data?.readings?.[0]?.kana,
             furiganaHtml: this.furiganaToHtml(word?.data?.readings?.[0]?.furigana),
-            meanings: this.filterMeaningsForUser(word),
+            meanings: this.filterMeaningsForUser(word).meanings,
             countExampleSentencesToShow: 1,
-            exampleSentences: this.formatExampleSentences([
-              ...word.data.meanings.flatMap((m) => m?.exampleSentenceIds || []),
-              ...(word.data.exampleSentenceIds || []),
-            ]),
+            exampleSentences: this.formatExampleSentences([...word.data.meanings.flatMap((m) => m?.exampleSentenceIds || []), ...(word.data.exampleSentenceIds || [])]),
             audioUrls: ['/assets/test-audio.mp3?word-3266529'],
           };
         }),
       }));
   }
 
-  generateSelectFuriganaForOneKanji(
-    word: JapaneseWord,
-    kanji: JapaneseKanji,
-    furiganaPosition: number,
-    userWord: UserDictionary,
-  ): TrainingQuestionCard & Record<string, any> {
+  generateSelectFuriganaForOneKanji(word: JapaneseWord, kanji: JapaneseKanji, furiganaPosition: number, userWord: UserDictionary): TrainingQuestionCard & Record<string, any> {
     return {
       cardType: 'selectFuriganaForOneKanji',
       cardId: `selectFuriganaForOneKanji_${word.id}_${furiganaPosition}`,
@@ -296,7 +271,7 @@ export class DrillsGenerator {
         answers: this.generateAnswersForKanji(kanji, word, furiganaPosition),
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
@@ -320,9 +295,7 @@ export class DrillsGenerator {
     let nextPosition = word.data.readings[0].furigana[furiganaPosition + 1];
     if (nextPosition && nextPosition.rt == '') {
       for (let randomKanji of shuffledList) {
-        let readings = randomKanji.data.readings.filter(
-          (r) => r.value.split('.')?.[1] == nextPosition.ruby && !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r)),
-        );
+        let readings = randomKanji.data.readings.filter((r) => r.value.split('.')?.[1] == nextPosition.ruby && !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r)));
         if (readings.length > 0) {
           reading = sample(readings);
           answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading) });
@@ -333,9 +306,7 @@ export class DrillsGenerator {
 
     // Readings from other kanji
     for (let randomKanji of shuffledList) {
-      let readings = randomKanji.data.readings.filter(
-        (r) => (r.frequencyPercent || 1) > 0.2 && !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r)),
-      );
+      let readings = randomKanji.data.readings.filter((r) => (r.frequencyPercent || 1) > 0.2 && !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r)));
       if (readings.length > 0) {
         reading = sample(readings);
         answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading) });
@@ -398,7 +369,7 @@ export class DrillsGenerator {
         answers: this.generateAnswersForWordReading(word),
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
@@ -417,7 +388,7 @@ export class DrillsGenerator {
         correctAnswers: [word.data.readings[0].furigana.map((r) => (r.rt == '' ? r.ruby : r.rt)).join('')],
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
     };
   }
@@ -477,7 +448,7 @@ export class DrillsGenerator {
         answers: this.generateAnswersForWordMeaning(word),
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
@@ -485,7 +456,7 @@ export class DrillsGenerator {
 
   generateAnswersForWordMeaning(word: JapaneseWord) {
     let correctAnswer = this.filterMeaningsForUser(word)
-      .map((v) => v.value)
+      .meanings.map((v) => v.value)
       .join(', ');
 
     const answers: TrainingAnswer[] = [];
@@ -499,7 +470,7 @@ export class DrillsGenerator {
 
       for (let randomWord of shuffledList) {
         let formattedAnswer = this.filterMeaningsForUser(randomWord)
-          .map((v) => v.value)
+          .meanings.map((v) => v.value)
           .join(', ');
 
         if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
@@ -530,12 +501,12 @@ export class DrillsGenerator {
       question: {
         type: 'select',
         questionHtml: this.filterMeaningsForUser(word)
-          .map((v) => v.value)
+          .meanings.map((v) => v.value)
           .join(', '),
         answers: this.generateAnswersForWordWriting(word)[0],
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
@@ -613,7 +584,7 @@ export class DrillsGenerator {
         openAnswers: answers,
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
@@ -629,21 +600,18 @@ export class DrillsGenerator {
       question: {
         type: 'select',
         isAudioQuestion: true,
-        questionHtml:
-          '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class="question-blank-box"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
+        questionHtml: '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class="question-blank-box"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
         sentence: {
           sentenceId: 94376,
           value: '携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。',
-          furiganaHtml:
-            '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
-          translationHtml:
-            'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.',
+          furiganaHtml: '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
+          translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.',
           audioUrls: ['/assets/test-audio.mp3?sentence-94376'],
         },
         answers: this.generateAnswersForWordWriting(word)[0],
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
@@ -658,21 +626,18 @@ export class DrillsGenerator {
       question: {
         type: 'select',
         isAudioQuestion: true,
-        questionHtml:
-          '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class="question-blank-box"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
+        questionHtml: '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class="question-blank-box"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
         sentence: {
           sentenceId: 94376,
           value: '携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。',
-          furiganaHtml:
-            '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
-          translationHtml:
-            'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.',
+          furiganaHtml: '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
+          translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.',
           videoUrls: ['/assets/test-video.mp3?sentence-94376'],
         },
         answers: this.generateAnswersForWordWriting(word)[0],
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
@@ -691,7 +656,7 @@ export class DrillsGenerator {
         answers: this.generateAnswersForWordAudio(word),
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
-      meanings: this.filterMeaningsForUser(word),
+      meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
       audioUrls: ['/assets/test-audio.mp3?word-3236529'],
     };
@@ -742,7 +707,7 @@ export class DrillsGenerator {
       wordId: kanji.id,
       frequencyRank: Math.min(100, Math.round(kanji.data.frequencyRank * 10)),
       value: kanji.query[0],
-      meanings: this.filterMeaningsForUser(kanji).slice(0, 1),
+      meanings: this.filterMeaningsForUser(kanji).meanings.slice(0, 1),
       mnemonic: null,
       kunReadings: this.filterReadingsByType(kanji, 'kun'),
       onReadings: this.filterReadingsByType(kanji, 'on'),
@@ -757,19 +722,14 @@ export class DrillsGenerator {
       frequencyRank: Math.min(100, Math.round(word.data?.frequencyRank * 10)),
       value: word.data?.readings?.[0]?.kanji,
       furiganaHtml: this.furiganaToHtml(word.data?.readings?.[0]?.furigana),
-      meanings: this.filterMeaningsForUser(word),
+      ...this.filterMeaningsForUser(word, false),
       countExampleSentencesToShow: 3, // move to boolean inside exampleSentences?
-      exampleSentences: this.formatExampleSentences([
-        ...word.data.meanings.flatMap((m) => m.exampleSentenceIds),
-        ...word.data.exampleSentenceIds,
-      ]),
+      exampleSentences: this.formatExampleSentences([...word.data.meanings.flatMap((m) => m.exampleSentenceIds), ...word.data.exampleSentenceIds]),
       kanji: this.kanjis.map((kanji) => ({
         wordId: kanji.id,
         value: kanji.query[0],
-        readings: kanji.data.readings
-          .map((r) => ({ type: r.type, value: r.value, frequencyPercent: r.frequencyPercent }))
-          .sort((a, b) => b.frequencyPercent - a.frequencyPercent),
-        meanings: this.filterMeaningsForUser(kanji),
+        readings: kanji.data.readings.map((r) => ({ type: r.type, value: r.value, frequencyPercent: r.frequencyPercent })).sort((a, b) => b.frequencyPercent - a.frequencyPercent),
+        meanings: this.filterMeaningsForUser(kanji).meanings.slice(0, 1),
         infoCard: `kanjiInfo_${kanji.id}`,
       })),
       // TODO: audioUrls

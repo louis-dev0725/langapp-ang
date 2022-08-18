@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
@@ -25,7 +25,6 @@ export class WordTranslationComponent implements OnInit {
   answeredIndex: number;
   isAnsweredCorrectly: boolean;
   cardTypeRouteEnum = CardTypeRouteEnum;
-  rts: any;
 
   icons = {
     editIcon,
@@ -64,9 +63,6 @@ export class WordTranslationComponent implements OnInit {
   }
 
   checkAnswer(index: number) {
-    for (let i = 0; i < this.rts.length; i++) {
-      this.rts[i].classList.remove('rt-gray');
-    }
     if (!this.isAnswered) {
       if ('answers' in this.card?.question) {
         this.isAnswered = true;
@@ -81,9 +77,6 @@ export class WordTranslationComponent implements OnInit {
   }
 
   forgotAnswer() {
-    for (let i = 0; i < this.rts.length; i++) {
-      this.rts[i].classList.remove('rt-gray');
-    }
     this.isAnswered = true;
     this.isAnsweredCorrectly = false;
     this.playAudio(this.card.audioUrls[0]);
