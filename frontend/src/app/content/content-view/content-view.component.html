@@ -15,7 +15,7 @@
                   <button pButton title="{{'Repeat sentence' | translate}}" type="button" style="background: none; border: none; color: white" class="control" (click)="repeatSubtitle()">
                     <ic-icon [icon]="icons.repeat" height="30" width="30"></ic-icon>
                   </button>
-                  <!--                    <button pButton title="{{'Repeat sentence' | translate}}" type="button" icon="bi bi-arrow-repeat" iconPos="center" style="background: none; border: none; font-size: 20px" (click)="repeatSubtitle(!isRepeatingSubtitle)"></button>-->
+                  <!--                    <button pButton title="{{'Repeat sentence' | translate}}" type="button" icon="bi bi-arrow-repeat" iconPos="left" style="background: none; border: none; font-size: 20px" (click)="repeatSubtitle(!isRepeatingSubtitle)"></button>-->
                   <button pButton title="{{'Full screen' | translate}}" type="button" style="background: none; border: none; color: white" class="control"  (click)="fullScreen()">
                     <ic-icon [icon]="icons.fullscreen" height="30" width="30"></ic-icon>
                   </button>
@@ -39,7 +39,7 @@
                     </svg>
                     <span>x{{currentPlaySpeed}}</span>
                   </button>
-                  <button #moreButton pButton title="{{'More' | translate}}" type="button" icon="pi pi-ellipsis-h" iconPos="center" class="control" style="background: none; border: none; font-size: 20px" (click)="openMoreOverlay(moreOverlay, $event, moreButton)"></button>
+                  <button #moreButton pButton title="{{'More' | translate}}" type="button" icon="pi pi-ellipsis-h" iconPos="left" class="control" style="background: none; border: none; font-size: 20px" (click)="openMoreOverlay(moreOverlay, $event, moreButton)"></button>
                 </div>
               </div>
             </div>

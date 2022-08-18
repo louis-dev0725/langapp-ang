@@ -2,12 +2,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { User } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import * as fromStore from '@app/store/index';
-import {
-  AuthorizedSaveAdminAction,
-  AuthorizedUpdateTokenAction,
-  AuthorizedUpdateUserAction,
-  LoadAuthorizedSuccess,
-} from '@app/store/index';
+import { AuthorizedSaveAdminAction, AuthorizedUpdateTokenAction, AuthorizedUpdateUserAction, LoadAuthorizedSuccess } from '@app/store/index';
 
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -24,17 +19,9 @@ export class SessionService {
   private _language: string;
 
   public user$ = this.userService.user$;
-  private _user: User;
+  public _user: User;
 
-  constructor(
-    private router: Router,
-    private store: Store<fromStore.State>,
-    private translateService: TranslateService,
-    private eventService: EventService,
-    private cookieService: CookieService,
-    @Inject(PLATFORM_ID) private platformId: any,
-    private userService: UserService
-  ) {
+  constructor(private router: Router, private store: Store<fromStore.State>, private translateService: TranslateService, private eventService: EventService, private cookieService: CookieService, @Inject(PLATFORM_ID) private platformId: any, private userService: UserService) {
     this.init();
   }
 

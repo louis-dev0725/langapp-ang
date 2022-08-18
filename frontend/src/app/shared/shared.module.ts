@@ -39,6 +39,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ToolbarModule } from 'primeng/toolbar';
 import { PasswordModule } from 'primeng/password';
 import { TooltipModule } from 'primeng/tooltip';
+import { AsPipe } from '../pipes/as.pipe';
 
 let sharedModules = [
   // primeng
@@ -80,8 +81,8 @@ let sharedModules = [
 ];
 
 @NgModule({
-  declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective],
+  declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, AsPipe],
   imports: [CommonModule, ...sharedModules],
-  exports: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, ...sharedModules],
+  exports: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, AsPipe, ...sharedModules],
 })
 export class SharedModule {}

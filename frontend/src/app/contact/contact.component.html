@@ -23,7 +23,7 @@
         </div>-->
         <div class="p-field g-field-big">
           <label for="body">{{'Message' | translate}}</label>
-          <textarea id="body" formControlName="body" pInputTextarea autoResize="autoResize" [class.p-invalid]="checkError('body')" [rows]="5" [cols]="30"></textarea>
+          <textarea id="body" formControlName="body" pInputTextarea [autoResize]="true" [class.p-invalid]="checkError('body')" [rows]="5" [cols]="30"></textarea>
           <small class="p-invalid" *ngIf="checkError('body')">{{getError('body')}}</small>
         </div>
       </div>

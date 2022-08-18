@@ -6,7 +6,7 @@
           <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
         </div>
         <div class="w-6 mr-4 row-start-2">
-          <p-knob size="20" [(ngModel)]="card.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: card.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
+          <p-knob [size]="20" [(ngModel)]="card.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: card.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
         </div>
         <div [innerHTML]="card?.furiganaHtml" class="text-black furigana-font text-[40px] row-span-2"></div>
       </div>
@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="flex items-center justify-center" style="margin-top: 25px" *ngIf="card?.exampleSentences?.length > card?.countExampleSentencesToShow">
-          <button pButton class="ellipsis-btn" style="width: 100%; height: 20px" icon="pi pi-ellipsis-h" iconPos="center" (click)="showMore(5)"></button>
+          <button pButton class="ellipsis-btn" style="width: 100%; height: 20px" icon="pi pi-ellipsis-h" iconPos="left" (click)="showMore(5)"></button>
         </div>
       </ng-container>
     </div>
@@ -68,7 +68,7 @@
                 }"
                 *ngIf="card.kanji[i].readings[y].frequencyPercent > 5"
               >
-                <p-knob size="20" [(ngModel)]="card.kanji[i].readings[y].frequencyPercent" [showValue]="false" [valueColor]="y === 0 ? '#73e38e' : '#a0b0c4'"></p-knob>
+                <p-knob [size]="20" [(ngModel)]="card.kanji[i].readings[y].frequencyPercent" [showValue]="false" [valueColor]="y === 0 ? '#73e38e' : '#a0b0c4'"></p-knob>
                 <p
                   [ngClass]="{
                     'text-black': y === 0,
@@ -91,7 +91,7 @@
             </ul>
           </div>
           <div style="flex: 3" class="flex items-center justify-center">
-            <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="center" (click)="goToKanjiInfo(kanji?.infoCard)"></button>
+            <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToKanjiInfo(kanji?.infoCard)"></button>
           </div>
         </div>
         <div class="flex justify-center" *ngIf="i !== kanji?.meanings?.length - 1">

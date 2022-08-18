@@ -4,7 +4,7 @@
       <div class="flex flex-col items-start justify-start">
         <div class="flex items-center justify-start">
           <div class="w-6 mr-4">
-            <p-knob size="20" [(ngModel)]="card.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: card.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
+            <p-knob [size]="20" [(ngModel)]="card.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: card.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
           </div>
           <div [innerHTML]="card?.value" class="text-black text-[40px] mr-3"></div>
           <div class="text-black pl-4">
@@ -24,7 +24,7 @@
   <div class="flex flex-wrap sm:flex-nowrap">
     <div class="basis-full sm:basis-1/2 p-8 pb-0 border-r border-neutral-100 last:border-r-0" *ngFor="let type of ['kunReadings', 'onReadings']">
       <div class="text-center text-[12px]" style="color: #afafaf">{{ type == 'kunReadings' ? 'Kun readings:' : ('On readings:' | translate) }}</div>
-      <div *ngFor="let reading of card?.[type]; let i=index" class="pt-6">
+      <div *ngFor="let reading of (card?.[type] | as : TrainingKanjiReadingArray); let i=index" class="pt-6">
         <div class="flex">
           <div class="w-14 mr-4 rounded-md p-2 text-center outline-0 select-none" [ngClass]="reading.frequencyPercent >= 90 ? 'bg-green-900 text-white' : reading.frequencyPercent >= 30 ? 'bg-green-800 text-white' : reading.frequencyPercent > 10 ? 'bg-green-700 text-white' : reading.frequencyPercent > 5 ? 'bg-green-600 text-white' : reading.frequencyPercent > 1 ? 'bg-green-200 text-neutral-400' : 'bg-green-100 text-neutral-400'" [pTooltip]="'frequency-percent-tooltip-reading' | translate: { value: reading.frequencyPercent }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus">{{ reading.frequencyPercent | number: '1.0-0' }}%</div>
           <div class="flex-1 flex items-center justify-start">
@@ -39,13 +39,13 @@
                 <i *ngIf="example.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(example?.audioUrls[0])"></i>
               </div>
               <div class="flex items-center justify-start w-6 mr-4">
-                <p-knob size="20" [(ngModel)]="example.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-word' | translate: { value: example?.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
+                <p-knob [size]="20" [(ngModel)]="example.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-word' | translate: { value: example?.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
               </div>
               <div class="flex flex-1 items-center justify-start">
                 <div class="text-black text-[18px]" [innerHTML]="example?.furiganaHtml"></div>
               </div>
               <div class="flex items-center justify-center">
-                <button pButton class="ellipsis-btn" style="width: 43px; height: 24px" icon="pi pi-ellipsis-h" iconPos="center" (click)="goToWordInfo(example?.infoCard)"></button>
+                <button pButton class="ellipsis-btn" style="width: 43px; height: 24px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToWordInfo(example?.infoCard)"></button>
               </div>
             </div>
             <div class="pl-20">
@@ -62,7 +62,7 @@
             </ng-container>
             <div class="flex items-center justify-center pt-6" *ngIf="example?.exampleSentences?.length > example?.countExampleSentencesToShow">
               <button pButton class="ellipsis-btn w-full" [label]="'more-example-sentences-for' | translate: { value: example?.value }" (click)="showMore(i, y, type, 5)"></button>
-              <!--<button pButton class="ellipsis-btn" style="width: 100%; height: 20px" icon="pi pi-ellipsis-h" iconPos="center" (click)="showMore(i, y, type, 5)"></button>-->
+              <!--<button pButton class="ellipsis-btn" style="width: 100%; height: 20px" icon="pi pi-ellipsis-h" iconPos="left" (click)="showMore(i, y, type, 5)"></button>-->
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @Component({
   selector: 'app-payments-table',
   templateUrl: './payments-table.component.html',
-  styleUrls: ['./payments-table.component.scss']
+  styleUrls: ['./payments-table.component.scss'],
 })
 export class PaymentsTableComponent implements OnInit, OnDestroy {
   @Input() isPaginator = false;
@@ -97,12 +97,10 @@ export class PaymentsTableComponent implements OnInit, OnDestroy {
   @Input()
   pageSize: any;
 
-  constructor(private session: SessionService, private api: ApiService, private translate: TranslateService) {}
+  constructor(public session: SessionService, private api: ApiService, private translate: TranslateService) {}
 
   ngOnInit() {
-    this.sort.sortChange
-    .pipe(untilDestroyed(this))
-    .subscribe(data => {
+    this.sort.sortChange.pipe(untilDestroyed(this)).subscribe((data) => {
       const sort: any = {};
       if (this.sort.direction !== '') {
         sort[this.sort.active] = this.sort.direction;

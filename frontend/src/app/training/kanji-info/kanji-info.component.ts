@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { CardsService } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Drill, KanjiCardInfo } from '@app/interfaces/common.interface';
+import { Drill, KanjiCardInfo, TrainingKanjiReading } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
 import { Router } from '@angular/router';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
@@ -19,6 +19,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 })
 export class KanjiInfoComponent implements OnInit {
   card: KanjiCardInfo;
+  TrainingKanjiReadingArray: TrainingKanjiReading[];
   meaning: string;
   startTime = Date.now();
   cardTypeRouteEnum = CardTypeRouteEnum;

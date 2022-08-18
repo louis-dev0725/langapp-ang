@@ -333,7 +333,7 @@ export interface Training {
 }
 
 export interface TrainingCards {
-  [key: string]: WordInfo | KanjiCardInfo | TrainingQuestionCard;
+  [key: string]: WordInfo | KanjiCardInfo | TrainingQuestionCard | TrainingButtonQuestionCard;
 }
 
 export interface Drill {
@@ -371,9 +371,22 @@ export interface KanjiCardInfo {
 
 export interface TrainingQuestionCard {
   cardType: string;
+  cardId: string;
   wordId: number;
   infoCard: string;
-  question: TrainingQuestion | TrainingButtonQuestion;
+  question: TrainingQuestion;
+  furiganaHtml: string;
+  meanings: TrainingMeaning[];
+  mnemonic: TrainingMnemonic;
+  audioUrls?: string[];
+}
+
+export interface TrainingButtonQuestionCard {
+  cardType: string;
+  cardId: string;
+  wordId: number;
+  infoCard: string;
+  question: TrainingButtonQuestion;
   furiganaHtml: string;
   meanings: TrainingMeaning[];
   mnemonic: TrainingMnemonic;
@@ -422,6 +435,8 @@ export interface TrainingKanjiReading {
 
 export interface TrainingKanjiExampleWord {
   wordId: number;
+  frequencyRank: number;
+  frequencyPmw: number;
   infoCard: string;
   value: string;
   furiganaHtml: string;
@@ -449,6 +464,7 @@ export interface TrainingAnswer {
 }
 
 export interface TrainingButtonQuestion {
+  questionHtml: string;
   type: string;
   buttons: string[];
   correctAnswers: string[];

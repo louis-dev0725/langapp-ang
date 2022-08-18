@@ -35,16 +35,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   @ViewChild(PaymentsTableComponent, { static: true }) paymentsTable: PaymentsTableComponent;
 
-  constructor(
-    private api: ApiService,
-    private customValidator: CustomValidator,
-    private router: Router,
-    private serializer: UrlSerializer,
-    private session: SessionService,
-    private userService: UserService,
-    private messageService: MessageService,
-    private translateService: TranslateService
-  ) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private router: Router, private serializer: UrlSerializer, public session: SessionService, private userService: UserService, private messageService: MessageService, private translateService: TranslateService) {}
 
   ngOnInit() {
     this.userService.user$.pipe(untilDestroyed(this)).subscribe((u) => (this.user = u));

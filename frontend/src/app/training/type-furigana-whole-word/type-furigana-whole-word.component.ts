@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
+import { Drill, TrainingButtonQuestionCard, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
 import { CardsService } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
@@ -18,7 +18,7 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
   },
 })
 export class TypeFuriganaWholeWordComponent implements OnInit {
-  card: TrainingQuestionCard;
+  card: TrainingButtonQuestionCard;
   drills: Drill[];
   startTime = Date.now();
   enteredAnswer = [];

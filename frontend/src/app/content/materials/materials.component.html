@@ -18,10 +18,10 @@
         <p-dropdown formControlName="length" [options]="lengthVariants$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Text length' | translate }}" [showClear]="true" [style]="{width: '200px'}" class="p-mr-md-2"></p-dropdown>
 
 
-        <p-toggleButton onLabel="Hide studied" offLabel="Show studied" [style]="{'width': '10rem'}"></p-toggleButton>
+        <p-toggleButton [onLabel]="'Hide studied'" [offLabel]="'Show studied'" [style]="{'width': '10rem'}"></p-toggleButton>
       </form>
     </div>
   </div>
 
-  <app-list-materials *ngIf="contentList$ | async as contentList" [list]="contentList" (deleteM)="deleteMaterial($event)" (dataChanged)="changePageTable($event)"></app-list-materials>
+  <app-list-materials *ngIf="contentList$ | async as contentList" [list]="$any(contentList)" (deleteM)="deleteMaterial($event)" (dataChanged)="changePageTable($event)"></app-list-materials>
 </div>
