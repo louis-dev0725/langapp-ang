@@ -24,7 +24,7 @@ export interface WordInfo {
   furiganaHtml: string;
   meanings: TrainingMeaning[];
   exampleSentences: TrainingExampleSentence[];
-  countExampleSentencesToShow: number;
+  countMeaningsToShow: number;
   kanji: KanjiInfo[];
   audioUrls: string[];
   mnemonic: TrainingMnemonic;
@@ -69,6 +69,12 @@ export interface TrainingButtonQuestionCard {
 export interface TrainingMeaning {
   lang: string;
   value: string;
+  probabilityInList?: number;
+  probabilityOverall?: number;
+  frequencyPmw?: number;
+  exampleSentences?: TrainingExampleSentence[];
+  countExampleSentencesToShow?: number;
+  isOther?: boolean;
 }
 
 export interface TrainingExampleSentence {

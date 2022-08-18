@@ -46,6 +46,7 @@ export class Meaning {
   frequencyPmw?: number;
   frequencySource?: string;
   exampleSentenceIds: number[];
+  isOther: boolean;
 }
 
 export class Related {

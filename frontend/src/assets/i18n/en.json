@@ -257,6 +257,10 @@
 	"frequency-rank-tooltip-kanji": "Usefulness: {{value}}%",
 	"frequency-rank-tooltip-word": "Usefulness: {{value}}%",
 	"frequency-percent-tooltip-reading": "This reading used in {{value}}% cases",
+	"frequency-percent-tooltip-meaning": "This meaning used in {{value}}% cases",
 	"more-example-words-for": "More examples for {{value}}",
-	"more-example-sentences-for": "More examples for {{value}}"
+	"more-example-sentences-for": "More examples for {{value}}",
+	"more-example-sentences-for-meaning": "More examples with \"{{value}}\"",
+	"more-example-sentences-for-other-meanings": "More examples with other meanings",
+	"more-meanings-for": "More meanings for {{value}}"
 }

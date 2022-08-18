@@ -9,7 +9,7 @@ import { User } from 'src/entities/User';
 import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
 import { convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
 import { In } from 'typeorm';
-import { Drill, KanjiCardInfo, TrainingAnswer, TrainingButtonQuestionCard, TrainingCards, TrainingExampleSentence, TrainingQuestionCard, WordInfo } from './drills.interfaces';
+import { Drill, KanjiCardInfo, TrainingAnswer, TrainingButtonQuestionCard, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfo } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
 import { Dictionary, keyBy, orderBy, sample, shuffle, uniq } from 'lodash';
@@ -197,23 +197,37 @@ export class DrillsGenerator {
     return html;
   }
 
-  filterMeaningsForUser(word: JapaneseWord | JapaneseKanji, shortList = true) {
+  filterMeaningsForUser(word: JapaneseWord | JapaneseKanji, forWordInfoCard = false) {
     let userLanguages = this.user.languages;
 
-    let meanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
-    if (meanings.length == 0) {
+    // TODO: move to database generator
+    let probabilityCoveredInMeanings = (<JapaneseWord>word).data.meanings.filter((m) => m.lang == 'en').reduce((v, m) => (v += m.probabilityOverall), 0);
+
+    let fullMeanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
+    if (fullMeanings.length == 0) {
       userLanguages.push('eng', 'en');
-      meanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
+      fullMeanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
     }
 
-    meanings.sort((a: any, b: any) => {
+    fullMeanings.sort((a: any, b: any) => {
       return userLanguages.indexOf(a.lang) - userLanguages.indexOf(b.lang);
     });
 
-    let probabilitySoFar = 0;
-    let countMeaningsToShow = meanings.length;
+    if (forWordInfoCard) {
+      fullMeanings.push({
+        lang: 'en', // TODO: move in database to already calculated meaning
+        value: '',
+        probabilityInList: 0,
+        probabilityOverall: 1 - probabilityCoveredInMeanings,
+        frequencyPmw: 0,
+        exampleSentenceIds: word.data.exampleSentenceIds,
+        isOther: true,
+      });
+    }
 
-    for (let [i, meaning] of meanings.entries()) {
+    let probabilitySoFar = 0;
+    let countMeaningsToShow = fullMeanings.length;
+    for (let [i, meaning] of fullMeanings.entries()) {
       if (probabilitySoFar > 0.8 || (i > 3 && (!meaning.probabilityOverall || meaning.probabilityOverall < 0.2))) {
         countMeaningsToShow = i;
         break;
@@ -221,9 +235,20 @@ export class DrillsGenerator {
       probabilitySoFar += meaning.probabilityOverall || 0;
     }
 
-    if (shortList) {
-      meanings = meanings.slice(0, countMeaningsToShow);
+    if (!forWordInfoCard) {
+      fullMeanings = fullMeanings.slice(0, countMeaningsToShow);
     }
+
+    let meanings: TrainingMeaning[] = fullMeanings.map((m) => ({
+      lang: m.lang,
+      value: m.value,
+      probabilityInList: Math.round(m.probabilityInList * 100),
+      probabilityOverall: Math.round(m.probabilityOverall * 100),
+      frequencyPmw: m.frequencyPmw,
+      exampleSentences: forWordInfoCard ? this.formatExampleSentences(m.exampleSentenceIds) : null,
+      countExampleSentencesToShow: forWordInfoCard ? 3 : 0,
+      isOther: m.isOther || false,
+    }));
 
     return { meanings, countMeaningsToShow };
   }
@@ -324,6 +349,9 @@ export class DrillsGenerator {
   }
 
   formatExampleSentences(exampleSentences: number[]): TrainingExampleSentence[] {
+    if (!exampleSentences) {
+      return [];
+    }
     return exampleSentences
       .map((sentenceId) => {
         if (!sentenceId) {
@@ -722,8 +750,7 @@ export class DrillsGenerator {
       frequencyRank: Math.min(100, Math.round(word.data?.frequencyRank * 10)),
       value: word.data?.readings?.[0]?.kanji,
       furiganaHtml: this.furiganaToHtml(word.data?.readings?.[0]?.furigana),
-      ...this.filterMeaningsForUser(word, false),
-      countExampleSentencesToShow: 3, // move to boolean inside exampleSentences?
+      ...this.filterMeaningsForUser(word, true),
       exampleSentences: this.formatExampleSentences([...word.data.meanings.flatMap((m) => m.exampleSentenceIds), ...word.data.exampleSentenceIds]),
       kanji: this.kanjis.map((kanji) => ({
         wordId: kanji.id,

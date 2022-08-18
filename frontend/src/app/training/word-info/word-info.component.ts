@@ -62,8 +62,13 @@ export class WordInfoComponent implements OnInit {
       });
   }
 
-  showMore(countToAdd: number) {
-    this.card.countExampleSentencesToShow += countToAdd;
+  showMoreExampleSentences(meaningI: number, countToAdd: number) {
+    this.card.meanings[meaningI].countExampleSentencesToShow += countToAdd;
+    this.cd.markForCheck();
+  }
+
+  showMoreMeanings(countToAdd: number) {
+    this.card.countMeaningsToShow += countToAdd;
     this.cd.markForCheck();
   }
 
