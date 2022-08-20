@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
-import editIcon from '@iconify/icons-mdi/edit';
 import { CardsService } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
@@ -25,25 +24,6 @@ export class FuriganaWholeWordComponent implements OnInit {
   answeredIndex: number;
   isAnsweredCorrectly: boolean;
   cardTypeRouteEnum = CardTypeRouteEnum;
-
-  icons = {
-    editIcon,
-  };
-
-  @HostListener('document:keydown', ['$event'])
-  handleAnswer(event: KeyboardEvent) {
-    if (event.code.startsWith('Digit')) {
-      event.preventDefault();
-      if (!this.isAnswered) {
-        const digit = Number(event.code.charAt(event.code.length - 1));
-        if ('answers' in this.card?.question && digit <= this.card.question.answers.length) {
-          this.checkAnswer(digit);
-        }
-      } else {
-        this.continueTraining();
-      }
-    }
-  }
 
   constructor(private cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef) {}
 

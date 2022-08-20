@@ -68,14 +68,17 @@ export class DrillsGenerator {
       }
       const currentKanjis = currentExtractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji)); // filter inside map to save sorting
       for (const [i, userKanji] of currentUserKanjis.entries()) {
-        // TODO: remove
-        this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
-
         const currentKanji = currentKanjis[i];
         if (!currentKanji) {
           console.log(`Skip user kanji ${userKanji.id}: no kanji in dictionary with such id`);
           continue;
         }
+
+        // TODO: remove
+        // this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
+        // this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, 0, userKanji));
+        this.addToCards(this.generateSelectWordForTranslation(currentWord, userWord));
+
         if (this.addToCards(this.generateKanjiInfo(currentKanji, userKanji))) {
           for (const [fI, fV] of currentWord.data.readings[0].furigana.entries()) {
             if (fV.ruby == currentKanji.query[0]) {
@@ -231,6 +234,10 @@ export class DrillsGenerator {
 
     if (!forWordInfoCard) {
       fullMeanings = fullMeanings.slice(0, countMeaningsToShow);
+    }
+
+    if (word.id == 81467 && !forWordInfoCard) {
+      console.log({ countMeaningsToShow, probabilitySoFar });
     }
 
     let meanings: TrainingMeaning[] = fullMeanings.map((m) => ({

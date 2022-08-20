@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { Drill, WordInfo } from '@app/interfaces/common.interface';
 import { CardsService } from '@app/training/cards/cards.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -31,6 +31,14 @@ export class WordInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleAnswer(event: KeyboardEvent) {
+    if (event.code.startsWith('Digit')) {
+      event.preventDefault();
+      this.goToNextCard();
+    }
   }
 
   playAudio(source: string) {

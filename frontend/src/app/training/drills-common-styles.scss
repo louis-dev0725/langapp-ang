@@ -17,7 +17,7 @@
   background-color: #efe2e3;
 }
 
-@media screen and (max-width: 768px) {
+/*@media screen and (max-width: 768px) {
   .kanji-info {
     display: flex;
     flex-direction: column;
@@ -48,7 +48,7 @@
     display: flex;
     flex-direction: column;
   }
-}
+}*/
 
 .edit:focus {
   outline: 0 none;
@@ -76,7 +76,11 @@
   font-size: 13px;
 }
 
-:host ::ng-deep .kanji-info-furigana rt {
+:host ::ng-deep .drill-word-furigana rt {
   font-size: 15px;
-  padding-left: 5px;
+  /*padding-left: 5px;
+
+  &.question-highlight {
+    padding-left: 0;
+  }*/
 }

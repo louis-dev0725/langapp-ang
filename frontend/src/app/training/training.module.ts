@@ -29,6 +29,8 @@ import { EndTrainingComponent } from '@app/training/end-training/end-training.co
 import { DialogModule } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { WordSentenceVideoComponent } from "@app/training/word-sentence-video/word-sentence-video.component";
+import { DrillWordComponent } from './drill-word/drill-word.component';
+import { DrillAnswerButtonsComponent } from './drill-answer-buttons/drill-answer-buttons.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { WordSentenceVideoComponent } from "@app/training/word-sentence-video/wo
     WordSentenceVideoComponent,
     AudioWordComponent,
     EndTrainingComponent,
+    DrillWordComponent,
+    DrillAnswerButtonsComponent,
   ],
   imports: [
     FormsModule,

@@ -1,66 +1,15 @@
-  <div class="card w-full p-0">
-    <div class="flex flex-wrap md:flex-nowrap">
-      <div class="basis-full md:basis-1/2 p-8 pb-0">
-        <div class="flex items-center justify-center w-full h-full" *ngIf="!isAnswered; else kanjiInfo">
-          <p [innerHTML]="card?.question?.questionHtml" class="text-black" style="font-size: 40px"></p>
-        </div>
-      </div>
-      <div class="basis-full md:basis-1/2 p-8 pb-0">
-        <div class="flex flex-col items-center justify-center w-full">
-          <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
-            <div style="flex: 1" class="flex justify-center" *ngIf="isWideScreen">
-              <span style="font-size: 13px">{{i + 1}}</span>
-            </div>
-            <div style="flex: 4; height: 57px; cursor: pointer" class="answer-default flex items-center justify-center" (click)="checkAnswer(i + 1)" [ngClass]="{
-              'answer-correct': isAnswered && answer?.isCorrectAnswer,
-              'answer-incorrect': isAnswered && !isAnsweredCorrectly && i === answeredIndex - 1
-            }">
-              <p [innerHTML]="answer?.contentHtml" class="text-black" style="font-size: 20px;"></p>
-            </div>
-          </div>
-          <div class="flex w-full" style="margin-bottom: 15px">
-            <div style="flex: 1" *ngIf="isWideScreen"></div>
-            <div style="flex: 4" class="flex items-center justify-center">
-              <button style="width: 100%; height: 35px; font-size: 15px" pButton type="button" label="{{'I don\'t remember' | translate}}" (click)="forgotAnswer()" *ngIf="!isAnswered; else continueButton"></button>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="card w-full p-0">
+  <div class="flex flex-wrap md:flex-nowrap">
+    <div class="basis-full md:basis-1/2 p-8 pb-0">
+      <app-drill-word [card]="card" [isAnswered]="isAnswered"></app-drill-word>
     </div>
-    <div class="w-full" style="margin: 0; padding: 12px 16px">
-      <div class="flex items-center justify-start">
-        <p style="color: #a0b0c4; font-size: 14px">{{isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: select correct reading for the marked kanji.' | translate)}}</p>
-      </div>
+    <div class="basis-full md:basis-1/2 p-8 pb-0">
+      <app-drill-answer-buttons [card]="card" [(isAnswered)]="isAnswered" [(answeredIndex)]="answeredIndex" [(isAnsweredCorrectly)]="isAnsweredCorrectly"></app-drill-answer-buttons>
     </div>
   </div>
-
-<ng-template #continueButton>
-  <button style="width: 100%; height: 35px; font-size: 15px" pButton type="button" label="{{'Continue' | translate}}" (click)="continueTraining()"></button>
-</ng-template>
-
-<ng-template #kanjiInfo>
-  <div class="kanji-info">
-    <div class="grid grid-cols-[2.5rem_auto_2.5rem] gap-y-1 items-center justify-start">
-      <div>
-        <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
-      </div>
-      <div>
-        <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="kanji-info-furigana furigana-font-large text-black"></p>
-      </div>
-      <div>
-      </div>
-    </div>
-    <div class="pl-0 md:pl-10 text-center md:text-left">
-      <div class="text-[20px] text-black pb-4">{{card?.meanings | join: ', '}}</div>
-      <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToInfoCard(card?.infoCard)"></button>
-    </div>
-    <div class="flex items-start justify-start" style="margin-top: 20px">
-      <div style="flex: 1">
-<!--        <button pButton style="background: none; padding: 0; border: none;" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18" [color]="'#5397d5'"></ic-icon></button>-->
-      </div>
-      <div style="flex: 5">
-        <img height="105" width="105" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl">
-      </div>
+  <div class="w-full" style="margin: 0; padding: 12px 16px">
+    <div class="flex items-center justify-start">
+      <p style="color: #a0b0c4; font-size: 14px">{{ isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: select correct reading for the marked kanji.' | translate) }}</p>
     </div>
   </div>
-</ng-template>
+</div>

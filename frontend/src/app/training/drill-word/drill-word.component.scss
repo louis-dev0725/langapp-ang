@@ -1,0 +1,27 @@
+.question-mode .mark-on-quesion {
+    visibility: hidden;
+    position: relative;
+}
+
+.question-mode .mark-on-quesion::after {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: block;
+    content: '';
+    /*background-color: #eef4f9;*/
+    /*background-color: #f6f9fd;*/
+    background-color: #eef4fb;
+    /*background-color: rgb(237 243 247 / 60%);*/
+    width: 100%;
+    pointer-events: none;
+}
+
+.question-mode .mark-on-quesion.play-audio-button::after {
+    border-radius: 50%;
+}
+
+.question-mode .hide-on-quesion {
+    visibility: hidden;
+}
