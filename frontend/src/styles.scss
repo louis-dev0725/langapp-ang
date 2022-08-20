@@ -130,7 +130,7 @@ a.p-button:hover {
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1025px) {
   .layout-wrapper .layout-main .layout-content {
     padding: 0;
   }
@@ -200,6 +200,10 @@ ruby rt:hover {
 
 .question-blank-box:before {
   content: "?";
+}
+
+.container {
+  max-width: none;
 }
 
 /*

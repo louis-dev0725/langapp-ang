@@ -1,17 +1,17 @@
 <div class="card p-0">
-  <div class="flex flex-wrap sm:flex-nowrap">
-    <div class="basis-full sm:basis-1/2 p-8 pb-0">
+  <div class="flex flex-wrap md:flex-nowrap">
+    <div class="basis-full md:basis-1/2 p-8 pb-0">
       <div class="grid grid-cols-[2.5rem_2.5rem_auto] grid-rows-[18px_auto] leading-none items-center justify-start">
         <div class="w-6 mr-4 row-start-2">
           <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
         </div>
         <div class="w-6 mr-4 row-start-2">
-          <p-knob [size]="20" [(ngModel)]="card.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: card.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
-        </div>
+          <app-progress-circle [percent]="card.frequencyRank" [size]="20" [pTooltip]="'frequency-rank-tooltip-word' | translate: { value: card.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></app-progress-circle>
+         </div>
         <div [innerHTML]="card?.furiganaHtml" class="text-black furigana-font text-[40px] row-span-2"></div>
       </div>
     </div>
-    <div class="basis-full sm:basis-1/2 p-8 pb-0" *ngIf="card?.mnemonic?.imageUrl">
+    <div class="basis-full md:basis-1/2 px-8 mt-8" *ngIf="card?.mnemonic?.imageUrl">
       <div class="flex items-start justify-start">
         <img class="margin-m" width="105" height="105" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl" />
         <!--          <button pButton style="background: none; padding: 0; border: none; margin-left: 10px" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18" [color]="'#5397d5'"></ic-icon></button>-->
@@ -19,92 +19,76 @@
     </div>
   </div>
 
-  <div class="flex flex-wrap sm:flex-nowrap pb-8">
-    <div class="basis-full sm:basis-1/2 p-8 pb-0 border-r border-neutral-100">
-      <div class="text-center text-[12px]" style="color: #afafaf">{{ 'Meanings:' | translate }}</div>
-
-      <div *ngFor="let meaning of card?.meanings | slice: 0:card?.countMeaningsToShow; let i = index" class="pt-6">
-        <div class="flex">
-          <div class="w-14 mr-4 rounded-md p-2 text-center outline-0 select-none" [ngClass]="meaning.probabilityOverall >= 90 ? 'bg-green-900 text-white' : meaning.probabilityOverall >= 30 ? 'bg-green-800 text-white' : meaning.probabilityOverall > 10 ? 'bg-green-700 text-white' : meaning.probabilityOverall > 5 ? 'bg-green-600 text-white' : meaning.probabilityOverall > 1 ? 'bg-green-200 text-neutral-400' : 'bg-green-100 text-neutral-400'" [pTooltip]="'frequency-percent-tooltip-meaning' | translate: { value: meaning.probabilityOverall }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus">{{ meaning.probabilityOverall | number: '1.0-0' }}%</div>
-          <div class="flex-1 flex items-center justify-start">
-            <p [innerText]="meaning?.value" class="text-black text-[20px]"></p>
-          </div>
-        </div>
-
-        <ng-container *ngIf="meaning?.exampleSentences?.length">
-          <div class="grid grid-cols-[2.5rem_auto] gap-y-1 items-center justify-start pt-6 example-sentence" *ngFor="let sentence of meaning?.exampleSentences | slice: 0:meaning?.countExampleSentencesToShow">
-            <div class="w-10 flex items-center justify-start">
-              <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(sentence?.audioUrls[0])"></i>
-            </div>
-            <div class="text-black text-[18px]" onclickTranslation [innerHTML]="sentence?.furiganaHtml"></div>
-            <div class="col-start-2 text-black text-[14px]" *ngIf="sentence?.translationHtml" [innerHTML]="sentence?.translationHtml"></div>
-          </div>
-
-          <div class="flex items-center justify-center pt-6" *ngIf="meaning?.exampleSentences?.length > meaning?.countExampleSentencesToShow">
-            <button pButton class="ellipsis-btn w-full" [label]="(meaning.isOther ? 'more-example-sentences-for-other-meanings' : 'more-example-sentences-for-meaning') | translate: { value: meaning?.value }" (click)="showMoreExampleSentences(i, 5)"></button>
-          </div>
-        </ng-container>
-      </div>
-
-      <div class="flex items-center justify-center border-b last:border-b-0 border-neutral-100 pt-6" *ngIf="card?.meanings?.length > card?.countMeaningsToShow">
-        <button pButton class="ellipsis-btn w-full" (click)="showMoreMeanings(10)" [label]="'more-meanings-for' | translate: { value: card?.value }"></button>
-      </div>
-    </div>
-    <div class="basis-full sm:basis-1/2 p-8 pb-0">
+  <div class="flex flex-wrap md:flex-nowrap pb-8">
+    <!-- ordered for accessibility and mobile version -->
+    <div class="basis-full md:basis-1/2 p-8 pb-0 md:order-2">
       <div class="text-center text-[12px]" style="color: #afafaf">{{ 'Kanji in this word:' | translate }}</div>
-      <div class="flex flex-col" *ngFor="let kanji of card?.kanji; let i = index">
-        <div class="flex">
-          <div style="flex: 1"></div>
-          <div style="flex: 12" class="flex">
+      <div>
+        <div class="pt-6 pb-6 first:pt-4 last:pb-4 border-b last:border-b-0 border-neutral-100" *ngFor="let kanji of card?.kanji; let i = index">
+          <div class="flex mb-4">
             <ng-container *ngFor="let kanjiReading of kanji?.readings; let y = index">
-              <div
-                class="flex flex-col items-center"
-                [ngClass]="{
-                  'm-l': y !== 0
-                }"
-                *ngIf="card.kanji[i].readings[y].frequencyPercent > 5"
-              >
-                <p-knob [size]="20" [(ngModel)]="card.kanji[i].readings[y].frequencyPercent" [showValue]="false" [valueColor]="y === 0 ? '#73e38e' : '#a0b0c4'"></p-knob>
-                <p
-                  [ngClass]="{
-                    'text-black': y === 0,
-                    'text-gray': y !== 0
-                  }"
-                  style="font-size: 14px"
-                >
+              <div class="flex flex-col items-center mr-12" *ngIf="kanjiReading.frequencyPercent > 1">
+                <app-progress-circle [color]="y === 0 ? '#00c853' : '#a0b0c4'" [percent]="kanjiReading.frequencyPercent" [size]="20" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: kanjiReading.frequencyPercent }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></app-progress-circle>
+                <div class="pt-1 text-[14px]" [ngClass]="y === 0 ? 'text-black' : 'text-gray-400'">
                   {{ kanjiReading?.value }}
-                </p>
+                </div>
               </div>
             </ng-container>
           </div>
-        </div>
-        <div class="flex">
-          <div style="flex: 1"></div>
-          <div style="flex: 9" class="flex items-center justify-start">
-            <p class="text-black" style="font-size: 31px; margin: 0">{{ kanji?.value }}</p>
-            <ul style="list-style: none" class="p-l">
-              <li *ngFor="let kanjiMeaning of kanji?.meanings; let i = index" class="text-black" style="font-size: 16px">{{ kanjiMeaning?.value }}<span *ngIf="kanji?.meanings?.length !== 1 && i !== kanji?.meanings?.length - 1">,</span></li>
-            </ul>
-          </div>
-          <div style="flex: 3" class="flex items-center justify-center">
-            <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToKanjiInfo(kanji?.infoCard)"></button>
+          <div class="flex">
+            <div class="text-black text-[31px] leading-none mr-8">{{ kanji?.value }}</div>
+            <div class="flex-1 text-black text-[16px] mr-4">{{ kanji?.meanings | join: ', ' }}</div>
+            <div class="justify-self-end">
+              <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToKanjiInfo(kanji?.infoCard)"></button>
+            </div>
           </div>
         </div>
-        <div class="flex justify-center" *ngIf="i !== kanji?.meanings?.length - 1">
-          <hr class="w-full" style="border: 1px solid #f4f6f8" />
+      </div>
+    </div>
+    <div class="basis-full md:basis-1/2 px-8 mt-8 border-0 md:border-r border-neutral-100">
+      <div class="text-center text-[12px]" style="color: #afafaf">{{ 'Meanings:' | translate }}</div>
+
+      <div>
+        <div *ngFor="let meaning of card?.meanings | slice: 0:card?.countMeaningsToShow; let i = index" class="py-6 first:pt-4 border-b last:border-b-0 border-neutral-100">
+          <div class="flex">
+            <div class="w-14 mr-4 rounded-md p-2 text-center outline-0 select-none" [ngClass]="meaning.probabilityOverall >= 90 ? 'bg-green-900 text-white' : meaning.probabilityOverall >= 30 ? 'bg-green-800 text-white' : meaning.probabilityOverall > 10 ? 'bg-green-700 text-white' : meaning.probabilityOverall > 5 ? 'bg-green-600 text-white' : meaning.probabilityOverall > 1 ? 'bg-green-200 text-neutral-400' : 'bg-green-100 text-neutral-400'" [pTooltip]="'frequency-percent-tooltip-meaning' | translate: { value: meaning.probabilityOverall }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus">{{ meaning.probabilityOverall | number: '1.0-0' }}%</div>
+            <div class="flex-1 flex items-center justify-start">
+              <p [innerText]="meaning?.isOther ? ('other-meanings' | translate) : meaning?.value" class="text-[20px]" [ngClass]="meaning?.isOther ? 'text-neutral-400' : 'text-black'"></p>
+            </div>
+          </div>
+
+          <ng-container *ngIf="meaning?.exampleSentences?.length">
+            <div class="grid grid-cols-[2.5rem_auto] gap-y-1 items-center justify-start pt-4 example-sentence" *ngFor="let sentence of meaning?.exampleSentences | slice: 0:meaning?.countExampleSentencesToShow">
+              <div class="w-10 flex items-center justify-start">
+                <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(sentence?.audioUrls[0])"></i>
+              </div>
+              <div class="text-black text-[18px]" onclickTranslation [innerHTML]="sentence?.furiganaHtml"></div>
+              <div class="col-start-2 text-black text-[14px]" *ngIf="sentence?.translationHtml" [innerHTML]="sentence?.translationHtml"></div>
+            </div>
+
+            <div class="flex items-center justify-center pt-4" *ngIf="meaning?.exampleSentences?.length > meaning?.countExampleSentencesToShow">
+              <button pButton class="ellipsis-btn w-full" [label]="(meaning.isOther ? 'more-example-sentences-for-other-meanings' : 'more-example-sentences-for-meaning') | translate: { value: meaning?.value }" (click)="showMoreExampleSentences(i, 5)"></button>
+            </div>
+          </ng-container>
         </div>
+      </div>
+
+      <div class="flex items-center justify-center pt-0" *ngIf="card?.meanings?.length > card?.countMeaningsToShow">
+        <button pButton class="ellipsis-btn w-full" (click)="showMoreMeanings(10)" [label]="'more-meanings-for' | translate: { value: card?.value }"></button>
       </div>
     </div>
   </div>
 </div>
-<div class="card card-bottom-buttons w-full" style="margin: 0; padding: 12px 16px">
-  <div class="word-footer">
-    <div style="flex: 3" class="footer-text">
-      <p style="color: #a0b0c4; font-size: 14px">
-        {{ 'Explanation: take a look at the meanings and the usage of the word, then click "Continue."' | translate }}
-      </p>
+
+<div class="sticky bottom-0 lg:hidden w-full flex justify-center">
+  <button pButton label="{{ 'Continue' | translate }}" class="w-full" style="height: 40px; font-size: 15px" (click)="goToNextCard()"></button>
+</div>
+<div class="card mt-8 mb-8 lg:mb-0 w-full lg:sticky lg:bottom-0 bg-white border-t border-neutral-100">
+  <div class="word-footer flex items-center">
+    <div class="flex-grow-[8]">
+      <p style="color: #a0b0c4; font-size: 14px">{{ 'Explanation: take a look at the meanings and the usage of the word, then click "Continue.' | translate }}</p>
     </div>
-    <div style="flex: 1" class="w-full flex justify-center">
+    <div class="bottom-0 hidden lg:flex basis-80 w-full justify-center">
       <button pButton label="{{ 'Continue' | translate }}" class="w-full" style="height: 40px; font-size: 15px" (click)="goToNextCard()"></button>
     </div>
   </div>

@@ -12,7 +12,7 @@ import { In } from 'typeorm';
 import { Drill, KanjiCardInfo, TrainingAnswer, TrainingButtonQuestionCard, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfo } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
-import { Dictionary, keyBy, orderBy, sample, shuffle, uniq } from 'lodash';
+import { Dictionary, keyBy, max, orderBy, sample, shuffle, uniq } from 'lodash';
 import { SentenceRepository } from 'src/entities/SentenceRepository';
 import { Sentence } from 'src/entities/Sentence';
 
@@ -157,9 +157,6 @@ export class DrillsGenerator {
           exampleSentencesIds.push(...meaning.exampleSentenceIds);
         }
       }
-      if (word.data.exampleSentences) {
-        exampleSentencesIds.push(...word.data.exampleSentenceIds);
-      }
     }
 
     this.exampleSentences = keyBy(await this.sentenceRepository.findByIds(exampleSentencesIds), (s) => s.id);
@@ -200,39 +197,36 @@ export class DrillsGenerator {
   filterMeaningsForUser(word: JapaneseWord | JapaneseKanji, forWordInfoCard = false) {
     let userLanguages = this.user.languages;
 
-    // TODO: move to database generator
-    let probabilityCoveredInMeanings = (<JapaneseWord>word).data.meanings.filter((m) => m.lang == 'en').reduce((v, m) => (v += m.probabilityOverall), 0);
-
-    let fullMeanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
+    let fullMeanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1 && (!m.isOther || forWordInfoCard));
     if (fullMeanings.length == 0) {
       userLanguages.push('eng', 'en');
-      fullMeanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1);
+      fullMeanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1 && (!m.isOther || forWordInfoCard));
     }
 
     fullMeanings.sort((a: any, b: any) => {
       return userLanguages.indexOf(a.lang) - userLanguages.indexOf(b.lang);
     });
 
-    if (forWordInfoCard) {
-      fullMeanings.push({
-        lang: 'en', // TODO: move in database to already calculated meaning
-        value: '',
-        probabilityInList: 0,
-        probabilityOverall: 1 - probabilityCoveredInMeanings,
-        frequencyPmw: 0,
-        exampleSentenceIds: word.data.exampleSentenceIds,
-        isOther: true,
-      });
-    }
-
     let probabilitySoFar = 0;
     let countMeaningsToShow = fullMeanings.length;
+    let threshold = forWordInfoCard ? 0.99 : 0.8;
+    let otherIndex = null;
     for (let [i, meaning] of fullMeanings.entries()) {
-      if (probabilitySoFar > 0.8 || (i > 3 && (!meaning.probabilityOverall || meaning.probabilityOverall < 0.2))) {
+      if (probabilitySoFar > threshold || (!forWordInfoCard && i > 3 && (!meaning.probabilityOverall || meaning.probabilityOverall < 0.2))) {
         countMeaningsToShow = i;
         break;
       }
+      if (otherIndex === null && meaning.isOther) {
+        otherIndex = i;
+      }
       probabilitySoFar += meaning.probabilityOverall || 0;
+    }
+
+    // Move other meaning to the end of the list (if it shows in the list before clicking "more")
+    if (forWordInfoCard && otherIndex !== null && otherIndex <= countMeaningsToShow - 1) {
+      let otherItem = fullMeanings[otherIndex];
+      fullMeanings.splice(otherIndex, 1);
+      fullMeanings.splice(countMeaningsToShow - 1, 0, otherItem);
     }
 
     if (!forWordInfoCard) {
@@ -242,8 +236,8 @@ export class DrillsGenerator {
     let meanings: TrainingMeaning[] = fullMeanings.map((m) => ({
       lang: m.lang,
       value: m.value,
-      probabilityInList: Math.round(m.probabilityInList * 100),
-      probabilityOverall: Math.round(m.probabilityOverall * 100),
+      probabilityInList: Math.floor(m.probabilityInList * 100),
+      probabilityOverall: Math.floor(m.probabilityOverall * 100),
       frequencyPmw: m.frequencyPmw,
       exampleSentences: forWordInfoCard ? this.formatExampleSentences(m.exampleSentenceIds) : null,
       countExampleSentencesToShow: forWordInfoCard ? 3 : 0,
@@ -277,7 +271,7 @@ export class DrillsGenerator {
             furiganaHtml: this.furiganaToHtml(word?.data?.readings?.[0]?.furigana),
             meanings: this.filterMeaningsForUser(word).meanings,
             countExampleSentencesToShow: 1,
-            exampleSentences: this.formatExampleSentences([...word.data.meanings.flatMap((m) => m?.exampleSentenceIds || []), ...(word.data.exampleSentenceIds || [])]),
+            exampleSentences: this.formatExampleSentencesForWord(word),
             audioUrls: ['/assets/test-audio.mp3?word-3266529'],
           };
         }),
@@ -346,6 +340,21 @@ export class DrillsGenerator {
 
   formatKanjiReadingForAnswer(reading: JapaneseKanjiReading) {
     return convertKatakanaToHiragana(reading.value.replace(/\..*/, '').replace('-', '')); // For example replace "つよ.い" to "つよ" and
+  }
+
+  formatExampleSentencesForWord(word: JapaneseWord) {
+    let meanings = this.filterMeaningsForUser(word, true).meanings;
+    let maxLength = max(meanings.map((m) => m?.exampleSentences?.length));
+    let exampleSentences: TrainingExampleSentence[] = [];
+    for (let step = 0; step < maxLength; step++) {
+      for (let meaningI = 0; meaningI < meanings.length; meaningI++) {
+        if (meanings[meaningI]?.exampleSentences?.[step]) {
+          exampleSentences.push(meanings[meaningI].exampleSentences[step]);
+        }
+      }
+    }
+
+    return exampleSentences;
   }
 
   formatExampleSentences(exampleSentences: number[]): TrainingExampleSentence[] {
@@ -751,7 +760,6 @@ export class DrillsGenerator {
       value: word.data?.readings?.[0]?.kanji,
       furiganaHtml: this.furiganaToHtml(word.data?.readings?.[0]?.furigana),
       ...this.filterMeaningsForUser(word, true),
-      exampleSentences: this.formatExampleSentences([...word.data.meanings.flatMap((m) => m.exampleSentenceIds), ...word.data.exampleSentenceIds]),
       kanji: this.kanjis.map((kanji) => ({
         wordId: kanji.id,
         value: kanji.query[0],

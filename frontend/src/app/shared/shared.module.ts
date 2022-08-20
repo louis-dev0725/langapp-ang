@@ -40,6 +40,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { PasswordModule } from 'primeng/password';
 import { TooltipModule } from 'primeng/tooltip';
 import { AsPipe } from '../pipes/as.pipe';
+import { ProgressCircleComponent } from './progress-circle/progress-circle.component';
 
 let sharedModules = [
   // primeng
@@ -80,9 +81,11 @@ let sharedModules = [
   MatRadioModule,
 ];
 
+let sharedComponents = [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, AsPipe, ProgressCircleComponent];
+
 @NgModule({
-  declarations: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, AsPipe],
+  declarations: [...sharedComponents],
   imports: [CommonModule, ...sharedModules],
-  exports: [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, AsPipe, ...sharedModules],
+  exports: [...sharedComponents, ...sharedModules],
 })
 export class SharedModule {}

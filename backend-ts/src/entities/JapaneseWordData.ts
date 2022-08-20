@@ -8,7 +8,6 @@ export class JapaneseWordData {
   frequencySource?: string;
   jlptLevel: number;
   [key: string]: any;
-  exampleSentenceIds: number[];
 }
 
 export class PartOfSpeech {
@@ -46,7 +45,7 @@ export class Meaning {
   frequencyPmw?: number;
   frequencySource?: string;
   exampleSentenceIds: number[];
-  isOther: boolean;
+  isOther?: boolean;
 }
 
 export class Related {

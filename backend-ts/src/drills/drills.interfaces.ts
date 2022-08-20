@@ -23,7 +23,6 @@ export interface WordInfo {
   value: string;
   furiganaHtml: string;
   meanings: TrainingMeaning[];
-  exampleSentences: TrainingExampleSentence[];
   countMeaningsToShow: number;
   kanji: KanjiInfo[];
   audioUrls: string[];

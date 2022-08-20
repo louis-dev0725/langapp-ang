@@ -1,26 +1,26 @@
 import { Component, OnDestroy, OnInit, NgZone, Renderer2 } from '@angular/core';
-import {NavigationStart, Router} from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import { Observable } from 'rxjs';
 import * as fromStore from '@app/store';
 import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
 import { Store } from '@ngrx/store';
-import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { AppComponent } from '@app/app.component';
 import { MenuService } from '@app/theme/theme.menu.service';
 import { ConfirmationService, PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/event.service';
 import { MatDialog } from '@angular/material/dialog';
-import {randomFromRange} from "@app/shared/helpers";
-import {UserService} from "@app/services/user.service";
-import {take} from "rxjs/operators";
+import { randomFromRange } from '@app/shared/helpers';
+import { UserService } from '@app/services/user.service';
+import { take } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
   selector: 'app-theme-main',
-  templateUrl: './theme.main.component.html'
+  templateUrl: './theme.main.component.html',
 })
 export class ThemeMainComponent implements OnDestroy, OnInit {
   rotateMenuButton: boolean;
@@ -61,20 +61,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
 
   languages = ['Русский', 'English'];
 
-  constructor(public zone: NgZone,
-    private store: Store<fromStore.State>,
-    private router: Router,
-    private userService: UserService,
-    private api: ApiService,
-    private sessionService: SessionService,
-    public renderer: Renderer2,
-    private menuService: MenuService,
-    private translateService: TranslateService,
-    private eventService: EventService,
-    private primengConfig: PrimeNGConfig,
-    private confirmDialog: MatDialog,
-    public app: AppComponent,
-    private confirmationService: ConfirmationService) {
+  constructor(public zone: NgZone, private store: Store<fromStore.State>, private router: Router, private userService: UserService, private api: ApiService, private sessionService: SessionService, public renderer: Renderer2, private menuService: MenuService, private translateService: TranslateService, private eventService: EventService, private primengConfig: PrimeNGConfig, private confirmDialog: MatDialog, public app: AppComponent, private confirmationService: ConfirmationService) {
     this.setUpSubscriptions();
   }
 
@@ -130,7 +117,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     return this.sessionService.openedAdmin;
   }
 
-  logout(event : MouseEvent) {
+  logout(event: MouseEvent) {
     if (!this.isOpenedAdmin) {
       this.confirmationService.confirm({
         target: event.target,
@@ -140,8 +127,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
           this.api.logout();
           window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
         },
-        reject: () => {
-        }
+        reject: () => {},
       });
     } else {
       this.api.logout();
@@ -226,7 +212,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   }
 
   isDesktop() {
-    return window.innerWidth > 1024;
+    return window.innerWidth > 991;
   }
 
   isMobile() {
@@ -257,8 +243,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     if (document.body.classList) {
       document.body.classList.remove('blocked-scroll');
     } else {
-      document.body.className = document.body.className.replace(new RegExp('(^|\\b)' +
-        'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      document.body.className = document.body.className.replace(new RegExp('(^|\\b)' + 'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
     }
   }
 
@@ -269,27 +254,33 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.isLoggedIn$.subscribe(res => {
+    this.isLoggedIn$.subscribe((res) => {
       this.isLoggedIn = res;
     });
   }
 
   setUpSubscriptions() {
-    this.router.events.subscribe(async event => {
+    this.router.events.subscribe(async (event) => {
       if (event instanceof NavigationStart) {
         if (this.isLoggedIn) {
-          this.userService.getMeRequest().pipe(take(1)).subscribe(user => {
-            this.userService.user$.next(user);
-          });
+          this.userService
+            .getMeRequest()
+            .pipe(take(1))
+            .subscribe((user) => {
+              this.userService.user$.next(user);
+            });
         }
       }
     });
     this.interval = setInterval(async () => {
       const isLoggedIn = await this.isLoggedIn$.toPromise();
       if (isLoggedIn) {
-        this.userService.getMeRequest().pipe(untilDestroyed(this)).subscribe(user => {
-          this.userService.user$.next(user);
-        });
+        this.userService
+          .getMeRequest()
+          .pipe(untilDestroyed(this))
+          .subscribe((user) => {
+            this.userService.user$.next(user);
+          });
       }
     }, randomFromRange(500, 600));
   }

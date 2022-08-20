@@ -20,7 +20,6 @@ import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 export class KanjiInfoComponent implements OnInit {
   card: KanjiCardInfo;
   TrainingKanjiReadingArray: TrainingKanjiReading[];
-  meaning: string;
   startTime = Date.now();
   cardTypeRouteEnum = CardTypeRouteEnum;
 
@@ -58,7 +57,6 @@ export class KanjiInfoComponent implements OnInit {
 
   setCard(card: KanjiCardInfo) {
     this.card = card;
-    this.meaning = card.meanings.map((m) => m.value).join(', ');
   }
 
   showMore(first: number, second: number, type: string, countToAdd: number) {

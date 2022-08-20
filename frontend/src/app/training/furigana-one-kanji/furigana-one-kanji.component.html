@@ -1,11 +1,11 @@
   <div class="card w-full p-0">
-    <div class="flex flex-wrap sm:flex-nowrap">
-      <div class="basis-full sm:basis-1/2 p-8 pb-0">
+    <div class="flex flex-wrap md:flex-nowrap">
+      <div class="basis-full md:basis-1/2 p-8 pb-0">
         <div class="flex items-center justify-center w-full h-full" *ngIf="!isAnswered; else kanjiInfo">
           <p [innerHTML]="card?.question?.questionHtml" class="text-black" style="font-size: 40px"></p>
         </div>
       </div>
-      <div class="basis-full sm:basis-1/2 p-8 pb-0">
+      <div class="basis-full md:basis-1/2 p-8 pb-0">
         <div class="flex flex-col items-center justify-center w-full">
           <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
             <div style="flex: 1" class="flex justify-center" *ngIf="isWideScreen">
@@ -45,12 +45,12 @@
         <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
       </div>
       <div>
-        <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-m furigana-font-large text-black"></p>
+        <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="kanji-info-furigana furigana-font-large text-black"></p>
       </div>
       <div>
       </div>
     </div>
-    <div class="pl-0 md:pl-10 text-center">
+    <div class="pl-0 md:pl-10 text-center md:text-left">
       <div class="text-[20px] text-black pb-4">{{card?.meanings | join: ', '}}</div>
       <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToInfoCard(card?.infoCard)"></button>
     </div>
