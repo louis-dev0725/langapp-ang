@@ -77,7 +77,7 @@ export class DrillsGenerator {
         // TODO: remove
         // this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
         // this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, 0, userKanji));
-        this.addToCards(this.generateSelectWordForTranslation(currentWord, userWord));
+        this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
 
         if (this.addToCards(this.generateKanjiInfo(currentKanji, userKanji))) {
           for (const [fI, fV] of currentWord.data.readings[0].furigana.entries()) {
@@ -293,7 +293,7 @@ export class DrillsGenerator {
       infoCard: `wordInfo_${word.id}`,
       question: {
         type: 'select',
-        questionHtml: this.furiganaToHtml(word.data.readings[0].furigana, furiganaPosition),
+        furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana, furiganaPosition),
         answers: this.generateAnswersForKanji(kanji, word, furiganaPosition),
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
@@ -409,7 +409,7 @@ export class DrillsGenerator {
       infoCard: `wordInfo_${word.id}`,
       question: {
         type: 'select',
-        questionHtml: this.furiganaToHtml(word.data.readings[0].furigana, -1),
+        furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana, -1),
         answers: this.generateAnswersForWordReading(word),
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
@@ -427,7 +427,7 @@ export class DrillsGenerator {
       infoCard: `wordInfo_${word.id}`,
       question: {
         type: 'type',
-        questionHtml: this.furiganaToHtml(word.data.readings[0].furigana, -1),
+        furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana, -1),
         buttons: shuffle(word.data.readings[0].furigana.flatMap((r) => (r.rt == '' ? r.ruby : r.rt).split(''))),
         correctAnswers: [word.data.readings[0].furigana.map((r) => (r.rt == '' ? r.ruby : r.rt)).join('')],
       },
@@ -487,7 +487,7 @@ export class DrillsGenerator {
       infoCard: `wordInfo_${word.id}`,
       question: {
         type: 'select',
-        questionHtml: this.furiganaToHtml(word.data.readings[0].furigana),
+        furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
         showAudio: true,
         answers: this.generateAnswersForWordMeaning(word),
       },
@@ -544,9 +544,7 @@ export class DrillsGenerator {
       infoCard: `wordInfo_${word.id}`,
       question: {
         type: 'select',
-        questionHtml: this.filterMeaningsForUser(word)
-          .meanings.map((v) => v.value)
-          .join(', '),
+        meanings: this.filterMeaningsForUser(word).meanings,
         answers: this.generateAnswersForWordWriting(word)[0],
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
@@ -696,7 +694,7 @@ export class DrillsGenerator {
       question: {
         type: 'selectAudio',
         isAudioQuestion: true,
-        questionHtml: this.formatWordFuriganaForAnswerKanji(word.data.readings[0].furigana),
+        furiganaHtml: this.formatWordFuriganaForAnswerKanji(word.data.readings[0].furigana),
         answers: this.generateAnswersForWordAudio(word),
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),

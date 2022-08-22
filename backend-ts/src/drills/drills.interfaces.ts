@@ -127,6 +127,8 @@ export interface TrainingKanjiExampleWord {
 export interface TrainingQuestion {
   type: string;
   questionHtml?: string;
+  furiganaHtml?: string;
+  meanings?: TrainingMeaning[];
   isAudioQuestion?: boolean;
   showAudio?: boolean;
   showBigAudio?: boolean;
@@ -142,7 +144,9 @@ export interface TrainingAnswer {
 }
 
 export interface TrainingButtonQuestion {
-  questionHtml: string;
+  questionHtml?: string;
+  furiganaHtml?: string;
+  meanings?: TrainingMeaning[];
   type: string;
   buttons: string[];
   correctAnswers: string[];

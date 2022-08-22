@@ -1,16 +1,21 @@
-<div [ngClass]="{'question-mode': !isAnswered}">
+<div [ngClass]="{ 'question-mode': !isAnswered }">
   <div class="grid grid-cols-[2.5rem_auto_2.5rem] gap-y-1 items-center justify-center md:justify-start">
     <div>
       <i class="pi pi-volume-up play-audio-button mark-on-quesion" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
     </div>
     <div>
-      <p [innerHTML]="isAnswered ? card?.furiganaHtml : card?.question?.questionHtml" style="font-size: 34px" class="drill-word-furigana text-black"></p>
+      <p [innerHTML]="isAnswered || !card?.question?.furiganaHtml ? card?.furiganaHtml : card?.question?.furiganaHtml" style="font-size: 34px" class="drill-word-furigana text-black" [ngClass]="{ 'mark-on-quesion': !isAnswered && !card?.question?.furiganaHtml }"></p>
     </div>
     <div></div>
   </div>
-  <div class="hide-on-quesion pl-0 md:pl-10 text-center md:text-left">
-    <div class="text-[20px] text-black pb-4">{{ card?.meanings | join: ', ' }}</div>
-    <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToInfoCard(card?.infoCard)"></button>
+  <div
+    class="pl-0 md:pl-10 text-center md:text-left"
+    [ngClass]="{
+      'hide-on-question': !isAnswered && !card?.question?.meanings
+    }"
+  >
+    <div class="text-[20px] text-black pb-4">{{ (isAnswered || !card?.question?.meanings ? card?.meanings : card?.question?.meanings) | join: ', ' }}</div>
+    <button pButton class="ellipsis-btn hide-on-question" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToInfoCard(card?.infoCard)"></button>
   </div>
   <div class="flex items-start justify-start" style="margin-top: 20px">
     <div style="flex: 1">
