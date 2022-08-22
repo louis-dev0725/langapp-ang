@@ -77,7 +77,7 @@ export class DrillsGenerator {
         // TODO: remove
         // this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
         // this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, 0, userKanji));
-        this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
+        this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
 
         if (this.addToCards(this.generateKanjiInfo(currentKanji, userKanji))) {
           for (const [fI, fV] of currentWord.data.readings[0].furigana.entries()) {
@@ -695,7 +695,7 @@ export class DrillsGenerator {
         type: 'selectAudio',
         isAudioQuestion: true,
         furiganaHtml: this.formatWordFuriganaForAnswerKanji(word.data.readings[0].furigana),
-        answers: this.generateAnswersForWordAudio(word),
+        ...this.generateAnswersForWordAudio(word),
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
@@ -705,13 +705,13 @@ export class DrillsGenerator {
   }
 
   generateAnswersForWordAudio(word: JapaneseWord) {
-    let answers: TrainingAnswer[] = [];
+    let openAnswers: TrainingAnswer[] = [];
 
     let correctAnswer = this.furiganaToHtml(word.data.readings[0].furigana, null, 'gray-furigana');
-    answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'] });
+    openAnswers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'] });
 
     for (let words of [this.words, DrillsGenerator.additionalWords]) {
-      if (answers.length == 5) {
+      if (openAnswers.length == 5) {
         break;
       }
       let shuffledList = shuffle(words);
@@ -723,23 +723,26 @@ export class DrillsGenerator {
       for (let randomWord of shuffledList) {
         let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, 'gray-furigana');
 
-        if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-          answers.push({ contentHtml: formattedAnswer, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'] });
+        if (!openAnswers.some((a) => a.contentHtml == formattedAnswer)) {
+          openAnswers.push({ contentHtml: formattedAnswer, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'], isCorrectAnswer: false });
         }
 
-        if (answers.length == 5) {
+        if (openAnswers.length == 5) {
           break;
         }
       }
     }
 
-    if (answers.length < 5) {
+    if (openAnswers.length < 5) {
       console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
 
     // TODO: load additional words if needed
 
-    return shuffle(answers);
+    openAnswers = shuffle(openAnswers);
+    let answers = openAnswers.map((a) => ({ audioUrls: a.audioUrls, isCorrectAnswer: a.isCorrectAnswer }));
+
+    return { openAnswers, answers };
   }
 
   generateKanjiInfo(kanji: JapaneseKanji, userKanji: UserDictionary): KanjiCardInfo & Record<string, any> {

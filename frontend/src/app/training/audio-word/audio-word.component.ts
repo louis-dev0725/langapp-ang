@@ -33,69 +33,10 @@ export class AudioWordComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
-    this.playAllAudios();
-  }
-
-  playAllAudios() {
-    this.audioTimeout = setTimeout(() => {
-      let counter = 0;
-      const maxIndex = 'answers' in this.card.question ? this.card.question.answers.length - 1 : null;
-      this.audioInterval = setInterval(() => {
-        if (counter <= maxIndex && 'answers' in this.card.question) {
-          this.playAudio(this.card.question.answers[counter].audioUrls[0], false);
-          counter += 1;
-        } else {
-          clearTimeout(this.audioTimeout);
-          clearInterval(this.audioInterval);
-        }
-      }, 2000);
-    });
   }
 
   get isWideScreen() {
     return window.innerWidth > 768;
-  }
-
-  playAudio(source: string, clear: boolean) {
-    if (clear) {
-      clearTimeout(this.audioTimeout);
-      clearInterval(this.audioInterval);
-    }
-    const audio = new Audio();
-    audio.src = source;
-    audio.load();
-    audio.play();
-  }
-
-  checkAnswer(index: number) {
-    if (!this.isAnswered) {
-      if ('answers' in this.card?.question) {
-        this.isAnswered = true;
-        this.answeredIndex = index;
-        this.isAnsweredCorrectly = this.card.question?.answers[index - 1].isCorrectAnswer;
-        this.playAudio(this.card.audioUrls[0], true);
-        this.cardsService.answerCard(this.isAnsweredCorrectly);
-      }
-    } else {
-      this.continueTraining();
-    }
-  }
-
-  forgotAnswer() {
-    this.isAnswered = true;
-    this.isAnsweredCorrectly = false;
-    this.playAudio(this.card.audioUrls[0], true);
-
-    this.cardsService.answerCard(this.isAnsweredCorrectly);
-  }
-
-  continueTraining() {
-    this.cardsService.navigateToNextCard();
-  }
-
-  goToInfoCard(route: string) {
-    const [card, id] = route.split('_');
-    this.router.navigate(['training', card === 'wordInfo' ? 'word-info' : 'kanji-info', id]);
   }
 
   disableQuestion() {

@@ -263,5 +263,6 @@
 	"more-example-sentences-for-meaning": "More examples with \"{{value}}\"",
 	"more-example-sentences-for-other-meanings": "More examples with other meanings",
 	"more-meanings-for": "More meanings for {{value}}",
-	"other-meanings": "(other)"
+	"other-meanings": "(other)",
+	"select-audio-n": "Select audio #{{value}}"
 }

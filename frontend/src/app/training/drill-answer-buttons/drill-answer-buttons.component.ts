@@ -52,6 +52,9 @@ export class DrillAnswerButtonsComponent implements OnInit {
     this.isAnsweredCorrectlyChange.emit(newValue);
   }
 
+  audioTimeout: any;
+  audioInterval: any;
+
   constructor(private cardsService: CardsService, private cd: ChangeDetectorRef) {}
 
   @HostListener('document:keydown', ['$event'])
@@ -69,7 +72,28 @@ export class DrillAnswerButtonsComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.playAllAudios();
+  }
+
+  playAllAudios() {
+    if (this.card?.question?.answers?.[0]?.audioUrls?.[0]) {
+      this.audioTimeout = setTimeout(() => {
+        let counter = 0;
+        const maxIndex = this.card.question.answers ? this.card.question.answers.length - 1 : null;
+        this.audioInterval = setInterval(() => {
+          // TODO: сделать нормальное воспроизведение (через сервис), учитывая длительность аудио (сейчас тут просто 2 сек)
+          if (counter <= maxIndex && this?.card?.question?.answers) {
+            this.playAudio(this.card.question.answers[counter].audioUrls[0], false);
+            counter += 1;
+          } else {
+            clearTimeout(this.audioTimeout);
+            clearInterval(this.audioInterval);
+          }
+        }, 2000);
+      });
+    }
+  }
 
   checkAnswer(index: number) {
     if (!this.isAnswered) {
@@ -91,9 +115,20 @@ export class DrillAnswerButtonsComponent implements OnInit {
     this.isAnsweredCorrectly = false;
     this.playAudio(this.card?.audioUrls[0]);
     this.cardsService.answerCard(this.isAnsweredCorrectly);
+    this.cd.markForCheck();
   }
 
-  playAudio(source: string) {
+  playAudio(source: string, clearAudioQueue = true) {
+    if (clearAudioQueue) {
+      if (this.audioTimeout) {
+        clearTimeout(this.audioTimeout);
+        this.audioTimeout = null;
+      }
+      if (this.audioInterval) {
+        clearInterval(this.audioInterval);
+        this.audioInterval = null;
+      }
+    }
     const audio = new Audio();
     audio.src = source;
     audio.load();
