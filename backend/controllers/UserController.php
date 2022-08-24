@@ -200,6 +200,8 @@ class UserController extends ActiveController
 
         $model->load(Yii::$app->getRequest()->getBodyParams(), '');
         $model->registerIp = Yii::$app->request->getUserIP();
+        // TODO: change to proper trial
+        $model->paidUntilDateTime = Helpers::dateToSql(time() + 60 * 60 * 24 * 14);
         if ($model->save()) {
             $model->scenario = User::SCENARIO_PROFILE;
             $model->refresh();
