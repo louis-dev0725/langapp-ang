@@ -32,6 +32,8 @@ export class DrillsGenerator {
   kanjis: JapaneseKanji[];
   exampleSentences: Dictionary<Sentence>;
 
+  isTestMode = false;
+
   constructor(private userDictionaryRepository: UserDictionaryRepository, private dictionaryWordRepository: DictionaryWordRepository, private sentenceRepository: SentenceRepository) {}
 
   async loadAdditionalWords() {
@@ -75,9 +77,11 @@ export class DrillsGenerator {
         }
 
         // TODO: remove
-        // this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
-        // this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, 0, userKanji));
-        this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
+        if (this.isTestMode) {
+          // this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
+          // this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, 0, userKanji));
+          this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
+        }
 
         if (this.addToCards(this.generateKanjiInfo(currentKanji, userKanji))) {
           for (const [fI, fV] of currentWord.data.readings[0].furigana.entries()) {
@@ -92,10 +96,12 @@ export class DrillsGenerator {
       this.addToCards(this.generateTypeFuriganaForWholeWord(currentWord, userWord));
       this.addToCards(this.generateSelectTranslationForWord(currentWord, userWord));
       this.addToCards(this.generateSelectWordForTranslation(currentWord, userWord));
-      this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
-      this.addToCards(this.generateSelectWordForSentence(currentWord, userWord));
-      this.addToCards(this.generateSelectWordForSentenceVideo(currentWord, userWord));
-      this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
+      if (this.isTestMode) {
+        this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
+        this.addToCards(this.generateSelectWordForSentence(currentWord, userWord));
+        this.addToCards(this.generateSelectWordForSentenceVideo(currentWord, userWord));
+        this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
+      }
     }
 
     return {
@@ -279,7 +285,7 @@ export class DrillsGenerator {
             meanings: this.filterMeaningsForUser(word).meanings,
             countExampleSentencesToShow: 1,
             exampleSentences: this.formatExampleSentencesForWord(word),
-            audioUrls: ['/assets/test-audio.mp3?word-3266529'],
+            audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3266529'] : [],
           };
         }),
       }));
@@ -299,7 +305,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 
@@ -394,7 +400,7 @@ export class DrillsGenerator {
             value: sentence.text,
             furiganaHtml: sentence.text, // TODO: furigana
             translationHtml: translationHtml,
-            audioUrls: ['/assets/test-audio.mp3?example-sentence'], // TODO: audio
+            audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?example-sentence'] : [], // TODO: audio
           };
         }
       })
@@ -415,7 +421,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 
@@ -494,7 +500,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 
@@ -550,7 +556,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 
@@ -628,7 +634,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 
@@ -648,14 +654,14 @@ export class DrillsGenerator {
           value: '携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。',
           furiganaHtml: '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
           translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.',
-          audioUrls: ['/assets/test-audio.mp3?sentence-94376'],
+          audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?sentence-94376'] : [],
         },
         answers: this.generateAnswersForWordWriting(word)[0],
       },
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 
@@ -681,7 +687,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 
@@ -700,7 +706,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 
@@ -708,7 +714,7 @@ export class DrillsGenerator {
     let openAnswers: TrainingAnswer[] = [];
 
     let correctAnswer = this.furiganaToHtml(word.data.readings[0].furigana, null, 'gray-furigana');
-    openAnswers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'] });
+    openAnswers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?selectAudioForWord'] : [] });
 
     for (let words of [this.words, DrillsGenerator.additionalWords]) {
       if (openAnswers.length == 5) {
@@ -724,7 +730,7 @@ export class DrillsGenerator {
         let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, 'gray-furigana');
 
         if (!openAnswers.some((a) => a.contentHtml == formattedAnswer)) {
-          openAnswers.push({ contentHtml: formattedAnswer, audioUrls: ['/assets/test-audio.mp3?selectAudioForWord'], isCorrectAnswer: false });
+          openAnswers.push({ contentHtml: formattedAnswer, audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?selectAudioForWord'] : [], isCorrectAnswer: false });
         }
 
         if (openAnswers.length == 5) {
@@ -776,7 +782,7 @@ export class DrillsGenerator {
         infoCard: `kanjiInfo_${kanji.id}`,
       })),
       // TODO: audioUrls
-      audioUrls: ['/assets/test-audio.mp3?word-3236529'],
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
       mnemonic: null,
       /*mnemonic: {
         imageUrl: '/assets/test-image.png?word-3236529',
