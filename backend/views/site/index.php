@@ -30,7 +30,7 @@ $currentLanguage = substr(Yii::$app->language, 0, 2);
 
 
 
-    <link rel="shortcut icon" href="/assets/tildafavicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico?2" type="image/x-icon">
 
 
     <link rel="stylesheet" href="/assets/tilda-grid-3.0.min.css" type="text/css" media="all">
