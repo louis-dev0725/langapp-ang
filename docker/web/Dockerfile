@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 ARG BASE_IMAGE=php-nginx
 FROM webdevops/${BASE_IMAGE}:7.4 AS dev
 
@@ -114,7 +115,7 @@ RUN set -ex \
     && tar xf jumanpp-2.0.0-rc3.tar.xz --strip-components=2 -C /var/lib/jumanpp jumanpp-2.0.0-rc3/model/jumandic.jppmdl \
     && rm jumanpp-2.0.0-rc3.tar.xz
 
-COPY ./run/ /opt/run/
+COPY --link ./run/ /opt/run/
 
 # Application environment
 WORKDIR /app/
@@ -123,9 +124,9 @@ WORKDIR /app/
 #FROM dev as prod
 
 FROM dev as prod-backend
-COPY ./backend/composer.json ./backend/composer.lock /app/backend/
+COPY --link ./backend/composer.json ./backend/composer.lock /app/backend/
 RUN cd /app/backend/ && composer install --prefer-dist --no-scripts --no-dev --no-autoloader && rm -rf /root/.composer
-COPY ./backend /app/backend
+COPY --link ./backend /app/backend
 RUN cd /app/backend/ && composer dump-autoload --no-scripts --no-dev --optimize
 RUN mkdir /app/backend/runtime; mkdir /app/backend/web/yii-assets; chown application:application /app/backend/runtime/ -R; chown application:application /app/backend/web/assets/ -R; chown application:application /app/backend/web/yii-assets/ -R
 
@@ -133,49 +134,50 @@ FROM prod-backend as prod-backend-cleaned
 RUN rm -R /app/backend/vendor
 
 FROM dev as prod-backend-ts
-COPY ./backend-ts/package.json ./backend-ts/package-lock.json /app/backend-ts/
+COPY --link ./backend-ts/package.json ./backend-ts/package-lock.json /app/backend-ts/
 RUN cd /app/backend-ts/ && npm ci
-COPY ./backend-ts/ /app/backend-ts/
+COPY --link ./backend-ts/ /app/backend-ts/
 RUN cd /app/backend-ts/ && npm run build
-# Copy to separate dir to be able to copy it separately (used for better cache)
+# COPY --link to separate dir to be able to COPY --link it separately (used for better cache)
 #RUN mv /app/backend-ts/node_modules /app/to-copy-backend-ts-node_modules
 
 FROM prod-backend-ts as prod-backend-ts-cleaned
 RUN rm -R /app/backend-ts/node_modules
 
 FROM dev as prod-frontend
-COPY ./frontend/package.json ./frontend/package-lock.json /app/frontend/
+COPY --link ./frontend/package.json ./frontend/package-lock.json /app/frontend/
 RUN cd /app/frontend/ && npm ci
-COPY ./frontend/ /app/frontend/
-COPY ./extension/ /app/extension/
+COPY --link ./frontend/ /app/frontend/
+COPY --link ./extension/ /app/extension/
+COPY --link --from=prod-backend-ts /app/backend-ts/src/drills/drills.interfaces.ts /app/backend-ts/src/drills/drills.interfaces.ts
 RUN cd /app/frontend/ && npm run build:prod
-# Copy to separate dir to be able to copy it separately (used for better cache)
+# COPY --link to separate dir to be able to COPY --link it separately (used for better cache)
 #RUN mv /app/frontend/node_modules /app/to-copy-frontend-node_modules
 
 FROM prod-frontend as prod-frontend-cleaned
 RUN rm -R /app/frontend/node_modules
 
 FROM dev as prod
-COPY ./docker/web/nginx/vhost.conf /opt/docker/etc/nginx/vhost.conf
-COPY ./docker/web/nginx/vhost-prod.conf /opt/docker/etc/nginx/vhost-prod.conf
-COPY ./docker/web/php/php.ini /opt/docker/etc/php/php.ini
-COPY ./docker/web/supervisord/postfix.conf /opt/docker/etc/supervisor.d/postfix.conf
-COPY ./docker/web/supervisord/juman.conf /opt/docker/etc/supervisor.d/juman.conf
-COPY ./docker/web/supervisord/backendts.conf /opt/docker/etc/supervisor.d/backendts.conf
-COPY ./docker/web/entrypoint.sh /opt/docker/bin/entrypoint.d/app.sh
-COPY ./docker /app/docker
-COPY ./run /app/run
+COPY --link ./docker/web/nginx/vhost.conf /opt/docker/etc/nginx/vhost.conf
+COPY --link ./docker/web/nginx/vhost-prod.conf /opt/docker/etc/nginx/vhost-prod.conf
+COPY --link ./docker/web/php/php.ini /opt/docker/etc/php/php.ini
+COPY --link ./docker/web/supervisord/postfix.conf /opt/docker/etc/supervisor.d/postfix.conf
+COPY --link ./docker/web/supervisord/juman.conf /opt/docker/etc/supervisor.d/juman.conf
+COPY --link ./docker/web/supervisord/backendts.conf /opt/docker/etc/supervisor.d/backendts.conf
+COPY --link ./docker/web/entrypoint.sh /opt/docker/bin/entrypoint.d/app.sh
+COPY --link ./docker /app/docker
+COPY --link ./run /app/run
 
-# Copy only vendor/node_modules from separate dirs (used for better cache)
-# COPY --from=prod-backend /app/to-copy-backend-vendor /app/backend/vendor
-# COPY --from=prod-backend-ts /app/to-copy-backend-ts-node_modules /app/backend-ts/node_modules
-# COPY --from=prod-frontend /app/to-copy-frontend-node_modules /app/frontend/node_modules
-COPY --from=prod-backend-ts /app/backend-ts/node_modules /app/backend-ts/node_modules
-# COPY --from=prod-frontend /app/frontend/node_modules /app/frontend/node_modules
-COPY --from=prod-backend /app/backend/vendor /app/backend/vendor
+# COPY --link only vendor/node_modules from separate dirs (used for better cache)
+# COPY --link --from=prod-backend /app/to-copy-backend-vendor /app/backend/vendor
+# COPY --link --from=prod-backend-ts /app/to-copy-backend-ts-node_modules /app/backend-ts/node_modules
+# COPY --link --from=prod-frontend /app/to-copy-frontend-node_modules /app/frontend/node_modules
+COPY --link --from=prod-backend-ts /app/backend-ts/node_modules /app/backend-ts/node_modules
+# COPY --link --from=prod-frontend /app/frontend/node_modules /app/frontend/node_modules
+COPY --link --from=prod-backend /app/backend/vendor /app/backend/vendor
 
-COPY --from=prod-backend-cleaned /app/backend /app/backend
-COPY --from=prod-backend-ts-cleaned /app/backend-ts /app/backend-ts
-COPY --from=prod-frontend-cleaned /app/frontend /app/frontend
+COPY --link --from=prod-backend-cleaned /app/backend /app/backend
+COPY --link --from=prod-backend-ts-cleaned /app/backend-ts /app/backend-ts
+COPY --link --from=prod-frontend-cleaned /app/frontend /app/frontend
 
 # TODO: Probably there is no need for node_modules in frontend, we can just use build
