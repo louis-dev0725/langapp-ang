@@ -3,13 +3,7 @@
     <div class="flex flex-col justify-center start-text">
       <p style="font-size: 21px; font-weight: 600" translate>{{'Study new words' | translate}}</p>
       <div style="word-wrap: break-word; font-size: 14px" translate>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Sed ut imperdiet tortor. Quisque molestie turpis vitae ante iaculis, a
-        convallis ante porta. Nullam a viverra elit, non interdum sem. Pellentesque
-        quis felis ullamcorper dolor sollicitudin lacinia. Aliquam ac lacinia diam,
-        at viverra urna. Duis eleifend, nunc quis pharetra laoreet, enim ipsum faucibus
-        dui, euismod efficitur metus ipsum in massa. Curabitur dictum, ante non lobortis
-        iaculis, leo mauris cursus nisi, non condimentum nunc ligula in sapien.
+        {{ 'In this section you can study the words you added while watching videos or reading texts.' | translate }}
       </div>
       <button class="w-full" style="text-align: center; margin-top: 20px; height: 35px; font-size: 14px" label="{{'Start study' | translate}}" pButton (click)="getTrainingCards()"></button>
     </div>
