@@ -18,7 +18,7 @@
       <div class="p-fluid">
         <div class="p-field g-field">
           <label for="email">{{'Email' | translate}}</label>
-          <input id="email" formControlName="email" pInputText type="text" />
+          <input id="email" formControlName="email" pInputText type="email" />
           <small class="p-invalid" *ngIf="checkError('email')">{{getErrors('email')}}</small>
         </div>
 

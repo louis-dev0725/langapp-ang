@@ -1,8 +1,8 @@
 export const environment = {
-  development: false,
-  production: true,
-  isIonic: false,
-  apiUrl: '/api',
+  development: true,
+  production: false,
+  isIonic: true,
+  apiUrl: 'https://langapp.metal1.jonexit.ru/api',
   siteKey: '',
   square: {
     env: 'sandbox',

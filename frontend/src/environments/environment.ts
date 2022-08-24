@@ -5,6 +5,7 @@
 export const environment = {
   development: true,
   production: false,
+  isIonic: false,
   apiUrl: '/api',
   siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   square: {

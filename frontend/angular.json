@@ -77,8 +77,23 @@
               "sourceMap": true,
               "namedChunks": true
             },
-            "ionic": {
-              "baseHref": "/"
+            "ionic-production": {
+              "baseHref": "/",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.ionic-prod.ts"
+                }
+              ]
+            },
+            "ionic-development": {
+              "baseHref": "/",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.ionic-dev.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -93,6 +108,14 @@
             "development": {
               "servePath": "/app/",
               "browserTarget": "langapp:build:development"
+            },
+            "ionic-production": {
+              "servePath": "/",
+              "browserTarget": "langapp:build:production,ionic-production"
+            },
+            "ionic-development": {
+              "servePath": "/",
+              "browserTarget": "langapp:build:development,ionic-development"
             }
           },
           "defaultConfiguration": "development"
