@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Content, ContentAttributeResponse } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
@@ -112,7 +103,7 @@ export class ContentViewComponent implements AfterViewInit {
     },
   ];
   currentSubtitleStyle = this.subtitleStyles[3].style;
-  currentSubtitleStyleIndex: number;
+  currentSubtitleStyleIndex: number = 3;
   isRepeatingVideo = new FormControl(false);
 
   reportReason = new FormControl(null, [Validators.required]);
@@ -172,18 +163,17 @@ export class ContentViewComponent implements AfterViewInit {
     this.checkPauseOnHover();
   }
 
-  constructor(
-    private route: ActivatedRoute,
-    private api: ApiService,
-    private cd: ChangeDetectorRef,
-    private messageService: MessageService
-  ) {}
+  constructor(private route: ActivatedRoute, private api: ApiService, private cd: ChangeDetectorRef, private messageService: MessageService) {}
 
   ngAfterViewInit(): void {
     this.isRepeatingVideo.setValue(!!+localStorage.getItem('IS_REPEATING_VIDEO'));
-    const styleIndex = +localStorage.getItem('CURRENT_SUBTITLE_STYLE');
-    this.currentSubtitleStyle = this.subtitleStyles[styleIndex].style;
-    this.currentSubtitleStyleIndex = styleIndex;
+    let styleIndex = localStorage.getItem('CURRENT_SUBTITLE_STYLE');
+    if (styleIndex !== null) {
+      if (this.subtitleStyles[parseInt(styleIndex)]) {
+        this.currentSubtitleStyleIndex = parseInt(styleIndex);
+        this.currentSubtitleStyle = this.subtitleStyles[this.currentSubtitleStyleIndex].style;
+      }
+    }
     this.currentPlaySpeed = localStorage.getItem('PLAY_SPEED');
     this.route.params
       .pipe(
@@ -354,10 +344,7 @@ export class ContentViewComponent implements AfterViewInit {
       this.selectSubtitle(this.subtitles[0], 0);
       return;
     }
-    this.selectSubtitle(
-      this.subtitles[this.selectedSubtitleIndexes[this.selectedSubtitleIndexes.length - 1] + 1],
-      this.selectedSubtitleIndexes.length - 1
-    );
+    this.selectSubtitle(this.subtitles[this.selectedSubtitleIndexes[this.selectedSubtitleIndexes.length - 1] + 1], this.selectedSubtitleIndexes.length - 1);
   }
 
   playSubtitle(startTime: number, isPaused: boolean = false) {
