@@ -74,7 +74,7 @@ export class AppService {
 
     let hasMeaningsInRequestedLanguages = toReturn.words.filter((w) => w.meanings.filter((m) => requestedLanguages.indexOf(m.lang) !== -1).length > 0).length > 0;
     if (!hasMeaningsInRequestedLanguages) {
-      requestedLanguages.push('eng');
+      requestedLanguages.push('en');
     }
 
     for (let word of toReturn.words) {
@@ -97,7 +97,7 @@ export class AppService {
         return languages.indexOf(a.lang) - languages.indexOf(b.lang);
       });*/
       word.meanings = word.meanings
-        .filter((m) => requestedLanguages.indexOf(m.lang) !== -1)
+        .filter((m) => !m.isOther && requestedLanguages.indexOf(m.lang) !== -1)
         .sort((a, b) => {
           return requestedLanguages.indexOf(a.lang) - requestedLanguages.indexOf(b.lang);
         });
