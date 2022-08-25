@@ -111,11 +111,11 @@
             },
             "ionic-production": {
               "servePath": "/",
-              "browserTarget": "langapp:build:production,ionic-production"
+              "browserTarget": "langapp:build:ionic-production,production"
             },
             "ionic-development": {
               "servePath": "/",
-              "browserTarget": "langapp:build:development,ionic-development"
+              "browserTarget": "langapp:build:ionic-development,development"
             }
           },
           "defaultConfiguration": "development"
