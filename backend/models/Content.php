@@ -45,7 +45,7 @@ class Content extends ActiveRecord
         if (isset($this->dataJson['imageUrl'])) {
             return $this->dataJson['imageUrl'];
         } elseif (isset($this->dataJson['youtubeVideo']['videoId'])) {
-            return 'http://i3.ytimg.com/vi/' . $this->dataJson['youtubeVideo']['videoId'] . '/hqdefault.jpg';
+            return 'https://i3.ytimg.com/vi/' . $this->dataJson['youtubeVideo']['videoId'] . '/hqdefault.jpg';
         }
     }
 

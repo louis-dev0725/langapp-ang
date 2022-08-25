@@ -120,6 +120,8 @@ class ContentController extends ActiveController
             $query->andWhere(['content.deleted' => 0]);
         }
 
+        $query->select([/*'cleanText',*/ 'dataJson', 'deleted', 'format', 'id', 'length', 'level', 'rank', 'sourceLink', 'status', 'tagsJson', /*'text',*/ 'title', 'type']);
+
         return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
