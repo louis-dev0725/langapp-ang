@@ -43,7 +43,7 @@ class Content extends ActiveRecord
     public function getImageUrl()
     {
         if (isset($this->dataJson['imageUrl'])) {
-            return $this->dataJson['imageUrl'];
+            return str_replace('http://', 'https://', $this->dataJson['imageUrl']);
         } elseif (isset($this->dataJson['youtubeVideo']['videoId'])) {
             return 'https://i3.ytimg.com/vi/' . $this->dataJson['youtubeVideo']['videoId'] . '/hqdefault.jpg';
         }

@@ -1,24 +1,24 @@
 <div class="container">
   <div *ngIf="list.items?.length > 0">
-    <div class="p-grid">
-      <div *ngFor="let item of list.items" class="p-col-6">
-        <div class="card p-d-flex">
-          <div style="background-image: url({{item.imageUrl}});" class="image p-shadow-1"></div>
-          <div class="p-ml-3" class="right p-ml-3 p-d-flex p-flex-column p-jc-between">
-            <div>
-              <a class="title p-mb-2" [routerLink]="['/content/view', item.id]" lang="ja">{{item.title}}</a>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div *ngFor="let item of list.items" class="">
+        <div class="card p-0 flex flex-wrap md:flex-nowrap">
+          <div style="background-image: url({{ item.imageUrl }});" class="image w-full md:w-[290px] p-shadow-1"></div>
+          <div class="p-ml-3" class="right md:ml-4 p-4 flex flex-col justify-between">
             <!--<div>
           <p-tag *ngFor="let tag of item.tagsJson" [value]="tag" styleClass="p-mr-2 p-mb-2"></p-tag>
         </div>-->
+            <div class="pb-2">
+              <a class="title" [routerLink]="['/content/view', item.id]" lang="ja">{{ item.title }}</a>
+            </div>
             <div>
-              <div class="p-mb-2">
+              <div class="pb-2">
                 <p-tag *ngIf="item.dataJson?.youtubeVideo?.channel?.title" [value]="item.dataJson.youtubeVideo.channel.title" class="p-mr-2"></p-tag>
               </div>
-              <div class="p-d-flex p-jc-between">
+              <div class="flex justify-between">
                 <div>
                   <p-chip *ngIf="item.level > 0" [label]="'JLPT N' + item.level" class="p-mr-2"></p-chip>
-                  <p-chip *ngIf="item.dataJson?.youtubeVideo?.wilsonScore" [label]="this.showRating(item)" class="p-mr-2"></p-chip>
+                  <!--<p-chip *ngIf="item.dataJson?.youtubeVideo?.wilsonScore" [label]="this.showRating(item)" class="p-mr-2"></p-chip>-->
                 </div>
                 <div>
                   <a pButton label="Open" [routerLink]="['/content/view', item.id]"></a>
@@ -30,17 +30,13 @@
       </div>
     </div>
 
-
-    <div class="card p-mt-4 p-p-0">
-      <div class="p-grid p-align-center">
-        <div class="p-col-2">
-        </div>
-        <div class="p-col-8">
+    <div class="card p-0 mt-4">
+      <div class="grid grid-cols-1 md:p-4 md:grid-cols-[2fr_8fr_2fr]">
+        <div class=""></div>
+        <div class="">
           <p-paginator [rows]="list._meta.perPage" [totalRecords]="list._meta.totalCount" [first]="list._meta.perPage * (list._meta.currentPage - 1)" (onPageChange)="handlePage($event)"></p-paginator>
         </div>
-        <div class="p-col-2 p-as-center p-text-right p-pr-5">
-          Total {{list._meta.totalCount}} materials
-        </div>
+        <div class="text-center md:text-right self-center">Total {{ list._meta.totalCount }} materials</div>
       </div>
     </div>
   </div>

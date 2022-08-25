@@ -1,8 +1,8 @@
 <div class="container">
   <div class="card">
     <h4 translate>Materials</h4>
-    <div class="filter p-d-flex p-flex-column p-flex-md-row p-jc-md-start p-mb-2">
-      <form [formGroup]="filterForm">
+    <form [formGroup]="filterForm">
+      <div class="filter flex flex-wrap gap-4">
         <!--<form [formGroup]="filterForm" class="form-filter">
         <input pInputText formControlName="keywords" placeholder="{{'Search to keywords' | translate}}">
 
@@ -11,16 +11,15 @@
         </div>
       -->
 
-        <p-dropdown formControlName="level" [options]="levels$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'JLPT Level' | translate }}" [showClear]="true" [style]="{width: '150px'}" class="p-mr-md-2"></p-dropdown>
+        <p-dropdown formControlName="level" [options]="levels$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'JLPT Level' | translate }}" [showClear]="true" [style]="{ width: '150px' }"></p-dropdown>
 
-        <p-dropdown formControlName="type" [options]="types$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Content Type' | translate }}" [showClear]="true" [style]="{width: '170px'}" class="p-mr-md-2"></p-dropdown>
+        <p-dropdown formControlName="type" [options]="types$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Content Type' | translate }}" [showClear]="true" [style]="{ width: '170px' }"></p-dropdown>
 
-        <p-dropdown formControlName="length" [options]="lengthVariants$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Text length' | translate }}" [showClear]="true" [style]="{width: '200px'}" class="p-mr-md-2"></p-dropdown>
+        <p-dropdown formControlName="length" [options]="lengthVariants$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Text length' | translate }}" [showClear]="true" [style]="{ width: '200px' }"></p-dropdown>
 
-
-        <p-toggleButton [onLabel]="'Hide studied'" [offLabel]="'Show studied'" [style]="{'width': '10rem'}"></p-toggleButton>
-      </form>
-    </div>
+        <p-toggleButton [onLabel]="'Hide studied'" [offLabel]="'Show studied'" [style]="{ width: '10rem' }"></p-toggleButton>
+      </div>
+    </form>
   </div>
 
   <app-list-materials *ngIf="contentList$ | async as contentList" [list]="$any(contentList)" (deleteM)="deleteMaterial($event)" (dataChanged)="changePageTable($event)"></app-list-materials>
