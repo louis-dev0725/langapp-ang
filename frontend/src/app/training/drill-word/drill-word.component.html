@@ -4,7 +4,7 @@
 <div [ngClass]="{ 'question-mode': !isAnswered }" *ngIf="isAnswered || !card?.question?.showBigAudio">
   <div class="grid grid-cols-[2.5rem_auto_2.5rem] gap-y-1 items-center justify-center md:justify-start">
     <div>
-      <i class="pi pi-volume-up play-audio-button mark-on-quesion" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
+      <i class="pi pi-volume-up play-audio-button mark-on-quesion" style="color: #5397d5; font-size: 1.5rem" *ngIf="card?.audioUrls?.[0]" (click)="playAudio(card?.audioUrls[0])"></i>
     </div>
     <div>
       <p [innerHTML]="isAnswered || !card?.question?.furiganaHtml ? card?.furiganaHtml : card?.question?.furiganaHtml" style="font-size: 34px" class="drill-word-furigana text-black" [ngClass]="{ 'mark-on-quesion': !isAnswered && !card?.question?.furiganaHtml }"></p>
