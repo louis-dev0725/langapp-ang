@@ -11,6 +11,7 @@
     "ionic:build": "cross-env NODE_ENV=production ng build --configuration=production,ionic-production",
     "ionic:serve": "ng serve --configuration=ionic-development",
     "ionic:generate-icons": "cordova-res android --skip-config --copy && cordova-res ios --skip-config --copy",
+    "cap:build": "ionic cap build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
