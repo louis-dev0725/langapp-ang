@@ -58,6 +58,8 @@ spec:
             - name: http
               containerPort: 80
           env:
+            - name: IS_PROD
+              value: "1"
             - name: POSTGRES_HOST
               value: acid-langapp-cluster
             - name: PGHOST
@@ -114,6 +116,8 @@ spec:
         - name: langapp-web-db-migrations
           image: registry.gitlab.com/mangoproject/langapp/langapp-web
           env:
+            - name: IS_PROD
+              value: "1"
             - name: POSTGRES_HOST
               value: acid-langapp-cluster
             - name: PGHOST
