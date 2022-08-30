@@ -70,7 +70,13 @@ export class DrillsGenerator {
       }
 
       const currentKanjis = currentExtractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji)); // filter inside map to save sorting
-      const currentKanjiReadings = [];
+
+      if (this.isTestMode) {
+        // this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
+        this.addToCards(this.generateSelectFuriganaForWholeWord(currentWord, userWord));
+        continue;
+      }
+
       for (const [i, userKanji] of currentUserKanjis.entries()) {
         const currentKanji = currentKanjis[i];
         if (!currentKanji) {
@@ -92,11 +98,6 @@ export class DrillsGenerator {
             }
           }
         }
-      }
-
-      if (this.isTestMode) {
-        this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
-        continue;
       }
 
       this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
@@ -457,8 +458,7 @@ export class DrillsGenerator {
     let correctAnswer = this.formatWordFuriganaForAnswerReading(wordFurigana);
     const answers: TrainingAnswer[] = [];
     answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true });
-    let lastPosition = wordFurigana[wordFurigana.length - 1];
-    let wordOkurigana = lastPosition && lastPosition.rt ? lastPosition.ruby : null;
+    let wordOkurigana = this.getOkuriganaForWord(word);
 
     for (let words of [this.words, DrillsGenerator.additionalWords]) {
       if (answers.length == 5) {
@@ -466,11 +466,12 @@ export class DrillsGenerator {
       }
       let shuffledList = shuffle(words);
 
-      // If word has okurigana then it should match
       for (let randomWord of shuffledList) {
-        let reading = randomWord.data.readings[0];
-        if (wordOkurigana == null || reading.furigana[reading.furigana.length - 1].ruby) {
-          let formattedAnswer = this.formatWordFuriganaForAnswerReading(reading.furigana);
+        let furigana = randomWord.data.readings[0].furigana;
+        // Okurigana should match; count of parts in furigana should match
+        if (wordOkurigana == this.getOkuriganaForWord(randomWord) && wordFurigana.length == furigana.length) {
+          let formattedAnswer = this.formatWordFuriganaForAnswerReading(furigana);
+          // Do not add duplicate answers
           if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
             answers.push({ contentHtml: formattedAnswer });
           }
@@ -488,6 +489,14 @@ export class DrillsGenerator {
     // TODO: load additional words if needed
 
     return shuffle(answers);
+  }
+
+  getOkuriganaForWord(word: JapaneseWord) {
+    let wordFurigana = word.data.readings[0].furigana;
+    let lastPosition = wordFurigana[wordFurigana.length - 1];
+    let wordOkurigana = lastPosition && lastPosition.rt == '' ? lastPosition.ruby : '';
+
+    return wordOkurigana;
   }
 
   formatWordFuriganaForAnswerReading(furigana: Furigana[]) {
