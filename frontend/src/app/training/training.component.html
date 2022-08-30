@@ -2,6 +2,17 @@
   <div class="flex justify-center">
     <div class="flex-initial w-full max-w-screen-lg">
       <div class="flex justify-end pb-4">
+        <div class="justify-self-start flex-1" *ngIf="showBackButton">
+          <button
+            pButton
+            icon="pi pi-angle-left"
+            iconPos="left"
+            [label]="'Back' | translate"
+            class="action-btn"
+            style="color: #aebccd; background-color: white; border: none; height: 40px; line-height: 40px;"
+            (click)="goBack()"
+          ></button>
+        </div>
         <div class="start-actions" *ngIf="currentCardType">
           <button
             pButton

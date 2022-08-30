@@ -18,17 +18,9 @@ export class TrainingComponent implements OnInit {
   drills: Drill[];
   isOpenSettingsModal = false;
   isOpenHidingModal = false;
-  selectedCardTypes: string[] = [
-    'selectFuriganaForOneKanji',
-    'selectFuriganaForWholeWord',
-    'typeFuriganaForWholeWord',
-    'selectTranslationForWord',
-    'selectWordForTranslation',
-    'selectWordForAudio',
-    'selectWordForSentence',
-    'selectAudioForWord',
-  ];
+  selectedCardTypes: string[] = ['selectFuriganaForOneKanji', 'selectFuriganaForWholeWord', 'typeFuriganaForWholeWord', 'selectTranslationForWord', 'selectWordForTranslation', 'selectWordForAudio', 'selectWordForSentence', 'selectAudioForWord'];
   selectedHidingReason: string;
+  showBackButton = false;
   hidingReasons = [
     {
       text: 'Hide just this question',
@@ -89,14 +81,18 @@ export class TrainingComponent implements OnInit {
     },
   ];
 
-  constructor(private cardService: CardsService, private cd: ChangeDetectorRef, private api: ApiService) {}
+  constructor(private cardsService: CardsService, private cd: ChangeDetectorRef, private api: ApiService) {}
 
   ngOnInit() {
     this.getTrainingDrills();
   }
 
+  goBack() {
+    this.cardsService.navigateToNextCard();
+  }
+
   getTrainingDrills() {
-    this.cardService
+    this.cardsService
       .getCurrentWord()
       .pipe(untilDestroyed(this))
       .subscribe((word) => {
@@ -106,21 +102,24 @@ export class TrainingComponent implements OnInit {
         }
         this.cd.markForCheck();
       });
-    this.cardService.getIsAudioCard()
-      .pipe(
-        untilDestroyed(this)
-      )
-      .subscribe(isAudio => {
+    this.cardsService
+      .getIsAudioCard()
+      .pipe(untilDestroyed(this))
+      .subscribe((isAudio) => {
         this.hidingReasons[3].show = isAudio;
       });
-    this.cardService
+    this.cardsService.showBackButton$.pipe(untilDestroyed(this)).subscribe((showBackButton) => {
+      this.showBackButton = showBackButton;
+      this.cd.markForCheck();
+    });
+    this.cardsService
       .getCurrentCardType()
       .pipe(untilDestroyed(this))
       .subscribe((cardType) => {
         this.currentCardType = cardType;
         this.cd.markForCheck();
       });
-    this.cardService
+    this.cardsService
       .getTrainingDrills()
       .pipe(untilDestroyed(this))
       .subscribe((drills) => {
@@ -154,7 +153,7 @@ export class TrainingComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.cardService.setTrainingDrills(response.drills);
+        this.cardsService.setTrainingDrills(response.drills);
       });
   }
 
@@ -177,7 +176,7 @@ export class TrainingComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.cardService.setTrainingDrills(response.drills);
+        this.cardsService.setTrainingDrills(response.drills);
       });
   }
 

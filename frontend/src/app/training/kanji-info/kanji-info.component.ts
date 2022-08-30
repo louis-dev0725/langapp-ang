@@ -42,9 +42,8 @@ export class KanjiInfoComponent implements OnInit {
     }
   }
 
-  goToWordInfo(route: string) {
-    const [_, id] = route.split('_');
-    this.router.navigate(['training', 'word-info', id]);
+  goToWordInfo(cardId: string) {
+    this.cardsService.navigateToCardById(cardId);
   }
 
   getTrainingDetails() {

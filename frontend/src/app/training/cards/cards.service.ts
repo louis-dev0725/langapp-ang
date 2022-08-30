@@ -19,6 +19,7 @@ export class CardsService {
   public currentCard$ = new BehaviorSubject<WordInfo | KanjiCardInfo | TrainingQuestionCard | TrainingButtonQuestionCard>(null);
   public currentCardType$ = new BehaviorSubject<string>(null);
   public isAudioCard$ = new BehaviorSubject<boolean>(null);
+  public showBackButton$ = new BehaviorSubject<boolean>(false);
   public drills$ = new BehaviorSubject<Drill[]>(null);
   public endingMessage$ = new BehaviorSubject<TrainingEndMessage>(null);
 
@@ -43,6 +44,7 @@ export class CardsService {
       const currentCard = this.cards$.value[currentDrill.card];
       this.currentCardType$.next(currentCard.cardType);
       this.currentCard$.next(currentCard);
+      this.showBackButton$.next(false);
 
       if (currentCard.cardType === 'wordInfo' || currentCard.cardType === 'kanjiInfo') {
         this.router.navigate(['training', this.cardTypeRouteEnum[currentCard.cardType], currentCard.wordId]);
@@ -55,7 +57,31 @@ export class CardsService {
     }
   }
 
+  navigateToCardById(cardId: string) {
+    let currentCard = this.cards$.value[cardId];
+    const [type, id] = cardId.split('_');
+    if (!currentCard) {
+      // Will be loaded from API if not exists
+      // @ts-ignore
+      currentCard = { cardType: type, cardId, wordId: Number(id) };
+    }
+    this.currentCardType$.next(currentCard.cardType);
+    this.currentCard$.next(currentCard);
+    this.currentDrillIndex = -1;
+    this.showBackButton$.next(true);
+
+    if (currentCard.cardType === 'wordInfo' || currentCard.cardType === 'kanjiInfo') {
+      this.router.navigate(['training', this.cardTypeRouteEnum[currentCard.cardType], currentCard.wordId]);
+    } else {
+      this.router.navigate(['training', this.cardTypeRouteEnum[currentCard.cardType]]);
+    }
+  }
+
   answerCard(isAnsweredCorrectly: boolean) {
+    if (this.currentDrillIndex == -1) {
+      return;
+    }
+
     let drills = [...this.drills$.value];
     drills[this.currentDrillIndex] = {
       ...drills[this.currentDrillIndex],
