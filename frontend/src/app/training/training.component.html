@@ -21,6 +21,7 @@
             class="action-btn"
             style="color: #aebccd; background-color: white; border: none; height: 40px; width: 45px; font-size: 25px"
             (click)="openSettingsModal()"
+            [pTooltip]="'Settings' | translate" [tooltipStyleClass]="'max-w-xs'"
           ></button>
           <button
             pButton
@@ -29,6 +30,7 @@
             class="action-btn"
             style="color: #aebccd; background-color: white; border: none; height: 40px; width: 45px; font-size: 25px; margin-left: 10px"
             (click)="openHidingModal(true)"
+            [pTooltip]="'Hide this question' | translate" [tooltipStyleClass]="'max-w-xs'"
           ></button>
         </div>
       </div>
@@ -39,14 +41,14 @@
 
 <p-dialog
   [(visible)]="isOpenSettingsModal"
+  header="Study settings"
   [modal]="true"
   [dismissableMask]="true"
-  [showHeader]="false"
   [breakpoints]="{ '769px': '100vw' }"
   [style]="{ width: '360px' }"
 >
   <ng-template pTemplate="content">
-    <p style="font-weight: 700; margin-top: 20px; font-size: 16px">{{ 'General' | translate }}</p>
+    <p style="font-weight: 700; font-size: 16px">{{ 'General' | translate }}</p>
     <p-checkbox [(ngModel)]="autoPlayAudio" [binary]="true" label="{{ 'Auto play audio' | translate }}"></p-checkbox>
     <p style="font-weight: 700; margin-top: 20px; font-size: 16px">{{ 'Active type of questions' | translate }}</p>
     <div

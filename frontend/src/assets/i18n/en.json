@@ -265,5 +265,6 @@
 	"more-meanings-for": "More meanings for {{value}}",
 	"other-meanings": "(other)",
 	"select-audio-n": "Select audio #{{value}}",
-	"Back": "Back"
+	"Back": "Back",
+	"Hide this question": "Hide this question"
 }
