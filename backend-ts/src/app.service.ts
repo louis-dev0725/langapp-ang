@@ -7,7 +7,7 @@ import { DictionaryWordRepository } from './entities/DictionaryWordRepository';
 import { JapaneseWord } from './entities/JapaneseWord';
 import { JapaneseWordData, Reading } from './entities/JapaneseWordData';
 import { FormDetection } from './form.detection';
-import { distributeFurigana, distributeFuriganaInflected, isStringEntirelyKana } from './japanese.utils';
+import { convertKatakanaToHiragana, distributeFurigana, distributeFuriganaInflected, isStringEntirelyKana } from './japanese.utils';
 import { JumanppJumandicClient as JumanppClient } from './proto/jumandic-svc_grpc_pb';
 import { AnalysisRequest } from './proto/jumandic-svc_pb';
 import { JumanMorpheme, JumanSentence, JumanStringPos } from './proto/juman_pb';
@@ -47,7 +47,7 @@ export class AppService {
       return { success: false };
     }
 
-    let queries = allVariants.map((v) => v.value);
+    let queries = allVariants.map((v) => (v.valueHiragana = convertKatakanaToHiragana(v.value)));
 
     this.logger.log('Query words in DB');
     this.logger.log(queries);
@@ -56,7 +56,7 @@ export class AppService {
 
     let resultWords: JapaneseResultItem[] = [];
     for (let word of wordsFromDb) {
-      let variant = allVariants.find((v) => word.query.indexOf(v.value) !== -1);
+      let variant = allVariants.find((v) => word.query.indexOf(v.valueHiragana) !== -1);
       if (variant) {
         resultWords.push({
           id: word.id,
@@ -350,6 +350,7 @@ export class AppService {
 
 interface Variant {
   value: string;
+  valueHiragana?: string;
   reading: string;
   reasons: JumanStringPos.AsObject[];
   isBaseform: boolean;
