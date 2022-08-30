@@ -97,6 +97,7 @@ export interface KanjiReading {
   type: string;
   value: string;
   frequencyPercent: number;
+  isCurrent?: boolean;
 }
 
 export interface TrainingMnemonic {

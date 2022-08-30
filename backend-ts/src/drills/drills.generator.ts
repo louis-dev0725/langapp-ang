@@ -7,7 +7,7 @@ import { Furigana, Meaning as JapaneseWordMeaning, Reading as JapaneseWordReadin
 import { Meaning as JapaneseKanjiMeaning, Reading as JapaneseKanjiReading } from 'src/entities/JapaneseKanjiData';
 import { User } from 'src/entities/User';
 import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
-import { convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
+import { convertHiraganaToKatakana, convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
 import { In } from 'typeorm';
 import { Drill, KanjiCardInfo, TrainingAnswer, TrainingButtonQuestionCard, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfo } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
@@ -32,7 +32,7 @@ export class DrillsGenerator {
   kanjis: JapaneseKanji[];
   exampleSentences: Dictionary<Sentence>;
 
-  isTestMode = false;
+  isTestMode = true;
 
   constructor(private userDictionaryRepository: UserDictionaryRepository, private dictionaryWordRepository: DictionaryWordRepository, private sentenceRepository: SentenceRepository) {}
 
@@ -68,7 +68,9 @@ export class DrillsGenerator {
         console.log(`Skip user word #${userWord.id}: unable to find all kanji (currentExtractedKanji.length != currentUserKanjis.length)`);
         continue;
       }
+
       const currentKanjis = currentExtractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji)); // filter inside map to save sorting
+      const currentKanjiReadings = [];
       for (const [i, userKanji] of currentUserKanjis.entries()) {
         const currentKanji = currentKanjis[i];
         if (!currentKanji) {
@@ -80,7 +82,7 @@ export class DrillsGenerator {
         if (this.isTestMode) {
           // this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
           // this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, 0, userKanji));
-          this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
+          // this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
         }
 
         if (this.addToCards(this.generateKanjiInfo(currentKanji, userKanji))) {
@@ -91,11 +93,18 @@ export class DrillsGenerator {
           }
         }
       }
+
+      if (this.isTestMode) {
+        this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
+        continue;
+      }
+
       this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
       this.addToCards(this.generateSelectFuriganaForWholeWord(currentWord, userWord));
       this.addToCards(this.generateTypeFuriganaForWholeWord(currentWord, userWord));
       this.addToCards(this.generateSelectTranslationForWord(currentWord, userWord));
       this.addToCards(this.generateSelectWordForTranslation(currentWord, userWord));
+
       if (this.isTestMode) {
         this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
         this.addToCards(this.generateSelectWordForSentence(currentWord, userWord));
@@ -338,7 +347,7 @@ export class DrillsGenerator {
 
     // Readings from other kanji
     for (let randomKanji of shuffledList) {
-      let readings = randomKanji.data.readings.filter((r) => (r.frequencyPercent || 1) > 0.2 && !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r)));
+      let readings = randomKanji.data.readings.filter((r) => (r.frequencyPercent || 1) > 0.2 /*&& r.value.indexOf('.') === -1*/ && !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r)));
       if (readings.length > 0) {
         reading = sample(readings);
         answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading) });
@@ -765,7 +774,28 @@ export class DrillsGenerator {
     };
   }
 
+  // Possible optimization: write index of the used reading in the database record for the word (along with the kanji ids)
+  getReadingsUsedInWord(word: JapaneseWord) {
+    const usedReadings: Record<string, string[]> = {};
+    const furigana = word.data.readings[0].furigana;
+    for (let [fI, fV] of furigana.entries()) {
+      if (fV.rt != '') {
+        let nextPosition = furigana?.[fI + 1]?.rt === '' ? '.' + furigana?.[fI + 1]?.ruby : '';
+        if (!usedReadings[fV.ruby]) {
+          usedReadings[fV.ruby] = [];
+        }
+        usedReadings[fV.ruby].push(convertHiraganaToKatakana(fV.rt + nextPosition));
+      }
+    }
+
+    return usedReadings;
+  }
+
   generateWordInfo(word: JapaneseWord, userWord: UserDictionary, kanjis: JapaneseKanji[]): WordInfo {
+    const usedReadings = this.getReadingsUsedInWord(word);
+
+    console.log(usedReadings);
+
     return {
       cardType: 'wordInfo',
       cardId: `wordInfo_${word.id}`,
@@ -774,10 +804,10 @@ export class DrillsGenerator {
       value: word.data?.readings?.[0]?.kanji,
       furiganaHtml: this.furiganaToHtml(word.data?.readings?.[0]?.furigana),
       ...this.filterMeaningsForUser(word, true),
-      kanji: this.kanjis.map((kanji) => ({
+      kanji: kanjis.map((kanji, i) => ({
         wordId: kanji.id,
         value: kanji.query[0],
-        readings: kanji.data.readings.map((r) => ({ type: r.type, value: r.value, frequencyPercent: r.frequencyPercent })).sort((a, b) => b.frequencyPercent - a.frequencyPercent),
+        readings: kanji.data.readings.map((r) => ({ type: r.type, value: r.value, frequencyPercent: r.frequencyPercent, isCurrent: usedReadings?.[kanji.query[0]]?.indexOf(convertHiraganaToKatakana(r.value)) !== -1 })).sort((a, b) => b.frequencyPercent - a.frequencyPercent),
         meanings: this.filterMeaningsForUser(kanji).meanings.slice(0, 1),
         infoCard: `kanjiInfo_${kanji.id}`,
       })),

@@ -28,8 +28,8 @@
           <div class="flex mb-4">
             <ng-container *ngFor="let kanjiReading of kanji?.readings; let y = index">
               <div class="flex flex-col items-center mr-12" *ngIf="kanjiReading.frequencyPercent > 1">
-                <app-progress-circle [color]="y === 0 ? '#00c853' : '#a0b0c4'" [percent]="kanjiReading.frequencyPercent" [size]="20" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: kanjiReading.frequencyPercent }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></app-progress-circle>
-                <div class="pt-1 text-[14px]" [ngClass]="y === 0 ? 'text-black' : 'text-gray-400'">
+                <app-progress-circle [color]="kanjiReading?.isCurrent ? '#00c853' : '#a0b0c4'" [percent]="kanjiReading.frequencyPercent" [size]="20" [pTooltip]="'frequency-rank-tooltip-kanji' | translate: { value: kanjiReading.frequencyPercent }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></app-progress-circle>
+                <div class="pt-1 text-[14px]" [ngClass]="kanjiReading?.isCurrent ? 'text-black' : 'text-gray-400'">
                   {{ kanjiReading?.value }}
                 </div>
               </div>
