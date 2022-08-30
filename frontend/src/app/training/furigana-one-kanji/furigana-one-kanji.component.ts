@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
+import { AudioService } from '@app/services/audio.service';
 
 @UntilDestroy()
 @Component({
@@ -25,17 +26,10 @@ export class FuriganaOneKanjiComponent implements OnInit {
   isAnsweredCorrectly: boolean;
   cardTypeRouteEnum = CardTypeRouteEnum;
 
-  constructor(private cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef) {}
+  constructor(private cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef, public audioService: AudioService) {}
 
   ngOnInit(): void {
     this.getTrainingDetails();
-  }
-
-  playAudio(source: string) {
-    const audio = new Audio();
-    audio.src = source;
-    audio.load();
-    audio.play();
   }
 
   checkAnswer(index: number) {
@@ -44,7 +38,7 @@ export class FuriganaOneKanjiComponent implements OnInit {
         this.isAnswered = true;
         this.answeredIndex = index;
         this.isAnsweredCorrectly = this.card.question?.answers[index - 1].isCorrectAnswer;
-        this.playAudio(this.card?.audioUrls[0]);
+        this.audioService.play(this.card?.audioUrls[0]);
         this.cardsService.answerCard(this.isAnsweredCorrectly);
       }
     } else {
@@ -56,7 +50,7 @@ export class FuriganaOneKanjiComponent implements OnInit {
   forgotAnswer() {
     this.isAnswered = true;
     this.isAnsweredCorrectly = false;
-    this.playAudio(this.card?.audioUrls[0]);
+    this.audioService.play(this.card?.audioUrls[0]);
     this.cardsService.answerCard(this.isAnsweredCorrectly);
   }
 

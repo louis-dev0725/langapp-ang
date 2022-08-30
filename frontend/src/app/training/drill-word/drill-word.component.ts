@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TrainingQuestionCard } from '@app/interfaces/common.interface';
+import { AudioService } from '@app/services/audio.service';
 import editIcon from '@iconify/icons-mdi/edit';
 
 @Component({
@@ -17,16 +18,9 @@ export class DrillWordComponent implements OnInit {
     editIcon,
   };
 
-  constructor(private router: Router, private cd: ChangeDetectorRef) {}
+  constructor(private router: Router, private cd: ChangeDetectorRef, public audioService: AudioService) {}
 
   ngOnInit(): void {}
-
-  playAudio(source: string) {
-    const audio = new Audio();
-    audio.src = source;
-    audio.load();
-    audio.play();
-  }
 
   goToInfoCard(route: string) {
     const [card, id] = route.split('_');

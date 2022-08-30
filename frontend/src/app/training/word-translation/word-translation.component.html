@@ -27,7 +27,7 @@
   <div class="kanji-info">
     <div class="flex items-center justify-start">
       <div style="flex: 1">
-        <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(card?.audioUrls[0])"></i>
+        <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(card?.audioUrls[0])"></i>
       </div>
       <div style="flex: 5">
         <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px" class="furigana-font-tiny text-black"></p>

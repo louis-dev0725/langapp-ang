@@ -3,6 +3,7 @@ import { ApiService } from '@app/services/api.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { CardsService } from '@app/training/cards/cards.service';
 import { Router } from '@angular/router';
+import { AudioService } from '@app/services/audio.service';
 
 @UntilDestroy()
 @Component({
@@ -15,9 +16,10 @@ import { Router } from '@angular/router';
   },
 })
 export class IndexComponent {
-  constructor(private apiService: ApiService, private cardsService: CardsService, private router: Router) {}
+  constructor(private apiService: ApiService, private cardsService: CardsService, private router: Router, private audioService: AudioService) {}
 
-  getTrainingCards() {
+  startStudy() {
+    this.audioService.prepareFromUserGesture();
     this.cardsService.loadCards();
   }
 }

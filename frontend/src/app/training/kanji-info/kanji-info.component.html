@@ -37,7 +37,7 @@
             <div *ngFor="let example of reading?.exampleWords | slice: 0:reading?.countExampleWordsToShow; let y = index" class="border-b border-neutral-100 py-6 last:border-b-0">
               <div class="flex">
                 <div class="w-6 mr-4 flex items-center justify-start">
-                  <i *ngIf="example.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(example?.audioUrls[0])"></i>
+                  <i *ngIf="example.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(example?.audioUrls[0])"></i>
                 </div>
                 <div class="flex items-center justify-start w-6 mr-4">
                   <p-knob [size]="20" [(ngModel)]="example.frequencyRank" [disabled]="true" [showValue]="false" [valueColor]="'#00c853'" [pTooltip]="'frequency-rank-tooltip-word' | translate: { value: example?.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></p-knob>
@@ -55,7 +55,7 @@
               <ng-container *ngIf="example?.exampleSentences?.length">
                 <div class="grid grid-cols-[2.5rem_auto] gap-y-1 items-center justify-start pt-6 example-sentence" *ngFor="let sentence of example?.exampleSentences | slice: 0:example?.countExampleSentencesToShow">
                   <div class="w-10 flex items-center justify-start">
-                    <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(sentence?.audioUrls[0])"></i>
+                    <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(sentence?.audioUrls[0])"></i>
                   </div>
                   <div class="text-black text-[18px]" onclickTranslation [innerHTML]="sentence?.furiganaHtml"></div>
                   <div class="col-start-2 text-black text-[14px]" *ngIf="sentence?.translationHtml" [innerHTML]="sentence?.translationHtml"></div>

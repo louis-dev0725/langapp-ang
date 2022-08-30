@@ -6,6 +6,7 @@ import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
+import { AudioService } from '@app/services/audio.service';
 
 @UntilDestroy()
 @Component({
@@ -30,7 +31,7 @@ export class TypeFuriganaWholeWordComponent implements OnInit {
     editIcon,
   };
 
-  constructor(private cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef) {}
+  constructor(private cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef, public audioService: AudioService) {}
 
   ngOnInit(): void {
     this.getTrainingDetails();
@@ -49,13 +50,6 @@ export class TypeFuriganaWholeWordComponent implements OnInit {
   goToInfoCard(route: string) {
     const [card, id] = route.split('_');
     this.router.navigate(['training', card === 'wordInfo' ? 'word-info' : 'kanji-info', id]);
-  }
-
-  playAudio(source: string) {
-    const audio = new Audio();
-    audio.src = source;
-    audio.load();
-    audio.play();
   }
 
   enterAnswer(value: string) {

@@ -6,6 +6,7 @@ import { Drill, KanjiCardInfo, TrainingKanjiReading } from '@app/interfaces/comm
 import editIcon from '@iconify/icons-mdi/edit';
 import { Router } from '@angular/router';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
+import { AudioService } from '@app/services/audio.service';
 
 @UntilDestroy()
 @Component({
@@ -27,7 +28,7 @@ export class KanjiInfoComponent implements OnInit {
     editIcon,
   };
 
-  constructor(private cardsService: CardsService, private router: Router, private api: ApiService, private cd: ChangeDetectorRef) {}
+  constructor(private cardsService: CardsService, private router: Router, private api: ApiService, private cd: ChangeDetectorRef, public audioService: AudioService) {}
 
   ngOnInit(): void {
     this.getTrainingDetails();
@@ -39,13 +40,6 @@ export class KanjiInfoComponent implements OnInit {
       event.preventDefault();
       this.goToNextCard();
     }
-  }
-
-  playAudio(source: string) {
-    const audio = new Audio();
-    audio.src = source;
-    audio.load();
-    audio.play();
   }
 
   goToWordInfo(route: string) {

@@ -28,44 +28,14 @@ import { AudioWordComponent } from '@app/training/audio-word/audio-word.componen
 import { EndTrainingComponent } from '@app/training/end-training/end-training.component';
 import { DialogModule } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { WordSentenceVideoComponent } from "@app/training/word-sentence-video/word-sentence-video.component";
+import { WordSentenceVideoComponent } from '@app/training/word-sentence-video/word-sentence-video.component';
 import { DrillWordComponent } from './drill-word/drill-word.component';
 import { DrillAnswerButtonsComponent } from './drill-answer-buttons/drill-answer-buttons.component';
+import { AudioService } from '@app/services/audio.service';
 
 @NgModule({
-  declarations: [
-    TrainingComponent,
-    NavigateActionCardComponent,
-    ModalMnemonicComponent,
-    CreateMnemonicModalComponent,
-    IndexComponent,
-    WordInfoComponent,
-    KanjiInfoComponent,
-    JoinPipe,
-    FuriganaOneKanjiComponent,
-    FuriganaWholeWordComponent,
-    TypeFuriganaWholeWordComponent,
-    TranslationWordComponent,
-    WordTranslationComponent,
-    WordAudioComponent,
-    WordSentenceComponent,
-    WordSentenceVideoComponent,
-    AudioWordComponent,
-    EndTrainingComponent,
-    DrillWordComponent,
-    DrillAnswerButtonsComponent,
-  ],
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    CommonModule,
-    TrainingRoutingModule,
-    SharedModule,
-    KnobModule,
-    IconModule,
-    DialogModule,
-    RadioButtonModule,
-  ],
+  declarations: [TrainingComponent, NavigateActionCardComponent, ModalMnemonicComponent, CreateMnemonicModalComponent, IndexComponent, WordInfoComponent, KanjiInfoComponent, JoinPipe, FuriganaOneKanjiComponent, FuriganaWholeWordComponent, TypeFuriganaWholeWordComponent, TranslationWordComponent, WordTranslationComponent, WordAudioComponent, WordSentenceComponent, WordSentenceVideoComponent, AudioWordComponent, EndTrainingComponent, DrillWordComponent, DrillAnswerButtonsComponent],
+  imports: [FormsModule, ReactiveFormsModule, TranslateModule, CommonModule, TrainingRoutingModule, SharedModule, KnobModule, IconModule, DialogModule, RadioButtonModule],
+  providers: [AudioService],
 })
 export class TrainingModule {}

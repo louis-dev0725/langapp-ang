@@ -5,6 +5,7 @@ import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
+import { AudioService } from '@app/services/audio.service';
 
 @UntilDestroy()
 @Component({
@@ -25,7 +26,7 @@ export class FuriganaWholeWordComponent implements OnInit {
   isAnsweredCorrectly: boolean;
   cardTypeRouteEnum = CardTypeRouteEnum;
 
-  constructor(private cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef) {}
+  constructor(private cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef, public audioService: AudioService) {}
 
   ngOnInit(): void {
     this.getTrainingDetails();
@@ -33,13 +34,6 @@ export class FuriganaWholeWordComponent implements OnInit {
 
   get isWideScreen() {
     return window.innerWidth > 768;
-  }
-
-  playAudio(source: string) {
-    const audio = new Audio();
-    audio.src = source;
-    audio.load();
-    audio.play();
   }
 
   checkAnswer(index: number) {

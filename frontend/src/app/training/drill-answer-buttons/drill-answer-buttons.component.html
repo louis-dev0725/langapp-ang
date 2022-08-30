@@ -4,7 +4,7 @@
       <span style="font-size: 13px">{{ i + 1 }}</span>
     </div>
     <div style="flex: 1" class="flex justify-center items-center" *ngIf="answer?.audioUrls?.[0]">
-      <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="playAudio(answer?.audioUrls?.[0], true)"></i>
+      <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(answer?.audioUrls?.[0])"></i>
     </div>
     <div
       style="flex: 4"

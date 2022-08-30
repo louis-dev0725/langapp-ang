@@ -35,13 +35,6 @@ export class TranslationWordComponent implements OnInit {
     return window.innerWidth > 768;
   }
 
-  playAudio(source: string) {
-    const audio = new Audio();
-    audio.src = source;
-    audio.load();
-    audio.play();
-  }
-
   checkAnswer(index: number) {
     if (!this.isAnswered) {
       if ('answers' in this.card?.question) {
