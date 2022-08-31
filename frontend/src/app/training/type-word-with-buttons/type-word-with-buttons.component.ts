@@ -115,7 +115,7 @@ export class TypeWordWithButtonsComponent implements OnInit {
 
       for (let [i, currentLetter] of this.card.question.buttons.entries()) {
         if (this.usedButtons[i] == null) {
-          let index = letters.findIndex((letterValue, letterIndex) => letterValue == currentLetter && this.usedButtons.indexOf(letterIndex) == -1);
+          let index = letters.findIndex((letterValue, letterIndex) => letterValue == currentLetter && newUsedButtons.indexOf(letterIndex) == -1);
           if (index != -1) {
             newUsedButtons[i] = index;
           }

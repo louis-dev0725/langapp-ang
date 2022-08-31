@@ -3,7 +3,7 @@
     <app-drill-word [card]="card" [isAnswered]="isAnswered" [centerOnDesktop]="true" [useHide]="true"></app-drill-word>
   </div>
 
-  <div class="p-8 pt-0" *ngIf="!isAnswered">
+  <div class="px-2 pb-8" *ngIf="!isAnswered">
     <app-type-word-with-buttons [card]="card" [(isAnswered)]="isAnswered" [(enteredAnswer)]="enteredAnswer" [(isAnsweredCorrectly)]="isAnsweredCorrectly"></app-type-word-with-buttons>
   </div>
   <div class="flex flex-col justify-center items-center text-center" *ngIf="isAnswered">

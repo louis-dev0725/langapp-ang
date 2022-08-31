@@ -1,19 +1,27 @@
-<div class="flex flex-col items-center justify-center w-full">
-  <div class="flex items-center justify-center relative">
+<div
+  class="flex flex-col items-center justify-center w-full"
+  [ngClass]="{
+    'more-than-4-buttons': card?.question?.buttons?.length > 4,
+    'more-than-5-buttons': card?.question?.buttons?.length > 5,
+    'more-than-6-buttons': card?.question?.buttons?.length > 6
+  }"
+>
+  <div class="relative">
     <input class="absolute w-full h-full opacity-0" #input (focus)="onFocus($event)" (blur)="onBlur($event)" (input)="onInput($event)" (beforeinput)="onBeforeInput($event)" (compositionstart)="onCompositionStart($event)" (compositionend)="onCompositionEnd($event)" [cdkTrapFocusAutoCapture]="true" [cdkTrapFocus]="true" />
-    <input
-      maxlength="1"
-      type="text"
-      [value]="enteredAnswerArray[i] ? enteredAnswerArray[i] : ''"
-      class="answer-input text-black pointer-events-none mr-4 last:mr-0"
-      [ngClass]="{
-        focus: i == activeInputIndex
-      }"
-      *ngFor="let button of card?.question?.buttons; let i = index"
-    />
+    <div class="boxes-container flex items-center justify-center gap-4 flex-wrap">
+      <input
+        maxlength="1"
+        type="text"
+        [value]="enteredAnswerArray[i] ? enteredAnswerArray[i] : ''"
+        class="answer-box answer-input text-black pointer-events-none"
+        [ngClass]="{
+          focus: i == activeInputIndex
+        }"
+        *ngFor="let button of card?.question?.buttons; let i = index"
+      />
+    </div>
   </div>
-  <div class="flex items-center justify-center" style="margin-top: 15px">
-    <button pButton class="answer-button mr-4 last:mr-0" *ngFor="let button of card?.question?.buttons; let i = index" [ngClass]="{ used: usedButtons[i] != null }" (click)="typeFromButton(i, button)" [label]="button">
-    </button>
+  <div class="boxes-container flex items-center justify-center gap-4 mt-4 flex-wrap">
+    <button pButton class="answer-box answer-button" *ngFor="let button of card?.question?.buttons; let i = index" [ngClass]="{ used: usedButtons[i] != null }" (click)="typeFromButton(i, button)" [label]="button"></button>
   </div>
 </div>
