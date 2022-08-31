@@ -32,10 +32,12 @@ import { WordSentenceVideoComponent } from '@app/training/word-sentence-video/wo
 import { DrillWordComponent } from './drill-word/drill-word.component';
 import { DrillAnswerButtonsComponent } from './drill-answer-buttons/drill-answer-buttons.component';
 import { AudioService } from '@app/services/audio.service';
+import { TypeWordWithButtonsComponent } from './type-word-with-buttons/type-word-with-buttons.component';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
-  declarations: [TrainingComponent, NavigateActionCardComponent, ModalMnemonicComponent, CreateMnemonicModalComponent, IndexComponent, WordInfoComponent, KanjiInfoComponent, JoinPipe, FuriganaOneKanjiComponent, FuriganaWholeWordComponent, TypeFuriganaWholeWordComponent, TranslationWordComponent, WordTranslationComponent, WordAudioComponent, WordSentenceComponent, WordSentenceVideoComponent, AudioWordComponent, EndTrainingComponent, DrillWordComponent, DrillAnswerButtonsComponent],
-  imports: [FormsModule, ReactiveFormsModule, TranslateModule, CommonModule, TrainingRoutingModule, SharedModule, KnobModule, IconModule, DialogModule, RadioButtonModule],
+  declarations: [TrainingComponent, NavigateActionCardComponent, ModalMnemonicComponent, CreateMnemonicModalComponent, IndexComponent, WordInfoComponent, KanjiInfoComponent, JoinPipe, FuriganaOneKanjiComponent, FuriganaWholeWordComponent, TypeFuriganaWholeWordComponent, TranslationWordComponent, WordTranslationComponent, WordAudioComponent, WordSentenceComponent, WordSentenceVideoComponent, AudioWordComponent, EndTrainingComponent, DrillWordComponent, DrillAnswerButtonsComponent, TypeWordWithButtonsComponent],
+  imports: [FormsModule, ReactiveFormsModule, TranslateModule, CommonModule, TrainingRoutingModule, SharedModule, KnobModule, IconModule, DialogModule, RadioButtonModule, A11yModule],
   providers: [AudioService],
 })
 export class TrainingModule {}

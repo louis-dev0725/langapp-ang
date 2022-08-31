@@ -1,0 +1,47 @@
+.answer-input, .answer-button {
+    width: 67px;
+    height: 67px;
+    /*background-color: #eef4fb;
+    border: none;*/
+    font-size: 21px;
+    text-align: center;
+    border-radius: 3px;
+    /*
+    display: flex;
+    align-items: center;
+    justify-content: center;*/
+}
+
+.answer-input {
+    @apply bg-white border-gray-200 border border-solid;
+}
+
+.answer-input:focus, .answer-input.focus {
+    border-color: #2196f3;
+}
+
+.answer-button {
+    /*background-color: #ffffff;
+    border: 1px solid #5397d5;
+    color: #5397d5;*/
+    /*background-color: #2196f3;
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: none;
+    color: white;*/
+}
+
+.answer-button:focus,
+.answer-button.focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: none;
+    color: white;
+    background-color: #2196f3;
+    background-color: #1B74C5;
+}
+
+.answer-button.used {
+    @apply text-gray-400 border-gray-200;
+    background-color: #eef4fb;
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Drill, KanjiCardInfo, TrainingButtonQuestionCard, TrainingCards, TrainingEndMessage, TrainingQuestionCard, WordInfo } from '@app/interfaces/common.interface';
+import { Drill, KanjiCardInfo, TrainingCards, TrainingEndMessage, TrainingQuestionCard, WordInfo } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 import { ApiService } from '@app/services/api.service';
@@ -16,7 +16,7 @@ export class CardsService {
 
   public cards$ = new BehaviorSubject<TrainingCards>(null);
   public currentWord$ = new BehaviorSubject<string>(null);
-  public currentCard$ = new BehaviorSubject<WordInfo | KanjiCardInfo | TrainingQuestionCard | TrainingButtonQuestionCard>(null);
+  public currentCard$ = new BehaviorSubject<WordInfo | KanjiCardInfo | TrainingQuestionCard>(null);
   public currentCardType$ = new BehaviorSubject<string>(null);
   public isAudioCard$ = new BehaviorSubject<boolean>(null);
   public showBackButton$ = new BehaviorSubject<boolean>(false);

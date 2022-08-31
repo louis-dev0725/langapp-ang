@@ -9,7 +9,7 @@ import { User } from 'src/entities/User';
 import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
 import { convertHiraganaToKatakana, convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
 import { In } from 'typeorm';
-import { Drill, KanjiCardInfo, TrainingAnswer, TrainingButtonQuestionCard, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfo } from './drills.interfaces';
+import { Drill, KanjiCardInfo, TrainingAnswer, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfo } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
 import { Dictionary, keyBy, max, orderBy, sample, shuffle, uniq } from 'lodash';
@@ -72,9 +72,10 @@ export class DrillsGenerator {
       const currentKanjis = currentExtractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji)); // filter inside map to save sorting
 
       if (this.isTestMode) {
+        this.addToCards(this.generateTypeFuriganaForWholeWord(currentWord, userWord));
         // this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
-        this.addToCards(this.generateSelectFuriganaForWholeWord(currentWord, userWord));
-        continue;
+        // this.addToCards(this.generateSelectFuriganaForWholeWord(currentWord, userWord));
+        // continue;
       }
 
       for (const [i, userKanji] of currentUserKanjis.entries()) {
@@ -181,7 +182,7 @@ export class DrillsGenerator {
     this.exampleSentences = keyBy(await this.sentenceRepository.findByIds(exampleSentencesIds), (s) => s.id);
   }
 
-  addToCards(card: WordInfo | KanjiCardInfo | TrainingQuestionCard | TrainingButtonQuestionCard) {
+  addToCards(card: WordInfo | KanjiCardInfo | TrainingQuestionCard) {
     if (!this.cards[card.cardId]) {
       this.cards[card.cardId] = card;
       this.drills.push({
@@ -435,7 +436,7 @@ export class DrillsGenerator {
     };
   }
 
-  generateTypeFuriganaForWholeWord(word: JapaneseWord, userWord: UserDictionary): TrainingButtonQuestionCard & Record<string, any> {
+  generateTypeFuriganaForWholeWord(word: JapaneseWord, userWord: UserDictionary): TrainingQuestionCard & Record<string, any> {
     return {
       cardType: 'typeFuriganaForWholeWord',
       cardId: `typeFuriganaForWholeWord_${word.id}`,
@@ -450,6 +451,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
+      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
     };
   }
 

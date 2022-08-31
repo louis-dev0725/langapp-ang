@@ -1,85 +1,36 @@
-<div class="start-content">
-  <div class="card w-full">
-    <div class="p-grid w-full" style="margin: 0; padding: 12px 16px">
-      <ng-container *ngIf="!isAnswered; else answered">
-        <div class="p-col-12 p-md-12">
-          <div class="flex flex-col items-center justify-center w-full">
-            <p class="text-black" [innerHTML]="card?.question?.questionHtml" style="font-size: 40px"></p>
-            <div class="flex items-center justify-center">
-              <input maxlength="1" type="text" [value]="enteredAnswer[i] ? enteredAnswer[i] : ''" class="answer-input answer-button text-black" (input)="inputAnswer($event, i)" [ngClass]="{
-              'm-r': i !== card?.question?.buttons?.length - 1
-            }" *ngFor="let button of card?.question?.buttons; let i=index">
-            </div>
-            <div class="flex items-center justify-center" style="margin-top: 15px">
-              <button class="answer-input answer-button text-black" [ngClass]="{
-              'm-r': i !== card?.question?.buttons?.length - 1
-            }" *ngFor="let button of card?.question?.buttons; let i=index" (click)="enterAnswer(button)">
-                {{button}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-    <div class="p-grid w-full" style="margin: 0; padding: 12px 16px">
-      <div class="p-col-12 p-md-6 p-md-offset-6">
-        <div class="flex items-center justify-end">
-          <button style="width: 100%; font-size: 15px; height: 35px" pButton type="button" label="{{'I don\'t remember' | translate}}" (click)="forgotAnswer()" *ngIf="!isAnswered; else continueButton"></button>
-        </div>
+<div class="card w-full p-0">
+  <div class="p-8">
+    <app-drill-word [card]="card" [isAnswered]="isAnswered"></app-drill-word>
+  </div>
+
+  <div class="p-8" *ngIf="!isAnswered">
+    <app-type-word-with-buttons [card]="card" [(isAnswered)]="isAnswered" [(enteredAnswer)]="enteredAnswer" [(isAnsweredCorrectly)]="isAnsweredCorrectly"></app-type-word-with-buttons>
+  </div>
+  <div class="flex flex-col justify-center items-center" *ngIf="isAnswered">
+    <p style="font-size: 13px">{{ 'Your answer' | translate }}:</p>
+    <p style="font-size: 34px" [ngClass]="isAnsweredCorrectly ? 'answer-color-correct' : 'answer-color-incorrect'">
+      {{ enteredAnswer }}
+    </p>
+    <ng-container *ngIf="!isAnsweredCorrectly">
+      <p style="font-size: 13px">{{ 'Correct answer' | translate }}:</p>
+      <p style="font-size: 34px; color: #0aa218">{{ card.question.correctAnswers[0] }}</p>
+    </ng-container>
+  </div>
+
+  <div class="p-grid w-full" style="margin: 0; padding: 12px 16px">
+    <div class="p-col-12 p-md-6 p-md-offset-6">
+      <div class="flex items-center justify-end">
+        <button style="width: 100%; font-size: 15px; height: 35px" pButton type="button" label="{{ 'I don\'t remember' | translate }}" (click)="forgotAnswer()" *ngIf="!isAnswered; else continueButton"></button>
       </div>
     </div>
-    <div class="w-full" style="margin: 0; padding: 12px 16px">
-      <div class="flex items-center justify-start">
-        <p style="color: #a0b0c4; font-size: 14px">{{isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: write the reading for the marked kanji.' | translate)}}</p>
-      </div>
+  </div>
+  <div class="w-full" style="margin: 0; padding: 12px 16px">
+    <div class="flex items-center justify-start">
+      <p style="color: #a0b0c4; font-size: 14px">{{ isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: write the reading for the marked kanji.' | translate) }}</p>
     </div>
   </div>
 </div>
 
 <ng-template #continueButton>
-  <button style="width: 100%; font-size: 15px; height: 35px" pButton type="button" label="{{'Continue' | translate}}" (click)="continueTraining()"></button>
-</ng-template>
-
-<ng-template #answered>
-  <div class="p-col-12 p-md-6">
-    <div class="kanji-info">
-      <div class="flex items-center justify-start">
-        <div style="flex: 1">
-          <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(card?.audioUrls[0])"></i>
-        </div>
-        <div style="flex: 5">
-          <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-font-small text-black"></p>
-        </div>
-      </div>
-      <div class="flex items-center justify-start">
-        <div style="flex: 1"></div>
-        <div class="kanji-meaning">
-          <p class="text-black" style="font-size: 20px">{{card?.meanings | join: ', '}}</p>
-          <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToInfoCard(card?.infoCard)"></button>
-        </div>
-      </div>
-      <div class="flex items-start justify-start" style="margin-top: 20px">
-        <div style="flex: 1">
-<!--          <button pButton style="background: none; padding: 0; border: none;" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18" [color]="'#5397d5'"></ic-icon></button>-->
-        </div>
-        <div style="flex: 5">
-          <img height="105" width="105" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl">
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="p-col-12 p-md-6">
-    <div class="flex flex-col justify-center items-center">
-      <p class="text-black furigana-font-small" [innerHTML]="card?.furiganaHtml" style="font-size: 40px"></p>
-      <p style="font-size: 13px">{{'Your answer' | translate}}:</p>
-      <p style="font-size: 34px;" [ngClass]="{
-        'answer-color-correct': isAnsweredCorrectly,
-        'answer-color-incorrect': !isAnsweredCorrectly
-      }">{{enteredAnswer.join('')}}</p>
-      <ng-container *ngIf="!isAnsweredCorrectly">
-        <p style="font-size: 13px">{{'Correct answer' | translate}}:</p>
-        <p style="font-size: 34px; color: #0aa218">{{card.question.correctAnswers[0]}}</p>
-      </ng-container>
-    </div>
-  </div>
+  <button style="width: 100%; font-size: 15px; height: 35px" pButton type="button" label="{{ 'Continue' | translate }}" (click)="continueTraining()"></button>
 </ng-template>

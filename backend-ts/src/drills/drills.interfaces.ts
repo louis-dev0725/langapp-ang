@@ -4,7 +4,7 @@ export interface Training {
 }
 
 export interface TrainingCards {
-  [key: string]: WordInfo | KanjiCardInfo | TrainingQuestionCard | TrainingButtonQuestionCard;
+  [key: string]: WordInfo | KanjiCardInfo | TrainingQuestionCard;
 }
 
 export interface Drill {
@@ -47,18 +47,6 @@ export interface TrainingQuestionCard {
   wordId: number;
   infoCard: string;
   question: TrainingQuestion;
-  furiganaHtml: string;
-  meanings: TrainingMeaning[];
-  mnemonic: TrainingMnemonic;
-  audioUrls?: string[];
-}
-
-export interface TrainingButtonQuestionCard {
-  cardType: string;
-  cardId: string;
-  wordId: number;
-  infoCard: string;
-  question: TrainingButtonQuestion;
   furiganaHtml: string;
   meanings: TrainingMeaning[];
   mnemonic: TrainingMnemonic;
@@ -134,23 +122,16 @@ export interface TrainingQuestion {
   showAudio?: boolean;
   showBigAudio?: boolean;
   sentence?: TrainingExampleSentence;
-  answers: TrainingAnswer[];
+  answers?: TrainingAnswer[];
   openAnswers?: TrainingAnswer[];
+  buttons?: string[];
+  correctAnswers?: string[];
 }
 
 export interface TrainingAnswer {
   contentHtml?: string;
   audioUrls?: string[];
   isCorrectAnswer?: boolean;
-}
-
-export interface TrainingButtonQuestion {
-  questionHtml?: string;
-  furiganaHtml?: string;
-  meanings?: TrainingMeaning[];
-  type: string;
-  buttons: string[];
-  correctAnswers: string[];
 }
 
 export interface TrainingEndMessage {

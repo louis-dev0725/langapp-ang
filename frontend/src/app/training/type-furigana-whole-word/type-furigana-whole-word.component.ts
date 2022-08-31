@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Drill, TrainingButtonQuestionCard, TrainingQuestionCard } from '@app/interfaces/common.interface';
+import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
 import { CardsService } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
@@ -19,13 +19,13 @@ import { AudioService } from '@app/services/audio.service';
   },
 })
 export class TypeFuriganaWholeWordComponent implements OnInit {
-  card: TrainingButtonQuestionCard;
+  card: TrainingQuestionCard;
   drills: Drill[];
   startTime = Date.now();
-  enteredAnswer = [];
   isAnswered: boolean;
   isAnsweredCorrectly: boolean;
   cardTypeRouteEnum = CardTypeRouteEnum;
+  enteredAnswer: string;
 
   icons = {
     editIcon,
@@ -50,28 +50,6 @@ export class TypeFuriganaWholeWordComponent implements OnInit {
   goToInfoCard(route: string) {
     const [card, id] = route.split('_');
     this.router.navigate(['training', card === 'wordInfo' ? 'word-info' : 'kanji-info', id]);
-  }
-
-  enterAnswer(value: string) {
-    this.enteredAnswer.push(value);
-    if ('buttons' in this.card.question) {
-      if (this.enteredAnswer.join('').length === this.card.question.buttons.length) {
-        this.isAnswered = true;
-        this.isAnsweredCorrectly = this.enteredAnswer.join('') === this.card.question.correctAnswers[0];
-        this.cardsService.answerCard(this.isAnsweredCorrectly);
-      }
-    }
-  }
-
-  inputAnswer(event: any, index: number) {
-    this.enteredAnswer[index] = event.target.value;
-    if ('buttons' in this.card.question) {
-      if (this.enteredAnswer.join('').length === this.card.question.buttons.length) {
-        this.isAnswered = true;
-        this.isAnsweredCorrectly = this.enteredAnswer.join('') === this.card.question.correctAnswers[0];
-        this.cardsService.answerCard(this.isAnsweredCorrectly);
-      }
-    }
   }
 
   getTrainingDetails() {

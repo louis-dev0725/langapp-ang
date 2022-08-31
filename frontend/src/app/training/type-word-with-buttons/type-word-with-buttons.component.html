@@ -1,0 +1,19 @@
+<div class="flex flex-col items-center justify-center w-full">
+  <div class="flex items-center justify-center relative">
+    <input class="absolute w-full h-full opacity-0" #input (focus)="onFocus($event)" (blur)="onBlur($event)" (input)="onInput($event)" (beforeinput)="onBeforeInput($event)" (compositionstart)="onCompositionStart($event)" (compositionend)="onCompositionEnd($event)" [cdkTrapFocusAutoCapture]="true" [cdkTrapFocus]="true" />
+    <input
+      maxlength="1"
+      type="text"
+      [value]="enteredAnswerArray[i] ? enteredAnswerArray[i] : ''"
+      class="answer-input text-black pointer-events-none mr-4 last:mr-0"
+      [ngClass]="{
+        focus: i == activeInputIndex
+      }"
+      *ngFor="let button of card?.question?.buttons; let i = index"
+    />
+  </div>
+  <div class="flex items-center justify-center" style="margin-top: 15px">
+    <button pButton class="answer-button mr-4 last:mr-0" *ngFor="let button of card?.question?.buttons; let i = index" [ngClass]="{ used: usedButtons[i] != null }" (click)="typeFromButton(i, button)" [label]="button">
+    </button>
+  </div>
+</div>
