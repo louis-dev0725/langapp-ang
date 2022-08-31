@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
 import { CardsService } from '@app/training/cards/cards.service';
@@ -35,6 +35,13 @@ export class TypeFuriganaWholeWordComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    if ((event.code.startsWith('Digit') || event.code == 'Enter') && this.isAnswered) {
+      this.continueTraining();
+    }
   }
 
   forgotAnswer() {

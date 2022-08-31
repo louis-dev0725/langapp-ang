@@ -35,8 +35,8 @@ export class KanjiInfoComponent implements OnInit {
   }
 
   @HostListener('document:keydown', ['$event'])
-  handleAnswer(event: KeyboardEvent) {
-    if (event.code.startsWith('Digit')) {
+  handleKeydown(event: KeyboardEvent) {
+    if (event.code.startsWith('Digit') || event.code == 'Enter') {
       event.preventDefault();
       this.goToNextCard();
     }

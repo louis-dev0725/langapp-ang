@@ -56,13 +56,15 @@ export class DrillAnswerButtonsComponent implements OnInit {
   constructor(private cardsService: CardsService, private cd: ChangeDetectorRef, public audioService: AudioService) {}
 
   @HostListener('document:keydown', ['$event'])
-  handleAnswer(event: KeyboardEvent) {
-    if (event.code.startsWith('Digit')) {
+  handleKeydown(event: KeyboardEvent) {
+    if (event.code.startsWith('Digit') || event.code == 'Enter') {
       event.preventDefault();
       if (!this.isAnswered) {
         const digit = Number(event.code.charAt(event.code.length - 1));
-        if ('answers' in this.card?.question && digit <= this.card.question.answers.length) {
+        if (this.card?.question?.answers && digit <= this.card.question.answers.length) {
           this.checkAnswer(digit);
+        } else {
+          this.forgotAnswer();
         }
       } else {
         this.continueTraining();

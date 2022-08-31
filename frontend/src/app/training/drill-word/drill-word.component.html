@@ -2,7 +2,7 @@
   <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 4rem" (click)="audioService.play(card?.audioUrls[0])"></i>
 </div>
 <div [ngClass]="{ 'question-mode': !isAnswered }" *ngIf="isAnswered || !card?.question?.showBigAudio">
-  <div class="grid grid-cols-[2.5rem_auto_2.5rem] gap-y-1 items-center justify-center md:justify-start">
+  <div class="grid grid-cols-[2.5rem_auto_2.5rem] gap-y-1 items-center justify-center" [ngClass]="{ 'md:justify-start': !centerOnDesktop }">
     <div>
       <i class="pi pi-volume-up play-audio-button mark-on-quesion" style="color: #5397d5; font-size: 1.5rem" *ngIf="card?.audioUrls?.[0]" (click)="audioService.play(card?.audioUrls[0])"></i>
     </div>
@@ -12,13 +12,26 @@
     <div></div>
   </div>
   <div
-    class="pl-0 md:pl-10 text-center md:text-left"
+    class="pl-0 text-center"
     [ngClass]="{
-      'hide-on-question': !isAnswered && !card?.question?.meanings
+      'invisible-on-question': !isAnswered && !card?.question?.meanings && !useHide,
+      'hide-on-question': !isAnswered && !card?.question?.meanings && useHide,
+      'md:pl-10 md:text-left': !centerOnDesktop
     }"
   >
     <div class="text-[20px] text-black pb-4">{{ (isAnswered || !card?.question?.meanings ? card?.meanings : card?.question?.meanings) | join: ', ' }}</div>
-    <button pButton class="ellipsis-btn hide-on-question" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToInfoCard(card?.infoCard)"></button>
+    <button
+      pButton
+      class="ellipsis-btn"
+      [ngClass]="{
+        'invisible-on-question': !useHide,
+        'hide-on-question': useHide
+      }"
+      style="width: 44px; height: 25px"
+      icon="pi pi-ellipsis-h"
+      iconPos="left"
+      (click)="goToInfoCard(card?.infoCard)"
+    ></button>
   </div>
   <div class="flex items-start justify-start" style="margin-top: 20px" *ngIf="card?.mnemonic?.imageUrl">
     <div style="flex: 1">

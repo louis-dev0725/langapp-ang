@@ -13,6 +13,8 @@ import editIcon from '@iconify/icons-mdi/edit';
 export class DrillWordComponent implements OnInit {
   @Input() card: TrainingQuestionCard;
   @Input() isAnswered: boolean = false;
+  @Input() centerOnDesktop: boolean = true;
+  @Input() useHide: boolean = false;
 
   icons = {
     editIcon,

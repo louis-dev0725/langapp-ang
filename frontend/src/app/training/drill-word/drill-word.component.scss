@@ -23,5 +23,9 @@
 }
 
 .question-mode .hide-on-question {
+    display: none;
+}
+
+.question-mode .invisible-on-question {
     visibility: hidden;
 }
