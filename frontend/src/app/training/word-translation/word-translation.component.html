@@ -1,20 +1,20 @@
 <div class="card w-full p-0">
   <div class="flex flex-wrap md:flex-nowrap">
     <div class="basis-full md:basis-1/2 p-8 pb-0">
-      <app-drill-word [card]="card" [isAnswered]="isAnswered"></app-drill-word>
+      <app-drill-word [card]="card" [isAnswered]="state.isAnswered"></app-drill-word>
     </div>
     <div class="basis-full md:basis-1/2 p-8 pb-0">
-      <app-drill-answer-buttons [card]="card" [(isAnswered)]="isAnswered" [(answeredIndex)]="answeredIndex" [(isAnsweredCorrectly)]="isAnsweredCorrectly"></app-drill-answer-buttons>
+      <app-drill-answer-buttons [card]="card" [(isAnswered)]="state.isAnswered" [(answeredIndex)]="state.answeredIndex" [(isAnsweredCorrectly)]="state.isAnsweredCorrectly"></app-drill-answer-buttons>
     </div>
   </div>
   <div class="w-full" style="margin: 0; padding: 12px 16px">
     <div class="flex items-center justify-start">
-      <p style="color: #a0b0c4; font-size: 14px">{{ isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: select correct reading for the marked kanji.' | translate) }}</p>
+      <p style="color: #a0b0c4; font-size: 14px">{{ state.isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: select correct reading for the marked kanji.' | translate) }}</p>
     </div>
   </div>
   <div class="w-full" style="margin: 0; padding: 12px 16px">
     <div class="flex items-center justify-start">
-      <p style="color: #a0b0c4; font-size: 14px">{{ isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: select word with this meaning.' | translate) }}</p>
+      <p style="color: #a0b0c4; font-size: 14px">{{ state.isAnswered ? ('Explanation: take a look at the correct answer and then click "Continue".' | translate) : ('Explanation: select word with this meaning.' | translate) }}</p>
     </div>
   </div>
 </div>

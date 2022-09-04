@@ -9,7 +9,7 @@ import { User } from 'src/entities/User';
 import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
 import { convertHiraganaToKatakana, convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
 import { In } from 'typeorm';
-import { Drill, KanjiCardInfo, TrainingAnswer, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfo } from './drills.interfaces';
+import { Drill, KanjiInfoCard, TrainingAnswer, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfoCard } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
 import { add, Dictionary, keyBy, max, orderBy, sample, shuffle, uniq } from 'lodash';
@@ -219,7 +219,7 @@ export class DrillsGenerator {
     return this.getAudioUrls(sentenceText);
   }
 
-  addToCards(card: WordInfo | KanjiCardInfo | TrainingQuestionCard) {
+  addToCards(card: WordInfoCard | KanjiInfoCard | TrainingQuestionCard) {
     if (!this.cards[card.cardId]) {
       this.cards[card.cardId] = card;
       this.drills.push({
@@ -781,7 +781,7 @@ export class DrillsGenerator {
     return { openAnswers, answers };
   }
 
-  generateKanjiInfo(kanji: JapaneseKanji, userKanji: UserDictionary): KanjiCardInfo & Record<string, any> {
+  generateKanjiInfo(kanji: JapaneseKanji, userKanji: UserDictionary): KanjiInfoCard & Record<string, any> {
     return {
       cardType: 'kanjiInfo',
       cardId: `kanjiInfo_${kanji.id}`,
@@ -812,7 +812,7 @@ export class DrillsGenerator {
     return usedReadings;
   }
 
-  generateWordInfo(word: JapaneseWord, userWord: UserDictionary, kanjis: JapaneseKanji[]): WordInfo {
+  generateWordInfo(word: JapaneseWord, userWord: UserDictionary, kanjis: JapaneseKanji[]): WordInfoCard {
     const usedReadings = this.getReadingsUsedInWord(word);
 
     return {

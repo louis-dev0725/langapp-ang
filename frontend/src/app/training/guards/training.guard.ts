@@ -10,11 +10,8 @@ import { map } from 'rxjs/operators';
 export class TrainingGuard implements CanActivate {
   constructor(private cardService: CardsService, private router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.cardService.getTrainingCards().pipe(
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.cardService.cards$.pipe(
       map((cards) => {
         if (cards) {
           return true;

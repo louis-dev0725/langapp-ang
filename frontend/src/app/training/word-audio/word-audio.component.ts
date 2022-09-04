@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
-import { CardsService } from '@app/training/cards/cards.service';
+import { CardsService, CurrentCardState } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -20,15 +20,9 @@ import { AudioService } from '@app/services/audio.service';
 })
 export class WordAudioComponent implements OnInit {
   card: TrainingQuestionCard;
-  currentCardType: string;
-  drills: Drill[];
-  startTime = Date.now();
-  isAnswered = false;
-  answeredIndex: number;
-  isAnsweredCorrectly: boolean;
-  cardTypeRouteEnum = CardTypeRouteEnum;
+  state: CurrentCardState;
 
-  constructor(private cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef, public audioService: AudioService) {}
+  constructor(public cardsService: CardsService, private api: ApiService, private router: Router, private cd: ChangeDetectorRef, public audioService: AudioService) {}
 
   ngOnInit(): void {
     this.getTrainingDetails();
@@ -40,13 +34,13 @@ export class WordAudioComponent implements OnInit {
   }
 
   checkAnswer(index: number) {
-    if (!this.isAnswered) {
+    if (!this.state.isAnswered) {
       if ('answers' in this.card?.question) {
-        this.isAnswered = true;
-        this.answeredIndex = index;
-        this.isAnsweredCorrectly = this.card.question?.answers[index - 1].isCorrectAnswer;
+        this.state.isAnswered = true;
+        this.state.answeredIndex = index;
+        this.state.isAnsweredCorrectly = this.card.question?.answers[index - 1].isCorrectAnswer;
         this.audioService.play(this.card.audioUrls[0]);
-        this.cardsService.answerCard(this.isAnsweredCorrectly);
+        this.cardsService.answerCard(this.state.isAnsweredCorrectly);
       }
     } else {
       this.continueTraining();
@@ -54,10 +48,10 @@ export class WordAudioComponent implements OnInit {
   }
 
   forgotAnswer() {
-    this.isAnswered = true;
-    this.isAnsweredCorrectly = false;
+    this.state.isAnswered = true;
+    this.state.isAnsweredCorrectly = false;
     this.audioService.play(this.card.audioUrls[0]);
-    this.cardsService.answerCard(this.isAnsweredCorrectly);
+    this.cardsService.answerCard(this.state.isAnsweredCorrectly);
   }
 
   continueTraining() {
@@ -69,41 +63,11 @@ export class WordAudioComponent implements OnInit {
     this.router.navigate(['training', card === 'wordInfo' ? 'word-info' : 'kanji-info', id]);
   }
 
-  disableQuestion() {
-    this.api
-      .saveTrainingHidings({
-        cardToHide: this.currentCardType,
-        mode: 'disableAudioQuestionsFor1Hour',
-        drills: this.drills,
-      })
-      .pipe(take(1))
-      .subscribe((response) => {
-        this.cardsService.setTrainingDrills(response.drills);
-      });
-  }
-
   getTrainingDetails() {
-    this.cardsService
-      .getCurrentCard()
-      .pipe(untilDestroyed(this))
-      .subscribe((card) => {
-        this.card = card;
-        this.cardsService.setIsAudioCard(card?.question?.isAudioQuestion);
-        this.cd.markForCheck();
-      });
-    this.cardsService
-      .getCurrentCardType()
-      .pipe(untilDestroyed(this))
-      .subscribe((cardType) => {
-        this.currentCardType = cardType;
-        this.cd.markForCheck();
-      });
-    this.cardsService
-      .getTrainingDrills()
-      .pipe(untilDestroyed(this))
-      .subscribe((drills) => {
-        this.drills = drills;
-        this.cd.markForCheck();
-      });
+    this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
+      this.state = state;
+      this.card = <TrainingQuestionCard>state.card;
+      this.cd.markForCheck();
+    });
   }
 }

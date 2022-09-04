@@ -29,12 +29,9 @@ export class EndTrainingComponent implements OnInit {
   }
 
   getEndMessage() {
-    this.cardService
-      .getEndingMessage()
-      .pipe(untilDestroyed(this))
-      .subscribe((message) => {
-        this.endMessage = message;
-        this.cd.markForCheck();
-      });
+    this.cardService.endingMessage$.pipe(untilDestroyed(this)).subscribe((message) => {
+      this.endMessage = message;
+      this.cd.markForCheck();
+    });
   }
 }

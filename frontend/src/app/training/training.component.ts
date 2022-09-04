@@ -14,7 +14,6 @@ import { finalize } from 'rxjs/operators';
 })
 export class TrainingComponent implements OnInit {
   currentCardType: string;
-  currentWord: string;
   drills: Drill[];
   isOpenSettingsModal = false;
   isOpenHidingModal = false;
@@ -92,40 +91,24 @@ export class TrainingComponent implements OnInit {
   }
 
   getTrainingDrills() {
-    this.cardsService
-      .getCurrentWord()
-      .pipe(untilDestroyed(this))
-      .subscribe((word) => {
-        this.currentWord = word;
-        if (word) {
-          this.hidingReasons[1].text += word;
-        }
-        this.cd.markForCheck();
-      });
-    this.cardsService
-      .getIsAudioCard()
-      .pipe(untilDestroyed(this))
-      .subscribe((isAudio) => {
-        this.hidingReasons[3].show = isAudio;
-      });
     this.cardsService.showBackButton$.pipe(untilDestroyed(this)).subscribe((showBackButton) => {
       this.showBackButton = showBackButton;
       this.cd.markForCheck();
     });
-    this.cardsService
-      .getCurrentCardType()
-      .pipe(untilDestroyed(this))
-      .subscribe((cardType) => {
-        this.currentCardType = cardType;
-        this.cd.markForCheck();
-      });
-    this.cardsService
-      .getTrainingDrills()
-      .pipe(untilDestroyed(this))
-      .subscribe((drills) => {
-        this.drills = drills;
-        this.cd.markForCheck();
-      });
+    this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
+      // this.state = state;
+      // this.card = <TrainingQuestionCard>state.card;
+      if (state && state.card) {
+        this.currentCardType = state.card.cardType;
+        // @ts-ignore
+        this.hidingReasons[3].show = state.card?.question?.isAudioQuestion === true;
+      }
+      this.cd.markForCheck();
+    });
+    this.cardsService.drills$.pipe(untilDestroyed(this)).subscribe((drills) => {
+      this.drills = drills;
+      this.cd.markForCheck();
+    });
   }
 
   openSettingsModal() {
@@ -153,7 +136,7 @@ export class TrainingComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.cardsService.setTrainingDrills(response.drills);
+        this.cardsService.drills$.next(response.drills);
       });
   }
 
@@ -176,7 +159,7 @@ export class TrainingComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        this.cardsService.setTrainingDrills(response.drills);
+        this.cardsService.drills$.next(response.drills);
       });
   }
 

@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { Observable } from 'rxjs';
 import { CardsService } from '@app/training/cards/cards.service';
 import { map } from 'rxjs/operators';
-import {ApiService} from "@app/services/api.service";
+import { ApiService } from '@app/services/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,27 +11,23 @@ import {ApiService} from "@app/services/api.service";
 export class KanjiInfoGuard implements CanActivate {
   constructor(private cardService: CardsService, private router: Router, private api: ApiService) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.cardService.getTrainingCards().pipe(
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.cardService.cards$.pipe(
       map((cards) => {
-        let cardType;
+        // let cardType;
         if (cards) {
-          for (const [key, card] of Object.entries(cards)) {
-            if (key === `kanjiInfo_${route.params.id}`) {
-              cardType = card;
-              this.cardService.setCurrentWord(cardType.value);
-              this.cardService.setCurrentCard(card);
-            }
-          }
-          if (!cardType) {
-            this.api.getTrainingCardById(route.params.id)
-              .subscribe(response => {
-                this.cardService.setCurrentCard(response);
-              });
-          }
+          // for (const [key, card] of Object.entries(cards)) {
+          //   if (key === `kanjiInfo_${route.params.id}`) {
+          //     cardType = card;
+          //     this.cardService.setCurrentWord(cardType.value);
+          //     this.cardService.setCurrentCard(card);
+          //   }
+          // }
+          // if (!cardType) {
+          //   this.api.getTrainingCardById(route.params.id).subscribe((response) => {
+          //     this.cardService.setCurrentCard(response);
+          //   });
+          // }
           return true;
         }
         return this.router.createUrlTree(['training/index']);

@@ -1,20 +1,20 @@
 <div class="card w-full p-0">
   <div class="p-8">
-    <app-drill-word [card]="card" [isAnswered]="isAnswered" [centerOnDesktop]="true" [useHide]="true"></app-drill-word>
+    <app-drill-word [card]="card" [isAnswered]="state.isAnswered" [centerOnDesktop]="true" [useHide]="true"></app-drill-word>
   </div>
 
-  <div class="px-2 pb-8" *ngIf="!isAnswered">
-    <app-type-word-with-buttons [card]="card" [(isAnswered)]="isAnswered" [(enteredAnswer)]="enteredAnswer" [(isAnsweredCorrectly)]="isAnsweredCorrectly"></app-type-word-with-buttons>
+  <div class="px-2 pb-8" *ngIf="!state.isAnswered">
+    <app-type-word-with-buttons [card]="card" [(isAnswered)]="state.isAnswered" [(enteredAnswer)]="state.enteredAnswer" [(isAnsweredCorrectly)]="state.isAnsweredCorrectly"></app-type-word-with-buttons>
   </div>
-  <div class="flex flex-col justify-center items-center text-center" *ngIf="isAnswered">
+  <div class="flex flex-col justify-center items-center text-center" *ngIf="state.isAnswered">
     <div class="p-4">
       <div style="font-size: 13px">{{ 'Your answer' | translate }}:</div>
-      <div style="font-size: 34px" [ngClass]="isAnsweredCorrectly ? 'answer-color-correct' : 'answer-color-incorrect'">
-        {{ enteredAnswer }}
-        <div *ngIf="enteredAnswer == ''" class="text-xl">{{ '(no answer)' | translate }}</div>
+      <div style="font-size: 34px" [ngClass]="state.isAnsweredCorrectly ? 'answer-color-correct' : 'answer-color-incorrect'">
+        {{ state.enteredAnswer }}
+        <div *ngIf="state.enteredAnswer == ''" class="text-xl">{{ '(no answer)' | translate }}</div>
       </div>
     </div>
-    <div class="p-4" *ngIf="!isAnsweredCorrectly">
+    <div class="p-4" *ngIf="!state.isAnsweredCorrectly">
       <div style="font-size: 13px">{{ 'Correct answer' | translate }}:</div>
       <div style="font-size: 34px; color: #0aa218">{{ card.question.correctAnswers[0] }}</div>
     </div>
@@ -22,7 +22,7 @@
 </div>
 
 <div class="sticky bottom-0 lg:hidden w-full flex justify-center">
-  <button pButton label="{{ isAnswered ? 'Continue' : 'I don\'t remember' | translate }}" class="w-full" style="height: 40px; font-size: 15px" (click)="isAnswered ? continueTraining() : forgotAnswer()"></button>
+  <button pButton label="{{ state.isAnswered ? 'Continue' : 'I don\'t remember' | translate }}" class="w-full" style="height: 40px; font-size: 15px" (click)="state.isAnswered ? continueTraining() : forgotAnswer()"></button>
 </div>
 <div class="card mt-8 mb-8 lg:mb-0 w-full lg:sticky lg:bottom-0 bg-white border-t border-neutral-100">
   <div class="word-footer flex items-center">
@@ -30,7 +30,7 @@
       <p style="color: #a0b0c4; font-size: 14px">{{ 'Explanation: take a look at the correct answer and then click "Continue".' | translate }}</p>
     </div>
     <div class="bottom-0 hidden lg:flex basis-80 w-full justify-center">
-      <button pButton label="{{ isAnswered ? 'Continue' : 'I don\'t remember' | translate }}" class="w-full" style="height: 40px; font-size: 15px" (click)="isAnswered ? continueTraining() : forgotAnswer()"></button>
+      <button pButton label="{{ state.isAnswered ? 'Continue' : 'I don\'t remember' | translate }}" class="w-full" style="height: 40px; font-size: 15px" (click)="state.isAnswered ? continueTraining() : forgotAnswer()"></button>
     </div>
   </div>
 </div>

@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
-import { Drill, WordInfo } from '@app/interfaces/common.interface';
-import { CardsService } from '@app/training/cards/cards.service';
+import { Drill, WordInfoCard } from '@app/interfaces/common.interface';
+import { CardsService, CurrentCardState } from '@app/training/cards/cards.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import editIcon from '@iconify/icons-mdi/edit';
 import { ApiService } from '@app/services/api.service';
@@ -19,10 +19,8 @@ import { AudioService } from '@app/services/audio.service';
   },
 })
 export class WordInfoComponent implements OnInit {
-  card: WordInfo;
-  drills: Drill[];
-  startTime = Date.now();
-  cardTypeRouteEnum = CardTypeRouteEnum;
+  card: WordInfoCard;
+  state: CurrentCardState;
 
   icons = {
     editIcon,
@@ -48,20 +46,11 @@ export class WordInfoComponent implements OnInit {
   }
 
   getTrainingDetails() {
-    this.cardsService
-      .getCurrentCard()
-      .pipe(untilDestroyed(this))
-      .subscribe((card) => {
-        this.card = card;
-        this.cd.markForCheck();
-      });
-    this.cardsService
-      .getTrainingDrills()
-      .pipe(untilDestroyed(this))
-      .subscribe((drills) => {
-        this.drills = drills;
-        this.cd.markForCheck();
-      });
+    this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
+      this.state = state;
+      this.card = <WordInfoCard>state.card;
+      this.cd.markForCheck();
+    });
   }
 
   showMoreExampleSentences(meaningI: number, countToAdd: number) {

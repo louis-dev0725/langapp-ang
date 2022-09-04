@@ -36,6 +36,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { WebpackTranslateLoader } from './WebpackTranslateLoader';
 import { CookieModule } from 'ngx-cookie';
 import { IonicModule } from '@ionic/angular';
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomRouteReuseStrategy } from './shared/custom-route-reuse-strategy';
 
 @NgModule({
   declarations: [AppComponent],
@@ -89,6 +91,10 @@ import { IonicModule } from '@ionic/angular';
     },
     MessageService,
     ConfirmationService,
+    // {
+    //   provide: RouteReuseStrategy,
+    //   useClass: CustomRouteReuseStrategy,
+    // },
   ],
   bootstrap: [AppComponent],
 })

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { Drill, TrainingQuestionCard } from '@app/interfaces/common.interface';
 import editIcon from '@iconify/icons-mdi/edit';
-import { CardsService } from '@app/training/cards/cards.service';
+import { CardsService, CurrentCardState } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -20,12 +20,7 @@ import { AudioService } from '@app/services/audio.service';
 })
 export class TypeFuriganaWholeWordComponent implements OnInit {
   card: TrainingQuestionCard;
-  drills: Drill[];
-  startTime = Date.now();
-  isAnswered: boolean;
-  isAnsweredCorrectly: boolean;
-  cardTypeRouteEnum = CardTypeRouteEnum;
-  enteredAnswer: string;
+  state: CurrentCardState;
 
   icons = {
     editIcon,
@@ -39,15 +34,15 @@ export class TypeFuriganaWholeWordComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
-    if ((event.code.startsWith('Digit') || event.code == 'Enter') && this.isAnswered) {
+    if ((event.code.startsWith('Digit') || event.code == 'Enter') && this.state.isAnswered) {
       this.continueTraining();
     }
   }
 
   forgotAnswer() {
-    this.isAnswered = true;
-    this.isAnsweredCorrectly = false;
-    this.cardsService.answerCard(this.isAnsweredCorrectly);
+    this.state.isAnswered = true;
+    this.state.isAnsweredCorrectly = false;
+    this.cardsService.answerCard(this.state.isAnsweredCorrectly);
   }
 
   continueTraining() {
@@ -60,20 +55,10 @@ export class TypeFuriganaWholeWordComponent implements OnInit {
   }
 
   getTrainingDetails() {
-    this.cardsService
-      .getCurrentCard()
-      .pipe(untilDestroyed(this))
-      .subscribe((card) => {
-        this.card = card;
-        this.cardsService.setIsAudioCard(card?.question?.isAudioQuestion);
-        this.cd.markForCheck();
-      });
-    this.cardsService
-      .getTrainingDrills()
-      .pipe(untilDestroyed(this))
-      .subscribe((drills) => {
-        this.drills = drills;
-        this.cd.markForCheck();
-      });
+    this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
+      this.state = state;
+      this.card = <TrainingQuestionCard>state.card;
+      this.cd.markForCheck();
+    });
   }
 }

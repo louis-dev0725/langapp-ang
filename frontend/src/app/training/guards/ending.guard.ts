@@ -10,11 +10,8 @@ import { map } from 'rxjs/operators';
 export class EndingGuard implements CanActivate {
   constructor(private cardService: CardsService, private router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.cardService.getEndingMessage().pipe(
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.cardService.endingMessage$.pipe(
       map((message) => {
         if (message) {
           return true;

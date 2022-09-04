@@ -4,7 +4,7 @@ export interface Training {
 }
 
 export interface TrainingCards {
-  [key: string]: WordInfo | KanjiCardInfo | TrainingQuestionCard;
+  [key: string]: WordInfoCard | KanjiInfoCard | TrainingQuestionCard;
 }
 
 export interface Drill {
@@ -15,7 +15,7 @@ export interface Drill {
   answerEndTime: number;
 }
 
-export interface WordInfo {
+export interface WordInfoCard {
   cardType: string;
   cardId: string;
   wordId: number;
@@ -29,7 +29,7 @@ export interface WordInfo {
   mnemonic: TrainingMnemonic;
 }
 
-export interface KanjiCardInfo {
+export interface KanjiInfoCard {
   cardType: string;
   cardId: string;
   wordId: number;
