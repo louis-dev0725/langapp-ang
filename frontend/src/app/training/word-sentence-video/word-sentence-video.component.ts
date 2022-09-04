@@ -26,7 +26,12 @@ export class WordSentenceVideoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
-    this.audioService.play(this.card.audioUrls[0]);
+  }
+
+  initCard() {
+    if (this.card.audioUrls[0]) {
+      this.audioService.play(this.card.audioUrls[0]);
+    }
   }
 
   get isWideScreen() {
@@ -67,6 +72,7 @@ export class WordSentenceVideoComponent implements OnInit {
     this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
       this.state = state;
       this.card = <TrainingQuestionCard>state.card;
+      this.initCard();
       this.cd.markForCheck();
     });
   }

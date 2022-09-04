@@ -26,6 +26,9 @@ export class WordSentenceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
+  }
+
+  initCard() {
     let audioUrl = this.getAudioUrl();
     if (audioUrl) {
       this.audioService.play(audioUrl);
@@ -42,7 +45,7 @@ export class WordSentenceComponent implements OnInit {
 
   checkAnswer(index: number) {
     if (!this.state.isAnswered) {
-      if ('answers' in this.card?.question) {
+      if (this.card?.question?.answers) {
         this.state.isAnswered = true;
         this.state.answeredIndex = index;
         this.state.isAnsweredCorrectly = this.card.question?.answers[index - 1]?.isCorrectAnswer;
@@ -74,6 +77,7 @@ export class WordSentenceComponent implements OnInit {
     this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
       this.state = state;
       this.card = <TrainingQuestionCard>state.card;
+      this.initCard();
       this.cd.markForCheck();
     });
   }
