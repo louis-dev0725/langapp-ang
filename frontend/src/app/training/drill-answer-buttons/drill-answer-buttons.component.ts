@@ -78,7 +78,12 @@ export class DrillAnswerButtonsComponent implements OnInit {
 
   playAllAudios() {
     for (let answer of this?.card?.question?.answers) {
+      if (answer.numberAudioUrl) {
+        this.audioService.play(answer.numberAudioUrl, false);
+        this.audioService.play('short-pause', false);
+      }
       this.audioService.play(answer.audioUrls?.[0], false);
+      this.audioService.play('short-pause', false);
     }
   }
 

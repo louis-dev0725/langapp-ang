@@ -72,7 +72,9 @@ export class DrillsGenerator {
       const currentKanjis = currentExtractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji)); // filter inside map to save sorting
 
       if (this.isTestMode) {
-        this.addToCards(this.generateTypeFuriganaForWholeWord(currentWord, userWord));
+        // this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
+        this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
+        // this.addToCards(this.generateTypeFuriganaForWholeWord(currentWord, userWord));
         // this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
         // this.addToCards(this.generateSelectFuriganaForWholeWord(currentWord, userWord));
         // continue;
@@ -475,35 +477,22 @@ export class DrillsGenerator {
     let correctAnswer = this.formatWordFuriganaForAnswerReading(wordFurigana);
     const answers: TrainingAnswer[] = [];
     answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true });
-    let wordOkurigana = this.getOkuriganaForWord(word);
 
-    for (let words of [this.words, DrillsGenerator.additionalWords]) {
+    for (let randomWord of this.getSimilarRandomWords(word)) {
+      let furigana = randomWord.data.readings[0].furigana;
+      let formattedAnswer = this.formatWordFuriganaForAnswerReading(furigana);
+      // Do not add duplicate answers
+      if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
+        answers.push({ contentHtml: formattedAnswer });
+      }
       if (answers.length == 5) {
         break;
-      }
-      let shuffledList = shuffle(words);
-
-      for (let randomWord of shuffledList) {
-        let furigana = randomWord.data.readings[0].furigana;
-        // Okurigana should match; count of parts in furigana should match
-        if (wordOkurigana == this.getOkuriganaForWord(randomWord) && wordFurigana.length == furigana.length) {
-          let formattedAnswer = this.formatWordFuriganaForAnswerReading(furigana);
-          // Do not add duplicate answers
-          if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-            answers.push({ contentHtml: formattedAnswer });
-          }
-        }
-        if (answers.length == 5) {
-          break;
-        }
       }
     }
 
     if (answers.length < 5) {
       console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
-
-    // TODO: load additional words if needed
 
     return shuffle(answers);
   }
@@ -547,32 +536,23 @@ export class DrillsGenerator {
     const answers: TrainingAnswer[] = [];
     answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true });
 
-    for (let words of [this.words, DrillsGenerator.additionalWords]) {
+    for (let randomWord of this.getSimilarRandomWords(word)) {
+      let formattedAnswer = this.filterMeaningsForUser(randomWord)
+        .meanings.map((v) => v.value)
+        .join(', ');
+
+      if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
+        answers.push({ contentHtml: formattedAnswer });
+      }
+
       if (answers.length == 5) {
         break;
-      }
-      let shuffledList = shuffle(words);
-
-      for (let randomWord of shuffledList) {
-        let formattedAnswer = this.filterMeaningsForUser(randomWord)
-          .meanings.map((v) => v.value)
-          .join(', ');
-
-        if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-          answers.push({ contentHtml: formattedAnswer });
-        }
-
-        if (answers.length == 5) {
-          break;
-        }
       }
     }
 
     if (answers.length < 5) {
       console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
-
-    // TODO: load additional words if needed
 
     return shuffle(answers);
   }
@@ -607,35 +587,24 @@ export class DrillsGenerator {
       closedAnswers.push({ contentHtml: closedCorrentAnswer, isCorrectAnswer: true });
     }
 
-    for (let words of [this.words, DrillsGenerator.additionalWords]) {
+    for (let randomWord of this.getSimilarRandomWords(word)) {
+      let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, forAudio ? null : 'gray-furigana');
+
+      if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
+        answers.push({ contentHtml: formattedAnswer });
+        if (forAudio) {
+          closedAnswers.push({ contentHtml: this.formatWordFuriganaForAnswerKanji(randomWord.data.readings[0].furigana) });
+        }
+      }
+
       if (answers.length == 5) {
         break;
-      }
-      let shuffledList = shuffle(words);
-
-      // TODO: пропускать слова с одинаковыми/похожими значениями (если есть пересечение в значениях)
-
-      for (let randomWord of shuffledList) {
-        let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, forAudio ? null : 'gray-furigana');
-
-        if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-          answers.push({ contentHtml: formattedAnswer });
-          if (forAudio) {
-            closedAnswers.push({ contentHtml: this.formatWordFuriganaForAnswerKanji(randomWord.data.readings[0].furigana) });
-          }
-        }
-
-        if (answers.length == 5) {
-          break;
-        }
       }
     }
 
     if (answers.length < 5) {
       console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
-
-    // TODO: load additional words if needed
 
     if (forAudio) {
       const shuffled = shuffle([...answers.keys()]);
@@ -745,32 +714,40 @@ export class DrillsGenerator {
     };
   }
 
+  *getSimilarRandomWords(word: JapaneseWord) {
+    let wordFurigana = word.data.readings[0].furigana;
+    let wordOkurigana = this.getOkuriganaForWord(word);
+    for (let words of [this.words, DrillsGenerator.additionalWords]) {
+      let shuffledList = shuffle(words);
+      for (let randomWord of shuffledList) {
+        // TODO: пропускать слова с одинаковыми/похожими значениями (если есть пересечение в значениях)
+
+        let furigana = randomWord.data.readings[0].furigana;
+        // Okurigana should match; count of parts in furigana should match
+        if (wordOkurigana == this.getOkuriganaForWord(randomWord) && wordFurigana.length == furigana.length) {
+          yield randomWord;
+        }
+      }
+    }
+
+    // TODO: load additional words if needed
+  }
+
   generateAnswersForWordAudio(word: JapaneseWord) {
     let openAnswers: TrainingAnswer[] = [];
 
     let correctAnswer = this.furiganaToHtml(word.data.readings[0].furigana, null, 'gray-furigana');
     openAnswers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: this.getAudioUrlsForWord(word) });
 
-    for (let words of [this.words, DrillsGenerator.additionalWords]) {
+    for (let randomWord of this.getSimilarRandomWords(word)) {
+      let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, 'gray-furigana');
+
+      if (!openAnswers.some((a) => a.contentHtml == formattedAnswer)) {
+        openAnswers.push({ contentHtml: formattedAnswer, audioUrls: this.getAudioUrlsForWord(randomWord), isCorrectAnswer: false });
+      }
+
       if (openAnswers.length == 5) {
         break;
-      }
-      let shuffledList = shuffle(words);
-
-      // TODO: real audio
-
-      // TODO: пропускать слова с одинаковыми/похожими значениями (если есть пересечение в значениях)
-
-      for (let randomWord of shuffledList) {
-        let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, 'gray-furigana');
-
-        if (!openAnswers.some((a) => a.contentHtml == formattedAnswer)) {
-          openAnswers.push({ contentHtml: formattedAnswer, audioUrls: this.getAudioUrlsForWord(randomWord), isCorrectAnswer: false });
-        }
-
-        if (openAnswers.length == 5) {
-          break;
-        }
       }
     }
 
@@ -778,10 +755,10 @@ export class DrillsGenerator {
       console.log(new Error(`Less than 5 answers for word ${word.id}`).stack);
     }
 
-    // TODO: load additional words if needed
-
     openAnswers = shuffle(openAnswers);
-    let answers = openAnswers.map((a) => ({ audioUrls: a.audioUrls, isCorrectAnswer: a.isCorrectAnswer }));
+    openAnswers.map((a, i) => (a.numberAudioUrl = this.getAudioUrls(String(i + 1))[0]));
+
+    let answers = openAnswers.map((a) => ({ audioUrls: a.audioUrls, numberAudioUrl: a.numberAudioUrl, isCorrectAnswer: a.isCorrectAnswer }));
 
     return { openAnswers, answers };
   }

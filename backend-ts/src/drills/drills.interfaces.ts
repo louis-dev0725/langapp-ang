@@ -131,6 +131,7 @@ export interface TrainingQuestion {
 export interface TrainingAnswer {
   contentHtml?: string;
   audioUrls?: string[];
+  numberAudioUrl?: string;
   isCorrectAnswer?: boolean;
 }
 
