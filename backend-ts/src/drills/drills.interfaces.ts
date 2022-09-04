@@ -66,7 +66,7 @@ export interface TrainingMeaning {
 
 export interface TrainingExampleSentence {
   sentenceId: number;
-  value: string;
+  value?: string;
   furiganaHtml: string;
   translationHtml: string;
   audioUrls?: string[];

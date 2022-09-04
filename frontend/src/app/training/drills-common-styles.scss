@@ -84,3 +84,16 @@
     padding-left: 0;
   }*/
 }
+
+:host ::ng-deep .question-blank-box {
+  padding: 0px 20px 5px 20px;
+  color: white;
+  vertical-align: 3px;
+  font-size: 18px;
+  margin: 0 5px;
+  background-image: linear-gradient(0deg, #757575 0px 1px, transparent 1px 4px, #2196f3 0 100%);
+}
+
+:host ::ng-deep .question-blank-box:before {
+  content: "?";
+}

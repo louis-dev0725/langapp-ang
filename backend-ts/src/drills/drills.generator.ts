@@ -12,7 +12,7 @@ import { In } from 'typeorm';
 import { Drill, KanjiCardInfo, TrainingAnswer, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfo } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
-import { Dictionary, keyBy, max, orderBy, sample, shuffle, uniq } from 'lodash';
+import { add, Dictionary, keyBy, max, orderBy, sample, shuffle, uniq } from 'lodash';
 import { SentenceRepository } from 'src/entities/SentenceRepository';
 import { Sentence } from 'src/entities/Sentence';
 
@@ -72,8 +72,26 @@ export class DrillsGenerator {
       const currentKanjis = currentExtractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji)); // filter inside map to save sorting
 
       if (this.isTestMode) {
-        this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, this.formatExampleSentencesForWord(currentWord)[0]));
-        // continue;
+        // this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, this.formatExampleSentencesForWord(currentWord)[1]));
+
+        let meanings = this.filterMeaningsForUser(currentWord, false, true).meanings;
+        for (let meaning of meanings) {
+          if (!meaning.isOther) {
+            let exampleSentences = shuffle(meaning.exampleSentences);
+            let added = 0;
+            for (let currentSentence of exampleSentences) {
+              if (currentSentence.furiganaHtml.indexOf('<em>') !== -1) {
+                this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, currentSentence));
+                added++;
+              }
+              if (added >= 3) {
+                break;
+              }
+            }
+          }
+        }
+
+        continue;
       }
 
       for (const [i, userKanji] of currentUserKanjis.entries()) {
@@ -105,20 +123,10 @@ export class DrillsGenerator {
       this.addToCards(this.generateSelectTranslationForWord(currentWord, userWord));
       this.addToCards(this.generateSelectWordForTranslation(currentWord, userWord));
 
-      if (this.isTestMode) {
-        this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
+      this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
 
-        let meanings = this.filterMeaningsForUser(currentWord, false, true).meanings;
-        for (let meaning of meanings) {
-          let exampleSentences = shuffle(meaning.exampleSentences).slice(0, 3);
-          for (let currentSentence of exampleSentences) {
-            this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, currentSentence));
-          }
-        }
-
-        // this.addToCards(this.generateSelectWordForSentenceVideo(currentWord, userWord));
-        this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
-      }
+      // this.addToCards(this.generateSelectWordForSentenceVideo(currentWord, userWord));
+      this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
     }
 
     return {
@@ -663,11 +671,11 @@ export class DrillsGenerator {
         isAudioQuestion: true,
         questionHtml: sentence.furiganaHtml.replace(/<em>([^<]*?)<\/em>/g, '<span class="question-blank-box"></span><rt></rt>'),
         // audioUrls: this.getAudioUrlForSentence(sentence.value, true),
+        audioUrls: this.getAudioUrlForSentence(sentence.value),
         sentence: {
           sentenceId: 94376,
-          value: '携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。',
-          furiganaHtml: '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
-          translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.',
+          furiganaHtml: sentence.furiganaHtml,
+          translationHtml: sentence.translationHtml,
           audioUrls: this.getAudioUrlForSentence(sentence.value),
         },
         answers: this.generateAnswersForWordWriting(word)[0],
