@@ -6,7 +6,7 @@
           <audio controls class="w-full" style="margin-bottom: 20px">
             <source [src]="card?.question?.sentence?.audioUrls[0]" type="audio/mpeg">
           </audio>
-          <p class="text-black" [innerHTML]="card?.question?.questionHtml" style="font-size: 18px"></p>
+          <div class="text-black" [innerHTML]="card?.question?.questionHtml" style="font-size: 18px"></div>
         </div>
       </div>
       <div class="p-col-12 p-md-6">

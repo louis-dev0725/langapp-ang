@@ -56,6 +56,7 @@ export class AudioService {
       this.inDelayTimeout = null;
     }
     this.audio.pause();
+    this.status = PlayerStatus.pause;
   }
 
   _processQueue() {

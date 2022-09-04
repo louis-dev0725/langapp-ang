@@ -117,6 +117,7 @@ export interface TrainingQuestion {
   type: string;
   questionHtml?: string;
   furiganaHtml?: string;
+  audioUrls?: string[];
   meanings?: TrainingMeaning[];
   isAudioQuestion?: boolean;
   showAudio?: boolean;

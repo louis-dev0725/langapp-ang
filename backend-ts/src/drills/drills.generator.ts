@@ -72,11 +72,7 @@ export class DrillsGenerator {
       const currentKanjis = currentExtractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji)); // filter inside map to save sorting
 
       if (this.isTestMode) {
-        // this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
-        this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
-        // this.addToCards(this.generateTypeFuriganaForWholeWord(currentWord, userWord));
-        // this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
-        // this.addToCards(this.generateSelectFuriganaForWholeWord(currentWord, userWord));
+        this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, this.formatExampleSentencesForWord(currentWord)[0]));
         // continue;
       }
 
@@ -111,8 +107,16 @@ export class DrillsGenerator {
 
       if (this.isTestMode) {
         this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
-        this.addToCards(this.generateSelectWordForSentence(currentWord, userWord));
-        this.addToCards(this.generateSelectWordForSentenceVideo(currentWord, userWord));
+
+        let meanings = this.filterMeaningsForUser(currentWord, false, true).meanings;
+        for (let meaning of meanings) {
+          let exampleSentences = shuffle(meaning.exampleSentences).slice(0, 3);
+          for (let currentSentence of exampleSentences) {
+            this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, currentSentence));
+          }
+        }
+
+        // this.addToCards(this.generateSelectWordForSentenceVideo(currentWord, userWord));
         this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
       }
     }
@@ -194,9 +198,17 @@ export class DrillsGenerator {
     return this.getAudioUrls(`<phoneme type="ruby" ph="${reading.replace(/"/, '')}">${value.replace(/"/, '')}</phoneme> `);
   }
 
-  getAudioUrlForSentence(sentence: Sentence) {
-    // It's trusted HTML, so we use simple regexp to remove it
-    return this.getAudioUrls(sentence.text.replace(/<[^>]*>/gm, ''));
+  getAudioUrlForSentence(sentenceText: string, clozeMode = false) {
+    if (clozeMode) {
+      sentenceText = sentenceText.replace(/<em>([^<]*?)<\/em>/g, '。 ');
+      sentenceText = sentenceText.replace(/<(?!break)[^>]*>/gm, '');
+      console.log('cloze', sentenceText);
+      sentenceText = `<speak>${sentenceText}</speak>`;
+    } else {
+      // It's trusted HTML, so we use simple regexp to remove it
+      sentenceText = sentenceText.replace(/<[^>]*>/gm, '');
+    }
+    return this.getAudioUrls(sentenceText);
   }
 
   addToCards(card: WordInfo | KanjiCardInfo | TrainingQuestionCard) {
@@ -231,7 +243,8 @@ export class DrillsGenerator {
     return html;
   }
 
-  filterMeaningsForUser(word: JapaneseWord | JapaneseKanji, forWordInfoCard = false) {
+  filterMeaningsForUser(word: JapaneseWord | JapaneseKanji, forWordInfoCard = false, forSentenceDrills = false) {
+    // TODO: cache it inside class as it used several times
     let userLanguages = this.user.languages;
 
     let fullMeanings = (<JapaneseWord>word).data.meanings.filter((m) => userLanguages.indexOf(m.lang) !== -1 && (!m.isOther || forWordInfoCard));
@@ -270,18 +283,14 @@ export class DrillsGenerator {
       fullMeanings = fullMeanings.slice(0, countMeaningsToShow);
     }
 
-    if (word.id == 81467 && !forWordInfoCard) {
-      console.log({ countMeaningsToShow, probabilitySoFar });
-    }
-
     let meanings: TrainingMeaning[] = fullMeanings.map((m) => ({
       lang: m.lang,
       value: m.value,
       probabilityInList: Math.floor(m.probabilityInList * 100),
       probabilityOverall: Math.floor(m.probabilityOverall * 100),
       frequencyPmw: m.frequencyPmw,
-      exampleSentences: forWordInfoCard ? this.formatExampleSentences(m.exampleSentenceIds) : null,
-      countExampleSentencesToShow: forWordInfoCard ? 3 : 0,
+      exampleSentences: forWordInfoCard || forSentenceDrills ? this.formatExampleSentences(m.exampleSentenceIds) : null,
+      countExampleSentencesToShow: forWordInfoCard || forSentenceDrills ? 3 : 0,
       isOther: m.isOther || false,
     }));
 
@@ -428,7 +437,7 @@ export class DrillsGenerator {
             value: sentence.text,
             furiganaHtml: sentence.text, // TODO: furigana
             translationHtml: translationHtml,
-            audioUrls: this.getAudioUrlForSentence(sentence),
+            audioUrls: this.getAudioUrlForSentence(sentence.text),
           };
         }
       })
@@ -642,7 +651,7 @@ export class DrillsGenerator {
     };
   }
 
-  generateSelectWordForSentence(word: JapaneseWord, userWord: UserDictionary): TrainingQuestionCard & Record<string, any> {
+  generateSelectWordForSentence(word: JapaneseWord, userWord: UserDictionary, sentence: TrainingExampleSentence): TrainingQuestionCard & Record<string, any> {
     return {
       cardType: 'selectWordForSentence',
       cardId: `selectWordForSentence_${word.id}`,
@@ -652,13 +661,14 @@ export class DrillsGenerator {
       question: {
         type: 'select',
         isAudioQuestion: true,
-        questionHtml: '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><div class="question-blank-box"></div>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
+        questionHtml: sentence.furiganaHtml.replace(/<em>([^<]*?)<\/em>/g, '<span class="question-blank-box"></span><rt></rt>'),
+        // audioUrls: this.getAudioUrlForSentence(sentence.value, true),
         sentence: {
           sentenceId: 94376,
           value: '携帯電話は便利ですが、ちゃんとマナーを守って使ってほしいです。',
           furiganaHtml: '<ruby>携帯電話<rt>けいたいでんわ</rt>は<rt></rt><span class="word-highlight">便利</span>ですが、ちゃんとマナーを<rt></rt>守<rt>まも</rt>って使<rt>つか</rt>ってほしいです。<rt></rt></ruby>',
           translationHtml: 'Cell phones are <span class="word-highlight">convenient</span>, but I want them to be used responsibly. More text for example.',
-          audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?sentence-94376'] : [],
+          audioUrls: this.getAudioUrlForSentence(sentence.value),
         },
         answers: this.generateAnswersForWordWriting(word)[0],
       },

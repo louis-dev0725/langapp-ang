@@ -32,7 +32,11 @@ export class WordSentenceComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTrainingDetails();
-    this.audioService.play(this.card?.audioUrls[0]);
+    if (this.card?.question?.audioUrls?.[0]) {
+      this.audioService.play(this.card?.question?.audioUrls?.[0]);
+    } else if (this.card?.question?.sentence?.audioUrls?.[0]) {
+      this.audioService.play(this.card?.question?.sentence?.audioUrls?.[0]);
+    }
   }
 
   get isWideScreen() {
