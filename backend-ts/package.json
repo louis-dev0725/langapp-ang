@@ -22,6 +22,8 @@
     "console:prod": "node dist/console.js"
   },
   "dependencies": {
+    "@aws-sdk/client-polly": "^3.163.0",
+    "@google-cloud/text-to-speech": "^4.0.2",
     "@nestjs/bull": "^0.3.1",
     "@nestjs/common": "^7.5.1",
     "@nestjs/core": "^7.5.1",
@@ -38,6 +40,7 @@
     "grpc": "^1.24.3",
     "html-entities": "^2.3.3",
     "lodash": "^4.17.21",
+    "microsoft-cognitiveservices-speech-sdk": "^1.23.0",
     "nestjs-console": "^4.0.0",
     "node-webvtt": "^1.9.3",
     "passport": "^0.5.3",

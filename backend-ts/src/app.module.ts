@@ -22,6 +22,8 @@ import { UserDictionary } from './entities/UserDictionary';
 import { UserDictionaryRepository } from './entities/UserDictionaryRepository';
 import { Sentence } from './entities/Sentence';
 import { SentenceRepository } from './entities/SentenceRepository';
+import { AudioController } from './audio/audio.controller';
+import { Audio } from 'src/entities/Audio';
 
 @Global()
 @Module({
@@ -33,18 +35,10 @@ import { SentenceRepository } from './entities/SentenceRepository';
       username: process.env.POSTGRES_USER || 'postgres',
       password: process.env.POSTGRES_PASSWORD || 'postgres',
       database: process.env.POSTGRES_DB || 'postgres',
-      entities: [DictionaryWord, Content, User, UserDictionary, Sentence],
+      entities: [DictionaryWord, Content, User, UserDictionary, Sentence, Audio],
       autoLoadEntities: false,
     }),
-    TypeOrmModule.forFeature([
-      DictionaryWord,
-      DictionaryWordRepository,
-      Content,
-      UserDictionary,
-      UserDictionaryRepository,
-      Sentence,
-      SentenceRepository,
-    ]),
+    TypeOrmModule.forFeature([DictionaryWord, DictionaryWordRepository, Content, UserDictionary, UserDictionaryRepository, Sentence, SentenceRepository, Audio]),
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST || 'redis',
@@ -58,7 +52,7 @@ import { SentenceRepository } from './entities/SentenceRepository';
     BackgroundModule,
     AuthModule,
   ],
-  controllers: [AppController, DrillsController],
+  controllers: [AppController, DrillsController, AudioController],
   providers: [
     AppService,
     QueueService,

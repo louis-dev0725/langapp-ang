@@ -182,6 +182,21 @@ export class DrillsGenerator {
     this.exampleSentences = keyBy(await this.sentenceRepository.findByIds(exampleSentencesIds), (s) => s.id);
   }
 
+  getAudioUrls(text: string) {
+    return ['/api/audio?q=' + encodeURIComponent(Buffer.from(text).toString('base64'))];
+  }
+
+  getAudioUrlsForWord(word: JapaneseWord) {
+    const reading = word?.data?.readings?.[0]?.kana;
+    const value = word?.data?.readings?.[0]?.kanji || word?.data?.readings?.[0]?.kana;
+    return this.getAudioUrls(`<phoneme type="ruby" ph="${reading.replace(/"/, '')}">${value.replace(/"/, '')}</phoneme> `);
+  }
+
+  getAudioUrlForSentence(sentence: Sentence) {
+    // It's trusted HTML, so we use simple regexp to remove it
+    return this.getAudioUrls(sentence.text.replace(/<[^>]*>/gm, ''));
+  }
+
   addToCards(card: WordInfo | KanjiCardInfo | TrainingQuestionCard) {
     if (!this.cards[card.cardId]) {
       this.cards[card.cardId] = card;
@@ -296,7 +311,7 @@ export class DrillsGenerator {
             meanings: this.filterMeaningsForUser(word).meanings,
             countExampleSentencesToShow: 1,
             exampleSentences: this.formatExampleSentencesForWord(word),
-            audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3266529'] : [],
+            audioUrls: this.getAudioUrlsForWord(word),
           };
         }),
       }));
@@ -316,7 +331,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -411,7 +426,7 @@ export class DrillsGenerator {
             value: sentence.text,
             furiganaHtml: sentence.text, // TODO: furigana
             translationHtml: translationHtml,
-            audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?example-sentence'] : [], // TODO: audio
+            audioUrls: this.getAudioUrlForSentence(sentence),
           };
         }
       })
@@ -432,7 +447,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -451,7 +466,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -520,7 +535,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -576,7 +591,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -654,7 +669,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -681,7 +696,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -707,7 +722,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -726,7 +741,7 @@ export class DrillsGenerator {
       furiganaHtml: this.furiganaToHtml(word.data.readings[0].furigana),
       meanings: this.filterMeaningsForUser(word).meanings,
       mnemonic: null,
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
     };
   }
 
@@ -734,7 +749,7 @@ export class DrillsGenerator {
     let openAnswers: TrainingAnswer[] = [];
 
     let correctAnswer = this.furiganaToHtml(word.data.readings[0].furigana, null, 'gray-furigana');
-    openAnswers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?selectAudioForWord'] : [] });
+    openAnswers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: this.getAudioUrlsForWord(word) });
 
     for (let words of [this.words, DrillsGenerator.additionalWords]) {
       if (openAnswers.length == 5) {
@@ -750,7 +765,7 @@ export class DrillsGenerator {
         let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, 'gray-furigana');
 
         if (!openAnswers.some((a) => a.contentHtml == formattedAnswer)) {
-          openAnswers.push({ contentHtml: formattedAnswer, audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?selectAudioForWord'] : [], isCorrectAnswer: false });
+          openAnswers.push({ contentHtml: formattedAnswer, audioUrls: this.getAudioUrlsForWord(randomWord), isCorrectAnswer: false });
         }
 
         if (openAnswers.length == 5) {
@@ -805,8 +820,6 @@ export class DrillsGenerator {
   generateWordInfo(word: JapaneseWord, userWord: UserDictionary, kanjis: JapaneseKanji[]): WordInfo {
     const usedReadings = this.getReadingsUsedInWord(word);
 
-    console.log(usedReadings);
-
     return {
       cardType: 'wordInfo',
       cardId: `wordInfo_${word.id}`,
@@ -822,8 +835,7 @@ export class DrillsGenerator {
         meanings: this.filterMeaningsForUser(kanji).meanings.slice(0, 1),
         infoCard: `kanjiInfo_${kanji.id}`,
       })),
-      // TODO: audioUrls
-      audioUrls: this.isTestMode ? ['/assets/test-audio.mp3?word-3236529'] : [],
+      audioUrls: this.getAudioUrlsForWord(word),
       mnemonic: null,
       /*mnemonic: {
         imageUrl: '/assets/test-image.png?word-3236529',
