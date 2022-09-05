@@ -356,7 +356,7 @@ export class DrillsGenerator {
   generateAnswersForKanji(kanji: JapaneseKanji, word: JapaneseWord, furiganaPosition: number) {
     let correctAnswer = word.data.readings[0].furigana[furiganaPosition].rt;
     const answers: TrainingAnswer[] = [];
-    answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true });
+    answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, useBigFont: true });
     let shuffledList = shuffle(this.kanjis);
 
     // TODO: load additional kanjis besides user kanjis
@@ -364,7 +364,7 @@ export class DrillsGenerator {
     // Readings from same kanji
     let reading = sample(kanji.data.readings.filter((r) => !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r))));
     if (reading) {
-      answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading) });
+      answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading), useBigFont: true });
     }
 
     // Readings with same okurigana (for example "こわ.い" for "つよ.い")
@@ -374,7 +374,7 @@ export class DrillsGenerator {
         let readings = randomKanji.data.readings.filter((r) => r.value.split('.')?.[1] == nextPosition.ruby && !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r)));
         if (readings.length > 0) {
           reading = sample(readings);
-          answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading) });
+          answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading), useBigFont: true });
           break;
         }
       }
@@ -385,7 +385,7 @@ export class DrillsGenerator {
       let readings = randomKanji.data.readings.filter((r) => (r.frequencyPercent || 1) > 0.2 /*&& r.value.indexOf('.') === -1*/ && !answers.some((a) => a.contentHtml == this.formatKanjiReadingForAnswer(r)));
       if (readings.length > 0) {
         reading = sample(readings);
-        answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading) });
+        answers.push({ contentHtml: this.formatKanjiReadingForAnswer(reading), useBigFont: true });
       }
       if (answers.length == 5) {
         break;
@@ -492,14 +492,14 @@ export class DrillsGenerator {
     let wordFurigana = word.data.readings[0].furigana;
     let correctAnswer = this.formatWordFuriganaForAnswerReading(wordFurigana);
     const answers: TrainingAnswer[] = [];
-    answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true });
+    answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, useBigFont: true });
 
     for (let randomWord of this.getSimilarRandomWords(word)) {
       let furigana = randomWord.data.readings[0].furigana;
       let formattedAnswer = this.formatWordFuriganaForAnswerReading(furigana);
       // Do not add duplicate answers
       if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-        answers.push({ contentHtml: formattedAnswer });
+        answers.push({ contentHtml: formattedAnswer, useBigFont: true });
       }
       if (answers.length == 5) {
         break;
@@ -596,20 +596,20 @@ export class DrillsGenerator {
     let closedAnswers: TrainingAnswer[] = [];
 
     let correctAnswer = this.furiganaToHtml(word.data.readings[0].furigana, null, forAudio ? null : 'gray-furigana');
-    answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true });
+    answers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, useBigFont: true });
 
     if (forAudio) {
       let closedCorrentAnswer = this.formatWordFuriganaForAnswerKanji(word.data.readings[0].furigana);
-      closedAnswers.push({ contentHtml: closedCorrentAnswer, isCorrectAnswer: true });
+      closedAnswers.push({ contentHtml: closedCorrentAnswer, isCorrectAnswer: true, useBigFont: true });
     }
 
     for (let randomWord of this.getSimilarRandomWords(word)) {
       let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, forAudio ? null : 'gray-furigana');
 
       if (!answers.some((a) => a.contentHtml == formattedAnswer)) {
-        answers.push({ contentHtml: formattedAnswer });
+        answers.push({ contentHtml: formattedAnswer, useBigFont: true });
         if (forAudio) {
-          closedAnswers.push({ contentHtml: this.formatWordFuriganaForAnswerKanji(randomWord.data.readings[0].furigana) });
+          closedAnswers.push({ contentHtml: this.formatWordFuriganaForAnswerKanji(randomWord.data.readings[0].furigana), useBigFont: true });
         }
       }
 
@@ -754,13 +754,13 @@ export class DrillsGenerator {
     let openAnswers: TrainingAnswer[] = [];
 
     let correctAnswer = this.furiganaToHtml(word.data.readings[0].furigana, null, 'gray-furigana');
-    openAnswers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: this.getAudioUrlsForWord(word) });
+    openAnswers.push({ contentHtml: correctAnswer, isCorrectAnswer: true, audioUrls: this.getAudioUrlsForWord(word), useBigFont: true });
 
     for (let randomWord of this.getSimilarRandomWords(word)) {
       let formattedAnswer = this.furiganaToHtml(randomWord.data.readings[0].furigana, null, 'gray-furigana');
 
       if (!openAnswers.some((a) => a.contentHtml == formattedAnswer)) {
-        openAnswers.push({ contentHtml: formattedAnswer, audioUrls: this.getAudioUrlsForWord(randomWord), isCorrectAnswer: false });
+        openAnswers.push({ contentHtml: formattedAnswer, audioUrls: this.getAudioUrlsForWord(randomWord), isCorrectAnswer: false, useBigFont: true });
       }
 
       if (openAnswers.length == 5) {

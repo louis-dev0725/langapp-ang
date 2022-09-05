@@ -8,11 +8,13 @@
     </div>
     <div
       style="flex: 4"
-      class="answer-default cursor-pointer p-4 py-8 flex items-center justify-center text-center text-black text-[18px]"
+      class="answer-default cursor-pointer p-4 py-2 min-h-[5rem] flex items-center justify-center text-center text-black"
       (click)="checkAnswer(i + 1)"
       [ngClass]="{
         'answer-correct': isAnswered && answer?.isCorrectAnswer,
-        'answer-incorrect': isAnswered && !isAnsweredCorrectly && i === answeredIndex - 1
+        'answer-incorrect': isAnswered && !isAnsweredCorrectly && i === answeredIndex - 1,
+        'text-[18px]': !answer?.useBigFont,
+        'text-[24px]': answer?.useBigFont
       }"
       [innerHTML]="answer?.contentHtml ? answer?.contentHtml : 'select-audio-n' | translate : {value: i + 1}"
     >

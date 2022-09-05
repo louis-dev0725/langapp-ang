@@ -136,6 +136,7 @@ export interface TrainingAnswer {
   audioUrls?: string[];
   numberAudioUrl?: string;
   isCorrectAnswer?: boolean;
+  useBigFont?: boolean;
 }
 
 export interface TrainingEndMessage {
