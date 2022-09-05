@@ -17,6 +17,18 @@ export interface Drill {
 
 export type DrillCard = WordInfoCard | KanjiInfoCard | TrainingQuestionCard;
 
+export function isWordInfoCard(card: DrillCard): card is WordInfoCard {
+  return card.cardType == 'wordInfo';
+}
+
+export function isKanjiInfoCard(card: DrillCard): card is KanjiInfoCard {
+  return card.cardType == 'kanjiInfo';
+}
+
+export function isTrainingQuestionCard(card: DrillCard): card is TrainingQuestionCard {
+  return card.cardType != 'wordInfo' && card.cardType != 'kanjiInfo';
+}
+
 export interface WordInfoCard {
   cardType: string;
   cardId: string;

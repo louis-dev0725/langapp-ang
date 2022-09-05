@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DictionaryType } from 'src/entities/DictionaryWord';
+import { DictionaryType, DictionaryWord } from 'src/entities/DictionaryWord';
 import { DictionaryWordRepository } from 'src/entities/DictionaryWordRepository';
 import { JapaneseKanji } from 'src/entities/JapaneseKanji';
 import { JapaneseWord } from 'src/entities/JapaneseWord';
@@ -34,7 +34,9 @@ export class DrillsGenerator {
 
   isTestMode = true;
 
-  constructor(private userDictionaryRepository: UserDictionaryRepository, private dictionaryWordRepository: DictionaryWordRepository, private sentenceRepository: SentenceRepository) {}
+  constructor(private userDictionaryRepository: UserDictionaryRepository, private dictionaryWordRepository: DictionaryWordRepository, private sentenceRepository: SentenceRepository) {
+    this.loadAdditionalWords();
+  }
 
   async loadAdditionalWords() {
     if (!DrillsGenerator.additionalWords) {
@@ -42,11 +44,46 @@ export class DrillsGenerator {
     }
   }
 
-  async getList(user: User) {
+  async prepareForUser(user: User) {
     await this.loadAdditionalWords();
 
     this.user = user;
+  }
 
+  async getOne(cardId: string) {
+    let [cardType, wordId] = cardId.split('_', 2);
+
+    if (!cardType || ['wordInfo', 'kanjiInfo'].indexOf(cardType) === -1 || !wordId) {
+      throw new Error('Wrong cardId.');
+    }
+
+    const word = await this.dictionaryWordRepository.findOneOrFail(wordId);
+    let kanjis: JapaneseKanji[];
+
+    if (cardType == 'wordInfo') {
+      const extractedKanji = extractKanji(word.data?.readings?.[0]?.kanji);
+      this.words = [<JapaneseWord>word];
+      this.kanjis = <JapaneseKanji[]>await this.dictionaryWordRepository.findByExactQueries(DictionaryType.JapaneseKanji, extractedKanji);
+      kanjis = extractedKanji.map((extractedKanji) => this.kanjis.find((k) => k.query[0] == extractedKanji));
+    } else if (cardType == 'kanjiInfo') {
+      this.words = [];
+      this.kanjis = [<JapaneseKanji>word];
+    }
+
+    let exampleWordIds = this.kanjis.map((k) => k.data.readings.map((r) => r.exampleWords.map((w) => w.wordId))).flat(2);
+    this.exampleWordsArray = <JapaneseWord[]>await this.dictionaryWordRepository.findByIds(exampleWordIds);
+    this.exampleWords = keyBy(this.exampleWordsArray, (w) => w.id);
+
+    await this.loadSentences();
+
+    if (cardType == 'wordInfo') {
+      return this.generateWordInfo(<JapaneseWord>word, null, kanjis);
+    } else if (cardType == 'kanjiInfo') {
+      return this.generateKanjiInfo(<JapaneseKanji>word, null);
+    }
+  }
+
+  async getList() {
     await this.loadWords();
 
     if (this.userWords.length == 0) {

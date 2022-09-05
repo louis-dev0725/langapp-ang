@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Req, Post, HttpCode } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, Post, HttpCode, Query, HttpException, HttpStatus } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PaidGuard } from 'src/auth/paid.guard';
@@ -29,6 +29,18 @@ export class DrillsController {
     const user = req.user;
 
     let generator = await this.moduleRef.create(DrillsGenerator);
-    return await generator.getList(user);
+    await generator.prepareForUser(user);
+    return await generator.getList();
+  }
+
+  @UseGuards(JwtAuthGuard, PaidGuard)
+  @Get('card')
+  async getCard(@Req() req: RequestWithUser, @Query() query: any) {
+    const user = req.user;
+
+    let generator = await this.moduleRef.create(DrillsGenerator);
+    await generator.prepareForUser(user);
+
+    return await generator.getOne(query.id);
   }
 }

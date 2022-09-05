@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Drill, DrillCard, KanjiInfoCard, TrainingCards, TrainingEndMessage, TrainingQuestionCard, WordInfoCard } from '@app/interfaces/common.interface';
+import { Drill, DrillCard, isKanjiInfoCard, isTrainingQuestionCard, isWordInfoCard, KanjiInfoCard, TrainingCards, TrainingEndMessage, TrainingQuestionCard, WordInfoCard } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 import { ApiService } from '@app/services/api.service';
@@ -57,6 +57,7 @@ export class CardsService {
 
       const currentCard = this.cards$.value[currentDrill.card];
       this._navigateToCard(currentCard);
+      this._preloadAudioForNextCard();
     } else {
       console.log('end of training');
       this.router.navigate(['training/end-of-training']);
@@ -64,16 +65,42 @@ export class CardsService {
   }
 
   navigateToCardById(cardId: string) {
+    console.log('navigateToCardById', cardId);
     let currentCard = this.cards$.value[cardId];
     const [type, id] = cardId.split('_');
     if (!currentCard) {
       // Will be loaded from API if not exists
       // @ts-ignore
       currentCard = { cardType: type, cardId, wordId: Number(id) };
+
+      this.api.getTrainingCardById(cardId).subscribe((response) => {
+        this.currentCardState$.next(new CurrentCardState(response));
+      });
     }
     this.currentDrillIndex = -1;
     this.showBackButton$.next(true);
     this._navigateToCard(currentCard);
+  }
+
+  _preloadAudioForNextCard() {
+    if (this.currentDrillIndex != -1) {
+      const nextDrill = this.drills$.value[this.currentDrillIndex + 1];
+      if (nextDrill) {
+        const nextCard = this.cards$.value[nextDrill.card];
+        if (nextCard) {
+          if (isWordInfoCard(nextCard)) {
+            this.audioService.preloadAudio(nextCard?.audioUrls?.[0]);
+          } else if (isKanjiInfoCard(nextCard)) {
+            // (<KanjiInfoCard>nextCard)
+          } else if (isTrainingQuestionCard(nextCard)) {
+            this.audioService.preloadAudio(nextCard?.audioUrls?.[0]);
+            this.audioService.preloadAudio(nextCard?.question?.audioUrls?.[0]);
+            nextCard?.question?.answers?.map((a) => this.audioService.preloadAudio(a?.audioUrls?.[0]));
+            nextCard?.question?.openAnswers?.map((a) => this.audioService.preloadAudio(a?.audioUrls?.[0]));
+          }
+        }
+      }
+    }
   }
 
   _navigateToCard(currentCard: DrillCard) {

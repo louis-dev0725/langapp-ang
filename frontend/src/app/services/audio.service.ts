@@ -44,7 +44,7 @@ export class AudioService {
       this.clearQueue();
     }
     this.queue.push(audioUrl);
-    if (audioUrl != 'short-pause') {
+    if (audioUrl != 'short-pause' && this.queue.length != 1) {
       this.preloadAudio(audioUrl);
     }
     this._processQueue();
@@ -82,6 +82,10 @@ export class AudioService {
   }
 
   preloadAudio(audioUrl: string) {
+    if (!audioUrl) {
+      return;
+    }
+    console.log('preloadAudio', audioUrl);
     if (this.preloadAudioList.findIndex((a) => a.url == audioUrl) === -1) {
       this.preloadAudioList.push({ url: audioUrl, finished: false, started: false });
     }
