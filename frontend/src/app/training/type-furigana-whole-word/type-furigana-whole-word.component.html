@@ -4,7 +4,7 @@
   </div>
 
   <div class="px-2 pb-8" *ngIf="!state.isAnswered">
-    <app-type-word-with-buttons [card]="card" [(isAnswered)]="state.isAnswered" [(enteredAnswer)]="state.enteredAnswer" [(isAnsweredCorrectly)]="state.isAnsweredCorrectly"></app-type-word-with-buttons>
+    <app-type-word-with-buttons [card]="card" [(isAnswered)]="state.isAnswered" (isAnsweredChange)="onAnsweredChanged()" [(enteredAnswer)]="state.enteredAnswer" [(isAnsweredCorrectly)]="state.isAnsweredCorrectly"></app-type-word-with-buttons>
   </div>
   <div class="flex flex-col justify-center items-center text-center" *ngIf="state.isAnswered">
     <div class="p-4">

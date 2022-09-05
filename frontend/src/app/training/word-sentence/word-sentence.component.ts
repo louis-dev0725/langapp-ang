@@ -49,7 +49,7 @@ export class WordSentenceComponent implements OnInit {
         this.state.isAnswered = true;
         this.state.answeredIndex = index;
         this.state.isAnsweredCorrectly = this.card.question?.answers[index - 1]?.isCorrectAnswer;
-        this.audioService.play(this.card?.audioUrls[0]);
+        this.audioService.play(this.card?.audioUrls?.[0]);
         this.cardsService.answerCard(this.state.isAnsweredCorrectly);
       }
     } else {
@@ -60,7 +60,7 @@ export class WordSentenceComponent implements OnInit {
   forgotAnswer() {
     this.state.isAnswered = true;
     this.state.isAnsweredCorrectly = false;
-    this.audioService.play(this.card?.audioUrls[0]);
+    this.audioService.play(this.card?.audioUrls?.[0]);
     this.cardsService.answerCard(this.state.isAnsweredCorrectly);
   }
 

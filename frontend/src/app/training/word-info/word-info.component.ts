@@ -32,6 +32,10 @@ export class WordInfoComponent implements OnInit {
     this.getTrainingDetails();
   }
 
+  initCard() {
+    this.audioService.play(this.card?.audioUrls?.[0]);
+  }
+
   @HostListener('document:keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
     if (event.code.startsWith('Digit') || event.code == 'Enter') {
@@ -49,6 +53,7 @@ export class WordInfoComponent implements OnInit {
     this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
       this.state = state;
       this.card = <WordInfoCard>state.card;
+      this.initCard();
       this.cd.markForCheck();
     });
   }

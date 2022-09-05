@@ -39,10 +39,17 @@ export class TypeFuriganaWholeWordComponent implements OnInit {
     }
   }
 
+  onAnsweredChanged() {
+    if (this.state.isAnswered) {
+      this.audioService.play(this.card?.audioUrls?.[0]);
+    }
+  }
+
   forgotAnswer() {
     this.state.isAnswered = true;
     this.state.isAnsweredCorrectly = false;
     this.cardsService.answerCard(this.state.isAnsweredCorrectly);
+    this.onAnsweredChanged();
   }
 
   continueTraining() {

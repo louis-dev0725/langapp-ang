@@ -95,7 +95,7 @@ export class DrillAnswerButtonsComponent implements OnInit {
         this.isAnswered = true;
         this.answeredIndex = index;
         this.isAnsweredCorrectly = this.card.question?.answers[index - 1].isCorrectAnswer;
-        this.audioService.play(this.card?.audioUrls[0]);
+        this.audioService.play(this.card?.audioUrls?.[0]);
         this.cardsService.answerCard(this.isAnsweredCorrectly);
       }
     } else {
@@ -107,7 +107,7 @@ export class DrillAnswerButtonsComponent implements OnInit {
   forgotAnswer() {
     this.isAnswered = true;
     this.isAnsweredCorrectly = false;
-    this.audioService.play(this.card?.audioUrls[0]);
+    this.audioService.play(this.card?.audioUrls?.[0]);
     this.cardsService.answerCard(this.isAnsweredCorrectly);
     this.cd.markForCheck();
   }
