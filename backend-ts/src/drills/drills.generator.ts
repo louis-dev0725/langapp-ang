@@ -122,7 +122,7 @@ export class DrillsGenerator {
 
         // TODO: remove
         if (this.isTestMode) {
-          // this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
+          // this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
           // this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, 0, userKanji));
           // this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
         }
@@ -136,7 +136,7 @@ export class DrillsGenerator {
         }
       }
 
-      this.addToCards(this.generateWordInfo(currentWord, userWord, this.kanjis));
+      this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
       this.addToCards(this.generateSelectFuriganaForWholeWord(currentWord, userWord));
       this.addToCards(this.generateTypeFuriganaForWholeWord(currentWord, userWord));
       this.addToCards(this.generateSelectTranslationForWord(currentWord, userWord));
