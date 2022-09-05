@@ -15,6 +15,8 @@ export interface Drill {
   answerEndTime: number;
 }
 
+export type DrillCard = WordInfoCard | KanjiInfoCard | TrainingQuestionCard;
+
 export interface WordInfoCard {
   cardType: string;
   cardId: string;

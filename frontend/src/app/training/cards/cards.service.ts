@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Drill, KanjiInfoCard, TrainingCards, TrainingEndMessage, TrainingQuestionCard, WordInfoCard } from '@app/interfaces/common.interface';
+import { Drill, DrillCard, KanjiInfoCard, TrainingCards, TrainingEndMessage, TrainingQuestionCard, WordInfoCard } from '@app/interfaces/common.interface';
 import { Router } from '@angular/router';
 import { CardTypeRouteEnum } from '@app/training/enums/card-type-route.enum';
 import { ApiService } from '@app/services/api.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { AudioService } from '@app/services/audio.service';
 
 export class CurrentCardState {
   startTime = Date.now();
@@ -13,7 +14,7 @@ export class CurrentCardState {
   isAnsweredCorrectly: boolean;
   enteredAnswer?: string = '';
 
-  constructor(public card: WordInfoCard | KanjiInfoCard | TrainingQuestionCard) {}
+  constructor(public card: DrillCard) {}
 }
 
 @UntilDestroy()
@@ -34,7 +35,7 @@ export class CardsService {
   public drills$ = new BehaviorSubject<Drill[]>(null);
   public endingMessage$ = new BehaviorSubject<TrainingEndMessage>(null);
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(private router: Router, private api: ApiService, private audioService: AudioService) {}
 
   loadCards() {
     this.api
@@ -52,15 +53,10 @@ export class CardsService {
     if (this.currentDrillIndex != -1) {
       const currentDrill = this.drills$.value[this.currentDrillIndex];
       currentDrill.answerStartTime = Math.floor(Date.now());
-      const currentCard = this.cards$.value[currentDrill.card];
-      this.currentCardState$.next(new CurrentCardState(currentCard));
       this.showBackButton$.next(false);
 
-      if (currentCard.cardType === 'wordInfo' || currentCard.cardType === 'kanjiInfo') {
-        this.router.navigate(['training', this.cardTypeRouteEnum[currentCard.cardType], currentCard.wordId]);
-      } else {
-        this.router.navigate(['training', this.cardTypeRouteEnum[currentCard.cardType]]);
-      }
+      const currentCard = this.cards$.value[currentDrill.card];
+      this._navigateToCard(currentCard);
     } else {
       console.log('end of training');
       this.router.navigate(['training/end-of-training']);
@@ -75,9 +71,14 @@ export class CardsService {
       // @ts-ignore
       currentCard = { cardType: type, cardId, wordId: Number(id) };
     }
-    this.currentCardState$.next(new CurrentCardState(currentCard));
     this.currentDrillIndex = -1;
     this.showBackButton$.next(true);
+    this._navigateToCard(currentCard);
+  }
+
+  _navigateToCard(currentCard: DrillCard) {
+    this.currentCardState$.next(new CurrentCardState(currentCard));
+    this.audioService.clearQueue();
 
     if (currentCard.cardType === 'wordInfo' || currentCard.cardType === 'kanjiInfo') {
       this.router.navigate(['training', this.cardTypeRouteEnum[currentCard.cardType], currentCard.wordId]);

@@ -73,25 +73,7 @@ export class DrillsGenerator {
 
       if (this.isTestMode) {
         // this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, this.formatExampleSentencesForWord(currentWord)[1]));
-
-        let meanings = this.filterMeaningsForUser(currentWord, false, true).meanings;
-        for (let meaning of meanings) {
-          if (!meaning.isOther) {
-            let exampleSentences = shuffle(meaning.exampleSentences);
-            let added = 0;
-            for (let currentSentence of exampleSentences) {
-              if (currentSentence.furiganaHtml.indexOf('<em>') !== -1) {
-                this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, currentSentence));
-                added++;
-              }
-              if (added >= 3) {
-                break;
-              }
-            }
-          }
-        }
-
-        continue;
+        // continue;
       }
 
       for (const [i, userKanji] of currentUserKanjis.entries()) {
@@ -124,6 +106,23 @@ export class DrillsGenerator {
       this.addToCards(this.generateSelectWordForTranslation(currentWord, userWord));
 
       this.addToCards(this.generateSelectWordForAudio(currentWord, userWord));
+
+      let meanings = this.filterMeaningsForUser(currentWord, false, true).meanings;
+      for (let meaning of meanings) {
+        if (!meaning.isOther) {
+          let exampleSentences = shuffle(meaning.exampleSentences);
+          let added = 0;
+          for (let currentSentence of exampleSentences) {
+            if (currentSentence.furiganaHtml.indexOf('<em>') !== -1) {
+              this.addToCards(this.generateSelectWordForSentence(currentWord, userWord, currentSentence));
+              added++;
+            }
+            if (added >= 3) {
+              break;
+            }
+          }
+        }
+      }
 
       // this.addToCards(this.generateSelectWordForSentenceVideo(currentWord, userWord));
       this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
@@ -635,7 +634,7 @@ export class DrillsGenerator {
   }
 
   formatWordFuriganaForAnswerKanji(furigana: Furigana[]) {
-    return furigana.map((f) => f.ruby).join(' ');
+    return furigana.map((f) => f.ruby).join('');
   }
 
   generateSelectWordForAudio(word: JapaneseWord, userWord: UserDictionary): TrainingQuestionCard & Record<string, any> {
@@ -662,7 +661,7 @@ export class DrillsGenerator {
   generateSelectWordForSentence(word: JapaneseWord, userWord: UserDictionary, sentence: TrainingExampleSentence): TrainingQuestionCard & Record<string, any> {
     return {
       cardType: 'selectWordForSentence',
-      cardId: `selectWordForSentence_${word.id}`,
+      cardId: `selectWordForSentence_${word.id}_${sentence.sentenceId}`,
       wordId: word.id,
       infoCard: `wordInfo_${word.id}`,
       // TODO: real sentences
