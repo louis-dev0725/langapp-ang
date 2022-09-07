@@ -16,10 +16,7 @@ import { WordSentenceComponent } from '@app/training/word-sentence/word-sentence
 import { AudioWordComponent } from '@app/training/audio-word/audio-word.component';
 import { EndTrainingComponent } from '@app/training/end-training/end-training.component';
 import { TrainingGuard } from '@app/training/guards/training.guard';
-import { EndingGuard } from '@app/training/guards/ending.guard';
 import { WordSentenceVideoComponent } from '@app/training/word-sentence-video/word-sentence-video.component';
-import { WordInfoGuard } from '@app/training/guards/word-info.guard';
-import { KanjiInfoGuard } from '@app/training/guards/kanji-info.guard';
 
 const trainingRoutes: Routes = [
   {
@@ -45,7 +42,7 @@ const trainingRoutes: Routes = [
       {
         path: 'word-info/:id',
         component: WordInfoComponent,
-        canActivate: [WordInfoGuard],
+        canActivate: [TrainingGuard],
         data: {
           breadcrumb: { label: 'Word Info', skip: true },
         },
@@ -53,7 +50,7 @@ const trainingRoutes: Routes = [
       {
         path: 'kanji-info/:id',
         component: KanjiInfoComponent,
-        canActivate: [KanjiInfoGuard],
+        canActivate: [TrainingGuard],
         data: {
           breadcrumb: { label: 'Kanji Info', skip: true },
         },
@@ -133,7 +130,7 @@ const trainingRoutes: Routes = [
       {
         path: 'end-of-training',
         component: EndTrainingComponent,
-        canActivate: [EndingGuard],
+        canActivate: [TrainingGuard],
         data: {
           breadcrumb: { label: 'End of training', skip: true },
         },

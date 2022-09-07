@@ -268,26 +268,6 @@ export interface DictionaryArray {
   };
 }
 
-export interface CardReview {
-  id?: number;
-  date: Date;
-  answer: number;
-  oldInterval: number;
-  newInterval: number;
-  oldEaseFactor: number;
-  newEaseFactor: number;
-}
-
-export interface Card {
-  id?: number;
-  status: number;
-  due: number;
-  interval: number;
-  reviews: CardReview[];
-  easeFactor: number;
-  consecutiveCorrectAnswers: number;
-}
-
 export interface UserPaymentMethod {
   id: number;
   userId: number;

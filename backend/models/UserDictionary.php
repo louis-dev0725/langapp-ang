@@ -19,9 +19,11 @@ use yii\db\ActiveRecord;
  * @property string $url
  * @property int $success_training
  * @property int $number_training
- * @property string $workout_progress_card
+ * @property string $drill_card
  * @property string $workout_progress_word_translate
  * @property int $mnemonic_id
+ * @property string $drill_due
+ * @property string $drill_last
  *
  * @property DictionaryWord $dictionaryWord
  * @property User $user

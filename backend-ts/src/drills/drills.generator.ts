@@ -8,7 +8,7 @@ import { Meaning as JapaneseKanjiMeaning, Reading as JapaneseKanjiReading } from
 import { User } from 'src/entities/User';
 import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
 import { convertHiraganaToKatakana, convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
-import { In } from 'typeorm';
+import { In, LessThanOrEqual } from 'typeorm';
 import { Drill, KanjiInfoCard, TrainingAnswer, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfoCard } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
@@ -120,23 +120,16 @@ export class DrillsGenerator {
           continue;
         }
 
-        // TODO: remove
-        if (this.isTestMode) {
-          // this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
-          // this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, 0, userKanji));
-          // this.addToCards(this.generateSelectAudioForWord(currentWord, userWord));
-        }
-
-        if (this.addToCards(this.generateKanjiInfo(currentKanji, userKanji))) {
+        if (this.addToCards(this.generateKanjiInfo(currentKanji, userKanji), null, 0)) {
           for (const [fI, fV] of currentWord.data.readings[0].furigana.entries()) {
             if (fV.ruby == currentKanji.query[0]) {
-              this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, fI, userKanji));
+              this.addToCards(this.generateSelectFuriganaForOneKanji(currentWord, currentKanji, fI, userKanji), currentKanji.id);
             }
           }
         }
       }
 
-      this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis));
+      this.addToCards(this.generateWordInfo(currentWord, userWord, currentKanjis), null, 0);
       this.addToCards(this.generateSelectFuriganaForWholeWord(currentWord, userWord));
       this.addToCards(this.generateTypeFuriganaForWholeWord(currentWord, userWord));
       this.addToCards(this.generateSelectTranslationForWord(currentWord, userWord));
@@ -205,6 +198,11 @@ export class DrillsGenerator {
       where: {
         user_id: this.user.id,
         type: DictionaryType.JapaneseWords,
+        // drill_due: LessThanOrEqual(new Date()),
+      },
+      order: {
+        id: 'ASC',
+        // drill_due: 'ASC',
       },
     });
 
@@ -255,7 +253,7 @@ export class DrillsGenerator {
     return this.getAudioUrls(sentenceText);
   }
 
-  addToCards(card: WordInfoCard | KanjiInfoCard | TrainingQuestionCard) {
+  addToCards(card: WordInfoCard | KanjiInfoCard | TrainingQuestionCard, trackBy = null, trackPoints = 1) {
     if (!this.cards[card.cardId]) {
       this.cards[card.cardId] = card;
       this.drills.push({
@@ -264,6 +262,9 @@ export class DrillsGenerator {
         isAnsweredCorrectly: null,
         answerStartTime: null,
         answerEndTime: null,
+        answerDuration: null,
+        trackBy: trackBy || card.wordId,
+        trackPoints: trackPoints,
       });
       return true;
     } else {

@@ -52,7 +52,7 @@ export class CardsService {
     this.currentDrillIndex = this.drills$.value.findIndex((d) => !d.isFinished);
     if (this.currentDrillIndex != -1) {
       const currentDrill = this.drills$.value[this.currentDrillIndex];
-      currentDrill.answerStartTime = Math.floor(Date.now());
+      currentDrill.answerStartTime = Date.now();
       this.showBackButton$.next(false);
 
       const currentCard = this.cards$.value[currentDrill.card];
@@ -133,9 +133,11 @@ export class CardsService {
     }
 
     let drills = [...this.drills$.value];
+    let dateNow = Date.now();
     drills[this.currentDrillIndex] = {
       ...drills[this.currentDrillIndex],
-      answerEndTime: Math.floor(Date.now() / 1000),
+      answerEndTime: dateNow,
+      answerDuration: dateNow - drills[this.currentDrillIndex].answerStartTime,
       isAnsweredCorrectly: isAnsweredCorrectly,
       isFinished: true,
     };

@@ -13,6 +13,9 @@ export interface Drill {
   isAnsweredCorrectly: boolean;
   answerStartTime: number;
   answerEndTime: number;
+  answerDuration: number;
+  trackBy: number;
+  trackPoints: number;
 }
 
 export type DrillCard = WordInfoCard | KanjiInfoCard | TrainingQuestionCard;
@@ -173,4 +176,12 @@ export interface Hidings {
   cardToHide: string;
   mode: string;
   drills: Drill[];
+}
+
+export interface UserDictionaryDrillCard {
+  due?: number;
+  interval?: number;
+  easeFactor?: number;
+  countAnswers?: number;
+  consecutiveCorrectAnswers?: number;
 }

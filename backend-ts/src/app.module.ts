@@ -24,6 +24,8 @@ import { Sentence } from './entities/Sentence';
 import { SentenceRepository } from './entities/SentenceRepository';
 import { AudioController } from './audio/audio.controller';
 import { Audio } from 'src/entities/Audio';
+import { SrsService } from './drills/srs.service';
+import { DrillReview } from './entities/DrillReview';
 
 @Global()
 @Module({
@@ -35,10 +37,10 @@ import { Audio } from 'src/entities/Audio';
       username: process.env.POSTGRES_USER || 'postgres',
       password: process.env.POSTGRES_PASSWORD || 'postgres',
       database: process.env.POSTGRES_DB || 'postgres',
-      entities: [DictionaryWord, Content, User, UserDictionary, Sentence, Audio],
+      entities: [DictionaryWord, Content, User, UserDictionary, Sentence, Audio, DrillReview],
       autoLoadEntities: false,
     }),
-    TypeOrmModule.forFeature([DictionaryWord, DictionaryWordRepository, Content, UserDictionary, UserDictionaryRepository, Sentence, SentenceRepository, Audio]),
+    TypeOrmModule.forFeature([DictionaryWord, DictionaryWordRepository, Content, UserDictionary, UserDictionaryRepository, Sentence, SentenceRepository, Audio, DrillReview]),
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST || 'redis',
@@ -64,6 +66,7 @@ import { Audio } from 'src/entities/Audio';
     ConsoleController,
     AnalyzeJapaneseService,
     TestService,
+    SrsService,
   ],
   exports: [ConsoleController, AnalyzeJapaneseService],
 })

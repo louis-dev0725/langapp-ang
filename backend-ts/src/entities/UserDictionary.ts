@@ -1,3 +1,4 @@
+import { UserDictionaryDrillCard } from 'src/drills/drills.interfaces';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { DictionaryType } from './DictionaryWord';
 
@@ -30,17 +31,17 @@ export class UserDictionary {
   @Column('character varying')
   url: string;
 
-  @Column('int')
-  success_training: number;
+  @Column('jsonb')
+  drill_card: UserDictionaryDrillCard;
 
   @Column('int')
-  number_training: number;
+  drill_progress: number;
 
-  @Column('character varying')
-  workout_progress_card: string;
+  @Column('timestamptz')
+  drill_due: Date;
 
-  @Column('character varying')
-  workout_progress_word_translate: string;
+  @Column('timestamptz')
+  drill_last: Date;
 
   @Column('int')
   mnemonic_id: number;
