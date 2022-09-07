@@ -66,7 +66,7 @@ export class DrillsController {
       success: true,
       finishContent: {
         title: 'Good job!',
-        text: `Done ${drills.length} and studied ${countWords}.`,
+        text: `Done ${drills.length} drills and studied ${countWords} words.`,
         //'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut imperdiet tortor. Quisque molestie turpis vitae ante iaculis, a convallis ante porta. Nullam a viverra elit, non interdum sem. Pellentesque quis felis ullamcorper dolor sollicitudin lacinia. Aliquam ac lacinia diam, at viverra urna. Duis eleifend, nunc quis pharetra laoreet, enim ipsum faucibus dui, euismod efficitur metus ipsum in massa. Curabitur dictum, ante non lobortis iaculis, leo mauris cursus nisi, non condimentum nunc ligula in sapien.',
       },
     };
