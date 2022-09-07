@@ -198,12 +198,13 @@ export class DrillsGenerator {
       where: {
         user_id: this.user.id,
         type: DictionaryType.JapaneseWords,
-        // drill_due: LessThanOrEqual(new Date()),
+        drill_due: LessThanOrEqual(new Date()),
       },
       order: {
-        id: 'ASC',
-        // drill_due: 'ASC',
+        // id: 'ASC',
+        drill_due: 'ASC',
       },
+      take: 10,
     });
 
     this.words = <JapaneseWord[]>await this.dictionaryWordRepository.find({
