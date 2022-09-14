@@ -283,6 +283,7 @@ export interface AddCardSquareRequest {
 export interface ProlongSubscriptionResult {
   status: boolean;
   message: string;
+  user: User;
 }
 
 export interface ContentStudiedAttributeRequest {
@@ -305,6 +306,10 @@ export interface Category {
   id?: number;
   title: string;
   parent_id: number;
+}
+
+export interface StripeSetupIntentResponse {
+  client_secret: string;
 }
 
 export * from '../../../../backend-ts/src/drills/drills.interfaces';

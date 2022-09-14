@@ -1,25 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import {
-  Category,
-  Content,
-  UserDictionary,
-  ListResponse,
-  Mnemonic,
-  SettingPlugin,
-  User,
-  UserPaymentMethod,
-  AddCardSquareRequest,
-  ProlongSubscriptionResult,
-  ContentAttributeResponse,
-  ContentStudiedAttributeRequest,
-  ContentHiddenAttributeRequest,
-  Training,
-  Drill,
-  TrainingEndMessage,
-  TrainingSetting,
-  Hidings,
-} from '@app/interfaces/common.interface';
+import { Category, Content, UserDictionary, ListResponse, Mnemonic, SettingPlugin, User, UserPaymentMethod, AddCardSquareRequest, ProlongSubscriptionResult, ContentAttributeResponse, ContentStudiedAttributeRequest, ContentHiddenAttributeRequest, Training, Drill, TrainingEndMessage, TrainingSetting, Hidings, StripeSetupIntentResponse } from '@app/interfaces/common.interface';
 import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
@@ -86,20 +67,10 @@ export class ApiService {
     return environment.siteKey;
   }
 
-  constructor(
-    private http: HttpClient,
-    private session: SessionService,
-    private store: Store<fromStore.State>,
-    private messageService: MessageService,
-    @Inject(APP_BASE_HREF) private baseHref: string,
-    private userService: UserService,
-    private router: Router
-  ) {}
+  constructor(private http: HttpClient, private session: SessionService, private store: Store<fromStore.State>, private messageService: MessageService, @Inject(APP_BASE_HREF) private baseHref: string, private userService: UserService, private router: Router) {}
 
   apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, catchValidationErrors = false) {
-    return <Observable<T>>(
-      this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(catchError((r) => this.handleError(r, catchValidationErrors)))
-    );
+    return <Observable<T>>this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(catchError((r) => this.handleError(r, catchValidationErrors)));
   }
 
   private handleError(response: HttpErrorResponse, catchValidationErrors = false) {
@@ -1067,8 +1038,27 @@ export class ApiService {
   }
 
   getTrainingCardById(cardId: string): Observable<any> {
-    return this.apiRequest<any>('GET', 'drills/card', { params: {
-        id: cardId
-      } });
+    return this.apiRequest<any>('GET', 'drills/card', {
+      params: {
+        id: cardId,
+      },
+    });
+  }
+
+  getStripeSetupIntent(): Observable<StripeSetupIntentResponse> {
+    return this.apiRequest<StripeSetupIntentResponse>('GET', 'users/stripe-setup-intent');
+  }
+
+  stripeAddPaymentMethod(stripePaymentMethodId: string) {
+    return this.apiRequest<UserPaymentMethod[]>(
+      'POST',
+      `users/stripe-add-payment-method`,
+      {
+        body: {
+          stripePaymentMethodId,
+        },
+      },
+      true
+    );
   }
 }

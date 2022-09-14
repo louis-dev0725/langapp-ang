@@ -65,7 +65,7 @@ class UserController extends ActiveController
                 ],
                 [
                     'allow' => true,
-                    'actions' => ['me', 'update', 'invited-users', 'close-notification', 'my-payment-methods', 'add-card-square', 'delete-payment-method', 'prolong-subscription'],
+                    'actions' => ['me', 'update', 'invited-users', 'close-notification', 'my-payment-methods', 'add-card-square', 'delete-payment-method', 'prolong-subscription', 'stripe-setup-intent', 'stripe-add-payment-method'],
                     'roles' => ['@'],
                 ],
                 [
@@ -172,7 +172,7 @@ class UserController extends ActiveController
     public function actionInvitedUsers($id)
     {
         // note: [SHR]: this changes need to push to repository
-        $id = (int) $id;
+        $id = (int)$id;
         $userId = Yii::$app->user->id;
         if (Helpers::isAdmin()) {
             $model = User::findOne($id);
@@ -314,9 +314,104 @@ class UserController extends ActiveController
         return Helpers::user()->paymentMethods;
     }
 
-    public function actionProlongSubscription() {
+    public function actionProlongSubscription()
+    {
         $user = Helpers::user();
-        return $user->paySubscriptionIfNecessary();
+
+        $result = $user->paySubscriptionIfNecessary();
+
+        $user->scenario = User::SCENARIO_PROFILE;
+        $result['user'] = $user;
+
+        return $result;
+    }
+
+    public function actionStripeSetupIntent()
+    {
+        $user = Helpers::user();
+        $userData = $user->dataJson;
+
+        $stripeParams = Yii::$app->params['stripe'];
+        $env = $stripeParams['env'] ?? 'sandbox';
+        \Stripe\Stripe::setApiKey($stripeParams[$env]['secretKey']);
+
+        $customerId = $userData['paymentCustomerIds']['stripe'] ?? null;
+        if ($customerId == null) {
+            foreach ($user->paymentMethods as $paymentMethod) {
+                if ($paymentMethod->type == PaymentMethod::TYPE_STRIPE && isset($paymentMethod->data['customerId'])) {
+                    $customerId = $paymentMethod->data['customerId'];
+                }
+            }
+            if ($customerId != null) {
+                $userData['paymentCustomerIds']['stripe'] = $customerId;
+                $user->dataJson = $userData;
+                $user->save(false, ['dataJson']);
+            }
+        }
+        if ($customerId == null) {
+            $customer = \Stripe\Customer::create(['email' => $user->email, 'metadata' => ['user_id' => $user->id]]);
+            $customerId = $customer->id;
+            $userData['paymentCustomerIds']['stripe'] = $customerId;
+            $user->dataJson = $userData;
+            $user->save(false, ['dataJson']);
+        }
+
+        $stripe = new \Stripe\StripeClient($stripeParams[$env]['secretKey']);
+        $intent = $stripe->setupIntents->create(
+            [
+                'customer' => $customerId,
+                'payment_method_types' => $stripeParams[$env]['types'], // Possible types
+            ]
+        );
+
+        return ['client_secret' => $intent->client_secret];
+    }
+
+    public function actionStripeAddPaymentMethod()
+    {
+        $params = Yii::$app->request->bodyParams;
+        if (!isset($params['stripePaymentMethodId'])) {
+            throw new BadRequestHttpException('"stripePaymentMethodId" is required.');
+        }
+        $id = $params['stripePaymentMethodId'];
+
+        $user = Helpers::user();
+        $userData = $user->dataJson;
+
+        $stripeParams = Yii::$app->params['stripe'];
+        $env = $stripeParams['env'] ?? 'sandbox';
+        \Stripe\Stripe::setApiKey($stripeParams[$env]['secretKey']);
+
+        $customerId = $userData['paymentCustomerIds']['stripe'] ?? null;
+        if ($customerId != null) {
+            $stripe = new \Stripe\StripeClient($stripeParams[$env]['secretKey']);
+            $result = $stripe->paymentMethods->retrieve($id, []);
+
+            $paymentMethod = null;
+            foreach ($user->paymentMethods as $tmp) {
+                if ($tmp->type == PaymentMethod::TYPE_STRIPE && $tmp->data['id'] == $id) {
+                    $paymentMethod = $tmp;
+                }
+            }
+
+            if ($paymentMethod == null) {
+                $paymentMethod = new PaymentMethod();
+                $paymentMethod->userId = $user->id;
+                $paymentMethod->type = PaymentMethod::TYPE_STRIPE;
+            }
+            if ($result->type == 'card') {
+                $paymentMethod->title = ucfirst($result->card['brand']) . ' •••• ' . $result->card['last4'];
+            }
+            else {
+                $paymentMethod->title = ucfirst($result->type);
+            }
+            $paymentMethod->data = array_merge($paymentMethod->data ?? [], $result->toArray());
+            $paymentMethod->addedDateTime = Helpers::dateToSql(time());
+            $paymentMethod->save(false);
+
+            // Use this instead of $user->paymentMethods to get a fresh list
+            return $user->getPaymentMethods()->all();
+        }
     }
 
     public function actionAddCardSquare()
@@ -342,6 +437,11 @@ class UserController extends ActiveController
                 if ($paymentMethod->type == PaymentMethod::TYPE_SQUARE && isset($paymentMethod->data['customerId'])) {
                     $customerId = $paymentMethod->data['customerId'];
                 }
+            }
+            if ($customerId != null) {
+                $userData['paymentCustomerIds']['square'] = $customerId;
+                $user->dataJson = $userData;
+                $user->save(false, ['dataJson']);
             }
         }
         if ($customerId == null) {

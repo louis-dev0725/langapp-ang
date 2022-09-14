@@ -8,7 +8,7 @@ import { SessionService } from '@app/services/session.service';
 import { PaymentsTableComponent } from '@app/common/payments-table/payments-table.component';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { User, UserPaymentMethod } from '@app/interfaces/common.interface';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '@app/services/user.service';
 
@@ -23,7 +23,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   enableBalanceTopup = false;
   showPaymentMethods = true;
-  enableSquare = true;
+  enableSquare = false;
+  enableStripe = true;
+
+  tryingToProlong = false;
 
   paymentForm: FormGroup;
 
@@ -35,7 +38,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   @ViewChild(PaymentsTableComponent, { static: true }) paymentsTable: PaymentsTableComponent;
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private router: Router, private serializer: UrlSerializer, public session: SessionService, private userService: UserService, private messageService: MessageService, private translateService: TranslateService) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private router: Router, private serializer: UrlSerializer, public session: SessionService, private userService: UserService, private messageService: MessageService, private translateService: TranslateService, private confirmationService: ConfirmationService) {}
 
   ngOnInit() {
     this.userService.user$.pipe(untilDestroyed(this)).subscribe((u) => (this.user = u));
@@ -72,22 +75,47 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   receiveUpdatedPaymentMethods(updatedList: UserPaymentMethod[]) {
     this.paymentMethods = updatedList;
+    this.tryProlongIfNeed();
   }
 
   prolongSubscription() {
+    this.tryingToProlong = true;
     this.api.prolongSubscription().subscribe((r) => {
       this.messageService.add({ severity: r.status ? 'success' : 'error', summary: r.status ? 'Success' : 'Error', detail: r.message });
+      if (r.user) {
+        this.userService.user$.next(r.user);
+        this.tryingToProlong = false;
+      }
+      if (r.status) {
+        // this.updateUser();
+        this.getRows();
+        this.refreshPaymentMethods();
+      }
     });
   }
 
-  deletePaymentMethod(id: number) {
-    this.api.deletePaymentMethod(id).subscribe((r) => {
-      this.paymentMethods = r;
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: this.translateService.instant('Payment method was deleted'),
-      });
+  tryProlongIfNeed() {
+    if (!this.tryingToProlong && this.paymentMethods && this.paymentMethods.length > 0 && !this.user?.isPaid) {
+      this.prolongSubscription();
+    }
+  }
+
+  deletePaymentMethod(event: Event, id: number) {
+    this.confirmationService.confirm({
+      target: event.target,
+      message: this.translateService.instant('Are you sure you want to delete this payment method?'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.api.deletePaymentMethod(id).subscribe((r) => {
+          this.paymentMethods = r;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: this.translateService.instant('Payment method was deleted'),
+          });
+        });
+      },
+      reject: () => {},
     });
   }
 

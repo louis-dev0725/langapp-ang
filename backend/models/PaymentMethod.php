@@ -31,6 +31,7 @@ use yii\web\ServerErrorHttpException;
 class PaymentMethod extends \yii\db\ActiveRecord
 {
     public const TYPE_SQUARE = 'square';
+    public const TYPE_STRIPE = 'stripe';
 
     /**
      * {@inheritdoc}
@@ -101,7 +102,7 @@ class PaymentMethod extends \yii\db\ActiveRecord
             'addedDateTime' => Helpers::dateToSql(time()),
             'paymentMethodId' => $this->id,
             'scenario' => Transaction::SCENARIO_USER,
-            'comment' => 'Top up (' . $this->title . ')',
+            'comment' => $this->title,
         ]);
 
         if (!$transaction->save()) {
@@ -110,7 +111,36 @@ class PaymentMethod extends \yii\db\ActiveRecord
 
         Yii::info('Trying to debit funds. Transaction: ' . json_encode($transaction->attributes, JSON_THROW_ON_ERROR));
 
-        if ($this->type == self::TYPE_SQUARE) {
+        if ($this->type == self::TYPE_STRIPE) {
+            $stripeParams = Yii::$app->params['stripe'];
+            $env = $stripeParams['env'] ?? 'sandbox';
+            \Stripe\Stripe::setApiKey($stripeParams[$env]['secretKey']);
+
+            try {
+                $result = \Stripe\PaymentIntent::create([
+                    'amount' => $transaction->getMoneyInSmallestUnit(),
+                    'currency' => $transaction->currency,
+                    'customer' => $this->data['customer'],
+                    'payment_method' => $this->data['id'],
+                    'off_session' => true,
+                    'confirm' => true,
+                ]);
+                $transaction->status = Transaction::STATUS_SUCCESS;
+                $transaction->dataJson = array_merge($transaction->dataJson ?? [], ['paymentIntent' => $result->toArray()]);
+            } catch (\Stripe\Exception\CardException $e) {
+                // Error code will be authentication_required if authentication is needed
+                // $payment_intent_id = $e->getError()->payment_intent->id;
+                // $payment_intent = \Stripe\PaymentIntent::retrieve($payment_intent_id);
+
+                Yii::info("Transaction error. Error code: {$e->getError()->code} Details: {$e->getError()->toJSON()}");
+                $transaction->status = Transaction::STATUS_ERROR;
+                $transaction->dataJson = array_merge($transaction->dataJson ?? [], ['error' => $e->getMessage(), 'errorData' => $e->getError()->toArray(), 'trace' => $e->__toString()]);
+            } catch (\Exception $e) {
+                Yii::info("Transaction error: {$e->__toString()}");
+                $transaction->status = Transaction::STATUS_ERROR;
+                $transaction->dataJson = array_merge($transaction->dataJson ?? [], ['error' => $e->getMessage(), 'trace' => $e->__toString()]);
+            }
+        } elseif ($this->type == self::TYPE_SQUARE) {
             $squareParams = Yii::$app->params['square'];
             $env = $squareParams['env'] ?? 'sandbox';
             $squareClient = new SquareClient([
@@ -155,11 +185,11 @@ class PaymentMethod extends \yii\db\ActiveRecord
             } catch (Throwable $e) {
                 Yii::info("Transaction error: {$e->getMessage()}");
                 $transaction->status = Transaction::STATUS_ERROR;
-                $transaction->dataJson = array_merge($transaction->dataJson, ['error' => $e->getMessage()]);
+                $transaction->dataJson = array_merge($transaction->dataJson ?? [], ['error' => $e->getMessage()]);
             }
         } else {
             $transaction->status = Transaction::STATUS_ERROR;
-            $transaction->dataJson = array_merge($transaction->dataJson, ['error' => 'Unknown payment method.']);
+            $transaction->dataJson = array_merge($transaction->dataJson ?? [], ['error' => 'Unknown payment method.']);
         }
 
         $transaction->save(false);

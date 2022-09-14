@@ -134,6 +134,17 @@ class Transaction extends \yii\db\ActiveRecord
         }
     }
 
+    public function getMoneyInSmallestUnit() {
+        $currency = strtoupper($this->currency);
+        // From https://stripe.com/docs/currencies?presentment-currency=JP#zero-decimal
+        $zeroDecimalCurrencies = ['BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'];
+        if (in_array($currency, $zeroDecimalCurrencies)) {
+            return $this->money;
+        }
+
+        return $this->money * 100;
+    }
+
     public function calculateToBaseCurrency()
     {
         $this->moneyBaseCurrency = $this->moneyToCurrency(User::getBaseCurrency());

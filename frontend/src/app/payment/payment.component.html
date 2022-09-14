@@ -1,11 +1,40 @@
 <div class="container">
   <div class="card">
     <h4>Subscription status</h4>
-    <p *ngIf="user?.isPaid" [translate]="'ActiveSubscriptionUntil'" [translateParams]="{until: user?.paidUntilDateTime | formatDate: session.language}"></p>
-    <p *ngIf="!user?.isPaid && user?.paidUntilDateTime != '2000-01-01 00:00:00'" [translate]="'EndedSubscriptionUntil'" [translateParams]="{until: user?.paidUntilDateTime | formatDate: session.language}"></p>
-    <p *ngIf="!user?.isPaid" [translate]="'FirstSubscription'"></p>
 
-    <p-messages severity="error" *ngIf="paymentMethods && paymentMethods.length > 0 && !user?.isPaid">
+    <p-messages severity="success" *ngIf="paymentMethods && paymentMethods.length > 0 && user?.isPaid">
+      <ng-template pTemplate>
+        <div>
+          <h4 translate>All ok!</h4>
+          <p [translate]="'ActiveSubscriptionUntil'" [translateParams]="{until: user?.paidUntilDateTime | formatDate: session.language}"></p>
+        </div>
+      </ng-template>
+    </p-messages>
+    <p-messages severity="info" *ngIf="(!paymentMethods || paymentMethods.length == 0) && user?.isPaid">
+      <ng-template pTemplate>
+        <div>
+          <h4 translate>You need to add payment method</h4>
+          <p [translate]="'ActiveSubscriptionPaymentMethod'" [translateParams]="{until: user?.paidUntilDateTime | formatDate: session.language}"></p>
+        </div>
+      </ng-template>
+    </p-messages>
+    <p-messages severity="info" *ngIf="!user?.isPaid && user?.paidUntilDateTime != '2000-01-01 00:00:00'">
+      <ng-template pTemplate>
+        <div>
+          <h4 translate>Subscribtion ended</h4>
+          <p [translate]="'EndedSubscriptionUntil'" [translateParams]="{until: user?.paidUntilDateTime | formatDate: session.language}"></p>
+        </div>
+      </ng-template>
+    </p-messages>
+    <p-messages severity="info" *ngIf="!user?.isPaid && user?.paidUntilDateTime == '2000-01-01 00:00:00'">
+      <ng-template pTemplate>
+        <div>
+          <h4 translate>Let's start!</h4>
+          <p [translate]="'FirstSubscription'"></p>
+        </div>
+      </ng-template>
+    </p-messages>
+    <p-messages severity="error" *ngIf="!tryingToProlong && paymentMethods && paymentMethods.length > 0 && !user?.isPaid">
       <ng-template pTemplate>
         <div>
           <h4 translate>Failed payment</h4>
@@ -37,6 +66,10 @@
       <h5>{{ 'Add new card' | translate }}</h5>
       <app-square-form (updatedListEvent)="receiveUpdatedPaymentMethods($event)"></app-square-form>
     </div>
+    <div *ngIf="enableStripe" class="max-w-lg">
+      <h5>{{ 'Add new card' | translate }}</h5>
+      <app-stripe-form (updatedListEvent)="receiveUpdatedPaymentMethods($event)"></app-stripe-form>
+    </div>
     <div *ngIf="showPaymentMethods && paymentMethods && paymentMethods.length > 0" class="g-field">
       <h5 class="p-mt-3">{{ 'Your payment methods' | translate }}</h5>
       <p-toolbar *ngFor="let method of paymentMethods" styleClass="p-mt-3">
@@ -45,7 +78,7 @@
         </div>
 
         <div class="p-toolbar-group-right">
-          <button pButton (click)="deletePaymentMethod(method.id)" label="{{'Delete' | translate}}" icon="pi pi-trash" class="p-button-danger"></button>
+          <button pButton (click)="deletePaymentMethod($event, method.id)" label="{{'Delete' | translate}}" icon="pi pi-trash" class="p-button-danger"></button>
         </div>
       </p-toolbar>
     </div>

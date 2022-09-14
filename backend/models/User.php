@@ -705,7 +705,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ['status' => Transaction::STATUS_PROCESS],
         ])->exists();
         if ($hasPendingTransactions) {
-            return ['status' => false, Yii::t('app', "We're currently processing transaction to renew your subscription. Please try again later.")];
+            return ['status' => false, 'message' => Yii::t('app', "We're currently processing transaction to renew your subscription. Please try again later.")];
         }
 
         [$amount, $currency] = $this->getSubscriptionPaymentAmount();
@@ -734,7 +734,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                         throw $e;
                     }
 
-                    return ['status' => true, Yii::t('app', 'Your subscription was successfully renewed.')];
+                    return ['status' => true, 'message' => Yii::t('app', 'Your subscription was successfully renewed.')];
                 }
             }
         }
@@ -743,10 +743,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                 throw new ServerErrorHttpException("Failed to renew the subscription for user $this->id");
             }
 
-            return ['status' => true, Yii::t('app', 'Your subscription was successfully renewed.')];
+            return ['status' => true, 'message' => Yii::t('app', 'Your subscription was successfully renewed.')];
         }
 
-        return ['status' => true, Yii::t('app', 'Unable to renew subscription. Please try again using other card or payment method.')];
+        return ['status' => false, 'message' => Yii::t('app', 'Unable to renew subscription. Please try again using other card or payment method.')];
     }
 
     /**
