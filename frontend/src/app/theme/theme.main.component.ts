@@ -11,11 +11,11 @@ import { AppComponent } from '@app/app.component';
 import { MenuService } from '@app/theme/theme.menu.service';
 import { ConfirmationService, PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '@app/event.service';
 import { MatDialog } from '@angular/material/dialog';
 import { randomFromRange } from '@app/shared/helpers';
 import { UserService } from '@app/services/user.service';
 import { take } from 'rxjs/operators';
+import { EventsService } from '@app/services/events.service';
 
 @UntilDestroy()
 @Component({
@@ -55,13 +55,15 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
 
   search = false;
 
+  isProgressBarLoading = false;
+
   interval;
   private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
   public isLoggedIn: boolean;
 
   languages = ['Русский', 'English'];
 
-  constructor(public zone: NgZone, private store: Store<fromStore.State>, private router: Router, private userService: UserService, private api: ApiService, private sessionService: SessionService, public renderer: Renderer2, private menuService: MenuService, private translateService: TranslateService, private eventService: EventService, private primengConfig: PrimeNGConfig, private confirmDialog: MatDialog, public app: AppComponent, private confirmationService: ConfirmationService) {
+  constructor(public zone: NgZone, private store: Store<fromStore.State>, private router: Router, private userService: UserService, private api: ApiService, private sessionService: SessionService, public renderer: Renderer2, private menuService: MenuService, private translateService: TranslateService, private eventsService: EventsService, private primengConfig: PrimeNGConfig, private confirmDialog: MatDialog, public app: AppComponent, private confirmationService: ConfirmationService) {
     this.setUpSubscriptions();
   }
 
@@ -257,6 +259,10 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
     this.isLoggedIn$.subscribe((res) => {
       this.isLoggedIn = res;
     });
+
+    this.eventsService.progressBarLoading.pipe(untilDestroyed(this)).subscribe((event: boolean) => {
+      this.isProgressBarLoading = event;
+    });
   }
 
   setUpSubscriptions() {
@@ -264,7 +270,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
       if (event instanceof NavigationStart) {
         if (this.isLoggedIn) {
           this.userService
-            .getMeRequest()
+            .getMeRequest(null, true)
             .pipe(take(1))
             .subscribe((user) => {
               this.userService.user$.next(user);
@@ -276,7 +282,7 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
       const isLoggedIn = await this.isLoggedIn$.toPromise();
       if (isLoggedIn) {
         this.userService
-          .getMeRequest()
+          .getMeRequest(null, true)
           .pipe(untilDestroyed(this))
           .subscribe((user) => {
             this.userService.user$.next(user);

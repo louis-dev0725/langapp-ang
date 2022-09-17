@@ -40,7 +40,9 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { PasswordModule } from 'primeng/password';
 import { TooltipModule } from 'primeng/tooltip';
 import { AsPipe } from '../pipes/as.pipe';
+import { InplaceModule } from 'primeng/inplace';
 import { ProgressCircleComponent } from './progress-circle/progress-circle.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 let sharedModules = [
   // primeng
@@ -66,6 +68,8 @@ let sharedModules = [
   ToolbarModule,
   PasswordModule,
   TooltipModule,
+  ProgressBarModule,
+  InplaceModule,
 
   // material
   MatIconModule,

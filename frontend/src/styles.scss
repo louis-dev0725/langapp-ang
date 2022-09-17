@@ -14,6 +14,15 @@ $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 //@import "../node_modules/@fullcalendar/daygrid/main.min.css";
 //@import "../node_modules/@fullcalendar/timegrid/main.min.css";
 
+.card {
+  padding: 2rem;
+}
+@media (max-width: $tabletBreakpoint) {
+  .card {
+    padding: 1.25rem;
+  }
+}
+
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
@@ -178,7 +187,8 @@ ruby rt:hover {
   color: white;
 }
 
-.word-highlight, .example-sentence em {
+.word-highlight,
+.example-sentence em {
   font-style: normal;
   /*text-decoration: underline;
   text-decoration-color: #8fcaf9;
@@ -192,6 +202,25 @@ ruby rt:hover {
 
 .container {
   max-width: none;
+}
+
+.p-inplace .p-inplace-display {
+  padding: 0;
+}
+
+.p-inplace .p-inplace-display:not(.p-disabled):hover {
+  background: inherit;
+  color: inherit;
+}
+
+.p-progressbar.global-progressbar {
+  position: fixed;
+  height: 2px;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 999;
 }
 
 /*

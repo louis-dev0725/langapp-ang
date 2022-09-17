@@ -318,6 +318,7 @@ export class ApiService {
    * Получаем авторизованного пользователя(себя), сам запрос
    */
   private getMeRequest(observer, token = null, isCurrentUser = true) {
+    // TODO: Headers not required as they already set in http interceptor?
     const headers = this.userService.getHeadersWithToken(token);
 
     this.http

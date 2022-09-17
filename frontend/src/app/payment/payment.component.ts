@@ -41,7 +41,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService, private customValidator: CustomValidator, private router: Router, private serializer: UrlSerializer, public session: SessionService, private userService: UserService, private messageService: MessageService, private translateService: TranslateService, private confirmationService: ConfirmationService) {}
 
   ngOnInit() {
-    this.userService.user$.pipe(untilDestroyed(this)).subscribe((u) => (this.user = u));
+    this.userService.user$.pipe(untilDestroyed(this)).subscribe((u) => {
+      this.user = u;
+    });
 
     if (this.paymentsTable) {
       this.paymentsTable.isLoaded = false;
@@ -116,6 +118,43 @@ export class PaymentComponent implements OnInit, OnDestroy {
         });
       },
       reject: () => {},
+    });
+  }
+
+  updateIsPaused(event: Event) {
+    let newIsServicePaused = !this.user.isServicePaused ? 1 : 0;
+    let message: string;
+    let icon: string;
+    if (this.user.isServicePaused) {
+      message = this.translateService.instant('Do you want to enable subscription?');
+      if (!this.user.isPaid) {
+        message += ' ' + this.translateService.instant('We will charge the subscription fee for the next month according to your tariff plan.');
+      }
+      icon = 'pi pi-info-circle';
+    } else {
+      message = this.translateService.instant('Are you sure you want to disable subscription?');
+      icon = 'pi pi-exclamation-triangle';
+    }
+    this.confirmationService.confirm({
+      target: event.target,
+      message: message,
+      icon: icon,
+      accept: () => {
+        this.changeIsServicePaused(newIsServicePaused);
+      },
+      reject: () => {},
+    });
+  }
+
+  changeIsServicePaused(newIsServicePaused: number) {
+    this.api.updateUser({ id: this.user.id, isServicePaused: newIsServicePaused }).subscribe((r) => {
+      this.userService.user$.next(r);
+      const text = this.translateService.instant(r.isServicePaused ? 'Subscription disabled.' : 'Subscription enabled.');
+      this.messageService.add({
+        severity: r.isServicePaused ? 'info' : 'success',
+        summary: text,
+        detail: text,
+      });
     });
   }
 

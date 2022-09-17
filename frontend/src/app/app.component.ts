@@ -10,12 +10,6 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  public isProgressBarLoading = false;
-  public color = 'red';
-  public mode = 'indeterminate';
-  public value = 50;
-  public bufferValue = 75;
-
   title = 'langapp';
 
   topbarTheme = 'light';
@@ -26,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   inputStyle = 'outlined';
   ripple = false;
 
-  constructor(private translate: TranslateService, private eventsService: EventsService) {
+  constructor(private translate: TranslateService) {
     let langVal = localStorage.getItem('lang');
     if (!langVal) {
       langVal = window.navigator.language.slice(0, 2).toLowerCase();
@@ -39,11 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.translate.use(langVal);
   }
 
-  ngOnInit() {
-    this.eventsService.progressBarLoading.pipe(untilDestroyed(this)).subscribe((event: boolean) => {
-      this.isProgressBarLoading = event;
-    });
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {}
 }

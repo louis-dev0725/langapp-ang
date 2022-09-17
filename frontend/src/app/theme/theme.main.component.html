@@ -33,4 +33,5 @@
 </div>
 <p-toast></p-toast>
 <!--<p-confirmPopup></p-confirmPopup>-->
-<p-confirmDialog [header]="'Confirmation' | translate"></p-confirmDialog>
+<p-confirmDialog [header]="'Confirmation' | translate" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-progressBar mode="indeterminate" [styleClass]="'global-progressbar'" *ngIf="isProgressBarLoading"></p-progressBar>

@@ -13,7 +13,6 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-
   public user$ = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient, private router: Router, private store: Store<fromStore.State>) {}
@@ -40,10 +39,11 @@ export class UserService {
     }
   }
 
-  getMeRequest(token = null, isCurrentUser = true) {
+  getMeRequest(token = null, isBackgroundReload = false) {
+    // TODO: Headers not required as they already set in http interceptor?
     const headers = this.getHeadersWithToken(token);
 
-    return this.http.get<User>(this.apiHost + '/users/me', { headers });
+    return this.http.get<User>(this.apiHost + '/users/me' + (isBackgroundReload ? '?bg-check=1' : ''), { headers });
   }
 
   getApiError(response) {

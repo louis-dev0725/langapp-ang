@@ -253,6 +253,7 @@
 	"ErrorMnemonicSize": "The size of the mnemonics should not exceed 10mb",
 	"ActiveSubscriptionUntil": "You have an active subscription. Next charge will be at {{until}}.",
 	"ActiveSubscriptionPaymentMethod": "You have an active subscription until {{until}}. You need to add a payment method to continue using the service.",
+	"ActiveSubscriptionPaused": "You disabled subscription renewal but your current subscription is active until {{until}}.<br />You need to enable subscription to continue using the service after your current subscription ends.",
 	"EndedSubscriptionUntil": "Your subscription has ended. It was active until {{until}}.",
 	"FirstSubscription": "Please add an payment method to activate subscription.",
 	"frequency-rank-tooltip-kanji": "Usefulness: {{value}}%",

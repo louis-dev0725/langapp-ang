@@ -690,12 +690,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function paySubscriptionIfNecessary(): array
     {
+        if ($this->isServicePaused == 1) {
+            return ['status' => false, 'message' => Yii::t('app','You disabled subscription renewal. Please enable subscription to continue using the service.')];
+        }
+
         $timeNow = time();
         $oneDayUnix = 3600 * 24;
 
         // Is the service paid for more than one day?
         if (Helpers::dateToUnix($this->paidUntilDateTime) > $timeNow + $oneDayUnix) {
-            return ['status' => true, 'message' => Yii::t('app','Your subscription is already renewed')];
+            return ['status' => true, 'message' => Yii::t('app','Your subscription is already renewed.')];
         }
 
         // Has user pending transactions?
