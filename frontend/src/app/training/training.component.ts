@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CardsService } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -80,6 +80,8 @@ export class TrainingComponent implements OnInit {
     },
   ];
 
+  @ViewChild('scrollTo') scrollToEl: ElementRef;
+
   constructor(private cardsService: CardsService, private cd: ChangeDetectorRef, private api: ApiService) {}
 
   ngOnInit() {
@@ -104,6 +106,17 @@ export class TrainingComponent implements OnInit {
         this.hidingReasons[3].show = state.card?.question?.isAudioQuestion === true;
       }
       this.cd.markForCheck();
+
+      let scrollToEl = <HTMLDivElement>this.scrollToEl?.nativeElement;
+      if (scrollToEl) {
+        console.log(scrollToEl);
+        let rect = scrollToEl.getBoundingClientRect();
+        let newY = rect.top + window.scrollY - 60;
+        console.log(rect, newY);
+        if (window.scrollY > newY) {
+          window.scrollTo({ top: newY });
+        }
+      }
     });
     this.cardsService.drills$.pipe(untilDestroyed(this)).subscribe((drills) => {
       this.drills = drills;
