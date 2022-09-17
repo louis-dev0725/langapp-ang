@@ -7,6 +7,7 @@ import { AppComponent } from '@app/app.component';
 import { MenuItem } from 'primeng/api';
 import { UserService } from '@app/services/user.service';
 import { User } from '@app/interfaces/common.interface';
+import { TranslateService } from '@ngx-translate/core';
 
 @UntilDestroy()
 @Component({
@@ -23,7 +24,7 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
     return this.userService.openedAdmin;
   }
 
-  constructor(public appTheme: ThemeMainComponent, public session: SessionService, private userService: UserService, public api: ApiService, private cd: ChangeDetectorRef, public app: AppComponent) {}
+  constructor(public appTheme: ThemeMainComponent, public session: SessionService, private userService: UserService, public api: ApiService, private cd: ChangeDetectorRef, public app: AppComponent, private translate: TranslateService) {}
 
   ngOnInit() {
     this.model = this.getModel();
@@ -34,13 +35,18 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
       this.model = [...this.getModel()];
       this.cd.detectChanges();
     });
+
+    this.translate.onLangChange.subscribe((e) => {
+      this.model = [...this.getModel()];
+      this.cd.detectChanges();
+    });
   }
 
   public getModel(): MenuItem[] {
     let model: MenuItem[] = [];
 
     model.push({
-      label: 'Language',
+      label: this.translate.instant('Language'),
       items: [
         {
           label: 'Русский',
@@ -59,52 +65,52 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
 
     if (this.isLoggedIn) {
       model.push({
-        label: 'Payment',
+        label: this.translate.instant('Payment'),
         routerLink: ['/payment'],
       });
       model.push({
-        label: 'Settings',
+        label: this.translate.instant('Settings'),
         routerLink: ['/settings/profile'],
       });
     }
 
     model.push({
-      label: 'Support',
+      label: this.translate.instant('Support'),
       routerLink: ['/contacts'],
     });
 
     if (this.isLoggedIn) {
       model.push({
-        label: 'Affiliate program',
+        label: this.translate.instant('Affiliate program'),
         items: [
           {
-            label: 'About',
+            label: this.translate.instant('About'),
             routerLink: ['/partners/about'],
           },
           {
-            label: 'Clients',
+            label: this.translate.instant('Clients'),
             routerLink: ['/partners/clients'],
           },
           {
-            label: 'Transactions',
+            label: this.translate.instant('Transactions'),
             routerLink: ['/partners/transactions'],
           },
         ],
       });
 
       model.push({
-        label: 'Logout',
+        label: this.translate.instant('Logout'),
         command: (event) => {
           this.appTheme.logout(event.originalEvent);
         },
       });
     } else {
       model.push({
-        label: 'Sign up',
+        label: this.translate.instant('Sign up'),
         routerLink: ['/auth/signup'],
       });
       model.push({
-        label: 'Sign in',
+        label: this.translate.instant('Sign in'),
         routerLink: ['/auth/signin'],
       });
     }
