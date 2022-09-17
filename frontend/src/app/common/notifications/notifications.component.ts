@@ -1,10 +1,8 @@
 import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
-import * as fromStore from '@app/store';
-import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
-import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { UserService } from '@app/services/user.service';
+import { User } from '@app/interfaces/common.interface';
 
 @UntilDestroy()
 @Component({
@@ -14,10 +12,9 @@ import { UserService } from '@app/services/user.service';
 })
 export class NotificationsComponent implements OnInit, OnChanges, OnDestroy {
   public messages = [];
-  public user;
-  public isLoggedIn$ = this.store.select(getAuthorizedIsLoggedIn);
+  public user: User;
 
-  constructor(private api: ApiService, private store: Store<fromStore.State>, private userService: UserService) {}
+  constructor(private api: ApiService, private userService: UserService) {}
 
   ngOnInit() {
     this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
@@ -36,13 +33,12 @@ export class NotificationsComponent implements OnInit, OnChanges, OnDestroy {
 
   public onValueChange(msg) {
     const data = { id: msg.id, onClose: true };
+    this.user['notifications'] = this.user['notifications'].filter((el) => el.id !== msg.id);
+    this.userService.user$.next(this.user);
     this.api
       .onCloseNotify(data)
       .pipe(untilDestroyed(this))
-      .subscribe(() => {
-        this.user['notifications'] = this.user['notifications'].filter((el) => el.id !== msg.id);
-        this.userService.user$.next(this.user);
-      });
+      .subscribe(() => {});
   }
 
   private _mapMessages(msg) {

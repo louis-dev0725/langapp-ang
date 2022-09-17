@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import * as fromStore from '@app/store/index';
-import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
-import { map } from 'rxjs/operators';
+import { UserService } from '@app/services/user.service';
 
 @Injectable()
 export class CanactivateNologged implements CanActivate {
-  constructor(private store: Store<fromStore.State>) {}
+  constructor(private userService: UserService, private router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.store.select(getAuthorizedIsLoggedIn).pipe(map((isLoggedIn) => !isLoggedIn));
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    if (this.userService.user$.value != null) {
+      return this.router.createUrlTree(['content/materials']);
+    }
+
+    return true;
   }
 }

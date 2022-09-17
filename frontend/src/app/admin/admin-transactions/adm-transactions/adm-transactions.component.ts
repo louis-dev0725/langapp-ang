@@ -171,6 +171,7 @@ export class AdmTransactionsComponent implements OnInit, OnDestroy {
   }
 
   showEditUser(row: any) {
+    // TODO: should edit from admin, not from user
     this.api.getUserByToken(row.token)
     .pipe(untilDestroyed(this))
     .subscribe(result => {

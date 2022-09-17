@@ -1,17 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Category, Content, UserDictionary, ListResponse, Mnemonic, SettingPlugin, User, UserPaymentMethod, AddCardSquareRequest, ProlongSubscriptionResult, ContentAttributeResponse, ContentStudiedAttributeRequest, ContentHiddenAttributeRequest, Training, Drill, TrainingEndMessage, TrainingSetting, Hidings, StripeSetupIntentResponse } from '@app/interfaces/common.interface';
+import { Category, Content, UserDictionary, ListResponse, Mnemonic, User, UserPaymentMethod, AddCardSquareRequest, ProlongSubscriptionResult, ContentAttributeResponse, ContentStudiedAttributeRequest, ContentHiddenAttributeRequest, Training, Drill, TrainingEndMessage, TrainingSetting, Hidings, StripeSetupIntentResponse } from '@app/interfaces/common.interface';
 import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
-import { Store } from '@ngrx/store';
-import * as fromStore from '@app/store/index';
-import { AuthorizedUpdateTokenAction, LoadAccount, LoadAccountFail, LoadAccountSuccess, LoadAuthorizedSuccess } from '@app/store/index';
 import { environment } from '../../environments/environment';
 import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from 'primeng/api';
 import { APP_BASE_HREF } from '@angular/common';
-import { UserService } from '@app/services/user.service';
 import { Router } from '@angular/router';
 
 type ParamsInterface =
@@ -67,14 +63,14 @@ export class ApiService {
     return environment.siteKey;
   }
 
-  constructor(private http: HttpClient, private session: SessionService, private store: Store<fromStore.State>, private messageService: MessageService, @Inject(APP_BASE_HREF) private baseHref: string, private userService: UserService, private router: Router) {}
+  constructor(private http: HttpClient, private session: SessionService, private messageService: MessageService, @Inject(APP_BASE_HREF) private baseHref: string, private router: Router, private sessionSerivce: SessionService) {}
 
   apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, catchValidationErrors = false) {
     return <Observable<T>>this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(catchError((r) => this.handleError(r, catchValidationErrors)));
   }
 
   private handleError(response: HttpErrorResponse, catchValidationErrors = false) {
-    console.log(response);
+    console.log('handleError', response);
     if (response.error instanceof ErrorEvent) {
       this.messageService.add({
         severity: 'error',
@@ -83,14 +79,14 @@ export class ApiService {
         sticky: true,
         closable: true,
       });
-      //return of(new ApiError([{ field: 'all', message: 'Unable to connect to server. Error: ' + response.error.message }], false));
+      return of(this._generalError(response, 'Unable to connect to server.'));
     } else if (response.error) {
       if (response.error?.[0]) {
         if (catchValidationErrors) {
           let fieldsErrorText = response.error?.[0]?.message ? response.error.map((e) => e.message).join('\n') : '';
           this.messageService.add({
             severity: 'error',
-            summary: 'Server error',
+            summary: 'Error',
             detail: response.statusText + '\n' + fieldsErrorText,
             sticky: true,
             closable: true,
@@ -108,18 +104,20 @@ export class ApiService {
             closable: true,
           });
           return throwError(response);
+          // return of(this._generalError(response, 'Payment required to continue using the service.'));
         }
         this.messageService.add({
           severity: 'error',
-          summary: 'Server error: ' + response.error.message,
+          summary: 'Error: ' + response.error.message,
           detail: response.message,
           sticky: true,
           closable: true,
         });
       } else if (response.message) {
-        this.messageService.add({ severity: 'error', summary: 'Server error', detail: response.message, sticky: true, closable: true });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: response.message, sticky: true, closable: true });
       }
-      //return of(new ApiError(response.error, response.ok, response.status, response.statusText));
+
+      return of(this._generalError(response, ''));
     } else {
       this.messageService.add({
         severity: 'error',
@@ -128,103 +126,59 @@ export class ApiService {
         sticky: true,
         closable: true,
       });
-      //return of(new ApiError([{ field: 'all', message: 'Unknown error' }], false));
+      return of(this._generalError(response, 'Unknown error.'));
     }
+  }
 
-    return throwError(response);
+  _generalError(response: HttpErrorResponse, message: string) {
+    return new ApiError([{ field: 'all', message: message + '  Error: ' + (response?.error?.message ?? response.message) }], false, response.status, response.statusText, response.error);
   }
 
   /**
    * Авторизация
    */
   login(params: any): Observable<any | ApiError> {
-    this.store.dispatch(new LoadAccount());
-    return new Observable((observer) => {
-      this.http.post(this.apiHost + '/users/login', params).subscribe(
-        (res: any) => {
-          if (res.accessToken) {
-            this.store.dispatch(new LoadAccountSuccess(res));
-            this.store.dispatch(new AuthorizedUpdateTokenAction(res.accessToken));
-            this.getMeRequest(observer);
-          } else {
-            observer.next(res.message);
-          }
-        },
-        (err: any) => {
-          console.log(err);
-          this.store.dispatch(new LoadAccountFail(err));
-          observer.next(this.userService.getApiError(err));
+    return this.apiRequest('POST', `users/login`, { body: params }, false).pipe(
+      tap((res: any) => {
+        if (res.accessToken) {
+          this.session.token$.next(res.accessToken);
+          this.refreshUserInfo();
         }
-      );
-    });
+      })
+    );
   }
 
   /**
    * Забыли пароль
    */
   restorePasswordRequest(params: any): Observable<any> {
-    return new Observable((observer) => {
-      this.http.post(this.apiHost + '/users/request-reset-password', params).subscribe(
-        () => {
-          observer.next(true);
-        },
-        (err) => {
-          observer.next(this.userService.getApiError(err));
-        }
-      );
-    });
+    return this.apiRequest('POST', 'users/request-reset-password', { body: params });
   }
 
   /**
    * Смена пароля
    */
   changePassword(params: any): Observable<any> {
-    return new Observable((observer) => {
-      this.http.post(this.apiHost + '/users/reset-password', params).subscribe(
-        (res: any) => {
-          this.store.dispatch(new AuthorizedUpdateTokenAction(res.accessToken));
-          this.getMeRequest(observer);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('POST', 'users/reset-password', { body: params }).pipe(
+      tap((res: any) => {
+        this.session.token$.next(res.accessToken);
+        this.refreshUserInfo();
+      })
+    );
   }
 
   /**
    * Регистрация
    */
-  signUp(params: any): Observable<any> {
-    return new Observable((observer) => {
-      return this.http.post<User>(this.apiHost + '/users', params).subscribe(
-        (res) => {
-          this.userService.user$.next(res);
-          this.store.dispatch(new AuthorizedUpdateTokenAction(this.userService.user$.value.accessToken));
-          this.getMeRequest(observer);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-          observer.complete();
-        }
-      );
-    });
+  signUp(params: any): Observable<User> {
+    return this.apiRequest<User>(this.apiHost + '/users', params).pipe(
+      tap((res) => {
+        this.session.user$.next(res);
+        this.session.token$.next(res.accessToken);
+        this.refreshUserInfo();
+      })
+    );
   }
-
-  changeUserLanguage(newLanguage: string) {
-    this.session._changeLanguage(newLanguage);
-    if (this.userService.user$.value !== null) {
-      this.updateUser({ id: this.userService.user$.value.id, language: newLanguage }).subscribe(() => {});
-    }
-  }
-
-  /**
-   * Выход
-   */
-  logout() {
-    this.userService.logout();
-  }
-  // </editor-fold>
 
   /**
    * Получаем часовые пояса
@@ -251,8 +205,7 @@ export class ApiService {
       params.sort = this.prepareSort(sort);
     }
 
-    const headers = this.userService.getHeadersWithToken();
-    return this.http.get(this.apiHost + '/users', { headers, params });
+    return this.apiRequest('GET', 'users', { body: { params } });
   }
 
   /**
@@ -261,78 +214,45 @@ export class ApiService {
    * url: /users/<user id>/check-invited-users
    */
   getClientsList(userId: number = null): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      if (!userId) {
-        userId = this.userService.user$.value.id;
-      }
-      this.http.get(this.apiHost + `/users/${userId}/invited-users`, { headers }).subscribe(
-        (result) => {
-          observer.next(result);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    if (!userId) {
+      userId = this.session.user$.value.id;
+    }
+
+    return this.apiRequest('GET', `users/${userId}/invited-users`);
   }
 
   /**
    * Что-то связанное с партнёрской программой
    */
   checkInvitedUsers(userId: number = null): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      if (!userId) {
-        userId = this.userService.user$.value.id;
-      }
-      this.http.post(this.apiHost + `/users/${userId}/check-invited-users`, {}, { headers }).subscribe(
-        (result) => {
-          observer.next(result);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
-  }
-
-  /**
-   * Получаем авторизованного пользователя(себя)
-   */
-  meRequest(): Observable<any> {
-    return new Observable((observer) => {
-      this.getMeRequest(observer);
-    });
+    if (!userId) {
+      userId = this.sessionSerivce.user$.value.id;
+    }
+    return this.apiRequest('DELETE', `users/${userId}/check-invited-users`);
   }
 
   updateUser(value: Partial<User>): Observable<User> {
     return this.apiRequest<User>('PATCH', 'users/' + value.id, { body: value }).pipe(
-      tap((user) => {
-        this.userService.user$.next(user);
+      tap((result) => {
+        if (!(result instanceof ApiError)) {
+          this.sessionSerivce.user$.next(result);
+        }
       })
     );
   }
 
-  /**
-   * Получаем авторизованного пользователя(себя), сам запрос
-   */
-  private getMeRequest(observer, token = null, isCurrentUser = true) {
-    // TODO: Headers not required as they already set in http interceptor?
-    const headers = this.userService.getHeadersWithToken(token);
-
-    this.http
-      .get<User>(this.apiHost + '/users/me', { headers })
-      .subscribe(
-        (userRes: any) => {
-          this.store.dispatch(new LoadAuthorizedSuccess(userRes));
-          this.userService.user$.next(userRes);
-          observer.next(userRes);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
+  usersMe(): Observable<User> {
+    return this.apiRequest<User>('GET', 'users/me').pipe(
+      tap((result: User) => {
+        if (!(result instanceof ApiError)) {
+          this.sessionSerivce.user$.next(result);
         }
-      );
+      })
+    );
+  }
+
+  refreshUserInfo() {
+    this.usersMe().subscribe((res) => {});
   }
 
   /**
@@ -352,33 +272,22 @@ export class ApiService {
     if (Object.keys(sort).length > 0) {
       params.sort = this.prepareSort(sort);
     }
-    const headers = this.userService.getHeadersWithToken();
-    return new Observable((observer) => {
-      this.http.get(this.apiHost + '/transactions?field=*,user.id,user.name,user.accessToken&expand=user', { headers, params }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+
+    return this.apiRequest('GET', 'transactions?field=*,user.id,user.name,user.accessToken&expand=user', { body: { params } });
   }
 
   /**
    * Получаем пользователя по id
    */
   public getUserById(id: number) {
-    const headers = this.userService.getHeadersWithToken();
-    return this.http.get(this.apiHost + `/users/${id}`, { headers });
+    return this.apiRequest('GET', `users/${id}`);
   }
 
   /**
    * Получаем транзакцию по id
    */
   public getTransactionById(id: number) {
-    const headers = this.userService.getHeadersWithToken();
-    return this.http.get(this.apiHost + `/transactions/${id}`, { headers });
+    return this.apiRequest('GET', `transactions/${id}`);
   }
 
   /**
@@ -392,8 +301,8 @@ export class ApiService {
     if (page > 0) {
       params.page = page - 1;
     }
-    const headers = this.userService.getHeadersWithToken();
-    return this.http.get(this.prepareTransactionsUrl(params), { headers });
+
+    return this.apiRequest('GET', this.prepareTransactionsUrl(params));
   }
 
   /**
@@ -429,7 +338,7 @@ export class ApiService {
    * url: /transactions/index?filter[userId]=<user id>
    */
   getUserTransactionsList(page = 0, sort = {}): Observable<any> {
-    const params: any = { userId: this.userService.user$.value?.id, 'per-page': this.pageSize };
+    const params: any = { userId: this.sessionSerivce.user$.value?.id, 'per-page': this.pageSize };
 
     if (Object.keys(sort).length > 0) {
       params.sort = this.prepareSort(sort);
@@ -439,17 +348,7 @@ export class ApiService {
       params.page = page - 1;
     }
 
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.prepareTransactionsUrl(params), { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('GET', this.prepareTransactionsUrl(params));
   }
 
   /**
@@ -458,7 +357,7 @@ export class ApiService {
    * url: /transactions/index?filter[userId]=<user id>&filter[isPartner]=1
    */
   getUserPartnersTransactionsList(page = 0, sort = {}): Observable<any> {
-    const params: any = { userId: this.userService.user$.value?.id, isPartner: 1, 'per-page': this.pageSize };
+    const params: any = { userId: this.sessionSerivce.user$.value?.id, isPartner: 1, 'per-page': this.pageSize };
 
     if (Object.keys(sort).length > 0) {
       params.sort = this.prepareSort(sort);
@@ -468,106 +367,47 @@ export class ApiService {
       params.page = page - 1;
     }
 
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.prepareTransactionsUrl(params), { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('GET', this.prepareTransactionsUrl(params));
   }
 
   /**
    * Создаём транзакцию
    */
   createTransaction(data: any): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.post(this.apiHost + '/transactions/create', data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('POST', 'transactions/create', { body: data });
   }
 
   /**
    * Обновляем транзакцию
    */
   updateTransaction(data: any): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.patch(this.apiHost + '/transactions/' + data.id, data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('PATCH', 'transactions/' + data.id, { body: data });
   }
 
   /**
    * Получение всех категорий
    */
   getCategories(): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.apiHost + '/categories', { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('GET', 'categories');
   }
 
   /**
    * Получение всех категорий с пагинацией
    */
   getAllCategories(data: any = ''): Observable<any> {
-    return new Observable((observer) => {
-      let query = '';
-      if (data !== '') {
-        query = '&' + data;
-      }
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.apiHost + '/categories/all?expand=parentCategory' + query, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    let query = '';
+    if (data !== '') {
+      query = '&' + data;
+    }
+
+    return this.apiRequest('GET', 'categories/all?expand=parentCategory' + query);
   }
 
   /**
    * Создаём категорию
    */
   createCategory(data: Category): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.post(this.apiHost + '/categories/create', data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('POST', 'categories/create', { body: data });
   }
 
   /**
@@ -576,34 +416,14 @@ export class ApiService {
    * @param id
    */
   getCategoryById(id: number): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.apiHost + `/categories/${id}`, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('GET', `categories/${id}`);
   }
 
   /**
    * Изменяем категорию
    */
   updateCategory(data: Category): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.patch(this.apiHost + '/categories/' + data.id, data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('PATCH', 'categories/' + data.id, { body: data });
   }
 
   /**
@@ -612,17 +432,7 @@ export class ApiService {
    * @param id
    */
   deleteCategory(id: number): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.delete(this.apiHost + `/categories/${id}`, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('DELETE', `categories/${id}`);
   }
 
   /**
@@ -677,55 +487,26 @@ export class ApiService {
    * Получаем список материалов с фильтром
    */
   getMaterials(data: any): Observable<any> {
-    return new Observable((observer) => {
-      let query = '';
-      if (data !== '') {
-        query = '?' + data;
-      }
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.apiHost + '/contents/index' + query, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    let query = '';
+    if (data !== '') {
+      query = '?' + data;
+    }
+
+    return this.apiRequest('GET', 'contents/index' + query);
   }
 
   /**
    * Создаём материал
    */
   createMaterials(data: Content): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.post(this.apiHost + '/contents/create', data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('POST', 'contents/create', { body: data });
   }
 
   /**
    * Изменяем материал
    */
   updateMaterials(data: Content): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.patch(this.apiHost + '/contents/' + data.id, data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('PATCH', 'contents/' + data.id, { body: data });
   }
 
   /**
@@ -734,34 +515,14 @@ export class ApiService {
    * @param id
    */
   deleteMaterial(id: number): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.delete(this.apiHost + `/contents/${id}`, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('DELETE', `contents/${id}`);
   }
 
   /**
    * Получаем все доступные языки
    */
   getAllLanguage(): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.apiHost + '/languages/all', { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('GET', 'languages/all');
   }
 
   getUserDictionary(params: ParamsInterface) {
@@ -777,63 +538,33 @@ export class ApiService {
    * Получаем список слов и канзи и пользовательского словаря без пагинации
    */
   getAllUserDictionary(data: any): Observable<any> {
-    return new Observable((observer) => {
-      let query = '';
-      if (data !== '') {
-        query = '?' + data;
-      }
-      query += '&expand=dictionaryWord,mnemonic';
+    let query = '';
+    if (data !== '') {
+      query = '?' + data;
+    }
+    query += '&expand=dictionaryWord,mnemonic';
 
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.apiHost + '/dictionaries/all' + query, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('GET', 'dictionaries/all' + query);
   }
 
   /**
    * Получаем связанные слова с кандзи
    */
   getQueryUserDictionary(data: any): Observable<any> {
-    return new Observable((observer) => {
-      let query = '';
-      if (data !== '') {
-        query = '?' + data;
-      }
-      query += '&expand=dictionaryWord,mnemonicsUsers';
+    let query = '';
+    if (data !== '') {
+      query = '?' + data;
+    }
+    query += '&expand=dictionaryWord,mnemonicsUsers';
 
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.apiHost + '/dictionaries/query-one' + query, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('GET', 'dictionaries/query-one' + query);
   }
 
   /**
    * Изменяем слова из пользовательского словаря
    */
   updateUserDictionary(data: UserDictionary): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.patch(this.apiHost + '/dictionaries/' + data.id, data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('PATCH', 'dictionaries/' + data.id, { body: data });
   }
 
   /**
@@ -842,17 +573,7 @@ export class ApiService {
    * @param ids
    */
   deleteUserDictionaries(ids: number[]): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.post(this.apiHost + '/dictionaries/delete-select', ids, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('POST', 'dictionaries/delete-select', { body: ids });
   }
 
   /**
@@ -861,17 +582,7 @@ export class ApiService {
    * @param id
    */
   deleteUserDictionary(id: number): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.delete(this.apiHost + `/dictionaries/${id}`, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('DELETE', `dictionaries/${id}`);
   }
 
   /**
@@ -879,14 +590,14 @@ export class ApiService {
    */
   sendMessage(data: any) {
     const headers = this.getSimpleLanguageHeader();
-    return this.http.post(this.apiHost + '/users/contact', data, { headers });
+    return this.apiRequest('POST', 'users/contact', { body: data });
   }
 
   /**
    * Получаем язык приложения
    */
   private getSimpleLanguageHeader(): HttpHeaders {
-    const lang = this.session.language;
+    const lang = this.session.lang$.value;
     return new HttpHeaders().append('Accept-Language', lang);
   }
 
@@ -915,74 +626,42 @@ export class ApiService {
    * Получаем пользователя по токену
    */
   getUserByToken(token: string): Observable<any> {
-    return new Observable((observer) => {
-      this.getMeRequest(observer, token, false);
-    });
+    return null;
+    // return this.getMeRequest(observer, token, false);;
   }
 
   /**
    * Вроде закрываем уведомление
    */
   onCloseNotify(data) {
-    const headers = this.userService.getHeadersWithToken();
-    return this.http.post(this.apiHost + '/users/close-notification', data, { headers });
+    return this.apiRequest('POST', 'users/close-notification', { body: data });
   }
 
   /**
    * Получаем мнемоники
    */
   getMnemonics(data): Observable<any> {
-    return new Observable((observer) => {
-      let query = '';
-      if (data !== '') {
-        query = '?' + data;
-      }
-      query += '&expand=mnemonicsUsers';
+    let query = '';
+    if (data !== '') {
+      query = '?' + data;
+    }
+    query += '&expand=mnemonicsUsers';
 
-      const headers = this.userService.getHeadersWithToken();
-      this.http.get(this.apiHost + '/mnemonics/index' + query, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('GET', 'mnemonics/index' + query);
   }
 
   /**
    * Создаём мнемонику
    */
   createMnemonic(data): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.post(this.apiHost + '/mnemonics/create', data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('POST', 'mnemonics/create', { body: data });
   }
 
   /**
    * Обновляем мнемонику
    */
   updateMnemonic(data: Mnemonic): Observable<any> {
-    return new Observable((observer) => {
-      const headers = this.userService.getHeadersWithToken();
-      this.http.patch(this.apiHost + '/mnemonics/' + data.id, data, { headers }).subscribe(
-        (res) => {
-          observer.next(res);
-        },
-        (error) => {
-          observer.next(this.userService.getApiError(error));
-        }
-      );
-    });
+    return this.apiRequest('PATCH', 'mnemonics/' + data.id, { body: data });
   }
 
   getUserPaymentMethods() {

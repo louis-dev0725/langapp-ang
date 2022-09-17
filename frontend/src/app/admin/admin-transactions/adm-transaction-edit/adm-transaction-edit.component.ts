@@ -59,7 +59,6 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
       .subscribe(
         (res: any) => {
           this.transaction = res;
-          this.session.transaction = res;
           this.updateForm(res);
         },
         err => {}

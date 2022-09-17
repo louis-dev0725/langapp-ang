@@ -200,11 +200,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   updateUser() {
-    this.api
-      .meRequest()
-      .pipe(untilDestroyed(this))
-      .subscribe((res) => {
-        this.userService.user$.next(res);
-      });
+    this.api.usersMe().subscribe((res) => {});
   }
 }

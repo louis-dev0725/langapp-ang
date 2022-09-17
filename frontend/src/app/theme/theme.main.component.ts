@@ -1,20 +1,14 @@
 import { Component, OnDestroy, OnInit, NgZone, Renderer2 } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
-import { Observable } from 'rxjs';
-import * as fromStore from '@app/store';
-import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
-import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { AppComponent } from '@app/app.component';
 import { MenuService } from '@app/theme/theme.menu.service';
 import { ConfirmationService, PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
-import { randomFromRange } from '@app/shared/helpers';
 import { UserService } from '@app/services/user.service';
-import { take } from 'rxjs/operators';
 import { EventsService } from '@app/services/events.service';
 
 @UntilDestroy()
@@ -57,15 +51,11 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
 
   isProgressBarLoading = false;
 
-  interval;
-  private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
   public isLoggedIn: boolean;
 
   languages = ['Русский', 'English'];
 
-  constructor(public zone: NgZone, private store: Store<fromStore.State>, private router: Router, private userService: UserService, private api: ApiService, private sessionService: SessionService, public renderer: Renderer2, private menuService: MenuService, private translateService: TranslateService, private eventsService: EventsService, private primengConfig: PrimeNGConfig, private confirmDialog: MatDialog, public app: AppComponent, private confirmationService: ConfirmationService) {
-    this.setUpSubscriptions();
-  }
+  constructor(public zone: NgZone, private router: Router, private userService: UserService, private api: ApiService, private sessionService: SessionService, public renderer: Renderer2, private menuService: MenuService, private translateService: TranslateService, private eventsService: EventsService, private primengConfig: PrimeNGConfig, private confirmDialog: MatDialog, public app: AppComponent, private confirmationService: ConfirmationService) {}
 
   ngAfterViewInit() {
     // hides the horizontal submenus or top menu if outside is clicked
@@ -112,11 +102,11 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   }
 
   setLanguage(lang: string) {
-    this.api.changeUserLanguage(lang);
+    this.userService.changeLanguage(lang);
   }
 
   get isOpenedAdmin(): boolean {
-    return this.sessionService.openedAdmin;
+    return this.userService.openedAdmin;
   }
 
   logout(event: MouseEvent) {
@@ -126,13 +116,13 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
         message: this.translateService.instant('Logout confirm title'),
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.api.logout();
+          this.userService.logout();
           window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
         },
         reject: () => {},
       });
     } else {
-      this.api.logout();
+      this.userService.logout();
       window.postMessage({ type: 'Logout', text: 'Logout' }, '*');
     }
   }
@@ -256,38 +246,8 @@ export class ThemeMainComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.isLoggedIn$.subscribe((res) => {
-      this.isLoggedIn = res;
-    });
-
     this.eventsService.progressBarLoading.pipe(untilDestroyed(this)).subscribe((event: boolean) => {
       this.isProgressBarLoading = event;
     });
-  }
-
-  setUpSubscriptions() {
-    this.router.events.subscribe(async (event) => {
-      if (event instanceof NavigationStart) {
-        if (this.isLoggedIn) {
-          this.userService
-            .getMeRequest(null, true)
-            .pipe(take(1))
-            .subscribe((user) => {
-              this.userService.user$.next(user);
-            });
-        }
-      }
-    });
-    this.interval = setInterval(async () => {
-      const isLoggedIn = await this.isLoggedIn$.toPromise();
-      if (isLoggedIn) {
-        this.userService
-          .getMeRequest(null, true)
-          .pipe(untilDestroyed(this))
-          .subscribe((user) => {
-            this.userService.user$.next(user);
-          });
-      }
-    }, randomFromRange(500, 600));
   }
 }

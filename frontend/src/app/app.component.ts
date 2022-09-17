@@ -20,18 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   inputStyle = 'outlined';
   ripple = false;
 
-  constructor(private translate: TranslateService) {
-    let langVal = localStorage.getItem('lang');
-    if (!langVal) {
-      langVal = window.navigator.language.slice(0, 2).toLowerCase();
-      if (langVal !== 'ru' && langVal !== 'en') {
-        langVal = 'en';
-      }
-      localStorage.setItem('lang', langVal);
-    }
-    this.translate.setDefaultLang('en');
-    this.translate.use(langVal);
-  }
+  constructor() {}
 
   ngOnInit() {}
 

@@ -9,11 +9,10 @@ import { CustomValidator } from '@app/services/custom-validator';
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.scss']
+  styleUrls: ['./signin.component.scss'],
 })
 export class SigninComponent implements OnInit {
-  constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder,
-    private router: Router) {}
+  constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder, private router: Router) {}
 
   signinForm: FormGroup;
   errors: FieldError[] = [];
@@ -23,21 +22,22 @@ export class SigninComponent implements OnInit {
   ngOnInit() {
     this.signinForm = this.formBuilder.group({
       email: ['', { validators: [Validators.required, Validators.email], updateOn: 'blur' }],
-      password: ['', { validators: [Validators.required], updateOn: 'change' }]
+      password: ['', { validators: [Validators.required], updateOn: 'change' }],
     });
   }
 
   onSubmit() {
     this.errors = [];
     this.isLoaded = false;
-    this.api.login(this.signinForm.value).subscribe(res => {
+    this.api.login(this.signinForm.value).subscribe((res) => {
+      console.log('res in signin', res);
       if (res instanceof ApiError) {
         this.errors = res.error;
         this.isLoaded = true;
       } else {
         this.router.navigate(['/']);
 
-        window.postMessage({ type: 'LoginSuccess', text: 'Login'}, '*');
+        window.postMessage({ type: 'LoginSuccess', text: 'Login' }, '*');
       }
     });
   }

@@ -58,7 +58,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       languages: [[], { validators: [Validators.required], updateOn: 'change' }],
     });
 
-    combineLatest([this.api.meRequest(), this.api.getAllLanguage()]).pipe(untilDestroyed(this))
+    combineLatest([this.api.usersMe(), this.api.getAllLanguage()]).pipe(untilDestroyed(this))
       .subscribe(([user, languages]) => {
         this.user = user;
         this.languages = languages.items.map(l => ({

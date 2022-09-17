@@ -16,12 +16,13 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { availableCurrencyList } from '@app/config/availableCurrencyList';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UserService } from '@app/services/user.service';
 
 @UntilDestroy()
 @Component({
   selector: 'app-adm-user-edit',
   templateUrl: './adm-user-edit.component.html',
-  styleUrls: ['./adm-user-edit.component.scss']
+  styleUrls: ['./adm-user-edit.component.scss'],
 })
 export class AdmUserEditComponent implements OnInit, OnDestroy {
   public userId;
@@ -31,12 +32,12 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   public languages = [
     {
       value: 'ru-RU',
-      label: 'Русский'
+      label: 'Русский',
     },
     {
       value: 'en-Us',
-      label: 'English'
-    }
+      label: 'English',
+    },
   ];
   public currency = availableCurrencyList;
   public baseCurrency;
@@ -53,7 +54,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
   messages: any = {
     'confirm.user-open.title': '',
-    'confirm.user-open.msg': ''
+    'confirm.user-open.msg': '',
   };
   // @ViewChild(MatSort, {static: true}) sort;
   @ViewChild('sortTrans', { static: true }) sortTrans: MatSort;
@@ -73,19 +74,8 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     return this._errors;
   }
 
-  constructor(
-    public session: SessionService,
-    private api: ApiService,
-    private confirmDialog: MatDialog,
-    private customValidator: CustomValidator,
-    private eventService: EventService,
-    private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
-    private translate: TranslateService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
-    this.route.params.pipe(untilDestroyed(this)).subscribe(params => {
+  constructor(public session: SessionService, public userService: UserService, private api: ApiService, private confirmDialog: MatDialog, private customValidator: CustomValidator, private eventService: EventService, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private translate: TranslateService, private route: ActivatedRoute, private router: Router) {
+    this.route.params.pipe(untilDestroyed(this)).subscribe((params) => {
       this.getUser(params.id);
     });
   }
@@ -101,16 +91,16 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
         this.timeZones = res;
       });
 
-    this.sortTrans.sortChange.pipe(untilDestroyed(this)).subscribe(sort => {
+    this.sortTrans.sortChange.pipe(untilDestroyed(this)).subscribe((sort) => {
       this.getTrans(this.userId);
     });
-    this.sortTransPartn.sortChange.pipe(untilDestroyed(this)).subscribe(sort => {
+    this.sortTransPartn.sortChange.pipe(untilDestroyed(this)).subscribe((sort) => {
       this.getPartnerTrans(this.userId);
     });
 
     this.callTranslate();
 
-    this.globalEventSubscription = this.eventService.emitter.pipe(untilDestroyed(this)).subscribe(event => {
+    this.globalEventSubscription = this.eventService.emitter.pipe(untilDestroyed(this)).subscribe((event) => {
       if (event.type === 'language-change') {
         this.callTranslate();
       }
@@ -135,7 +125,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       invitedByUserId: [''],
       enablePartnerPayments: [''],
       frozeEnablePartnerPayments: [''],
-      comment: ['']
+      comment: [''],
     });
     this.getTrans(this.userId);
     this.getPartnerTrans(this.userId);
@@ -150,7 +140,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     this.getTransactions(userId, 0, _sort, page)
       .pipe(untilDestroyed(this))
       .subscribe(
-        res => {
+        (res) => {
           this.transactionList = res.items;
           this.transactionList.sort = this.sortTrans;
           this.transactionList.paginator = this.paginatorTrans;
@@ -158,7 +148,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
           this.paginatorTrans.pageIndex = res._meta.currentPage - 1;
           this.isLoadingTrans = false;
         },
-        err => {
+        (err) => {
           this.isLoadingTrans = false;
         }
       );
@@ -173,7 +163,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     this.getTransactions(userId, 1, _sort, page)
       .pipe(untilDestroyed(this))
       .subscribe(
-        res => {
+        (res) => {
           this.transactionPartnerList = res.items;
           /*this.transactionPartnerList = res.items.map(el => {
           const _mark = availableCurrencyList.find((item: any) => {
@@ -190,7 +180,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
           this.paginatorPartnerTrans.pageIndex = res._meta.currentPage - 1;
           this.isLoadingTransPartner = false;
         },
-        err => {
+        (err) => {
           this.isLoadingTransPartner = false;
         }
       );
@@ -203,7 +193,6 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   showEditTransaction(row: any) {
-    this.session.transaction = row;
     this.router.navigate([`/admin/transactions/${row.id}`]);
   }
 
@@ -225,14 +214,14 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
           this.baseCurrency = this.user.currency;
           this.updateForm(res);
         },
-        err => {}
+        (err) => {}
       );
   }
 
   public updateForm(res) {
     this.userProfile.patchValue({
       id: res.id,
-      ...res
+      ...res,
     });
   }
 
@@ -260,14 +249,14 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
         'password',
         this.formBuilder.control('', {
           validators: [Validators.required],
-          updateOn: 'change'
+          updateOn: 'change',
         })
       );
       this.userProfile.addControl(
         'passrepeat',
         this.formBuilder.control('', {
           validators: [Validators.required],
-          updateOn: 'change'
+          updateOn: 'change',
         })
       );
       this.userProfile.setValidators([CustomValidator.confirmPasswordCheck]);
@@ -285,12 +274,12 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       ...this.userProfile.value,
       enablePartnerPayments: this.userProfile.value.enablePartnerPayments ? 1 : 0,
       isPartner: this.userProfile.value.isPartner ? 1 : 0,
-      frozeEnablePartnerPayments: this.userProfile.value.frozeEnablePartnerPayments ? 1 : 0
+      frozeEnablePartnerPayments: this.userProfile.value.frozeEnablePartnerPayments ? 1 : 0,
     };
     this.api
       .updateUser(data)
       .pipe(untilDestroyed(this))
-      .subscribe(res => {
+      .subscribe((res) => {
         if (res instanceof ApiError) {
           this._errors = res.error;
         } else {
@@ -303,7 +292,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     this.api
       .checkInvitedUsers(this.user.id)
       .pipe(untilDestroyed(this))
-      .subscribe(res => {
+      .subscribe((res) => {
         if (res instanceof ApiError) {
           this.snackBar.open(this.customValidator.messagesMap['snackbar.balance-edit-error'], null, { duration: 3000 });
         } else {
@@ -320,15 +309,15 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
 
     const dialogRef = this.confirmDialog.open(ConfirmDialogComponent, {
       maxWidth: '400px',
-      data: dialogModel
+      data: dialogModel,
     });
 
     dialogRef
       .afterClosed()
       .pipe(untilDestroyed(this))
-      .subscribe(result => {
+      .subscribe((result) => {
         if (result) {
-          this.session.openAsUser(this.user);
+          this.userService.openAsUser(this.user);
         }
       });
   }
@@ -337,7 +326,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     this.translate
       .get(Object.keys(this.messages))
       .pipe(untilDestroyed(this))
-      .subscribe(res => {
+      .subscribe((res) => {
         this.messages = res;
       });
   }

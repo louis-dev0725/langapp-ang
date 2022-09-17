@@ -6,6 +6,7 @@ import { ApiService } from '@app/services/api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SessionService } from '@app/services/session.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UserService } from '@app/services/user.service';
 
 @UntilDestroy()
 @Component({
@@ -97,7 +98,7 @@ export class PaymentsTableComponent implements OnInit, OnDestroy {
   @Input()
   pageSize: any;
 
-  constructor(public session: SessionService, private api: ApiService, private translate: TranslateService) {}
+  constructor(public session: SessionService, public userService: UserService, private api: ApiService, private translate: TranslateService) {}
 
   ngOnInit() {
     this.sort.sortChange.pipe(untilDestroyed(this)).subscribe((data) => {

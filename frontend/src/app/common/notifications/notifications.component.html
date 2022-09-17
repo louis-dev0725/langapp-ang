@@ -1,4 +1,4 @@
-<div class="container" *ngIf="(isLoggedIn$ | async) && messages.length">
+<div class="container" *ngIf="user != null && messages.length">
   <div *ngFor="let message of messages">
     <p-messages  [showTransitionOptions]="'0ms'"
                  [hideTransitionOptions]="'0ms'"

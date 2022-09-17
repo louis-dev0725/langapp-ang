@@ -4,19 +4,17 @@ import { ThemeMainComponent } from '@app/theme/theme.main.component';
 import { SessionService } from '@app/services/session.service';
 import { APP_NAME } from '@app/config/config';
 import { ApiService } from '@app/services/api.service';
-import * as fromStore from '@app/store';
-import { getAuthorizedIsLoggedIn } from '@app/store/selectors/authorized.selector';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { TranslateService } from '@ngx-translate/core';
 
 import { MenuItem } from 'primeng/api';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent } from 'rxjs';
 
-import { Store } from '@ngrx/store';
 import { AppComponent } from '@app/app.component';
 import { UserService } from '@app/services/user.service';
+import { User } from '@app/interfaces/common.interface';
 
 @UntilDestroy()
 @Component({
@@ -27,21 +25,18 @@ export class ThemeMenuComponent implements OnInit {
   model: MenuItem[];
 
   public appName = APP_NAME;
-  public user;
+  public user: User;
   public isLoggedIn: boolean;
 
-  private isLoggedIn$: Observable<boolean> = this.store.select(getAuthorizedIsLoggedIn);
-
-  constructor(public app: AppComponent, public appTheme: ThemeMainComponent, public api: ApiService, public session: SessionService, private userService: UserService, private cd: ChangeDetectorRef, private translate: TranslateService, private store: Store<fromStore.State>) {}
+  constructor(public app: AppComponent, public appTheme: ThemeMainComponent, public api: ApiService, public session: SessionService, private userService: UserService, private cd: ChangeDetectorRef, private translate: TranslateService) {}
 
   ngOnInit() {
-    this.subscribeToIsLoggedIn();
     this.subscribeToWindowResize();
     this.subscribeToUser();
   }
 
   get isOpenedAdmin(): boolean {
-    return this.session.openedAdmin;
+    return this.userService.openedAdmin;
   }
 
   get isAdmin(): boolean {
@@ -176,14 +171,6 @@ export class ThemeMenuComponent implements OnInit {
     return menuItems;
   }
 
-  private subscribeToIsLoggedIn(): void {
-    this.isLoggedIn$.pipe(untilDestroyed(this)).subscribe((authState: boolean) => {
-      this.isLoggedIn = authState;
-      this.model = this.getModel();
-      this.cd.markForCheck();
-    });
-  }
-
   private subscribeToWindowResize() {
     fromEvent(window, 'resize')
       .pipe(untilDestroyed(this))
@@ -195,8 +182,9 @@ export class ThemeMenuComponent implements OnInit {
 
   private subscribeToUser(): void {
     this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
-      this.model = [...this.getModel()];
       this.user = user;
+      this.isLoggedIn = user != null;
+      this.model = [...this.getModel()];
       this.cd.detectChanges();
     });
   }

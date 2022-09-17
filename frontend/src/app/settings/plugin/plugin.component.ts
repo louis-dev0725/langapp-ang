@@ -56,8 +56,7 @@ export class PluginComponent implements OnInit, OnDestroy {
       processSubtitles: new FormControl(true, [Validators.required]),
     });
 
-    this.api
-      .meRequest()
+    this.api.usersMe()
       .pipe(untilDestroyed(this))
       .subscribe((user: User) => {
         this.user = user;

@@ -29,15 +29,11 @@ import localeRu from '@angular/common/locales/ru';
 
 registerLocaleData(localeRu);
 
-import { StoreModule, MetaReducer } from '@ngrx/store';
-import { reducers } from '@app/store/reducers';
 import { environment } from 'src/environments/environment';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { WebpackTranslateLoader } from './WebpackTranslateLoader';
 import { CookieModule } from 'ngx-cookie';
 import { IonicModule } from '@ionic/angular';
-import { RouteReuseStrategy } from '@angular/router';
-import { CustomRouteReuseStrategy } from './shared/custom-route-reuse-strategy';
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -51,8 +47,6 @@ import { CustomRouteReuseStrategy } from './shared/custom-route-reuse-strategy';
         useClass: WebpackTranslateLoader,
       },
     }),
-    StoreModule.forRoot(reducers),
-    environment.development ? StoreDevtoolsModule.instrument() : [],
     BrowserAnimationsModule,
     ThemeModule,
     ConfirmDialogModule,
@@ -68,8 +62,8 @@ import { CustomRouteReuseStrategy } from './shared/custom-route-reuse-strategy';
     SessionService,
     {
       provide: APP_INITIALIZER,
-      useFactory: (ss: SessionService) => () => ss.checkInvitedByUrlParams(),
-      deps: [SessionService],
+      useFactory: (userService: UserService) => () => userService.checkInvitedByUrlParams(),
+      deps: [UserService],
       multi: true,
     },
     ApiService,
