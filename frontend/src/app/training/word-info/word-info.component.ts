@@ -50,7 +50,6 @@ export class WordInfoComponent implements OnInit {
 
   getTrainingDetails() {
     this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
-      console.log('wordInfo state', state);
       this.state = state;
       this.card = <WordInfoCard>state.card;
       this.initCard();

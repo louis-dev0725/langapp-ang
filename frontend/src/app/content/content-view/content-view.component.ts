@@ -247,7 +247,6 @@ export class ContentViewComponent implements AfterViewInit {
 
   timeUpdate() {
     const currentTime = this.video.player.currentTime();
-    // console.log('currentTime', currentTime);
 
     if (this.video.player.ended()) {
       this.videoEndedHandler();

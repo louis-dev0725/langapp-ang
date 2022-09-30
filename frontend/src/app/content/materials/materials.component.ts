@@ -16,7 +16,7 @@ import { allParams, toQueryParams } from '@app/shared/helpers';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
-  styleUrls: ['./materials.component.scss']
+  styleUrls: ['./materials.component.scss'],
 })
 export class MaterialsComponent implements OnInit, OnDestroy {
   filterForm: FormGroup;
@@ -31,14 +31,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   defaultPerPage = 50;
   currentPerPage = this.defaultPerPage;
 
-  constructor(private api: ApiService,
-    private customValidator: CustomValidator,
-    private formBuilder: FormBuilder,
-    private translatingService: TranslatingService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private snackBar: MatSnackBar) {
-  }
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private translatingService: TranslatingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.levels$ = this.api.getContentLevels();
@@ -52,14 +45,16 @@ export class MaterialsComponent implements OnInit, OnDestroy {
       length: [''],
     });
 
-    this.contentList$ = allParams(this.route).pipe(switchMap(params => {
-      this.currentPage = params['page'] !== undefined ? Number(params['page']) : 1;
-      this.currentPerPage = params['per-page'] !== undefined ? Number(params['per-page']) : this.defaultPerPage;
-      if (params['filter']) {
-        this.filterForm.patchValue(params['filter']);
-      }
-      return this.api.contentList(this.getQueryParams(true));
-    }));
+    this.contentList$ = allParams(this.route).pipe(
+      switchMap((params) => {
+        this.currentPage = params['page'] !== undefined ? Number(params['page']) : 1;
+        this.currentPerPage = params['per-page'] !== undefined ? Number(params['per-page']) : this.defaultPerPage;
+        if (params['filter']) {
+          this.filterForm.patchValue(params['filter']);
+        }
+        return this.api.contentList(this.getQueryParams(true));
+      })
+    );
 
     this.filterForm.valueChanges.pipe(untilDestroyed(this)).subscribe((e) => this.onFormUpdated(e));
   }
@@ -106,15 +101,17 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   }
 
   deleteMaterial(event) {
-    this.api.deleteMaterial(event).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.translatingService.translates['confirm'].materials.deleted, null, { duration: 3000 });
-        this.router.navigate([], { queryParamsHandling: "merge" });
-      } else {
-        console.log(res.error);
-      }
-    });
+    this.api
+      .deleteMaterial(event)
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.snackBar.open(this.translatingService.translates['confirm'].materials.deleted, null, { duration: 3000 });
+          this.router.navigate([], { queryParamsHandling: 'merge' });
+        } else {
+        }
+      });
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 }

@@ -70,7 +70,6 @@ export class ApiService {
   }
 
   private handleError(response: HttpErrorResponse, catchValidationErrors = false) {
-    console.log('handleError', response);
     if (response.error instanceof ErrorEvent) {
       this.messageService.add({
         severity: 'error',

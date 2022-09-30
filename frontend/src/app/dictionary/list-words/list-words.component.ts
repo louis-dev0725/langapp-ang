@@ -3,16 +3,14 @@ import { MatPaginator } from '@angular/material/paginator';
 
 import { ListResponse, User } from '@app/interfaces/common.interface';
 
-
 @Component({
   selector: 'app-list-words',
   templateUrl: './list-words.component.html',
-  styleUrls: ['./list-words.component.scss']
+  styleUrls: ['./list-words.component.scss'],
 })
 export class ListWordsComponent implements OnInit {
-
   @Input() arrayData: ListResponse<User>;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @Output() dataChanged: EventEmitter<any> = new EventEmitter<any>();
   @Output() deleteD: EventEmitter<any> = new EventEmitter<any>();
   @Output() interTrue: EventEmitter<any> = new EventEmitter<any>();
@@ -21,7 +19,7 @@ export class ListWordsComponent implements OnInit {
   displayedColumns: string[] = ['id', 'original_word', 'literal', 'translate_word', 'workout_progress', 'button_delete'];
   ids: number[] = [];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     /*this.arrayData.items.forEach((item) => {
@@ -67,11 +65,10 @@ export class ListWordsComponent implements OnInit {
     if (event.checked) {
       this.ids.push(event.source.value);
     } else {
-      const d_id = this.ids.findIndex(el => el === event.source.value);
+      const d_id = this.ids.findIndex((el) => el === event.source.value);
       this.ids.splice(d_id, 1);
     }
 
-    console.log(this.ids);
     this.interTrue.emit(this.ids);
   }
 

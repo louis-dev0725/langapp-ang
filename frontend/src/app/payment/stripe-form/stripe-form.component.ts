@@ -68,7 +68,6 @@ export class StripeFormComponent implements OnInit {
   }
 
   async checkSetupResult(result: { setupIntent?: SetupIntent; error?: StripeError }) {
-    console.log('checkSetupResult', result);
     if (result.error) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: result.error.message });
     } else {

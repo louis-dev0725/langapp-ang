@@ -61,7 +61,6 @@ export class AudioService {
   }
 
   _processQueue() {
-    console.log('queue', this.queue);
     if (this.queue.length == 0) {
       return;
     }
@@ -85,7 +84,6 @@ export class AudioService {
     if (!audioUrl) {
       return;
     }
-    console.log('preloadAudio', audioUrl);
     if (this.preloadAudioList.findIndex((a) => a.url == audioUrl) === -1) {
       this.preloadAudioList.push({ url: audioUrl, finished: false, started: false });
     }

@@ -109,10 +109,8 @@ export class TrainingComponent implements OnInit {
 
       let scrollToEl = <HTMLDivElement>this.scrollToEl?.nativeElement;
       if (scrollToEl) {
-        console.log(scrollToEl);
         let rect = scrollToEl.getBoundingClientRect();
         let newY = rect.top + window.scrollY - 60;
-        console.log(rect, newY);
         if (window.scrollY > newY) {
           window.scrollTo({ top: newY });
         }

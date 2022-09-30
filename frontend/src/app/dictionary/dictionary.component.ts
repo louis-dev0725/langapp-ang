@@ -17,7 +17,7 @@ import { FilterMetadata, LazyLoadEvent } from 'primeng/api';
 @Component({
   selector: 'app-dictionary',
   templateUrl: './dictionary.component.html',
-  styleUrls: ['./dictionary.component.scss']
+  styleUrls: ['./dictionary.component.scss'],
 })
 export class DictionaryComponent implements OnInit, OnDestroy {
   filterForm: FormGroup;
@@ -29,11 +29,7 @@ export class DictionaryComponent implements OnInit, OnDestroy {
   defaultPerPage = 50;
   currentPerPage = this.defaultPerPage;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private translatingService: TranslatingService,
-    private session: SessionService) { }
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private translatingService: TranslatingService, private session: SessionService) {}
 
   ngOnInit() {
     this.loading = true;
@@ -42,32 +38,38 @@ export class DictionaryComponent implements OnInit, OnDestroy {
       1: 'Word',
       2: 'Kanji',
     };
-    this.filterForm = this.formBuilder.group({
+    this.filterForm = this.formBuilder.group({});
 
-    });
-
-    allParams(this.route).pipe(untilDestroyed(this)).subscribe(params => {
-      this.currentPage = params['page'] !== undefined ? Number(params['page']) : 1;
-      this.currentPerPage = params['per-page'] !== undefined ? Number(params['per-page']) : this.defaultPerPage;
-      if (params['filter']) {
-        this.filterForm.patchValue(params['filter']);
-      }
-      this.updateList();
-    });
+    allParams(this.route)
+      .pipe(untilDestroyed(this))
+      .subscribe((params) => {
+        this.currentPage = params['page'] !== undefined ? Number(params['page']) : 1;
+        this.currentPerPage = params['per-page'] !== undefined ? Number(params['per-page']) : this.defaultPerPage;
+        if (params['filter']) {
+          this.filterForm.patchValue(params['filter']);
+        }
+        this.updateList();
+      });
 
     this.filterForm.valueChanges.pipe(untilDestroyed(this)).subscribe((e) => this.onFormUpdated(e));
   }
 
   updateList() {
     this.loading = true;
-    this.api.getUserDictionary(this.getQueryParams(true)).pipe(untilDestroyed(this)).subscribe(res => {
-      this.list = res;
-      this.loading = false;
-    });
+    this.api
+      .getUserDictionary(this.getQueryParams(true))
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        this.list = res;
+        this.loading = false;
+      });
   }
 
-  showReadings(readings: { type: string, value: string }[], type: string, title: string) {
-    let result = readings.filter(r => r.type == type).map(r => r.value).join(', ');
+  showReadings(readings: { type: string; value: string }[], type: string, title: string) {
+    let result = readings
+      .filter((r) => r.type == type)
+      .map((r) => r.value)
+      .join(', ');
     if (result.length > 0) {
       result = title + result;
     }
@@ -105,21 +107,17 @@ export class DictionaryComponent implements OnInit, OnDestroy {
         let key = 'filter[' + field + ']';
         if (filter.matchMode == 'startsWith') {
           params[key + '[like]'] = filter.value + '%';
-        }
-        else if (filter.matchMode == 'contains') {
+        } else if (filter.matchMode == 'contains') {
           params[key + '[like]'] = filter.value;
-        }
-        else {
+        } else {
           params[key] = filter.value;
         }
       }
     }
-    console.log('params', params, 'this.lastFilters', this.lastFilters);
     return params;
   }
 
   lazyLoad(event: LazyLoadEvent) {
-    console.log('lazy', event);
     this.lastFilters = event.filters;
     this.currentPerPage = event.rows ? event.rows : this.defaultPerPage;
     this.currentPage = event.rows ? Math.floor(event.first / event.rows) + 1 : 1;
@@ -197,5 +195,5 @@ export class DictionaryComponent implements OnInit, OnDestroy {
     });
   }*/
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 }

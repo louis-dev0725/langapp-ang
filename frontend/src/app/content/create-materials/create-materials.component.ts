@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-materials',
   templateUrl: './create-materials.component.html',
-  styleUrls: ['./create-materials.component.scss']
+  styleUrls: ['./create-materials.component.scss'],
 })
 export class CreateMaterialsComponent implements OnInit, OnDestroy {
   materialsForm: FormGroup;
@@ -21,9 +21,7 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
   categories = [];
   types = [];
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar, private router: Router, private session: SessionService,
-    private translatingService: TranslatingService) { }
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private router: Router, private session: SessionService, private translatingService: TranslatingService) {}
 
   @Input()
   set isLoaded(val: boolean) {
@@ -37,19 +35,25 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
   private _isLoaded = false;
 
   ngOnInit() {
-    this.api.getContentTypes().pipe(untilDestroyed(this)).subscribe(res => {
-      this.types = res;
-    });
+    this.api
+      .getContentTypes()
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        this.types = res;
+      });
 
-    this.api.getCategories().pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.categories = res.items;
+    this.api
+      .getCategories()
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.categories = res.items;
 
-        this._isLoaded = true;
-      } else {
-        this.errors = res.error;
-      }
-    });
+          this._isLoaded = true;
+        } else {
+          this.errors = res.error;
+        }
+      });
 
     const urlRegex = /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
     this.materialsForm = this.formBuilder.group({
@@ -68,8 +72,6 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
   getError(fieldName: string) {
     const errors = this.materialsForm.get(fieldName).errors;
     const key = Object.keys(errors)[0];
-    console.log(errors);
-    console.log(key);
 
     return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }
@@ -82,21 +84,24 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
       length: this.materialsForm.value.text.length,
       level: 'N1',
       status: 0,
-      deleted: 0
+      deleted: 0,
     };
-     this.api.createMaterials(materials).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.translatingService.translates['confirm'].materials.created, null, {duration: 3000});
-        setTimeout(() => {
-          this.router.navigate(['/content/materials']);
-        }, 3100);
-      } else {
-        this.errors = res.error;
-      }
+    this.api
+      .createMaterials(materials)
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.snackBar.open(this.translatingService.translates['confirm'].materials.created, null, { duration: 3000 });
+          setTimeout(() => {
+            this.router.navigate(['/content/materials']);
+          }, 3100);
+        } else {
+          this.errors = res.error;
+        }
 
-      this._isLoaded = true;
-     });
+        this._isLoaded = true;
+      });
   }
 
-  ngOnDestroy () {}
+  ngOnDestroy() {}
 }

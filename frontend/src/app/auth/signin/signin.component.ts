@@ -30,7 +30,6 @@ export class SigninComponent implements OnInit {
     this.errors = [];
     this.isLoaded = false;
     this.api.login(this.signinForm.value).subscribe((res) => {
-      console.log('res in signin', res);
       if (res instanceof ApiError) {
         this.errors = res.error;
         this.isLoaded = true;

@@ -59,13 +59,11 @@ export class CardsService {
       this._navigateToCard(currentCard);
       this._preloadAudioForNextCard();
     } else {
-      console.log('end of training');
       this.router.navigate(['training/end-of-training']);
     }
   }
 
   navigateToCardById(cardId: string) {
-    console.log('navigateToCardById', cardId);
     let currentCard = this.cards$.value[cardId];
     const [type, id] = cardId.split('_');
     if (!currentCard) {

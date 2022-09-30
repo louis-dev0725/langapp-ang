@@ -15,7 +15,6 @@ export class OnclickTranslationDirective {
       return this.api.apiRequest(httpMethod, apiMethod, { body }).toPromise();
     };
     state.user = this.userService.user$.value;
-    console.log('click event 3', e);
     showForRange(caretRangeFromPoint(e.x, e.y));
   }
 }
