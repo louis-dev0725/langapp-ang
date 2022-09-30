@@ -53,11 +53,6 @@ export class TranslationWordComponent implements OnInit {
     this.cardsService.navigateToNextCard();
   }
 
-  goToInfoCard(route: string) {
-    const [card, id] = route.split('_');
-    this.router.navigate(['training', card === 'wordInfo' ? 'word-info' : 'kanji-info', id]);
-  }
-
   getTrainingDetails() {
     this.cardsService.currentCardState$.pipe(untilDestroyed(this)).subscribe((state) => {
       this.state = state;

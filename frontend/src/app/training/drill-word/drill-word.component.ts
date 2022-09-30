@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TrainingQuestionCard } from '@app/interfaces/common.interface';
 import { AudioService } from '@app/services/audio.service';
 import editIcon from '@iconify/icons-mdi/edit';
+import { CardsService } from '../cards/cards.service';
 
 @Component({
   selector: 'app-drill-word',
@@ -20,12 +21,11 @@ export class DrillWordComponent implements OnInit {
     editIcon,
   };
 
-  constructor(private router: Router, private cd: ChangeDetectorRef, public audioService: AudioService) {}
+  constructor(private router: Router, private cd: ChangeDetectorRef, public audioService: AudioService, private cardsService: CardsService) {}
 
   ngOnInit(): void {}
 
-  goToInfoCard(route: string) {
-    const [card, id] = route.split('_');
-    this.router.navigate(['training', card === 'wordInfo' ? 'word-info' : 'kanji-info', id]);
+  goToInfoCard(cardId: string) {
+    this.cardsService.navigateToCardById(cardId);
   }
 }
