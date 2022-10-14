@@ -30,7 +30,7 @@ class m201014_061328_add_test_users extends Migration
             } else {
                 echo 'Use existing test admin user #' . $user->id . "\n";
             }
-            if (!empty($user->id)) {
+            if (!empty($user->id) && !Yii::$app->authManager->checkAccess($user->id, 'admin')) {
                 $adminRole = Yii::$app->authManager->getRole('admin');
                 Yii::$app->authManager->assign($adminRole, $user->id);
             }
