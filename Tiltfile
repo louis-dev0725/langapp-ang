@@ -56,8 +56,8 @@ local_resource('web-sync',
 )
 
 local_resource('web-frontend',
-  serve_cmd = 'while true; do docker-compose exec -T web /app/run/_web-start-frontend.sh; done',
-  serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -T web /app/run/_web-start-frontend.sh',
+  serve_cmd = 'while true; do docker-compose exec -T web bash /app/run/_web-start-frontend.sh; done',
+  serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -T web bash /app/run/_web-start-frontend.sh',
   allow_parallel = True,
   resource_deps = ['web-initial-sync'],
   labels = ['1-web'],
@@ -89,15 +89,15 @@ cmd_button('docker-compose:stop',
 )
 
 local_resource('web-backend-php',
-  cmd = 'docker-compose exec -T web /app/run/_web-start-backend.sh',
+  cmd = 'docker-compose exec -T web bash /app/run/_web-start-backend.sh',
   allow_parallel = True,
   resource_deps = ['web-initial-sync'],
   labels = ['1-web']
 )
 
 local_resource('web-backend-ts',
-  serve_cmd = 'while true; do docker-compose exec -T web /app/run/_web-start-backend-ts.sh; done',
-  serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -T web /app/run/_web-start-backend-ts.sh',
+  serve_cmd = 'while true; do docker-compose exec -T web bash /app/run/_web-start-backend-ts.sh; done',
+  serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -T web bash /app/run/_web-start-backend-ts.sh',
   allow_parallel = True,
   resource_deps = ['web-initial-sync'],
   labels = ['1-web'],
