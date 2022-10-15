@@ -124,8 +124,8 @@ export class UserService {
   }
 
   logout() {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    this.user$.next(null);
+    this.token$.next(null);
     this.reloadAdmin();
     this.router.navigate(['auth/signin']);
   }

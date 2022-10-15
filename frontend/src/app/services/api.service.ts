@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Category, Content, UserDictionary, ListResponse, Mnemonic, User, UserPaymentMethod, AddCardSquareRequest, ProlongSubscriptionResult, ContentAttributeResponse, ContentStudiedAttributeRequest, ContentHiddenAttributeRequest, Training, Drill, TrainingEndMessage, TrainingSetting, Hidings, StripeSetupIntentResponse } from '@app/interfaces/common.interface';
+import { Category, Content, UserDictionary, ListResponse, Mnemonic, User, UserPaymentMethod, AddCardSquareRequest, ProlongSubscriptionResult, ContentAttributeResponse, ContentStudiedAttributeRequest, ContentHiddenAttributeRequest, Training, Drill, TrainingEndMessage, TrainingSetting, Hidings, StripeSetupIntentResponse, CategoryArray } from '@app/interfaces/common.interface';
 import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
@@ -66,6 +66,7 @@ export class ApiService {
   constructor(private http: HttpClient, private session: SessionService, private messageService: MessageService, @Inject(APP_BASE_HREF) private baseHref: string, private router: Router, private sessionSerivce: SessionService) {}
 
   apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, catchValidationErrors = false) {
+    console.trace('apiRequest', { method, path, options, catchValidationErrors });
     return <Observable<T>>this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(catchError((r) => this.handleError(r, catchValidationErrors)));
   }
 
@@ -243,7 +244,13 @@ export class ApiService {
   usersMe(): Observable<User> {
     return this.apiRequest<User>('GET', 'users/me').pipe(
       tap((result: User) => {
-        if (!(result instanceof ApiError)) {
+        console.log('usersMe result', result);
+        if (result instanceof ApiError) {
+          if (result.status == 401) {
+            this.sessionSerivce.user$.next(null);
+            this.router.navigate(['auth/signin']);
+          }
+        } else {
           this.sessionSerivce.user$.next(result);
         }
       })
@@ -251,7 +258,9 @@ export class ApiService {
   }
 
   refreshUserInfo() {
-    this.usersMe().subscribe((res) => {});
+    if (this.sessionSerivce.token$.value) {
+      this.usersMe().subscribe((res) => {});
+    }
   }
 
   /**
@@ -393,13 +402,16 @@ export class ApiService {
   /**
    * Получение всех категорий с пагинацией
    */
-  getAllCategories(data: any = ''): Observable<any> {
-    let query = '';
-    if (data !== '') {
-      query = '&' + data;
+  getAllCategories(queryData: Record<string, string> | string = {}): Observable<CategoryArray> {
+    if (typeof queryData == 'string') {
+      queryData += '&expand=parentCategory';
+    } else {
+      if (!queryData['expand']) {
+        queryData['expand'] = 'parentCategory';
+      }
     }
 
-    return this.apiRequest('GET', 'categories/all?expand=parentCategory' + query);
+    return this.apiRequest<CategoryArray>('GET', 'categories/all?' + new URLSearchParams(queryData).toString());
   }
 
   /**

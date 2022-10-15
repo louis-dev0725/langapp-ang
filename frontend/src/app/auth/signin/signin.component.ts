@@ -34,7 +34,7 @@ export class SigninComponent implements OnInit {
         this.errors = res.error;
         this.isLoaded = true;
       } else {
-        this.router.navigate(['/']);
+        this.router.navigate(['/content/materials']);
 
         window.postMessage({ type: 'LoginSuccess', text: 'Login' }, '*');
       }
