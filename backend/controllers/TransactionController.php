@@ -36,20 +36,16 @@ class TransactionController extends ActiveController
     {
         $behaviors = parent::behaviors();
 
-        $behaviors['access'] = [
-            'class' => AccessControl::class,
-            'except' => ['options'],
-            'rules' => [
-                [
-                    'allow' => true,
-                    'actions' => ['index', 'view'],
-                    'roles' => ['@'],
-                ],
-                [
-                    'allow' => true,
-                    'actions' => ['create', 'update', 'delete'],
-                    'roles' => ['admin'],
-                ],
+        $behaviors['access']['rules'] = [
+            [
+                'allow' => true,
+                'actions' => ['index', 'view'],
+                'roles' => ['@'],
+            ],
+            [
+                'allow' => true,
+                'actions' => ['create', 'update', 'delete'],
+                'roles' => ['admin'],
             ],
         ];
 

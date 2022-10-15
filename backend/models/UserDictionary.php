@@ -17,11 +17,9 @@ use yii\db\ActiveRecord;
  * @property string $date
  * @property string $context
  * @property string $url
- * @property int $success_training
- * @property int $number_training
- * @property string $drill_card
- * @property string $workout_progress_word_translate
  * @property int $mnemonic_id
+ * @property string $drill_card
+ * @property string $drill_progress
  * @property string $drill_due
  * @property string $drill_last
  *
@@ -46,10 +44,8 @@ class UserDictionary extends ActiveRecord
     {
         return [
             [['user_id', 'dictionary_word_id', 'original_word', 'date'], 'required'],
-            [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training', 'mnemonic_id'], 'default',
-                'value' => null, ],
-            [['user_id', 'type', 'dictionary_word_id', 'success_training', 'number_training'], 'integer'],
-            [['date', 'workout_progress_card', 'workout_progress_word_translate'], 'safe'],
+            [['user_id', 'type', 'dictionary_word_id'], 'integer'],
+            [['date'], 'safe'],
             [['context'], 'string'],
             [['original_word', 'translate_word', 'url'], 'string', 'max' => 255],
             [['dictionary_word_id'], 'exist', 'skipOnError' => true, 'targetClass' => DictionaryWord::class,
@@ -76,10 +72,6 @@ class UserDictionary extends ActiveRecord
             'date' => 'Date',
             'context' => 'Context',
             'url' => 'Url',
-            'success_training' => 'Success Training',
-            'number_training' => 'Number Training',
-            'workout_progress_card' => 'Workout Progress Card',
-            'workout_progress_word_translate' => 'Workout Progress Word Translate',
             'mnemonic_id' => 'Mnemonic ID',
         ];
     }

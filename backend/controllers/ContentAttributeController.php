@@ -18,6 +18,21 @@ class ContentAttributeController extends ActiveController
     public $createScenario = ContentAttribute::SCENARIO_CREATE;
     public $updateScenario = ContentAttribute::SCENARIO_UPDATE;
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['access']['rules'] = [
+            [
+                'allow' => true,
+                'actions' => ['view', 'delete', 'update'],
+                'roles' => ['@'],
+            ],
+        ];
+
+        return $behaviors;
+    }
+
     /**
      * {@inheritDoc}
      */

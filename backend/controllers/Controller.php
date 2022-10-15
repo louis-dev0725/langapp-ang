@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\Cors;
@@ -51,6 +52,17 @@ class Controller extends \yii\rest\Controller
             'authenticator' => [
                 'class' => HttpBearerAuth::class,
                 'except' => ['options'],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'except' => ['options'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'roles' => ['admin'],
+                    ],
+                ],
             ],
             /*'rateLimiter' => [
                 'class' => RateLimiter::class,

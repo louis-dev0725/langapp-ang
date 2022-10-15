@@ -20,14 +20,26 @@ class DictionaryController extends ActiveController
 {
     public $modelClass = UserDictionary::class;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function behaviors(): array
+    public function behaviors()
     {
-        return array_merge(parent::behaviors(), [
-            'paid' => PaidOnlyBehavior::class,
-        ]);
+        $behaviors = parent::behaviors();
+
+        $behaviors['access']['rules'] = [
+            [
+                'allow' => true,
+                'actions' => ['index', 'view', 'create'],
+                'roles' => ['@'],
+            ],
+            [
+                'allow' => true,
+                'actions' => ['update', 'delete'],
+                'roles' => ['admin'],
+            ],
+        ];
+
+        $behaviors['paid'] = PaidOnlyBehavior::class;
+
+        return $behaviors;
     }
 
     /**
@@ -105,10 +117,6 @@ class DictionaryController extends ActiveController
         $word = UserDictionary::find()->where(['original_word' => $params['wordValue'], 'user_id' => Yii::$app->user->id, 'type' => $params['wordType']])->one();
 
         if ($word == null) {
-            $workout_progress_card = [
-                "due" => time(),
-            ];
-
             $word = new UserDictionary();
             $word->user_id = Yii::$app->user->id;
             $word->type = $params['wordType'];
@@ -118,9 +126,7 @@ class DictionaryController extends ActiveController
             $word->date = Helpers::dateToSql(time());
             $word->context = $params['contextText'];
             $word->url = $params['contextUrl'];
-            $word->workout_progress_card = $workout_progress_card;
-            $word->success_training = 0;
-            $word->number_training = 0;
+            $word->drill_due = Helpers::dateToSql(time());
         } else {
             $word->translate_word = $params['meaningValue'];
             $word->context = $params['contextText'];
@@ -168,11 +174,9 @@ class DictionaryController extends ActiveController
                             $kanjiInDb->original_word = $kanjiValue;
                             $kanjiInDb->translate_word = $dictionaryWord->getMeaningForLangList(['en']); // TODO: use lang list for user
                             $kanjiInDb->date = date('Y-m-d');
-                            $kanjiInDb->context = null;
-                            $kanjiInDb->url = null;
-                            $kanjiInDb->workout_progress_card = $workout_progress_card;
-                            $kanjiInDb->success_training = 0;
-                            $kanjiInDb->number_training = 0;
+                            $kanjiInDb->context = $params['contextText'];
+                            $kanjiInDb->url = $params['contextUrl'];
+                            $kanjiInDb->drill_due = Helpers::dateToSql(time());
                             //$kanjiInDb->mnemonic = null;
                             $kanjiInDb->save(false);
                             if ($kanjiInDb->hasErrors()) {
@@ -283,6 +287,8 @@ class DictionaryController extends ActiveController
      */
     public function actionDeleteSelect()
     {
+        // TODO: check is user has access to it
+        return;
         $filter = Yii::$app->getRequest()->getBodyParams();
 
         $dictionaries = UserDictionary::find()->where(['id' => $filter])->all();

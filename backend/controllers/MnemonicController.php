@@ -19,14 +19,26 @@ class MnemonicController extends ActiveController
 
     public $modelClass = Mnemonics::class;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function behaviors(): array
+    public function behaviors()
     {
-        return array_merge(parent::behaviors(), [
-            'paid' => PaidOnlyBehavior::class,
-        ]);
+        $behaviors = parent::behaviors();
+
+        $behaviors['access']['rules'] = [
+            [
+                'allow' => true,
+                'actions' => ['index', 'view', 'create'],
+                'roles' => ['@'],
+            ],
+            [
+                'allow' => true,
+                'actions' => ['update', 'delete'],
+                'roles' => ['admin'],
+            ],
+        ];
+
+        $behaviors['paid'] = PaidOnlyBehavior::class;
+
+        return $behaviors;
     }
 
     /**
@@ -89,6 +101,8 @@ class MnemonicController extends ActiveController
      */
     public function actionUpdate($id)
     {
+        // TODO: allow edit only for user who created it or admin
+        return;
         $model = Mnemonics::find()->where(['id' => $id])->one();
 
         $user = Yii::$app->getRequest()->getBodyParams()['user_rating'];

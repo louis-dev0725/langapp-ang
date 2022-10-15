@@ -18,29 +18,39 @@ class CategoryController extends ActiveController
         return $actions;
     }
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['access']['rules'] = [
+            [
+                'allow' => true,
+                'actions' => ['index', 'view'],
+                'roles' => ['@'],
+            ],
+            [
+                'allow' => true,
+                'actions' => ['create', 'update', 'delete'],
+                'roles' => ['admin'],
+            ],
+        ];
+
+        return $behaviors;
+    }
+
     /**
      * @return ActiveDataProvider
      */
     public function actionIndex()
     {
         return new ActiveDataProvider([
-            'query' => Category::find(),
-            'pagination' => false,
-        ]);
-    }
-
-    /**
-     * @return ActiveDataProvider
-     */
-    public function actionAll()
-    {
-        return new ActiveDataProvider([
             'query' => Category::find()->with('parentCategory'),
             'sort' => [
                 'defaultOrder' => [
-                    'id' => SORT_DESC,
+                    'id' => SORT_ASC,
                 ],
             ],
+            'pagination' => false,
         ]);
     }
 }

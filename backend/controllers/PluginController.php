@@ -9,6 +9,21 @@ class PluginController extends ActiveController
 {
     public $modelClass = SettingPlugin::class;
 
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['access']['rules'] = [
+            [
+                'allow' => true,
+                'actions' => ['view', 'update'],
+                'roles' => ['@'],
+            ],
+        ];
+
+        return $behaviors;
+    }
+
     /**
      * @return array
      */

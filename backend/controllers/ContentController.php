@@ -18,14 +18,26 @@ class ContentController extends ActiveController
 {
     public $modelClass = Content::class;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function behaviors(): array
+    public function behaviors()
     {
-        return array_merge(parent::behaviors(), [
-            'paid' => PaidOnlyBehavior::class,
-        ]);
+        $behaviors = parent::behaviors();
+
+        $behaviors['access']['rules'] = [
+            [
+                'allow' => true,
+                'actions' => ['index', 'view'],
+                'roles' => ['@'],
+            ],
+            [
+                'allow' => true,
+                'actions' => ['create', 'update', 'delete'],
+                'roles' => ['admin'],
+            ],
+        ];
+
+        $behaviors['paid'] = PaidOnlyBehavior::class;
+
+        return $behaviors;
     }
 
     /**
@@ -165,11 +177,6 @@ class ContentController extends ActiveController
      * @return array|\yii\db\ActiveRecord|null
      */
     public function actionView($id)
-    {
-        return Content::find()->with('categories')->where(['id' => $id])->one();
-    }
-
-    public function actionImage($id)
     {
         return Content::find()->with('categories')->where(['id' => $id])->one();
     }

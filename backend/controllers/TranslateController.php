@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\behaviors\PaidOnlyBehavior;
 use app\models\DictionaryWord;
 use meCab\meCab;
 use Yii;
@@ -20,6 +21,23 @@ class TranslateController extends ActiveController
         unset($actions['create']);
 
         return $actions;
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['access']['rules'] = [
+            [
+                'allow' => true,
+                'actions' => ['create', 'select'],
+                'roles' => ['@'],
+            ],
+        ];
+
+        $behaviors['paid'] = PaidOnlyBehavior::class;
+
+        return $behaviors;
     }
 
     public function actionCreate()
