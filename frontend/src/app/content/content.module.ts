@@ -18,6 +18,7 @@ import { RippleModule } from 'primeng/ripple';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { IconModule } from '@visurel/iconify-angular';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 const routes: Routes = [
   {
@@ -65,26 +66,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    ContentComponent,
-    MaterialsComponent,
-    CreateMaterialsComponent,
-    EditMaterialsComponent,
-    ListMaterialsComponent,
-    ContentViewComponent,
-    VideojsComponent,
-  ],
-  imports: [
-    RouterModule.forChild(routes),
-    CommonModule,
-    TranslateModule.forChild(),
-    ReactiveFormsModule,
-    SharedModule,
-    DialogModule,
-    RippleModule,
-    OverlayPanelModule,
-    InputSwitchModule,
-    IconModule,
-  ],
+  declarations: [ContentComponent, MaterialsComponent, CreateMaterialsComponent, EditMaterialsComponent, ListMaterialsComponent, ContentViewComponent, VideojsComponent],
+  imports: [RouterModule.forChild(routes), CommonModule, TranslateModule.forChild(), ReactiveFormsModule, SharedModule, DialogModule, RippleModule, OverlayPanelModule, InputSwitchModule, IconModule, MultiSelectModule],
 })
 export class ContentModule {}

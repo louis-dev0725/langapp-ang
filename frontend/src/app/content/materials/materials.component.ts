@@ -5,12 +5,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomValidator } from '@app/services/custom-validator';
 import { Observable } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
-import { Content, ListResponse } from '@app/interfaces/common.interface';
+import { Category, CategoryArray, Content, ListResponse } from '@app/interfaces/common.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatingService } from '@app/services/translating.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap } from 'rxjs/operators';
-import { allParams, toQueryParams } from '@app/shared/helpers';
+import { allParams, base64ToObject, filterEmptyFromObject, objectToBase64, toQueryParams } from '@app/shared/helpers';
 
 @UntilDestroy()
 @Component({
@@ -26,6 +26,8 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   levels$: Observable<SimpleListItem[]>;
   types$: Observable<SimpleListItem[]>;
   lengthVariants$: Observable<SimpleListItem[]>;
+  categories$: Observable<CategoryArray>;
+  categories: Category[];
 
   currentPage = 1;
   defaultPerPage = 50;
@@ -37,22 +39,33 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     this.levels$ = this.api.getContentLevels();
     this.types$ = this.api.getContentTypes();
     this.lengthVariants$ = this.api.getContentLengthVariants();
+    this.categories$ = this.api.getAllCategories({ 'per-page': '100' });
+
+    this.categories$.subscribe((c) => {
+      this.categories = c.items;
+    });
 
     this.filterForm = this.formBuilder.group({
       keywords: [''],
       level: [''],
       type: [''],
       length: [''],
+      categoryId: [''],
     });
 
     this.contentList$ = allParams(this.route).pipe(
       switchMap((params) => {
         this.currentPage = params['page'] !== undefined ? Number(params['page']) : 1;
         this.currentPerPage = params['per-page'] !== undefined ? Number(params['per-page']) : this.defaultPerPage;
+        console.log('params', params);
         if (params['filter']) {
-          this.filterForm.patchValue(params['filter']);
+          let filter = base64ToObject(params['filter']);
+
+          if (filter) {
+            this.filterForm.patchValue(filter);
+          }
         }
-        return this.api.contentList(this.getQueryParams(true));
+        return this.api.contentList(this.getQueryParamsForRequest());
       })
     );
 
@@ -70,24 +83,38 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
   }
 
-  getQueryParams(forRequest = false) {
-    let params = toQueryParams(this.filterForm.value, 'filter');
-    if (forRequest || this.currentPage != 1) {
+  getQueryParamsForUrl() {
+    let params = {};
+    if (this.currentPage != 1) {
       params['page'] = String(this.currentPage);
     }
-    if (forRequest || this.currentPerPage != this.defaultPerPage) {
+    if (this.currentPerPage != this.defaultPerPage) {
       params['per-page'] = String(this.currentPerPage);
     }
-    if (forRequest) {
-      params['filter[status]'] = '1';
-      params['filter[deleted]'] = '0';
+    let filterValue = filterEmptyFromObject(this.filterForm.value);
+    if (Object.keys(filterValue).length != 0) {
+      params['filter'] = objectToBase64(filterValue);
     }
 
     return params;
   }
 
+  getQueryParamsForRequest() {
+    let params = toQueryParams(this.filterForm.value, 'filter');
+    if (this.currentPage != 1) {
+      params['page'] = String(this.currentPage);
+    }
+    if (this.currentPerPage != this.defaultPerPage) {
+      params['per-page'] = String(this.currentPerPage);
+    }
+    params['filter[status]'] = '1';
+    params['filter[deleted]'] = '0';
+
+    return params;
+  }
+
   updateUrl() {
-    this.router.navigate([], { queryParams: this.getQueryParams() });
+    this.router.navigate([], { queryParams: this.getQueryParamsForUrl() });
   }
 
   onFormUpdated(newValues: any) {

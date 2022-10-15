@@ -66,7 +66,7 @@ export class ApiService {
   constructor(private http: HttpClient, private session: SessionService, private messageService: MessageService, @Inject(APP_BASE_HREF) private baseHref: string, private router: Router, private sessionSerivce: SessionService) {}
 
   apiRequest<T>(method: string, path: string, options: OptionsInterface = {}, catchValidationErrors = false) {
-    console.trace('apiRequest', { method, path, options, catchValidationErrors });
+    // console.trace('apiRequest', { method, path, options, catchValidationErrors });
     return <Observable<T>>this.http.request<T>(method, this.apiHost + '/' + path, options).pipe(catchError((r) => this.handleError(r, catchValidationErrors)));
   }
 
@@ -411,7 +411,7 @@ export class ApiService {
       }
     }
 
-    return this.apiRequest<CategoryArray>('GET', 'categories/all?' + new URLSearchParams(queryData).toString());
+    return this.apiRequest<CategoryArray>('GET', 'categories/index?' + new URLSearchParams(queryData).toString());
   }
 
   /**

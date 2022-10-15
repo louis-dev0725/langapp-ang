@@ -132,7 +132,7 @@ class ContentController extends ActiveController
             $query->andWhere(['content.deleted' => 0]);
         }
 
-        $query->select([/*'cleanText',*/ 'dataJson', 'deleted', 'format', 'id', 'length', 'level', 'rank', 'sourceLink', 'status', 'tagsJson', /*'text',*/ 'title', 'type']);
+        $query->select([/*'cleanText',*/ 'content.id', 'content.dataJson', 'content.deleted', 'content.format', 'content.length', 'content.level', 'content.rank', 'content.sourceLink', 'content.status', 'content.tagsJson', /*'text',*/ 'content.title', 'content.type']);
 
         return new ActiveDataProvider([
             'query' => $query,

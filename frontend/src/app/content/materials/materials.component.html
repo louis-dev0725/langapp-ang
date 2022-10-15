@@ -11,13 +11,15 @@
         </div>
       -->
 
+        <p-multiSelect formControlName="categoryId" [options]="categories" optionLabel="title" optionValue="id" [filter]="false" [defaultLabel]="'Categories' | translate" [style]="{ width: '200px' }"></p-multiSelect>
+
         <p-dropdown formControlName="level" [options]="levels$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'JLPT Level' | translate }}" [showClear]="true" [style]="{ width: '150px' }"></p-dropdown>
 
-        <p-dropdown formControlName="type" [options]="types$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Content Type' | translate }}" [showClear]="true" [style]="{ width: '170px' }"></p-dropdown>
+        <!--<p-dropdown formControlName="type" [options]="types$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Content Type' | translate }}" [showClear]="true" [style]="{ width: '170px' }"></p-dropdown>-->
 
         <p-dropdown formControlName="length" [options]="lengthVariants$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Text length' | translate }}" [showClear]="true" [style]="{ width: '200px' }"></p-dropdown>
 
-        <p-toggleButton [onLabel]="'Hide studied'" [offLabel]="'Show studied'" [style]="{ width: '10rem' }"></p-toggleButton>
+        <p-toggleButton [onLabel]="'Hide studied' | translate" [offLabel]="'Show studied' | translate" [style]="{ width: '10rem' }"></p-toggleButton>
       </div>
     </form>
   </div>

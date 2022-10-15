@@ -29,9 +29,9 @@ class ContentSearch extends Content
     public function rules(): array
     {
         return [
-            [['type', 'status', 'length', 'level', 'deleted', 'categoryId'], 'integer'],
+            [['type', 'status', 'length', 'level', 'deleted'], 'integer'],
             [['text', 'cleanText'], 'string'],
-            [['tagsJson'], 'safe'],
+            [['tagsJson','categoryId'], 'safe'],
             [['title', 'sourceLink', 'format'], 'string', 'max' => 255],
             [['isStudied', 'isHidden'], 'boolean'],
             [

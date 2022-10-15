@@ -139,11 +139,13 @@ export class UserService {
   }
 
   setUpSubscriptions() {
+    let isFirstNavigation = true;
     this.router.events.subscribe(async (event) => {
       if (event instanceof NavigationStart) {
-        if (this.user$.value != null) {
+        if (!isFirstNavigation && this.user$.value != null) {
           this.api.refreshUserInfo();
         }
+        isFirstNavigation = false;
       }
     });
     this.interval = setInterval(async () => {

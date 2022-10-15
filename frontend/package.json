@@ -72,6 +72,7 @@
     "rxjs": "^6.6.3",
     "tns-core-modules": "~6.5.25",
     "tslib": "^2.1.0",
+    "url-safe-base64": "^1.2.0",
     "video.js": "^7.11.4",
     "videojs-youtube": "^2.6.1",
     "webvtt-parser": "^2.1.2",
