@@ -223,6 +223,11 @@ ruby rt:hover {
   z-index: 999;
 }
 
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-text {
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+
 /*
 $color-blue-link: #039be5;
 $color-red-danger: #f44336;
