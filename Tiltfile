@@ -1,11 +1,22 @@
-load('ext://dotenv', 'dotenv')
 load('ext://uibutton', 'cmd_button')
 
-dotenv('run/dev.env')
+# Extend https://github.com/tilt-dev/tilt-extensions/blob/master/dotenv/Tiltfile
+def dotenv(fn='.env'):
+  f = read_file(fn, '')
+  lines = str(f).splitlines()
+  for line in lines:
+    v = line.split('=', 1)
+    if len(v) < 2:
+      continue # skip empty lines
+    if (os.getenv(v[0]) == None): # Do not override existing env variables
+      os.putenv(v[0], v[1])
+
+dotenv('.env.defaults')
+dotenv('.env')
 
 is_win = os.getenv('OS') == 'Windows_NT'
 
-if (is_win):
+if (not is_win):
   os.putenv('APP_DIR_TO_SHARE', './')
 
 allow_k8s_contexts(k8s_context()) # Disable check as we currently don't use k8s resources inside Tiltfile
@@ -63,8 +74,8 @@ if (os.getenv('OS') == 'Windows_NT'):
   )
 
 local_resource('web-frontend',
-  serve_cmd = 'while true; do docker-compose exec -T web bash /app/run/_web-start-frontend.sh; done',
-  serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -T web bash /app/run/_web-start-frontend.sh',
+  serve_cmd = 'while true; do docker-compose exec  -e LOAD_TEST_DATA=$LOAD_TEST_DATA -e TEST_DATA_URL=$TEST_DATA_URL -T web bash /app/run/_web-start-frontend.sh; done',
+  serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -e LOAD_TEST_DATA=%LOAD_TEST_DATA% -e TEST_DATA_URL=%TEST_DATA_URL% -T web bash /app/run/_web-start-frontend.sh',
   allow_parallel = True,
   resource_deps = ['web-initial-sync'] if is_win else [],
   labels = ['1-web'],

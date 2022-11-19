@@ -18,23 +18,28 @@
 - [Полезные команды](#полезные-команды)
 - [Полезные скрипты](#полезные-скрипты)
 
-# Установка и запуск
+# Подготовка
 
-## Подготовка
-1\) Установите [Tilt](https://docs.tilt.dev/install.html)
+## Вариант 1: быстро (через codespace)
 
-В Windows запустите в Powershell:
-```powershell
-iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.ps1'))
-```
-В Linux:
-```bash
-curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
-```
+Из браузера:
+1. [Создайте codespace](https://github.com/codespaces/new?hide_repo_select=true&ref=master&repo=568000975&machine=standardLinux32gb) и запустите его.
 
-2\) Установите [Docker](https://docs.docker.com/desktop/windows/install/) (если ещё не установлен).
+Если вы используете VS Code ([подробная инструкция](https://docs.github.com/en/codespaces/developing-in-codespaces/using-github-codespaces-in-visual-studio-code#creating-a-codespace-in-vs-code)):
+1. Установите расширение [GitHub Codespaces](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces)
+2. Перейдите на вкладку Remote Explorer
+3. Выберите в выпадающем списке GitHub Codespaces.
+4. Нажмите на кнопку "+" и создайте codespace для текущего репозитория.
 
-3\) Склонируйте репозиторий любым удобным для вас способом, например в терминале:
+Если вы используете IDE от JetBrains:
+1. [Подробная инструкция](https://docs.github.com/en/codespaces/developing-in-codespaces/using-github-codespaces-in-your-jetbrains-ide)
+
+К codespace можно подключиться из VS Code или WebStorm/PhpStorm.
+
+## Вариант 2: локально
+1\) Установите [Tilt](https://docs.tilt.dev/install.html), а также [Docker](https://docs.docker.com/get-docker/) (если ещё не установлен).
+
+2\) Склонируйте репозиторий любым удобным для вас способом, например в терминале:
 ```bash
 git clone git@gitlab.com:mangoproject/langapp.git && cd langapp
 ```
@@ -45,19 +50,22 @@ git clone git@gitlab.com:mangoproject/langapp.git && cd langapp
 tilt up
 ```
 
-2\) Нажмите пробел или откройте [http://localhost:10350/](http://localhost:10350/).\
+2\) Откройте [http://localhost:10350/](http://localhost:10350/).\
 На этой странице можно посмотреть логи, статус сборки и другую информацию. Первый запуск может занять некоторое время, дождитесь пока все ресурсы не станут зелеными.
 
-3\) Откройте в браузере [http://localhost/app/](http://localhost/app/)\
+При необходимости (например при изменении порта) нужные контейнеры можно перезагрузить с помощью кнопки "Trigger update" рядом с контейнером.
+
+3\) Откройте в браузере [http://localhost:8080/app/](http://localhost:8080/app/)\
 Это само приложение.
 
-4\) Когда захотите остановить проект, запустите
-```bash
-tilt down
-```
+4\) Если вы хотите установить какие-то зависимости, то это нужно делать внутри контейнера `web` (консоль можно открыть с помощью скрипта `run/terminal-web.sh`).
 
-Если у вас занят какой-то из портов, который используется при запуске (например 80, 443, 5432), то вы можете поменять его в `run/dev.env`.\
-Если вы меняете HTTP_PORT (по умолчанию 80), то его также необходимо поменять в `frontend/src/environments/environment.ts`.
+**Дополнительно:**
+
+Если запускаете локально и хотите остановить проект, запустите
+`docker-compose stop`. Чтобы удалить созданные контейнеры, запустите `tilt down`.
+
+Если у вас занят какой-то из портов, который используется при запуске (например 8080, 443, 5432), то вы можете поменять его в `.env`.
 
 # Ссылки и пароли
 ## Само приложение
@@ -92,7 +100,7 @@ Yii Debugger доступен по адресу http://localhost/debug
 ### xdebug
 Для активации и использования xdebug рекомендуем установить расширение https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc
 
-Также активировать xdebug можно вручную с помощью GET параметра XDEBUG_SESSION_START, например /api/?XDEBUG_SESSION_START=1 и деактивировать с помощью GET параметра XDEBUG_SESSION_STOP, например /api/?XDEBUG_SESSION_STOP=1 подробнее https://xdebug.org/docs/remote#browser_session
+Также активировать xdebug можно вручную с помощью GET параметра `XDEBUG_SESSION_START`, например `/api/?XDEBUG_SESSION_START=1` и деактивировать с помощью GET параметра XDEBUG_SESSION_STOP, например `/api/?XDEBUG_SESSION_STOP=1` подробнее https://xdebug.org/docs/remote#browser_session
 
 
 # Информация о Tilt
@@ -100,9 +108,10 @@ Yii Debugger доступен по адресу http://localhost/debug
 
 Ресурсы в Tilt:\
 **web** - контейнер web (из docker-composer)\
-**web-initial-sync** - синхронизация файлов с контейнером (при запуске, далее этим занимается сам Tilt)\
+**web-initial-sync** - (только Windows) начальная синхронизация файлов с контейнером
+**web-sync** - (только Windows) синхронизация файлов с контейнером
 **web-frontend** - `ng serve` для Angular (внутри контейнера web)\
-**web-backend-php** - выполняет `composer install` и миграции для бэкенда на PHP (Yii2, папка `backend/`) (только первый раз при запуске, далее Tilt выполняет `composer install` если composer.json изменился и показывает результат в `web`)\
+**web-backend-php** - выполняет `composer install` и миграции для бэкенда на PHP (Yii2, папка `backend/`) <!--(только первый раз при запуске, далее Tilt выполняет `composer install` если composer.json изменился и показывает результат в `web`)-->\
 **web-backend-ts** - выполняет `nest start --watch` для бэкенда на TypeScript (nestjs)\
 **db** - контейнер с PostgreSQL (из docker-composer)\
 **redis** - контейнер с Redis (из docker-composer)\
@@ -111,7 +120,7 @@ Yii Debugger доступен по адресу http://localhost/debug
 **(Tiltfile)** - Конфигурация Tilt
 <!--**adminer**, **arena**, **pgadmin** - контейнеры с adminer, arena, pgadmin (из docker-composer)\-->
 
-`node_modules` внутри контейнера расположены на отдельной volume и не синхронизируются с хостом, поэтому после запуска `npm install` на хосте нужно нажать "Обновить" рядом с `web-frontend` (или `web-backend-ts`) в Tilt, либо вручную запустить `npm install` в нужной папке (это сделано для производительности и избежания проблем с нативными модулями)
+`node_modules` внутри контейнера расположены на отдельной volume и не синхронизируются с хостом, поэтому после запуска `npm install` на хосте нужно нажать "Обновить" рядом с `web-frontend` (или `web-backend-ts`) в Tilt, либо вручную запустить `npm install` в нужной папке
 
 # Полезные команды
 

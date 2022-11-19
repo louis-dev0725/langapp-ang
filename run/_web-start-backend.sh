@@ -1,7 +1,7 @@
 #!/bin/bash
-cd "$(dirname "$0")"
-export $(grep -v '^#' dev.env | xargs)
-cd ../backend
+cd "$(dirname "$0")/.."
+eval "$(./run/shdotenv.sh --env .env.defaults --env)"
+cd backend
 
 set -x
 

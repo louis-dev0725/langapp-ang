@@ -1,7 +1,6 @@
 #!/bin/bash
-cd "$(dirname "$0")"
-export $(grep -v '^#' dev.env | xargs)
-cd ..
+cd "$(dirname "$0")/.."
+eval "$(./run/shdotenv.sh --env .env.defaults --env)"
 
 set -x
 
