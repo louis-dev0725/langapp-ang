@@ -38,7 +38,7 @@ services:
     volumes:
       - composer-cache:/root/.composer/cache
       # - ./:/app:delegated
-      - app-web:/app
+      - ${APP_DIR_TO_SHARE:-app-web}:/app
       - ./docker/web/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf:ro
       - ./docker/web/nginx/vhost-dev.conf:/opt/docker/etc/nginx/vhost-dev.conf:ro
       - ./docker/web/php/php.ini:/opt/docker/etc/php/php.ini:ro
