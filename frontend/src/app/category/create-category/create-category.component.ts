@@ -13,16 +13,14 @@ import { ApiError } from '@app/services/api-error';
 @Component({
   selector: 'app-create-category',
   templateUrl: './create-category.component.html',
-  styleUrls: ['./create-category.component.scss']
+  styleUrls: ['./create-category.component.scss'],
 })
 export class CreateCategoryComponent implements OnInit, OnDestroy {
   categoryForm: FormGroup;
   errors: any = [];
   parents = [];
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar, private router: Router, private session: SessionService,
-    private translatingService: TranslatingService) { }
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private router: Router, private session: SessionService, private translatingService: TranslatingService) {}
 
   @Input()
   set isLoaded(val: boolean) {
@@ -36,15 +34,18 @@ export class CreateCategoryComponent implements OnInit, OnDestroy {
   private _isLoaded = false;
 
   ngOnInit() {
-    this.api.getCategories().pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.parents = res.items;
+    this.api
+      .getCategories()
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.parents = res.items;
 
-        this._isLoaded = true;
-      } else {
-        this.errors = res.error;
-      }
-    });
+          this._isLoaded = true;
+        } else {
+          this.errors = res.error;
+        }
+      });
 
     this.categoryForm = this.formBuilder.group({
       title: ['', { validators: [Validators.required] }],
@@ -57,10 +58,7 @@ export class CreateCategoryComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.categoryForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.categoryForm, fieldName);
   }
 
   onSubmit() {
@@ -69,19 +67,22 @@ export class CreateCategoryComponent implements OnInit, OnDestroy {
     const category = {
       ...this.categoryForm.value,
     };
-    this.api.createCategory(category).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.translatingService.translates['confirm'].categories.created, null, {duration: 3000});
-        setTimeout(() => {
-          this.router.navigate(['/category/categories']);
-        }, 3100);
-      } else {
-        this.errors = res.error;
-      }
+    this.api
+      .createCategory(category)
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.snackBar.open(this.translatingService.translates['confirm'].categories.created, null, { duration: 3000 });
+          setTimeout(() => {
+            this.router.navigate(['/category/categories']);
+          }, 3100);
+        } else {
+          this.errors = res.error;
+        }
 
-      this._isLoaded = true;
-    });
+        this._isLoaded = true;
+      });
   }
 
-  ngOnDestroy () {}
+  ngOnDestroy() {}
 }

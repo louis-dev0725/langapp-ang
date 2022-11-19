@@ -1,59 +1,117 @@
 <div class="container">
-  <div class="card">
-    <h4 translate>Let's try!</h4>
-    <p>To continue please enter your name and choose password.</p>
+  <div class="card p-0">
+    <div class="p-4 pb-0 md:p-8 md:pb-0 grid grid-cols-4 gap-4 md:gap-8">
+      <div *ngFor="let item of [].constructor(4); let i = index" class="h-[1px]" [ngClass]="i <= activeStep ? 'bg-[#1B74C5]' : 'bg-neutral-200'"></div>
+    </div>
 
-    <ng-container *ngIf="errors.length > 0">
-      <p-messages severity="error">
-        <ng-template pTemplate>
-          <div *ngFor="let err of errors">
-            {{err.message}}
+    <form #f="ngForm" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div *ngIf="activeStep == 0" class="p-4 md:p-8">
+        <h4 translate>How much Japanese do you know?</h4>
+        <div class="max-w-xs flex flex-col gap-4">
+          <button *ngFor="let level of levels; index as i" pButton type="button" [label]="level.label | translate" class="button-text-left" [ngClass]="{ 'p-button-outlined': i !== signupForm.controls.level.value }" (click)="setValue('level', i)">
+            <ic-icon [icon]="icons[level.icon]" [inline]="true" width="20" height="20"></ic-icon>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="activeStep == 1">
+        <div class="p-4 pb-0 md:p-8 md:pb-0">
+          <h4 translate>What topics do you like?</h4>
+          <p translate>Select at least 3 topics.</p>
+          <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-2 md:gap-4 category-list">
+            <button *ngFor="let category of categories; index as i" pButton type="button" [label]="category.title | translate" class="button-text-left md:h-20" [ngClass]="{ 'p-button-outlined': signupForm.controls.favoriteCategoryId.value.indexOf(category.id) === -1 }" (click)="clickedOnCategory(category)">
+              <!--<ic-icon [icon]="category.icon" [inline]="true" width="20" height="20"></ic-icon>-->
+              <app-svg-icon [icon]="category.icon" width="20" height="20"></app-svg-icon>
+            </button>
           </div>
-        </ng-template>
-      </p-messages>
-    </ng-container>
-
-    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-
-      <div class="p-fluid">
-        <div class="p-field g-field">
-          <label for="name">{{'Name' | translate}}</label>
-          <span class="p-input-icon-left">
-            <i class="pi pi-user"></i>
-            <input id="name" formControlName="name" pInputText type="text" />
-          </span>
-          <small class="p-invalid" *ngIf="checkError('name')">{{getErrors('name')}}</small>
         </div>
 
-        <div class="p-field g-field">
-          <label for="email">{{'Email' | translate}}</label>
-          <span class="p-input-icon-left">
-            <i class="pi pi-envelope"></i>
-            <input id="email" formControlName="email" pInputText type="text" />
-          </span>
-          <small class="p-invalid" *ngIf="checkError('email')">{{getErrors('email')}}</small>
+        <div class="card mt-8 mb-8 lg:mb-0 w-full sticky bottom-0 bg-white border-t border-neutral-100">
+          <button pButton label="{{ 'Continue' | translate }}" [disabled]="signupForm.controls.favoriteCategoryId.value?.length < 3" class="w-full md:w-auto" (click)="nextStep()"></button>
         </div>
+      </div>
+      <div *ngIf="activeStep == 2">
+        <div class="p-4 pb-0 md:p-8 md:pb-0">
+          <h4 translate>Your native languages</h4>
+          <p translate>You can choose several languages that you are fluent in.</p>
 
-        <div class="p-field g-field">
-          <label for="password">{{'Choose Password' | translate}}</label>
-          <span class="p-input-icon-left">
-            <i class="pi pi-lock" style="z-index: 1;"></i>
-            <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true" [inputStyle]="{'padding-left': '2rem'}"></p-password>
-          </span>
-          <small class="p-invalid" *ngIf="checkError('password')">{{getErrors('password')}}</small>
-        </div>
-        <ng-container *ngIf="!quickSignup">
-          <div class="p-field g-field">
-            <label for="passrepeat">{{'Repeat password' | translate}}</label>
-            <input id="passrepeat" formControlName="passrepeat" pInputText type="passrepeat" />
-            <small class="p-invalid" *ngIf="checkError('passrepeat')">{{getErrors('passrepeat')}}</small>
+          <!--<div class="max-w-sm">
+            <p-tree [value]="availableLanguages" [filter]="true" styleClass="languages-select" selectionMode="checkbox" [(selection)]="selectedLanguages" (onNodeSelect)="selectedLanguagesChanged()" (onNodeUnselect)="selectedLanguagesChanged()"> </p-tree>
+          </div>-->
+
+          <div class="p-field g-field p-fluid">
+            <p-multiSelect formControlName="languages" [options]="availableLanguages" optionLabel="label" optionValue="data" display="chip" [placeholder]="'Select' | translate" [showToggleAll]="false"></p-multiSelect>
           </div>
-        </ng-container>
+        </div>
+
+        <div class="card mt-8 mb-8 lg:mb-0 w-full sticky bottom-0 bg-white border-t border-neutral-100">
+          <button pButton label="{{ 'Continue' | translate }}" [disabled]="signupForm.controls.languages.value?.length < 1" class="w-full md:w-auto" (click)="nextStep()"></button>
+        </div>
       </div>
 
-      <div>
-        <button color="primary" [disabled]="!signupForm.valid" pButton label="{{'Continue' | translate}}"></button>
-      </div>
+      <ng-container *ngIf="activeStep == 3">
+        <div class="p-4 md:p-8">
+          <h4 translate>Let's try!</h4>
+          <p>To continue please enter your name and choose password.</p>
+
+          <ng-container *ngIf="errors.length > 0">
+            <p-messages severity="error">
+              <ng-template pTemplate>
+                <div *ngFor="let err of errors">
+                  {{ err.message }}
+                </div>
+              </ng-template>
+            </p-messages>
+          </ng-container>
+
+          <div class="p-fluid">
+            <div class="p-field g-field">
+              <label for="name">{{ 'Name' | translate }}</label>
+              <span class="p-input-icon-left">
+                <i class="pi pi-user"></i>
+                <input id="name" formControlName="name" pInputText type="text" />
+              </span>
+              <small class="p-invalid" *ngIf="checkError('name')">{{ getErrors('name') }}</small>
+            </div>
+
+            <div class="p-field g-field">
+              <label for="email">{{ 'Email' | translate }}</label>
+              <span class="p-input-icon-left">
+                <i class="pi pi-envelope"></i>
+                <input id="email" formControlName="email" pInputText type="text" />
+              </span>
+              <small class="p-invalid" *ngIf="checkError('email')">{{ getErrors('email') }}</small>
+            </div>
+
+            <div class="p-field g-field">
+              <label for="telephone">{{ 'Telephone' | translate }}</label>
+              <div class="w-full">
+                <ngx-intl-tel-input cssClass="p-inputtext p-component p-element" [enableAutoCountrySelect]="true" [separateDialCode]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" name="telephone" formControlName="telephone" [preferredCountries]="[country]" [numberFormat]="PhoneNumberFormat.National"></ngx-intl-tel-input>
+              </div>
+              <small class="p-invalid" *ngIf="checkError('telephone')">{{ getErrors('telephone') }}</small>
+            </div>
+
+            <div class="p-field g-field">
+              <label for="password">{{ 'Choose Password' | translate }}</label>
+              <span class="p-input-icon-left">
+                <i class="pi pi-lock" style="z-index: 1"></i>
+                <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true" [inputStyle]="{ 'padding-left': '2rem' }" styleClass="p-password p-component p-inputwrapper p-input-icon-right"></p-password>
+              </span>
+              <small class="p-invalid" *ngIf="checkError('password')">{{ getErrors('password') }}</small>
+            </div>
+            <ng-container *ngIf="!quickSignup">
+              <div class="p-field g-field">
+                <label for="passrepeat">{{ 'Repeat password' | translate }}</label>
+                <input id="passrepeat" formControlName="passrepeat" pInputText type="passrepeat" />
+                <small class="p-invalid" *ngIf="checkError('passrepeat')">{{ getErrors('passrepeat') }}</small>
+              </div>
+            </ng-container>
+          </div>
+
+          <div>
+            <button color="primary" [disabled]="!signupForm.valid" pButton label="{{ 'Continue' | translate }}"></button>
+          </div>
+        </div>
+      </ng-container>
     </form>
   </div>
 </div>

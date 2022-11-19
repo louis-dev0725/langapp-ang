@@ -21,7 +21,7 @@ _('snackbar.balance-edit-error');
 _('snackbar.settings-edit-success');
 _('snackbar.user-edit-success');
 
-_('valid-err.required');
-_('valid-err.email');
-_('valid-err.passconfirm');
-_('valid-err.min');
+_('validation-error.required');
+_('validation-error.email');
+_('validation-error.passconfirm');
+_('validation-error.min');

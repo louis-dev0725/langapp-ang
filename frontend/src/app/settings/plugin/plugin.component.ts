@@ -9,6 +9,7 @@ import { ApiService } from '@app/services/api.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { User } from '@app/interfaces/common.interface';
 import { UserService } from '@app/services/user.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @UntilDestroy()
 @Component({
@@ -25,14 +26,7 @@ export class PluginComponent implements OnInit, OnDestroy {
     processSubtitles: true,
   };
 
-  constructor(
-    private api: ApiService,
-    private formBuilder: FormBuilder,
-    private customValidator: CustomValidator,
-    private snackBar: MatSnackBar,
-    private userService: UserService,
-    private cd: ChangeDetectorRef
-  ) {}
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private customValidator: CustomValidator, private snackBar: MatSnackBar, private userService: UserService, private cd: ChangeDetectorRef, private translateService: TranslateService) {}
 
   private _isLoaded = false;
 
@@ -56,7 +50,8 @@ export class PluginComponent implements OnInit, OnDestroy {
       processSubtitles: new FormControl(true, [Validators.required]),
     });
 
-    this.api.usersMe()
+    this.api
+      .usersMe()
       .pipe(untilDestroyed(this))
       .subscribe((user: User) => {
         this.user = user;
@@ -77,7 +72,7 @@ export class PluginComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe((res) => {
         if (!(res instanceof ApiError)) {
-          this.snackBar.open(this.customValidator.messagesMap['snackbar.settings-edit-success'], null, { duration: 3000 });
+          this.snackBar.open(this.translateService.instant('snackbar.settings-edit-success'), null, { duration: 3000 });
           window.postMessage({ type: 'saveSettingExtension', text: 'ExtensionSettingPlugin_' + this.user.id }, '*');
         }
 

@@ -12,7 +12,7 @@ import { CustomValidator } from '@app/services/custom-validator';
   styleUrls: ['./signin.component.scss'],
 })
 export class SigninComponent implements OnInit {
-  constructor(private api: ApiService, private custValidator: CustomValidator, private formBuilder: FormBuilder, private router: Router) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private router: Router) {}
 
   signinForm: FormGroup;
   errors: FieldError[] = [];
@@ -42,9 +42,7 @@ export class SigninComponent implements OnInit {
   }
 
   getErrors(fieldName: string): string {
-    const errors = this.signinForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-    return this.custValidator.errorMap[key] ? this.custValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.signinForm, fieldName);
   }
 
   checkError(fieldName: string) {

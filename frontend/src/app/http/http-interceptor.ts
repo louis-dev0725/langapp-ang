@@ -53,7 +53,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         (err: any) => {
           loading = false;
           this.countRequestsWaiting--;
-          console.log('this.countRequestsWaiting', this.countRequestsWaiting);
+          // console.log('this.countRequestsWaiting', this.countRequestsWaiting);
           if (this.countRequestsWaiting <= 0) {
             this.eventsService.progressBarLoading.emit(false);
           }

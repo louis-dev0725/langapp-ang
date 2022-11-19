@@ -14,7 +14,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 @Component({
   selector: 'app-adm-transaction-edit',
   templateUrl: './adm-transaction-edit.component.html',
-  styleUrls: ['./adm-transaction-edit.component.scss']
+  styleUrls: ['./adm-transaction-edit.component.scss'],
 })
 export class AdmTransactionEditComponent implements OnInit, OnDestroy {
   transaction: Transaction;
@@ -22,16 +22,8 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
   transactionForm: FormGroup;
   transactionId;
 
-  constructor(
-    public session: SessionService,
-    private translatingService: TranslatingService,
-    private api: ApiService,
-    private customValidator: CustomValidator,
-    private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
-    private route: ActivatedRoute
-  ) {
-    this.route.params.pipe(untilDestroyed(this)).subscribe(params => {
+  constructor(public session: SessionService, private translatingService: TranslatingService, private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private route: ActivatedRoute) {
+    this.route.params.pipe(untilDestroyed(this)).subscribe((params) => {
       this.getTransaction(params.id);
     });
   }
@@ -46,7 +38,7 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
       comment: [''],
       isPartner: [''],
       isRealMoney: [''],
-      fromInvitedUserId: ['']
+      fromInvitedUserId: [''],
     });
   }
 
@@ -61,14 +53,14 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
           this.transaction = res;
           this.updateForm(res);
         },
-        err => {}
+        (err) => {}
       );
   }
 
   updateForm(res) {
     this.transactionForm.patchValue({
       id: res.id,
-      ...res
+      ...res,
     });
   }
 
@@ -77,9 +69,7 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.transactionForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.transactionForm, fieldName);
   }
 
   onTransactionSave() {
@@ -87,12 +77,12 @@ export class AdmTransactionEditComponent implements OnInit, OnDestroy {
       ...this.transactionForm.value,
       isCommon: this.transactionForm.value.isCommon ? 1 : 0,
       isPartner: this.transactionForm.value.isPartner ? 1 : 0,
-      isRealMoney: this.transactionForm.value.isRealMoney ? 1 : 0
+      isRealMoney: this.transactionForm.value.isRealMoney ? 1 : 0,
     };
     this.api
       .updateTransaction(data)
       .pipe(untilDestroyed(this))
-      .subscribe(res => {
+      .subscribe((res) => {
         if (res instanceof ApiError) {
           this.errors = res.error;
         } else {

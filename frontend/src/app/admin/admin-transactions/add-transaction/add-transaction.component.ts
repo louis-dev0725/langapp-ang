@@ -39,18 +39,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
     money: 0,
   };
 
-  constructor(
-    public session: SessionService,
-    private userService: UserService,
-    private api: ApiService,
-    private customValidator: CustomValidator,
-    private eventService: EventService,
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private translatingService: TranslatingService,
-    private cd: ChangeDetectorRef
-  ) {}
+  constructor(public session: SessionService, private userService: UserService, private api: ApiService, private customValidator: CustomValidator, private eventService: EventService, private formBuilder: FormBuilder, private router: Router, private snackBar: MatSnackBar, private translatingService: TranslatingService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {
@@ -74,9 +63,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.transactionForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.transactionForm, fieldName);
   }
 
   onCreateTransaction() {

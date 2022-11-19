@@ -70,10 +70,7 @@ export class CreateMaterialsComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.materialsForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.materialsForm, fieldName);
   }
 
   onSubmit() {

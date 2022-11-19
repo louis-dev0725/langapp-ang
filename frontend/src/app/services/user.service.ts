@@ -19,6 +19,8 @@ export class UserService {
   public lang$ = this.sessionSerivce.lang$;
   public token$ = this.sessionSerivce.token$;
 
+  availableLanguages = ['en', 'ru'];
+
   private interval: any;
 
   constructor(private http: HttpClient, private router: Router, private translateService: TranslateService, private eventService: EventService, private cookieService: CookieService, private api: ApiService, private sessionSerivce: SessionService, @Inject(PLATFORM_ID) private platformId: any) {
@@ -61,10 +63,17 @@ export class UserService {
     let langVal = this.cookieService.get('language');
     // let langVal = localStorage.getItem('lang');
     if (!langVal) {
-      langVal = window.navigator.language.slice(0, 2).toLowerCase();
-      if (langVal !== 'ru' && langVal !== 'en') {
-        langVal = 'en';
+      let browserLangs = window.navigator.languages ?? [window.navigator.language];
+      for (let browserLang of browserLangs) {
+        browserLang = browserLang.slice(0, 2).toLowerCase();
+        if (this.availableLanguages.indexOf(browserLang) !== -1) {
+          langVal = browserLang;
+          break;
+        }
       }
+    }
+    if (!langVal) {
+      langVal = 'en';
     }
     this.translateService.setDefaultLang('en');
     this._changeLanguage(langVal);

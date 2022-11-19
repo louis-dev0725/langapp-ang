@@ -30,16 +30,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   @ViewChild('frmVar', { static: true }) form;
   @ViewChild('recaptcha', { static: true }) recaptcha: ReCaptcha2Component;
 
-  constructor(
-    private translatingService: TranslatingService,
-    public api: ApiService,
-    private customValidator: CustomValidator,
-    private formBuilder: FormBuilder,
-    private ref: ChangeDetectorRef,
-    private snackBar: MatSnackBar,
-    private userService: UserService,
-    private cd: ChangeDetectorRef
-  ) {}
+  constructor(private translatingService: TranslatingService, public api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private ref: ChangeDetectorRef, private snackBar: MatSnackBar, private userService: UserService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.contactForm = this.formBuilder.group({
@@ -82,9 +73,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.contactForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.contactForm, fieldName);
   }
 
   resetCaptcha() {

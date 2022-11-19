@@ -15,7 +15,7 @@ import { combineLatest } from 'rxjs';
 @Component({
   selector: 'app-edit-materials',
   templateUrl: './edit-materials.component.html',
-  styleUrls: ['./edit-materials.component.scss']
+  styleUrls: ['./edit-materials.component.scss'],
 })
 export class EditMaterialsComponent implements OnInit, OnDestroy {
   material: Content;
@@ -25,9 +25,7 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
   categories = [];
   types = [];
 
-  constructor(public session: SessionService, private translatingService: TranslatingService, private api: ApiService,
-    private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar,
-    private route: ActivatedRoute, private router: Router) { }
+  constructor(public session: SessionService, private translatingService: TranslatingService, private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) {}
 
   @Input()
   set isLoaded(val: boolean) {
@@ -42,24 +40,24 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.material_id = this.route.snapshot.paramMap.get('id');
-    combineLatest([this.api.contentById(this.material_id), this.api.getContentTypes(),
-    this.api.getCategories()]).pipe(untilDestroyed(this)).subscribe(([material, type, category]) => {
+    combineLatest([this.api.contentById(this.material_id), this.api.getContentTypes(), this.api.getCategories()])
+      .pipe(untilDestroyed(this))
+      .subscribe(([material, type, category]) => {
+        this.types = type;
+        if (!(category instanceof ApiError)) {
+          this.categories = category.items;
+        } else {
+          this.errors.push(category.error);
+        }
+        if (!(material instanceof ApiError)) {
+          this.material = material;
+          this.updateForm(this.material);
+        } else {
+          this.errors = material.error;
+        }
 
-      this.types = type;
-      if (!(category instanceof ApiError)) {
-        this.categories = category.items;
-      } else {
-        this.errors.push(category.error);
-      }
-      if (!(material instanceof ApiError)) {
-        this.material = material;
-        this.updateForm(this.material);
-      } else {
-        this.errors = material.error;
-      }
-
-      this._isLoaded = true;
-    });
+        this._isLoaded = true;
+      });
 
     const urlRegex = /^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
     this.materialForm = this.formBuilder.group({
@@ -74,13 +72,13 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
 
   updateForm(res) {
     const cat = [];
-    res.categories.forEach(category => {
+    res.categories.forEach((category) => {
       cat.push(category.id);
     });
     this.materialForm.patchValue({
       id: res.id,
       ...res,
-      category: cat
+      category: cat,
     });
   }
 
@@ -89,9 +87,7 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.materialForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.materialForm, fieldName);
   }
 
   onSubmit() {
@@ -102,21 +98,24 @@ export class EditMaterialsComponent implements OnInit, OnDestroy {
       length: this.materialForm.value.text.length,
       level: 'N3',
       status: this.material.status,
-      deleted: this.material.deleted
+      deleted: this.material.deleted,
     };
-    this.api.updateMaterials(materials).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.translatingService.translates['confirm'].materials.updated, null, { duration: 3000 });
-        setTimeout(() => {
-          this.router.navigate(['/content/materials']);
-        }, 3100);
-      } else {
-        this.errors = res.error;
-      }
+    this.api
+      .updateMaterials(materials)
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.snackBar.open(this.translatingService.translates['confirm'].materials.updated, null, { duration: 3000 });
+          setTimeout(() => {
+            this.router.navigate(['/content/materials']);
+          }, 3100);
+        } else {
+          this.errors = res.error;
+        }
 
-      this._isLoaded = true;
-    });
+        this._isLoaded = true;
+      });
   }
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 }

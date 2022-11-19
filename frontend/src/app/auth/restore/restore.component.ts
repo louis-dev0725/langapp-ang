@@ -8,7 +8,7 @@ import { ApiError } from '@app/services/api-error';
 @Component({
   selector: 'app-restore',
   templateUrl: './restore.component.html',
-  styleUrls: ['./restore.component.scss']
+  styleUrls: ['./restore.component.scss'],
 })
 export class RestoreComponent implements OnInit {
   readonly MODE_REQUEST = 'request-link';
@@ -29,12 +29,7 @@ export class RestoreComponent implements OnInit {
     }
   }
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private customValidator: CustomValidator,
-    private api: ApiService,
-    private router: Router
-  ) {
+  constructor(private activatedRoute: ActivatedRoute, private customValidator: CustomValidator, private api: ApiService, private router: Router) {
     if (this.activatedRoute.snapshot.data.mode) {
       this.mode = activatedRoute.snapshot.data.mode;
     }
@@ -48,7 +43,7 @@ export class RestoreComponent implements OnInit {
   changeForm() {
     if (this.mode === this.MODE_REQUEST) {
       this.restoreForm = new FormGroup({
-        email: new FormControl('', { validators: [Validators.required, Validators.email], updateOn: 'change' })
+        email: new FormControl('', { validators: [Validators.required, Validators.email], updateOn: 'change' }),
       });
     }
 
@@ -56,7 +51,7 @@ export class RestoreComponent implements OnInit {
       this.restoreForm = new FormGroup(
         {
           password: new FormControl('', { validators: [Validators.required], updateOn: 'change' }),
-          passrepeat: new FormControl('', { validators: [Validators.required], updateOn: 'change' })
+          passrepeat: new FormControl('', { validators: [Validators.required], updateOn: 'change' }),
         },
         CustomValidator.confirmPasswordCheck
       );
@@ -68,15 +63,13 @@ export class RestoreComponent implements OnInit {
   }
 
   getErrors(fieldName: string): string {
-    const errors = this.restoreForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.restoreForm, fieldName);
   }
 
   onSubmit() {
     this.errors = [];
     if (this.mode === this.MODE_REQUEST) {
-      this.api.restorePasswordRequest(this.restoreForm.value).subscribe(res => {
+      this.api.restorePasswordRequest(this.restoreForm.value).subscribe((res) => {
         if (res instanceof ApiError) {
           this.mode = this.MODE_REQUEST;
           this.errors = res.error;
@@ -86,7 +79,7 @@ export class RestoreComponent implements OnInit {
     }
 
     if (this.mode === this.MODE_PASSWORD) {
-      this.api.changePassword(this.restoreForm.value).subscribe(res => {
+      this.api.changePassword(this.restoreForm.value).subscribe((res) => {
         this.router.navigate(['/payment']);
       });
     }

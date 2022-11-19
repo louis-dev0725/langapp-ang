@@ -1,32 +1,24 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { EventService } from '@app/event.service';
 
 @Injectable()
 export class CustomValidator {
+  constructor(private translateService: TranslateService) {}
 
-  constructor(private eventService: EventService, private translate: TranslateService) {
-    this.callTranslate();
-    this.eventService.emitter.subscribe(event => {
-      if (event.type === 'language-change') {
-        this.callTranslate();
+  getErrors(form: FormGroup, fieldName: string): string {
+    const errors = [];
+    const originalErrors = form.get(fieldName).errors;
+    for (let key of Object.keys(originalErrors)) {
+      let value = this.translateService.instant('validation-error.' + key);
+      if (value == key) {
+        value = this.translateService.instant('validation-error.default');
       }
-    });
-  }
-  errorMap = {
-    required: 'This field is required',
-    email: 'This is not valid email',
-    passconfirm: 'Password and repeat password are not equals',
-    min: 'The amount must be equals to or greater than',
-    pattern: 'Not format url'
-  };
+      errors.push(value);
+    }
 
-  messagesMap = {
-    'snackbar.balance-edit-error': 'Error when recalculating balance',
-    'snackbar.settings-edit-success': 'Settings was successfully saved',
-    'snackbar.user-edit-success': 'User profile was successfully saved'
-  };
+    return errors.join('\n');
+  }
 
   /**
    * this method used as a custom validator to check
@@ -41,20 +33,5 @@ export class CustomValidator {
     } else {
       return null;
     }
-  }
-
-  callTranslate() {
-    const keys = Object.keys(this.errorMap).map(key => {
-      return 'valid-err.' + key;
-    });
-    const originalKeys = Object.keys(this.errorMap);
-    this.translate.get(keys).subscribe(res => {
-      originalKeys.forEach((key, idx) => {
-        this.errorMap[key] = res[keys[idx]];
-      });
-    });
-    this.translate.get(Object.keys(this.messagesMap)).subscribe(res => {
-      this.messagesMap = res;
-    });
   }
 }

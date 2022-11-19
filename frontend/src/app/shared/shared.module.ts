@@ -43,6 +43,7 @@ import { AsPipe } from '../pipes/as.pipe';
 import { InplaceModule } from 'primeng/inplace';
 import { ProgressCircleComponent } from './progress-circle/progress-circle.component';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { SvgIconComponent } from './svg-icon/svg-icon.component';
 
 let sharedModules = [
   // primeng
@@ -85,7 +86,7 @@ let sharedModules = [
   MatRadioModule,
 ];
 
-let sharedComponents = [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, AsPipe, ProgressCircleComponent];
+let sharedComponents = [FormatDatePipe, FormatNumbersPipe, RoundToPipe, FormatCurrencyPipe, OnclickTranslationDirective, AsPipe, ProgressCircleComponent, SvgIconComponent];
 
 @NgModule({
   declarations: [...sharedComponents],

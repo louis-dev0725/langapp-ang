@@ -8,12 +8,13 @@ import { SessionService } from '@app/services/session.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { TranslateService } from '@ngx-translate/core';
 
 @UntilDestroy()
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   settingsForm: FormGroup;
@@ -36,12 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     return this.user.isServicePaused !== undefined ? this.user.isServicePaused : false;
   }
 
-  constructor(private api: ApiService,
-    private customValidator: CustomValidator,
-    private formBuilder: FormBuilder,
-    private session: SessionService,
-    private changeDetector: ChangeDetectorRef,
-    private messageService: MessageService) { }
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private session: SessionService, private changeDetector: ChangeDetectorRef, private messageService: MessageService, private translateService: TranslateService) {}
 
   ngOnInit() {
     this.settingsForm = this.formBuilder.group({
@@ -58,10 +54,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
       languages: [[], { validators: [Validators.required], updateOn: 'change' }],
     });
 
-    combineLatest([this.api.usersMe(), this.api.getAllLanguage()]).pipe(untilDestroyed(this))
+    combineLatest([this.api.usersMe(), this.api.getAllLanguage()])
+      .pipe(untilDestroyed(this))
       .subscribe(([user, languages]) => {
         this.user = user;
-        this.languages = languages.items.map(l => ({
+        this.languages = languages.items.map((l) => ({
           label: l.title,
           value: l.code,
         }));
@@ -80,29 +77,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.languagesPlaceholder = 'Select'; // Workaround for issue https://github.com/primefaces/primeng/issues/9673
       });
 
-    this.api.getTimeZones().pipe(untilDestroyed(this)).subscribe((res: any) => {
-      this.timeZones = res.map(t => ({
-        label: t.group,
-        value: t.group,
-        disabled: true,
-        items: t.zones.map(z => ({
-          label: z.value,
-          value: z.value,
-        }))
-      }));
-    });
+    this.api
+      .getTimeZones()
+      .pipe(untilDestroyed(this))
+      .subscribe((res: any) => {
+        this.timeZones = res.map((t) => ({
+          label: t.group,
+          value: t.group,
+          disabled: true,
+          items: t.zones.map((z) => ({
+            label: z.value,
+            value: z.value,
+          })),
+        }));
+      });
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 
   checkError(fieldName: string) {
     return !this.settingsForm.get(fieldName).valid;
   }
 
   getError(fieldName: string) {
-    const errors = this.settingsForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.settingsForm, fieldName);
   }
 
   onPasswordFlagChange() {
@@ -112,14 +110,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
         'password',
         this.formBuilder.control('', {
           validators: [Validators.required],
-          updateOn: 'change'
+          updateOn: 'change',
         })
       );
       this.settingsForm.addControl(
         'passrepeat',
         this.formBuilder.control('', {
           validators: [Validators.required],
-          updateOn: 'change'
+          updateOn: 'change',
         })
       );
       this.settingsForm.setValidators([CustomValidator.confirmPasswordCheck]);
@@ -152,12 +150,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (this.settingsForm.value.language2 === null || this.settingsForm.value.language2 === '') {
       this.settingsForm.value.language3 = null;
     }
-    this.api.updateUser(value).pipe(untilDestroyed(this)).subscribe(result => {
-      if (result instanceof ApiError) {
-        this._errors = result.error;
-      } else {
-        this.messageService.add({ severity: 'success', summary: this.customValidator.messagesMap['snackbar.settings-edit-success'], detail: this.customValidator.messagesMap['snackbar.settings-edit-success'] });
-      }
-    });
+    this.api
+      .updateUser(value)
+      .pipe(untilDestroyed(this))
+      .subscribe((result) => {
+        if (result instanceof ApiError) {
+          this._errors = result.error;
+        } else {
+          this.messageService.add({ severity: 'success', summary: this.translateService.instant('snackbar.settings-edit-success'), detail: this.translateService.instant('snackbar.settings-edit-success') });
+        }
+      });
   }
 }

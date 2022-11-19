@@ -15,7 +15,7 @@ import { Category } from '@app/interfaces/common.interface';
 @Component({
   selector: 'app-edit-category',
   templateUrl: './edit-category.component.html',
-  styleUrls: ['./edit-category.component.scss']
+  styleUrls: ['./edit-category.component.scss'],
 })
 export class EditCategoryComponent implements OnInit, OnDestroy {
   categoryForm: FormGroup;
@@ -24,9 +24,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   errors: any = [];
   parents = [];
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar, private router: Router, private session: SessionService,
-    private translatingService: TranslatingService, private route: ActivatedRoute) { }
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private router: Router, private session: SessionService, private translatingService: TranslatingService, private route: ActivatedRoute) {}
 
   @Input()
   set isLoaded(val: boolean) {
@@ -42,21 +40,22 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.category_id = this.route.snapshot.paramMap.get('id');
     combineLatest([this.api.getCategoryById(this.category_id), this.api.getCategories()])
-      .pipe(untilDestroyed(this)).subscribe(([category, parents]) => {
-      if (!(category instanceof ApiError)) {
-        this.category = category;
-        this.updateForm(this.category);
-      } else {
-        this.errors.push(category.error);
-      }
-      if (!(parents instanceof ApiError)) {
-        this.parents = parents.items;
-      } else {
-        this.errors = parents.error;
-      }
+      .pipe(untilDestroyed(this))
+      .subscribe(([category, parents]) => {
+        if (!(category instanceof ApiError)) {
+          this.category = category;
+          this.updateForm(this.category);
+        } else {
+          this.errors.push(category.error);
+        }
+        if (!(parents instanceof ApiError)) {
+          this.parents = parents.items;
+        } else {
+          this.errors = parents.error;
+        }
 
-      this._isLoaded = true;
-    });
+        this._isLoaded = true;
+      });
 
     this.categoryForm = this.formBuilder.group({
       id: ['', { validators: [Validators.nullValidator] }],
@@ -76,10 +75,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.categoryForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.categoryForm, fieldName);
   }
 
   checkUserSelection(id) {
@@ -92,19 +88,22 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     const category = {
       ...this.categoryForm.value,
     };
-    this.api.updateCategory(category).pipe(untilDestroyed(this)).subscribe(res => {
-      if (!(res instanceof ApiError)) {
-        this.snackBar.open(this.translatingService.translates['confirm'].categories.updated, null, {duration: 3000});
-        setTimeout(() => {
-          this.router.navigate(['/category/categories']);
-        }, 3100);
-      } else {
-        this.errors = res.error;
-      }
+    this.api
+      .updateCategory(category)
+      .pipe(untilDestroyed(this))
+      .subscribe((res) => {
+        if (!(res instanceof ApiError)) {
+          this.snackBar.open(this.translatingService.translates['confirm'].categories.updated, null, { duration: 3000 });
+          setTimeout(() => {
+            this.router.navigate(['/category/categories']);
+          }, 3100);
+        } else {
+          this.errors = res.error;
+        }
 
-      this._isLoaded = true;
-    });
+        this._isLoaded = true;
+      });
   }
 
-  ngOnDestroy () {}
+  ngOnDestroy() {}
 }

@@ -169,12 +169,14 @@
 		"user-edit-success": "User profile was successfully saved"
 	},
 	"userId": "User ID",
-	"valid-err": {
+	"validation-error": {
 		"email": "This is not valid email",
 		"min": "The amount must be equals to or greater than",
 		"passconfirm": "Password and repeat password are not equals",
 		"required": "This field is required",
-		"pattern": "Link does not match format"
+		"pattern": "Link does not match format",
+		"validatePhoneNumber": "Please fill correct phone number",
+		"default": "Please fill correctly"
 	},
 	"Materials": "Materials",
 	"Create material": "Create material",

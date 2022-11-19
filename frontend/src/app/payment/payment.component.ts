@@ -177,8 +177,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   getError() {
-    const key = Object.keys(this.paymentForm.get('amount').errors);
-    return key ? this.customValidator.errorMap[key[0]] + ` ${this.minVal} ` : '';
+    return this.customValidator.getErrors(this.paymentForm, 'amount') + ` ${this.minVal} `;
   }
 
   onPayment() {

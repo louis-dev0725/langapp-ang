@@ -22,11 +22,14 @@ class CategoryController extends ActiveController
     {
         $behaviors = parent::behaviors();
 
+        $availableToEveryone = ['options', 'index', 'view'];
+
+        $behaviors['authenticator']['optional'] = $availableToEveryone;
         $behaviors['access']['rules'] = [
             [
                 'allow' => true,
-                'actions' => ['index', 'view'],
-                'roles' => ['@'],
+                'actions' => $availableToEveryone,
+                //'roles' => ['?'],
             ],
             [
                 'allow' => true,

@@ -77,10 +77,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.filterForm.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.filterForm, fieldName);
   }
 
   getQueryParamsForUrl() {

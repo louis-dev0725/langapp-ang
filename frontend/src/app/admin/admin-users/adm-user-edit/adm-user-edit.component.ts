@@ -237,9 +237,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   }
 
   getError(fieldName: string) {
-    const errors = this.userProfile.get(fieldName).errors;
-    const key = Object.keys(errors)[0];
-    return this.customValidator.errorMap[key] ? this.customValidator.errorMap[key] : '';
+    return this.customValidator.getErrors(this.userProfile, fieldName);
   }
 
   onPasswordFlagChange() {
@@ -283,7 +281,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
         if (res instanceof ApiError) {
           this._errors = res.error;
         } else {
-          this.snackBar.open(this.customValidator.messagesMap['snackbar.user-edit-success'], null, { duration: 3000 });
+          this.snackBar.open(this.translate.instant('snackbar.user-edit-success'), null, { duration: 3000 });
         }
       });
   }
@@ -294,7 +292,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe((res) => {
         if (res instanceof ApiError) {
-          this.snackBar.open(this.customValidator.messagesMap['snackbar.balance-edit-error'], null, { duration: 3000 });
+          this.snackBar.open(this.translate.instant('snackbar.balance-edit-error'), null, { duration: 3000 });
         } else {
           this.snackBar.open('Balance recalculated', null, { duration: 3000 });
         }

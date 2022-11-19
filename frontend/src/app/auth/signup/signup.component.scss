@@ -1,0 +1,31 @@
+@media (max-width: 767px) {
+    :host ::ng-deep .button-text-left .p-button-label {
+        text-align: left;
+        padding-left: 0.5rem;
+    }
+
+    .button-text-left {
+        padding-left: 0.6rem;
+    }
+}
+@media (min-width: 768px) {
+    :host ::ng-deep .button-text-left .p-button-label {
+        text-align: left;
+        padding-left: 1rem;
+    }
+
+    :host ::ng-deep .button-text-left svg {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+:host ::ng-deep .p-multiselect-label {
+    white-space: initial;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+:host ::ng-deep p-multiselect-token {
+    margin-right: 0;
+}
