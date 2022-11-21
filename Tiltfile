@@ -1,4 +1,6 @@
 load('ext://uibutton', 'cmd_button')
+# Disable analytics
+analytics_settings(enable=False)
 
 # Extend https://github.com/tilt-dev/tilt-extensions/blob/master/dotenv/Tiltfile
 def dotenv(fn='.env'):
@@ -15,7 +17,7 @@ dotenv('.env.defaults')
 dotenv('.env')
 
 is_win = os.getenv('OS') == 'Windows_NT'
-http_port = os.getenv('HTTP_PORT')
+http_port = int(os.getenv('HTTP_PORT'))
 
 if (not is_win):
   os.putenv('APP_DIR_TO_SHARE', './')
