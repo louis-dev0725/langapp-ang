@@ -15,7 +15,7 @@ class m221103_075511_add_columns_to_users_table extends Migration
     {
         $this->addColumn('{{%users}}', 'favoriteCategoryId', 'jsonb NOT NULL DEFAULT \'[]\'::jsonb');
         $this->addColumn('{{%users}}', 'languageLevel', 'text DEFAULT \'\'');
-        $this->addColumn('{{%dailyGoal}}', 'languageLevel', 'int4 DEFAULT 60');
+        $this->addColumn('{{%users}}', 'dailyGoal', 'int4 DEFAULT 60');
     }
 
     /**
