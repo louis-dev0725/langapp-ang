@@ -1,155 +1,151 @@
 # LangApp
 
 - [LangApp](#langapp)
-- [Установка и запуск](#установка-и-запуск)
-  - [Подготовка](#подготовка)
-  - [Запуск](#запуск)
-- [Ссылки и пароли](#ссылки-и-пароли)
-  - [Само приложение](#само-приложение)
-    - [Тестовый администратор](#тестовый-администратор)
-    - [Тестовый пользователь](#тестовый-пользователь)
-  - [Документация к API](#документация-к-api)
+  - [How to start](#how-to-start)
+    - [Option 1: Quick (via codespace)](#option-1-quick-via-codespace)
+    - [Option 2: locally](#option-2-locally)
+  - [Launch](#launch)
+- [References and passwords](#references-and-passwords)
+  - [The application itself](#the-application-itself)
+    - [Test administrator](#test-administrator)
+    - [Test user](#test-user)
+  - [API documentation](#api-documentation)
   - [PostgreSQL](#postgresql)
-    - [Доступ к PostgreSQL:](#доступ-к-postgresql)
-  - [Бэкенд на PHP (Yii2)](#бэкенд-на-php-yii2)
+    - [Access to PostgreSQL:](#access-to-postgresql)
+  - [PHP backend (Yii2)](#php-backend-yii2)
     - [Yii Debugger](#yii-debugger)
     - [xdebug](#xdebug)
-- [Информация о Tilt](#информация-о-tilt)
-- [Полезные команды](#полезные-команды)
-- [Полезные скрипты](#полезные-скрипты)
+- [Tilt information](#tilt-information)
+- [Useful commands](#useful-commands)
+- [Useful scripts](#useful-scripts)
 
-# Подготовка
+## How to start
 
-## Вариант 1: быстро (через codespace)
+### Option 1: Quick (via codespace)
 
-Из браузера:
-1. [Создайте codespace](https://github.com/codespaces/new?hide_repo_select=true&ref=master&repo=568000975&machine=standardLinux32gb) и запустите его.
+From the browser:
+1. [Create codespace](https://github.com/codespaces/new?hide_repo_select=true&ref=master&repo=568000975&machine=standardLinux32gb) and run it.
 
-Если вы используете VS Code ([подробная инструкция](https://docs.github.com/en/codespaces/developing-in-codespaces/using-github-codespaces-in-visual-studio-code#creating-a-codespace-in-vs-code)):
-1. Установите расширение [GitHub Codespaces](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces)
-2. Перейдите на вкладку Remote Explorer
-3. Выберите в выпадающем списке GitHub Codespaces.
-4. Нажмите на кнопку "+" и создайте codespace для текущего репозитория.
+If you are using VS Code ([detailed instructions](https://docs.github.com/en/codespaces/developing-in-codespaces/using-github-codespaces-in-visual-studio-code#creating-a-codespace-in-vs-code)):
+1. Install the [GitHub Codespaces](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces) extension
+2. Switch to "Remote Explorer" tab
+3. Select "GitHub Codespaces" from the drop-down list.
+4. Click the "+" button and create a codespace for the current repository.
 
-Если вы используете IDE от JetBrains:
-1. [Подробная инструкция](https://docs.github.com/en/codespaces/developing-in-codespaces/using-github-codespaces-in-your-jetbrains-ide)
+If you are using an IDE from JetBrains:
+1. [Detailed instructions](https://docs.github.com/en/codespaces/developing-in-codespaces/using-github-codespaces-in-your-jetbrains-ide)
 
-К codespace можно подключиться из VS Code или WebStorm/PhpStorm.
+### Option 2: locally
+1. Install [Tilt](https://docs.tilt.dev/install.html), and [Docker](https://docs.docker.com/get-docker/) (if not already installed).
 
-## Вариант 2: локально
-1\) Установите [Tilt](https://docs.tilt.dev/install.html), а также [Docker](https://docs.docker.com/get-docker/) (если ещё не установлен).
+2. Clone this repository.
 
-2\) Склонируйте репозиторий любым удобным для вас способом, например в терминале:
-```bash
-git clone git@gitlab.com:mangoproject/langapp.git && cd langapp
-```
-
-## Запуск
-1\) Запустите в терминале:
+## Launch
+1. Run in the terminal:
 ```bash
 tilt up
 ```
 
-2\) Откройте [http://localhost:10350/](http://localhost:10350/).\
-На этой странице можно посмотреть логи, статус сборки и другую информацию. Первый запуск может занять некоторое время, дождитесь пока все ресурсы не станут зелеными.
+2. Open [http://localhost:10350/](http://localhost:10350/).\
+On this page you can check logs, build status and other information. The first run may take some time, please wait until all resources are green.\
 
-При необходимости (например при изменении порта) нужные контейнеры можно перезагрузить с помощью кнопки "Trigger update" рядом с контейнером.
+If necessary (e.g. if you change the port) you can restart the desired containers with the "Trigger update" button next to the container.
 
-3\) Откройте в браузере [http://localhost:8080/app/](http://localhost:8080/app/)\
-Это само приложение.
+3. Open [http://localhost:8080/app/](http://localhost:8080/app/) in your browser.
+This is the application itself.
 
-4\) Если вы хотите установить какие-то зависимости, то это нужно делать внутри контейнера `web` (консоль можно открыть с помощью скрипта `run/terminal-web.sh`).
+4. If you want to install any dependencies, you can do it inside the `web` container (the console can be opened with the `run/terminal-web.sh` script).
 
-**Дополнительно:**
+**Additionally:**
 
-Если запускаете локально и хотите остановить проект, запустите
-`docker-compose stop`. Чтобы удалить созданные контейнеры, запустите `tilt down`.
+If you run locally and want to stop the project, run
+`docker-compose stop`. To remove created containers, run `tilt down`.
 
-Если у вас занят какой-то из портов, который используется при запуске (например 8080, 443, 5432), то вы можете поменять его в `.env`.
+If you have any of the ports you use at startup (like 8080, 443, 5432) busy, you can change it in `.env`.
 
-# Ссылки и пароли
-## Само приложение
+# References and passwords
+## The application itself
 http://localhost/app
 
-### Тестовый администратор
-Логин: admin@example.org\
-Пароль: adminpassword
+### Test administrator
+Login name: admin@example.org\
+Password: adminpassword
 
-### Тестовый пользователь
-Логин: user@example.org\
-Пароль: userpassword
+### Test user
+Login: user@example.org\
+Password: userpassword
 
-## Документация к API
-В Swagger UI: http://localhost:5005
+## API documentation
+In Swagger UI: http://localhost:5005
 
 ## PostgreSQL
-<!--pgAdmin4 доступен по адресу http://localhost:5001/\
-adminer доступен по адресу http://localhost:5002/?pgsql=db&username=postgres&db=postgres&ns=public-->
+<!--pgAdmin4 available at http://localhost:5001/\
+adminer available at http://localhost:5002/?pgsql=db&username=postgres&db=postgres&ns=public-->
 
-### Доступ к PostgreSQL:
-Хост: 127.0.0.1\
-Порт: 5432\
-Логин: postgres\
-Пароль: postgres\
-База данных: postgres
+### Access to PostgreSQL:
+Host: 127.0.0.1\
+Port: 5432\
+Login: postgres\
+Password: postgres
+Database: postgres
 
-## Бэкенд на PHP (Yii2)
+## PHP backend (Yii2)
 ### Yii Debugger
-Yii Debugger доступен по адресу http://localhost/debug
+The Yii Debugger is available at http://localhost/debug
 
 ### xdebug
-Для активации и использования xdebug рекомендуем установить расширение https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc
+To activate and use xdebug, you can install the extension https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc
 
-Также активировать xdebug можно вручную с помощью GET параметра `XDEBUG_SESSION_START`, например `/api/?XDEBUG_SESSION_START=1` и деактивировать с помощью GET параметра XDEBUG_SESSION_STOP, например `/api/?XDEBUG_SESSION_STOP=1` подробнее https://xdebug.org/docs/remote#browser_session
+You can also activate xdebug manually with the GET parameter `XDEBUG_SESSION_START`, for example `/api/?XDEBUG_SESSION_START=1` and deactivate it with the GET parameter XDEBUG_SESSION_STOP, for example `/api/?XDEBUG_SESSION_STOP=1` more https://xdebug.org/docs/remote#browser_session
 
 
-# Информация о Tilt
-Для каждого ресурса можно посмотреть логи, а также перезапустить его.
+# Tilt information
+You can see the logs for each resource, and you can also restart it.
 
-Ресурсы в Tilt:\
-**web** - контейнер web (из docker-composer)\
-**web-initial-sync** - (только Windows) начальная синхронизация файлов с контейнером
-**web-sync** - (только Windows) синхронизация файлов с контейнером
-**web-frontend** - `ng serve` для Angular (внутри контейнера web)\
-**web-backend-php** - выполняет `composer install` и миграции для бэкенда на PHP (Yii2, папка `backend/`) <!--(только первый раз при запуске, далее Tilt выполняет `composer install` если composer.json изменился и показывает результат в `web`)-->\
-**web-backend-ts** - выполняет `nest start --watch` для бэкенда на TypeScript (nestjs)\
-**db** - контейнер с PostgreSQL (из docker-composer)\
-**redis** - контейнер с Redis (из docker-composer)\
-**swagger** - контейнер с Swagger UI (документация к API) (из docker-composer)\
-**arena** - контейнер с arena (из docker-composer)\
-**(Tiltfile)** - Конфигурация Tilt
-<!--**adminer**, **arena**, **pgadmin** - контейнеры с adminer, arena, pgadmin (из docker-composer)\-->
+The resources in Tilt:\
+**web** - web container (from docker-composer)\
+**web-initial-sync** - (Windows only) initial synchronization of files with the container\
+**web-sync** - (Windows only) continuous file synchronization with a container\
+**web-frontend** - `ng serve` for Angular (inside web container)\
+**web-backend-php** - runs `composer install` and migration for PHP backend (Yii2, folder `backend/`) <!--(first time only, then Tilt will run `composer install` if composer.json is changed and show results in `web`)-->\
+**web-backend-ts** - executes `nest start --watch` for TypeScript backend (nestjs)\
+**db** - container with PostgreSQL (from docker-composer)\
+**redis** - container with Redis (from docker-composer)\
+**swagger** - container with Swagger UI (API documentation) (from docker-composer)\
+**arena** - arena container (from docker-composer)\
+**(Tiltfile)** - Tilt configuration
+<!--**adminer**, **arena**, **pgadmin** - containers with adminer, arena, pgadmin (from docker-composer)\-->
 
-`node_modules` внутри контейнера расположены на отдельной volume и не синхронизируются с хостом, поэтому после запуска `npm install` на хосте нужно нажать "Обновить" рядом с `web-frontend` (или `web-backend-ts`) в Tilt, либо вручную запустить `npm install` в нужной папке
+`node_modules` inside the container are located on a separate volume and are not synchronized with the host, so after running `npm install` on the host you need to click on "Update" next to the `web-frontend` (or `web-backend-ts`) in Tilt, or manually run `npm install` in the desired folder
 
-# Полезные команды
+# Useful commands
 
 
 ```bash
-# Tilt и Docker
-tilt up # Запуск проекта
-docker-compose stop # Остановка проекта
-tilt down # Остановка проекта и удаление контейнеров
-docker-compose down --volumes # Остановка и удаление docker контейнеров вместе с volumes (база данных, кеши и т.д.)
+# Tilt and Docker
+tilt up # Start the project
+docker-compose stop # Stop the project
+tilt down # Stopping the project and removing containers
+docker-compose down --volumes # Stopping and removing docker containers along with volumes (database, caches, etc.)
 
-# Контейнер web (backend и frontend)
-docker-compose exec web [command] # Запуск команды в контейнере web
-docker-compose exec web bash # Запуск bash в контейнере web (см. также run/terminal-web.sh)
+# Container web (backend and frontend)
+docker-compose exec web [command] # Runs a command in the web container
+docker-compose execute web bash # Run bash in the web container (see also run/terminal-web.sh)
 
-# composer install и миграции также можно запустить нажав "Trigger update" у web-backend-php в Tilt
+# composer install and migration can also be triggered by pressing "Trigger update" on web-backend-php in Tilt
 docker-compose exec web composer install # composer install 
-docker-compose exec web ./yii migrate/up --interactive 0 # Миграции
-docker-compose exec web ./yii migrate-data/up --interactive 0 # Миграции для данных (словарь и т.д.)
+docker-compose exec web ./yii migrate/up --interactive 0 # Migrations
+docker-compose exec web ./yii migrate-data/up --interactive 0 # Migrations for data (dictionary, etc.)
 
-# npm install также можно запустить нажав Trigger update" у web-frontend/web-backend-ts в Tilt
-docker-compose exec -w /app/backend-ts web sh -c 'NG_CLI_ANALYTICS=ci npm install --no-audit' # npm install для backend-ts
-docker-compose exec -w /app/frontend web sh -c 'cd backend-ts && NG_CLI_ANALYTICS=ci npm install --no-audit' # npm install для frontend
+The # npm install can also be run by pressing Trigger update" at web-frontend/web-backend-ts in Tilt
+docker-compose exec -w /app/backend-ts web sh -c 'NG_CLI_ANALYTICS=ci npm install --no-audit' # npm install for backend-ts
+docker-compose exec -w /app/frontend web sh -c 'cd backend-ts && NG_CLI_ANALYTICS=ci npm install --no-audit' # npm install for frontend
 
-docker-compose exec -w /app/frontend web npm start -- --host 0.0.0.0 # npm start (запускает ng serve)
-docker-compose exec -w /app/frontend web npm run ng -- --help # Запуск ng  
-docker-compose exec -w /app/frontend web npm run ng -- build --prod # запускает ng build --prod
+docker-compose exec -w /app/frontend web npm start -- --host 0.0.0.0 # npm start (starts ng serve)
+docker-compose exec -w /app/frontend web npm run ng -- --help # ng start  
+docker-compose exec -w /app/frontend web npm run ng -- build --prod # run ng build --prod
 ```
 
-# Полезные скрипты
+# Useful scripts
 
-- `run/terminal-web.sh` открывает терминал в Docker контейнере web (доступ к консоли yii, npm и так далее)
+- `run/terminal-web.sh` opens the terminal in the Docker container web (access to the yii console, npm and so on)
