@@ -15,6 +15,7 @@ dotenv('.env.defaults')
 dotenv('.env')
 
 is_win = os.getenv('OS') == 'Windows_NT'
+http_port = os.getenv('HTTP_PORT')
 
 if (not is_win):
   os.putenv('APP_DIR_TO_SHARE', './')
@@ -77,9 +78,9 @@ local_resource('web-frontend',
   serve_cmd = 'while true; do docker-compose exec  -e LOAD_TEST_DATA=$LOAD_TEST_DATA -e TEST_DATA_URL=$TEST_DATA_URL -T web bash /app/run/_web-start-frontend.sh; done',
   serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -e LOAD_TEST_DATA=%LOAD_TEST_DATA% -e TEST_DATA_URL=%TEST_DATA_URL% -T web bash /app/run/_web-start-frontend.sh',
   allow_parallel = True,
-  resource_deps = ['web-initial-sync'] if is_win else [],
+  resource_deps = ['web-initial-sync', 'web'] if is_win else ['web'],
   labels = ['1-web'],
-  readiness_probe = probe(http_get = http_get_action(80, host = 'localhost', path ='/app'))
+  readiness_probe = probe(http_get = http_get_action(http_port, host = 'localhost', path ='/app'))
 )
 
 if (is_win):
@@ -112,7 +113,7 @@ cmd_button('docker-compose:stop',
 local_resource('web-backend-php',
   cmd = 'docker-compose exec -T web bash /app/run/_web-start-backend.sh',
   allow_parallel = True,
-  resource_deps = ['web-initial-sync'] if is_win else [],
+  resource_deps = ['web-initial-sync', 'web'] if is_win else ['web'],
   labels = ['1-web']
 )
 
@@ -120,9 +121,9 @@ local_resource('web-backend-ts',
   serve_cmd = 'while true; do docker-compose exec -T web bash /app/run/_web-start-backend-ts.sh; done',
   serve_cmd_bat = 'FOR /L %N IN () DO docker-compose exec -T web bash /app/run/_web-start-backend-ts.sh',
   allow_parallel = True,
-  resource_deps = ['web-initial-sync'] if is_win else [],
+  resource_deps = ['web-initial-sync', 'web'] if is_win else ['web'],
   labels = ['1-web'],
-  readiness_probe = probe(http_get = http_get_action(80, host = 'localhost', path ='/api/probeBackendTs'))
+  readiness_probe = probe(http_get = http_get_action(http_port, host = 'localhost', path ='/api/probeBackendTs'))
 )
 
 if (is_win):
