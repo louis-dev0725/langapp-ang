@@ -10,44 +10,40 @@ class m201014_061328_add_test_users extends Migration
 {
     public function safeUp()
     {
-        $loadTestData = isset($_SERVER['LOAD_TEST_DATA']) && $_SERVER['LOAD_TEST_DATA'] == '1';
-
-        if ($loadTestData) {
-            $testAdminEmail = 'admin@example.org';
-            $user = User::findByEmail($testAdminEmail);
-            if ($user == null) {
-                $user = new User();
-                $user->name = 'Admin';
-                $user->scenario = User::SCENARIO_ADMIN;
-                $user->email = $testAdminEmail;
-                $user->password = 'adminpassword';
-                $user->paidUntilDateTime = '2030-01-01 00:00:00';
-                if ($user->save()) {
-                    echo 'Created test admin user #' . $user->id . "\n";
-                } else {
-                    echo 'Error: Unable to create test admin user with email ' . $testAdminEmail . '. Errors: ' . json_encode($user->errors, JSON_UNESCAPED_UNICODE) . "\n";
-                }
-            } else {
-                echo 'Use existing test admin user #' . $user->id . "\n";
-            }
-            if (!empty($user->id) && !Yii::$app->authManager->checkAccess($user->id, 'admin')) {
-                $adminRole = Yii::$app->authManager->getRole('admin');
-                Yii::$app->authManager->assign($adminRole, $user->id);
-            }
-
-            $testUserEmail = 'user@example.org';
+        $testAdminEmail = 'admin@example.org';
+        $user = User::findByEmail($testAdminEmail);
+        if ($user == null) {
             $user = new User();
-            $user->name = 'User';
+            $user->name = 'Admin';
             $user->scenario = User::SCENARIO_ADMIN;
-            $user->email = $testUserEmail;
-            $user->password = 'userpassword';
+            $user->email = $testAdminEmail;
+            $user->password = 'adminpassword';
             $user->paidUntilDateTime = '2030-01-01 00:00:00';
-            $user->save();
             if ($user->save()) {
-                echo 'Created test non-admin user #' . $user->id . "\n";
+                echo 'Created test admin user #' . $user->id . "\n";
             } else {
-                echo 'Error: Unable to create test non-admin user with email ' . $testUserEmail . '. Errors: ' . json_encode($user->errors, JSON_UNESCAPED_UNICODE) . "\n";
+                echo 'Error: Unable to create test admin user with email ' . $testAdminEmail . '. Errors: ' . json_encode($user->errors, JSON_UNESCAPED_UNICODE) . "\n";
             }
+        } else {
+            echo 'Use existing test admin user #' . $user->id . "\n";
+        }
+        if (!empty($user->id) && !Yii::$app->authManager->checkAccess($user->id, 'admin')) {
+            $adminRole = Yii::$app->authManager->getRole('admin');
+            Yii::$app->authManager->assign($adminRole, $user->id);
+        }
+
+        $testUserEmail = 'user@example.org';
+        $user = new User();
+        $user->name = 'User';
+        $user->scenario = User::SCENARIO_ADMIN;
+        $user->email = $testUserEmail;
+        $user->password = 'userpassword';
+        $user->paidUntilDateTime = '2030-01-01 00:00:00';
+        $user->save();
+        if ($user->save()) {
+            echo 'Created test non-admin user #' . $user->id . "\n";
+        } else {
+            echo 'Error: Unable to create test non-admin user with email ' . $testUserEmail . '. Errors: ' . json_encode($user->errors, JSON_UNESCAPED_UNICODE) . "\n";
         }
     }
 
