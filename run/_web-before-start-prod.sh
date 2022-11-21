@@ -1,6 +1,6 @@
 #!/bin/bash
 cd "$(dirname "$0")/.."
-eval "$(./run/shdotenv.sh --env .env.defaults --env)"
+eval "$(./run/shdotenv.sh --env .env --env .env.defaults)"
 
 set -x
 
