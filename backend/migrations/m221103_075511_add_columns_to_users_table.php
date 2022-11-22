@@ -23,5 +23,8 @@ class m221103_075511_add_columns_to_users_table extends Migration
      */
     public function safeDown()
     {
+        $this->dropColumn('{{%users}}', 'favoriteCategoryId');
+        $this->dropColumn('{{%users}}', 'languageLevel');
+        $this->dropColumn('{{%users}}', 'dailyGoal');
     }
 }
