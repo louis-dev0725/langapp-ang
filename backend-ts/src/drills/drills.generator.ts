@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DictionaryType, DictionaryWord } from 'src/entities/DictionaryWord';
 import { DictionaryWordRepository } from 'src/entities/DictionaryWordRepository';
 import { JapaneseKanji } from 'src/entities/JapaneseKanji';
@@ -18,6 +18,8 @@ import { Sentence } from 'src/entities/Sentence';
 
 @Injectable()
 export class DrillsGenerator {
+  private readonly logger = new Logger(DrillsGenerator.name, true);
+
   user: User;
   userWords: UserDictionary[];
   words: JapaneseWord[];
@@ -40,7 +42,9 @@ export class DrillsGenerator {
 
   async loadAdditionalWords() {
     if (!DrillsGenerator.additionalWords) {
+      this.logger.log('Load additional words');
       DrillsGenerator.additionalWords = <JapaneseWord[]>await this.dictionaryWordRepository.createQueryBuilder().where(`"type" = 1 and (data->>'frequencyRank')::float < 14 and (data->>'frequencyRank')::float > 13`).getMany();
+      this.logger.log('Loaded additional words');
     }
   }
 
@@ -206,6 +210,7 @@ export class DrillsGenerator {
       },
       take: 10,
     });
+    console.log(`Loaded ${this.userWords.length} words`);
 
     this.words = <JapaneseWord[]>await this.dictionaryWordRepository.find({
       where: {
@@ -464,7 +469,7 @@ export class DrillsGenerator {
         }
         let sentence = this.exampleSentences[sentenceId];
         if (!sentence) {
-          console.log(`Unable to find sentence #${sentenceId}`);
+          //console.log(`Unable to find sentence #${sentenceId}`);
           return null;
         }
         let translationHtml = null;
