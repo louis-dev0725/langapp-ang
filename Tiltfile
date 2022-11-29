@@ -19,8 +19,12 @@ dotenv('.env')
 is_win = os.getenv('OS') == 'Windows_NT'
 http_port = int(os.getenv('HTTP_PORT'))
 
+# Mount paths directly (except Windows)
 if (not is_win):
-  os.putenv('APP_DIR_TO_SHARE', './')
+  os.putenv('MOUNT_PATH_APP', './')
+  os.putenv('MOUNT_PATH_NODE_MODULES_FRONTEND', './frontend/node_modules')
+  os.putenv('MOUNT_PATH_NODE_MODULES_BACKEND', './backend-ts/node_modules')
+  os.putenv('MOUNT_PATH_NODE_MODULES_EXTENSION', './extension/node_modules')
 
 allow_k8s_contexts(k8s_context()) # Disable check as we currently don't use k8s resources inside Tiltfile
 

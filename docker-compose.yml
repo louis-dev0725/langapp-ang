@@ -38,16 +38,16 @@ services:
     volumes:
       - composer-cache:/root/.composer/cache
       # - ./:/app:delegated
-      - ${APP_DIR_TO_SHARE:-app-web}:/app
+      - ${MOUNT_PATH_APP:-app-web}:/app
       - ./docker/web/nginx/vhost.conf:/opt/docker/etc/nginx/vhost.conf:ro
       - ./docker/web/nginx/vhost-dev.conf:/opt/docker/etc/nginx/vhost-dev.conf:ro
       - ./docker/web/php/php.ini:/opt/docker/etc/php/php.ini:ro
       - ./docker/web/supervisord/postfix.conf:/opt/docker/etc/supervisor.d/postfix.conf:ro
       - ./docker/web/supervisord/juman.conf:/opt/docker/etc/supervisor.d/juman.conf:ro
       - ./docker/web/entrypoint.sh:/opt/docker/bin/entrypoint.d/app.sh:ro
-      - node-modules:${NODE_MODULES_MOUNT:-/app/frontend/node_modules}
-      - node-modules-backend:${NODE_MODULES_BACKEND_MOUNT:-/app/backend-ts/node_modules}
-      - node-modules-extension:${NODE_MODULES_EXTENSION_MOUNT:-/app/extension/node_modules}
+      - ${MOUNT_PATH_NODE_MODULES_FRONTEND:-node-modules}:${NODE_MODULES_MOUNT:-/app/frontend/node_modules}
+      - ${MOUNT_PATH_NODE_MODULES_BACKEND:-node-modules-backend}:${NODE_MODULES_BACKEND_MOUNT:-/app/backend-ts/node_modules}
+      - ${MOUNT_PATH_NODE_MODULES_EXTENSION:-node-modules-extension}:${NODE_MODULES_EXTENSION_MOUNT:-/app/extension/node_modules}
       - npm-cache:/root/.npm
       - ./docker/web/etc/cron.hourly:/etc/cron.hourly:ro
     environment:
