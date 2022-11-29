@@ -1,23 +1,51 @@
 {
-	"name": "Ubuntu",
-	"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
-	"features": {
-		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}
-	},
+  "name": "Ubuntu",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+  "features": {
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}
+  },
 
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
 
-	"onCreateCommand": "curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash",
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "echo \"$DOTENV_CONTENT\" > .env"
+  "onCreateCommand": "curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash",
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "echo \"$DOTENV_CONTENT\" > .env",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "42Crunch.vscode-openapi",
+        "ahmadalli.vscode-nginx-conf",
+        "Angular.ng-template",
+        "bmewburn.vscode-intelephense-client",
+        "bradlc.vscode-tailwindcss",
+        "chrisbibby.hide-node-modules",
+        "DigitalBrainstem.javascript-ejs-support",
+        "eamodio.gitlens",
+        "ecmel.vscode-html-css",
+        "esbenp.prettier-vscode",
+        "hangxingliu.vscode-nginx-conf-hint",
+        "junstyle.php-cs-fixer",
+        "MariusAlchimavicius.json-to-ts",
+        "mhutchie.git-graph",
+        "pranaygp.vscode-css-peek",
+        "raynigon.nginx-formatter",
+        "redhat.vscode-yaml",
+        "sibiraj-s.vscode-scss-formatter",
+        "TabNine.tabnine-vscode",
+        "Tchoupinax.tilt",
+        "xdebug.php-debug",
+        "yzhang.markdown-all-in-one"
+      ]
+    }
+  }
 
-	// Configure tool-specific properties.
-	// "customizations": {},
+  // Configure tool-specific properties.
+  // "customizations": {},
 
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
 }
