@@ -4,8 +4,6 @@ class m221029_070000_languages_data extends yii\db\Migration
 {
     public function safeUp()
     {
-        $this->execute('truncate table content_category cascade;');
-        $this->execute('truncate table category cascade;');
         $this->truncateTable('{{%languages}}');
 
         $list = json_decode(file_get_contents(__DIR__ . '/../dump/languages_google_translate.json'), true);

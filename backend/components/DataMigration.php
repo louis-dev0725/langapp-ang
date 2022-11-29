@@ -23,7 +23,7 @@ class DataMigration extends Migration
         $this->execute('delete from migration_data where "version" like :suffix;', [':suffix' => $migrationSuffix]);
 
         // Clean table
-        $this->execute('truncate table '.$this->db->quoteTableName($this->tableName).' cascade;');
+        $this->execute('truncate table ' . $this->db->quoteTableName($this->tableName) . ' cascade;');
 
         // Load from remote dump
         preg_match('/host=(.*?)(;|$)/', $this->db->dsn, $matches);
@@ -34,7 +34,7 @@ class DataMigration extends Migration
         $testDataUrl = isset($_SERVER['TEST_DATA_URL']) ? $_SERVER['TEST_DATA_URL'] : 'http://langapp.lb7.ru/internal-8f348g47f39/';
         $url = $testDataUrl . $this->tableName . '.pgdata';
 
-        $command = 'curl ' . escapeshellarg($url) . ' | ' . 'PGPASSWORD=' . escapeshellarg($this->db->password) . ' pg_restore --host=' . escapeshellarg($host) . ' --username=' . escapeshellarg($this->db->username) . ' --dbname=' . escapeshellarg($dbname) . ' --verbose --single-transaction';
+        $command = 'curl ' . escapeshellarg($url) . ' | ' . 'PGPASSWORD=' . escapeshellarg($this->db->password) . ' pg_restore --host=' . escapeshellarg($host) . ' --username=' . escapeshellarg($this->db->username) . ' --dbname=' . escapeshellarg($dbname) . ' --verbose --single-transaction --exit-on-error';
         echo 'Execute: ' . $command . "\n";
         exec($command, $result, $exitStatus);
 
@@ -48,6 +48,6 @@ class DataMigration extends Migration
      */
     public function safeDown()
     {
-        $this->truncateTable($this->tableName);
+        $this->execute('truncate table ' . $this->db->quoteTableName($this->tableName) . ' cascade;');
     }
 }
