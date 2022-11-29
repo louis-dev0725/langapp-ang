@@ -50,6 +50,9 @@ use yii\web\UserEvent;
  * @property string $currency
  * @property string $frozeEnablePartnerPayments
  * @property string[] $languages
+ * @property array $favoriteCategoryId
+ * @property string $languageLevel
+ * @property int $dailyGoal
  *
  * @property string $isAdmin
  * @property string $password write-only password (virtual attribute)
