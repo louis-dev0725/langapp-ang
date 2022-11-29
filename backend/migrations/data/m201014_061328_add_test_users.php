@@ -33,17 +33,22 @@ class m201014_061328_add_test_users extends Migration
         }
 
         $testUserEmail = 'user@example.org';
-        $user = new User();
-        $user->name = 'User';
-        $user->scenario = User::SCENARIO_ADMIN;
-        $user->email = $testUserEmail;
-        $user->password = 'userpassword';
-        $user->paidUntilDateTime = '2030-01-01 00:00:00';
-        $user->save();
-        if ($user->save()) {
-            echo 'Created test non-admin user #' . $user->id . "\n";
+        $user = User::findByEmail($testUserEmail);
+        if ($user == null) {
+            $user = new User();
+            $user->name = 'User';
+            $user->scenario = User::SCENARIO_ADMIN;
+            $user->email = $testUserEmail;
+            $user->password = 'userpassword';
+            $user->paidUntilDateTime = '2030-01-01 00:00:00';
+            $user->save();
+            if ($user->save()) {
+                echo 'Created test non-admin user #' . $user->id . "\n";
+            } else {
+                echo 'Error: Unable to create test non-admin user with email ' . $testUserEmail . '. Errors: ' . json_encode($user->errors, JSON_UNESCAPED_UNICODE) . "\n";
+            }
         } else {
-            echo 'Error: Unable to create test non-admin user with email ' . $testUserEmail . '. Errors: ' . json_encode($user->errors, JSON_UNESCAPED_UNICODE) . "\n";
+            echo 'Use existing test user #' . $user->id . "\n";
         }
     }
 
