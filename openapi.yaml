@@ -5,6 +5,151 @@ info:
 servers:
   - url: 'http://localhost/api'
 paths:
+  /activities:
+    get:
+      summary: Get activity stats
+      tags: [ ]
+      operationId: get-activities
+      description: Query the activity stats by date range
+      parameters:
+        -   schema:
+              type: string
+            in: query
+            name: 'filter[date][gte]'
+            description: Date in Y-m-d format
+        -   schema:
+              type: string
+            in: query
+            name: 'filter[date][lte]'
+            description: Date in Y-m-d format
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        total_seconds:
+                          type: integer
+                        goal_seconds:
+                          type: integer
+                        currency:
+                          type: string
+                        details:
+                          type: object
+                          properties:
+                            drills:
+                              type: integer
+                            contents:
+                              type: integer
+                        penalty_amount:
+                          type: integer
+                        is_goal_reached:
+                          type: boolean
+                        is_penalty_received:
+                          type: boolean
+                        is_current_day:
+                          type: boolean
+                x-examples:
+                  Example 1:
+                    success: true
+                    items:
+                      -   date: '2022-12-01'
+                          total_seconds: 40
+                          goal_seconds: 60
+                          currency: JPY
+                          details:
+                            drills: 24
+                            contents: 16
+                          penalty_amount: 0
+                          is_goal_reached: false
+                          is_penalty_received: false
+                          is_current_day: true
+              examples:
+                Example 1:
+                  value:
+                    success: true
+                    items:
+                      -   date: '2022-12-01'
+                          total_seconds: 40
+                          goal_seconds: 60
+                          currency: JPY
+                          details:
+                            drills: 24
+                            contents: 16
+                          penalty_amount: 0
+                          is_goal_reached: false
+                          is_penalty_received: false
+                          is_current_day: true
+    post:
+      summary: 'Create new interim activity'
+      operationId: post-activities
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  text:
+                    type: string
+                  errors:
+                    type: object
+                    properties:
+                      '{attribute}':
+                        type: array
+                        items:
+                          type: string
+              examples:
+                Example 1:
+                  value:
+                    success: true
+                    text: Added new activity
+                Example 2:
+                  value:
+                    success: false
+                    text: 'Error while adding activity [E001]'
+                    errors:
+                      activity_type:
+                        - Activity Type is invalid.
+                      user_id:
+                        - The combination "1"-"54353534" of User ID and Nonce Token has already been taken.
+                      nonce_token:
+                        - The combination "1"-"54353534" of User ID and Nonce Token has already been taken.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activity_type:
+                  type: string
+                  enum:
+                    - contents
+                    - drills
+                nonce_token:
+                  type: string
+                seconds:
+                  type: integer
+          application/xml:
+            schema:
+              type: object
+              properties: { }
+        description: ''
+      parameters: [ ]
   /contents:
     get:
       summary: Content list

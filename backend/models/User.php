@@ -4,18 +4,26 @@ namespace app\models;
 
 use app\components\Helpers;
 use app\components\Notifications;
+use app\enums\LanguageLevel;
+use app\enums\UserTariff;
 use Lcobucci\JWT\Token;
 use sizeg\jwt\Jwt;
 use Throwable;
 use Yii;
 use yii\base\BaseObject;
+use yii\base\InvalidCallException;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\db\StaleObjectException;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\validators\NumberValidator;
 use yii\web\IdentityInterface;
 use yii\web\ServerErrorHttpException;
 use yii\web\UserEvent;
+use DateTime;
+use DateTimeZone;
 
 /**
  * This is the model class for table "users".
@@ -53,6 +61,8 @@ use yii\web\UserEvent;
  * @property array $favoriteCategoryId
  * @property string $languageLevel
  * @property int $dailyGoal
+ * @property float $penaltyAmount
+ * @property string $tariff
  *
  * @property string $isAdmin
  * @property string $password write-only password (virtual attribute)
@@ -229,6 +239,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                 'isAdmin',
                 'languages',
                 'extensionSettings',
+                'tariff',
+                'penaltyAmount',
+                'languageLevel',
+                'favoriteCategoryId',
+                'dailyGoal',
             ],
             static::SCENARIO_ADMIN => [
                 'name',
@@ -252,6 +267,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                 'currency',
                 'languages',
                 'extensionSettings',
+                'tariff',
+                'penaltyAmount',
+                'languageLevel',
+                'favoriteCategoryId',
+                'dailyGoal',
             ],
         ];
     }
@@ -297,6 +317,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                 'languages',
                 'extensionSettings',
                 'isPaid',
+                'tariff',
+                'penaltyAmount',
+                'languageLevel',
+                'favoriteCategoryId',
+                'dailyGoal',
             ];
         } elseif ($this->scenario == static::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
@@ -419,6 +444,22 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ['currency', 'in', 'range' => array_keys(User::getAvailableCurrencyList())],
             //['languages', 'in', 'range' => ],
             ['languages', 'each', 'rule' => ['string']],
+            ['penaltyAmount', 'validatePenaltyAmount'],
+            ['tariff', 'default', 'value' => UserTariff::FREE],
+            ['tariff', 'in', 'range' => UserTariff::values()],
+            ['languageLevel', 'in', 'range' => LanguageLevel::values()],
+            [
+                'favoriteCategoryId',
+                'each',
+                'skipOnError' => true,
+                'rule' => [
+                    'exist',
+                    'skipOnError' => true,
+                    'targetClass' => Category::class,
+                    'targetAttribute' => ['favoriteCategoryId' => 'id'],
+                ],
+            ],
+            ['dailyGoal', 'integer', 'min' => 300],
             ['extensionSettings', 'safe'],
         ];
     }
@@ -686,6 +727,104 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getLastActivityStatDate()
+    {
+        return ArrayHelper::getValue($this->dataJson, ['lastActivityStateDate'], '1970-01-01');
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public function setLastActivityStatDate($value)
+    {
+        $datetime = DateTime::createFromFormat('Y-m-d', $value);
+        if ($datetime === false) {
+            $this->addError('lastActivityStateDate', 'lastActivityStateDate should be valid date in format "Y-m-d".');
+            return false;
+        }
+
+        $this->setDataJsonItem('lastActivityStateDate', $datetime->format('Y-m-d'));
+        return true;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    protected function setDataJsonItem($key, $value)
+    {
+        $dataJson = $this->dataJson;
+        $dataJson[$key] = $value;
+        $this->dataJson = $dataJson;
+    }
+
+    /**
+     * @param string $date
+     * @return bool
+     */
+    public function processActivityPenalty($date)
+    {
+        if (empty($this->penaltyAmount) || $this->penaltyAmount <= 0) {
+            return true;
+        }
+
+        if ($this->tariff !== UserTariff::FREE) {
+            throw new InvalidCallException('This function can only be called by "free" tariff user');
+        }
+
+        $query = Transaction::find()
+            ->andWhere(['userId' => $this->id])
+            ->andWhere(['status' => Transaction::STATUS_SUCCESS])
+            ->andWhere(["[[dataJson]]->>'activityPenaltyDate'" => $date]);
+
+        $hasPenalty = $query->exists();
+        if ($hasPenalty) {
+            return true;
+        }
+
+        $debitBalance = new Transaction([
+            'money' => -1.0 * $this->penaltyAmount,
+            'currency' => $this->currency,
+            'userId' => $this->id,
+            'status' => Transaction::STATUS_SUCCESS,
+            'isRealMoney' => 1,
+            'addedDateTime' => Helpers::dateToSql(time()),
+            'scenario' => Transaction::SCENARIO_USER,
+            'dataJson' => [
+                'activityPenaltyDate' => $date
+            ],
+            'comment' => 'Activity Penalty for ' . $date,
+        ]);
+
+        if (!$debitBalance->save()) {
+            throw new ServerErrorHttpException('Unable to create transaction to debit funds.');
+        }
+
+        // Iterating over all user's payment methods and trying to debit funds.
+        foreach ($this->paymentMethods as $paymentMethod) {
+            // Continue the loop if $paymentMethod isn't active or has faulty transactions in last 24 hours.
+            if (!$paymentMethod->isActive || $paymentMethod->hasFaultyTransactionsInLast24h()) {
+                continue;
+            }
+
+            $transaction = $paymentMethod->debitFunds($this->penaltyAmount, $this->currency);
+            if ($transaction->status === Transaction::STATUS_SUCCESS) {
+                return true;
+            }
+        }
+
+        // reach here, means all payment methods failed, disable user
+        $this->paidUntilDateTime = Helpers::dateToSql(time());
+        $this->save(false, ['paidUntilDateTime']);
+        return false;
+    }
+
+    /**
      * Try to charge subscription (if necessary) using one of available payment methods added by user
      * Returns ['status' => boolean, 'message' => string]
      * @return array
@@ -812,5 +951,40 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     private function getSubscriptionPaymentAmount(): array
     {
         return [2000, 'JPY'];
+    }
+
+    /**
+     * @return DateTimeZone
+     */
+    public function getDateTimeZone()
+    {
+        try {
+            return new DateTimeZone($this->timezone ?? Yii::$app->timeZone);
+        } catch (Throwable $e) {}
+
+        return new DateTimeZone(Yii::$app->timeZone);
+    }
+
+    /**
+     * @param string $attribute
+     * @param array $options
+     * @return void
+     */
+    public function validatePenaltyAmount($attribute, $options = [])
+    {
+        if ($this->tariff !== UserTariff::FREE) {
+            return;
+        }
+
+        $validator = new NumberValidator(['min' => 1]);
+        $currency = $this->currency ?? $this->getDefaultCurrency();
+        if ($currency === 'JPY') {
+            $validator->min = 100;
+        }
+
+        $value = $this->getAttribute($attribute);
+        if (!$validator->validate($value, $error)) {
+            $this->addError($attribute, sprintf('%s [Currency: %s]', $error, $currency));
+        }
     }
 }

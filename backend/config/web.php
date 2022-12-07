@@ -89,6 +89,15 @@ $config = [
                         '<action:[\w-]+>' => '<action>',
                     ],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'activity',
+                    'prefix' => 'api',
+                    'patterns' => [
+                        'POST' => 'create',
+                        'GET,HEAD' => 'view',
+                    ],
+                ],
                 '/robots.txt' => 'site/robots-txt',
                 'api/pay/start' => 'pay/start',
                 'api/pay/result' => 'pay/result',
