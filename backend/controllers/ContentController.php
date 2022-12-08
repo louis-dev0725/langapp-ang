@@ -7,12 +7,16 @@ use app\components\Helpers;
 use app\models\Category;
 use app\models\Content;
 use app\models\ContentSearch;
-use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\data\ActiveDataFilter;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
+use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\validators\NumberValidator;
+use Yii;
 
 class ContentController extends ActiveController
 {
@@ -62,8 +66,16 @@ class ContentController extends ActiveController
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
 
-        $query = Content::find();
 
+        $randomSeed = ArrayHelper::getValue($requestParams, 'randomSeed', false);
+        if ($randomSeed !== false) {
+            $validator = new NumberValidator(['min' => 0, 'max' => 1]);
+            if ($validator->validate($randomSeed, $error)) {
+                Yii::$app->db->createCommand('SELECT SETSEED(:number)', [':number' => $randomSeed])->execute();
+            }
+        }
+
+        $query = Content::find()->alias('t');
         // Custom filter by channelId here.
         if (isset($requestParams['filter']['youtubeChannelId'])) {
             $query->andWhere([
@@ -128,13 +140,47 @@ class ContentController extends ActiveController
 
         if (!Helpers::isAdmin()) {
             // Force filter by status
-            $query->andWhere(['content.status' => 1]);
-            $query->andWhere(['content.deleted' => 0]);
+            $query->andWhere(['t.status' => 1]);
+            $query->andWhere(['t.deleted' => 0]);
         }
 
-        $query->select([/*'cleanText',*/ 'content.id', 'content.dataJson', 'content.deleted', 'content.format', 'content.length', 'content.level', 'content.rank', 'content.sourceLink', 'content.status', 'content.tagsJson', /*'text',*/ 'content.title', 'content.type']);
+        $query->select([/*'cleanText',*/ 't.id', 't.dataJson', 't.deleted', 't.format', 't.length', 't.level', 't.rank', 't.sourceLink', 't.status', 't.tagsJson', /*'text',*/ 't.title', 't.type']);
+        //$query->orderBy(new Expression('RANDOM()'));
 
-        return new ActiveDataProvider([
+        // - if no filter below set, then load random content
+        $requestSort = ArrayHelper::getValue($requestParams, ['sort'], '');
+        $requestFilter = ArrayHelper::getValue($requestParams, ['filter'], []);
+        if (!isset($requestFilter['categoryId'])
+            && !isset($requestFilter['level'])
+            && !isset($requestFilter['youtubeChannelId'])
+            && !isset($requestFilter['length'])
+            && !isset($requestFilter['type'])
+            && substr($requestSort, -6) === 'random') {
+
+            $pagination = new Pagination();
+            $offset = $pagination->getOffset();
+            $limit = $pagination->getLimit();
+
+            $loadOffset = floor(($offset + $limit) * 2.5 ) + 1000;
+            $subQuery = '(
+                WITH params AS (
+                   SELECT 1 AS min_id,
+                   (SELECT (reltuples / relpages * (pg_relation_size(oid) / 8192))::bigint AS ct 
+                   FROM pg_class WHERE oid = \'content\'::regclass) + 1000 AS id_span
+                )
+                SELECT *
+                FROM  (
+                   SELECT p.min_id + trunc(random() * p.id_span)::integer AS id
+                   FROM params p, generate_series(1, :loadOffset) g
+                   GROUP BY 1
+                ) r JOIN "content" USING (id)
+            )';
+
+            $query->from(['t' => new Expression($subQuery)]);
+            $query->addParams([':loadOffset' => $loadOffset]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'params' => $requestParams,
@@ -144,6 +190,13 @@ class ContentController extends ActiveController
                 'defaultOrder' => ['rank' => SORT_ASC],
             ],
         ]);
+        $dataProvider->sort->attributes['random'] = [
+            'asc' => new Expression('RANDOM()'),
+            'desc' => new Expression('RANDOM()'),
+        ];
+
+
+        return $dataProvider;
     }
 
     /**
