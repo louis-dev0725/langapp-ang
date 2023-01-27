@@ -11,6 +11,8 @@ import { TranslatingService } from '@app/services/translating.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap } from 'rxjs/operators';
 import { allParams, base64ToObject, filterEmptyFromObject, objectToBase64, toQueryParams } from '@app/shared/helpers';
+import { MaterialSortOptions } from './common/constant';
+import { deepEqual } from './common/helper';
 
 @UntilDestroy()
 @Component({
@@ -28,10 +30,16 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   lengthVariants$: Observable<SimpleListItem[]>;
   categories$: Observable<CategoryArray>;
   categories: Category[];
+  sortOptions: SimpleListItem[] = MaterialSortOptions;
 
   currentPage = 1;
   defaultPerPage = 50;
   currentPerPage = this.defaultPerPage;
+  randomSeed: number;
+
+  get sortValue(): string {
+    return this.filterForm.get('sort').value;
+  }
 
   constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private translatingService: TranslatingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) {}
 
@@ -51,7 +59,10 @@ export class MaterialsComponent implements OnInit, OnDestroy {
       type: [''],
       length: [''],
       categoryId: [''],
+      sort: ['random']
     });
+    this.setRandomSeed();
+    this.setFavoriteCategories();
 
     this.contentList$ = allParams(this.route).pipe(
       switchMap((params) => {
@@ -59,9 +70,15 @@ export class MaterialsComponent implements OnInit, OnDestroy {
         this.currentPerPage = params['per-page'] !== undefined ? Number(params['per-page']) : this.defaultPerPage;
         console.log('params', params);
         if (params['filter']) {
-          let filter = base64ToObject(params['filter']);
-
-          if (filter) {
+          let filter: any = base64ToObject(params['filter']);
+          if (filter?.categoryId?.length && filter?.categoryId[0] === -1) {
+            filter = {
+              ...filter,
+              categoryId: [],
+            };
+          }
+          const isSameValue = deepEqual({...this.filterForm.value, ...filter}, this.filterForm.value);
+          if (filter && !isSameValue) {
             this.filterForm.patchValue(filter);
           }
         }
@@ -89,6 +106,11 @@ export class MaterialsComponent implements OnInit, OnDestroy {
       params['per-page'] = String(this.currentPerPage);
     }
     let filterValue = filterEmptyFromObject(this.filterForm.value);
+    const formVal = this.filterForm.value;
+    if (typeof formVal?.categoryId === 'object' && formVal?.categoryId?.length === 0) {
+      // Set categoryId as [-1] (indication for empty array) to add condition to remove all the Favorite categoryIds
+      filterValue.categoryId = [-1];
+    }
     if (Object.keys(filterValue).length != 0) {
       params['filter'] = objectToBase64(filterValue);
     }
@@ -98,6 +120,13 @@ export class MaterialsComponent implements OnInit, OnDestroy {
 
   getQueryParamsForRequest() {
     let params = toQueryParams(this.filterForm.value, 'filter');
+    if (params['filter[sort]']) {
+      params['sort'] = params['filter[sort]'];
+      if (params['sort'] === 'random') {
+        params['randomSeed'] = `${this.randomSeed}`;
+      }
+      delete params['filter[sort]'];
+    }
     if (this.currentPage != 1) {
       params['page'] = String(this.currentPage);
     }
@@ -115,7 +144,12 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   }
 
   onFormUpdated(newValues: any) {
+    this.setRandomSeed();
     this.updateUrl();
+  }
+
+  setRandomSeed() {
+    this.randomSeed = Math.random();
   }
 
   changePageTable(data) {
@@ -135,6 +169,22 @@ export class MaterialsComponent implements OnInit, OnDestroy {
         } else {
         }
       });
+  }
+
+  setFavoriteCategories() {
+    const favoriteCategoryIds = this.getFavoriteCategories();
+    if (favoriteCategoryIds?.length) {
+      this.filterForm.get('categoryId').setValue(favoriteCategoryIds);
+    }
+  }
+
+  getFavoriteCategories() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user?.favoriteCategoryId || [];
+  }
+
+  getSortLabel(val: string) {
+    return this.sortOptions.find(x => x.value === val)?.title || '';
   }
 
   ngOnDestroy() {}
