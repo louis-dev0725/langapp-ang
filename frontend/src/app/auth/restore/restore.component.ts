@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomValidator } from '@app/services/custom-validator';
@@ -15,7 +15,7 @@ export class RestoreComponent implements OnInit {
   readonly MODE_REQUEST_SENT = 'request-sent';
   readonly MODE_PASSWORD = 'password-change';
 
-  restoreForm: FormGroup = new FormGroup({});
+  restoreForm: UntypedFormGroup = new UntypedFormGroup({});
   _mode = this.MODE_REQUEST;
   errors: any[] = [];
   get mode(): string {
@@ -42,16 +42,16 @@ export class RestoreComponent implements OnInit {
 
   changeForm() {
     if (this.mode === this.MODE_REQUEST) {
-      this.restoreForm = new FormGroup({
-        email: new FormControl('', { validators: [Validators.required, Validators.email], updateOn: 'change' }),
+      this.restoreForm = new UntypedFormGroup({
+        email: new UntypedFormControl('', { validators: [Validators.required, Validators.email], updateOn: 'change' }),
       });
     }
 
     if (this.mode === this.MODE_PASSWORD) {
-      this.restoreForm = new FormGroup(
+      this.restoreForm = new UntypedFormGroup(
         {
-          password: new FormControl('', { validators: [Validators.required], updateOn: 'change' }),
-          passrepeat: new FormControl('', { validators: [Validators.required], updateOn: 'change' }),
+          password: new UntypedFormControl('', { validators: [Validators.required], updateOn: 'change' }),
+          passrepeat: new UntypedFormControl('', { validators: [Validators.required], updateOn: 'change' }),
         },
         CustomValidator.confirmPasswordCheck
       );

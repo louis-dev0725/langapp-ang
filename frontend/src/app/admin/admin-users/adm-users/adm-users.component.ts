@@ -8,7 +8,7 @@ import { EventService } from '@app/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '@app/services/session.service';
 import { ApiError } from '@app/services/api-error';
-import { debounceTime, take } from 'rxjs/operators';
+import { debounceTime, take } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { Router, UrlSerializer } from '@angular/router';
 import { CustomValidator } from '@app/services/custom-validator';
@@ -28,7 +28,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   tryingToProlong = false;
 
-  paymentForm: FormGroup;
+  paymentForm: UntypedFormGroup;
 
   rows: any;
 
@@ -60,8 +60,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.paymentForm = new FormGroup({
-      amount: new FormControl('', { validators: [Validators.required, Validators.min(100)], updateOn: 'change' }),
+    this.paymentForm = new UntypedFormGroup({
+      amount: new UntypedFormControl('', { validators: [Validators.required, Validators.min(100)], updateOn: 'change' }),
     });
 
     this.getRows();

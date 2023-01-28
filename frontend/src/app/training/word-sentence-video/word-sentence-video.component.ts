@@ -5,7 +5,7 @@ import { CardsService, CurrentCardState } from '@app/training/cards/cards.servic
 import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { take } from 'rxjs/operators';
+import { take } from 'rxjs';
 import { AudioService } from '@app/services/audio.service';
 
 @UntilDestroy()

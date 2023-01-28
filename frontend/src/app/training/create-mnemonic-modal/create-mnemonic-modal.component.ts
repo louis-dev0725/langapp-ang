@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { UserDictionary } from '@app/interfaces/common.interface';
@@ -23,7 +23,7 @@ export class CreateMnemonicModalComponent implements OnInit, OnDestroy {
   @Output() createMnemonic: EventEmitter<any> = new EventEmitter<any>();
 
   selectedFile: File = null;
-  mnemonicForm: FormGroup;
+  mnemonicForm: UntypedFormGroup;
   errors: any = [];
 
   @Input()
@@ -38,7 +38,7 @@ export class CreateMnemonicModalComponent implements OnInit, OnDestroy {
   private _isLoaded = false;
 
   constructor(private api: ApiService, private snackBar: MatSnackBar, private translatingService: TranslatingService,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.mnemonicForm = this.formBuilder.group({

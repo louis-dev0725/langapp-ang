@@ -5,7 +5,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
 import { SessionService } from '@app/services/session.service';
 import { environment } from '../../environments/environment';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { APP_BASE_HREF } from '@angular/common';
 import { Router } from '@angular/router';

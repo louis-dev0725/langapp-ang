@@ -1,6 +1,6 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map } from 'rxjs';
 import { encode as urlSafeBase64Encode, decode as urlSafeBase64Decode } from 'url-safe-base64';
 
 export function randomFromRange(min: number, max: number): number {

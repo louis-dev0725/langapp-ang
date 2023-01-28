@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 
 import * as jstz from 'jstz';
@@ -27,7 +27,7 @@ import { PhoneNumberFormat } from 'ngx-intl-tel-input';
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
-  signupForm: FormGroup;
+  signupForm: UntypedFormGroup;
   errors: any[] = [];
   quickSignup = true;
 
@@ -83,7 +83,7 @@ export class SignupComponent implements OnInit {
   country: string;
   PhoneNumberFormat = PhoneNumberFormat;
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private cookieService: CookieService, private sessionService: SessionService) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private cookieService: CookieService, private sessionService: SessionService) {}
 
   ngOnInit() {
     this.timezone = this.detectTimezone();

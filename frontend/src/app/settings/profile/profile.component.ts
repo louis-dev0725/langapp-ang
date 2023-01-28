@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,7 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  settingsForm: FormGroup;
+  settingsForm: UntypedFormGroup;
   isChangePassword = false;
   timeZones: any[] = [];
   user;
@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     return this.user.isServicePaused !== undefined ? this.user.isServicePaused : false;
   }
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private session: SessionService, private changeDetector: ChangeDetectorRef, private messageService: MessageService, private translateService: TranslateService) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private session: SessionService, private changeDetector: ChangeDetectorRef, private messageService: MessageService, private translateService: TranslateService) {}
 
   ngOnInit() {
     this.settingsForm = this.formBuilder.group({

@@ -3,7 +3,7 @@ import { CardsService } from '@app/training/cards/cards.service';
 import { ApiService } from '@app/services/api.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Drill } from '@app/interfaces/common.interface';
-import { finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs';
 
 @UntilDestroy()
 @Component({

@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { CustomValidator } from '@app/services/custom-validator';
 import { SessionService } from '@app/services/session.service';
@@ -16,12 +16,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-materials.component.scss'],
 })
 export class CreateMaterialsComponent implements OnInit, OnDestroy {
-  materialsForm: FormGroup;
+  materialsForm: UntypedFormGroup;
   errors: any = [];
   categories = [];
   types = [];
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private router: Router, private session: SessionService, private translatingService: TranslatingService) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private snackBar: MatSnackBar, private router: Router, private session: SessionService, private translatingService: TranslatingService) {}
 
   @Input()
   set isLoaded(val: boolean) {

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { SessionService } from '@app/services/session.service';
 import { EventService } from '@app/event.service';
@@ -30,7 +30,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
   }
 
   errors: any = [];
-  transactionForm: FormGroup;
+  transactionForm: UntypedFormGroup;
 
   transaction: Transaction = {
     userId: 0,
@@ -39,7 +39,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
     money: 0,
   };
 
-  constructor(public session: SessionService, private userService: UserService, private api: ApiService, private customValidator: CustomValidator, private eventService: EventService, private formBuilder: FormBuilder, private router: Router, private snackBar: MatSnackBar, private translatingService: TranslatingService, private cd: ChangeDetectorRef) {}
+  constructor(public session: SessionService, private userService: UserService, private api: ApiService, private customValidator: CustomValidator, private eventService: EventService, private formBuilder: UntypedFormBuilder, private router: Router, private snackBar: MatSnackBar, private translatingService: TranslatingService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.userService.user$.pipe(untilDestroyed(this)).subscribe((user) => {

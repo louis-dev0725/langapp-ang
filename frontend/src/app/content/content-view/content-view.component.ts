@@ -2,10 +2,10 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { ActivatedRoute } from '@angular/router';
 import { Content, ContentAttributeResponse } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
-import { distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, switchMap } from 'rxjs';
 import { VideoJsPlayerOptions } from 'video.js';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { VideojsComponent } from '@app/content/videojs/videojs.component';
 import { WebVTTParser } from 'webvtt-parser';
@@ -104,9 +104,9 @@ export class ContentViewComponent implements AfterViewInit {
   ];
   currentSubtitleStyle = this.subtitleStyles[3].style;
   currentSubtitleStyleIndex: number = 3;
-  isRepeatingVideo = new FormControl(false);
+  isRepeatingVideo = new UntypedFormControl(false);
 
-  reportReason = new FormControl(null, [Validators.required]);
+  reportReason = new UntypedFormControl(null, [Validators.required]);
 
   icons = {
     fullscreen,

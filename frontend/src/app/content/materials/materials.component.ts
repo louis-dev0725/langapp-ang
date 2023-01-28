@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ApiService, SimpleListItem } from '@app/services/api.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CustomValidator } from '@app/services/custom-validator';
 import { Observable } from 'rxjs';
 import { ApiError } from '@app/services/api-error';
@@ -9,7 +9,7 @@ import { Category, CategoryArray, Content, ListResponse } from '@app/interfaces/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatingService } from '@app/services/translating.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs';
 import { allParams, base64ToObject, filterEmptyFromObject, objectToBase64, toQueryParams } from '@app/shared/helpers';
 import { MaterialSortOptions } from './common/constant';
 import { deepEqual } from './common/helper';
@@ -21,7 +21,7 @@ import { deepEqual } from './common/helper';
   styleUrls: ['./materials.component.scss'],
 })
 export class MaterialsComponent implements OnInit, OnDestroy {
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   loading$: Observable<boolean>;
   contentList$: Observable<ApiError | ListResponse<Content>>;
 
@@ -41,7 +41,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     return this.filterForm.get('sort').value;
   }
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private translatingService: TranslatingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private translatingService: TranslatingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.levels$ = this.api.getContentLevels();
@@ -59,7 +59,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
       type: [''],
       length: [''],
       categoryId: [''],
-      sort: ['random']
+      sort: ['random'],
     });
     this.setRandomSeed();
     this.setFavoriteCategories();
@@ -77,7 +77,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
               categoryId: [],
             };
           }
-          const isSameValue = deepEqual({...this.filterForm.value, ...filter}, this.filterForm.value);
+          const isSameValue = deepEqual({ ...this.filterForm.value, ...filter }, this.filterForm.value);
           if (filter && !isSameValue) {
             this.filterForm.patchValue(filter);
           }
@@ -184,7 +184,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   }
 
   getSortLabel(val: string) {
-    return this.sortOptions.find(x => x.value === val)?.title || '';
+    return this.sortOptions.find((x) => x.value === val)?.title || '';
   }
 
   ngOnDestroy() {}

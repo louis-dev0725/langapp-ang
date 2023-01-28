@@ -3,7 +3,7 @@ import { SessionService } from '@app/services/session.service';
 import { TranslatingService } from '@app/services/translating.service';
 import { ApiService } from '@app/services/api.service';
 import { CustomValidator } from '@app/services/custom-validator';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -20,12 +20,12 @@ import { combineLatest } from 'rxjs';
 export class EditMaterialsComponent implements OnInit, OnDestroy {
   material: Content;
   errors: any[] = [];
-  materialForm: FormGroup;
+  materialForm: UntypedFormGroup;
   material_id;
   categories = [];
   types = [];
 
-  constructor(public session: SessionService, private translatingService: TranslatingService, private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) {}
+  constructor(public session: SessionService, private translatingService: TranslatingService, private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) {}
 
   @Input()
   set isLoaded(val: boolean) {

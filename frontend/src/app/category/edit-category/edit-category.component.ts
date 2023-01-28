@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { CustomValidator } from '@app/services/custom-validator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,13 +18,13 @@ import { Category } from '@app/interfaces/common.interface';
   styleUrls: ['./edit-category.component.scss'],
 })
 export class EditCategoryComponent implements OnInit, OnDestroy {
-  categoryForm: FormGroup;
+  categoryForm: UntypedFormGroup;
   category: Category;
   category_id;
   errors: any = [];
   parents = [];
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private router: Router, private session: SessionService, private translatingService: TranslatingService, private route: ActivatedRoute) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private snackBar: MatSnackBar, private router: Router, private session: SessionService, private translatingService: TranslatingService, private route: ActivatedRoute) {}
 
   @Input()
   set isLoaded(val: boolean) {

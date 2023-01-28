@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -9,7 +9,7 @@ import { ApiService } from '@app/services/api.service';
 import { TranslatingService } from '@app/services/translating.service';
 import { SessionService } from '@app/services/session.service';
 import { allParams, Dictionary, toQueryParams } from '@app/shared/helpers';
-import { switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs';
 import { Observable } from 'rxjs';
 import { FilterMetadata, LazyLoadEvent } from 'primeng/api';
 
@@ -20,7 +20,7 @@ import { FilterMetadata, LazyLoadEvent } from 'primeng/api';
   styleUrls: ['./dictionary.component.scss'],
 })
 export class DictionaryComponent implements OnInit, OnDestroy {
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   list: ListResponse<UserDictionary>;
   loading: boolean;
   wordTypes: Dictionary<string>;
@@ -29,7 +29,7 @@ export class DictionaryComponent implements OnInit, OnDestroy {
   defaultPerPage = 50;
   currentPerPage = this.defaultPerPage;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private translatingService: TranslatingService, private session: SessionService) {}
+  constructor(private api: ApiService, private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private translatingService: TranslatingService, private session: SessionService) {}
 
   ngOnInit() {
     this.loading = true;

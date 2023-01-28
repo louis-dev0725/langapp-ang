@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { Router } from '@angular/router';
 import { ApiError } from '@app/services/api-error';
@@ -12,9 +12,9 @@ import { CustomValidator } from '@app/services/custom-validator';
   styleUrls: ['./signin.component.scss'],
 })
 export class SigninComponent implements OnInit {
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private router: Router) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private router: Router) {}
 
-  signinForm: FormGroup;
+  signinForm: UntypedFormGroup;
   errors: FieldError[] = [];
 
   isLoaded = true;

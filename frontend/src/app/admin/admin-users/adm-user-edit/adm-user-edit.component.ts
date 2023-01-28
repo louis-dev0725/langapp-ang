@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '@app/services/api.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { User } from '@app/interfaces/common.interface';
 import { CustomValidator } from '@app/services/custom-validator';
 import { SessionService } from '@app/services/session.service';
@@ -48,7 +48,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
   private globalEventSubscription: Subscription;
 
   isChangePassword = false;
-  userProfile: FormGroup;
+  userProfile: UntypedFormGroup;
   user: User;
   timeZones: any[] = [];
 
@@ -74,7 +74,7 @@ export class AdmUserEditComponent implements OnInit, OnDestroy {
     return this._errors;
   }
 
-  constructor(public session: SessionService, public userService: UserService, private api: ApiService, private confirmDialog: MatDialog, private customValidator: CustomValidator, private eventService: EventService, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private translate: TranslateService, private route: ActivatedRoute, private router: Router) {
+  constructor(public session: SessionService, public userService: UserService, private api: ApiService, private confirmDialog: MatDialog, private customValidator: CustomValidator, private eventService: EventService, private formBuilder: UntypedFormBuilder, private snackBar: MatSnackBar, private translate: TranslateService, private route: ActivatedRoute, private router: Router) {
     this.route.params.pipe(untilDestroyed(this)).subscribe((params) => {
       this.getUser(params.id);
     });

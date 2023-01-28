@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class CustomValidator {
   constructor(private translateService: TranslateService) {}
 
-  getErrors(form: FormGroup, fieldName: string): string {
+  getErrors(form: UntypedFormGroup, fieldName: string): string {
     const errors = [];
     const originalErrors = form.get(fieldName).errors;
     for (let key of Object.keys(originalErrors)) {

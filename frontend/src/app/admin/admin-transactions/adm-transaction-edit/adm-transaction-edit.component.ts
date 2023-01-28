@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Transaction } from '@app/interfaces/common.interface';
 import { SessionService } from '@app/services/session.service';
 import { ApiService } from '@app/services/api.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomValidator } from '@app/services/custom-validator';
 import { ApiError } from '@app/services/api-error';
@@ -19,10 +19,10 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 export class AdmTransactionEditComponent implements OnInit, OnDestroy {
   transaction: Transaction;
   errors: any[] = [];
-  transactionForm: FormGroup;
+  transactionForm: UntypedFormGroup;
   transactionId;
 
-  constructor(public session: SessionService, private translatingService: TranslatingService, private api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private route: ActivatedRoute) {
+  constructor(public session: SessionService, private translatingService: TranslatingService, private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private snackBar: MatSnackBar, private route: ActivatedRoute) {
     this.route.params.pipe(untilDestroyed(this)).subscribe((params) => {
       this.getTransaction(params.id);
     });

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from '@app/services/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '@app/interfaces/common.interface';
@@ -16,7 +16,7 @@ import { UserService } from '@app/services/user.service';
   styleUrls: ['./contact.component.scss'],
 })
 export class ContactComponent implements OnInit, OnDestroy {
-  contactForm: FormGroup;
+  contactForm: UntypedFormGroup;
   user: User;
 
   get isErrors() {
@@ -30,7 +30,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   @ViewChild('frmVar', { static: true }) form;
   @ViewChild('recaptcha', { static: true }) recaptcha: ReCaptcha2Component;
 
-  constructor(private translatingService: TranslatingService, public api: ApiService, private customValidator: CustomValidator, private formBuilder: FormBuilder, private ref: ChangeDetectorRef, private snackBar: MatSnackBar, private userService: UserService, private cd: ChangeDetectorRef) {}
+  constructor(private translatingService: TranslatingService, public api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private ref: ChangeDetectorRef, private snackBar: MatSnackBar, private userService: UserService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.contactForm = this.formBuilder.group({
