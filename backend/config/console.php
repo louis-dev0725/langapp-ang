@@ -20,8 +20,8 @@ $config = [
         'cache' => [
             'class' => 'yii\redis\Cache',
             'redis' => [
-                'hostname' => isset($_SERVER['REDIS_HOST']) ? $_SERVER['REDIS_HOST'] : 'redis',
-                'port' => isset($_SERVER['REDIS_PORT']) ? $_SERVER['REDIS_PORT'] : 6379,
+                'hostname' => isset($_SERVER['REDIS_SERVICE_HOST']) ? $_SERVER['REDIS_SERVICE_HOST'] : 'redis',
+                'port' => isset($_SERVER['REDIS_SERVICE_PORT']) ? $_SERVER['REDIS_SERVICE_PORT'] : 6379,
                 'database' => 0,
             ]
         ],

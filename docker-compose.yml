@@ -58,7 +58,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_SERVICE_HOST: ${REDIS_SERVICE_HOST:-redis}
       PHP_IDE_CONFIG: ${PHP_IDE_CONFIG:-serverName=_}
     # Can be activated when docker-compose will support "host-gateway" value
     # Currently:
@@ -87,14 +87,14 @@ services:
   #   restart: always
   #   ports:
   #     - "${LISTEN_HOST:-127.0.0.1}:${ADMINER_PORT:-5002}:8080"
-  
+
   arena:
     image: mixmaxhq/arena
     ports:
       - "${LISTEN_HOST:-127.0.0.1}:${ARENA_PORT:-5003}:4567"
     volumes:
       - ./docker/arena/index.json:/opt/arena/index.json
-  
+
   # es:
   #   build:
   #     context: ./
