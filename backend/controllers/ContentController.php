@@ -66,15 +66,6 @@ class ContentController extends ActiveController
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
 
-
-        $randomSeed = ArrayHelper::getValue($requestParams, 'randomSeed', false);
-        if ($randomSeed !== false) {
-            $validator = new NumberValidator(['min' => 0, 'max' => 1]);
-            if ($validator->validate($randomSeed, $error)) {
-                Yii::$app->db->createCommand('SELECT SETSEED(:number)', [':number' => $randomSeed])->execute();
-            }
-        }
-
         $query = Content::find()->alias('t');
         // Custom filter by channelId here.
         if (isset($requestParams['filter']['youtubeChannelId'])) {
@@ -150,18 +141,18 @@ class ContentController extends ActiveController
         // - if no filter below set, then load random content
         $requestSort = ArrayHelper::getValue($requestParams, ['sort'], '');
         $requestFilter = ArrayHelper::getValue($requestParams, ['filter'], []);
-        if (!isset($requestFilter['categoryId'])
+        $isRandomOrder = substr($requestSort, -6) === 'random';
+        if ($isRandomOrder
+            && !isset($requestFilter['categoryId'])
             && !isset($requestFilter['level'])
             && !isset($requestFilter['youtubeChannelId'])
             && !isset($requestFilter['length'])
-            && !isset($requestFilter['type'])
-            && substr($requestSort, -6) === 'random') {
-
+            && !isset($requestFilter['type'])) {
             $pagination = new Pagination();
             $offset = $pagination->getOffset();
             $limit = $pagination->getLimit();
 
-            $loadOffset = floor(($offset + $limit) * 2.5 ) + 1000;
+            $loadOffset = floor(($offset + $limit) * 2.5) + 1000;
             $subQuery = '(
                 WITH params AS (
                    SELECT 1 AS min_id,
@@ -190,11 +181,22 @@ class ContentController extends ActiveController
                 'defaultOrder' => ['rank' => SORT_ASC],
             ],
         ]);
-        $dataProvider->sort->attributes['random'] = [
-            'asc' => new Expression('RANDOM()'),
-            'desc' => new Expression('RANDOM()'),
-        ];
 
+
+        if ($isRandomOrder) {
+            $randomSeed = ArrayHelper::getValue($requestParams, 'randomSeed', false);
+            $validator = new NumberValidator(['min' => 0, 'max' => 1]);
+            if ($randomSeed === false || !$validator->validate($randomSeed, $error)) {
+                $randomSeed = mt_rand() / mt_getrandmax();
+            }
+
+            Yii::$app->db->createCommand('SELECT SETSEED(:number)', [':number' => $randomSeed])->execute();
+
+            $dataProvider->sort->attributes['random'] = [
+                'asc' => new Expression('SETSEED(:order_seed * 1.0 / "t"."id") || \'\', RANDOM()', [':order_seed' => $randomSeed]),
+                'desc' => new Expression('SETSEED(:order_seed * 1.0 / "t"."id") || \'\', RANDOM()', [':order_seed' => $randomSeed]),
+            ];
+        }
 
         return $dataProvider;
     }
