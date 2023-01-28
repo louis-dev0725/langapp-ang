@@ -18,7 +18,12 @@ $config = [
     ],
     'components' => [
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => 'yii\redis\Cache',
+            'redis' => [
+                'hostname' => isset($_SERVER['REDIS_HOST']) ? $_SERVER['REDIS_HOST'] : 'redis',
+                'port' => isset($_SERVER['REDIS_PORT']) ? $_SERVER['REDIS_PORT'] : 6379,
+                'database' => 0,
+            ]
         ],
         'log' => [
             'flushInterval' => 1,
