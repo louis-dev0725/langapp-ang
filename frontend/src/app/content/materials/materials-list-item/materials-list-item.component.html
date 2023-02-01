@@ -1,5 +1,5 @@
 <div class="card p-0 flex flex-wrap md:flex-nowrap">
-  <div [ngStyle]="{ 'background-image': 'url(' + item?.imageUrl + ')' }" class="image w-full md:w-[290px] p-shadow-1" [ngClass]="{ 'p-skeleton': !item?.id }"></div>
+  <div [ngStyle]="{ 'background-image': item?.imageUrl ? 'url(' + item?.imageUrl + ')' : null }" class="image w-full md:w-[290px] p-shadow-1" [ngClass]="{ 'p-skeleton': !item?.id }"></div>
   <div class="p-ml-3" class="right md:ml-4 p-4 flex flex-col justify-between">
     <!--<div>
               <p-tag *ngFor="let tag of item.tagsJson" [value]="tag" styleClass="p-mr-2 p-mb-2"></p-tag>

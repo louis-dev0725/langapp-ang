@@ -68,6 +68,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     });
     this.setFavoriteCategories();
 
+    let previousFilter = null;
     this.dataSource$ = allParams(this.route).pipe(
       map((params) => {
         this.currentOffset = params['offset'] !== undefined ? Number(params['offset']) : 0;
@@ -80,13 +81,18 @@ export class MaterialsComponent implements OnInit, OnDestroy {
               categoryId: [],
             };
           }
+          // Do not update form if nothing will change
           const isSameValue = deepEqual({ ...this.filterForm.value, ...filter }, this.filterForm.value);
           if (filter && !isSameValue) {
             this.filterForm.patchValue(filter);
-          } else if (this.dataSource) {
+          }
+          // Do not update list if filters not changed
+          if (this.dataSource && previousFilter == params['filter']) {
             return this.dataSource;
           }
+          previousFilter = params['filter'];
         }
+
         let formParams = toQueryParams(this.filterForm.value, 'filter');
         this.dataSource = new MaterialsDataSource(formParams, this.api, this.currentOffset);
         return this.dataSource;
