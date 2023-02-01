@@ -18,11 +18,11 @@
         <!--<p-dropdown formControlName="type" [options]="types$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Content Type' | translate }}" [showClear]="true" [style]="{ width: '170px' }"></p-dropdown>-->
 
         <p-dropdown formControlName="length" [options]="lengthVariants$ | async" optionLabel="title" optionValue="value" placeholder="{{ 'Text length' | translate }}" [showClear]="true" [style]="{ width: '200px' }"></p-dropdown>
-  
+
         <p-dropdown formControlName="sort" [options]="sortOptions" optionLabel="title" optionValue="value" placeholder="Sort By" [style]="{ width: '200px' }">
           <ng-template pTemplate="selectedItem">
             <div *ngIf="sortValue">
-                <div>Sort By: {{getSortLabel(sortValue)}}</div>
+              <div>Sort By: {{ getSortLabel(sortValue) }}</div>
             </div>
           </ng-template>
         </p-dropdown>
@@ -32,5 +32,19 @@
     </form>
   </div>
 
-  <app-list-materials *ngIf="contentList$ | async as contentList" [list]="$any(contentList)" (deleteM)="deleteMaterial($event)" (dataChanged)="changePageTable($event)"></app-list-materials>
+  <div class="container">
+    <cdk-virtual-scroll-viewport #viewPort scrollWindow [itemSize]="itemSize" *ngIf="dataSource$ | async as dataSource" (scrolledIndexChange)="offsetChanged($event)">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ng-container *cdkVirtualFor="let arr of dataSource; let i = index; trackBy: trackById">
+          <div *ngFor="let item of arr || [undefined, undefined]">
+            <app-materials-list-item [item]="item"></app-materials-list-item>
+          </div>
+        </ng-container>
+      </div>
+    </cdk-virtual-scroll-viewport>
+
+    <div *ngIf="!dataSource || dataSource.length === 0">
+      <h5 translate>No content was found, try to change filters</h5>
+    </div>
+  </div>
 </div>

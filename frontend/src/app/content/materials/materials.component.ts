@@ -1,18 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ApiService, SimpleListItem } from '@app/services/api.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { CustomValidator } from '@app/services/custom-validator';
-import { Observable } from 'rxjs';
-import { ApiError } from '@app/services/api-error';
-import { Category, CategoryArray, Content, ListResponse } from '@app/interfaces/common.interface';
+import { map, Observable } from 'rxjs';
+import { Category, CategoryArray, Content } from '@app/interfaces/common.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatingService } from '@app/services/translating.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { switchMap } from 'rxjs';
 import { allParams, base64ToObject, filterEmptyFromObject, objectToBase64, toQueryParams } from '@app/shared/helpers';
 import { MaterialSortOptions } from './common/constant';
 import { deepEqual } from './common/helper';
+import { MaterialsDataSource } from './materials.data-source';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { ViewportScroller } from '@angular/common';
 
 @UntilDestroy()
 @Component({
@@ -23,7 +23,8 @@ import { deepEqual } from './common/helper';
 export class MaterialsComponent implements OnInit, OnDestroy {
   filterForm: UntypedFormGroup;
   loading$: Observable<boolean>;
-  contentList$: Observable<ApiError | ListResponse<Content>>;
+  dataSource$: Observable<MaterialsDataSource>;
+  dataSource: MaterialsDataSource;
 
   levels$: Observable<SimpleListItem[]>;
   types$: Observable<SimpleListItem[]>;
@@ -32,16 +33,20 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   categories: Category[];
   sortOptions: SimpleListItem[] = MaterialSortOptions;
 
-  currentPage = 1;
-  defaultPerPage = 50;
+  currentOffset = 0;
+  itemSize = 174;
+  isInitialOffset = true;
+  defaultPerPage = 20;
   currentPerPage = this.defaultPerPage;
-  randomSeed: number;
+
+  @ViewChild(CdkVirtualScrollViewport)
+  cdkScroll: CdkVirtualScrollViewport;
 
   get sortValue(): string {
     return this.filterForm.get('sort').value;
   }
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private translatingService: TranslatingService, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private translatingService: TranslatingService, private route: ActivatedRoute, private router: Router, private viewportScroller: ViewportScroller) {}
 
   ngOnInit() {
     this.levels$ = this.api.getContentLevels();
@@ -61,14 +66,12 @@ export class MaterialsComponent implements OnInit, OnDestroy {
       categoryId: [''],
       sort: ['random'],
     });
-    this.setRandomSeed();
     this.setFavoriteCategories();
 
-    this.contentList$ = allParams(this.route).pipe(
-      switchMap((params) => {
-        this.currentPage = params['page'] !== undefined ? Number(params['page']) : 1;
+    this.dataSource$ = allParams(this.route).pipe(
+      map((params) => {
+        this.currentOffset = params['offset'] !== undefined ? Number(params['offset']) : 0;
         this.currentPerPage = params['per-page'] !== undefined ? Number(params['per-page']) : this.defaultPerPage;
-        console.log('params', params);
         if (params['filter']) {
           let filter: any = base64ToObject(params['filter']);
           if (filter?.categoryId?.length && filter?.categoryId[0] === -1) {
@@ -80,9 +83,13 @@ export class MaterialsComponent implements OnInit, OnDestroy {
           const isSameValue = deepEqual({ ...this.filterForm.value, ...filter }, this.filterForm.value);
           if (filter && !isSameValue) {
             this.filterForm.patchValue(filter);
+          } else if (this.dataSource) {
+            return this.dataSource;
           }
         }
-        return this.api.contentList(this.getQueryParamsForRequest());
+        let formParams = toQueryParams(this.filterForm.value, 'filter');
+        this.dataSource = new MaterialsDataSource(formParams, this.api, this.currentOffset);
+        return this.dataSource;
       })
     );
 
@@ -99,9 +106,6 @@ export class MaterialsComponent implements OnInit, OnDestroy {
 
   getQueryParamsForUrl() {
     let params = {};
-    if (this.currentPage != 1) {
-      params['page'] = String(this.currentPage);
-    }
     if (this.currentPerPage != this.defaultPerPage) {
       params['per-page'] = String(this.currentPerPage);
     }
@@ -114,61 +118,37 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     if (Object.keys(filterValue).length != 0) {
       params['filter'] = objectToBase64(filterValue);
     }
-
-    return params;
-  }
-
-  getQueryParamsForRequest() {
-    let params = toQueryParams(this.filterForm.value, 'filter');
-    if (params['filter[sort]']) {
-      params['sort'] = params['filter[sort]'];
-      if (params['sort'] === 'random') {
-        params['randomSeed'] = `${this.randomSeed}`;
-      }
-      delete params['filter[sort]'];
+    if (this.currentOffset != 0) {
+      params['offset'] = this.currentOffset;
     }
-    if (this.currentPage != 1) {
-      params['page'] = String(this.currentPage);
-    }
-    if (this.currentPerPage != this.defaultPerPage) {
-      params['per-page'] = String(this.currentPerPage);
-    }
-    params['filter[status]'] = '1';
-    params['filter[deleted]'] = '0';
 
     return params;
   }
 
   updateUrl() {
-    this.router.navigate([], { queryParams: this.getQueryParamsForUrl() });
+    this.router.navigate([], { queryParams: this.getQueryParamsForUrl(), replaceUrl: true });
+  }
+
+  offsetChanged(newOffset: number) {
+    if (this.isInitialOffset) {
+      this.isInitialOffset = false;
+      let scrollPosition = this.viewportScroller.getScrollPosition();
+      if (this.cdkScroll && scrollPosition[1] == 0 && newOffset == 0 && this.currentOffset != 0) {
+        let viewportOffset = this.cdkScroll.measureViewportOffset();
+        this.cdkScroll.scrollToOffset(Math.ceil(viewportOffset + this.currentOffset * this.itemSize));
+      }
+    } else {
+      this.currentOffset = newOffset;
+      if (window) {
+        // Avoid triggering Angular route update
+        let newUrl = window.location.href.replace(/\?offset=\d+/, '?').replace(/&offset=\d+/, '') + (this.currentOffset > 0 ? '&offset=' + this.currentOffset : '');
+        window.history.replaceState(window.history.state, null, newUrl);
+      }
+    }
   }
 
   onFormUpdated(newValues: any) {
-    this.setRandomSeed();
     this.updateUrl();
-  }
-
-  setRandomSeed() {
-    this.randomSeed = Math.random();
-  }
-
-  changePageTable(data) {
-    this.currentPerPage = data.rows;
-    this.currentPage = Number(data.page) + 1;
-    this.updateUrl();
-  }
-
-  deleteMaterial(event) {
-    this.api
-      .deleteMaterial(event)
-      .pipe(untilDestroyed(this))
-      .subscribe((res) => {
-        if (!(res instanceof ApiError)) {
-          this.snackBar.open(this.translatingService.translates['confirm'].materials.deleted, null, { duration: 3000 });
-          this.router.navigate([], { queryParamsHandling: 'merge' });
-        } else {
-        }
-      });
   }
 
   setFavoriteCategories() {
@@ -185,6 +165,10 @@ export class MaterialsComponent implements OnInit, OnDestroy {
 
   getSortLabel(val: string) {
     return this.sortOptions.find((x) => x.value === val)?.title || '';
+  }
+
+  trackById(index: number, item: Content[]) {
+    return item?.[0]?.id || -1 * index;
   }
 
   ngOnDestroy() {}

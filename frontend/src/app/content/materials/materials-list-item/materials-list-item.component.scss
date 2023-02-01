@@ -15,4 +15,9 @@
   font-size: 1.25rem;
   cursor: pointer;
   color: #515C66;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
