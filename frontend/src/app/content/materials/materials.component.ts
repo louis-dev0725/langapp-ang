@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ApiService, SimpleListItem } from '@app/services/api.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
@@ -102,6 +102,22 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     this.filterForm.valueChanges.pipe(untilDestroyed(this)).subscribe((e) => this.onFormUpdated(e));
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.updateItemSize();
+  }
+
+  updateItemSize() {
+    let cards = this.cdkScroll.elementRef.nativeElement?.querySelectorAll('.card');
+    if (cards && cards[0] && cards[2]) {
+      this.itemSize = cards[2].getBoundingClientRect().y - cards[0].getBoundingClientRect().y;
+    } else {
+      setTimeout(() => {
+        this.updateItemSize();
+      }, 1000);
+    }
+  }
+
   checkError(fieldName: string) {
     return !this.filterForm.get(fieldName).valid;
   }
@@ -138,16 +154,24 @@ export class MaterialsComponent implements OnInit, OnDestroy {
   offsetChanged(newOffset: number) {
     if (this.isInitialOffset) {
       this.isInitialOffset = false;
-      let scrollPosition = this.viewportScroller.getScrollPosition();
-      if (this.cdkScroll && scrollPosition[1] == 0 && newOffset == 0 && this.currentOffset != 0) {
-        let viewportOffset = this.cdkScroll.measureViewportOffset();
-        this.cdkScroll.scrollToOffset(Math.ceil(viewportOffset + this.currentOffset * this.itemSize));
-      }
+      this.updateItemSize();
+      setTimeout(() => {
+        let scrollPosition = this.viewportScroller.getScrollPosition();
+        if (this.cdkScroll && scrollPosition[1] == 0 && newOffset == 0 && this.currentOffset != 0) {
+          let viewportOffset = this.cdkScroll.measureViewportOffset();
+          this.cdkScroll.scrollToOffset(Math.ceil(viewportOffset + this.currentOffset * this.itemSize));
+        }
+      });
     } else {
       this.currentOffset = newOffset;
       if (window) {
         // Avoid triggering Angular route update
-        let newUrl = window.location.href.replace(/\?offset=\d+/, '?').replace(/&offset=\d+/, '') + (this.currentOffset > 0 ? '&offset=' + this.currentOffset : '');
+        let newUrl = window.location.href
+          .replace(/\?offset=\d+/, '?')
+          .replace(/&offset=\d+/, '')
+          .replace(/\?$/, '');
+        newUrl += newUrl.includes('?') ? '&' : '?';
+        newUrl += this.currentOffset > 0 ? 'offset=' + this.currentOffset : '';
         window.history.replaceState(window.history.state, null, newUrl);
       }
     }
