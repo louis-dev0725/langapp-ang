@@ -127,8 +127,12 @@ export class SignupComponent implements OnInit {
       let browserLangs = window.navigator.languages ?? [window.navigator.language];
       let newLanguages = [];
       for (let browserLang of browserLangs) {
-        if (browserLang != this.languageToLearn) {
+        let browserLang2 = browserLang.substring(0, 2);
+        if (browserLang != this.languageToLearn || browserLang2 != this.languageToLearn) {
           let langIndex = this.availableLanguages.findIndex((l) => l.data == browserLang);
+          if (langIndex == -1) {
+            langIndex = this.availableLanguages.findIndex((l) => l.data == browserLang2);
+          }
           if (langIndex !== -1) {
             let langValue = this.availableLanguages.splice(langIndex, 1)[0];
             this.availableLanguages.splice(newLanguages.length, 0, langValue);
@@ -136,6 +140,7 @@ export class SignupComponent implements OnInit {
           }
         }
       }
+      console.log('newLanguages:', newLanguages);
       this.signupForm.get('languages').setValue(newLanguages.map((l) => l.data));
       this.selectedLanguages = newLanguages;
     });
