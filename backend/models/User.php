@@ -322,6 +322,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                 'languageLevel',
                 'favoriteCategoryId',
                 'dailyGoal',
+                'avatar'
             ];
         } elseif ($this->scenario == static::SCENARIO_INDEX || Helpers::isAdmin()) {
             $fields = parent::fields();
@@ -332,6 +333,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             $fields['accessToken'] = 'token';
             $fields['extensionSettings'] = 'extensionSettings';
             $fields['isPaid'] = 'isPaid';
+            $fields['avatar'] = 'avatar';
             unset($fields['passwordHash']);
 
             return $fields;
@@ -702,6 +704,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->dataJson['extensionSettings'] ?? [];
     }
 
+    public function getAvatar()
+    {
+        return '/assets/default-avatar.jpg';
+    }
+
     public function setExtensionSettings($value)
     {
         if (!is_array($value)) {
@@ -833,7 +840,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function paySubscriptionIfNecessary(): array
     {
         if ($this->isServicePaused == 1) {
-            return ['status' => false, 'message' => Yii::t('app','You disabled subscription renewal. Please enable subscription to continue using the service.')];
+            return ['status' => false, 'message' => Yii::t('app', 'You disabled subscription renewal. Please enable subscription to continue using the service.')];
         }
 
         $timeNow = time();
@@ -841,7 +848,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
         // Is the service paid for more than one day?
         if (Helpers::dateToUnix($this->paidUntilDateTime) > $timeNow + $oneDayUnix) {
-            return ['status' => true, 'message' => Yii::t('app','Your subscription is already renewed.')];
+            return ['status' => true, 'message' => Yii::t('app', 'Your subscription is already renewed.')];
         }
 
         // Has user pending transactions?
@@ -883,8 +890,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                     return ['status' => true, 'message' => Yii::t('app', 'Your subscription was successfully renewed.')];
                 }
             }
-        }
-        else {
+        } else {
             if ($this->renewSubscription(0) === false) {
                 throw new ServerErrorHttpException("Failed to renew the subscription for user $this->id");
             }
@@ -960,7 +966,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         try {
             return new DateTimeZone($this->timezone ?? Yii::$app->timeZone);
-        } catch (Throwable $e) {}
+        } catch (Throwable $e) {
+        }
 
         return new DateTimeZone(Yii::$app->timeZone);
     }
