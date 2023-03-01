@@ -29,6 +29,12 @@ export interface User {
   paidUntilDateTime: string;
   partnerPercent: string;
   isPaid: boolean;
+  tariff: 'free' | 'monthly' | 'yearly';
+  penaltyAmount: number;
+  languageLevel: 'new' | 'beginner' | 'intermediate' | 'advanced';
+  favoriteCategoryId: number[];
+  dailyGoal: number;
+  avatar: string;
 }
 
 export interface UserNotification {
