@@ -122,7 +122,7 @@ export class ApiService {
       this.messageService.add({
         severity: 'error',
         summary: 'Unknown error',
-        detail: response.error.toString(),
+        detail: response?.error?.toString(),
         sticky: true,
         closable: true,
       });
@@ -171,7 +171,7 @@ export class ApiService {
    * Регистрация
    */
   signUp(params: any): Observable<User> {
-    return this.apiRequest<User>(this.apiHost + '/users', params).pipe(
+    return this.apiRequest<User>('POST', 'users', { body: params }).pipe(
       tap((res) => {
         this.session.user$.next(res);
         this.session.token$.next(res.accessToken);
@@ -317,7 +317,7 @@ export class ApiService {
    * Получаем все транзакции пользователя ... вроде
    */
   private prepareTransactionsUrl(params: any = {}): string {
-    let url = this.apiHost + '/transactions/index';
+    let url = 'transactions/index';
     if (Object.keys(params).length > 0) {
       url += '?';
     }
