@@ -3,18 +3,18 @@
     <div class="basis-full md:basis-1/2 p-8 pb-0">
       <div class="grid grid-cols-[2.5rem_2.5rem_auto] grid-rows-[18px_auto] leading-none items-center justify-start">
         <div class="w-6 mr-4 row-start-2">
-          <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(card?.audioUrls[0])"></i>
+          <i class="pi pi-volume-up play-audio-button text-2xl leading-none" (click)="audioService.play(card?.audioUrls[0])"></i>
         </div>
         <div class="w-6 mr-4 row-start-2">
           <app-progress-circle [percent]="card.frequencyRank" [size]="20" [pTooltip]="'frequency-rank-tooltip-word' | translate: { value: card.frequencyRank }" [tooltipStyleClass]="'max-w-xs'" tabindex="0" tooltipEvent="focus" [styleClass]="'outline-0'"></app-progress-circle>
-         </div>
+        </div>
         <div [innerHTML]="card?.furiganaHtml" class="text-black furigana-font text-[40px] row-span-2"></div>
       </div>
     </div>
     <div class="basis-full md:basis-1/2 px-8 mt-8" *ngIf="card?.mnemonic?.imageUrl">
       <div class="flex items-start justify-start">
         <img class="margin-m" width="105" height="105" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl" />
-        <!--          <button pButton style="background: none; padding: 0; border: none; margin-left: 10px" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18" [color]="'#5397d5'"></ic-icon></button>-->
+        <!--          <button pButton style="background: none; padding: 0; border: none; margin-left: 10px" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18"></ic-icon></button>-->
       </div>
     </div>
   </div>
@@ -60,7 +60,7 @@
           <ng-container *ngIf="meaning?.exampleSentences?.length">
             <div class="grid grid-cols-[2.5rem_auto] gap-y-1 items-center justify-start pt-4 example-sentence" *ngFor="let sentence of meaning?.exampleSentences | slice: 0:meaning?.countExampleSentencesToShow">
               <div class="w-10 flex items-center justify-start">
-                <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(sentence?.audioUrls[0])"></i>
+                <i *ngIf="sentence?.audioUrls?.length" class="pi pi-volume-up play-audio-button text-2xl leading-none" (click)="audioService.play(sentence?.audioUrls[0])"></i>
               </div>
               <div class="text-black text-[18px]" onclickTranslation [innerHTML]="sentence?.furiganaHtml"></div>
               <div class="col-start-2 text-black text-[14px]" *ngIf="sentence?.translationHtml" [innerHTML]="sentence?.translationHtml"></div>

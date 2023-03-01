@@ -1,10 +1,10 @@
 <div class="flex items-start justify-center w-full mt-8" *ngIf="!isAnswered && card?.question?.showBigAudio">
-  <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 4rem" (click)="audioService.play(card?.audioUrls[0])"></i>
+  <i class="pi pi-volume-up play-audio-button text-[4rem]" (click)="audioService.play(card?.audioUrls[0])"></i>
 </div>
 <div [ngClass]="{ 'question-mode': !isAnswered }" *ngIf="isAnswered || !card?.question?.showBigAudio">
   <div class="grid grid-cols-[2.5rem_auto_2.5rem] gap-y-1 items-center justify-center" [ngClass]="{ 'md:justify-start': !centerOnDesktop }">
     <div>
-      <i class="pi pi-volume-up play-audio-button mark-on-quesion" style="color: #5397d5; font-size: 1.5rem" *ngIf="card?.audioUrls?.[0]" (click)="audioService.play(card?.audioUrls[0])"></i>
+      <i class="pi pi-volume-up play-audio-button mark-on-quesion text-2xl leading-none" *ngIf="card?.audioUrls?.[0]" (click)="audioService.play(card?.audioUrls[0])"></i>
     </div>
     <div>
       <p [innerHTML]="isAnswered || !card?.question?.furiganaHtml ? card?.furiganaHtml : card?.question?.furiganaHtml" style="font-size: 34px" class="drill-word-furigana text-black" [ngClass]="{ 'mark-on-quesion': !isAnswered && !card?.question?.furiganaHtml }"></p>
@@ -35,7 +35,7 @@
   </div>
   <div class="flex items-start justify-start" style="margin-top: 20px" *ngIf="card?.mnemonic?.imageUrl">
     <div style="flex: 1">
-      <!--        <button pButton style="background: none; padding: 0; border: none;" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18" [color]="'#5397d5'"></ic-icon></button>-->
+      <!--        <button pButton style="background: none; padding: 0; border: none;" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18"></ic-icon></button>-->
     </div>
     <div style="flex: 5">
       <img height="105" width="105" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl" />

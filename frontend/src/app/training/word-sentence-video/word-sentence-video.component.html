@@ -4,28 +4,33 @@
       <div class="p-col-12 p-md-6">
         <div class="flex flex-col items-center justify-start w-full h-full" *ngIf="!state.isAnswered; else kanjiInfo">
           <video controls class="w-full" style="margin-bottom: 20px">
-            <source [src]="card?.question?.sentence?.videoUrls[0]" type="video/mp4">
+            <source [src]="card?.question?.sentence?.videoUrls[0]" type="video/mp4" />
           </video>
           <p class="text-black" [innerHTML]="card?.question?.questionHtml" style="font-size: 18px"></p>
         </div>
       </div>
       <div class="p-col-12 p-md-6">
         <div class="flex flex-col items-center justify-center w-full">
-          <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i=index">
+          <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of card?.question?.answers; let i = index">
             <div style="flex: 1" class="flex justify-center" *ngIf="isWideScreen">
-              <span style="font-size: 13px">{{i + 1}}</span>
+              <span style="font-size: 13px">{{ i + 1 }}</span>
             </div>
-            <div style="flex: 4; height: 80px; cursor: pointer" class="answer-default flex items-center justify-center" (click)="checkAnswer(i + 1)" [ngClass]="{
-              'answer-correct': state.isAnswered && answer?.isCorrectAnswer,
-              'answer-incorrect': state.isAnswered && !state.isAnsweredCorrectly && i === state.answeredIndex - 1
-            }">
-              <p class="text-black" [innerHTML]="answer?.contentHtml" style="font-size: 25px;"></p>
+            <div
+              style="flex: 4; height: 80px; cursor: pointer"
+              class="answer-default flex items-center justify-center"
+              (click)="checkAnswer(i + 1)"
+              [ngClass]="{
+                'answer-correct': state.isAnswered && answer?.isCorrectAnswer,
+                'answer-incorrect': state.isAnswered && !state.isAnsweredCorrectly && i === state.answeredIndex - 1
+              }"
+            >
+              <p class="text-black" [innerHTML]="answer?.contentHtml" style="font-size: 25px"></p>
             </div>
           </div>
           <div class="flex w-full" style="margin-bottom: 15px">
             <div style="flex: 1" *ngIf="isWideScreen"></div>
             <div style="flex: 4" class="flex items-center justify-center">
-              <button style="width: 100%; height: 35px; font-size: 15px" pButton type="button" label="{{'I don\'t remember' | translate}}" (click)="forgotAnswer()" *ngIf="!state.isAnswered; else continueButton"></button>
+              <button style="width: 100%; height: 35px; font-size: 15px" pButton type="button" label="{{ 'I don\'t remember' | translate }}" (click)="forgotAnswer()" *ngIf="!state.isAnswered; else continueButton"></button>
             </div>
           </div>
         </div>
@@ -33,51 +38,51 @@
     </div>
     <div class="w-full" style="margin: 0; padding: 12px 16px">
       <div class="flex items-center justify-start">
-        <button style="height: 35px; font-size: 15px" pButton type="button" label="{{'Disable questions with audio for 1 hour' | translate}}" class="ellipsis-btn" (click)="cardsService.disableAudioQuestionsFor1Hour()"></button>
+        <button style="height: 35px; font-size: 15px" pButton type="button" label="{{ 'Disable questions with audio for 1 hour' | translate }}" class="ellipsis-btn" (click)="cardsService.disableAudioQuestionsFor1Hour()"></button>
       </div>
     </div>
     <div class="w-full" style="margin: 0; padding: 12px 16px">
       <div class="flex items-center justify-start">
-        <p style="color: #a0b0c4; font-size: 14px">{{state.isAnswered ? ('Explanation: select word with this meaning.' | translate) : ('Explanation: fill empty space with word from audio.' | translate)}}</p>
+        <p style="color: #a0b0c4; font-size: 14px">{{ state.isAnswered ? ('Explanation: select word with this meaning.' | translate) : ('Explanation: fill empty space with word from audio.' | translate) }}</p>
       </div>
     </div>
   </div>
 </div>
 
 <ng-template #continueButton>
-  <button style="width: 100%; height: 35px; font-size: 15px" pButton type="button" label="{{'Continue' | translate}}" (click)="continueTraining()"></button>
+  <button style="width: 100%; height: 35px; font-size: 15px" pButton type="button" label="{{ 'Continue' | translate }}" (click)="continueTraining()"></button>
 </ng-template>
 
 <ng-template #kanjiInfo>
   <div class="kanji-info">
     <video controls class="w-full" style="margin-bottom: 20px">
-      <source [src]="card?.question?.sentence?.videoUrls[0]" type="video/mp4">
+      <source [src]="card?.question?.sentence?.videoUrls[0]" type="video/mp4" />
     </video>
     <div class="flex flex-col items-center justify-start">
-      <p [innerHTML]="card?.question?.sentence?.furiganaHtml" style="font-size: 18px;" class="furigana-font-tiny text-black"></p>
-      <p [innerHTML]="card?.question?.sentence?.translationHtml" style="font-size: 14px;" class="furigana-font-tiny text-black"></p>
+      <p [innerHTML]="card?.question?.sentence?.furiganaHtml" style="font-size: 18px" class="furigana-font-tiny text-black"></p>
+      <p [innerHTML]="card?.question?.sentence?.translationHtml" style="font-size: 14px" class="furigana-font-tiny text-black"></p>
     </div>
     <div class="flex items-center justify-start" style="margin-top: 20px">
       <div style="flex: 1">
-        <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(card?.audioUrls[0])"></i>
+        <i class="pi pi-volume-up play-audio-button text-2xl leading-none" (click)="audioService.play(card?.audioUrls[0])"></i>
       </div>
       <div style="flex: 5">
-        <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px;" class="furigana-font-tiny text-black"></p>
+        <p [innerHTML]="card?.furiganaHtml" style="font-size: 34px" class="furigana-font-tiny text-black"></p>
       </div>
     </div>
     <div class="flex items-center justify-start">
       <div style="flex: 1"></div>
       <div class="kanji-meaning">
-        <p class="text-black" style="font-size: 20px">{{card?.meanings | join: ', '}}</p>
+        <p class="text-black" style="font-size: 20px">{{ card?.meanings | join: ', ' }}</p>
         <button pButton class="ellipsis-btn" style="width: 44px; height: 25px" icon="pi pi-ellipsis-h" iconPos="left" (click)="goToInfoCard(card?.infoCard)"></button>
       </div>
     </div>
     <div class="flex items-start justify-start" style="margin-top: 20px">
       <div style="flex: 1">
-<!--        <button pButton style="background: none; padding: 0; border: none;" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18" [color]="'#5397d5'"></ic-icon></button>-->
+        <!--        <button pButton style="background: none; padding: 0; border: none;" type="button" class="edit"><ic-icon [icon]="icons.editIcon" height="18" width="18"></ic-icon></button>-->
       </div>
       <div style="flex: 5">
-        <img height="105" width="105" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl">
+        <img height="105" width="105" *ngIf="card?.mnemonic?.imageUrl" [src]="card?.mnemonic?.imageUrl" />
       </div>
     </div>
   </div>

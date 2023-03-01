@@ -7,8 +7,37 @@ $fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 @import "../node_modules/primeng/resources/primeng.css";
 @import "../node_modules/primeflex/primeflex.scss";
 @import "../node_modules/primeicons/primeicons.css";
-@import "assets/theme/denim/theme-light.scss";
-@import "assets/layout/css/layout-light.scss";
+
+$primaryLightColor: #ffa5ae; // #e86e7a //#4d9fdc;
+$primaryColor: #ff8289;
+$primaryDarkColor: #b5565f;
+$primaryDarkerColor: #6b3338;
+$primaryTextColor: #f8fafc;
+$borderRadius: 8px;
+
+$grayscaleStrokeLineColor: #d9dfeb;
+$grayscaleBodyColor: #64697d;
+$grayscaleBackgroundColor: #eef4fb;
+
+$highlightBg: $primaryColor;
+$highlightTextColor: $primaryTextColor;
+
+:root {
+  --primary-light-color: $primaryLightColor;
+  --primary-color: $primaryColor;
+  --primary-dark-color: $primaryDarkColor;
+  --primary-darker-color: $primaryDarkerColor;
+  --primary-text-color: $primaryTextColor;
+
+  --grayscale-stroke-line-c: $grayscaleStrokeLineColor;
+  --grayscale-body: $grayscaleBodyColor;
+  --grayscale-background: #eef4fb;
+}
+
+@import "assets/sass/theme/_theme_light";
+@import "assets/sass/variables/layout/_layout_light";
+@import "assets/sass/layout/_layout";
+
 //@import "../node_modules/prismjs/themes/prism-coy.css";
 //@import "../node_modules/@fullcalendar/core/main.min.css";
 //@import "../node_modules/@fullcalendar/daygrid/main.min.css";
@@ -180,8 +209,54 @@ ruby rt:hover {
 
 .ellipsis-btn {
   background: white;
-  border: 1px solid #5397d5;
-  color: #5397d5;
+  border: 1px solid $grayscaleStrokeLineColor;
+  color: $grayscaleBodyColor;
+}
+
+.ellipsis-btn:enabled:hover {
+  background: $grayscaleBackgroundColor;
+  border: 1px solid $grayscaleStrokeLineColor;
+  color: $grayscaleBodyColor;
+}
+
+.text-primary-light {
+  color: $primaryLightColor;
+}
+
+.bg-tulip-100 {
+  background-color: #ffd5d9;
+}
+
+.bg-tulip-200 {
+  background-color: #ffc1c7;
+}
+
+.bg-tulip-300 {
+  background-color: #ffa5ae;
+}
+
+.bg-tulip-400 {
+  background-color: #ff949e;
+}
+
+.bg-tulip-500 {
+  background-color: #ff8289;
+}
+
+.bg-tulip-600 {
+  background-color: #e86e7a;
+}
+
+.bg-tulip-700 {
+  background-color: #b5565f;
+}
+
+.bg-tulip-800 {
+  background-color: #8c434a;
+}
+
+.bg-tulip-900 {
+  background-color: #6b3338;
 }
 
 rt {
@@ -200,11 +275,13 @@ rt {
   /*text-decoration: underline;
   text-decoration-color: #8fcaf9;
   text-decoration-thickness: 2px;*/
-  background-image: linear-gradient(0deg, #8fcaf9 0px 2px, transparent 0 100%);
+  background-image: linear-gradient(0deg, #fcc418 0px 2px, transparent 0 100%);
 }
 
 .play-audio-button {
   cursor: pointer;
+  color: #5397d5;
+  color: $grayscaleBodyColor;
 }
 
 .container {

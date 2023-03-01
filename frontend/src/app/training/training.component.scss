@@ -1,5 +1,5 @@
 .action-btn:hover {
-  color: #5397d5 !important;
+  color: var(--primary-light-color) !important;
 }
 
 .action-btn:focus {
@@ -20,11 +20,9 @@
     justify-content: flex-start;
     margin-top: 20px;
   }
-
 }
 
 @media screen and (min-width: 968px) {
-
   .buttons-layout {
     display: flex;
     flex-direction: row;
@@ -32,5 +30,4 @@
     justify-content: flex-end;
     margin-top: 20px;
   }
-
 }

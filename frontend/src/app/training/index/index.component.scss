@@ -1,12 +1,14 @@
 @media screen and (max-width: 320px) {
   .start-text {
-    width: 100%; margin: 0;
+    width: 100%;
+    margin: 0;
   }
 }
 
 @media screen and (min-width: 968px) {
   .start-text {
-    width: 50%; margin: 150px 0;
+    width: 50%;
+    margin: 150px 0;
   }
 }
 
@@ -25,7 +27,7 @@
 }
 
 .action-btn:hover {
-  color: #5397d5 !important;
+  color: var(--primary-light-color) !important;
 }
 
 .action-btn:focus {

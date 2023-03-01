@@ -1,10 +1,11 @@
-$primaryLightColor: #4D9FDC;
-$primaryColor: #1B74C5;
-$primaryDarkColor: #135AA9;
-$primaryDarkerColor: #0D438D;
+$primaryLightColor: #ffc1c7; //#4d9fdc;
+$primaryColor: #ff8289;
+$primaryDarkColor: #b5565f;
+$primaryDarkerColor: #6b3338;
 $primaryTextColor: #f8fafc;
+$borderRadius: 8px;
 
 $highlightBg: $primaryColor;
 $highlightTextColor: $primaryTextColor;
 
-@import '../../sass/theme/_theme_light';
+@import "../../sass/theme/_theme_light";

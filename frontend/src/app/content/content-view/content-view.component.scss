@@ -168,15 +168,15 @@ textarea {
 }
 
 .play-active {
-  background-color: #75ABDC;
+  background-color: #75abdc;
 }
 
 .play:hover {
-  color: #75ABDC;
+  color: #75abdc;
 }
 
 .subtitle-active {
-  background-color: #EFF5FE;
+  background-color: #eff5fe;
 }
 
 .subtitle:hover {
@@ -195,7 +195,7 @@ textarea {
 
 .active-subtitle {
   padding: 50px;
-  background-color: #607D8B;
+  background-color: #607d8b;
   text-align: center;
   color: white;
   font-size: 20px;
@@ -214,7 +214,7 @@ textarea {
 }
 
 .control:hover {
-  color: #5397d5 !important;
+  color: var(--primary-light-color) !important;
 }
 
 .control:focus {
@@ -288,7 +288,7 @@ textarea {
   }
 }
 .secondary-overlay-btn-active {
-  color: #5397d5 !important;
+  color: var(--primary-light-color) !important;
 }
 
 .secondary-overlay-btn {
@@ -297,7 +297,7 @@ textarea {
 
 .overlay-btn:hover {
   background: transparent;
-  color: #5397d5 !important;
+  color: var(--primary-light-color) !important;
 }
 
 :host ::ng-deep .shortcut {
@@ -312,7 +312,7 @@ textarea {
   font-size: 14px;
   font-weight: 500;
   padding: 10px 14px;
-  transition: all .15s ease-out;
+  transition: all 0.15s ease-out;
   min-height: 48px;
   -webkit-user-select: none;
   -moz-user-select: none;

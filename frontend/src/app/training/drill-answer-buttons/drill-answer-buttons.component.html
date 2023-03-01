@@ -1,10 +1,10 @@
 <div class="flex flex-col items-center justify-center w-full">
-  <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of (isAnswered && card?.question?.openAnswers ? card?.question?.openAnswers : card?.question?.answers); let i = index">
+  <div class="flex w-full" style="margin-bottom: 15px" *ngFor="let answer of isAnswered && card?.question?.openAnswers ? card?.question?.openAnswers : card?.question?.answers; let i = index">
     <div style="flex: 1" class="justify-center hidden md:flex">
       <span style="font-size: 13px">{{ i + 1 }}</span>
     </div>
     <div style="flex: 1" class="flex justify-center items-center" *ngIf="answer?.audioUrls?.[0]">
-      <i class="pi pi-volume-up play-audio-button" style="color: #5397d5; font-size: 1.5rem" (click)="audioService.play(answer?.audioUrls?.[0])"></i>
+      <i class="pi pi-volume-up play-audio-button text-2xl leading-none" (click)="audioService.play(answer?.audioUrls?.[0])"></i>
     </div>
     <div
       style="flex: 4"
@@ -16,9 +16,8 @@
         'text-[18px]': !answer?.useBigFont,
         'text-[24px]': answer?.useBigFont
       }"
-      [innerHTML]="answer?.contentHtml ? answer?.contentHtml : 'select-audio-n' | translate : {value: i + 1}"
-    >
-    </div>
+      [innerHTML]="answer?.contentHtml ? answer?.contentHtml : ('select-audio-n' | translate: { value: i + 1 })"
+    ></div>
   </div>
   <div class="flex w-full" style="margin-bottom: 15px">
     <div style="flex: 1" class="hidden md:flex"></div>
