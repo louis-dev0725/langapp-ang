@@ -1,6 +1,6 @@
 <?php
 
-class m230220_070000_languages_data extends yii\db\Migration
+class m230301_070000_languages_data extends yii\db\Migration
 {
     public function safeUp()
     {
@@ -40,7 +40,7 @@ class m230220_070000_languages_data extends yii\db\Migration
                 $titleEnglish = '';
             }
             $title = mb_strtoupper(mb_substr($titleNative, 0, 1)) . mb_substr($titleNative, 1);
-            if ($titleEnglish != '') {
+            if ($titleEnglish != '' && $title != $titleEnglish) {
                 $title .= ' (' . $titleEnglish . ')';
             }
             $toInsert[] = ['code' => $code2, 'code3' => $code3, 'title' => $title, 'titleEnglish' => $titleEnglish, 'titleNative' => $titleNative];
