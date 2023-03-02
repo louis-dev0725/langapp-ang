@@ -1,12 +1,13 @@
 import { Controller, Get, UseGuards, Req, Post, HttpCode, Query, HttpException, HttpStatus, Body, Logger } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
+import { InjectRepository } from '@nestjs/typeorm';
 import { IsNotEmpty } from 'class-validator';
 import { groupBy, max, mean, sum } from 'lodash';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PaidGuard } from 'src/auth/paid.guard';
 import { RequestWithUser } from 'src/auth/RequestWithUser';
-import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
-import { In } from 'typeorm';
+import { UserDictionary } from 'src/entities/UserDictionary';
+import { In, Repository } from 'typeorm';
 import { DrillsGenerator } from './drills.generator';
 import { Drill } from './drills.interfaces';
 import { CardAnswer, SrsService } from './srs.service';
@@ -18,9 +19,14 @@ export class ReportProgressBody {
 
 @Controller('drills')
 export class DrillsController {
-  private readonly logger = new Logger(DrillsController.name, true);
+  private readonly logger = new Logger(DrillsController.name, { timestamp: true });
 
-  constructor(private moduleRef: ModuleRef, private userDictionaryRepository: UserDictionaryRepository, private srsService: SrsService) {}
+  constructor(
+    private moduleRef: ModuleRef,
+    @InjectRepository(UserDictionary)
+    private userDictionaryRepository: Repository<UserDictionary>,
+    private srsService: SrsService,
+  ) {}
 
   @UseGuards(JwtAuthGuard, PaidGuard)
   @Post('report-progress')

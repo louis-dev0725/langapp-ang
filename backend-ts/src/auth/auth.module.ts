@@ -7,16 +7,14 @@ import { getSecret } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entities/User';
-import { UserRepository } from 'src/entities/UserRepository';
 
-@Injectable()
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({
       secret: getSecret(),
     }),
-    TypeOrmModule.forFeature([User, UserRepository]),
+    TypeOrmModule.forFeature([User]),
   ],
   providers: [JwtStrategy],
 })

@@ -13,18 +13,17 @@ import { AnalyzeJapaneseService } from '../analyze.japanese.service';
 @Injectable()
 @Processor('backgroundTasks')
 export class QueueProcessor {
-  private readonly logger = new Logger(QueueProcessor.name);
+  private readonly logger = new Logger(QueueProcessor.name, { timestamp: true });
 
   constructor(
     @InjectRepository(Content)
     private contentRepository: Repository<Content>,
-    private analyzeJapanese: AnalyzeJapaneseService
-  ) {
-  }
+    private analyzeJapanese: AnalyzeJapaneseService,
+  ) {}
 
   @Process({ name: 'processContent', concurrency: 10 })
   async processContent(job: Job<any>) {
-    let item = await this.contentRepository.findOne(job.data.id);
+    let item = await this.contentRepository.findOne({ where: { id: job.data.id } });
     if (!item) {
       throw new Error('Unable to find content item with id ' + job.data.id);
     }
@@ -49,7 +48,7 @@ export class QueueProcessor {
           throw new UnpublishedReason('Less than 5 subtitle lines.');
         }
 
-        item.cleanText = webvtt.cues.map(c => c.text).join("\n");
+        item.cleanText = webvtt.cues.map((c) => c.text).join('\n');
         if (item.dataJson.duration) {
           item.dataJson.subtitlesPaceMedian = this.calculateMedianSubtitlesPace(webvtt.cues, item.dataJson.duration, lang);
           item.dataJson.subtitlesPaceOverall = this.calculateOverallSubtitlesPace(item.cleanText, item.dataJson.duration, lang);
@@ -69,8 +68,7 @@ export class QueueProcessor {
             throw new UnpublishedReason('View count < 1000 and averageRating < 3.');
           }
         }
-      }
-      else {
+      } else {
         item.cleanText = item.text;
 
         if (lang == 'ja') {
@@ -88,8 +86,7 @@ export class QueueProcessor {
       if (e instanceof UnpublishedReason) {
         item.status = -1;
         item.dataJson.unpublishedReason = e.message;
-      }
-      else {
+      } else {
         item.status = -2;
         item.dataJson.errorInternal = e.stack;
       }
@@ -108,7 +105,8 @@ export class QueueProcessor {
       if (item.dataJson.subtitlesPaceOverall > 2000) {
         throw new UnpublishedReason('Subtitles overall pace is too high (possible due to duplicate lines in subtitles).');
       }
-      if (item.dataJson.subtitlesPaceMedian < 50) { // TODO: change to 30 after adding filter using STT
+      if (item.dataJson.subtitlesPaceMedian < 50) {
+        // TODO: change to 30 after adding filter using STT
         throw new UnpublishedReason('Subtitles median pace is too low (possible video is not fully subtitled).');
       }
       if (item.dataJson.subtitlesPaceOverall < 50) {
@@ -116,10 +114,10 @@ export class QueueProcessor {
       }
     }
     let nonJapaneseChars = removeJapaneseChars(item.cleanText);
-    if ((nonJapaneseChars.length / item.cleanText.length) > 0.8) {
+    if (nonJapaneseChars.length / item.cleanText.length > 0.8) {
       throw new UnpublishedReason('Subtitles not in Japanese.');
     }
-    if ((nonJapaneseChars.length / item.cleanText.length) > 0.45) {
+    if (nonJapaneseChars.length / item.cleanText.length > 0.45) {
       throw new UnpublishedReason('More than 45% of subtitles not in Japanese.');
     }
   }
@@ -137,18 +135,18 @@ export class QueueProcessor {
     if (cues.length == 0) {
       return 0;
     }
-    let groupedBy30seconds = groupBy(cues, c => Math.floor(c.start / 30));
+    let groupedBy30seconds = groupBy(cues, (c) => Math.floor(c.start / 30));
     // Add groups/periods without subtitles
     for (let s = 0; s < Math.floor(duration / 30); s++) {
       if (!groupedBy30seconds[s]) {
         groupedBy30seconds[s] = [];
       }
     }
-    return median(values(groupedBy30seconds).map(a => a.map(c => this.cleanTextForSubtitlesPace(c.text, lang)).join("").length)) * 2;
+    return median(values(groupedBy30seconds).map((a) => a.map((c) => this.cleanTextForSubtitlesPace(c.text, lang)).join('').length)) * 2;
   }
 
   calculateOverallSubtitlesPace(cleanText: string, duration: number, lang: string) {
-    return Math.floor(this.cleanTextForSubtitlesPace(cleanText, lang).length / duration * 60)
+    return Math.floor((this.cleanTextForSubtitlesPace(cleanText, lang).length / duration) * 60);
   }
 
   calculateSubtitlesCoverage(cues: Cue[], duration: number) {
@@ -161,9 +159,9 @@ export class QueueProcessor {
         coverage[s] = true;
       }
     }
-    let coveredSeconds = coverage.filter(c => c === true).length;
+    let coveredSeconds = coverage.filter((c) => c === true).length;
 
-    return Math.floor(coveredSeconds / duration * 100);
+    return Math.floor((coveredSeconds / duration) * 100);
   }
 
   @OnQueueFailed()
@@ -172,6 +170,4 @@ export class QueueProcessor {
   }
 }
 
-class UnpublishedReason extends Error {
-
-}
+class UnpublishedReason extends Error {}

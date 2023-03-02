@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { mean, sum } from 'lodash';
 import { DrillReview } from 'src/entities/DrillReview';
 import { UserDictionary } from 'src/entities/UserDictionary';
-import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
+import { Repository } from 'typeorm';
 import { Drill, UserDictionaryDrillCard } from './drills.interfaces';
 
 export enum CardAnswer {
@@ -23,7 +24,10 @@ export class SrsService {
   protected defaultEaseFactor = 2.5;
   protected defaultCardInterval = 1;
 
-  constructor(private userDictionaryRepository: UserDictionaryRepository) {}
+  constructor(
+    @InjectRepository(UserDictionary)
+    private userDictionaryRepository: Repository<UserDictionary>,
+  ) {}
 
   async processDrillGroup(userWord: UserDictionary, drillsGroup: Drill[]) {
     const firstCard = drillsGroup[0];

@@ -17,7 +17,7 @@ import { SpeechInterface } from './SpeechInterface';
 
 @Controller('audio')
 export class AudioController {
-  private readonly logger = new Logger(AudioController.name, true);
+  private readonly logger = new Logger(AudioController.name, { timestamp: true });
 
   public audioDir: string;
 

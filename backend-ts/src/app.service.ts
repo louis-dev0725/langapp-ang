@@ -14,7 +14,7 @@ import { JumanMorpheme, JumanSentence, JumanStringPos } from './proto/juman_pb';
 
 @Injectable()
 export class AppService {
-  private readonly logger = new Logger(AppService.name, true);
+  private readonly logger = new Logger(AppService.name, { timestamp: true });
 
   constructor(private dictionaryWordRepository: DictionaryWordRepository, private jumanppClient: JumanppClient, private analyzeJapanese: AnalyzeJapaneseService) {}
 

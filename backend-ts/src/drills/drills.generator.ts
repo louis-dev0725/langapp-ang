@@ -6,19 +6,18 @@ import { JapaneseWord } from 'src/entities/JapaneseWord';
 import { Furigana, Meaning as JapaneseWordMeaning, Reading as JapaneseWordReading } from 'src/entities/JapaneseWordData';
 import { Meaning as JapaneseKanjiMeaning, Reading as JapaneseKanjiReading } from 'src/entities/JapaneseKanjiData';
 import { User } from 'src/entities/User';
-import { UserDictionaryRepository } from 'src/entities/UserDictionaryRepository';
 import { convertHiraganaToKatakana, convertKatakanaToHiragana, extractKanji } from 'src/japanese.utils';
-import { In, LessThanOrEqual } from 'typeorm';
+import { In, LessThanOrEqual, Repository } from 'typeorm';
 import { Drill, KanjiInfoCard, TrainingAnswer, TrainingCards, TrainingExampleSentence, TrainingMeaning, TrainingQuestionCard, WordInfoCard } from './drills.interfaces';
 import { encode as htmlEncode } from 'html-entities';
 import { UserDictionary } from 'src/entities/UserDictionary';
 import { add, Dictionary, keyBy, max, orderBy, sample, shuffle, uniq } from 'lodash';
-import { SentenceRepository } from 'src/entities/SentenceRepository';
 import { Sentence } from 'src/entities/Sentence';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class DrillsGenerator {
-  private readonly logger = new Logger(DrillsGenerator.name, true);
+  private readonly logger = new Logger(DrillsGenerator.name, { timestamp: true });
 
   user: User;
   userWords: UserDictionary[];
@@ -36,7 +35,13 @@ export class DrillsGenerator {
 
   isTestMode = true;
 
-  constructor(private userDictionaryRepository: UserDictionaryRepository, private dictionaryWordRepository: DictionaryWordRepository, private sentenceRepository: SentenceRepository) {
+  constructor(
+    @InjectRepository(UserDictionary)
+    private userDictionaryRepository: Repository<UserDictionary>,
+    private dictionaryWordRepository: DictionaryWordRepository,
+    @InjectRepository(Sentence)
+    private sentenceRepository: Repository<Sentence>,
+  ) {
     this.loadAdditionalWords();
   }
 
@@ -61,7 +66,7 @@ export class DrillsGenerator {
       throw new Error('Wrong cardId.');
     }
 
-    const word = await this.dictionaryWordRepository.findOneOrFail(wordId);
+    const word = await this.dictionaryWordRepository.findOne({ where: { id: Number(wordId) } });
     let kanjis: JapaneseKanji[];
 
     if (cardType == 'wordInfo') {

@@ -19,9 +19,7 @@ import { DrillsController } from './drills/drills.controller';
 import { AuthModule } from './auth/auth.module';
 import { User } from './entities/User';
 import { UserDictionary } from './entities/UserDictionary';
-import { UserDictionaryRepository } from './entities/UserDictionaryRepository';
 import { Sentence } from './entities/Sentence';
-import { SentenceRepository } from './entities/SentenceRepository';
 import { AudioController } from './audio/audio.controller';
 import { Audio } from 'src/entities/Audio';
 import { SrsService } from './drills/srs.service';
@@ -40,7 +38,7 @@ import { DrillReview } from './entities/DrillReview';
       entities: [DictionaryWord, Content, User, UserDictionary, Sentence, Audio, DrillReview],
       autoLoadEntities: false,
     }),
-    TypeOrmModule.forFeature([DictionaryWord, DictionaryWordRepository, Content, UserDictionary, UserDictionaryRepository, Sentence, SentenceRepository, Audio, DrillReview]),
+    TypeOrmModule.forFeature([DictionaryWord, Content, UserDictionary, Sentence, Audio, DrillReview]),
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_SERVICE_HOST || 'redis',
@@ -67,6 +65,7 @@ import { DrillReview } from './entities/DrillReview';
     AnalyzeJapaneseService,
     TestService,
     SrsService,
+    DictionaryWordRepository,
   ],
   exports: [ConsoleController, AnalyzeJapaneseService],
 })
