@@ -2,7 +2,7 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Content } from '@app/interfaces/common.interface';
 import { ApiService } from '@app/services/api.service';
 import { Dictionary } from '@app/shared/helpers';
-import { chunk } from 'lodash';
+import chunk from 'lodash/chunk';
 import { BehaviorSubject, firstValueFrom, Observable, Subscription } from 'rxjs';
 
 export class MaterialsDataSource extends DataSource<Content[] | undefined> {

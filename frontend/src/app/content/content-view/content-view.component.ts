@@ -15,7 +15,7 @@ import next from '@iconify/icons-mdi/next-title';
 import repeat from '@iconify/icons-mdi/repeat';
 import play from '@iconify/icons-mdi/play-circle-filled';
 import pause from '@iconify/icons-mdi/pause-circle-filled';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 interface Subtitle {
   startTime: number;
