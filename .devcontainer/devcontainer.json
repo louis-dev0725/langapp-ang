@@ -36,9 +36,9 @@
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
 
-  "onCreateCommand": "sudo apt-get update; sudo apt-get install -y php7.4; curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash; sudo fallocate -l 8G /tmp/swapfile && sudo chmod 600 /tmp/swapfile && sudo mkswap /tmp/swapfile && sudo swapon /tmp/swapfile || true",
+  "onCreateCommand": "bash .devcontainer/on-create.sh",
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "echo \"$DOTENV_CONTENT\" > .env",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
   "customizations": {
     "vscode": {
       "extensions": [
