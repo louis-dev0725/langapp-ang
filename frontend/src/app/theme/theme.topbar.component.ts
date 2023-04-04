@@ -13,18 +13,20 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-topbar',
   templateUrl: './theme.topbar.component.html',
+  styleUrls: ['./menu-custom.component.scss']
 })
 export class ThemeTopbarComponent implements OnInit, OnDestroy {
   public user: User;
-  public isLoggedIn: boolean;
+  public isLoggedIn: boolean = true;
 
   model: MenuItem[];
+  translateModel: MenuItem[] = [];
 
   get isOpenedAdmin(): boolean {
     return this.userService.openedAdmin;
   }
 
-  constructor(public appTheme: ThemeMainComponent, public session: SessionService, private userService: UserService, public api: ApiService, private cd: ChangeDetectorRef, public app: AppComponent, private translate: TranslateService) {}
+  constructor(public appTheme: ThemeMainComponent, public session: SessionService, private userService: UserService, public api: ApiService, private cd: ChangeDetectorRef, public app: AppComponent, private translate: TranslateService) { }
 
   ngOnInit() {
     this.model = this.getModel();
@@ -33,90 +35,142 @@ export class ThemeTopbarComponent implements OnInit, OnDestroy {
       this.user = user;
       this.isLoggedIn = user != null;
       this.model = [...this.getModel()];
+      this.translateModel = [...this.getTranslateModel()];
       this.cd.detectChanges();
     });
 
     this.translate.onLangChange.subscribe((e) => {
       this.model = [...this.getModel()];
+      this.translateModel = [...this.getTranslateModel()];
       this.cd.detectChanges();
     });
+  }
+
+  public getTranslateModel(): MenuItem[] {
+    let translateModel: MenuItem[] = [];
+    translateModel.push({
+      label: 'English',
+      icon: 'c-icons icon-flag-uk',
+      command: (event) => {
+        this.appTheme.setLanguage('en');
+      },
+    });
+    translateModel.push({
+      label: 'Русский',
+      icon: 'c-icons icon-flag-rusia',
+      command: (event) => {
+        this.appTheme.setLanguage('ru');
+      },
+    });
+    return translateModel;
   }
 
   public getModel(): MenuItem[] {
     let model: MenuItem[] = [];
 
-    model.push({
-      label: this.translate.instant('Language'),
-      items: [
-        {
-          label: 'Русский',
-          command: (event) => {
-            this.appTheme.setLanguage('ru');
-          },
-        },
-        {
-          label: 'English',
-          command: (event) => {
-            this.appTheme.setLanguage('en');
-          },
-        },
-      ],
-    });
+    // if (this.isLoggedIn) {
+    //   model.push({
+    //     label: this.translate.instant('Payment'),
+    //     routerLink: ['/payment'],
+    //     icon: 'c-icons icon-payment'
+    //   });
+    //   model.push({
+    //     label: this.translate.instant('Settings'),
+    //     routerLink: ['/settings/profile'],
+    //   });
+    // }
 
     if (this.isLoggedIn) {
-      model.push({
-        label: this.translate.instant('Payment'),
-        routerLink: ['/payment'],
-      });
-      model.push({
-        label: this.translate.instant('Settings'),
-        routerLink: ['/settings/profile'],
-      });
-    }
-
-    model.push({
-      label: this.translate.instant('Support'),
-      routerLink: ['/contacts'],
-    });
-
-    if (this.isLoggedIn) {
-      model.push({
-        label: this.translate.instant('Affiliate program'),
-        items: [
-          {
-            label: this.translate.instant('About'),
-            routerLink: ['/partners/about'],
-          },
-          {
-            label: this.translate.instant('Clients'),
-            routerLink: ['/partners/clients'],
-          },
-          {
-            label: this.translate.instant('Transactions'),
-            routerLink: ['/partners/transactions'],
-          },
-        ],
-      });
-
-      model.push({
-        label: this.translate.instant('Logout'),
-        command: (event) => {
-          this.appTheme.logout(event.originalEvent);
+      model.push(
+        {
+          label: this.translate.instant('Payment'),
+          routerLink: ['/payment'],
+          icon: 'c-icons icon-payment'
         },
-      });
+        {
+          label: this.translate.instant('Settings'),
+          routerLink: ['/settings/profile'],
+          icon: 'c-icons icon-settings'
+        },
+        {
+          label: this.translate.instant('Support'),
+          routerLink: ['/contacts'],
+          icon: 'c-icons icon-support',
+        },
+        {
+          label: this.translate.instant('Affiliate program'),
+          icon: 'c-icons icon-affiliate',
+        },
+        {
+          label: this.translate.instant('Logout'),
+          icon: 'c-icons icon-logout',
+          command: (event) => {
+            this.appTheme.logout(event.originalEvent);
+          },
+        }
+      );
+
+      // model.push({
+      //   label: this.translate.instant('Affiliate program'),
+      //   icon: 'icon-affiliate',
+      //   items: [
+      //     {
+      //       label: this.translate.instant('About'),
+      //       routerLink: ['/partners/about'],
+      //     },
+      //     {
+      //       label: this.translate.instant('Clients'),
+      //       routerLink: ['/partners/clients'],
+      //     },
+      //     {
+      //       label: this.translate.instant('Transactions'),
+      //       routerLink: ['/partners/transactions'],
+      //     },
+      //   ],
+      // });
+
+      // model.push({
+      //   label: this.translate.instant('Logout'),
+      //   icon: 'icon-logout',
+      //   command: (event) => {
+      //     this.appTheme.logout(event.originalEvent);
+      //   },
+      // });
+
+
     } else {
-      model.push({
-        label: this.translate.instant('Sign up'),
-        routerLink: ['/auth/signup'],
-      });
-      model.push({
-        label: this.translate.instant('Sign in'),
-        routerLink: ['/auth/signin'],
-      });
+      // model.push({
+      //   label: this.translate.instant('Sign up'),
+      //   routerLink: ['/auth/signup'],
+      //   icon: 'c-icons icon-sign__up',
+      // });
+      // model.push({
+      //   label: this.translate.instant('Sign in'),
+      //   routerLink: ['/auth/signin'],
+      //   icon: 'c-icons icon-sign__in',
+      // });
+
+      model.push(
+        {
+          label: this.translate.instant('Support'),
+          routerLink: ['/contacts'],
+          icon: 'c-icons icon-support',
+        },
+        {
+          label: this.translate.instant('Sign up'),
+          routerLink: ['/auth/signup'],
+          icon: 'c-icons icon-sign__up',
+        },
+        {
+          label: this.translate.instant('Sign in'),
+          routerLink: ['/auth/signin'],
+          icon: 'c-icons icon-sign__in',
+        }
+      );
     }
 
     return model;
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 }

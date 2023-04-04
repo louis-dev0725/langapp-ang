@@ -23,12 +23,22 @@ import { User } from '@app/interfaces/common.interface';
 })
 export class ThemeMenuComponent implements OnInit {
   model: MenuItem[];
+  otherModel: MenuItem[];
 
   public appName = APP_NAME;
   public user: User;
   public isLoggedIn: boolean;
 
-  constructor(public app: AppComponent, public appTheme: ThemeMainComponent, public api: ApiService, public session: SessionService, private userService: UserService, private cd: ChangeDetectorRef, private translate: TranslateService) {}
+  desktopLayer: boolean = false;
+
+  constructor(public app: AppComponent, public appTheme: ThemeMainComponent, public api: ApiService, public session: SessionService, private userService: UserService, private cd: ChangeDetectorRef, private translate: TranslateService) {
+
+    if (window.innerWidth >= 1024) {
+      this.desktopLayer = true;
+    } else {
+      this.desktopLayer = false;
+    }
+  }
 
   ngOnInit() {
     this.subscribeToWindowResize();
@@ -75,31 +85,57 @@ export class ThemeMenuComponent implements OnInit {
         label: 'Learning',
         visible: this.isLoggedIn,
         items: [
-          {
-            label: 'Study new words',
-            routerLink: ['/training'],
-          },
-          {
-            label: 'Explore content',
-            routerLink: ['/content/materials'],
-          },
+          // {
+          //   label: 'Study new words',
+          //   routerLink: ['/training'],
+          //   icon: 'c-icons icon-study'
+          // },
+          // {
+          //   label: 'Explore content',
+          //   routerLink: ['/content/materials'],
+          //   icon: 'c-icons icon-explorecontent'
+          // },
           /*{
             label: 'Create material',
             routerLink: ['/content/create']
           },*/
+          // {
+          //   label: 'My word list',
+          //   routerLink: ['/dictionary'],
+          //   icon: 'c-icons icon-wordlist'
+          // },
+
           {
-            label: 'My word list',
-            routerLink: ['/dictionary'],
+            label: 'Home',
+            routerLink: ['/content/materials'],
+            icon: 'c-icons icon-home',
           },
+          {
+            label: 'Study',
+            routerLink: ['/training'],
+            icon: 'c-icons icon-study'
+          },
+          {
+            label: 'Explore',
+            routerLink: ['/content/create'],
+            icon: 'c-icons icon-explorecontent'
+          },
+          {
+            label: 'Words',
+            routerLink: ['/dictionary'],
+            icon: 'c-icons icon-wordlist'
+          }
         ],
       },
       {
         label: 'Account',
+        visible: !this.isLoggedIn,
         items: [
           {
             label: 'Settings',
             routerLink: ['/settings/profile'],
-            visible: this.isLoggedIn,
+            // visible: this.isLoggedIn,
+            visible: this.isAdmin && !this.isOpenedAdmin,
           },
           /*{
             label: 'Affiliate program',
@@ -124,11 +160,13 @@ export class ThemeMenuComponent implements OnInit {
             label: 'Sign up',
             routerLink: ['/auth/signup'],
             visible: !this.isLoggedIn,
+            icon: 'c-icons icon-sign__up',
           },
           {
             label: 'Sign in',
             routerLink: ['/auth/signin'],
             visible: !this.isLoggedIn,
+            icon: 'c-icons icon-sign__in',
           },
           /*{
             label: 'Logout',
@@ -137,36 +175,55 @@ export class ThemeMenuComponent implements OnInit {
               this.appTheme.logout();
             }
           }*/
-          {
-            label: 'Support',
-            routerLink: ['/contacts'],
-          },
         ],
       },
     ];
 
-    if (!this.isDesktop()) {
-      menuItems.push({
-        label: 'Legal',
+    // if (!this.isDesktop()) {
+    //   menuItems.push({
+    //     label: 'Legal',
+    //     items: [
+    //       {
+    //         label: 'Terms of Use',
+    //         url: '/docs/terms-of-use.pdf',
+    //         target: '_blank',
+    //       },
+    //       {
+    //         label: 'Privacy policy',
+    //         url: '/docs/privacy-policy.pdf',
+    //         target: '_blank',
+    //       },
+    //       {
+    //         label: 'Tokushoho', // 特定商取引に関する法律に基づく表記
+    //         url: '/docs/tokutei.pdf',
+    //         target: '_blank',
+    //       },
+    //     ],
+    //   });
+    // }
+
+    return menuItems;
+  }
+
+  public getOtherModel(): MenuItem[] {
+    let menuItems: MenuItem[] = [
+      {
+        label: 'Other',
         items: [
           {
-            label: 'Terms of Use',
-            url: '/docs/terms-of-use.pdf',
-            target: '_blank',
+            label: 'Settings',
+            routerLink: ['/settings/profile'],
+            icon: 'c-icons icon-settings',
+            visible: this.isLoggedIn,
           },
           {
-            label: 'Privacy policy',
-            url: '/docs/privacy-policy.pdf',
-            target: '_blank',
-          },
-          {
-            label: 'Tokushoho', // 特定商取引に関する法律に基づく表記
-            url: '/docs/tokutei.pdf',
-            target: '_blank',
+            label: 'Support',
+            routerLink: ['/contacts'],
+            icon: 'c-icons icon-support',
           },
         ],
-      });
-    }
+      },
+    ];
 
     return menuItems;
   }
@@ -176,6 +233,7 @@ export class ThemeMenuComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe((e) => {
         this.model = this.getModel();
+        this.otherModel = [...this.getOtherModel()];
         this.cd.markForCheck();
       });
   }
@@ -185,6 +243,7 @@ export class ThemeMenuComponent implements OnInit {
       this.user = user;
       this.isLoggedIn = user != null;
       this.model = [...this.getModel()];
+      this.otherModel = [...this.getOtherModel()];
       this.cd.detectChanges();
     });
   }

@@ -1,7 +1,9 @@
 .menu-wrapper {
     background-color: $menuBgColor;
-    box-shadow: $menuShadow;
- 
+    // box-shadow: $menuShadow;
+    border-right: 1px solid #D9DFEB;
+
+
     .layout-menu-container {
 
         .layout-menu {
@@ -34,13 +36,19 @@
                     li {
                         a {
                             color: $submenuItemTextColor;
-
+                            font-family: 'Hind Madurai';
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 24px;
+                            height: 48px;
                             i {
                                 color: $menuItemIconColor;
                             }
-        
+
                             &:hover {
                                 background-color: $submenuItemHoverBgColor;
+                                border-radius: 8px;
                             }
                         }
 
@@ -48,6 +56,12 @@
                             > a {
                                 background-color: $submenuItemHoverBgColor;
                                 color: $activeSubmenuItemTextColor;
+                                font-family: 'Hind Madurai';
+                                font-style: normal;
+                                font-weight: 600;
+                                font-size: 16px;
+                                line-height: 24px;
+                                height: 48px;
                             }
                         }
                     }
@@ -66,7 +80,7 @@
 }
 
 @media (min-width: 993px) {
-    
+
     @mixin extrenalSubmenuitem {
         li {
             > a {
@@ -94,11 +108,11 @@
                         > ul {
                             background-color: $externalSubmenuBgColor;
                             box-shadow: $menuShadow;
-                            
+
                             @include extrenalSubmenuitem;
                         }
                     }
-                } 
+                }
             }
         }
     }

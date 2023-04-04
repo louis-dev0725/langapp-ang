@@ -1,11 +1,21 @@
 .menu-wrapper {
-    height: calc(100% - 56px);
+    // height: calc(100% - 56px);
+    // width: 240px;
+    // position: fixed;
+    // left: 0;
+    // top: 56px;
+    // z-index: 998;
+    // transform: none;
+
+    height: 100vh;
     width: 240px;
     position: fixed;
     left: 0;
-    top: 56px;
+    top: 0;
     z-index: 998;
     transform: none;
+// transition: transform 0.2s;
+
     @include transition(transform $transitionDuration);
 
     .layout-menu-container {
@@ -20,7 +30,7 @@
 
             li {
                 padding: 0px;
-                @include border-radius-left(10px);
+                @include border-radius(8px);
                 &.active-menuitem {
                     > a {
                         i.layout-submenu-toggler {
@@ -34,12 +44,12 @@
                         display: none;
                     }
                     > div {
-                        padding-left: 12px;
+                        padding-left: 32px;
                         margin-bottom: 6px;
                         margin-top: 24px;
 
                         > .layout-menuitem-text {
-                            font-size: 12px;
+                            font-size: 16px;
                             font-weight: 600;
                             text-transform: uppercase;
                         }
@@ -52,7 +62,8 @@
 
                 > a {
                     margin: 0px;
-                    padding: 7px 20px 6px 8px;
+                    // padding: 7px 20px 6px 8px;
+                    padding: 7px 20px 6px 16px;
                     @include flex();
                     @include flex-align-center();
                     @include transition(all $transitionDuration);
@@ -114,10 +125,12 @@
                             &.layout-root-menuitem {
                                 > a {
                                     @include flex();
-                                    border-bottom-left-radius: 0;
+                                    // border-bottom-left-radius: 0;
+                                    border-radius: 8px;
 
                                     &.active-menuitem-routerlink {
-                                        border-bottom-left-radius: 10px;
+                                        // border-bottom-left-radius: 10px;
+                                        border-radius: 8px;
                                     }
                                 }
                             }

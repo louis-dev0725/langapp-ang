@@ -55,6 +55,7 @@ import { ThemeMainComponent } from './theme.main.component';
       transition('void => visibleAnimated, visibleAnimated => void', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)')),
     ]),
   ],
+  styles: ['ul.menu-item__custom { padding: 0px 16px !important; }']
 })
 export class ThemeMenuitemComponent implements OnInit, OnDestroy {
   @Input() item: any;

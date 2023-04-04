@@ -11,39 +11,99 @@
   <div class="layout-topbar-wrapper">
     <div class="layout-topbar-left">
       <div class="layout-topbar-logo" id="logolink" style="cursor: pointer; outline: none" routerLink="/">
-        <!--<img id="app-logo" [src]="'assets/layout/images/logo-' + (app.topbarTheme === 'light' ? 'poseidon' : 'poseidon-dark') + '.png'" alt="poseidon-layout">-->
-        <!--<span style="font-size: 26px;">LangApp</span>-->
         <img src="assets/images/logo.svg" alt="LangApp Japanese" />
       </div>
     </div>
 
     <div class="layout-topbar-right">
       <a class="menu-button" href="#" (click)="appTheme.onMenuButtonClick($event)">
-        <i class="pi pi-bars"></i>
+        <!-- <i class="pi pi-bars"></i> -->
+        <img src="./assets/svg/ic-menu.svg" alt="menu_icon" width="26" height="26" />
       </a>
+      <!-- Search Input will shown if user have session -->
+      <div style="height: 48px; width: 361px">
+        <form class="search-container" *ngIf="isLoggedIn">
+          <input pInputText type="text" id="search-bar" placeholder="Search video..." />
+          <a href="#" class="search-icon">
+            <img class="icon-search" src="./assets/svg/ic-search-topbar.svg" alt="search_icon" srcset="" />
+          </a>
+        </form>
+      </div>
 
       <ul class="layout-topbar-actions">
-        <!--<li #settings class="topbar-item settings">
-                    <a href="#" (click)="settingsMenu.toggle($event); $event.stopPropagation()">
-                        <span class="topbar-icon">
-                            <i class="pi pi-cog"></i>
-                        </span>
-                    </a>
-                    <p-slideMenu #settingsMenu [model]="model" [popup]="true" [viewportHeight]="250"></p-slideMenu>
-                </li>-->
-        <li #settings class="topbar-item user-profile" [ngClass]="{ 'active-topmenuitem': appTheme.activeTopbarItem === settings }">
-          <a href="#" (click)="settingsMenu.toggle($event); $event.preventDefault()"
-            ><!-- appTheme.onTopbarItemClick($event,settings) -->
-            <span class="topbar-icon">
-              <i class="pi pi-cog"></i>
-            </span>
-          </a>
-          <p-slideMenu #settingsMenu [model]="model" [popup]="true" [viewportHeight]="365" class="topbar-submenu"></p-slideMenu>
-          <!--<div class="fadeInDown">
-                        test
-                    </div>-->
+        <!-- <li #settings class="topbar-item user-profile"
+          [ngClass]="{ 'active-topmenuitem': appTheme.activeTopbarItem === settings }">
+          <button (click)="profilesMenu.toggle($event); $event.preventDefault()" type="button"
+            class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
+            data-dropdown-placement="bottom">
+            <span class="sr-only">Open user menu</span>
+            <img class="w-9 h-9 rounded-full" src="https://i.imgur.com/YcP0tik.jpeg" alt="user photo" />
+          </button>
+          <p-slideMenu #profilesMenu [model]="model" [popup]="true" [viewportHeight]="365" class="topbar-submenu">
+          </p-slideMenu>
+        </li> -->
+
+        <!-- <li class="lg-only">
+          <button styleClass="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+            <img src="./assets/svg/ic-notification.svg" alt="ic-notification" />
+          </button>
+        </li> -->
+        <li class="lg-only mx-3">
+          <button styleClass="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-lang-button" aria-expanded="false" data-dropdown-toggle="user-lang-dropdown" data-dropdown-placement="bottom" (click)="langMenu.toggle($event); $event.preventDefault()">
+            <img src="./assets/svg/ic-translate.svg" alt="ic-notification" />
+          </button>
+          <p-slideMenu id="langMenu" #langMenu [model]="translateModel" [popup]="true" [viewportHeight]="150" [menuWidth]="222" class="topbar-submenu"> </p-slideMenu>
+          <!-- <p-menubar #langMenu [model]="translateModel" styleClass="align-right">
+            <div>
+                <input type="text" pInputText placeholder="Search">
+                <button type="button" pButton label="Logout" icon="pi pi-power-off" style="margin-left:.25em"></button>
+            </div>
+        </p-menubar> -->
+        </li>
+        <li class="lg-only">
+          <span class="separator"></span>
+        </li>
+        <li *ngIf="!isLoggedIn" #settings class="topbar-item user-profile" [ngClass]="{ 'active-topmenuitem': appTheme.activeTopbarItem === settings }">
+          <div class="flex cursor-pointer" (click)="profilesMenu.toggle($event); $event.preventDefault()">
+            <button type="button" class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+              <!-- <span class="sr-only">Open user menu</span> -->
+              <img class="w-9 h-9 rounded-full" src="https://i.imgur.com/YcP0tik.jpeg" alt="user photo" />
+            </button>
+            <img class="ml-0 sm:ml-2 md:ml-2" src="./assets/svg/ic-arrow-down.svg" alt="ic-notification" />
+          </div>
+          <p-slideMenu id="profilesMenu" #profilesMenu [model]="model" [popup]="true" [viewportHeight]="182" [menuWidth]="222" class="topbar-submenu"> </p-slideMenu>
+          <!-- <p-menubar #profilesMenu [model]="model" styleClass="align-right">
+            <div>
+                <input type="text" pInputText placeholder="Search">
+                <button type="button" pButton label="Logout" icon="pi pi-power-off" style="margin-left:.25em"></button>
+            </div>
+        </p-menubar> -->
+        </li>
+
+        <li *ngIf="isLoggedIn" #settings class="topbar-item user-profile" [ngClass]="{ 'active-topmenuitem': appTheme.activeTopbarItem === settings }">
+          <div class="flex cursor-pointer" (click)="profilesMenu.toggle($event); $event.preventDefault()">
+            <button type="button" class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+              <img class="w-9 h-9 rounded-full" src="https://i.imgur.com/YcP0tik.jpeg" alt="user photo" />
+            </button>
+            <img class="ml-0 sm:ml-2 md:ml-2" src="./assets/svg/ic-arrow-down.svg" alt="ic-notification" />
+          </div>
+          <p-slideMenu id="profilesMenu" #profilesMenu [model]="model" [popup]="true" [viewportHeight]="272" [menuWidth]="222" class="topbar-submenu"> </p-slideMenu>
         </li>
       </ul>
+
+      <!-- <div class="flex ...">
+        <div class="hidden lg:block...">01</div>
+        <div>02</div>
+        <div #settings class="topbar-item user-profile" [ngClass]="{ 'active-topmenuitem': appTheme.activeTopbarItem === settings }">
+          <button (click)="profilesMenu.toggle($event); $event.preventDefault()" type="button" class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+            <span class="sr-only">Open user menu</span>
+            <img class="w-9 h-9 rounded-full" src="https://i.imgur.com/YcP0tik.jpeg" alt="user photo" />
+          </button>
+          <p-slideMenu #profilesMenu [model]="model" [popup]="true" [viewportHeight]="365" class="topbar-submenu"> </p-slideMenu>
+
+        </div>
+      </div> -->
     </div>
   </div>
 </div>

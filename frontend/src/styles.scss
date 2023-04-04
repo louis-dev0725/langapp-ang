@@ -1,12 +1,12 @@
 $gutter: 1rem; //for primeflex grid system
 $fontSize: 14px;
-$fontFamily: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$fontFamily: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
-@import "tailwindcss/base";
+@import 'tailwindcss/base';
 
-@import "../node_modules/primeng/resources/primeng.css";
-@import "../node_modules/primeflex/primeflex.scss";
-@import "../node_modules/primeicons/primeicons.css";
+@import '../node_modules/primeng/resources/primeng.css';
+@import '../node_modules/primeflex/primeflex.scss';
+@import '../node_modules/primeicons/primeicons.css';
 
 $primaryLightColor: #ffa5ae; // #e86e7a //#4d9fdc;
 $primaryColor: #ff8289;
@@ -34,15 +34,15 @@ $highlightTextColor: $primaryTextColor;
   --grayscale-background: #eef4fb;
 }
 
-@import "assets/sass/theme/_theme_light";
-@import "assets/sass/variables/layout/_layout_light";
-@import "assets/sass/layout/_layout";
+@import 'assets/sass/theme/_theme_light';
+@import 'assets/sass/variables/layout/_layout_light';
+@import 'assets/sass/layout/_layout';
 
 //@import "../node_modules/prismjs/themes/prism-coy.css";
 //@import "../node_modules/@fullcalendar/core/main.min.css";
 //@import "../node_modules/@fullcalendar/daygrid/main.min.css";
 //@import "../node_modules/@fullcalendar/timegrid/main.min.css";
-@import "../node_modules/intl-tel-input/build/css/intlTelInput.css";
+@import '../node_modules/intl-tel-input/build/css/intlTelInput.css';
 
 .card {
   padding: 2rem;
@@ -54,8 +54,8 @@ $highlightTextColor: $primaryTextColor;
   }
 }
 
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 .layout-menu a {
   outline: 0 none;
@@ -67,14 +67,52 @@ $highlightTextColor: $primaryTextColor;
 
 .layout-topbar-light .layout-topbar .layout-topbar-wrapper .layout-topbar-right .layout-topbar-actions > li > .topbar-submenu > .p-slidemenu {
   position: absolute;
-  top: 46px !important;
+  top: 62px !important;
   right: 0px;
   left: auto !important;
+  background: #ffffff !important;
+  box-shadow: 0px 4px 16px rgba(60, 72, 83, 0.12) !important;
+  border-radius: 8px !important;
+  width: 222px;
+
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  color: #050a1f !important;
+
+  @media (max-width: 480px) {
+    top: 40px !important;
+  }
+
+  // padding: 0px;
+  // gap: 4px;
+
+  // position: absolute;
+  // width: 222px;
+  // height: 128px;
+  // left: 1186px;
+  // top: 76px;
+  // background: #ffffff;
+  // box-shadow: 0px 4px 16px rgba(60, 72, 83, 0.12);
+  // border-radius: 8px;
+
+  // font-family: 'Hind Madurai';
+  // font-style: normal;
+  // font-weight: 600;
+  // font-size: 16px;
+  // line-height: 24px;
+  // color: #050a1f;
 }
 
 @media (max-width: 992px) {
   .layout-topbar {
-    height: 56px !important;
+    height: 72px !important;
+
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    right: 0;
   }
 }
 
@@ -89,9 +127,13 @@ $highlightTextColor: $primaryTextColor;
 @media (max-width: $tabletBreakpoint) {
   .layout-wrapper {
     .menu-wrapper {
-      top: 56px;
-      height: calc(100% - 56px);
+      top: 32px;
+      height: calc(100% - 32px);
     }
+  }
+
+  .tablet-screen {
+    height: calc(100vh - 32px) !important;
   }
 }
 
@@ -362,6 +404,10 @@ rt {
   margin: 0;
 }
 
+body {
+  font-family: 'Hind Madurai', sans-serif;
+}
+
 /*
 $color-blue-link: #039be5;
 $color-red-danger: #f44336;
@@ -370,10 +416,6 @@ html, body {
   height: 100%;
 }
 
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
 
 img {
   max-width: 100%;
@@ -729,3 +771,115 @@ mat-progress-bar.mat-progress-bar {
   }
 }
 */
+
+/* Icon Custom*/
+
+// :host ::ng-deep {
+.c-icons {
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.icon-support {
+  background-image: url('./assets/svg/ic-24-support.svg');
+}
+
+.icon-support__active {
+  background-image: url('./assets/svg/ic-24-support__active.svg');
+}
+
+.icon-arrow-down {
+  background-image: url('./assets/svg/ic-arrow-down.svg');
+}
+
+.icon-notification {
+  background-image: url('./assets/svg/ic-notification.svg');
+}
+
+.icon-search {
+  background-image: url('./assets/svg/ic-search.svg');
+}
+
+.icon-sign__in {
+  background-image: url('./assets/svg/ic-sign-in.svg');
+}
+
+.icon-sign__in__active {
+  background-image: url('./assets/svg/ic-sign-in__active.svg');
+}
+
+.icon-sign__up {
+  background-image: url('./assets/svg/ic-sign-up.svg');
+}
+
+.icon-sign__up__active {
+  background-image: url('./assets/svg/ic-sign-up__active.svg');
+}
+
+.icon-translate {
+  background-image: url('./assets/svg/ic-sign-up.svg');
+}
+
+.icon-home {
+  background-image: url('./assets/svg/ic_home.svg');
+}
+
+.icon-home__active {
+  background-image: url('./assets/svg/ic_home__active.svg');
+}
+
+.icon-study {
+  background-image: url('./assets/svg/ic-study.svg');
+}
+
+.icon-study__active {
+  background-image: url('./assets/svg/ic-study__active.svg');
+}
+
+.icon-explorecontent {
+  background-image: url('./assets/svg/ic-explorecontent.svg');
+}
+
+.icon-explorecontent__active {
+  background-image: url('./assets/svg/ic-explorecontent__active.svg');
+}
+
+.icon-wordlist {
+  background-image: url('./assets/svg/ic-wordlist.svg');
+}
+
+.icon-wordlist__active {
+  background-image: url('./assets/svg/ic-wordlist__active.svg');
+}
+
+.icon-payment {
+  background-image: url('./assets/svg/ic-payment.svg');
+}
+
+.icon-affiliate {
+  background-image: url('./assets/svg/ic-affiliate.svg');
+}
+
+.icon-logout {
+  background-image: url('./assets/svg/ic-logout.svg');
+}
+
+.icon-settings {
+  background-image: url('./assets/svg/ic-setting.svg');
+}
+
+.icon-settings__active {
+  background-image: url('./assets/svg/ic-setting__active.svg');
+}
+
+// flag
+.icon-flag-uk {
+  background-image: url('./assets/svg/ic-flag-uk.svg');
+}
+
+.icon-flag-rusia {
+  background-image: url('./assets/svg/ic-flag-rusia.svg');
+}
+// }
