@@ -13,10 +13,13 @@ import { StepsModule } from 'primeng/steps';
 import { IconModule } from '@visurel/iconify-angular';
 import { TreeModule } from 'primeng/tree';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { DialogModule } from 'primeng/dialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { DragulaModule } from 'ng2-dragula';
 
 @NgModule({
   declarations: [AuthComponent, SigninComponent, SignupComponent, RestoreComponent],
-  imports: [CommonModule, TranslateModule, ReactiveFormsModule, AuthRoutingModule, SharedModule, StepsModule, IconModule, TreeModule, NgxIntlTelInputModule],
+  imports: [CommonModule, TranslateModule, ReactiveFormsModule, AuthRoutingModule, SharedModule, StepsModule, IconModule, TreeModule, NgxIntlTelInputModule, DialogModule, RadioButtonModule, DragulaModule.forRoot()],
   providers: [ApiService],
 })
 export class AuthModule {}

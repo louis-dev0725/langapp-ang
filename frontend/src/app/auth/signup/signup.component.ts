@@ -76,12 +76,15 @@ export class SignupComponent implements OnInit {
 
   languageToLearn = 'ja';
   categories: Category[];
-  availableLanguages: TreeNode[] = [];
-  selectedLanguages: TreeNode[] = [];
+  availableLanguages = [];
+  selectedLanguages = [];
+  languageOptions = [];
+  languageSearch: string = '';
 
   timezone: string;
   country: string;
   PhoneNumberFormat = PhoneNumberFormat;
+  openLangSelectModal = false;
 
   constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private cookieService: CookieService, private sessionService: SessionService) {}
 
@@ -122,6 +125,7 @@ export class SignupComponent implements OnInit {
           data: l.code,
         })
       );
+      this.languageOptions = this.availableLanguages.filter((item) => !this.selectedLanguages.find((selectedItem) => selectedItem.label === item.label));
 
       // Move current browser language to the top
       let browserLangs = window.navigator.languages ?? [window.navigator.language];
@@ -154,6 +158,7 @@ export class SignupComponent implements OnInit {
   }
 
   nextStep() {
+    console.log
     this.activeStep++;
   }
 
@@ -165,11 +170,6 @@ export class SignupComponent implements OnInit {
     } else {
       this.signupForm.controls.favoriteCategoryId.setValue([...selectedCategories, categoryId]);
     }
-  }
-
-  selectedLanguagesChanged() {
-    this.signupForm.get('languages').setValue(this.selectedLanguages.map((l) => l.data));
-    console.log('this.signupForm', this.signupForm.value);
   }
 
   detectTimezone() {
@@ -218,5 +218,33 @@ export class SignupComponent implements OnInit {
     let field = this.signupForm.get(fieldName);
     console.log(fieldName, { dirty: field.dirty, touched: field.touched });
     return field.touched && !field.valid;
+  }
+
+  onChangeLangSelectModal(value: boolean) {
+    this.openLangSelectModal = value;
+  }
+
+  onSearchLanguages() {
+    if (this.languageSearch === '') {
+      this.languageOptions = this.availableLanguages.filter((item) => !this.selectedLanguages.find((selectedItem) => selectedItem.label === item.label));
+    } else {
+      this.languageOptions = this.availableLanguages.filter((item) => !this.selectedLanguages.find((selectedItem) => selectedItem.label === item.label)).filter((item) => item.label.toLowerCase().includes(this.languageSearch.toLowerCase()));
+    }
+  }
+
+  clearLangSearch() {
+    this.languageSearch = '';
+    this.languageOptions = this.availableLanguages;
+  }
+  onSelectLanguage(label) {
+    const selectedLangItem = this.languageOptions.find((item) => item.label === label);
+    this.selectedLanguages = [...this.selectedLanguages, selectedLangItem];
+    this.languageOptions = this.availableLanguages.filter((item) => !this.selectedLanguages.find((selectedItem) => selectedItem.label === item.label));
+    this.signupForm.get('languages').setValue(this.selectedLanguages.map((l) => l.data));
+    this.openLangSelectModal = false;
+  }
+  removeItemFromSelected(label) {
+    this.selectedLanguages = this.selectedLanguages.filter((item) => item.label !== label);
+    this.languageOptions = this.availableLanguages.filter((item) => !this.selectedLanguages.find((selectedItem) => selectedItem.label === item.label));
   }
 }

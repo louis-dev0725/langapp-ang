@@ -1,31 +1,79 @@
+.primary-text-color {
+  color: #ff8289;
+}
 @media (max-width: 767px) {
-    :host ::ng-deep .button-text-left .p-button-label {
-        text-align: left;
-        padding-left: 0.5rem;
-    }
+  :host ::ng-deep .button-text-left .p-button-label {
+    text-align: left;
+    padding-left: 0.5rem;
+  }
 
-    .button-text-left {
-        padding-left: 0.6rem;
-    }
+  .button-text-left {
+    padding-left: 0.6rem;
+  }
 }
 @media (min-width: 768px) {
-    :host ::ng-deep .button-text-left .p-button-label {
-        text-align: left;
-        padding-left: 1rem;
-    }
+  :host ::ng-deep .button-text-left .p-button-label {
+    text-align: left;
+    padding-left: 1rem;
+  }
 
-    :host ::ng-deep .button-text-left svg {
-        width: 40px;
-        height: 40px;
-    }
+  :host ::ng-deep .button-text-left svg {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 :host ::ng-deep .p-multiselect-label {
-    white-space: initial;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
+  white-space: initial;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 :host ::ng-deep p-multiselect-token {
-    margin-right: 0;
+  margin-right: 0;
+}
+:host ::ng-deep .p-dialog-title {
+  font-size: 32px !important;
+  color: #050a1f;
+}
+:host ::ng-deep .p-dialog-header {
+  border-radius: unset;
+}
+:host ::ng-deep .p-dialog {
+  border-radius: 8px;
+  overflow: hidden;
+}
+:host ::ng-deep .p-input-icon-left i {
+    top: auto;
+    margin-top: 0;
+    left: 18px;
+}
+:host ::ng-deep .p-input-icon-left .p-inputtext {
+    padding-left: 52px;
+    border-radius: 0;
+}
+:host ::ng-deep .p-inputtext:enabled:focus, .p-inputtext:enabled:hover {
+    box-shadow: none;
+    border-color: inherit;
+}
+.search-remove {
+    right: 20px;
+    left: initial !important;
+}
+.custom-scrollbar::-webkit-scrollbar-track
+{
+	background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar
+{
+	width: 6px;
+    height: 30px;
+	background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb
+{
+	background-color: #9A9CAA;
+    border-radius: 5px;
 }
