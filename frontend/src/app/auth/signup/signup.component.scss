@@ -44,36 +44,48 @@
   overflow: hidden;
 }
 :host ::ng-deep .p-input-icon-left i {
-    top: auto;
-    margin-top: 0;
-    left: 18px;
+  top: auto;
+  margin-top: 0;
+  left: 18px;
 }
 :host ::ng-deep .p-input-icon-left .p-inputtext {
-    padding-left: 52px;
-    border-radius: 0;
+  padding-left: 52px;
+  border-radius: 0;
 }
-:host ::ng-deep .p-inputtext:enabled:focus, .p-inputtext:enabled:hover {
-    box-shadow: none;
-    border-color: inherit;
+:host ::ng-deep .p-inputtext:enabled:focus,
+.p-inputtext:enabled:hover {
+  box-shadow: none;
+  border-color: inherit;
+}
+:host ::ng-deep .p-dialog-title {
+  font-weight: 600 !important;
+  font-size: 32px !important;
+  line-height: 42px;
+  color: #050a1f;
+  font-family: Hind Madurai;
+}
+:host ::ng-deep .p-dialog-header {
+  padding: 32px;
+  padding-bottom: 12px;
+}
+:host ::ng-deep .p-dialog-content {
+  padding: 0 32px 30px 32px;
 }
 .search-remove {
-    right: 20px;
-    left: initial !important;
+  right: 20px;
+  left: initial !important;
 }
-.custom-scrollbar::-webkit-scrollbar-track
-{
-	background-color: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar
-{
-	width: 6px;
-    height: 30px;
-	background-color: transparent;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb
-{
-	background-color: #9A9CAA;
-    border-radius: 5px;
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 30px;
+  background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #9a9caa;
+  border-radius: 5px;
 }

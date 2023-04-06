@@ -17,6 +17,8 @@
     height: 100%;
     @include flex();
     @include flex-align-center();
+    border-bottom: 1px solid #D9DFEB;
+    background-color: #ffffff;
 
     .layout-topbar-left {
       display: none !important;

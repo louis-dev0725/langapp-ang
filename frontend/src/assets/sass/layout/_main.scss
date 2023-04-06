@@ -42,15 +42,14 @@ body {
 
 .layout-wrapper {
     .layout-main {
-        padding-top: 56px;
+        padding-top: 72px;
         @include flex();
         @include flex-direction-column();
         @include flex-justify-between();
         min-height: 100vh;
 
         .layout-content {
-            padding: 32px;
-            padding-top: 45px;
+            background-color: #ffffff;
             flex: 1 1 0;
         }
     }
