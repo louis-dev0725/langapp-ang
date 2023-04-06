@@ -19,6 +19,8 @@ import { Category } from '@app/interfaces/common.interface';
 import { TreeNode } from 'primeng/api';
 import { getCountryForTimezone } from 'countries-and-timezones';
 import { PhoneNumberFormat } from 'ngx-intl-tel-input';
+import { IconService } from '@visurel/iconify-angular';
+import { icons as flagIcons } from '@iconify-json/flag';
 
 @UntilDestroy()
 @Component({
@@ -72,7 +74,7 @@ export class SignupComponent implements OnInit {
     },
   ];
 
-  activeStep = 0;
+  activeStep = 2;
 
   languageToLearn = 'ja';
   categories: Category[];
@@ -86,7 +88,9 @@ export class SignupComponent implements OnInit {
   PhoneNumberFormat = PhoneNumberFormat;
   openLangSelectModal = false;
 
-  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private cookieService: CookieService, private sessionService: SessionService) {}
+  constructor(private api: ApiService, private customValidator: CustomValidator, private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, private cookieService: CookieService, private sessionService: SessionService, iconService: IconService) {
+    iconService.registerAll(flagIcons.icons);
+  }
 
   ngOnInit() {
     this.timezone = this.detectTimezone();
@@ -246,5 +250,8 @@ export class SignupComponent implements OnInit {
   removeItemFromSelected(label) {
     this.selectedLanguages = this.selectedLanguages.filter((item) => item.label !== label);
     this.languageOptions = this.availableLanguages.filter((item) => !this.selectedLanguages.find((selectedItem) => selectedItem.label === item.label));
+  }
+  isIconExist(iconLabel) {
+    return !!flagIcons.icons[`${iconLabel}-4x3`];
   }
 }
