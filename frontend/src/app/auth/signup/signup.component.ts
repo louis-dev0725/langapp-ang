@@ -74,7 +74,7 @@ export class SignupComponent implements OnInit {
     },
   ];
 
-  activeStep = 2;
+  activeStep = 0;
 
   languageToLearn = 'ja';
   categories: Category[];
