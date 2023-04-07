@@ -66,7 +66,7 @@
               <div *ngFor="let langItem of languageOptions" (click)="onSelectLanguage(langItem.label)" class="px-4 flex items-center w-full py-4 cursor-pointer hover:bg-gray-100">
                 <ic-icon *ngIf="isIconExist(langItem.country ?? langItem.data)" icon="{{langItem.country ?? langItem.data}}-4x3" [inline]="true" width="20" height="20"></ic-icon>
                 <!-- <img src="assets/images/languages/{{ langItem.country ?? langItem.data }}.png" class="w-[20px] h-[15px]" alt="{{ langItem.country ?? langItem.data }}" /> -->
-                <p class="m-0 mb-0.5 ml-3 text-base text-[#050A1F]" translate>{{ langItem.label }}</p>
+                <p class="m-0 mb-0.5 ml-3 text-base text-[#050A1F] lang-name" translate>{{ langItem.label }}</p>
                 <i class="pi pi-circle ml-auto text-2xl text-[#9A9CAA]"></i>
               </div>
             </div>
