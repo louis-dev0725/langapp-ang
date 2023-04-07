@@ -34,21 +34,21 @@
           <img src="assets/svg/steps-back.svg" alt="Steps back" />
           <h4 translate class="m-0 text-[32px] leading-[42px] ml-3 text-gray-900">Your languages</h4>
         </div>
-        <p translate class="text-[16px] leading-6 mt-1">You can choose the language you prefer.</p>
+        <p translate class="text-[16px] leading-6 mt-1 text-[#64697D]">You can choose the language you prefer.</p>
 
         <!--<div class="max-w-sm">
             <p-tree [value]="availableLanguages" [filter]="true" styleClass="languages-select" selectionMode="checkbox" [(selection)]="selectedLanguages" (onNodeSelect)="selectedLanguagesChanged()" (onNodeUnselect)="selectedLanguagesChanged()"> </p-tree>
           </div>-->
 
         <div class="container" dragula="SELECTED_LANG" [(dragulaModel)]="selectedLanguages" id="selected-languages">
-          <div class="flex items-center my-4" *ngFor="let selectedItem of selectedLanguages">
-            <img src="assets/svg/drag.svg" alt="Drag Icon" class="mr-4 handle" />
+          <div class="flex items-center my-[7px]" *ngFor="let selectedItem of selectedLanguages">
+            <img src="assets/svg/drag.svg" alt="Drag Icon" class="mr-[14px] handle" />
             <ic-icon *ngIf="isIconExist(selectedItem.country ?? selectedItem.data)" icon="{{selectedItem.country ?? selectedItem.data}}-4x3" [inline]="true" width="20" height="20"></ic-icon>
-            <p class="font-bold m-0 ml-1 mr-4 text-gray-900" translate>{{ selectedItem.label }}</p>
+            <p class="font-bold m-0 ml-1 mr-[14px] text-gray-900 text-[16px]" translate>{{ selectedItem.label }}</p>
             <img src="assets/svg/close.svg" alt="Close Icon" (click)="removeItemFromSelected(selectedItem.label)" />
           </div>
         </div>
-        <button pButton label="{{ 'Add language' | translate }}" class="bg-transparent p-button-text p-0 font-semibold flex items-center text-xs" (click)="onChangeLangSelectModal(true)">
+        <button pButton label="{{ 'Add language' | translate }}" class="bg-transparent p-button-text p-0 mt-[15px] font-semibold flex items-center text-xs" (click)="onChangeLangSelectModal(true)">
           <i class="pi pi-plus mr-2 text-[10px] font-semibold"></i>
         </button>
 
