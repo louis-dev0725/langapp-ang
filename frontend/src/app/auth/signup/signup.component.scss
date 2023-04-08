@@ -74,7 +74,10 @@
 .lang-name {
   font-family: Hind Madurai;
   font-weight: 400;
-  font-size: 16;
+  font-size: 16px;
+}
+:host ::ng-deep .p-dialog-header-icon .pi {
+  font-size: 17px;
 }
 .search-remove {
   right: 20px;
